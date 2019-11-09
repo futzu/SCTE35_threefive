@@ -14,8 +14,8 @@
 
 ## Install
 ```go
-pip install bitstring
-git clone https://github.com/futzu/threefive.git
+pip install bitstring 
+pip install threefive
 ```
 ## Run
 * base64 encoded messages
