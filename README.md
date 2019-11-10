@@ -73,7 +73,7 @@ identifier : CUEI
 provider_avail_id : 309
 >>> 
 ```
-```
+
 
 #### Parse base64 encoded messages
 ```python3
@@ -114,7 +114,7 @@ descriptor_loop_length : 75
 ```
 
 ## Methods
-#### splice.show_info_section()
+#### threefive.Splice.show_info_section()
 ```python3
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
@@ -138,7 +138,7 @@ splice_command_type : 6
 descriptor_loop_length : 75
 
 ```
-#### splice.show_command()
+#### threefive.Splice.show_command()
 ```python3
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
@@ -152,7 +152,7 @@ time_specified_flag : True
 pts_time : 31466.942367
 
 ```
-#### splice.show_descriptors()
+#### threefive.Splice.show_descriptors()
 ```python3
 >> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
@@ -224,7 +224,7 @@ segments_expected : 0
 
 ```
 
-### Splice.show()
+### threefive.Splice.show()
 #### Shows all data
 ```python3
 
