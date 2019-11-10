@@ -75,7 +75,7 @@ provider_avail_id : 309
 ```
 ```
 
-* __base64 encoded messages__
+#### Parse base64 encoded messages
 ```python3
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
@@ -89,7 +89,7 @@ time_specified_flag : True
 pts_time : 31466.942367
 
 ```
-* hex encoded messages
+#### Parse hex encoded messages
 ```python3
 >>> import threefive
 >>> mesg= '0xfc3061000000000000fffff00506fea8cd44ed004b021743554549480000ad7f9f0808000000002cb2d79d350200021743554549480000267f9f0808000000002cb2d79d110000021743554549480000277f9f0808000000002cb2d7b31000008a18869f'
@@ -113,8 +113,8 @@ splice_command_type : 6
 descriptor_loop_length : 75
 ```
 
-### Usage
-* splice.show_info_section()
+## Methods
+#### splice.show_info_section()
 ```python3
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
@@ -138,7 +138,7 @@ splice_command_type : 6
 descriptor_loop_length : 75
 
 ```
-* splice.show_command()
+#### splice.show_command()
 ```python3
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
@@ -152,7 +152,7 @@ time_specified_flag : True
 pts_time : 31466.942367
 
 ```
-* splice.show_descriptors()
+#### splice.show_descriptors()
 ```python3
 >> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
@@ -224,7 +224,8 @@ segments_expected : 0
 
 ```
 
-### Show all values
+### Splice.show()
+#### Shows all data
 ```python3
 
 >>> import threefive                
