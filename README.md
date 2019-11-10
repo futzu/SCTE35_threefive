@@ -14,7 +14,7 @@
 
 ## Install and Run
 ```python3
-so# pip install bitstring threefive   
+so# pip install threefive   
 Collecting bitstring
  ...
 Collecting threefive
