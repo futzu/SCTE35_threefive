@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="threefive", 
-    version="1.0.97",
+    version="1.0.99",
     author="fu-corp",
     author_email="spam@futzu.com",
     description="scte 35 parsing tools",
