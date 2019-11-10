@@ -12,7 +12,7 @@
 * Python 3
 * bitstring
 
-## Install
+## Install and Run
 ```go
 so# pip install bitstring threefive   
 Collecting bitstring
@@ -74,8 +74,8 @@ provider_avail_id : 309
 >>> 
 ```
 ```
-## Run
-* base64 encoded messages
+
+* __base64 encoded messages__
 ```python3
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
