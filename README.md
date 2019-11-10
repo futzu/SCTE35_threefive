@@ -14,32 +14,30 @@
 
 ## Install and Run
 ```python3
+so# pip install bitstring threefive   
+Collecting bitstring
+ ...
+Collecting threefive
+ ...
+Installing collected packages: bitstring, threefive
+Successfully installed bitstring-3.1.6 threefive-1.0.93
+
 so# python3                         
 Python 3.6.8 (default, Apr 13 2019, 18:58:09) 
 [GCC 4.2.1 Compatible OpenBSD Clang 7.0.1 (tags/RELEASE_701/final)] on openbsd6
-Type "help", "copyright", "credits" or "license" for more information.
 
 >>> import threefive    
 >>> mesg='/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo='
 >>> splice=threefive.Splice(mesg)
->>> splice.show_command()
+>>> splice.show_descriptors()
 
-[ Splice Command ]
-splice_type : 5
-name : Splice Insert
-splice_event_id : 1207959695
-splice_event_cancel_indicator : False
-out_of_network_indicator : True
-program_splice_flag : True
-duration_flag : True
-splice_immediate_flag : False
-time_specified_flag : True
-pts_time : 21514.559089
-break_auto_return : True
-break_duration : 60.293567
-unique_program_id : 0
-avail_num : 0
-avail_expected : 0
+[ Splice Descriptor  0  ]
+name : Avail Descriptor
+splice_descriptor_tag : 0
+descriptor_length : 8
+identifier : CUEI
+provider_avail_id : 309
+
 >>> 
 
 ```
