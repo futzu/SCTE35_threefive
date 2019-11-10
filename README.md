@@ -14,7 +14,7 @@
 
 ## Install
 ```go
-pip install threefive
+pip install bitstring threefive
 ```
 ## Run
 * base64 encoded messages
