@@ -14,7 +14,6 @@
 
 ## Install
 ```go
-pip install bitstring 
 pip install threefive
 ```
 ## Run
