@@ -177,7 +177,10 @@ class Splice_Descriptor:
         2: self.segmentation_descriptor,
         3: self.time_descriptor,
         4: self.audio_descriptor}   
-      
+        '''
+		All splice descriptors 
+		have the first six bytes in common
+        '''
         # splice_descriptor_tag 8 uimsbf
         self.splice_descriptor_tag= bb.read('uint:8') 
 
@@ -265,18 +268,17 @@ class Splice_Descriptor:
 
 class Splice_Info_Section:    
     def __init__(self,bb):
-        self.table_id = bb[:8]
-        self.section_syntax_indicator = bb[8]
-        self.private = bb[9]
-        self.reserved=  bb[10:12].uint
-        self.section_length = bb[12:24].uint
-        self.protocol_version =  bb[24:32].uint
-        self.encrypted_packet =  bb[32]
-        self.encryption_algorithm =bb[33:39].uint
-        self.pts_adjustment = bb[39:72].uint
-        self.cw_index = bb[72:80]
-        self.tier = bb[80:92]
-        self.splice_command_length = bb[92:104].uint
-        self.splice_command_type = bb[104:112].uint
-        bb.read('bits:112')		# just to slide bitpos up																		
+        self.table_id =bb.read('uint:8')
+        self.section_syntax_indicator = bb.read('bool')
+        self.private = bb.read('bool')
+        self.reserved= bb.read('uint:2')
+        self.section_length = bb.read('uint:12')
+        self.protocol_version = bb.read('uint:8')
+        self.encrypted_packet =  bb.read('bool')
+        self.encryption_algorithm =bb.read('uint:6')
+        self.pts_adjustment = time_90k(bb.read('uint:33'))
+        self.cw_index = bb.read('uint:8')
+        self.tier = bb.read('uint:8')
+        self.splice_command_length = bb.read('uint:12')
+        self.splice_command_type = bb.read('uint:8')
 
