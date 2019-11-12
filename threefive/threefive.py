@@ -21,7 +21,6 @@ def mk_bits(s):
     try: return bitstring.BitString(bytes=base64.b64decode(s))
     except:return bitstring.BitString(s)
 
-
 def time_90k(k):
     t= k/90000.0    
     return f'{t :.6f}'
@@ -156,9 +155,9 @@ class Splice_Insert(Splice_Command):
                     self.splice_time(bb)
             if self.duration_flag:
                 self.break_duration(bb) 
-                self.unique_program_id=bb.read('uint:16')
-                self.avail_num=bb.read('uint:8')
-                self.avail_expected=bb.read('uint:8')
+            self.unique_program_id=bb.read('uint:16')
+            self.avail_num=bb.read('uint:8')
+            self.avail_expected=bb.read('uint:8')
 
 
 class Time_Signal(Splice_Command):
@@ -196,6 +195,7 @@ class Avail_Descriptor(Splice_Descriptor):
         self.name='Avail Descriptor'
         self.provider_avail_id=bb.read('uint:32')
 
+	
 class Dtmf_Descriptor(Splice_Descriptor):
     def __init__(self,bb,tag):
         super().__init__(bb,tag)
@@ -207,6 +207,7 @@ class Dtmf_Descriptor(Splice_Descriptor):
         for i in range(0,self.dtmf_count):
             self.dtmf_chars.append(bb.read('uint:8'))
 
+	
 class Segmentation_Descriptor(Splice_Descriptor):
     def __init__(self,bb,tag):
         super().__init__(bb,tag)
@@ -256,6 +257,7 @@ class Time_Descriptor(Splice_Descriptor):
         self.TAI_ns=bb.read('uint:32')
         self.UTC_offset=bb.read('uint:16')
 
+	
 class Audio_Descriptor(Splice_Descriptor):
     def __init__(self,bb,tag):
         super().__init__(bb,tag)
