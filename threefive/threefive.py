@@ -1,11 +1,5 @@
 import base64,bitstring
 
-def hex_decode(k):
-    try:
-        return bytearray.fromhex(hex(k)[2:]).decode()
-    except:
-        return k
-
 def kv_print(obj):
     try: 
         for k,v in vars(obj).items(): print(k,':',v)
@@ -181,8 +175,12 @@ class Splice_Descriptor:
         # descriptor_length 8 uimsbf
         self.descriptor_length = bb.read('uint:8')
         #identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
-        self.identifier = hex_decode(bb.read('uint:32'))
-      
+        self.set_identifier(bb)
+    
+    def set_identifier(self,bb):
+        k=bb.read('uint:32')
+        self.identifier= bytearray.fromhex(hex(k)[2:]).decode()
+	
 
 class Avail_Descriptor(Splice_Descriptor):
     def __init__(self,bb,tag):
