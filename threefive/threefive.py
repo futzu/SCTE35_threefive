@@ -1,11 +1,8 @@
 import base64,bitstring
 
-def hexed(k):
-    return hex(k)
-
 def hex_decode(k):
     try:
-        return bytearray.fromhex(hexed(k)[2:]).decode()
+        return bytearray.fromhex(hex(k)[2:]).decode()
     except:
         return k
 
@@ -41,11 +38,11 @@ class Splice:
         self.command=None
         sct=self.info_section.splice_command_type
         command_types = {0: Splice_Null,
-                4: Splice_Schedule,
-                5: Splice_Insert,
-                6: Time_Signal,
-                7: Bandwidth_Reservation,
-                255: Private_Command}
+        4: Splice_Schedule,
+        5: Splice_Insert,
+        6: Time_Signal,
+        7: Bandwidth_Reservation,
+        255: Private_Command}
         if sct in command_types.keys(): self.command=command_types[sct](bb,sct)
 
     def set_splice_descriptor(self,bb):
@@ -115,7 +112,7 @@ class Splice_Schedule(Splice_Command):
                 reserved=bb.read('uint:5')
                 if self.program_splice_flag: 
                     self.utc_splice_time=bb.read('uint:32')
-                if not self.program_splice_flag:
+                else:
                     self.component_count=bb.read('uint:8')
                     self.components=[]
                     for j in range(0,self.component_count):
@@ -210,7 +207,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
     def __init__(self,bb,tag):
         super().__init__(bb,tag)
         self.name='Segmentation Descriptor'
-        self.segmentation_event_id=hexed(bb.read('uint:32'))
+        self.segmentation_event_id=hex(bb.read('uint:32'))
         self.segmentation_event_cancel_indicator=bb.read('bool')
         reserved= bb.read('bits:7')
         if not self.segmentation_event_cancel_indicator:
@@ -221,7 +218,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
                 self.web_delivery_allowed_flag=bb.read('bool')
                 self.no_regional_blackout_flag=bb.read('bool')
                 self.archive_allowed_flag=bb.read('bool')
-                self.device_restrictions=hexed(bb.read('uint:2'))
+                self.device_restrictions=hex(bb.read('uint:2'))
             else: 
                 reserved= bb.read('bits:5')	
 
@@ -285,7 +282,7 @@ class Splice_Info_Section:
         self.encryption_algorithm =bb.read('uint:6')
         self.pts_adjustment = time_90k(bb.read('uint:33'))
         self.cw_index = hex(bb.read('uint:8'))
-        self.tier = hexed(bb.read('uint:12'))
+        self.tier = hex(bb.read('uint:12'))
         self.splice_command_length = bb.read('uint:12')
         self.splice_command_type = bb.read('uint:8')
 
