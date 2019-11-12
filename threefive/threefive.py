@@ -272,7 +272,7 @@ class Audio_Descriptor(Splice_Descriptor):
 
 class Splice_Info_Section:    
     def __init__(self,bb):
-        self.table_id =bb.read('uint:8')
+        self.table_id =hex(bb.read('uint:8'))
         self.section_syntax_indicator = bb.read('bool')
         self.private = bb.read('bool')
         self.reserved= bb.read('uint:2')
