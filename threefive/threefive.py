@@ -1,5 +1,3 @@
-
-i
 import base64,bitstring
 
 def hexed(k):
