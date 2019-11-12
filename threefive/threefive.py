@@ -284,8 +284,8 @@ class Splice_Info_Section:
         self.encrypted_packet =  bb.read('bool')
         self.encryption_algorithm =bb.read('uint:6')
         self.pts_adjustment = time_90k(bb.read('uint:33'))
-        self.cw_index = bb.read('uint:8')
-        self.tier = bb.read('uint:12')
+        self.cw_index = bb.read('uint:8').hex
+        self.tier = hexed(bb.read('uint:12'))
         self.splice_command_length = bb.read('uint:12')
         self.splice_command_type = bb.read('uint:8')
 
