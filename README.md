@@ -13,7 +13,7 @@
 * bitstring
 
 ## Install
-```bash
+```go
 pip install threefive
 
 Collecting threefive
@@ -103,7 +103,7 @@ provider_avail_id : 309
 
 
 #### Parse base64 encoded messages
-```python3
+```go
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALL
 LXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAA
@@ -119,7 +119,7 @@ pts_time : 31466.942367
 
 ```
 #### Parse hex encoded messages
-```python3
+```go
 >>> import threefive
 >>> mesg= '0xfc3061000000000000fffff00506fea8cd44ed0
 04b021743554549480000ad7f9f0808000000002cb
