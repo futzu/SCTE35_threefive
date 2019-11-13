@@ -14,14 +14,18 @@
 
 ## Install
 ```bash
- pip install threefive
+pip install threefive
 
 Collecting threefive
-  Using cached https://files.pythonhosted.org/packages/66/0a/c18f0dee44197abeadb0f18b2c3731f1cf7f58ff8f080bb4b14162359d77/
-threefive-1.1.7-py3-none-any.whl
+  Using cached https://files.pythonhosted.org/packages/66/0a/
+  c18f0dee44197abeadb0f18b2c3731f1cf7f58ff8f0
+  80bb4b14162359d77/threefive-1.1.7-py3-none-any.whl
+
 Collecting bitstring
-  Using cached https://files.pythonhosted.org/packages/c7/b9/ce7458b35633968eae3477a201a00f6c8e01cab0ccb200ea5099d41dd977/
- bitstring-3.1.6-py3-none-any.whl
+  Using cached https://files.pythonhosted.org/packages/
+  c7/b9/ce7458b35633968eae3477a201a00f6c8e01cab0ccb
+  200ea5099d41dd977/bitstring-3.1.6-py3-none-any.whl
+
 Installing collected packages: bitstring, threefive
 Successfully installed bitstring-3.1.6 threefive-1.1.7
 
@@ -81,7 +85,8 @@ provider_avail_id : 309
 ```go
 
 >>> import threefive    
->>> mesg='/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo='
+>>> mesg='/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1A
+AAAAAAKAAhDVUVJAAABNWLbowo='
 >>> splice=threefive.Splice(mesg)
 >>> splice.show_descriptors()
 
@@ -100,7 +105,9 @@ provider_avail_id : 309
 #### Parse base64 encoded messages
 ```python3
 >>> import threefive
->>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
+>>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALL
+LXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAA
+sstezEAAAihiGnw=='
 >>> splice=threefive.Splice(mesg)
 >>> splice.show_command()
 
@@ -114,7 +121,11 @@ pts_time : 31466.942367
 #### Parse hex encoded messages
 ```python3
 >>> import threefive
->>> mesg= '0xfc3061000000000000fffff00506fea8cd44ed004b021743554549480000ad7f9f0808000000002cb2d79d350200021743554549480000267f9f0808000000002cb2d79d110000021743554549480000277f9f0808000000002cb2d7b31000008a18869f'
+>>> mesg= '0xfc3061000000000000fffff00506fea8cd44ed0
+04b021743554549480000ad7f9f0808000000002cb
+2d79d350200021743554549480000267f9f0808000000002cb2d79d110000021
+743554549480000277f9f0808000000002cb2d7b31000008a18869f'
+
 >>> h_splice=threefive.Splice(mesg)
 >>> h_splice.show_info_section() 
 
@@ -251,7 +262,8 @@ segments_expected : 0
 ```python3
 
 >>> import threefive                
->>> mesg='/DBIAAAAAAAA///wBQb+ky44CwAyAhdDVUVJSAAACn+fCAgAAAAALKCh4xgAAAIXQ1VFSUgAAAl/nwgIAAAAACygoYoRAAC0IX6w')
+>>> mesg='/DBIAAAAAAAA///wBQb+ky44CwAyAhdDVUVJSAAACn+fCAgAAAAALKCh4xgAAAIX
+Q1VFSUgAAAl/nwgIAAAAACygoYoRAAC0IX6w')
 >>> fu=threefive.Splice(mesg)
 >>> fu.show()
 
