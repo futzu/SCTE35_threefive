@@ -14,13 +14,16 @@
 
 ## Install
 ```python3
-so# pip install threefive   
-Collecting bitstring
- ...
+ pip install threefive
+
 Collecting threefive
- ...
+  Using cached https://files.pythonhosted.org/packages/66/0a/c18f0dee44197abeadb0f18b2c3731f1cf7f58ff8f080bb4b14162359d77/threefive-1.1.7-py3-none-any.whl
+Collecting bitstring
+  Using cached https://files.pythonhosted.org/packages/c7/b9/ce7458b35633968eae3477a201a00f6c8e01cab0ccb200ea5099d41dd977/bitstring-3.1.6-py3-none-any.whl
 Installing collected packages: bitstring, threefive
-Successfully installed bitstring-3.1.6 threefive-1.0.93
+Successfully installed bitstring-3.1.6 threefive-1.1.7
+
+
 ```
 ## Run
 ```go
