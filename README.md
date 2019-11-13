@@ -13,13 +13,15 @@
 * bitstring
 
 ## Install
-```python3
+```bash
  pip install threefive
 
 Collecting threefive
-  Using cached https://files.pythonhosted.org/packages/66/0a/c18f0dee44197abeadb0f18b2c3731f1cf7f58ff8f080bb4b14162359d77/threefive-1.1.7-py3-none-any.whl
+  Using cached https://files.pythonhosted.org/packages/66/0a/c18f0dee44197abeadb0f18b2c3731f1cf7f58ff8f080bb4b14162359d77/
+threefive-1.1.7-py3-none-any.whl
 Collecting bitstring
-  Using cached https://files.pythonhosted.org/packages/c7/b9/ce7458b35633968eae3477a201a00f6c8e01cab0ccb200ea5099d41dd977/bitstring-3.1.6-py3-none-any.whl
+  Using cached https://files.pythonhosted.org/packages/c7/b9/ce7458b35633968eae3477a201a00f6c8e01cab0ccb200ea5099d41dd977/
+ bitstring-3.1.6-py3-none-any.whl
 Installing collected packages: bitstring, threefive
 Successfully installed bitstring-3.1.6 threefive-1.1.7
 
@@ -32,7 +34,8 @@ Python 3.6.8 (default, Apr 13 2019, 18:58:09)
 [GCC 4.2.1 Compatible OpenBSD Clang 7.0.1 (tags/RELEASE_701/final)] on openbsd6
 
 >>> import threefive
->>> threefive.Splice( '0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A').show()
+>>> threefive.Splice( '0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF
+500000000000A0008435545490000013562DBA30A').show()
 
 [ Splice Info Section ]
 table_id : 0xfc
