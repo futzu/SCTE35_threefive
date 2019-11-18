@@ -1,5 +1,4 @@
 import base64,bitstring
-from tables import *
 
 def hex_decode(k):
     try:
