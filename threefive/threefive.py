@@ -1,5 +1,11 @@
 import base64,bitstring
 
+def hex_decode(k):
+    try:
+        return bytearray.fromhex(hex(k)[2:]).decode()
+    except:
+        return k
+
 def kv_print(obj):
     try: 
         for k,v in vars(obj).items(): print(k,':',v)
@@ -8,12 +14,14 @@ def kv_print(obj):
 
 def mk_bits(s):
     try: return bitstring.BitString(bytes=base64.b64decode(s))
-    except:return bitstring.BitString(s)
+    except:return bitstring.BitStream(s)
 
 def time_90k(k):
     t= k/90000.0    
     return f'{t :.6f}'
 	
+def reserved(bb,bst):
+    bb.bitpos+=bst
 	
 class Splice:
     def __init__(self,mesg):
@@ -24,27 +32,29 @@ class Splice:
         self.info_section.descriptor_loop_length = bb.read('uint:16') 
         dll=self.info_section.descriptor_loop_length 
         while dll> 0:
+            tag_plus_header_size=2 # 1 byte for descriptor_tag, 1 byte for header?
             sd=self.set_splice_descriptor(bb)
-            dll -=sd.descriptor_length+2
+            dll -=(sd.descriptor_length+ tag_plus_header_size)
             self.descriptors.append(sd)
-		
+        self.info_section.crc=hex(bb.read('uint:32'))
+
     def set_splice_command(self,bb):
+        cmd_types={0: Splice_Null,
+					4: Splice_Schedule,
+					5: Splice_Insert,
+					6: Time_Signal,
+					7: Bandwidth_Reservation,
+					255: Private_Command}
         self.command=None
         sct=self.info_section.splice_command_type
-        command_types = {0: Splice_Null,
-        4: Splice_Schedule,
-        5: Splice_Insert,
-        6: Time_Signal,
-        7: Bandwidth_Reservation,
-        255: Private_Command}
-        if sct in command_types.keys(): self.command=command_types[sct](bb,sct)
+        if sct in cmd_types.keys(): self.command=cmd_types[sct](bb,sct)
 
     def set_splice_descriptor(self,bb):
         dscr_types={0: Avail_Descriptor,
-        1: Dtmf_Descriptor,
-        2: Segmentation_Descriptor,
-        3: Time_Descriptor,
-        4: Audio_Descriptor}   
+					1: Dtmf_Descriptor,
+					2: Segmentation_Descriptor,
+					3: Time_Descriptor,
+					4: Audio_Descriptor}   
         # splice_descriptor_tag 8 uimsbf
         tag= bb.read('uint:8')
         if tag in dscr_types.keys(): return dscr_types[tag](bb,tag) 		
@@ -72,16 +82,16 @@ class Splice:
 class Splice_Command: 
     def break_duration(self,bb):
         self.break_auto_return= bb.read('bool')
-        self.reserved=bb.read('uint:6')
+        reserved(bb,6)
         self.break_duration= time_90k(bb.read('uint:33'))
 
     def splice_time(self,bb): #40bits
         self.time_specified_flag=bb.read('bool')
         if self.time_specified_flag:
-            self.reserved=bb.read('bits:6')
+            reserved(bb,6)
             self.pts_time=time_90k(bb.read('uint:33'))
         else:
-            self.reserved=bb.read('bits:7')
+            reserved(bb,7)
 
 
 class Splice_Null(Splice_Command):
@@ -98,14 +108,13 @@ class Splice_Schedule(Splice_Command):
         for i in range(0,splice_count):            
             self.splice_event_id= bb.read('uint:32')
             self.splice_event_cancel_indicator= bb.read('bool')
-            self.reserved=bb.read('bits:7')
+            reserved(bb,7)
             if not self.splice_event_cancel_indicator:
                 self.out_of_network_indicator=bb.read('bool')
                 self.program_splice_flag=bb.read('bool')
                 self.duration_flag=bb.read('bool')
-                self.reserved=bb.read('uint:5')
-                if self.program_splice_flag: 
-                    self.utc_splice_time=bb.read('uint:32')
+                reserved(bb,5)
+                if self.program_splice_flag:  self.utc_splice_time=bb.read('uint:32')
                 else:
                     self.component_count=bb.read('uint:8')
                     self.components=[]
@@ -113,8 +122,7 @@ class Splice_Schedule(Splice_Command):
                         self.components[j]={
                             'component_tag': bb.read('uint:8'),
                             'utc_splice_time':bb.read('uint:32')}
-                if self.duration_flag: 
-                    self.break_duration(bb)
+                if self.duration_flag: self.break_duration(bb)
                 self.unique_program_id= bb.read('uint:16')
                 self.avail_num= bb.read('uint:8')
                 self.avails_expected=bb.read('uint:8')
@@ -126,24 +134,21 @@ class Splice_Insert(Splice_Command):
         self.name='Splice Insert'
         self.splice_event_id=bb.read('uint:32')
         self.splice_event_cancel_indicator=bb.read('bool')
-        self.reserved= bb.read('bits:7')
+        reserved(bb,7)
         if not self.splice_event_cancel_indicator:    
             self.out_of_network_indicator=bb.read('bool')
             self.program_splice_flag=bb.read('bool')
             self.duration_flag=bb.read('bool')
             self.splice_immediate_flag=bb.read('bool')
-            self.reserved= bb.read('bits:4')
+            reserved(bb,4)
             if self.program_splice_flag and not self.splice_immediate_flag: 
                 self.splice_time(bb)
             if not self.program_splice_flag:
                 self.component_count=bb.read('uint:8')
                 self.components=[]
-                for i in range(0,self.component_count): 
-                    self.components[i]=bb.read('uint:8')
-                if not self.splice_immediate_flag:
-                    self.splice_time(bb)
-            if self.duration_flag:
-                self.break_duration(bb) 
+                for i in range(0,self.component_count):  self.components[i]=bb.read('uint:8')
+                if not self.splice_immediate_flag: self.splice_time(bb)
+            if self.duration_flag: self.break_duration(bb) 
             self.unique_program_id=bb.read('uint:16')
             self.avail_num=bb.read('uint:8')
             self.avail_expected=bb.read('uint:8')
@@ -175,12 +180,8 @@ class Splice_Descriptor:
         # descriptor_length 8 uimsbf
         self.descriptor_length = bb.read('uint:8')
         #identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
-        self.set_identifier(bb)
-    
-    def set_identifier(self,bb):
-        k=bb.read('uint:32')
-        self.identifier= bytearray.fromhex(hex(k)[2:]).decode()
-	
+        self.identifier = hex_decode(bb.read('uint:32'))
+      
 
 class Avail_Descriptor(Splice_Descriptor):
     def __init__(self,bb,tag):
@@ -195,7 +196,7 @@ class Dtmf_Descriptor(Splice_Descriptor):
         self.name='DTMF Descriptor'
         self.preroll= bb.read('uint:8')
         self.dtmf_count= bb.read('uint:3')
-        self.reserved= bb.read('bits:5')
+        reserved(bb,5)
         self.dtmf_chars=[]
         for i in range(0,self.dtmf_count):
             self.dtmf_chars.append(bb.read('uint:8'))
@@ -207,7 +208,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
         self.name='Segmentation Descriptor'
         self.segmentation_event_id=hex(bb.read('uint:32'))
         self.segmentation_event_cancel_indicator=bb.read('bool')
-        self.reserved= bb.read('bits:7')
+        reserved(bb,7)
         if not self.segmentation_event_cancel_indicator:
             self.program_segmentation_flag=bb.read('bool')
             self.segmentation_duration_flag=bb.read('bool')
@@ -218,7 +219,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
                 self.archive_allowed_flag=bb.read('bool')
                 self.device_restrictions=hex(bb.read('uint:2'))
             else: 
-                self.reserved= bb.read('bits:5')	
+                reserved(bb,5)
 
             if not self.program_segmentation_flag:
                 self.component_count= bb.read('uint:8')
@@ -226,7 +227,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
                 for i in range(0,self.component_count):
                     comp={}
                     comp['component_tag']=bb.read('uint:8')
-                    self.reserved= bb.read('bits:7')
+                    reserved(bb,7)
                     comp['pts_offset']=time_90k(bb.read('uint:33'))
                     self.components.append(comp)
             if self.segmentation_duration_flag:
@@ -257,7 +258,7 @@ class Audio_Descriptor(Splice_Descriptor):
         self.name='Audio Descriptor'
         self.components=[]
         self.audio_count= bb.read('uint:4') 
-        self.reserved=bb.read('uint:4') 
+        reserved(bb,4) 
         for i in range(0,self.audio_count):
             comp={}
             comp['component_tag']=bb.read('uint:8')
@@ -273,7 +274,7 @@ class Splice_Info_Section:
         self.table_id =hex(bb.read('uint:8'))
         self.section_syntax_indicator = bb.read('bool')
         self.private = bb.read('bool')
-        self.reserved= bb.read('uint:2')
+        reserved(bb,2)
         self.section_length = bb.read('uint:12')
         self.protocol_version = bb.read('uint:8')
         self.encrypted_packet =  bb.read('bool')
