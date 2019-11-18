@@ -32,6 +32,7 @@ Python 3.6.8 (default, Apr 13 2019, 18:58:09)
 >>> import threefive
 >>> threefive.Splice( '0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A').show()
 
+
 [ Splice Info Section ]
 table_id : 0xfc
 section_syntax_indicator : False
@@ -71,6 +72,7 @@ splice_descriptor_tag : 0
 descriptor_length : 8
 identifier : CUEI
 provider_avail_id : 309
+
 
 ```
 ### Or 
@@ -199,6 +201,7 @@ segmentation_upid_type : 8
 segmentation_upid_length : 8
 turner_identifier : 0x000000002cb2d79d
 segmentation_type_id : 53
+segmentation_type : Provider Placement Opportunity End
 segment_num : 2
 segments_expected : 0
 
@@ -220,6 +223,7 @@ segmentation_upid_type : 8
 segmentation_upid_length : 8
 turner_identifier : 0x000000002cb2d79d
 segmentation_type_id : 17
+segmentation_type : Program End
 segment_num : 0
 segments_expected : 0
 
@@ -241,6 +245,7 @@ segmentation_upid_type : 8
 segmentation_upid_length : 8
 turner_identifier : 0x000000002cb2d7b3
 segmentation_type_id : 16
+segmentation_type : Program Start
 segment_num : 0
 segments_expected : 0
 
@@ -256,11 +261,12 @@ Q1VFSUgAAAl/nwgIAAAAACygoYoRAAC0IX6w')
 >>> fu=threefive.Splice(mesg)
 >>> fu.show()
 
+
 [ Splice Info Section ]
 table_id : 0xfc
 section_syntax_indicator : False
 private : False
-section_length : 72
+section_length : 97
 protocol_version : 0
 encrypted_packet : False
 encryption_algorithm : 0
@@ -269,22 +275,21 @@ cw_index : 0xff
 tier : 0xfff
 splice_command_length : 5
 splice_command_type : 6
-descriptor_loop_length : 50
-crc : 0xb4217eb0
-
+descriptor_loop_length : 75
+crc : 0x8a18869f
 
 [ Splice Command ]
 splice_type : 6
 name : Time Signal
 time_specified_flag : True
-pts_time : 27436.441722
+pts_time : 31466.942367
 
 [ Splice Descriptor  0  ]
 name : Segmentation Descriptor
 splice_descriptor_tag : 2
 descriptor_length : 23
 identifier : CUEI
-segmentation_event_id : 0x4800000a
+segmentation_event_id : 0x480000ad
 segmentation_event_cancel_indicator : False
 program_segmentation_flag : True
 segmentation_duration_flag : False
@@ -295,9 +300,10 @@ archive_allowed_flag : True
 device_restrictions : 0x3
 segmentation_upid_type : 8
 segmentation_upid_length : 8
-turner_identifier : 0x000000002ca0a1e3
-segmentation_type_id : 24
-segment_num : 0
+turner_identifier : 0x000000002cb2d79d
+segmentation_type_id : 53
+segmentation_type : Provider Placement Opportunity End
+segment_num : 2
 segments_expected : 0
 
 [ Splice Descriptor  1  ]
@@ -305,7 +311,7 @@ name : Segmentation Descriptor
 splice_descriptor_tag : 2
 descriptor_length : 23
 identifier : CUEI
-segmentation_event_id : 0x48000009
+segmentation_event_id : 0x48000026
 segmentation_event_cancel_indicator : False
 program_segmentation_flag : True
 segmentation_duration_flag : False
@@ -316,10 +322,34 @@ archive_allowed_flag : True
 device_restrictions : 0x3
 segmentation_upid_type : 8
 segmentation_upid_length : 8
-turner_identifier : 0x000000002ca0a18a
+turner_identifier : 0x000000002cb2d79d
 segmentation_type_id : 17
+segmentation_type : Program End
 segment_num : 0
 segments_expected : 0
+
+[ Splice Descriptor  2  ]
+name : Segmentation Descriptor
+splice_descriptor_tag : 2
+descriptor_length : 23
+identifier : CUEI
+segmentation_event_id : 0x48000027
+segmentation_event_cancel_indicator : False
+program_segmentation_flag : True
+segmentation_duration_flag : False
+delivery_not_restricted_flag : False
+web_delivery_allowed_flag : True
+no_regional_blackout_flag : True
+archive_allowed_flag : True
+device_restrictions : 0x3
+segmentation_upid_type : 8
+segmentation_upid_length : 8
+turner_identifier : 0x000000002cb2d7b3
+segmentation_type_id : 16
+segmentation_type : Program Start
+segment_num : 0
+segments_expected : 0
+
 
 ```
 ### Read individual values
