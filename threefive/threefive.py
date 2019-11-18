@@ -40,21 +40,21 @@ class Splice:
 
     def set_splice_command(self,bb):
         cmd_types={0: Splice_Null,
-					4: Splice_Schedule,
-					5: Splice_Insert,
-					6: Time_Signal,
-					7: Bandwidth_Reservation,
-					255: Private_Command}
+		4: Splice_Schedule,
+		5: Splice_Insert,
+		6: Time_Signal,
+		7: Bandwidth_Reservation,
+		255: Private_Command}
         self.command=None
         sct=self.info_section.splice_command_type
         if sct in cmd_types.keys(): self.command=cmd_types[sct](bb,sct)
 
     def set_splice_descriptor(self,bb):
         dscr_types={0: Avail_Descriptor,
-					1: Dtmf_Descriptor,
-					2: Segmentation_Descriptor,
-					3: Time_Descriptor,
-					4: Audio_Descriptor}   
+		1: Dtmf_Descriptor,
+		2: Segmentation_Descriptor,
+		3: Time_Descriptor,
+		4: Audio_Descriptor}   
         # splice_descriptor_tag 8 uimsbf
         tag= bb.read('uint:8')
         if tag in dscr_types.keys(): return dscr_types[tag](bb,tag) 		
