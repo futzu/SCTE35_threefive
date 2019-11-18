@@ -17,18 +17,10 @@
 pip install threefive
 
 Collecting threefive
-  Using cached https://files.pythonhosted.org/packages/66/0a/
-  c18f0dee44197abeadb0f18b2c3731f1cf7f58ff8f0
-  80bb4b14162359d77/threefive-1.1.7-py3-none-any.whl
-
-Collecting bitstring
-  Using cached https://files.pythonhosted.org/packages/
-  c7/b9/ce7458b35633968eae3477a201a00f6c8e01cab0ccb
-  200ea5099d41dd977/bitstring-3.1.6-py3-none-any.whl
-
-Installing collected packages: bitstring, threefive
-Successfully installed bitstring-3.1.6 threefive-1.1.7
-
+  Downloading https://files.pythonhosted.org/packages/d9/67/a3557a287a7d7512c99afc86f2805d1a0a3e7f832d55b2af665692fdb498/threefive-1.1.9-py3-none-any.whl
+Requirement already satisfied: bitstring in /usr/lib/python3.7/site-packages (from threefive) (3.1.6)
+Installing collected packages: threefive
+Successfully installed threefive-1.1.9
 
 ```
 ## Run
@@ -118,9 +110,8 @@ pts_time : 31466.942367
 #### Parse hex encoded messages
 ```go
 >>> import threefive
->>> mesg= '0xfc3061000000000000fffff00506fea8cd44ed0
-04b021743554549480000ad7f9f0808000000002cb
-2d79d350200021743554549480000267f9f0808000000002cb2d79d110000021
+>>> mesg= '0xfc3061000000000000fffff00506fea8cd44ed004b021743554549480000ad7f9
+f0808000000002cb2d79d350200021743554549480000267f9f0808000000002cb2d79d110000021
 743554549480000277f9f0808000000002cb2d7b31000008a18869f'
 
 >>> h_splice=threefive.Splice(mesg)
@@ -130,17 +121,18 @@ pts_time : 31466.942367
 table_id : 0xfc
 section_syntax_indicator : False
 private : False
-reserved : 3
 section_length : 97
 protocol_version : 0
 encrypted_packet : False
 encryption_algorithm : 0
-pts_adjustment : 0
+pts_adjustment : 0.000000
 cw_index : 0xff
 tier : 0xfff
 splice_command_length : 5
 splice_command_type : 6
 descriptor_loop_length : 75
+crc : 0x8a18869f
+
 ```
 
 ## Methods
@@ -268,17 +260,18 @@ Q1VFSUgAAAl/nwgIAAAAACygoYoRAAC0IX6w')
 table_id : 0xfc
 section_syntax_indicator : False
 private : False
-reserved : 3
 section_length : 72
 protocol_version : 0
 encrypted_packet : False
 encryption_algorithm : 0
-pts_adjustment : 0
+pts_adjustment : 0.000000
 cw_index : 0xff
 tier : 0xfff
 splice_command_length : 5
 splice_command_type : 6
 descriptor_loop_length : 50
+crc : 0xb4217eb0
+
 
 [ Splice Command ]
 splice_type : 6
