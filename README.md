@@ -38,14 +38,12 @@ Python 3.6.8 (default, Apr 13 2019, 18:58:09)
 [GCC 4.2.1 Compatible OpenBSD Clang 7.0.1 (tags/RELEASE_701/final)] on openbsd6
 
 >>> import threefive
->>> threefive.Splice( '0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF
-500000000000A0008435545490000013562DBA30A').show()
+>>> threefive.Splice( '0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A').show()
 
 [ Splice Info Section ]
 table_id : 0xfc
 section_syntax_indicator : False
 private : False
-reserved : 3
 section_length : 47
 protocol_version : 0
 encrypted_packet : False
@@ -56,6 +54,7 @@ tier : 0xfff
 splice_command_length : 20
 splice_command_type : 5
 descriptor_loop_length : 10
+crc : 0x62dba30a
 
 [ Splice Command ]
 splice_type : 5
@@ -80,13 +79,13 @@ splice_descriptor_tag : 0
 descriptor_length : 8
 identifier : CUEI
 provider_avail_id : 309
+
 ```
 ### Or 
 ```go
 
 >>> import threefive    
->>> mesg='/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1A
-AAAAAAKAAhDVUVJAAABNWLbowo='
+>>> mesg='/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo='
 >>> splice=threefive.Splice(mesg)
 >>> splice.show_descriptors()
 
@@ -105,9 +104,7 @@ provider_avail_id : 309
 #### Parse base64 encoded messages
 ```go
 >>> import threefive
->>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALL
-LXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAA
-sstezEAAAihiGnw=='
+>>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUg/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
 >>> splice=threefive.Splice(mesg)
 >>> splice.show_command()
 
