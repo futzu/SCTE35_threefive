@@ -32,10 +32,14 @@ class Splice:
         self.info_section.descriptor_loop_length = bb.read('uint:16') 
         dll=self.info_section.descriptor_loop_length 
         while dll> 0:
+            bitstart=bb.bitpos
+            print(bitstart)
             tag_plus_header_size=2 # 1 byte for descriptor_tag, 1 byte for header?
             sd=self.set_splice_descriptor(bb)
-            dll -=(sd.descriptor_length+ tag_plus_header_size)
+            bit_move=sd.descriptor_length+ tag_plus_header_size
+            dll -=(bit_move)
             self.descriptors.append(sd)
+            bb.bitpos=bitstart+(bit_move*8)
         self.info_section.crc=hex(bb.read('uint:32'))
 
     def set_splice_command(self,bb):
@@ -233,8 +237,9 @@ class Segmentation_Descriptor(Splice_Descriptor):
             if self.segmentation_duration_flag:
                 self.segmentation_duration=time_90k(bb.read('uint:40'))
             self.segmentation_upid_type=bb.read('uint:8')
-            self.segmentation_upid_length=bb.read('uint:8')
-            self.turner_identifier=bb.read('bits:64')
+            if self.segmentation_upid_type==8:
+                self.segmentation_upid_length=bb.read('uint:8')
+                self.turner_identifier=bb.read('bits:64')
             self.segmentation_type_id=bb.read('uint:8')
             self.segment_num=bb.read('uint:8')
             self.segments_expected=bb.read('uint:8')
