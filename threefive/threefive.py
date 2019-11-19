@@ -250,7 +250,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
                 self.turner_identifier=bb.read('bits:64')
             self.segmentation_type_id=bb.read('uint:8')
             if self.segmentation_type_id in tables.table22.keys():
-                self.segmentation_type= tables.table22[self.segmentation_type_id][0]
+                self.segmentation_message= tables.table22[self.segmentation_type_id][0]
             self.segment_num=bb.read('uint:8')
             self.segments_expected=bb.read('uint:8')
             if self.segmentation_type_id in [0x34, 0x36]:
