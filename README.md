@@ -1,20 +1,20 @@
-# threefive
+# `threefive`
 
 
 ## SCTE35 parsing. 
 
 
 ## The Spec
-* https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
+* `https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf`
 
 
-### Splice Commands
+### `Splice Commands`
 * Splice Null
 * Splice Schedule (maybe)
 * Splice Insert
 * Time Signal
 * Bandwidth Reservation (maybe)
-### Splice Descriptors
+### `Splice Descriptors`
 * DTMF Descriptor
 * Segmentation Descriptor (mostly)
   * segmentation upid (some)
@@ -23,7 +23,7 @@
 * Time Descriptor (maybe)
 * Audio Descriptor
 
-### Encodings
+### `Encodings`
 * Base64
 * Hex
 
