@@ -1,10 +1,10 @@
 # `threefive`
 
 
-## SCTE35 parsing. 
+## `SCTE35 parsing.` 
 
 
-## The Spec
+### `Specification`
 * https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
 
 
