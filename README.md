@@ -4,9 +4,28 @@
 ## SCTE35 parsing. 
 
 
-### The Spec
+## The Spec
 * https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
 
+
+### Splice Commands
+* Splice Null
+* Splice Schedule (maybe)
+* Splice Insert
+* Time Signal
+* Bandwidth Reservation (maybe)
+### Splice Descriptors
+* DTMF Descriptor
+* Segmentation Descriptor (mostly)
+  * segmentation upid (some)
+  * segmentation type and messages
+
+* Time Descriptor (maybe)
+* Audio Descriptor
+
+### Encodings
+* Base64
+* Hex
 
 ## Dependencies
 * Python 3
@@ -14,13 +33,13 @@
 
 ## Install
 ```go
-pip install threefive
-
+[root@localhost examples]# pip install threefive
 Collecting threefive
-  Downloading https://files.pythonhosted.org/packages/d9/67/a3557a287a7d7512c99afc86f2805d1a0a3e7f832d55b2af665692fdb498/threefive-1.1.9-py3-none-any.whl
+  Downloading  https://files.pythonhosted.org/packages/0c/8c/eead7a2880c63f0238cba4282a0eb5603bb3590930868050e3a15b44af11/threefive-1.1.21-py3-none-any.whl
 Requirement already satisfied: bitstring in /usr/lib/python3.7/site-packages (from threefive) (3.1.6)
 Installing collected packages: threefive
-Successfully installed threefive-1.1.9
+Successfully installed threefive-1.1.21
+
 
 ```
 ## Run
