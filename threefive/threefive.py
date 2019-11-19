@@ -2,13 +2,6 @@ import base64,bitstring
 import threefive.tables as tables
 
 
-def not_zero(i):
-    return i !=0
-
-def gte_zero(i):
-    return i >=0
-
-
 def hex_decode(k):
     try:
         return bytearray.fromhex(hex(k)[2:]).decode()
