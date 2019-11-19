@@ -5,7 +5,7 @@
 
 
 ## The Spec
-* `https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf`
+* https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
 
 
 ### `Splice Commands`
@@ -27,11 +27,11 @@
 * Base64
 * Hex
 
-## Dependencies
+## `Dependencies`
 * Python 3
 * bitstring
 
-## Install
+## `Install`
 ```go
 [root@localhost examples]# pip install threefive
 Collecting threefive
@@ -42,7 +42,7 @@ Successfully installed threefive-1.1.21
 
 
 ```
-## Run
+## `Run`
 ```go
 so# python3                         
 Python 3.6.8 (default, Apr 13 2019, 18:58:09) 
@@ -94,7 +94,7 @@ provider_avail_id : 309
 
 
 ```
-### Or 
+### 
 ```go
 
 >>> import threefive    
@@ -114,7 +114,7 @@ provider_avail_id : 309
 ```
 
 
-#### Parse base64 encoded messages
+#### `Parse base64 encoded messages`
 ```go
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUg/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
@@ -128,7 +128,7 @@ time_specified_flag : True
 pts_time : 31466.942367
 
 ```
-#### Parse hex encoded messages
+#### `Parse hex encoded messages`
 ```go
 >>> import threefive
 >>> mesg= '0xfc3061000000000000fffff00506fea8cd44ed004b021743554549480000ad7f9
@@ -156,8 +156,8 @@ crc : 0x8a18869f
 
 ```
 
-## Methods
-#### threefive.Splice.show_info_section()
+## `Methods`
+#### `threefive.Splice.show_info_section()`
 ```python3
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
@@ -181,7 +181,7 @@ splice_command_type : 6
 descriptor_loop_length : 75
 
 ```
-#### threefive.Splice.show_command()
+#### `threefive.Splice.show_command()`
 ```python3
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
@@ -195,7 +195,7 @@ time_specified_flag : True
 pts_time : 31466.942367
 
 ```
-#### threefive.Splice.show_descriptors()
+#### `threefive.Splice.show_descriptors()`
 ```python3
 >> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
@@ -270,7 +270,7 @@ segments_expected : 0
 
 ```
 
-### threefive.Splice.show()
+### `threefive.Splice.show()`
 #### Shows all data
 ```python3
 
@@ -371,7 +371,7 @@ segments_expected : 0
 
 
 ```
-### Read individual values
+### `Read individual values`
 
 ```python3
 import threefive
