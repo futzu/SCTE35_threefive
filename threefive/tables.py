@@ -4,6 +4,52 @@ def not_zero(i):
 def gte_zero(i):
     return i >=0
 
+def MPU():
+    pass
+
+def MID():
+    pass
+	
+'''
+Table 20 from page 58 of
+https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
+
+Restrict Group 0 – This segment is restricted for a class of devices 
+defined by an out of band message that describes which devices are excluded.
+
+Restrict Group 1 – This segment is restricted for a class of devices 
+defined by an out of band message that describes which devices are excluded.  
+
+Restrict Group 2 – This segment is restricted for a class of devices 
+defined by an out of band message that describes which devices are excluded. 
+'''
+table20={
+0x00: 'Restrict Group 0',
+0x01: 'Restrict Group 1',
+0x02: 'Restrict Group 2',
+0x03: 'No Restrictions'}
+
+	
+table21={
+0x00: [	0,None],
+0x01: [	gte_zero,'User Defined'],
+0x02: [	8,'ISCI'],
+0x03: [	12,	'Ad-ID'],
+0x04: [	32,	'UMID'],
+0x05: [	8, 'ISAN'],
+0x06: [	12,'ISAN'],
+0x07: [	12,'TID'],
+0x08: [	8,'AiringID'],
+0x09: [	gte_zero,'ADI'],	
+0x0A: [	12,	'EIDR'],
+0x0B: [	gte_zero,'ATSC'],
+0x0C: [	gte_zero,MPU],
+0x0D: [	gte_zero,MID],
+0x0E: [	gte_zero,'ADS Info'],
+0x0F: [	gte_zero,'URI'],
+0x10-0xff: [gte_zero,'Reserved']}
+
+
 '''
 table 22 from page 62 of 
 https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
@@ -57,3 +103,5 @@ table22={
 0x41  : [ "Unscheduled Event End",0,0, None,None],
 0x50  : [ "Network Start",0,0, None,None],
 0x51  : [ "Network End",0,0, None,None]}
+
+
