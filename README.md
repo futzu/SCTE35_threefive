@@ -1,7 +1,7 @@
 # `threefive`
 
 
-## `SCTE35 parsing.` 
+## `SCTE35 Decoder Ring` 
 
 
 ### `Specification`
@@ -9,23 +9,23 @@
 
 
 ### `Splice Commands`
-* Splice Null
-* Splice Schedule (maybe)
-* Splice Insert
-* Time Signal
-* Bandwidth Reservation (maybe)
+* `Splice Null`
+* `Splice Schedule` (maybe)
+* `Splice Insert`
+* `Time Signal`
+* `Bandwidth Reservation` (maybe)
 ### `Splice Descriptors`
-* DTMF Descriptor
-* Segmentation Descriptor (mostly)
-  * segmentation upid (some)
-  * segmentation type and messages
+* `DTMF Descriptor`
+* `Segmentation Descriptor` (mostly)
+  * `segmentation upid` (some)
+  * `segmentation type and messages`
 
-* Time Descriptor (maybe)
-* Audio Descriptor
+* `Time Descriptor` (maybe)
+* `Audio Descriptor`
 
 ### `Encodings`
-* Base64
-* Hex
+* `Base64`
+* `Hex`
 
 ## `Dependencies`
 * Python 3
