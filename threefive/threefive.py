@@ -190,7 +190,7 @@ class Private_Command(Splice_Command):
 class Splice_Descriptor:
     '''
     the first six bytes of all descriptors:
-    
+   
         splice_descriptor_tag    8 uimsbf 
         descriptor_length        8 uimsbf 
         identifier              32 uimsbf 
@@ -205,19 +205,6 @@ class Splice_Descriptor:
 
 
 class Avail_Descriptor(Splice_Descriptor):
-    '''
-    
-    Table 17 -  avail_descriptor()
-    
-    avail_descriptor() {
-    splice_descriptor_tag    8 uimsbf 
-    descriptor_length        8 uimsbf 
-    identifier              32 uimsbf 
-    provider_avail_id       32 uimsbf
-    }
-    
-    
-    '''
     def __init__(self,bb,tag):
         super().__init__(bb,tag)
         self.name='Avail Descriptor'
@@ -225,22 +212,6 @@ class Avail_Descriptor(Splice_Descriptor):
 
 	
 class Dtmf_Descriptor(Splice_Descriptor):
-    '''
-    Table 18 -  DTMF_descriptor()
-    
-    DTMF_descriptor() 
-        splice_descriptor_tag           8uimsbf
-        descriptor_length               8uimsbf
-        identifier                     32uimsbf
-        preroll                         8uimsbf
-        dtmf_count                      3uimsbf
-        reserved                        5bslbf
-        for(i=0; i<dtmf_count; i++) {
-                 DTMF_char              8uimsbf       
-        }
-    }
-    
-    ''' 
     def __init__(self,bb,tag):
         super().__init__(bb,tag)
         self.name='DTMF Descriptor'
