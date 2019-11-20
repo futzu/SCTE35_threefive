@@ -1,7 +1,6 @@
 import base64
 import bitstring
 import threefive.tables as tables
-from termcolor import cprint
 
 
 def hex_decode(k):
@@ -10,29 +9,24 @@ def hex_decode(k):
 
 
 def kv_print(obj):
-    row=False
     dotdot=' : '
-    for k,v in vars(obj).items():
-        stuff=f'{k}{dotdot}{str(v)}'
-        if not row:
-            cprint(stuff,'blue','on_white')
-            row=True
-        else:    
-            cprint(stuff,'white','on_blue')
-            row=False
-
+    for k,v in vars(obj).items(): print(f'{k}{dotdot}{v}')
+ 
 
 def mk_bits(s):
     try: return bitstring.BitString(bytes=base64.b64decode(s))
-    except:return bitstring.BitStream(s)
+    except: return bitstring.BitStream(s)
 
+	
 def time_90k(k):
     t= k/90000.0    
     return f'{t :.6f}'
-	
+
+
 def reserved(bb,bst):
     bb.bitpos+=bst
-	
+
+
 class Splice:
     def __init__(self,mesg):
         bb=mk_bits(mesg)
