@@ -30,6 +30,7 @@
 ## `Dependencies`
 * Python 3
 * bitstring
+* termcolor
 
 ## `Install`
 ```go
