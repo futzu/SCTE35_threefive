@@ -1,0 +1,12 @@
+
+clean:
+	rm -f dist/*
+	rm -rf build/*
+		
+pkg: clean
+	python3 setup.py sdist bdist_wheel
+
+	
+upload: clean pkg	
+	twine upload dist/*
+
