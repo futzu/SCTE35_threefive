@@ -190,7 +190,7 @@ class Private_Command(Splice_Command):
 class Splice_Descriptor:
     '''
     the first six bytes of all descriptors:
-   
+    
         splice_descriptor_tag    8 uimsbf 
         descriptor_length        8 uimsbf 
         identifier              32 uimsbf 
@@ -198,13 +198,18 @@ class Splice_Descriptor:
     def __init__(self,bb,tag):
         self.name='Unknown Descriptor'
         self.splice_descriptor_tag=tag
-        # descriptor_length 8 uimsbf
         self.descriptor_length = bb.read('uint:8')
         #identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
         self.identifier = hex_decode(bb.read('uint:32'))
+        try: self.identifier == 'CUEI'
+        except:
+            print('descriptor identifier is ',self.identifier , 'should be CUEI')
 
 
 class Avail_Descriptor(Splice_Descriptor):
+    '''  
+    Table 17 -  avail_descriptor()
+    '''
     def __init__(self,bb,tag):
         super().__init__(bb,tag)
         self.name='Avail Descriptor'
@@ -212,6 +217,9 @@ class Avail_Descriptor(Splice_Descriptor):
 
 	
 class Dtmf_Descriptor(Splice_Descriptor):
+    '''
+    Table 18 -  DTMF_descriptor()
+    ''' 
     def __init__(self,bb,tag):
         super().__init__(bb,tag)
         self.name='DTMF Descriptor'
