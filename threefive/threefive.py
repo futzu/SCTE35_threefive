@@ -1,18 +1,29 @@
 import base64,bitstring
+from termcolor import colored, cprint
 import threefive.tables as tables
 
-
 def hex_decode(k):
-    try:
-        return bytearray.fromhex(hex(k)[2:]).decode()
-    except:
-        return k
+    try: return bytearray.fromhex(hex(k)[2:]).decode()
+    except: return k
 
 def kv_print(obj):
-    try: 
-        for k,v in vars(obj).items(): print(k,':',v)
-    except: 
-        print(obj)
+    #try:
+    row=False
+    for k,v in vars(obj).items():
+        stuff=k
+        if not row:
+            ck=colored(k,'blue','on_white')
+            cv=colored(v,'blue','on_white')
+            dotdot=colored(" : ",'blue','on_white')
+            row=True
+        else:    
+            ck=colored(k,'white','on_blue')
+            cv=colored(v,'white','on_blue')
+            dotdot=colored(" : ",'white','on_blue')
+
+            row=False
+        print(f'{str(ck)}{str(dotdot)}{str(cv)}')
+
 
 def mk_bits(s):
     try: return bitstring.BitString(bytes=base64.b64decode(s))
@@ -95,8 +106,7 @@ class Splice_Command:
         if self.time_specified_flag:
             reserved(bb,6)
             self.pts_time=time_90k(bb.read('uint:33'))
-        else:
-            reserved(bb,7)
+        else: reserved(bb,7)
 
 
 class Splice_Null(Splice_Command):
@@ -119,7 +129,8 @@ class Splice_Schedule(Splice_Command):
                 self.program_splice_flag=bb.read('bool')
                 self.duration_flag=bb.read('bool')
                 reserved(bb,5)
-                if self.program_splice_flag:  self.utc_splice_time=bb.read('uint:32')
+                if self.program_splice_flag:  
+                    self.utc_splice_time=bb.read('uint:32')
                 else:
                     self.component_count=bb.read('uint:8')
                     self.components=[]
@@ -151,7 +162,8 @@ class Splice_Insert(Splice_Command):
             if not self.program_splice_flag:
                 self.component_count=bb.read('uint:8')
                 self.components=[]
-                for i in range(0,self.component_count):  self.components[i]=bb.read('uint:8')
+                for i in range(0,self.component_count):  
+                    self.components[i]=bb.read('uint:8')
                 if not self.splice_immediate_flag: self.splice_time(bb)
             if self.duration_flag: self.break_duration(bb) 
             self.unique_program_id=bb.read('uint:16')
@@ -179,6 +191,13 @@ class Private_Command(Splice_Command):
 
 
 class Splice_Descriptor:
+    '''
+    the first six bytes of all descriptors:
+    
+        splice_descriptor_tag    8 uimsbf 
+        descriptor_length        8 uimsbf 
+        identifier              32 uimsbf 
+    '''
     def __init__(self,bb,tag):
         self.name='Unknown Descriptor'
         self.splice_descriptor_tag=tag
@@ -186,9 +205,22 @@ class Splice_Descriptor:
         self.descriptor_length = bb.read('uint:8')
         #identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
         self.identifier = hex_decode(bb.read('uint:32'))
-      
+
 
 class Avail_Descriptor(Splice_Descriptor):
+    '''
+    
+    Table 17 -  avail_descriptor()
+    
+    avail_descriptor() {
+    splice_descriptor_tag    8 uimsbf 
+    descriptor_length        8 uimsbf 
+    identifier              32 uimsbf 
+    provider_avail_id       32 uimsbf
+    }
+    
+    
+    '''
     def __init__(self,bb,tag):
         super().__init__(bb,tag)
         self.name='Avail Descriptor'
@@ -196,6 +228,22 @@ class Avail_Descriptor(Splice_Descriptor):
 
 	
 class Dtmf_Descriptor(Splice_Descriptor):
+    '''
+    Table 18 -  DTMF_descriptor()
+    
+    DTMF_descriptor() 
+        splice_descriptor_tag           8uimsbf
+        descriptor_length               8uimsbf
+        identifier                     32uimsbf
+        preroll                         8uimsbf
+        dtmf_count                      3uimsbf
+        reserved                        5bslbf
+        for(i=0; i<dtmf_count; i++) {
+                 DTMF_char              8uimsbf       
+        }
+    }
+    
+    ''' 
     def __init__(self,bb,tag):
         super().__init__(bb,tag)
         self.name='DTMF Descriptor'
@@ -203,7 +251,7 @@ class Dtmf_Descriptor(Splice_Descriptor):
         self.dtmf_count= bb.read('uint:3')
         reserved(bb,5)
         self.dtmf_chars=[]
-        for i in range(0,self.dtmf_count):
+        for i in range(0,self.dtmf_count): 
             self.dtmf_chars.append(bb.read('uint:8'))
 
 	
@@ -223,9 +271,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
                 self.no_regional_blackout_flag=bb.read('bool')
                 self.archive_allowed_flag=bb.read('bool')
                 self.device_restrictions=hex(bb.read('uint:2'))
-            else: 
-                reserved(bb,5)
-
+            else: reserved(bb,5)
             if not self.program_segmentation_flag:
                 self.component_count= bb.read('uint:8')
                 self.components=[]
@@ -249,7 +295,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
             if self.segmentation_type_id in [0x34, 0x36]:
                 self.sub_segment_num=bb.read('uint:8')
                 self.sub_segments_expected=bb.read('uint:8')
-           
+
 
 class Time_Descriptor(Splice_Descriptor):
     def __init__(self,bb,tag):
