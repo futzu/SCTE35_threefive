@@ -30,16 +30,18 @@
 ## `Dependencies`
 * Python 3
 * bitstring
-* termcolor
+
 
 ## `Install`
 ```go
-[root@localhost examples]# pip install threefive
+pip install threefive
+
 Collecting threefive
-  Downloading  https://files.pythonhosted.org/packages/0c/8c/eead7a2880c63f0238cba4282a0eb5603bb3590930868050e3a15b44af11/threefive-1.1.21-py3-none-any.whl
+  Downloading https://files.pythonhosted.org/packages/58/74/c0340db8d85ecd442e2180dc26cb6f11961496b3151e18e80f19026ec331/threefive-1.1.27-py3-none-any.whl
 Requirement already satisfied: bitstring in /usr/lib/python3.7/site-packages (from threefive) (3.1.6)
 Installing collected packages: threefive
-Successfully installed threefive-1.1.21
+Successfully installed threefive-1.1.27
+
 
 
 ```
