@@ -1,28 +1,25 @@
-import base64,bitstring
-from termcolor import colored, cprint
+import base64
+import bitstring
 import threefive.tables as tables
+from termcolor import cprint
+
 
 def hex_decode(k):
     try: return bytearray.fromhex(hex(k)[2:]).decode()
     except: return k
 
+
 def kv_print(obj):
-    #try:
     row=False
+    dotdot=' : '
     for k,v in vars(obj).items():
-        stuff=k
+        stuff=f'{k}{dotdot}{str(v)}'
         if not row:
-            ck=colored(k,'blue','on_white')
-            cv=colored(v,'blue','on_white')
-            dotdot=colored(" : ",'blue','on_white')
+            cprint(stuff,'blue','on_white')
             row=True
         else:    
-            ck=colored(k,'white','on_blue')
-            cv=colored(v,'white','on_blue')
-            dotdot=colored(" : ",'white','on_blue')
-
+            cprint(stuff,'white','on_blue')
             row=False
-        print(f'{str(ck)}{str(dotdot)}{str(cv)}')
 
 
 def mk_bits(s):
