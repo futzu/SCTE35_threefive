@@ -260,8 +260,12 @@ class Segmentation_Descriptor(Splice_Descriptor):
             self.segmentation_type_id=bb.read('uint:8')
             if self.segmentation_type_id in tables.table22.keys():
                 self.segmentation_message= tables.table22[self.segmentation_type_id][0]
-            self.segment_num=bb.read('uint:8')
-            self.segments_expected=bb.read('uint:8')
+            if  self.segmentation_type_id ==0:
+                self.segment_num=0
+                self.segments_expected=0
+            else:                
+                self.segment_num=bb.read('uint:8')
+                self.segments_expected=bb.read('uint:8')
             if self.segmentation_type_id in [0x34, 0x36]:
                 self.sub_segment_num=bb.read('uint:8')
                 self.sub_segments_expected=bb.read('uint:8')
