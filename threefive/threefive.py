@@ -40,7 +40,7 @@ class Splice:
             bitstart=bb.bitpos
             sd=self.set_splice_descriptor(bb)
             try: sdl=sd.descriptor_length
-            else: sdl=0
+            except: sdl=0
             bit_move=sdl+ tag_plus_header_size
             dll -=(bit_move)
             self.descriptors.append(sd)
