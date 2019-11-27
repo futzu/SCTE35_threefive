@@ -1,7 +1,7 @@
 import base64
 import bitstring
-import threefive.tables as tables
-
+#import threefive.tables as tables
+import tables
 
 def hex_decode(k):
     try: return bytearray.fromhex(hex(k)[2:]).decode()
@@ -36,6 +36,7 @@ class Splice:
         self.info_section.descriptor_loop_length = bb.read('uint:16') 
         tag_plus_header_size=2 # 1 byte for descriptor_tag, 1 byte for header?
         dll=self.info_section.descriptor_loop_length
+      
         while dll> 0:
             bitstart=bb.bitpos
             sd=self.set_splice_descriptor(bb)
@@ -46,7 +47,7 @@ class Splice:
             self.descriptors.append(sd)
             bb.bitpos=bitstart+(bit_move*8)
         self.info_section.crc=hex(bb.read('uint:32'))
-
+        
     def set_splice_command(self,bb):
         cmd_types={0: Splice_Null,
 		4: Splice_Schedule,
