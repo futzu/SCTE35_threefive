@@ -1,7 +1,6 @@
 import base64
 import bitstring
-#import threefive.tables as tables
-import tables
+import threefive.tables as tables
 
 def hex_decode(k):
     try: return bytearray.fromhex(hex(k)[2:]).decode()
