@@ -26,6 +26,7 @@
 ### `Encodings`
 * `Base64`
 * `Hex`
+* binary from mpegts 
 
 ## `Dependencies`
 * Python 3
@@ -115,7 +116,80 @@ provider_avail_id : 309
 >>> 
 
 ```
+#### `Parse mpegts file`
+```go
+[root@localhost threefive]# python
+Python 3.7.4 (default, Jul 16 2019, 07:12:58) 
+[GCC 9.1.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import threefive
+>>> threefive.parse_tsfile('/home/a/mpegwithscte35.ts')
 
+[ Splice Info Section ]
+table_id : 0xfc
+section_syntax_indicator : False
+private : False
+section_length : 17
+protocol_version : 0
+encrypted_packet : False
+encryption_algorithm : 0
+pts_adjustment : 0.000000
+cw_index : 0x0
+tier : 0xfff
+splice_command_length : 4095
+splice_command_type : 0
+descriptor_loop_length : 0
+crc : 0x4f253396
+
+[ Splice Command ]
+splice_type : 0
+name : Splice Null
+
+.......
+
+[ Splice Info Section ]
+table_id : 0xfc
+section_syntax_indicator : False
+private : False
+section_length : 42
+protocol_version : 0
+encrypted_packet : False
+encryption_algorithm : 0
+pts_adjustment : 0.000000
+cw_index : 0x0
+tier : 0xfff
+splice_command_length : 4095
+splice_command_type : 5
+descriptor_loop_length : 10
+crc : 0x6e33321e
+
+[ Splice Command ]
+splice_type : 5
+name : Splice Insert
+splice_event_id : 662
+splice_event_cancel_indicator : False
+out_of_network_indicator : False
+program_splice_flag : True
+duration_flag : False
+splice_immediate_flag : False
+time_specified_flag : True
+pts_time : 89984.161689
+unique_program_id : 1
+avail_num : 0
+avail_expected : 0
+
+[ Splice Descriptor  0  ]
+name : Avail Descriptor
+splice_descriptor_tag : 0
+descriptor_length : 8
+identifier : CUEI
+provider_avail_id : 0
+
+........
+
+
+
+```
 
 #### `Parse base64 encoded messages`
 ```go
