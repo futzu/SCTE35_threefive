@@ -155,8 +155,8 @@ crc : 0x8a18869f
 
 ```
 
-## `Methods
-`
+## `Methods`
+
 #### `threefive.Splice.show_info_section()`
 ```python3
 >>> import threefive
