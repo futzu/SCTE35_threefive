@@ -2,15 +2,11 @@
 
 
 ## `SCTE35 Decoder Ring` 
-
+* `Parse SCTE 35 messages from Mpeg-ts files.` 
+* `Parse SCTE 35 messages encoded in Base64 or Hex.`
 
 ### `Specification`
 * https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
-
-### `Encodings`
-* `Binary from mpegts` 
-* `Base64`
-* `Hex`
 
 ### `Splice Commands`
 * `Splice Null`
