@@ -1,6 +1,9 @@
 import base64
 import bitstring
-import threefive.tables as tables
+from struct import unpack
+try: import threefive.tables as tables
+except: import tables
+
 
 def hex_decode(k):
     try: return bytearray.fromhex(hex(k)[2:]).decode()
@@ -11,19 +14,42 @@ def kv_print(obj):
     dotdot=' : '
     for k,v in vars(obj).items(): print(f'{k}{dotdot}{v}')
  
-
+ 
 def mk_bits(s):
     try: return bitstring.BitString(bytes=base64.b64decode(s))
     except: return bitstring.BitStream(s)
 
-	
-def time_90k(k):
-    t= k/90000.0    
-    return f'{t :.6f}'
+
+def parse_tsfile(tsfile):
+    with open(tsfile,'rb') as tsdata: parse_tsdata(tsdata)
+
+
+def parse_tsdata(tsdata):
+    PACKET_SIZE=188
+    PID=0x135
+    SYNC_BYTE=0x47
+    while tsdata:
+        data = tsdata.read(PACKET_SIZE)
+        if not data: break
+        sync_offset = data.find(SYNC_BYTE)
+        if sync_offset != 0: data = data[sync_offset:]
+        sync,pid =unpack('>BH', data[:3])
+        pid=pid & 8191
+        if pid==PID: parse_tspacket(data[3:])
+
+
+def parse_tspacket(tspacket):
+    _, payload = unpack('>H183s', tspacket)
+    Splice(payload).show()
 
 
 def reserved(bb,bst):
     bb.bitpos+=bst
+
+
+def time_90k(k):
+    t= k/90000.0    
+    return f'{t :.6f}'
 
 
 class Splice:
@@ -37,14 +63,16 @@ class Splice:
         dll=self.info_section.descriptor_loop_length
       
         while dll> 0:
-            bitstart=bb.bitpos
-            sd=self.set_splice_descriptor(bb)
-            try: sdl=sd.descriptor_length
+            #bitstart=bb.bitpos
+            try: 
+                sd=self.set_splice_descriptor(bb)
+                sdl=sd.descriptor_length
+                self.descriptors.append(sd)
+
             except: sdl=0
             bit_move=sdl+ tag_plus_header_size
             dll -=(bit_move)
-            self.descriptors.append(sd)
-            bb.bitpos=bitstart+(bit_move*8)
+            #bb.bitpos=bitstart+(bit_move*8)
         self.info_section.crc=hex(bb.read('uint:32'))
         
     def set_splice_command(self,bb):
@@ -65,9 +93,12 @@ class Splice:
 		3: Time_Descriptor,
 		4: Audio_Descriptor}   
         # splice_descriptor_tag 8 uimsbf
-        tag= bb.read('uint:8')
-        if tag in dscr_types.keys(): return dscr_types[tag](bb,tag) 		
-
+        try:
+            tag= bb.read('uint:8')
+            if tag in dscr_types.keys(): return dscr_types[tag](bb,tag) 		
+        except:
+                return False
+                
     def show_info_section(self):
         print('\n[ Splice Info Section ]')
         kv_print(self.info_section)
