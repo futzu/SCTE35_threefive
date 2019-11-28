@@ -7,6 +7,10 @@
 ### `Specification`
 * https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
 
+### `Encodings`
+* `Binary from mpegts` 
+* `Base64`
+* `Hex`
 
 ### `Splice Commands`
 * `Splice Null`
@@ -14,24 +18,18 @@
 * `Splice Insert`
 * `Time Signal`
 * `Bandwidth Reservation` (maybe)
+
 ### `Splice Descriptors`
 * `DTMF Descriptor`
 * `Segmentation Descriptor` (mostly)
   * `segmentation upid` (some)
   * `segmentation type and messages`
-
 * `Time Descriptor` (maybe)
 * `Audio Descriptor`
 
-### `Encodings`
-* `Base64`
-* `Hex`
-* Binary from mpegts 
-
-## `Dependencies`
+### `Dependencies`
 * Python 3
 * bitstring
-
 
 ## `Install`
 ```go
