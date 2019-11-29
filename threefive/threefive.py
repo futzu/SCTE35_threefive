@@ -9,46 +9,36 @@ def hex_decode(k):
     try: return bytearray.fromhex(hex(k)[2:]).decode()
     except: return k
 
-
 def kv_print(obj):
     dotdot=' : '
     for k,v in vars(obj).items(): print(f'{k}{dotdot}{v}')
  
- 
 def mk_bits(s):
     try: return bitstring.BitString(bytes=base64.b64decode(s))
-    except: return bitstring.BitStream(s)
-
+    except: return bitstring.ConstBitStream(s)
 
 def parse_tsfile(tsfile):
     with open(tsfile,'rb') as tsdata:
         PID=False
         psize = 188  
         while tsdata:
-            data = tsdata.read(psize)
-            if not data: break
-            sync_offset = data.find(0x47)
-            if sync_offset != 0: data = data[sync_offset:]
-            packet,data = data[:psize], data[psize:]
+            packet = tsdata.read(psize)
+            if not packet: break
             PID=parse_tspacket(packet,PID)
 
 def parse_tspacket(packet,PID):
-    sync, pid, count, payload = unpack('>BHB184s', packet)
-    pid = pid & 8191 
+    sync, pid, _, payload = unpack('>BHB184s', packet)
     if PID:
-        if pid !=PID:
-            return PID
+        if pid !=PID: return PID
     cue=payload[1:]
     if cue[0]==0xfc:
         try:
             Splice(cue).show()
             if not PID: PID=pid
-        except: pass
-    return PID
+        finally: return PID
 
 def reserved(bb,bst):
     bb.bitpos+=bst
-
 
 def time_90k(k):
     t= k/90000.0    
@@ -65,25 +55,20 @@ class Splice:
         self.info_section.descriptor_loop_length = bb.read('uint:16') 
         tag_plus_header_size=2 # 1 byte for descriptor_tag, 1 byte for header?
         dll=self.info_section.descriptor_loop_length
-      
         while dll> 0:
-            #bitstart=bb.bitpos
             try: 
                 sd=self.set_splice_descriptor(bb)
                 sdl=sd.descriptor_length
                 self.descriptors.append(sd)
-
             except: sdl=0
             bit_move=sdl+ tag_plus_header_size
             dll -=(bit_move)
-            #bb.bitpos=bitstart+(bit_move*8)
         self.info_section.crc=hex(bb.read('uint:32'))
 
     def is_null_splice(self):
         if self.info_section.splice_command_type==0: return True
-        else: return False
+        return False
 
-               
     def set_splice_command(self,bb):
         cmd_types={0: Splice_Null,
 		4: Splice_Schedule,
@@ -102,11 +87,8 @@ class Splice:
 		3: Time_Descriptor,
 		4: Audio_Descriptor}   
         # splice_descriptor_tag 8 uimsbf
-        try:
-            tag= bb.read('uint:8')
-            if tag in dscr_types.keys(): return dscr_types[tag](bb,tag) 		
-        except:
-                return False
+        tag= bb.read('uint:8')
+        if tag in dscr_types.keys(): return dscr_types[tag](bb,tag) 		
                 
     def show_info_section(self):
         if self.is_null_splice(): return 
