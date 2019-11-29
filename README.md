@@ -38,7 +38,6 @@ Installing collected packages: threefive
 Successfully installed threefive-1.1.27
 
 
-
 ```
 ## `Run`
 
@@ -51,7 +50,7 @@ Successfully installed threefive-1.1.27
 table_id : 0xfc
 section_syntax_indicator : False
 private : False
-section_length : 17
+section_length : 47
 protocol_version : 0
 encrypted_packet : False
 encryption_algorithm : 0
@@ -59,15 +58,33 @@ pts_adjustment : 0.000000
 cw_index : 0x0
 tier : 0xfff
 splice_command_length : 4095
-splice_command_type : 0
-descriptor_loop_length : 0
-crc : 0x4f253396
+splice_command_type : 5
+descriptor_loop_length : 10
+crc : 0x10fa4d9e
 
 [ Splice Command ]
-splice_type : 0
-name : Splice Null
+splice_type : 5
+name : Splice Insert
+splice_event_id : 662
+splice_event_cancel_indicator : False
+out_of_network_indicator : True
+program_splice_flag : True
+duration_flag : True
+splice_immediate_flag : False
+time_specified_flag : True
+pts_time : 89742.161689
+break_auto_return : False
+break_duration : 242.000000
+unique_program_id : 1
+avail_num : 0
+avail_expected : 0
 
-.......
+[ Splice Descriptor  0  ]
+name : Avail Descriptor
+splice_descriptor_tag : 0
+descriptor_length : 8
+identifier : CUEI
+provider_avail_id : 0
 
 [ Splice Info Section ]
 table_id : 0xfc
@@ -107,9 +124,8 @@ descriptor_length : 8
 identifier : CUEI
 provider_avail_id : 0
 
-........
 
-
+>>>
 
 ```
 
