@@ -21,27 +21,30 @@ def mk_bits(s):
 
 
 def parse_tsfile(tsfile):
-    with open(tsfile,'rb') as tsdata: parse_tsdata(tsdata)
+    with open(tsfile,'rb') as tsdata:
+        PID=False
+        psize = 188  
+        while tsdata:
+            data = tsdata.read(psize)
+            if not data: break
+            sync_offset = data.find(0x47)
+            if sync_offset != 0: data = data[sync_offset:]
+            packet,data = data[:psize], data[psize:]
+            PID=parse_tspacket(packet,PID)
 
-
-def parse_tsdata(tsdata):
-    PACKET_SIZE=188
-    PID=0x135
-    SYNC_BYTE=0x47
-    while tsdata:
-        data = tsdata.read(PACKET_SIZE)
-        if not data: break
-        sync_offset = data.find(SYNC_BYTE)
-        if sync_offset != 0: data = data[sync_offset:]
-        sync,pid =unpack('>BH', data[:3])
-        pid=pid & 8191
-        if pid==PID: parse_tspacket(data[3:])
-
-
-def parse_tspacket(tspacket):
-    _, payload = unpack('>H183s', tspacket)
-    Splice(payload).show()
-
+def parse_tspacket(packet,PID):
+    sync, pid, count, payload = unpack('>BHB184s', packet)
+    pid = pid & 8191 
+    if PID:
+        if pid !=PID:
+            return PID
+    cue=payload[1:]
+    if cue[0]==0xfc:
+        try:
+            Splice(cue).show()
+            if not PID: PID=pid
+        except: pass
+    return PID
 
 def reserved(bb,bst):
     bb.bitpos+=bst
@@ -56,7 +59,8 @@ class Splice:
     def __init__(self,mesg):
         bb=mk_bits(mesg)
         self.descriptors=[]
-        self.info_section=Splice_Info_Section(bb) 
+        self.info_section=Splice_Info_Section(bb)
+        if self.is_null_splice(): return 
         self.set_splice_command(bb) 
         self.info_section.descriptor_loop_length = bb.read('uint:16') 
         tag_plus_header_size=2 # 1 byte for descriptor_tag, 1 byte for header?
@@ -74,7 +78,12 @@ class Splice:
             dll -=(bit_move)
             #bb.bitpos=bitstart+(bit_move*8)
         self.info_section.crc=hex(bb.read('uint:32'))
-        
+
+    def is_null_splice(self):
+        if self.info_section.splice_command_type==0: return True
+        else: return False
+
+               
     def set_splice_command(self,bb):
         cmd_types={0: Splice_Null,
 		4: Splice_Schedule,
@@ -100,14 +109,17 @@ class Splice:
                 return False
                 
     def show_info_section(self):
+        if self.is_null_splice(): return 
         print('\n[ Splice Info Section ]')
         kv_print(self.info_section)
 
     def show_command(self):
+        if self.is_null_splice(): return 
         print('\n[ Splice Command ]')
         kv_print(self.command)
 		
     def show_descriptors(self):
+        if self.is_null_splice(): return 
         for d in self.descriptors:
             idx=self.descriptors.index(d)
             print('\n[ Splice Descriptor ',idx,' ]')
