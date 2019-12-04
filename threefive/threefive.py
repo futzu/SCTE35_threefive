@@ -72,6 +72,7 @@ class Splice:
         self.info_section.crc=hex(bb.read('uint:32'))
 
     def is_splice_null(self):
+
         if self.info_section.splice_command_type==0: return True
         return False
 
