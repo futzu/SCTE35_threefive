@@ -52,10 +52,11 @@ Type "help", "copyright", "credits" or "license" for more information.
 pip install threefive
 
 Collecting threefive
-  Downloading https://files.pythonhosted.org/packages/58/74/c0340db8d85ecd442e2180dc26cb6f11961496b3151e18e80f19026ec331/threefive-1.1.27-py3-none-any.whl
-Requirement already satisfied: bitstring in /usr/lib/python3.7/site-packages (from threefive) (3.1.6)
-Installing collected packages: threefive
-Successfully installed threefive-1.1.27
+  Downloading https://files.pythonhosted.org/packages/4f/ba/242d23644c261b49e73ff7d693473a18fdefdfe8b5ef0c3269d7c0076f8d/threefive-1.1.47-py3-none-any.whl
+Collecting bitstring
+  Downloading https://files.pythonhosted.org/packages/c7/b9/ce7458b35633968eae3477a201a00f6c8e01cab0ccb200ea5099d41dd977/bitstring-3.1.6-py3-none-any.whl
+Installing collected packages: bitstring, threefive
+Successfully installed bitstring-3.1.6 threefive-1.1.47
 
 
 ```
