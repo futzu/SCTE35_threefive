@@ -63,7 +63,6 @@ class Splice:
         while dll> 0:
             try: 
                 sd=self.set_splice_descriptor(bb)
-                if not sd: return False
                 sdl=sd.descriptor_length
                 self.descriptors.append(sd)
             except: sdl=0
@@ -228,9 +227,6 @@ class Splice_Descriptor:
         #identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
         self.identifier = hex_decode(bb.read('uint:32'))
         if self.identifier != 'CUEI': return False
-        #except:
-         #   print('descriptor identifier is ',self.identifier , 'should be CUEI')
-          #  return False
 
 
 class Avail_Descriptor(Splice_Descriptor):
