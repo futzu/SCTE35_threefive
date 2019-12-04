@@ -4,6 +4,7 @@ from struct import unpack
 try: import threefive.tables as tables
 except: import tables
 
+SHOW_SPLICE_NULL=True
 
 def hex_decode(k):
     try: return bytearray.fromhex(hex(k)[2:]).decode()
@@ -14,8 +15,8 @@ def kv_print(obj):
     for k,v in vars(obj).items(): print(f'{k}{dotdot}{v}')
  
 def mk_bits(s):
-    if type(s)==bitstring.BitStream: return s
-    try: return bitstring.BitString(bytes=base64.b64decode(s))
+    if type(s) in [bitstring.BitStream,bitstring.ConstBitStream]: return s
+    try: return bitstring.ConstBitStream(bytes=base64.b64decode(s))
     except: return bitstring.ConstBitStream(s)
 
 def parse_tsfile(tsfile):
@@ -24,15 +25,15 @@ def parse_tsfile(tsfile):
         psize = 188  
         while tsdata:
             packet = tsdata.read(psize)
+            
             if not packet: break
             PID=parse_tspacket(packet,PID)
 
 def parse_tspacket(packet,PID):
-    sync, pid, _, payload = unpack('>BHB184s', packet)
+    sync, pid, _, cue = unpack('>BHH183s', packet)
     pid= pid & 0x1fff
     if PID:
         if pid !=PID: return PID
-    cue=payload[1:]
     if cue[0]==0xfc:
         try:
             tf=Splice(cue)
@@ -54,7 +55,8 @@ class Splice:
         bb=mk_bits(mesg)
         self.descriptors=[]
         self.info_section=Splice_Info_Section(bb)
-        if self.is_null_splice(): return False
+        if not SHOW_SPLICE_NULL:
+            if self.is_splice_null(): return False
         self.set_splice_command(bb) 
         if not self.command: return False
         self.info_section.descriptor_loop_length = bb.read('uint:16') 
@@ -70,7 +72,8 @@ class Splice:
             dll -=(bit_move)
         self.info_section.crc=hex(bb.read('uint:32'))
 
-    def is_null_splice(self):
+    def is_splice_null(self):
+
         if self.info_section.splice_command_type==0: return True
         return False
 
@@ -226,8 +229,6 @@ class Splice_Descriptor:
         self.descriptor_length = bb.read('uint:8')
         #identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
         self.identifier = hex_decode(bb.read('uint:32'))
-        if self.identifier != 'CUEI': return False
-
 
 class Avail_Descriptor(Splice_Descriptor):
     '''  
@@ -341,4 +342,5 @@ class Splice_Info_Section:
         self.tier = hex(bb.read('uint:12'))
         self.splice_command_length = bb.read('uint:12')
         self.splice_command_type = bb.read('uint:8')
+         
 
