@@ -6,11 +6,12 @@
 * `Parse SCTE 35 messages encoded in Base64 or Hex.`
 
 ### `New Feature`
-* threefive.SHOW_SPLICE_NULL
-** Some mpegts files I've used recently are 
-flooded with Splice Null commands, making it difficult to see
-anything else. If you want to surpress displaying splice null commands, 
-set SHOW_SPLICE_NULL=False.
+#### threefive.SHOW_SPLICE_NULL
+
+If you want to surpress displaying Splice Null commands: 
+ 
+* `threefive.SHOW_SPLICE_NULL=False.`
+
 Set it before doing anything else. 
 Here's an example:
 ```go
