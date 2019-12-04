@@ -14,6 +14,7 @@ def kv_print(obj):
     for k,v in vars(obj).items(): print(f'{k}{dotdot}{v}')
  
 def mk_bits(s):
+    if type(s)==bitstring.BitStream: return s
     try: return bitstring.BitString(bytes=base64.b64decode(s))
     except: return bitstring.ConstBitStream(s)
 
@@ -28,13 +29,16 @@ def parse_tsfile(tsfile):
 
 def parse_tspacket(packet,PID):
     sync, pid, _, payload = unpack('>BHB184s', packet)
+    pid= pid & 0x1fff
     if PID:
         if pid !=PID: return PID
     cue=payload[1:]
     if cue[0]==0xfc:
         try:
-            Splice(cue).show()
-            if not PID: PID=pid
+            tf=Splice(cue)
+            if tf:
+                tf.show()
+                if not PID: PID=pid
         finally: return PID
 
 def reserved(bb,bst):
@@ -50,14 +54,16 @@ class Splice:
         bb=mk_bits(mesg)
         self.descriptors=[]
         self.info_section=Splice_Info_Section(bb)
-        if self.is_null_splice(): return 
+        if self.is_null_splice(): return False
         self.set_splice_command(bb) 
+        if not self.command: return False
         self.info_section.descriptor_loop_length = bb.read('uint:16') 
         tag_plus_header_size=2 # 1 byte for descriptor_tag, 1 byte for header?
         dll=self.info_section.descriptor_loop_length
         while dll> 0:
             try: 
                 sd=self.set_splice_descriptor(bb)
+                if not sd: return False
                 sdl=sd.descriptor_length
                 self.descriptors.append(sd)
             except: sdl=0
@@ -70,7 +76,7 @@ class Splice:
         return False
 
     def set_splice_command(self,bb):
-        cmd_types={0: Splice_Null,
+        cmd_types={ 0: Splice_Null,
 		4: Splice_Schedule,
 		5: Splice_Insert,
 		6: Time_Signal,
@@ -79,6 +85,7 @@ class Splice:
         self.command=None
         sct=self.info_section.splice_command_type
         if sct in cmd_types.keys(): self.command=cmd_types[sct](bb,sct)
+        else: self.command= False
 
     def set_splice_descriptor(self,bb):
         dscr_types={0: Avail_Descriptor,
@@ -88,20 +95,18 @@ class Splice:
 		4: Audio_Descriptor}   
         # splice_descriptor_tag 8 uimsbf
         tag= bb.read('uint:8')
-        if tag in dscr_types.keys(): return dscr_types[tag](bb,tag) 		
+        if tag in dscr_types.keys(): return dscr_types[tag](bb,tag)
+        else: return False 		
                 
     def show_info_section(self):
-        if self.is_null_splice(): return 
         print('\n[ Splice Info Section ]')
         kv_print(self.info_section)
 
     def show_command(self):
-        if self.is_null_splice(): return 
         print('\n[ Splice Command ]')
         kv_print(self.command)
 		
     def show_descriptors(self):
-        if self.is_null_splice(): return 
         for d in self.descriptors:
             idx=self.descriptors.index(d)
             print('\n[ Splice Descriptor ',idx,' ]')
@@ -222,9 +227,10 @@ class Splice_Descriptor:
         self.descriptor_length = bb.read('uint:8')
         #identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
         self.identifier = hex_decode(bb.read('uint:32'))
-        try: self.identifier == 'CUEI'
-        except:
-            print('descriptor identifier is ',self.identifier , 'should be CUEI')
+        if self.identifier != 'CUEI': return False
+        #except:
+         #   print('descriptor identifier is ',self.identifier , 'should be CUEI')
+          #  return False
 
 
 class Avail_Descriptor(Splice_Descriptor):
