@@ -4,7 +4,6 @@ from struct import unpack
 try: import threefive.tables as tables
 except: import tables
 
-SHOW_SPLICE_NULL=False
 
 def hex_decode(k):
     try: return bytearray.fromhex(hex(k)[2:]).decode()
@@ -19,16 +18,16 @@ def mk_bits(s):
     try: return bitstring.ConstBitStream(bytes=base64.b64decode(s))
     except: return bitstring.ConstBitStream(s)
 
-def parse_tsfile(tsfile):
+def parse_tsfile(tsfile,show_null=True):
     with open(tsfile,'rb') as tsdata:
         PID=False
         psize = 188  
         while tsdata:
             packet = tsdata.read(psize)
             if not packet: break
-            PID=parse_tspacket(packet,PID)
+            PID=parse_tspacket(packet,PID,show_null)
 
-def parse_tspacket(packet,PID):
+def parse_tspacket(packet,PID,show_null):
     sync, pid, _, cue = unpack('>BHH183s', packet)
     pid= pid & 0x1fff
     if PID:
@@ -36,7 +35,7 @@ def parse_tspacket(packet,PID):
     if cue[0]==0xfc:
         try:
         
-            tf=Splice(cue)
+            tf=Splice(cue,show_null)
             if tf:
                 tf.show()
                 if not PID: PID=pid
@@ -51,12 +50,12 @@ def time_90k(k):
 
 
 class Splice:
-    def __init__(self,mesg):
+    def __init__(self,mesg,show_null=False):
         bb=mk_bits(mesg)
         self.descriptors=[]
         self.info_section=Splice_Info_Section(bb)
         if self.is_splice_null()==True: 
-            if SHOW_SPLICE_NULL==False: return False
+            if show_null==False: return False
         self.set_splice_command(bb) 
         if not self.command: return False
         self.info_section.descriptor_loop_length = bb.read('uint:16') 
@@ -73,9 +72,7 @@ class Splice:
         self.info_section.crc=hex(bb.read('uint:32'))
 
     def is_splice_null(self):
-
         if self.info_section.splice_command_type==0: return True
-        return False
 
     def set_splice_command(self,bb):
         cmd_types={ 0: Splice_Null,
