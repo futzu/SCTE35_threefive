@@ -50,12 +50,12 @@ def time_90k(k):
 
 
 class Splice:
-    def __init__(self,mesg,show_null=False):
+    def __init__(self,mesg,show_null=True):
         bb=mk_bits(mesg)
         self.descriptors=[]
         self.info_section=Splice_Info_Section(bb)
-        if self.is_splice_null()==True: 
-            if show_null==False: return False
+        if self.is_splice_null(): 
+            if not show_null: return False
         self.set_splice_command(bb) 
         if not self.command: return False
         self.info_section.descriptor_loop_length = bb.read('uint:16') 
