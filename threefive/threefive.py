@@ -54,7 +54,7 @@ class Splice:
         bb=mk_bits(mesg)
         self.descriptors=[]
         self.info_section=Splice_Info_Section(bb)
-        if not SHOW_SPLICE_NULL:
+        if not threefive.SHOW_SPLICE_NULL:
             if self.is_splice_null(): return False
         self.set_splice_command(bb) 
         if not self.command: return False
