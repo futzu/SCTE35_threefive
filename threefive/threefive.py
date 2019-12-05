@@ -38,7 +38,7 @@ def parse_tspacket(packet,PID,show_null):
         try:
             tf=Splice(cue)
             if tf:
-       +         tf.show()
+                tf.show()
             if not PID: PID=pid
         finally: return PID
 
@@ -337,5 +337,3 @@ class Splice_Info_Section:
         self.splice_command_type = bb.read('uint:8')
          
 
-
-		
