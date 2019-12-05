@@ -6,23 +6,17 @@
 * `Parse SCTE 35 messages encoded in Base64 or Hex.`
 
 ### `New Feature`
-#### threefive.SHOW_SPLICE_NULL
+If you want to surpress displaying Splice Null commands when parsing mpegts streams and files,
+call threefive.parse_tsfile with `show_null=False`
+Example:
 
-If you want to surpress displaying Splice Null commands: 
- 
-* `threefive.SHOW_SPLICE_NULL=False.`
-
-Set it before doing anything else. 
-Here's an example:
-```go
 ob3# python3.7
 Python 3.7.4 (default, Aug 10 2019, 15:03:08) 
 [Clang 8.0.0 (tags/RELEASE_800/final)] on openbsd6
 Type "help", "copyright", "credits" or "license" for more information.
 
 >>> import threefive
->>> threefive.SHOW_SPLICE_NULL=False
->>> threefive.parse_tsfile('/home/a/mpegwithscte35.ts')
+>>> threefive.parse_tsfile('/home/a/mpegwithscte35.ts',show_null=False) 
 
 
 ```
