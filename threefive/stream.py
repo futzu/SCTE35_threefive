@@ -1,4 +1,3 @@
-from .threefive import *
 from .util import PACKET_SIZE
 from .splice import Splice
 from struct import unpack
