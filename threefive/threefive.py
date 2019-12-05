@@ -18,7 +18,7 @@ def mk_bits(s):
     try: return bitstring.ConstBitStream(bytes=base64.b64decode(s))
     except: return bitstring.ConstBitStream(s)
 
-def parse_tsfile(tsfile,show_null=True):
+def parse_tsfile(tsfile,show_null=False):
     with open(tsfile,'rb') as tsdata:
         PID=False
         psize = 188  
@@ -33,12 +33,13 @@ def parse_tspacket(packet,PID,show_null):
     if PID:
         if pid !=PID: return PID
     if cue[0]==0xfc:
+        if cue[13]==0:
+            if not show_null: return PID
         try:
-        
-            tf=Splice(cue,show_null)
+            tf=Splice(cue)
             if tf:
-                tf.show()
-                if not PID: PID=pid
+       +         tf.show()
+            if not PID: PID=pid
         finally: return PID
 
 def reserved(bb,bst):
@@ -50,12 +51,10 @@ def time_90k(k):
 
 
 class Splice:
-    def __init__(self,mesg,show_null=True):
+    def __init__(self,mesg):
         bb=mk_bits(mesg)
         self.descriptors=[]
         self.info_section=Splice_Info_Section(bb)
-        if self.is_splice_null(): 
-            if not show_null: return False
         self.set_splice_command(bb) 
         if not self.command: return False
         self.info_section.descriptor_loop_length = bb.read('uint:16') 
@@ -70,9 +69,6 @@ class Splice:
             bit_move=sdl+ tag_plus_header_size
             dll -=(bit_move)
         self.info_section.crc=hex(bb.read('uint:32'))
-
-    def is_splice_null(self):
-        if self.info_section.splice_command_type==0: return True
 
     def set_splice_command(self,bb):
         cmd_types={ 0: Splice_Null,
@@ -341,3 +337,5 @@ class Splice_Info_Section:
         self.splice_command_type = bb.read('uint:8')
          
 
+
+		
