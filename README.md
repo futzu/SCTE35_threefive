@@ -6,9 +6,8 @@
 * `Parse SCTE 35 messages encoded in Base64 or Hex.`
 
 ### `New Feature`
-If you want to surpress displaying Splice Null commands 
-when parsing mpegts streams and files,
-call threefive.parse_tsfile with `show_null=False`.
+* Hide Splice Null commands in mpegts files and streams.
+  * call threefive.parse_tsfile with `show_null=False`.
 
 Example:
 
