@@ -46,18 +46,6 @@ Successfully installed threefive-1.1.59
 #### `Parse mpegts file`
  * handled by the Stream class (in threefive/stream.py )
 ```go
-'''
-
-class Stream:
-    def __init__(self,tsfile=None,show_null=True):
-        self.splices=[] # a list of Splice instances  
-        self.PID=False
-        self.show_null=show_null
-        self.tsfille=4
-        self.parse_tsfile(tsfile)
-        
-''' 
-
 
 # Parse the file '/home/a/mpegwithscte35.ts' for SCTE 35 messages
 # show_null=False hides splice null messages
@@ -154,27 +142,7 @@ provider_avail_id : 0
  * handled by the Splice class (in threefive/splice.py )
 
 ```go
-'''
-class Splice:
-    def __init__(self,mesg):
-        bb=mk_bits(mesg)
-        self.descriptors=[]
-        self.info_section=Splice_Info_Section(bb)
-        self.set_splice_command(bb) 
-        if not self.command: return False
-        self.info_section.descriptor_loop_length = bb.read('uint:16') 
-        tag_plus_header_size=2 # 1 byte for descriptor_tag, 1 byte for header?
-        dll=self.info_section.descriptor_loop_length
-        while dll> 0:
-            try: 
-                sd=self.set_splice_descriptor(bb)
-                sdl=sd.descriptor_length
-                self.descriptors.append(sd)
-            except: sdl=0
-            bit_move=sdl+ tag_plus_header_size
-            dll -=(bit_move)
-        self.info_section.crc=hex(bb.read('uint:32'))
-'''
+
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUg/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
 >>> splice=threefive.Splice(mesg)
@@ -188,6 +156,8 @@ pts_time : 31466.942367
 
 ```
 #### `Parse hex encoded messages`
+ * handled by the Splice class (in threefive/splice.py )
+
 ```go
 >>> import threefive
 >>> mesg= '0xfc3061000000000000fffff00506fea8cd44ed004b021743554549480000ad7f9
