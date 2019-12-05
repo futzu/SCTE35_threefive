@@ -44,7 +44,7 @@ Successfully installed threefive-1.1.59
 ## `Run`
 
 #### `Parse mpegts file`
- * handled by the Stream class (in threefive/stream.py )
+ * Handled by the Stream class (in threefive/stream.py )
 ```go
 
 # Parse the file '/home/a/mpegwithscte35.ts' for SCTE 35 messages
@@ -139,7 +139,7 @@ provider_avail_id : 0
 ```
 
 #### `Parse base64 encoded messages`
- * handled by the Splice class (in threefive/splice.py )
+ * Handled by the Splice class (in threefive/splice.py )
 
 ```go
 
@@ -156,7 +156,7 @@ pts_time : 31466.942367
 
 ```
 #### `Parse hex encoded messages`
- * handled by the Splice class (in threefive/splice.py )
+ * Handled by the Splice class (in threefive/splice.py )
 
 ```go
 >>> import threefive
