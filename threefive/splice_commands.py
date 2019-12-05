@@ -1,4 +1,4 @@
-from .threefive import *
+from .util import *
 
 class Splice_Command: 
     def break_duration(self,bb):
