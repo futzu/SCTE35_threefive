@@ -1,4 +1,3 @@
-from threefive import *
 from .splice_commands import *
 from .descriptors import *
 from .splice_info_section import *
