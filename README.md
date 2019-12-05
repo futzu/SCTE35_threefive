@@ -33,7 +33,6 @@
 ```go
 pip install threefive
 
-pip install threefive
 Collecting threefive
   Downloading https://files.pythonhosted.org/packages/c7/dd/fcef1a0529659be65dd5bee641fc715db0d559531faf4b4ddd59b239d60a/threefive-1.1.59-py3-none-any.whl
 Requirement already satisfied: bitstring in /usr/lib/python3.7/site-packages (from threefive) (3.1.6)
@@ -45,8 +44,10 @@ Successfully installed threefive-1.1.59
 ## `Run`
 
 #### `Parse mpegts file`
+ * handled by the Stream class (in threefive/stream.py )
 ```go
 '''
+
 class Stream:
     def __init__(self,tsfile=None,show_null=True):
         self.splices=[] # a list of Splice instances  
@@ -54,11 +55,15 @@ class Stream:
         self.show_null=show_null
         self.tsfille=4
         self.parse_tsfile(tsfile)
-'''        
->>> import threefive
+        
+''' 
+
 
 # Parse the file '/home/a/mpegwithscte35.ts' for SCTE 35 messages
 # show_null=False hides splice null messages
+
+
+>>> import threefive
 
 >>> scte35_stream=threefive.Stream('/home/a/mpegwithscte35.ts',show_null=False)
 
@@ -146,6 +151,8 @@ provider_avail_id : 0
 ```
 
 #### `Parse base64 encoded messages`
+ * handled by the Splice class (in threefive/splice.py )
+
 ```go
 '''
 class Splice:
