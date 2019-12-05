@@ -4,7 +4,7 @@ from struct import unpack
 try: import threefive.tables as tables
 except: import tables
 
-SHOW_SPLICE_NULL=True
+SHOW_SPLICE_NULL=False
 
 def hex_decode(k):
     try: return bytearray.fromhex(hex(k)[2:]).decode()
@@ -35,6 +35,7 @@ def parse_tspacket(packet,PID):
         if pid !=PID: return PID
     if cue[0]==0xfc:
         try:
+        
             tf=Splice(cue)
             if tf:
                 tf.show()
@@ -54,8 +55,8 @@ class Splice:
         bb=mk_bits(mesg)
         self.descriptors=[]
         self.info_section=Splice_Info_Section(bb)
-        if not threefive.SHOW_SPLICE_NULL:
-            if self.is_splice_null(): return False
+        if self.is_splice_null()==True: 
+            if SHOW_SPLICE_NULL==False: return False
         self.set_splice_command(bb) 
         if not self.command: return False
         self.info_section.descriptor_loop_length = bb.read('uint:16') 
