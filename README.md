@@ -5,23 +5,7 @@
 * `Parse SCTE 35 messages from Mpeg-ts files.` 
 * `Parse SCTE 35 messages encoded in Base64 or Hex.`
 
-### `New Feature`
-* Hide Splice Null commands in mpegts files and streams.
-  * call threefive.parse_tsfile with `show_null=False`.
 
-Example:
-
-```go
-ob3# python3.7
-Python 3.7.4 (default, Aug 10 2019, 15:03:08) 
-[Clang 8.0.0 (tags/RELEASE_800/final)] on openbsd6
-Type "help", "copyright", "credits" or "license" for more information.
-
->>> import threefive
->>> threefive.parse_tsfile('/home/a/mpegwithscte35.ts',show_null=False) 
-
-
-```
 
 ### `Specification`
 * https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
@@ -49,12 +33,12 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```go
 pip install threefive
 
+pip install threefive
 Collecting threefive
-  Downloading https://files.pythonhosted.org/packages/4f/ba/242d23644c261b49e73ff7d693473a18fdefdfe8b5ef0c3269d7c0076f8d/threefive-1.1.47-py3-none-any.whl
-Collecting bitstring
-  Downloading https://files.pythonhosted.org/packages/c7/b9/ce7458b35633968eae3477a201a00f6c8e01cab0ccb200ea5099d41dd977/bitstring-3.1.6-py3-none-any.whl
-Installing collected packages: bitstring, threefive
-Successfully installed bitstring-3.1.6 threefive-1.1.47
+  Downloading https://files.pythonhosted.org/packages/c7/dd/fcef1a0529659be65dd5bee641fc715db0d559531faf4b4ddd59b239d60a/threefive-1.1.59-py3-none-any.whl
+Requirement already satisfied: bitstring in /usr/lib/python3.7/site-packages (from threefive) (3.1.6)
+Installing collected packages: threefive
+Successfully installed threefive-1.1.59
 
 
 ```
@@ -62,8 +46,21 @@ Successfully installed bitstring-3.1.6 threefive-1.1.47
 
 #### `Parse mpegts file`
 ```go
+'''
+class Stream:
+    def __init__(self,tsfile=None,show_null=True):
+        self.splices=[] # a list of Splice instances  
+        self.PID=False
+        self.show_null=show_null
+        self.tsfille=4
+        self.parse_tsfile(tsfile)
+'''        
 >>> import threefive
->>> threefive.parse_tsfile('/home/a/mpegwithscte35.ts')
+
+# Parse the file '/home/a/mpegwithscte35.ts' for SCTE 35 messages
+# show_null=False hides splice null messages
+
+>>> scte35_stream=threefive.Stream('/home/a/mpegwithscte35.ts',show_null=False)
 
 [ Splice Info Section ]
 table_id : 0xfc
@@ -150,6 +147,27 @@ provider_avail_id : 0
 
 #### `Parse base64 encoded messages`
 ```go
+'''
+class Splice:
+    def __init__(self,mesg):
+        bb=mk_bits(mesg)
+        self.descriptors=[]
+        self.info_section=Splice_Info_Section(bb)
+        self.set_splice_command(bb) 
+        if not self.command: return False
+        self.info_section.descriptor_loop_length = bb.read('uint:16') 
+        tag_plus_header_size=2 # 1 byte for descriptor_tag, 1 byte for header?
+        dll=self.info_section.descriptor_loop_length
+        while dll> 0:
+            try: 
+                sd=self.set_splice_descriptor(bb)
+                sdl=sd.descriptor_length
+                self.descriptors.append(sd)
+            except: sdl=0
+            bit_move=sdl+ tag_plus_header_size
+            dll -=(bit_move)
+        self.info_section.crc=hex(bb.read('uint:32'))
+'''
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUg/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
 >>> splice=threefive.Splice(mesg)
