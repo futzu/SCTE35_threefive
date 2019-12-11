@@ -14,9 +14,9 @@ class Stream:
         with open(tsfile,'rb') as tsdata:
             while tsdata:
                 packet = tsdata.read(PACKET_SIZE)
-                if not packet: break
-                self.parse_tspacket(packet)
-
+                if len(packet) == PACKET_SIZE:  self.parse_tspacket(packet)
+                else: break
+                
     def parse_tspacket(self,packet):
         sync, pid, _, cue = unpack('>BHH183s', packet)
         pid= pid & 0x1fff
