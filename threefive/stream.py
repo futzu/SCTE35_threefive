@@ -2,6 +2,8 @@ from .util import PACKET_SIZE
 from .splice import Splice
 from struct import unpack
 
+SYNC_BYTE=b'\x47'
+
 class Stream:
     def __init__(self,tsfile=None,show_null=True):
         self.splices=[]
@@ -13,9 +15,13 @@ class Stream:
     def parse_tsfile(self,tsfile):
         with open(tsfile,'rb') as tsdata:
             while tsdata:
-                packet = tsdata.read(PACKET_SIZE)
-                if len(packet) == PACKET_SIZE:  self.parse_tspacket(packet)
-                else: break
+                # read a byte and see if it's a SYNC_BYTE, if so , read a packet. 
+                sync_chk=tsdata.read(1)
+                if sync_chk==SYNC_BYTE:
+                    packet =sync_chk+ tsdata.read(PACKET_SIZE-1)
+                    if len(packet) == PACKET_SIZE:  self.parse_tspacket(packet)
+                    else: break
+                else: return
                 
     def parse_tspacket(self,packet):
         sync, pid, _, cue = unpack('>BHH183s', packet)
