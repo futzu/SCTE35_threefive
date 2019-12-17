@@ -1,28 +1,25 @@
 # `threefive`
 
+## `SCTE35 Decoder` 
+* `Parse SCTE 35 messages from Mpeg Transport Streams` 
+* `Parse SCTE 35 messages encoded in Base64, Binary, or Hex.`
 
-## `SCTE35 Decoder Ring` 
-* `Parse SCTE 35 messages from Mpeg-ts files.` 
-* `Parse SCTE 35 messages encoded in Base64 or Hex.`
-
-
-
-### `Specification`
+### `2019 Specification`
 * https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
 
 ### `Splice Commands`
-* `Splice Null`
-* `Splice Schedule` (maybe)
+* `Splice Null` 
+* `Splice Schedule` (lightly tested)
 * `Splice Insert`
 * `Time Signal`
-* `Bandwidth Reservation` (maybe)
+* `Bandwidth Reservation` (lightly tested)
 
 ### `Splice Descriptors`
 * `DTMF Descriptor`
 * `Segmentation Descriptor` (mostly)
   * `segmentation upid` (some)
   * `segmentation type and messages`
-* `Time Descriptor` (maybe)
+* `Time Descriptor`
 * `Audio Descriptor`
 
 ### `Dependencies`
@@ -49,7 +46,7 @@ Successfully installed threefive-1.1.59
  * Handled by the Stream class (in threefive/stream.py )
  
  
-```go
+```python3
 
 # Parse the file '/home/a/mpegwithscte35.ts' for SCTE 35 messages
 # show_null=False hides splice null messages
