@@ -137,7 +137,7 @@ provider_avail_id : 0
 
 >>>
 
-```go
+```
 
 ####  Parse binary encoded messages from a file 
  * Handled by the Stream class (in threefive/stream.py )
