@@ -46,7 +46,7 @@ Successfully installed threefive-1.1.59
  * Handled by the Stream class (in threefive/stream.py )
  
  
-```python3
+```sh
 
 # Parse the file '/home/a/mpegwithscte35.ts' for SCTE 35 messages
 # show_null=False hides splice null messages
@@ -142,7 +142,7 @@ provider_avail_id : 0
 ####  Parse binary encoded messages from a file 
  * Handled by the Stream class (in threefive/stream.py )
 
-```python3
+```go
 >>> import threefive
 >>> stuff=threefive.Stream('/mnt/build/file.bin')
 
