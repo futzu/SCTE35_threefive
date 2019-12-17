@@ -1,32 +1,32 @@
-# `threefive`
+# threefive
 
-## `SCTE35 Decoder` 
-* `Parse SCTE 35 messages from Mpeg Transport Streams` 
-* `Parse SCTE 35 messages encoded in Base64, Binary, or Hex.`
+## SCTE35 Decoder
+*  Parse SCTE 35 messages from Mpeg Transport Streams  
+*  Parse SCTE 35 messages encoded in Base64, Binary, or Hex. 
 
-### `2019 Specification`
+### 2019 Specification 
 * https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
 
-### `Splice Commands`
-* `Splice Null` 
-* `Splice Schedule` (lightly tested)
-* `Splice Insert`
-* `Time Signal`
-* `Bandwidth Reservation` (lightly tested)
+###  Splice Commands 
+*  Splice Null  
+*  Splice Schedule  (lightly tested)
+*  Splice Insert 
+*  Time Signal 
+*  Bandwidth Reservation  (lightly tested)
 
-### `Splice Descriptors`
-* `DTMF Descriptor`
-* `Segmentation Descriptor` (mostly)
-  * `segmentation upid` (some)
-  * `segmentation type and messages`
-* `Time Descriptor`
-* `Audio Descriptor`
+###  Splice Descriptors 
+*  DTMF Descriptor 
+*  Segmentation Descriptor  (mostly)
+  *  segmentation upid  (some)
+  *  segmentation type and messages 
+*  Time Descriptor 
+*  Audio Descriptor 
 
-### `Dependencies`
+###  Dependencies 
 * Python 3
 * bitstring
 
-## `Install`
+##  Install 
 ```go
 pip install threefive
 
@@ -40,9 +40,9 @@ Successfully installed threefive-1.1.59
 ```
 
 
-## `Run`
+##  Run 
 
-#### `Parse mpegts file`
+####  Parse mpegts file 
  * Handled by the Stream class (in threefive/stream.py )
  
  
@@ -139,7 +139,7 @@ provider_avail_id : 0
 
 ```
 
-#### `Parse binary encoded messages from a file`
+####  Parse binary encoded messages from a file 
  * Handled by the Stream class (in threefive/stream.py )
 
 ```python3
@@ -186,7 +186,7 @@ segmentation_message : Closing Credit Start
 >>> 
 ```
 
-#### `Parse base64 encoded messages`
+####  Parse base64 encoded messages 
  * Handled by the Splice class (in threefive/splice.py )
 
 ```go
@@ -203,7 +203,7 @@ time_specified_flag : True
 pts_time : 31466.942367
 
 ```
-#### `Parse hex encoded messages`
+####  Parse hex encoded messages 
  * Handled by the Splice class (in threefive/splice.py )
 
 ```go
@@ -236,9 +236,9 @@ crc : 0x8a18869f
 
 
 
-## `Splice Methods`
+##  Splice Methods 
 
-#### `threefive.Splice.show_info_section()`
+####  threefive.Splice.show_info_section() 
 ```python3
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
@@ -262,7 +262,7 @@ splice_command_type : 6
 descriptor_loop_length : 75
 
 ```
-#### `threefive.Splice.show_command()`
+####  threefive.Splice.show_command() 
 ```python3
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
@@ -276,7 +276,7 @@ time_specified_flag : True
 pts_time : 31466.942367
 
 ```
-#### `threefive.Splice.show_descriptors()`
+####  threefive.Splice.show_descriptors() 
 ```python3
 >> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
@@ -351,7 +351,7 @@ segments_expected : 0
 
 ```
 
-### `threefive.Splice.show()`
+###  threefive.Splice.show() 
 #### Shows all data
 ```python3
 
@@ -452,7 +452,7 @@ segments_expected : 0
 
 
 ```
-### `Read individual values`
+###  Read individual values 
 
 ```python3
 import threefive
