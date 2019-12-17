@@ -239,7 +239,7 @@ crc : 0x8a18869f
 ##  Splice Methods 
 
 ####  threefive.Splice.show_info_section() 
-```python3
+```go
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
 >>> splice=threefive.Splice(mesg)
@@ -277,7 +277,7 @@ pts_time : 31466.942367
 
 ```
 ####  threefive.Splice.show_descriptors() 
-```python3
+```go
 >> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
 >>> stuff=threefive.Splice(mesg)
@@ -353,7 +353,7 @@ segments_expected : 0
 
 ###  threefive.Splice.show() 
 #### Shows all data
-```python3
+```go
 
 >>> import threefive                
 >>> mesg='/DBIAAAAAAAA///wBQb+ky44CwAyAhdDVUVJSAAACn+fCAgAAAAALKCh4xgAAAIX
@@ -454,7 +454,7 @@ segments_expected : 0
 ```
 ###  Read individual values 
 
-```python3
+```go
 import threefive
 mesg='/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo='
 scte_data=threefive.Splice(mesg)
