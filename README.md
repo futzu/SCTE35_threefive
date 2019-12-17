@@ -139,6 +139,53 @@ provider_avail_id : 0
 
 ```
 
+#### `Parse binary encoded messages from a file`
+ * Handled by the Stream class (in threefive/stream.py )
+
+```python3
+>>> import threefive
+>>> stuff=threefive.Stream('/mnt/build/file.bin')
+
+[ Splice Info Section ]
+table_id : 0xfc
+section_syntax_indicator : False
+private : False
+section_length : 78
+protocol_version : 0
+encrypted_packet : False
+encryption_algorithm : 0
+pts_adjustment : 0.000000
+cw_index : 0x0
+tier : 0xfff
+splice_command_length : 5
+splice_command_type : 6
+descriptor_loop_length : 60
+crc : 0x54590000
+
+[ Splice Command ]
+splice_type : 6
+name : Time Signal
+time_specified_flag : True
+pts_time : 0.555556
+
+[ Splice Descriptor  0  ]
+name : Segmentation Descriptor
+splice_descriptor_tag : 2
+descriptor_length : 58
+identifier : CUEI
+segmentation_event_id : 0x3
+segmentation_event_cancel_indicator : False
+program_segmentation_flag : True
+segmentation_duration_flag : True
+delivery_not_restricted_flag : True
+segmentation_duration : 0.000178
+segmentation_upid_type : 12
+segmentation_type_id : 38
+segmentation_message : Closing Credit Start
+
+>>> 
+```
+
 #### `Parse base64 encoded messages`
  * Handled by the Splice class (in threefive/splice.py )
 
@@ -184,9 +231,12 @@ splice_command_type : 6
 descriptor_loop_length : 75
 crc : 0x8a18869f
 
+
 ```
 
-## `Methods`
+
+
+## `Splice Methods`
 
 #### `threefive.Splice.show_info_section()`
 ```python3
