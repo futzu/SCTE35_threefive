@@ -32,10 +32,17 @@ class Stream:
         if self.PID:
             if pid !=self.PID: return
         cue=cue[1:]
-        if cue[0]==0xfc :
-            if cue[13]==0:
-                if not self.show_null: return 
-            try: tf=Splice(cue)
+        if cue[0] !=0xfc : return 
+        if cue[13]==0:
+            if not self.show_null: return 
+        try: tf=Splice(cue)
+        except: return 
+        tf.show()
+        self.splices.append(tf)
+        if not self.PID: self.PID=pid
+        return 
+            
+
             except: return 
             tf.show()
             self.splices.append(tf)
