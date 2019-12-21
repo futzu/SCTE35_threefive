@@ -29,11 +29,10 @@ class Splice:
 		6: Time_Signal,
 		7: Bandwidth_Reservation,
 		255: Private_Command}
-        self.command=None
+        self.command=False
         sct=self.info_section.splice_command_type
         if sct in cmd_types.keys(): self.command=cmd_types[sct](bb,sct)
-        else: self.command= False
-
+   
     def set_splice_descriptor(self,bb):
         dscr_types={0: Avail_Descriptor,
 		1: Dtmf_Descriptor,
