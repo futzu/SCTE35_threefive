@@ -43,10 +43,3 @@ class Stream:
         return 
             
 
-            except: return 
-            tf.show()
-            self.splices.append(tf)
-            if not self.PID: self.PID=pid
-            return 
-            
-
