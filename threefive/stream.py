@@ -20,29 +20,28 @@ class Stream:
                     if len(packet) == PACKET_SIZE:  self.parse_tspacket(packet)
                     else: break
                 else: return 
-                
-                                
+
+
     def parse_tspacket(self,packet):
         # sync,two_bytes, one_byte = 4 byte header
         sync,two_bytes,one_byte, cue = unpack('>BHB184s', packet)
+        cue=cue[1:]
+        if cue[0] !=0xfc : return
+        if cue[13]==0:
+            if not self.show_null: return 
+        pid = two_bytes & 0x1fff
+        if self.PID:
+            if pid !=self.PID: return
         tei = two_bytes >> 15
         pusi = two_bytes >> 14 & 0x1
         ts_priority = two_bytes >>13 & 0x1
-        pid = two_bytes & 0x1fff
         scramble = one_byte >>6
         afc = (one_byte & 48) >> 4
         count = one_byte & 15
-        if self.PID:
-            if pid !=self.PID: return
-        cue=cue[1:]
-        if cue[0] !=0xfc : return 
-        if cue[13]==0:
-            if not self.show_null: return 
         try: tf=Splice(cue)
         except: return 
         tf.show()
         self.splices.append(tf)
         if not self.PID: self.PID=pid
-        return 
-            
+        return
 
