@@ -9,7 +9,6 @@ class Stream:
         self.splices=[]
         self.PID=False
         self.show_null=show_null
-        self.tsfille=4
         self.parse_tsfile(tsfile)
 
     def parse_tsfile(self,tsfile):
@@ -24,11 +23,15 @@ class Stream:
                 
                                 
     def parse_tspacket(self,packet):
-        sync, pid,_, cue = unpack('>BHB184s', packet)
-        tei = pid & 0X8000
-        pusi = pid & 0X4000 
-        ts_priority = pid & 0X2000
-        pid= pid & 0x1fff
+        # sync,two_bytes, one_byte = 4 byte header
+        sync,two_bytes,one_byte, cue = unpack('>BHB184s', packet)
+        tei = two_bytes >> 15
+        pusi = two_bytes >> 14 & 0x1
+        ts_priority = two_bytes >>13 & 0x1
+        pid = two_bytes & 0x1fff
+        scramble = one_byte >>6
+        afc = (one_byte & 48) >> 4
+        count = one_byte & 15
         if self.PID:
             if pid !=self.PID: return
         cue=cue[1:]
