@@ -74,7 +74,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
             self.segmentation_upid_type=bb.read('uint:8')
             if self.segmentation_upid_type==8:
                 self.segmentation_upid_length=bb.read('uint:8')
-                self.turner_identifier=bb.read('bits:64')
+                self.turner_identifier=str(bb.read('bits:64'))
             self.segmentation_type_id=bb.read('uint:8')
             if self.segmentation_type_id in tables.table22.keys():
                 self.segmentation_message= tables.table22[self.segmentation_type_id][0]
