@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="threefive", 
-    version="1.1.77",
+    version="1.1.79",
     author="fu-corp",
     author_email="spam@futzu.com",
-    description="scte 35 decoder ring",
+    description="SCTE 35 Message Decoder",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/threefive",
