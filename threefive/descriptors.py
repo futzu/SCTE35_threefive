@@ -15,13 +15,15 @@ class Splice_Descriptor:
         self.descriptor_length = bb.read('uint:8')
         #identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
         self.identifier = hex_decode(bb.read('uint:32'))
+        if self.identifier ==  'CUEI': return True
+        return False
 
 class Avail_Descriptor(Splice_Descriptor):
     '''  
     Table 17 -  avail_descriptor()
     '''
     def __init__(self,bb,tag):
-        super().__init__(bb,tag)
+        if not super().__init__(bb,tag): return False
         self.name='Avail Descriptor'
         self.provider_avail_id=bb.read('uint:32')
 
@@ -31,7 +33,7 @@ class Dtmf_Descriptor(Splice_Descriptor):
     Table 18 -  DTMF_descriptor()
     ''' 
     def __init__(self,bb,tag):
-        super().__init__(bb,tag)
+        if not super().__init__(bb,tag): return False
         self.name='DTMF Descriptor'
         self.preroll= bb.read('uint:8')
         self.dtmf_count= bb.read('uint:3')
@@ -43,7 +45,7 @@ class Dtmf_Descriptor(Splice_Descriptor):
 	
 class Segmentation_Descriptor(Splice_Descriptor):
     def __init__(self,bb,tag):
-        super().__init__(bb,tag)
+        if not super().__init__(bb,tag): return False
         self.name='Segmentation Descriptor'
         self.segmentation_event_id=hex(bb.read('uint:32'))
         self.segmentation_event_cancel_indicator=bb.read('bool')
@@ -89,7 +91,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
 
 class Time_Descriptor(Splice_Descriptor):
     def __init__(self,bb,tag):
-        super().__init__(bb,tag)
+        if not super().__init__(bb,tag): return False
         self.name='Time Descriptor'
         self.TAI_seconds=bb.read('uint:48')
         self.TAI_ns=bb.read('uint:32')
@@ -98,7 +100,7 @@ class Time_Descriptor(Splice_Descriptor):
 	
 class Audio_Descriptor(Splice_Descriptor):
     def __init__(self,bb,tag):
-        super().__init__(bb,tag)
+        if not super().__init__(bb,tag): return False
         self.name='Audio Descriptor'
         self.components=[]
         self.audio_count= bb.read('uint:4') 
