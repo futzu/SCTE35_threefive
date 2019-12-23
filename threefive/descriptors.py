@@ -1,4 +1,5 @@
 from .util import *
+
 from .tables import table22
 
 class Splice_Descriptor:
@@ -15,9 +16,8 @@ class Splice_Descriptor:
         self.descriptor_length = bb.read('uint:8')
         #identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
         self.identifier = hex_decode(bb.read('uint:32'))
-        if self.identifier ==  'CUEI': return True
-        return False
-
+        return self.identifier ==  'CUEI'
+        
 class Avail_Descriptor(Splice_Descriptor):
     '''  
     Table 17 -  avail_descriptor()
