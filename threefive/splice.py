@@ -13,11 +13,11 @@ class Splice:
         tag_plus_header_size=2 # 1 byte for descriptor_tag, 1 byte for header?
         dll=self.info_section.descriptor_loop_length
         while dll> 0:
-            try: 
-                sd=self.set_splice_descriptor(bb)
+            sd=self.set_splice_descriptor(bb)
+            if sd:
                 sdl=sd.descriptor_length
                 self.descriptors.append(sd)
-            except: sdl=0
+            else: sdl=0
             bit_move=sdl+ tag_plus_header_size
             dll -=(bit_move)
         self.info_section.crc=hex(bb.read('uint:32'))
@@ -45,20 +45,21 @@ class Splice:
         else: return False 		
                 
     def show_info_section(self):
-        print('\n[ Splice Info Section ]')
+        print('\n Splice Info Section:')
         kv_print(self.info_section)
 
     def show_command(self):
-        print('\n[ Splice Command ]')
+        print('\n Splice Command:')
         kv_print(self.command)
 		
     def show_descriptors(self):
         for d in self.descriptors:
             idx=self.descriptors.index(d)
-            print('\n[ Splice Descriptor ',idx,' ]')
+            print(f'\n Splice Descriptor {idx}:')
             kv_print(d)
 		
     def show(self):
+        print('\n\n[SCTE 35 Message]')
         self.show_info_section()
         self.show_command()
         self.show_descriptors()
