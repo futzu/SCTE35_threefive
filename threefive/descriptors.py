@@ -1,5 +1,5 @@
 from .util import *
-
+from .tables import table22
 
 class Splice_Descriptor:
     '''
