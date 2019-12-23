@@ -135,7 +135,6 @@ identifier : CUEI
 provider_avail_id : 0
 
 
->>>
 
 ```
 
@@ -183,7 +182,7 @@ segmentation_upid_type : 12
 segmentation_type_id : 38
 segmentation_message : Closing Credit Start
 
->>> 
+
 ```
 
 ####  Parse base64 encoded messages 
@@ -467,9 +466,6 @@ False
 '21514.559089'
 >>> scte_data.command.break_duration
 '60.293567'
-
-
-
 
 
 ```
