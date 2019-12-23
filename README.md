@@ -1,7 +1,7 @@
 # threefive
 
 ## SCTE35 Decoder
-*  Parse SCTE 35 messages from Mpeg Transport Streams  
+*  Parse SCTE 35 messages from Mpeg Transport Streams and Binary files. 
 *  Parse SCTE 35 messages encoded in Base64, Binary, or Hex. 
 
 ### 2019 Specification 
@@ -16,11 +16,11 @@
 
 ###  Splice Descriptors 
 *  DTMF Descriptor 
-*  Segmentation Descriptor  (mostly)
-  *  segmentation upid  (some)
-  *  segmentation type and messages 
+*  Segmentation Descriptor
+  *  Segmentation UPID  (partially implemented)
+  *  Segmentation Types and Messages 
 *  Time Descriptor 
-*  Audio Descriptor 
+*  Audio Descriptor (lightly tested)
 
 ###  Dependencies 
 * Python 3
