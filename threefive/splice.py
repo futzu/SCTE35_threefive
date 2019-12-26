@@ -2,8 +2,7 @@ from .splice_commands import *
 from .descriptors import *
 from .splice_info_section import *
    
-   
-        
+
 class Splice:
     def __init__(self,mesg):
         bb=mk_bits(mesg)
