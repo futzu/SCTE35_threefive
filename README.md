@@ -82,7 +82,7 @@ Successfully installed threefive-1.1.59
  Splice Descriptor 0:
 	{'name': 'Avail Descriptor', 'splice_descriptor_tag': 0, 'descriptor_length': 8, 'identifier': 'CUEI', 'provider_avail_id': 0}
 ```
-##### Works the same way for Base64 encoded strings.
+### threefive.decode works the same for files and encoded strings.
 ```go 
 >>> import threefive
 >>> Bee64='/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
