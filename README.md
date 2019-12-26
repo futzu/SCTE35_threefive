@@ -41,6 +41,66 @@ Successfully installed threefive-1.1.59
 
 
 ##  Run 
+#### The Easy Way.
+ * Call threefive.decode on          
+         mpegts files, 
+         binary files,
+         base64 encoded strings,
+         binary encoded strings, 
+         hex encoded strings.
+  
+```go 
+
+>>> import threefive
+>>> threefive.decode('/path/to/mpegwithscte35.ts') 
+
+
+[  SCTE 35 Stream found with Pid 0x135  ]
+
+
+[SCTE 35 Message]
+
+ Splice Info Section:
+	{'table_id': '0xfc', 'section_syntax_indicator': False, 'private': False, 'section_length': 47, 'protocol_version': 0, 'encrypted_packet': False, 'encryption_algorithm': 0, 'pts_adjustment': '0.000000', 'cw_index': '0x0', 'tier': '0xfff', 'splice_command_length': 4095, 'splice_command_type': 5, 'descriptor_loop_length': 10, 'crc': '0x10fa4d9e'}
+
+ Splice Command:
+	{'splice_type': 5, 'name': 'Splice Insert', 'splice_event_id': 662, 'splice_event_cancel_indicator': False, 'out_of_network_indicator': True, 'program_splice_flag': True, 'duration_flag': True, 'splice_immediate_flag': False, 'time_specified_flag': True, 'pts_time': '89742.161689', 'break_auto_return': False, 'break_duration': '242.000000', 'unique_program_id': 1, 'avail_num': 0, 'avail_expected': 0}
+
+ Splice Descriptor 0:
+	{'name': 'Avail Descriptor', 'splice_descriptor_tag': 0, 'descriptor_length': 8, 'identifier': 'CUEI', 'provider_avail_id': 0}
+
+
+[SCTE 35 Message]
+
+ Splice Info Section:
+	{'table_id': '0xfc', 'section_syntax_indicator': False, 'private': False, 'section_length': 42, 'protocol_version': 0, 'encrypted_packet': False, 'encryption_algorithm': 0, 'pts_adjustment': '0.000000', 'cw_index': '0x0', 'tier': '0xfff', 'splice_command_length': 4095, 'splice_command_type': 5, 'descriptor_loop_length': 10, 'crc': '0x6e33321e'}
+
+ Splice Command:
+	{'splice_type': 5, 'name': 'Splice Insert', 'splice_event_id': 662, 'splice_event_cancel_indicator': False, 'out_of_network_indicator': False, 'program_splice_flag': True, 'duration_flag': False, 'splice_immediate_flag': False, 'time_specified_flag': True, 'pts_time': '89984.161689', 'unique_program_id': 1, 'avail_num': 0, 'avail_expected': 0}
+
+ Splice Descriptor 0:
+	{'name': 'Avail Descriptor', 'splice_descriptor_tag': 0, 'descriptor_length': 8, 'identifier': 'CUEI', 'provider_avail_id': 0}
+```
+##### Works the same way for Base64 encoded strings.
+```go 
+>>> import threefive
+>>> Bee64='/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
+>>> threefive.decode(Bee64)
+
+
+[SCTE 35 Message]
+
+ Splice Info Section:
+	{'table_id': '0xfc', 'section_syntax_indicator': False, 'private': False, 'section_length': 47, 'protocol_version': 0, 'encrypted_packet': False, 'encryption_algorithm': 0, 'pts_adjustment': '0.000000', 'cw_index': '0xff', 'tier': '0xfff', 'splice_command_length': 5, 'splice_command_type': 6, 'descriptor_loop_length': 25, 'crc': '0xa9cc6758'}
+
+ Splice Command:
+	{'splice_type': 6, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': '21695.740089'}
+
+ Splice Descriptor 0:
+	{'name': 'Segmentation Descriptor', 'splice_descriptor_tag': 2, 'descriptor_length': 23, 'identifier': 'CUEI', 'segmentation_event_id': '0x4800008e', 'segmentation_event_cancel_indicator': False, 'program_segmentation_flag': True, 'segmentation_duration_flag': False, 'delivery_not_restricted_flag': False, 'web_delivery_allowed_flag': True, 'no_regional_blackout_flag': True, 'archive_allowed_flag': True, 'device_restrictions': '0x3', 'segmentation_upid_type': 8, 'segmentation_upid_length': 8, 'turner_identifier': '0x000000002ca0a18a', 'segmentation_type_id': 53, 'segmentation_message': 'Provider Placement Opportunity End', 'segment_num': 2, 'segments_expected': 0}
+<threefive.splice.Splice object at 0x7f44c1f530d0>
+
+```
 
 ####  Parse mpegts file 
  * Handled by the Stream class (in threefive/stream.py )
