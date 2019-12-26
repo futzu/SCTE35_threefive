@@ -2,7 +2,7 @@ import base64
 import bitstring
 
 
-def grab_bits(data,start_bit,bit_count):
+def bit_slice(data,start_bit,bit_count):
     return (data >> (start_bit+1-bit_count)) & ~(~0 << bit_count)
 
 
@@ -24,9 +24,6 @@ def reserved(bb,bst):
 def time_90k(k):
     t= k/90000.0    
     return f'{t :.6f}'
-
-
-
 
 
 
