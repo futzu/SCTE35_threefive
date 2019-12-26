@@ -10,16 +10,15 @@ class Splice:
         self.descriptors=[]
         self.info_section=Splice_Info_Section(bb)
         self.set_splice_command(bb) 
-        if not self.command: return False
         self.info_section.descriptor_loop_length = bb.read('uint:16') 
         tag_plus_header_size=2 # 1 byte for descriptor_tag, 1 byte for header?
         dll=self.info_section.descriptor_loop_length
         while dll> 0:
-            sd=self.set_splice_descriptor(bb)
-            if sd:
+            try: 
+                sd=self.set_splice_descriptor(bb)
                 sdl=sd.descriptor_length
                 self.descriptors.append(sd)
-            else: sdl=0
+            except: sdl=0
             bit_move=sdl+ tag_plus_header_size
             dll -=(bit_move)
         self.info_section.crc=hex(bb.read('uint:32'))
@@ -44,7 +43,6 @@ class Splice:
         # splice_descriptor_tag 8 uimsbf
         tag= bb.read('uint:8')
         if tag in dscr_types.keys(): return dscr_types[tag](bb,tag)
-        else: return False 		
                 
     def show_info_section(self):
         print('\n Splice Info Section:')
