@@ -1,7 +1,6 @@
 from .splice import Splice
 from struct import unpack
-from .util import grab_bits
-
+from .util import bit_slice
 
 PACKET_SIZE=188
 SYNC_BYTE=b'\x47'
@@ -24,18 +23,18 @@ class Stream:
 
     def parse_tspacket(self,packet):
         two_bytes,one_byte,_, cue = unpack('>HBB183s', packet)
-        pid=grab_bits(two_bytes,12,13)
+        pid=bit_slice(two_bytes,12,13)
         if self.PID:
             if pid !=self.PID: return
         if cue[0] !=0xfc : return
         if cue[13]==0: 
             if not self.show_null: return 
-        tei=grab_bits(two_bytes,15,1)
-        pusi=grab_bits(two_bytes,14,1)
-        ts_priority=grab_bits(two_bytes,13,1)
-        scramble=grab_bits(one_byte,7,2)
-        afc=grab_bits(one_byte,5,2)
-        count=grab_bits(one_byte,3,4)
+        tei=bit_slice(two_bytes,15,1)
+        pusi=bit_slice(two_bytes,14,1)
+        ts_priority=bit_slice(two_bytes,13,1)
+        scramble=bit_slice(one_byte,7,2)
+        afc=bit_slice(one_byte,5,2)
+        count=bit_slice(one_byte,3,4)
         try:tf=Splice(cue)
         except: return 
         if not self.PID: 
