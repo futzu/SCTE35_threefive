@@ -42,7 +42,8 @@ Successfully installed threefive-1.1.59
 
 ##  Run 
 #### The Easy Way. 
-##### Call threefive.decode on 
+### Call threefive.decode.
+
  *  mpegts files, 
  *  binary files,
  *  base64 encoded strings,
