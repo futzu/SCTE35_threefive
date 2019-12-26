@@ -27,13 +27,11 @@ def decode(stuff):
     threefive.decode(Bee64)
 
     '''
+    scte35=None
     try: 
         scte35=Splice(stuff)
         scte35.show()
-        return scte35
     except: 
-        try:  
-            return Stream(stuff,show_null=False)
-        except: 
-            print(' No SCTE 35 data found')  
-            return None
+        try:  scte35=Stream(stuff,show_null=False)
+        except: pass
+    return scte35
