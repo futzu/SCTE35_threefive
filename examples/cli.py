@@ -5,18 +5,18 @@ import threefive
 
 '''
 example command line tool.
+pass in a file name or message string to decode
+
+example:
+python cli.py '/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAABl/nwgIAAAAACyk26AQAACZcuND'
+
+or 
+python cli.py /path/to/mpeg.ts
+
 ''' 
 
-try: mesg=sys.argv[1]
+try: threefive.Splice(sys.argv[1]).show()
 except: 
-    print( '''
-    Needs a hex or base64 string to decode.
-    Try this:
-        python cli.py  '/DAvAAAAAAAA///wBQb+rvF8TAAZAhdDVUVJSAAAB3+fCAgAAAAALKVslxEAAMSHai4='
-        
-    '''
-    )
-    sys.exit() 
-
-tf=threefive.Splice
-tf(mesg).show()
+    try: threefive.Stream(sys.argv[1],show_null=False)
+    except: print(' I need a string or file to parse') 
+sys.exit() 
