@@ -8,6 +8,7 @@ SYNC_BYTE=b'\x47'
 
 
 class Stream:
+
     def __init__(self,tsfile=None,show_null=True):
         self.splices=[]
         self.PID=False
