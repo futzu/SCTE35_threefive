@@ -1,19 +1,19 @@
-from .util import *
+from .util import time_90k
 
 
 class Splice_Info_Section:    
-    def __init__(self,bb):
-        self.table_id =hex(bb.read('uint:8'))
-        self.section_syntax_indicator = bb.read('bool')
-        self.private = bb.read('bool')
-        reserved(bb,2)
-        self.section_length = bb.read('uint:12')
-        self.protocol_version = bb.read('uint:8')
-        self.encrypted_packet =  bb.read('bool')
-        self.encryption_algorithm =bb.read('uint:6')
-        self.pts_adjustment = time_90k(bb.read('uint:33'))
-        self.cw_index = hex(bb.read('uint:8'))
-        self.tier = hex(bb.read('uint:12'))
-        self.splice_command_length = bb.read('uint:12')
-        self.splice_command_type = bb.read('uint:8')
-         
+    def __init__(self,bs):
+        self.table_id =bs.hexed(8)
+        self.section_syntax_indicator = bs.boolean(1)
+        self.private = bs.boolean(1)
+        self.reserved=bs.slice(2)
+        self.section_length = bs.slice(12)
+        self.protocol_version = bs.slice(8)
+        self.encrypted_packet =  bs.boolean(1)
+        self.encryption_algorithm =bs.slice(6)
+        self.pts_adjustment = time_90k(bs.slice(33))
+        self.cw_index = bs.hexed(8)
+        self.tier = bs.hexed(12)
+        self.splice_command_length = bs.slice(12)
+        self.splice_command_type = bs.slice(8)
+    
