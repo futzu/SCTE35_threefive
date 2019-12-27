@@ -1,11 +1,13 @@
 from .splice import Splice
-from .util import bitslice, btoi
+from .util import bitslice
+
 
 PACKET_SIZE=188
 SYNC_BYTE=b'\x47'
 
 
 class Stream:
+
     def __init__(self,tsfile=None,show_null=True):
         self.splices=[]
         self.PID=False
@@ -22,11 +24,10 @@ class Stream:
                 else: return 
 
     def parse_tspacket(self,packet):
-        two_bytes=btoi(packet[:2])
-        one_byte=packet[2]
+        if packet[4] !=0xfc :return
+        two_bytes=packet[:2]
         pid=bitslice(two_bytes,12,13)
         if self.PID and (pid !=self.PID): return
-        if packet[4] !=0xfc :return
         cue=packet[4:]
         try:tf=Splice(cue)
         except: return 
@@ -37,6 +38,7 @@ class Stream:
         tei=bitslice(two_bytes,15,1)
         pusi=bitslice(two_bytes,14,1)
         ts_priority=bitslice(two_bytes,13,1)
+        one_byte=packet[2]
         scramble=bitslice(one_byte,7,2)
         afc=bitslice(one_byte,5,2)
         count=bitslice(one_byte,3,4)
