@@ -1,13 +1,9 @@
 import base64
 import bitstring
 
-def btoi(bdata):
-    if type(bdata) == bytes: return int.from_bytes(bdata,byteorder='big')
-    else: return int.from_bytes(bytes(bdata),byteorder='big')
 
 def bitslice(data,bit_idx,num_bits):
-    if type(data) != int: 
-        data=btoi(data)
+    if type(data) == bytes: data=int.from_bytes(data,byteorder='big')
     return (data >> (bit_idx+1-num_bits)) & ~(~0 << num_bits)
 
 
@@ -29,8 +25,5 @@ def reserved(bb,bst):
 def time_90k(k):
     t= k/90000.0    
     return f'{t :.6f}'
-
-
-
 
 
