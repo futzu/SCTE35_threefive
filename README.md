@@ -24,7 +24,7 @@
 
 ###  Dependencies 
 * Python 3
-* bitstring
+
 
 ##  Install 
 ```go
