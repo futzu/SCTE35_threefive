@@ -1,6 +1,6 @@
 '''
 three5.py is all of threefive in one file
-incase you hate pip or something
+in case you hate pip or something.
 
 usage:
 
