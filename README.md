@@ -59,7 +59,7 @@ Successfully installed threefive-1.1.59
 [  SCTE 35 Stream found with Pid 0x135  ]
 
 ```
-#### * Ouput looks like this
+### Ouput looks like this
 
 ```python3
 
@@ -194,7 +194,7 @@ pts_time : 31466.942367
 
 ```
 ####  threefive.Splice.show_descriptors()
- * Multiple splice descriptors per splice command 
+ ##### Multiple splice descriptors per splice command are supported. 
  
 ```python3
 
