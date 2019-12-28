@@ -27,7 +27,7 @@
 
 
 ##  Install 
-```go
+```
 pip install threefive
 
 Collecting threefive
@@ -50,7 +50,7 @@ Successfully installed threefive-1.1.59
  * binary encoded strings, 
  * hex encoded strings.
   
-```go 
+``` 
 
 >>> import threefive
 >>> threefive.decode('/path/to/mpegwithscte35.ts') 
@@ -83,7 +83,7 @@ Successfully installed threefive-1.1.59
 	{'name': 'Avail Descriptor', 'splice_descriptor_tag': 0, 'descriptor_length': 8, 'identifier': 'CUEI', 'provider_avail_id': 0}
 ```
 ### threefive.decode works the same for files and encoded strings.
-```go 
+```
 >>> import threefive
 >>> Bee64='/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
 >>> threefive.decode(Bee64)
@@ -107,7 +107,7 @@ Successfully installed threefive-1.1.59
  * Handled by the Stream class (in threefive/stream.py )
  
  
-```go
+```
 
 # Parse the file '/home/a/mpegwithscte35.ts' for SCTE 35 messages
 # show_null=False hides splice null messages
@@ -202,7 +202,7 @@ provider_avail_id : 0
 ####  Parse binary encoded messages from a file 
  * Handled by the Stream class (in threefive/stream.py )
 
-```go
+```
 >>> import threefive
 >>> stuff=threefive.Stream('/mnt/build/file.bin')
 
@@ -249,7 +249,7 @@ segmentation_message : Closing Credit Start
 ####  Parse base64 encoded messages 
  * Handled by the Splice class (in threefive/splice.py )
 
-```go
+```
 
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUg/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
@@ -266,7 +266,7 @@ pts_time : 31466.942367
 ####  Parse hex encoded messages 
  * Handled by the Splice class (in threefive/splice.py )
 
-```go
+```
 >>> import threefive
 >>> mesg= '0xfc3061000000000000fffff00506fea8cd44ed004b021743554549480000ad7f9
 f0808000000002cb2d79d350200021743554549480000267f9f0808000000002cb2d79d110000021
@@ -299,7 +299,7 @@ crc : 0x8a18869f
 ##  Splice Methods 
 
 ####  threefive.Splice.show_info_section() 
-```go
+```
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
 >>> splice=threefive.Splice(mesg)
@@ -337,7 +337,7 @@ pts_time : 31466.942367
 
 ```
 ####  threefive.Splice.show_descriptors() 
-```go
+```
 >> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
 >>> stuff=threefive.Splice(mesg)
@@ -413,7 +413,7 @@ segments_expected : 0
 
 ###  threefive.Splice.show() 
 #### Shows all data
-```go
+```
 
 >>> import threefive                
 >>> mesg='/DBIAAAAAAAA///wBQb+ky44CwAyAhdDVUVJSAAACn+fCAgAAAAALKCh4xgAAAIX
@@ -514,7 +514,7 @@ segments_expected : 0
 ```
 ###  Read individual values 
 
-```go
+```
 import threefive
 mesg='/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo='
 scte_data=threefive.Splice(mesg)
