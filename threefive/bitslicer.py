@@ -1,19 +1,28 @@
 
 class BitSlicer:
-    def __init__(self,data):
-        self.data=data
-        self.bit_idx=(len(self.data)*8)-1
-     
+    def __init__(self,bites):
+        '''
+        From bytes to bits
+        '''
+        self.bit_idx=(len(bites)*8)
+        self.bits=int.from_bytes(bites,byteorder='big')
         
     def slice(self,num_bits):
-        pre=self.data
-        if type(pre) == bytes: pre=int.from_bytes(pre,byteorder='big')
-        bitslice= (pre >> (self.bit_idx+1-num_bits)) & ~(~0 << num_bits)
+        '''
+        Starting at self.bit_idx of self.bits, slice off num_bits of bits.
+        ''' 
+        bitslice= (self.bits >> (self.bit_idx-num_bits)) & ~(~0 << num_bits)
         self.bit_idx -=num_bits
         return bitslice
         
     def hexed(self,num_bits):
+        '''
+        return the hex value of a bitslice
+        '''
         return hex(self.slice(num_bits))
             
     def boolean(self,num_bits=1):
+        '''
+        returns one bit as True or False
+        '''
         return  self.slice(num_bits) ==1
