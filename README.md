@@ -60,8 +60,8 @@ Successfully installed threefive-2.0.3
 ####  Parse binary encoded messages from a file 
 
 ```python3
->>>import threefive
->>>stuff=threefive.decode('/mnt/build/file.bin')
+>>> import threefive
+>>> stuff=threefive.decode('/mnt/build/file.bin')
 
 
 ```
@@ -84,6 +84,18 @@ Successfully installed threefive-2.0.3
 
 
 ```
+
+#### Parse binary byte string messages
+
+
+```python3
+>>> import threefive
+>>> f=open('/mnt/build/file.bin','rb').read()
+>>> scte35=threefive.decode(f)
+
+```
+
+
 
 ### Ouput looks like this
 
