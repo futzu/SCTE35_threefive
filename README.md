@@ -31,10 +31,10 @@
 pip install threefive
 
 Collecting threefive
-  Downloading https://files.pythonhosted.org/packages/c7/dd/fcef1a0529659be65dd5bee641fc715db0d559531faf4b4ddd59b239d60a/threefive-1.1.59-py3-none-any.whl
-Requirement already satisfied: bitstring in /usr/lib/python3.7/site-packages (from threefive) (3.1.6)
+  Downloading https://files.pythonhosted.org/packages/e3/0a/716cdc471379fdf23b48732516e23e4e00dfecb5a6c4894ac20397a9a15d/threefive-2.0.1-py3-none-any.whl
 Installing collected packages: threefive
-Successfully installed threefive-1.1.59
+Successfully installed threefive-2.0.1
+
 
 
 ```
