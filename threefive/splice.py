@@ -1,12 +1,12 @@
 from .splice_commands import *
 from .descriptors import *
 from .splice_info_section import *
-from .bitslicer import BitSlicer
+from .bitslicer9k import BitSlicer9k
 
 class Splice:
     def __init__(self,mesg):
         mesg=mk_bits(mesg)
-        bs=BitSlicer(mesg)
+        bs=BitSlicer9k(mesg)
         self.descriptors=[]
         self.info_section=Splice_Info_Section(bs)
         self.set_splice_command(bs) 
