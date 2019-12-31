@@ -1,13 +1,11 @@
 from .splice import Splice
-from .util import bitslice
-from bitslicer9k import BitSlicer9k
+from bitslicer9k import Slicer9k
 
 PACKET_SIZE=188
 SYNC_BYTE=b'\x47'
 
 
 class Stream:
-
     def __init__(self,tsfile=None,show_null=True):
         self.splices=[]
         self.PID=False
@@ -25,12 +23,15 @@ class Stream:
 
     def parse_tspacket(self,packet):
         if packet[4] !=0xfc :return
-        three_bytes=BitSlicer9k(packet[:3])
-        tei=three_bytes.boolean(1)
-        pusi=three_bytes.boolean(1)
-        ts_priority=three_bytes.boolean(1)
-        pid=three_bytes.slice(13)
+        three_bytes=Slicer9k(packet[:3])
+        tei=three_bytes.asflag(1)
+        pusi=three_bytes.asflag(1)
+        ts_priority=three_bytes.asflag(1)
+        pid=three_bytes.asint(13)
         if self.PID and (pid !=self.PID): return
+        scramble=three_bytes.asint(2)
+        afc=three_bytes.asint(2)
+        count=three_bytes.asint(4)
         cue=packet[4:]
         try:tf=Splice(cue)
         except: return 
@@ -38,11 +39,6 @@ class Stream:
            self.PID=pid
            print(f'\n\n[  SCTE 35 Stream found with Pid {hex(self.PID)}  ]')
         if not self.show_null and (cue[13]==0) : return
-        '''
-        scramble=bitslice(one_byte,7,2)
-        afc=bitslice(one_byte,5,2)
-        count=bitslice(one_byte,3,4)
-        '''
         tf.show()
         self.splices.append(tf)
         return
