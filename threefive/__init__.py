@@ -1,4 +1,3 @@
-from .bitslicer9k import BitSlicer9k
 from .decode import decode
 from .descriptors import *
 from .splice import Splice
