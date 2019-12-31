@@ -1,16 +1,16 @@
 from .splice_commands import *
 from .descriptors import *
 from .splice_info_section import *
-from  bitslicer9k import BitSlicer9k
+from  bitslicer9k import Slicer9k
 
 class Splice:
     def __init__(self,mesg):
         mesg=mk_bits(mesg)
-        bs=BitSlicer9k(mesg)
+        bs=Slicer9k(mesg)
         self.descriptors=[]
         self.info_section=Splice_Info_Section(bs)
         self.set_splice_command(bs) 
-        self.info_section.descriptor_loop_length = bs.slice(16) 
+        self.info_section.descriptor_loop_length = bs.asint(16) 
         tag_plus_header_size=2 # 1 byte for descriptor_tag, 1 byte for header?
         dll=self.info_section.descriptor_loop_length
         while dll> 0:
@@ -21,7 +21,7 @@ class Splice:
             except: sdl=0
             bit_move=sdl+ tag_plus_header_size
             dll -=(bit_move)
-        self.info_section.crc=hex(bs.slice(32))
+        self.info_section.crc=bs.ashex(32)
 
     def set_splice_command(self,bs):
         cmd_types={ 0: Splice_Null,
@@ -41,7 +41,7 @@ class Splice:
 		3: Time_Descriptor,
 		4: Audio_Descriptor}   
         # splice_descriptor_tag 8 uimsbf
-        tag= bs.slice(8)
+        tag= bs.asint(8)
         if tag in dscr_types.keys(): return dscr_types[tag](bs,tag)
                 
     def show_info_section(self):
