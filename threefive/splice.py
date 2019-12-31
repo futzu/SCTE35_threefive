@@ -1,7 +1,7 @@
 from .splice_commands import *
 from .descriptors import *
 from .splice_info_section import *
-from .bitslicer9k import BitSlicer9k
+from  bitslicer9k import BitSlicer9k
 
 class Splice:
     def __init__(self,mesg):
