@@ -25,7 +25,7 @@ class Stream:
 
     def parse_tspacket(self,packet):
         if packet[4] !=0xfc :return
-        three_bytes=BitSlicer9k(packet[:2])
+        three_bytes=BitSlicer9k(packet[:3])
         tei=three_bytes.boolean(1)
         pusi=three_bytes.boolean(1)
         ts_priority=three_bytes.boolean(1)
