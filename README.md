@@ -27,7 +27,7 @@
 
 
 ##  Install 
-```bash
+```go
 pip install threefive
 
 Collecting threefive
