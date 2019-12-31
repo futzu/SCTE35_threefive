@@ -42,11 +42,11 @@ Successfully installed threefive-2.0.3
 #### The Easy Way. 
 ### Call threefive.decode.
 
- *  mpegts files, 
- *  binary files,
- *  base64 encoded strings,
- * binary encoded strings, 
- * hex encoded strings.
+ *  mpegts files
+ *  binary files
+ *  base64 encoded strings
+ *  hex encoded strings
+ *  binary byte strings
   
 ``` python3
 
