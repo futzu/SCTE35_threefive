@@ -15,8 +15,4 @@ python cli.py /path/to/mpeg.ts
 
 ''' 
 
-try: threefive.Splice(sys.argv[1]).show()
-except: 
-    try: threefive.Stream(sys.argv[1],show_null=False)
-    except: print(' I need a string or file to parse') 
-sys.exit() 
+threefive.decode(sys.argv[1])
