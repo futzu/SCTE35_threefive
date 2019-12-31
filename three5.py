@@ -11,59 +11,10 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> three5.decode('/home/fat.ts')
 
 '''
-
 import base64
-import sys
-
 
 PACKET_SIZE=188
 SYNC_BYTE=b'\x47'
-SCTE35_TID=0xfc
-
-
-def bitslice(data,bit_idx,num_bits):
-    if type(data) == bytes: data=int.from_bytes(data,byteorder='big')
-    return (data >> (bit_idx+1-num_bits)) & ~(~0 << num_bits)
-
-
-def hex_decode(k):
-    try: return bytearray.fromhex(hex(k)[2:]).decode()
-    except: return k
-
-
-def kv_print(obj):
-    print(f'\t{vars(obj)}')
-
- 
-def mk_bits(s):
-    if s[:2].lower()=='0x': s=s[2:]
-    if s[:2].lower()=='fc': return bytes.fromhex(s)
-    try: return base64.b64decode(s)
-    except: return s
-
-
-def time_90k(k):
-    t= k/90000.0    
-    return f'{t :.6f}'
-
-
-class BitSlicer:
-    def __init__(self,data):
-        self.data=data
-        self.bit_idx=(len(self.data)*8)-1
-
-    def slice(self,num_bits):
-        pre=self.data
-        if type(pre) == bytes: pre=int.from_bytes(pre,byteorder='big')
-        bitslice= (pre >> (self.bit_idx+1-num_bits)) & ~(~0 << num_bits)
-        self.bit_idx -=num_bits
-        return bitslice
-        
-    def hexed(self,num_bits):
-        return hex(self.slice(num_bits))
-            
-    def boolean(self,num_bits=1):
-        return  self.slice(num_bits) ==1
 
 
 def decode(stuff):
@@ -80,14 +31,14 @@ def decode(stuff):
 
     # for a mpegts video 
 
-    import threefive
-    threefive.decode('/path/to/mpegts')
+    import three5
+    three5.decode('/path/to/mpegts')
     
     # for a base64 encoded string
 
-    import threefive
+    import three5
     Bee64='/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
-    threefive.decode(Bee64)
+    three5.decode(Bee64)
 
     '''
     scte35=None
@@ -98,6 +49,48 @@ def decode(stuff):
         try:  scte35=Stream(stuff,show_null=False)
         except: pass
     return scte35
+    
+
+
+class Stream:
+
+    def __init__(self,tsfile=None,show_null=True):
+        self.splices=[]
+        self.PID=False
+        self.show_null=show_null
+        self.parse_tsfile(tsfile)
+
+    def parse_tsfile(self,tsfile):
+        with open(tsfile,'rb') as tsdata:
+            while tsdata:
+                if tsdata.read(1)==SYNC_BYTE: 
+                    packet =tsdata.read(PACKET_SIZE - 1)
+                    if packet: self.parse_tspacket(packet)
+                    else: break
+                else: return 
+
+    def parse_tspacket(self,packet):
+        if packet[4] !=0xfc :return
+        two_bytes=packet[:2]
+        one_byte=packet[2]
+        pid=bitslice(two_bytes,12,13)
+        if self.PID and (pid !=self.PID): return
+        cue=packet[4:]
+        try:tf=Splice(cue)
+        except: return 
+        if not self.PID: 
+            self.PID=pid
+            print(f'\n\n[  SCTE 35 Stream found with Pid {hex(self.PID)}  ]')
+        if not self.show_null and (cue[13]==0) : return
+        tei=bitslice(two_bytes,15,1)
+        pusi=bitslice(two_bytes,14,1)
+        ts_priority=bitslice(two_bytes,13,1)
+        scramble=bitslice(one_byte,7,2)
+        afc=bitslice(one_byte,5,2)
+        count=bitslice(one_byte,3,4)
+        tf.show()
+        self.splices.append(tf)
+        return
 
 
 class Splice:
@@ -160,6 +153,24 @@ class Splice:
         self.show_info_section()
         self.show_command()
         self.show_descriptors()
+	
+
+class Splice_Info_Section:    
+    def __init__(self,bs):
+        self.table_id =bs.hexed(8)
+        self.section_syntax_indicator = bs.boolean(1)
+        self.private = bs.boolean(1)
+        self.reserved=bs.slice(2)
+        self.section_length = bs.slice(12)
+        self.protocol_version = bs.slice(8)
+        self.encrypted_packet =  bs.boolean(1)
+        self.encryption_algorithm =bs.slice(6)
+        self.pts_adjustment = time_90k(bs.slice(33))
+        self.cw_index = bs.hexed(8)
+        self.tier = bs.hexed(12)
+        self.splice_command_length = bs.slice(12)
+        self.splice_command_type = bs.slice(8)
+    
 
 
 class Splice_Command: 
@@ -257,6 +268,7 @@ class Private_Command(Splice_Command):
         self.name='Private Command'
 
 
+
 class Splice_Descriptor:
     '''
     the first six bytes of all descriptors:
@@ -329,7 +341,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
             self.segmentation_upid_type=bs.slice(8)
             if self.segmentation_upid_type==8:
                 self.segmentation_upid_length=bs.slice(8)
-                self.turner_identifier=str(bs.slice(64))
+                self.turner_identifier=bs.hexed(64)
             self.segmentation_type_id=bs.slice(8)
             if self.segmentation_type_id in table22.keys():
                 self.segmentation_message= table22[self.segmentation_type_id][0]
@@ -369,67 +381,173 @@ class Audio_Descriptor(Splice_Descriptor):
             comp['Full_Srvc_Audio']=bs.boolean(1)
             self.components.append(comp)
 
+
+
+class BitSlicer:
+    def __init__(self,bites):
+        '''
+        From bytes to bits
+        '''
+        if not isinstance(bites,bytes):
+            raise TypeError('bites needs to be type bytes')
+        self.bit_idx=(len(bites)*8)
+        self.bits=int.from_bytes(bites,byteorder='big')
+           
+    def slice(self,num_bits):
+        '''
+        Starting at self.bit_idx of self.bits, slice off num_bits of bits.
+        ''' 
+        bitslice= (self.bits >> (self.bit_idx-num_bits)) & ~(~0 << num_bits)
+        self.bit_idx -=num_bits
+        return bitslice
+        
+    def hexed(self,num_bits):
+        '''
+        return the hex value of a bitslice
+        '''
+        return hex(self.slice(num_bits))
+        
+    def boolean(self,num_bits=1):
+        '''
+        returns one bit as True or False
+        '''
+        return  self.slice(num_bits) ==1
+
+
+
+def bitslice(data,bit_idx,num_bits):
+    if type(data) == bytes: data=int.from_bytes(data,byteorder='big')
+    return (data >> (bit_idx+1-num_bits)) & ~(~0 << num_bits)
+
+
+def hex_decode(k):
+    try: return bytearray.fromhex(hex(k)[2:]).decode()
+    except: return k
+
+def kv_print(obj):
+    print(f'\t{vars(obj)}')
+ 
+def mk_bits(s):
+    if s[:2].lower()=='0x': s=s[2:]
+    if s[:2].lower()=='fc': return bytes.fromhex(s)
+    try: return base64.b64decode(s)
+    except: return s
+
+def time_90k(k):
+    t= k/90000.0    
+    return f'{t :.6f}'
+
+
+def not_zero(i):
+    return i !=0
+
+def gte_zero(i):
+    return i >=0
+
+def MPU():
+    pass
+
+def MID():
+    pass
+	
+'''
+Table 20 from page 58 of
+https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
+
+Restrict Group 0 – This segment is restricted for a class of devices 
+defined by an out of band message that describes which devices are excluded.
+
+Restrict Group 1 – This segment is restricted for a class of devices 
+defined by an out of band message that describes which devices are excluded.  
+
+Restrict Group 2 – This segment is restricted for a class of devices 
+defined by an out of band message that describes which devices are excluded. 
+'''
+table20={
+0x00: 'Restrict Group 0',
+0x01: 'Restrict Group 1',
+0x02: 'Restrict Group 2',
+0x03: 'No Restrictions'}
+
+	
+table21={
+0x00: [	0,None],
+0x01: [	gte_zero,'User Defined'],
+0x02: [	8,'ISCI'],
+0x03: [	12,	'Ad-ID'],
+0x04: [	32,	'UMID'],
+0x05: [	8, 'ISAN'],
+0x06: [	12,'ISAN'],
+0x07: [	12,'TID'],
+0x08: [	8,'AiringID'],
+0x09: [	gte_zero,'ADI'],	
+0x0A: [	12,	'EIDR'],
+0x0B: [	gte_zero,'ATSC'],
+0x0C: [	gte_zero,MPU],
+0x0D: [	gte_zero,MID],
+0x0E: [	gte_zero,'ADS Info'],
+0x0F: [	gte_zero,'URI'],
+0x10-0xff: [gte_zero,'Reserved']}
+
+
+'''
+table 22 from page 62 of 
+https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
+I am using the segmentation_type_id as a key.
+
+Segmentation_type_id = [segmentation_message,
+			segment_num,
+			segments_expected,
+			sub_segment_num,
+			sub_segments_expected]
+'''
+table22={
+0x00  : [ "Not Indicated",0,0, None,None],
+0x01  : [ "Content Identification",0,0, None,None],
+0x10  : [ "Program Start",1,1, None,None],
+0x11  : [ "Program End",1,1, None,None],
+0x12 : [ "Program Early Termination",1,1, None,None],
+0x13 : [ "Program Breakaway",1,1, None,None],
+0x14 : [ "Program Resumption",1,1, None,None],
+0x15  : [ "Program Runover Planned",1,1, None,None],
+0x16  : [ "Program RunoverUnplanned",1,1, None,None],
+0x17 : [ "Program Overlap Start",1,1, None,None],
+0x18  : [ "Program Blackout Override",0,0, None,None],
+0x19 : [ "Program Start – In Progress",1,1, None,None],
+0x20 : [ "Chapter Start",not_zero,not_zero, None,None],
+0x21 : [ "Chapter End",not_zero,not_zero, None,None],
+0x22 : [ "Break Start",gte_zero,gte_zero, None,None],
+0x23 : [ "Break End",gte_zero,gte_zero, None,None],
+0x24 : [ "Opening Credit Start",1,1, None,None],
+0x25 : [ "Opening Credit End",1,1, None,None],
+0x26 : [ "Closing Credit Start",1,1, None,None],
+0x27 : [ "Closing Credit End",1,1, None,None],
+0x30 : [ "Provider Advertisement Start",gte_zero,gte_zero, None,None],
+0x31 : [ "Provider Advertisement End",gte_zero,gte_zero, None,None],
+0x32 : [ "Distributor Advertisement Start",gte_zero,gte_zero, None,None],
+0x33 : [ "Distributor Advertisement End",gte_zero,gte_zero, None,None],
+0x34 : [ "Provider Placement Opportunity Start",gte_zero,gte_zero,gte_zero,gte_zero],
+0x35 : [ "Provider Placement Opportunity End",gte_zero,gte_zero, None,None],
+0x36 : [ "Distributor Placement Opportunity Start",gte_zero,gte_zero,gte_zero,gte_zero],
+0x37 : [ "Distributor Placement Opportunity End",gte_zero,gte_zero, None,None],
+0x38 : [ "Provider Overlay Placement Opportunity Start",gte_zero,gte_zero,gte_zero,gte_zero],
+0x39 : [ "Provider Overlay Placement Opportunity End",gte_zero,gte_zero, None,None],
+0x3A : [ "Distributor Overlay Placement Opportunity Start",gte_zero,gte_zero,gte_zero,gte_zero],
+0x3B : [ "Distributor Overlay Placement Opportunity End",gte_zero,gte_zero, None,None],
+0x40  : [ "Unscheduled Event Start",0,0, None,None],
+0x41  : [ "Unscheduled Event End",0,0, None,None],
+0x50  : [ "Network Start",0,0, None,None],
+0x51  : [ "Network End",0,0, None,None],
+0x3B : [ "Distributor Overlay Placement Opportunity End",gte_zero,gte_zero, None,None],
+0x40  : [ "Unscheduled Event Start",0,0, None,None],
+0x41  : [ "Unscheduled Event End",0,0, None,None],
+0x50  : [ "Network Start",0,0, None,None],
+0x51  : [ "Network End",0,0, None,None]}
+
+
+
+
+	
 	
 
-class Splice_Info_Section:    
-    def __init__(self,bs):
-        self.table_id =bs.hexed(8)
-        self.section_syntax_indicator = bs.boolean(1)
-        self.private = bs.boolean(1)
-        self.reserved=bs.slice(2)
-        self.section_length = bs.slice(12)
-        self.protocol_version = bs.slice(8)
-        self.encrypted_packet =  bs.boolean(1)
-        self.encryption_algorithm =bs.slice(6)
-        self.pts_adjustment = time_90k(bs.slice(33))
-        self.cw_index = bs.hexed(8)
-        self.tier = bs.hexed(12)
-        self.splice_command_length = bs.slice(12)
-        self.splice_command_type = bs.slice(8)
-    
-
-
-class Stream:
-    def __init__(self,tsfile=None,show_null=True):
-        self.splices=[]
-        self.PID=False
-        self.show_null=show_null
-        self.packet_count=0
-        self.parse_tsfile(tsfile)
-        
-    def parse_tsfile(self,tsfile):
-        with open(tsfile,'rb') as tsdata:
-            while tsdata:
-                if tsdata.read(1)==SYNC_BYTE: 
-                    packet =tsdata.read(PACKET_SIZE - 1)
-                    if packet: self.parse_tspacket(packet)
-                    else: break
-                else:
-                    print(f'total packets: {self.packet_count}')
-                    return 
-
-    def parse_tspacket(self,packet):
-        self.packet_count +=1
-        if packet[4] !=SCTE35_TID :return
-        two_bytes=packet[:2]
-        one_byte=packet[2]
-        pid=bitslice(two_bytes,12,13)
-        if self.PID and (pid !=self.PID): return
-        cue=packet[4:]
-        try:tf=Splice(cue)
-        except: return 
-        if not self.PID: 
-            print(f'number of packets before determining pid: {self.packet_count}')
-            self.PID=pid
-            print(f'\n\n[  SCTE 35 Stream found with Pid {hex(self.PID)}  ]')
-        if not self.show_null and (cue[13]==0) : return
-        tei=bitslice(two_bytes,15,1)
-        pusi=bitslice(two_bytes,14,1)
-        ts_priority=bitslice(two_bytes,13,1)
-        scramble=bitslice(one_byte,7,2)
-        afc=bitslice(one_byte,5,2)
-        count=bitslice(one_byte,3,4)
-        tf.show()
-        self.splices.append(tf)
-        return
-
+	
