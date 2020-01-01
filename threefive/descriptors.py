@@ -92,7 +92,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
 class Time_Descriptor(Splice_Descriptor):
     '''
     Table 25 - time_descriptor()
-    ''')
+    '''
     def __init__(self,bs,tag):
         if not super().__init__(bs,tag): return False
         self.name='Time Descriptor'
