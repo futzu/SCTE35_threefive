@@ -1,6 +1,9 @@
-from .util import *
 
-class Splice_Command: 
+
+class Splice_Command:
+    def __init__(self,sct):
+        self.splice_type=sct
+    
     def break_duration(self,bs):
         self.break_auto_return= bs.asflag(1)
         reserved=bs.asint(6)
@@ -15,14 +18,20 @@ class Splice_Command:
 
 
 class Splice_Null(Splice_Command):
+    '''
+    Table 7 - splice_null()
+    '''
     def __init__(self,bs,sct):
-        self.splice_type=sct
+        super().__init__(sct)
         self.name='Splice Null'
 
              
 class Splice_Schedule(Splice_Command):
+    '''
+    Table 8 - splice_schedule()
+    '''
     def __init__(self,bs,sct):
-        self.splice_type=sct
+        super().__init__(sct)
         self.name='Splice Schedule'
         splice_count=bs.asint(8)
         for i in range(0,splice_count):            
@@ -50,8 +59,11 @@ class Splice_Schedule(Splice_Command):
 
 
 class Splice_Insert(Splice_Command):
+    '''
+    Table 9 - splice_insert()
+    '''
     def __init__(self,bs,sct):
-        self.splice_type=sct 
+        super().__init__(sct)
         self.name='Splice Insert'
         self.splice_event_id=bs.asint(32)
         self.splice_event_cancel_indicator=bs.asflag(1)
@@ -77,20 +89,30 @@ class Splice_Insert(Splice_Command):
 
 
 class Time_Signal(Splice_Command):
+    '''
+    Table 10 - time_signal()
+    '''
     def __init__(self,bs,sct):
-        self.splice_type=sct
+        super().__init__(sct)
         self.name='Time Signal'
         self.splice_time(bs)
 
 
 class Bandwidth_Reservation(Splice_Command):
+    '''
+    Table 11 - bandwidth_reservation()
+    '''
     def __init__(self,bs,sct):
-        self.splice_type=sct
+        super().__init__(sct)
         self.name='Bandwidth Reservation'
 
 
 class Private_Command(Splice_Command):
+    '''
+    Table 12 - private_command()
+    '''
     def __init__(self,bs,sct):
-        self.splice_type=sct
+        super().__init__(sct)
         self.name='Private Command'
-
+        self.identifier=bs.asint(32)
+        
