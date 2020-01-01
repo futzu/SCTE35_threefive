@@ -4,13 +4,13 @@ class Splice_Command:
     def break_duration(self,bs):
         self.break_auto_return= bs.asflag(1)
         reserved=bs.asint(6)
-        self.break_duration= time_90k(bs.asint(33))
+        self.break_duration= bs.as90k(33)
 
     def splice_time(self,bs): #40bits
         self.time_specified_flag=bs.asflag(1)
         if self.time_specified_flag:
             reserved=bs.asint(6)
-            self.pts_time=time_90k(bs.asint(33))
+            self.pts_time=bs.as90k(33)
         else: reserved=bs.asint(7)
 
 
