@@ -2,16 +2,16 @@ from .util import *
 
 class Splice_Command: 
     def break_duration(self,bs):
-        self.break_auto_return= bs.boolean(1)
-        reserved=bs.slice(6)
-        self.break_duration= time_90k(bs.slice(33))
+        self.break_auto_return= bs.asflag(1)
+        reserved=bs.asint(6)
+        self.break_duration= time_90k(bs.asint(33))
 
     def splice_time(self,bs): #40bits
-        self.time_specified_flag=bs.boolean(1)
+        self.time_specified_flag=bs.asflag(1)
         if self.time_specified_flag:
-            reserved=bs.slice(6)
-            self.pts_time=time_90k(bs.slice(33))
-        else: reserved=bs.slice(7)
+            reserved=bs.asint(6)
+            self.pts_time=time_90k(bs.asint(33))
+        else: reserved=bs.asint(7)
 
 
 class Splice_Null(Splice_Command):
@@ -24,56 +24,56 @@ class Splice_Schedule(Splice_Command):
     def __init__(self,bs,sct):
         self.splice_type=sct
         self.name='Splice Schedule'
-        splice_count=bs.slice(8)
+        splice_count=bs.asint(8)
         for i in range(0,splice_count):            
-            self.splice_event_id= bs.slice(32)
-            self.splice_event_cancel_indicator= bs.boolean(1)
-            reserved=bs.slice(7)
+            self.splice_event_id= bs.asint(32)
+            self.splice_event_cancel_indicator= bs.asflag(1)
+            reserved=bs.asint(7)
             if not self.splice_event_cancel_indicator:
-                self.out_of_network_indicator=bs.boolean(1)
-                self.program_splice_flag=bs.boolean(1)
-                self.duration_flag=bs.boolean(1)
-                reserved=bs.slice(5)
+                self.out_of_network_indicator=bs.asflag(1)
+                self.program_splice_flag=bs.asflag(1)
+                self.duration_flag=bs.asflag(1)
+                reserved=bs.asint(5)
                 if self.program_splice_flag:  
-                    self.utc_splice_time=bs.slice(32)
+                    self.utc_splice_time=bs.asint(32)
                 else:
-                    self.component_count=bs.slice(8)
+                    self.component_count=bs.asint(8)
                     self.components=[]
                     for j in range(0,self.component_count):
                         self.components[j]={
-                            'component_tag': bs.slice(8),
-                            'utc_splice_time':bs.slice(32)}
+                            'component_tag': bs.asint(8),
+                            'utc_splice_time':bs.asint(32)}
                 if self.duration_flag: self.break_duration(bs)
-                self.unique_program_id= bs.slice(16)
-                self.avail_num= bs.slice(8)
-                self.avails_expected=bs.slice(8)
+                self.unique_program_id= bs.asint(16)
+                self.avail_num= bs.asint(8)
+                self.avails_expected=bs.asint(8)
 
 
 class Splice_Insert(Splice_Command):
     def __init__(self,bs,sct):
         self.splice_type=sct 
         self.name='Splice Insert'
-        self.splice_event_id=bs.slice(32)
-        self.splice_event_cancel_indicator=bs.boolean(1)
-        reserved=bs.slice(7)
+        self.splice_event_id=bs.asint(32)
+        self.splice_event_cancel_indicator=bs.asflag(1)
+        reserved=bs.asint(7)
         if not self.splice_event_cancel_indicator:    
-            self.out_of_network_indicator=bs.boolean(1)
-            self.program_splice_flag=bs.boolean(1)
-            self.duration_flag=bs.boolean(1)
-            self.splice_immediate_flag=bs.boolean(1)
-            reserved=bs.slice(4)
+            self.out_of_network_indicator=bs.asflag(1)
+            self.program_splice_flag=bs.asflag(1)
+            self.duration_flag=bs.asflag(1)
+            self.splice_immediate_flag=bs.asflag(1)
+            reserved=bs.asint(4)
             if self.program_splice_flag and not self.splice_immediate_flag: 
                 self.splice_time(bs)
             if not self.program_splice_flag:
-                self.component_count=bs.slice(8)
+                self.component_count=bs.asint(8)
                 self.components=[]
                 for i in range(0,self.component_count):  
-                    self.components[i]=bs.slice(8)
+                    self.components[i]=bs.asint(8)
                 if not self.splice_immediate_flag: self.splice_time(bs)
             if self.duration_flag: self.break_duration(bs) 
-            self.unique_program_id=bs.slice(16)
-            self.avail_num=bs.slice(8)
-            self.avail_expected=bs.slice(8)
+            self.unique_program_id=bs.asint(16)
+            self.avail_num=bs.asint(8)
+            self.avail_expected=bs.asint(8)
 
 
 class Time_Signal(Splice_Command):
