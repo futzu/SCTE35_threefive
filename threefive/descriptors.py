@@ -67,10 +67,10 @@ class Segmentation_Descriptor(Splice_Descriptor):
                     comp={}
                     comp['component_tag']=bs.asint(8)
                     reserved(bs,7)
-                    comp['pts_offset']=time_90k(bs.asint(33))
+                    comp['pts_offset']=bs.as90k(33)
                     self.components.append(comp)
             if self.segmentation_duration_flag: 
-                self.segmentation_duration=time_90k(bs.asint(40))
+                self.segmentation_duration=bs.as90k(40)
             self.segmentation_upid_type=bs.asint(8)
             if self.segmentation_upid_type==8:
                 self.segmentation_upid_length=bs.asint(8)
