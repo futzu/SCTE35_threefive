@@ -14,10 +14,6 @@ def mk_bits(s):
     try: return base64.b64decode(s)
     except: return s
 
-def time_90k(k):
-    t= k/90000.0    
-    return f'{t :.6f}'
-
 
 
 
