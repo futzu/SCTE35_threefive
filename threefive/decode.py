@@ -1,4 +1,3 @@
-
 import sys
 from .splice import Splice
 from .stream import Stream
