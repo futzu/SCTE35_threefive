@@ -1,22 +1,19 @@
-from .util import *
-
 from .tables import table22
 
 class Splice_Descriptor:
     '''
-    the first six bytes of all descriptors:
-    
-        splice_descriptor_tag    8 uimsbf 
-        descriptor_length        8 uimsbf 
-        identifier              32 uimsbf 
+    The first six bytes of all descriptors:
+            splice_descriptor_tag    8 uimsbf 
+            descriptor_length        8 uimsbf 
+            identifier              32 uimsbf 
     '''
     def __init__(self,bs,tag):
         self.name='Unknown Descriptor'
         self.splice_descriptor_tag=tag
         self.descriptor_length = bs.asint(8)
         #identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
-        self.identifier = hex_decode(bs.asint(32))
-        return self.identifier ==  'CUEI'
+        self.identifier = bs.asdecodedhex(32)
+        return self.identifier =='CUEI'
         
 class Avail_Descriptor(Splice_Descriptor):
     '''  
@@ -44,6 +41,9 @@ class Dtmf_Descriptor(Splice_Descriptor):
 
 	
 class Segmentation_Descriptor(Splice_Descriptor):
+    '''
+    Table 19 - segmentation_descriptor()
+    '''
     def __init__(self,bs,tag):
         if not super().__init__(bs,tag): return False
         self.name='Segmentation Descriptor'
@@ -90,6 +90,9 @@ class Segmentation_Descriptor(Splice_Descriptor):
 
 
 class Time_Descriptor(Splice_Descriptor):
+    '''
+    Table 25 - time_descriptor()
+    ''')
     def __init__(self,bs,tag):
         if not super().__init__(bs,tag): return False
         self.name='Time Descriptor'
@@ -99,6 +102,9 @@ class Time_Descriptor(Splice_Descriptor):
 
 	
 class Audio_Descriptor(Splice_Descriptor):
+    '''
+    Table 26 - audio_descriptor()
+    '''
     def __init__(self,bs,tag):
         if not super().__init__(bs,tag): return False
         self.name='Audio Descriptor'
@@ -109,11 +115,7 @@ class Audio_Descriptor(Splice_Descriptor):
             comp={}
             comp['component_tag']=bs.asint(8)
             comp['ISO_code=']=bs.asint(24)
-            comp['Bit_Stream_Mode']=bs.asint(3)
-            comp['Num_Channels']=bs.asint(4)
-            comp['Full_Srvc_Audio']=bs.asflag(1)
+            comp['bit_stream_mode']=bs.asint(3)
+            comp['num_channels']=bs.asint(4)
+            comp['full_srvc_audio']=bs.asflag(1)
             self.components.append(comp)
-
-
-	
-	
