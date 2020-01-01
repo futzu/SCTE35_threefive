@@ -1,5 +1,8 @@
 
-class Splice_Info_Section:    
+class Splice_Info_Section: 
+    '''
+    Table 5 - splice_info_section()
+    '''   
     def __init__(self,bs):
         self.table_id =bs.ashex(8)
         self.section_syntax_indicator = bs.asflag(1)
