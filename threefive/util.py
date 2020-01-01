@@ -1,8 +1,4 @@
-import base64
-
-def bitslice(data,bit_idx,num_bits):
-    if type(data) == bytes: data=int.from_bytes(data,byteorder='big')
-    return (data >> (bit_idx+1-num_bits)) & ~(~0 << num_bits)
+iimport base64
 
 
 def hex_decode(k):
