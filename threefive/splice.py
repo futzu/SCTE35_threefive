@@ -42,9 +42,11 @@ class Splice:
             bit_move=sdl+ tag_plus_header_size
             dll -=(bit_move)
 
-    def kvprint(self,obj):
-        print(f'\t{vars(obj)}')
- 
+   def kvprint(self,obj):
+        stuff=[]
+        for k,v in vars(obj).items(): stuff.append(f'{k} :\033[92m{v} \033[0m')
+        print(' '.join(stuff))
+	
     def mkbits(self,s):
         if s[:2].lower()=='0x': s=s[2:]
         if s[:2].lower()=='fc': return bytes.fromhex(s)
