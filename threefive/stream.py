@@ -35,9 +35,7 @@ class Stream:
         cue=packet[4:]
         try:tf=Splice(cue)
         except: return 
-        if not self.PID: 
-           self.PID=pid
-           print(f'\n\n[  SCTE 35 Stream found with Pid {hex(self.PID)}  ]')
+        if not self.PID:  self.PID=pid
         if not self.show_null and (cue[13]==0) : return
         tf.show()
         self.splices.append(tf)
