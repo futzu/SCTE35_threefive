@@ -36,8 +36,7 @@ class Dtmf_Descriptor(Splice_Descriptor):
         self.dtmf_count= bs.asint(3)
         reserved=bs.asint(5)
         self.dtmf_chars=[]
-        for i in range(0,self.dtmf_count): 
-            self.dtmf_chars.append(bs.asint(8))
+        for i in range(0,self.dtmf_count):  self.dtmf_chars.append(bs.asint(8))
 
 	
 class Segmentation_Descriptor(Splice_Descriptor):
@@ -69,15 +68,14 @@ class Segmentation_Descriptor(Splice_Descriptor):
                     reserved(bs,7)
                     comp['pts_offset']=bs.as90k(33)
                     self.components.append(comp)
-            if self.segmentation_duration_flag: 
-                self.segmentation_duration=bs.as90k(40)
+            if self.segmentation_duration_flag:  self.segmentation_duration=bs.as90k(40)
             self.segmentation_upid_type=bs.asint(8)
             if self.segmentation_upid_type==8:
                 self.segmentation_upid_length=bs.asint(8)
                 self.turner_identifier=bs.ashex(64)
             self.segmentation_type_id=bs.asint(8)
             if self.segmentation_type_id in table22.keys():
-                self.segmentation_message= table22[self.segmentation_type_id][0]
+		self.segmentation_message= table22[self.segmentation_type_id][0]
             if  self.segmentation_type_id ==0:
                 self.segment_num=0
                 self.segments_expected=0
