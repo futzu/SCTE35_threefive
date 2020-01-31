@@ -6,20 +6,24 @@ SYNC_BYTE=b'\x47'
 
 
 class Stream:
-    def __init__(self,tsfile=None,show_null=True):
+    def __init__(self,tsfile=None,tsstream=None,show_null=False):
         self.splices=[]
         self.PID=False
         self.show_null=show_null
-        self.parse_tsfile(tsfile)
-
+        if tsfile: self.parse_tsfile(tsfile)
+        if tsstream: self.parse_tsdata(tsstream)
+ 
     def parse_tsfile(self,tsfile):
         with open(tsfile,'rb') as tsdata:
-            while tsdata:
-                if tsdata.read(1)==SYNC_BYTE: 
-                    packet =tsdata.read(PACKET_SIZE - 1)
-                    if packet: self.parse_tspacket(packet)
-                    else: break
-                else: return 
+            self.parse_tsdata(tsdata)
+
+    def parse_tsdata(self,tsdata):
+        while tsdata:
+            if tsdata.read(1)==SYNC_BYTE: 
+                packet =tsdata.read(PACKET_SIZE - 1)
+                if packet: self.parse_tspacket(packet)
+                else: break
+            else: return 
 
     def parse_tspacket(self,packet):
         if packet[4] !=0xfc :return
