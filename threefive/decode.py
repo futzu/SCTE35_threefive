@@ -27,10 +27,13 @@ def decode(stuff):
 
     '''
     scte35=None
-    try: 
-        scte35=Splice(stuff)
-        scte35.show()
-    except: 
-        try:  scte35=Stream(stuff,show_null=False)
-        except: pass
+
+    if stuff==sys.stdin.buffer:  scte35=Stream(tsstream=stuff,show_null=False)
+    else:
+        try: 
+            scte35=Splice(stuff)
+            scte35.show()
+        except: 
+            try:  scte35=Stream(tsfile=stuff,show_null=False)
+            except: pass
     return scte35
