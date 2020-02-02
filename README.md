@@ -5,7 +5,7 @@
 *  Parse SCTE 35 messages encoded in Base64, Binary, or Hex. 
 
 ### 2019 Specification 
-* https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
+[SCTE 35 specification](../master/SCTE-35-2019-specification.pdf)
 
 ###  Splice Commands 
 *  Splice Null  
