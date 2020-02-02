@@ -1,13 +1,13 @@
-'''
-Example from the specification 
+"""
+Example from the specification
 
 14.1. Time_Signal–Placement_Opportunity_Start
-'''
+"""
 
-import threefive 
+import threefive
 
-Base64='/DA0AAAAAAAA///wBQb+cr0AUAAeAhxDVUVJSAAAjn/PAAGlmbAICAAAAAAsoKGKNAIAmsnRfg=='
+Base64 = "/DA0AAAAAAAA///wBQb+cr0AUAAeAhxDVUVJSAAAjn/PAAGlmbAICAAAAAAsoKGKNAIAmsnRfg=="
 
-tf=threefive.Splice
+tf = threefive.Splice
 
 tf(Base64).show()
