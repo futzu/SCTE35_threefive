@@ -1,11 +1,12 @@
 from .splice import Splice
 from bitslicer9k import Slicer9k
 
-PACKET_SIZE = 188
-SYNC_BYTE = b"\x47"
-
-
 class Stream:
+    
+    PACKET_SIZE = 188
+    SYNC_BYTE = b"\x47"
+    SCTE35_TID = 0xFC
+    
     def __init__(self, tsfile=None, tsstream=None, show_null=False):
         self.splices = []
         self.PID = False
@@ -21,8 +22,8 @@ class Stream:
 
     def parse_tsdata(self, tsdata):
         while tsdata:
-            if tsdata.read(1) == SYNC_BYTE:
-                packet = tsdata.read(PACKET_SIZE - 1)
+            if tsdata.read(1) == self.SYNC_BYTE:
+                packet = tsdata.read(self.PACKET_SIZE - 1)
                 if packet:
                     self.parse_tspacket(packet)
                 else:
@@ -31,7 +32,7 @@ class Stream:
                 return
 
     def parse_tspacket(self, packet):
-        if packet[4] != 0xFC:
+        if packet[4] != self.SCTE35_TID:
             return
         three_bytes = Slicer9k(packet[:3])
         tei = three_bytes.asflag(1)
