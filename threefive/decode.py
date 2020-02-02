@@ -56,13 +56,3 @@ def decode(stuff = None):
             except BaseException:
                 pass
     return scte35
-
-        try:
-            scte35 = Splice(stuff)
-            scte35.show()
-        except BaseException:
-            try:
-                scte35 = Stream(tsfile=stuff, show_null=False)
-            except BaseException:
-                pass
-    return scte35
