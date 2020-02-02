@@ -5,24 +5,6 @@ from bitslicer9k import Slicer9k
 import base64
 
 
-descriptor_map = {
-    0: Avail_Descriptor,
-    1: Dtmf_Descriptor,
-    2: Segmentation_Descriptor,
-    3: Time_Descriptor,
-    4: Audio_Descriptor,
-}
-
-command_map = {
-    0: Splice_Null,
-    4: Splice_Schedule,
-    5: Splice_Insert,
-    6: Time_Signal,
-    7: Bandwidth_Reservation,
-    255: Private_Command,
-}
-
-
 class Splice:
     
     descriptor_map = {0: Avail_Descriptor,
