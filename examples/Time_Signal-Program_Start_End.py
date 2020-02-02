@@ -1,7 +1,7 @@
 """
 Example from the specification
 
-14.4. Time_Signal–Program Start_End
+14.4. Time_Signal–Program_Start_End
 """
 
 import threefive
