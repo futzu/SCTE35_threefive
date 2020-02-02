@@ -24,6 +24,20 @@ command_map = {
 
 
 class Splice:
+    
+    descriptor_map = {0: Avail_Descriptor,
+                    1: Dtmf_Descriptor,
+                    2: Segmentation_Descriptor,
+                    3: Time_Descriptor,
+                    4: Audio_Descriptor}   
+
+    command_map = { 0: Splice_Null,
+                4: Splice_Schedule,
+                5: Splice_Insert,
+                6: Time_Signal,
+                7: Bandwidth_Reservation,
+                255: Private_Command}
+    
     def __init__(self, mesg):
         mesg = self.mkbits(mesg)
         bs = Slicer9k(mesg)
@@ -65,14 +79,14 @@ class Splice:
 
     def set_splice_command(self, bs):
         sct = self.info_section.splice_command_type
-        if sct in command_map.keys():
-            self.command = command_map[sct](bs, sct)
+        if sct in self.command_map.keys():
+            self.command = self.command_map[sct](bs, sct)
 
     def set_splice_descriptor(self, bs):
         # splice_descriptor_tag 8 uimsbf
         tag = bs.asint(8)
-        if tag in descriptor_map.keys():
-            return descriptor_map[tag](bs, tag)
+        if tag in self.descriptor_map.keys():
+            return self.descriptor_map[tag](bs, tag)
 
     def show_info_section(self):
         print("\n Splice Info Section:")
