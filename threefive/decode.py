@@ -40,13 +40,23 @@ def decode(stuff = None):
 
     scte35 = None
 
-    if not stuff:
+    if stuff in [None,sys.stdin.buffer]:
         try:
             scte35 = Stream(tsstream=sys.stdin.buffer, show_null=False)
         except BaseException:
             scte35 = Splice(sys.stdin.buffer) 
             scte35.show()
     else:
+        try:
+            scte35 = Splice(stuff)
+            scte35.show()
+        except BaseException:
+            try:
+                scte35 = Stream(tsfile=stuff, show_null=False)
+            except BaseException:
+                pass
+    return scte35
+
         try:
             scte35 = Splice(stuff)
             scte35.show()
