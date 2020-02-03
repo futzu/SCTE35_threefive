@@ -1,5 +1,5 @@
 from .splice import Splice
-from bitslicer9k import Slicer9k
+from bitn import BitBin
 
 class Stream:
     '''
@@ -40,7 +40,7 @@ class Stream:
     def parse_tspacket(self, packet):
         if packet[4] != self.SCTE35_TID:
             return
-        three_bytes = Slicer9k(packet[:3])
+        three_bytes = BitBin(packet[:3])
         tei = three_bytes.asflag(1)
         pusi = three_bytes.asflag(1)
         ts_priority = three_bytes.asflag(1)

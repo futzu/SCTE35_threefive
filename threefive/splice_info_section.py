@@ -2,9 +2,9 @@ class Splice_Info_Section:
     """
     Table 5 - splice_info_section()
     """
-    def __init__(self, bs = None):
-        if not bs: self.novalues()
-        else: self.parsevalues(bs)
+    def __init__(self, bitbin = None):
+        if not bitbin: self.novalues()
+        else: self.parsevalues(bitbin)
  
     def novalues(self):
         '''
@@ -25,21 +25,21 @@ class Splice_Info_Section:
         self.splice_command_length = None
         self.splice_command_type = None
 
-    def parsevalues(self, bs):
+    def parsevalues(self, bitbin):
         '''
         create a splice_info_section instance
-        and set vars from bs
+        and set vars from bitbin
         '''
-        self.table_id = bs.ashex(8)
-        self.section_syntax_indicator = bs.asflag(1)
-        self.private = bs.asflag(1)
-        self.reserved = bs.asint(2)
-        self.section_length = bs.asint(12)
-        self.protocol_version = bs.asint(8)
-        self.encrypted_packet = bs.asflag(1)
-        self.encryption_algorithm = bs.asint(6)
-        self.pts_adjustment = bs.as90k(33)
-        self.cw_index = bs.ashex(8)
-        self.tier = bs.ashex(12)
-        self.splice_command_length = bs.asint(12)
-        self.splice_command_type = bs.asint(8)
+        self.table_id = bitbin.ashex(8)
+        self.section_syntax_indicator = bitbin.asflag(1)
+        self.private = bitbin.asflag(1)
+        self.reserved = bitbin.asint(2)
+        self.section_length = bitbin.asint(12)
+        self.protocol_version = bitbin.asint(8)
+        self.encrypted_packet = bitbin.asflag(1)
+        self.encryption_algorithm = bitbin.asint(6)
+        self.pts_adjustment = bitbin.as90k(33)
+        self.cw_index = bitbin.ashex(8)
+        self.tier = bitbin.ashex(12)
+        self.splice_command_length = bitbin.asint(12)
+        self.splice_command_type = bitbin.asint(8)
