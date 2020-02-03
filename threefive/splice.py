@@ -68,7 +68,7 @@ class Splice:
     def set_splice_command(self, bs):
         sct = self.info_section.splice_command_type
         if sct in self.command_map.keys():
-            self.command = self.command_map[sct](bs, sct)
+            self.command = self.command_map[sct](bs)
 
     def set_splice_descriptor(self, bs):
         # splice_descriptor_tag 8 uimsbf
