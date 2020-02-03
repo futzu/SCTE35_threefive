@@ -24,17 +24,18 @@
 
 ###  Dependencies 
 * Python 3
-* bitslicer9k
+* bitn
 
 ##  Install 
 ```
-$ pip install threefive
- 
+pip install threefive
 Collecting threefive
-  Downloading https://files.pythonhosted.org/packages/a0/2b/6027c2f38d0f76f70a61e8d9ac9b9a8d781c845a1bcc0e3a6d0395538dfb/threefive-2.0.5-py3-none-any.whl
-Collecting bitslicer9k
-  Downloading https://files.pythonhosted.org/packages/e1/57/aaf58b282a6bb824327a8ce266db55943881a1ebd14e6d40a952b90a28af/bitslicer9k-1.0.11-py3-none-any.whl
-Installing collected packages: bitslicer9k, threefive
+  Downloading threefive-2.0.23-py3-none-any.whl (11 kB)
+Collecting bitn
+  Downloading bitn-0.0.3-py3-none-any.whl (2.7 kB)
+Installing collected packages: bitn, threefive
+Successfully installed bitn-0.0.3 threefive-2.0.23
+
 ```
 
 ##  Run 
