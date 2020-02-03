@@ -2,6 +2,12 @@ from .splice import Splice
 from bitslicer9k import Slicer9k
 
 class Stream:
+    '''
+    threefive.Decode uses a threefive.Stream instance to handle files and streams. 
+    On creation, threefive.Stream parses mpegts for SCTE 35 packets. 
+    For each packet, a threefive.Splice instance is created to parse the packet payload.
+    threefive.Stream stores splices instances in a list, threefive.Stream.splices.
+    '''
     
     PACKET_SIZE = 188
     SYNC_BYTE = b"\x47"
