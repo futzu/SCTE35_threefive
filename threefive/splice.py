@@ -43,11 +43,11 @@ class Splice:
 
     def kvprint(self,obj):
         stuff=[]
-        for k,v in vars(obj).items(): stuff.append(f'{k} : \033[92m{v} \033[0m')
+        for k,v in vars(obj).items(): stuff.append(f'{k} : {v}')
         print(' '.join(stuff))
                                                             
     def sectionstart(self, section_name):
-        print(f'\n\x1b[1;30;47m {section_name} \x1b[0m')
+        print(f'\n{section_name}')
                                                                                                                                                                                               
  
     def mkbits(self,s):
@@ -60,7 +60,7 @@ class Splice:
 
         sct=self.info_section.splice_command_type
         if sct in self.command_map.keys(): 
-            self.command = self.command_map[sct](bs,sct)
+            self.command = self.command_map[sct](bs)
    
     def set_splice_descriptor(self,bs):
         # splice_descriptor_tag 8 uimsbf
