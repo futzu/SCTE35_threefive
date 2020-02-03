@@ -2,6 +2,28 @@ import sys
 from .splice import Splice
 from .stream import Stream
 
+    
+def read_stdin(scte35):
+    print(f'\n Reading from stdin')
+    try:
+        scte35 = Stream(tsstream=sys.stdin.buffer, show_null=False)
+    except BaseException:
+        scte35 = Splice(sys.stdin.buffer) 
+        scte35.show()
+    return scte35
+
+def read_stuff(stuff,scte35):
+    try:
+        scte35 = Splice(stuff)
+        scte35.show()
+    except BaseException:
+        try:
+            print(f'\nfile: {stuff}')
+            scte35 = Stream(tsfile=stuff, show_null=False)
+        except BaseException:
+            pass
+    return scte35
+
 
 def decode(stuff = None):
     """
@@ -37,22 +59,12 @@ def decode(stuff = None):
     
     
     """
-
+    
     scte35 = None
+    
+    if stuff in [None,sys.stdin.buffer]: 
+        return read_stdin(scte35)
+    else: 
+        return read_stuff(stuff,scte35)
 
-    if stuff in [None,sys.stdin.buffer]:
-        try:
-            scte35 = Stream(tsstream=sys.stdin.buffer, show_null=False)
-        except BaseException:
-            scte35 = Splice(sys.stdin.buffer) 
-            scte35.show()
-    else:
-        try:
-            scte35 = Splice(stuff)
-            scte35.show()
-        except BaseException:
-            try:
-                scte35 = Stream(tsfile=stuff, show_null=False)
-            except BaseException:
-                pass
-    return scte35
+
