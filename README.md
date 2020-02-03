@@ -27,7 +27,7 @@
 * bitslicer9k
 
 ##  Install 
-```python
+```
 $ pip install threefive
  
 Collecting threefive
