@@ -6,7 +6,13 @@ import base64
 
 
 class Splice:
-    
+    '''
+    threefive.Splice accepts a scte35 mesg to parse on creation.
+    The Splice instance contains
+        1 instance of Splice_Info_Section, 
+        1 instance of a Splice_Command subclass 
+        0 or more instances of a Splice_Descriptor subclass. 
+    '''
     descriptor_map = {0: Avail_Descriptor,
                     1: Dtmf_Descriptor,
                     2: Segmentation_Descriptor,
