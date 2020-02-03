@@ -26,21 +26,16 @@
 * Python 3
 * bitslicer9k
 
-
 ##  Install 
-```go
- pip install threefive
+```python
+$ pip install threefive
  
 Collecting threefive
   Downloading https://files.pythonhosted.org/packages/a0/2b/6027c2f38d0f76f70a61e8d9ac9b9a8d781c845a1bcc0e3a6d0395538dfb/threefive-2.0.5-py3-none-any.whl
 Collecting bitslicer9k
   Downloading https://files.pythonhosted.org/packages/e1/57/aaf58b282a6bb824327a8ce266db55943881a1ebd14e6d40a952b90a28af/bitslicer9k-1.0.11-py3-none-any.whl
 Installing collected packages: bitslicer9k, threefive
-
-
-
 ```
-
 
 ##  Run 
 #### The Easy Way. 
@@ -52,64 +47,41 @@ Installing collected packages: bitslicer9k, threefive
  *  hex encoded strings
  *  binary byte strings
  
- 
  ####  Parse mpegts files 
-
-  
-``` python3
-
+```python
 >>> import threefive
 >>> threefive.decode('/path/to/mpegwithscte35.ts') 
-
-
 ```
 
-
-####  Parse binary encoded messages from a file 
-
-```python3
+####  Parse binary encoded messages from a file
+```python
 >>> import threefive
 >>> stuff=threefive.decode('/mnt/build/file.bin')
-
-
 ```
 
 ####  Parse base64 encoded messages 
-
-```python3
-
+```python
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUg/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
 >>> t=threefive.decode(mesg)
-
-
 ```
+
 ####  Parse hex encoded messages 
+
 ```python
-
 >>> import threefive
->>>u=threefive.decode('0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A')
-
-
+>>> u=threefive.decode('0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A')
 ```
 
 #### Parse binary byte string messages
-
-
-```python3
+```python
 >>> import threefive
 >>> f=open('/mnt/build/file.bin','rb').read()
 >>> scte35=threefive.decode(f)
-
 ```
 
-
-
 ### Ouput looks like this
-
-```python3
-
-
+```python
 [SCTE 35 Message]
 
  Splice Info Section:
@@ -147,14 +119,9 @@ name :Avail Descriptor  splice_descriptor_tag :0  descriptor_length :8  identifi
 	{'name': 'Avail Descriptor', 'splice_descriptor_tag': 0, 'descriptor_length': 8, 'identifier': 'CUEI', 'provider_avail_id': 0}
 ```
 
-
-
-
-##  Splice Methods 
-
+##  Splice Methods
 ####  threefive.Splice.show_info_section() 
-```python3
-
+```python
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
 >>> splice=threefive.Splice(mesg)
@@ -178,7 +145,7 @@ descriptor_loop_length : 75
 
 ```
 ####  threefive.Splice.show_command() 
-```python3
+```python
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
 >>> splice=threefive.Splice(mesg)
@@ -191,12 +158,11 @@ time_specified_flag : True
 pts_time : 31466.942367
 
 ```
-####  threefive.Splice.show_descriptors()
- ##### Multiple splice descriptors per splice command are supported. 
- 
-```python3
 
->> import threefive
+####  threefive.Splice.show_descriptors()
+##### Multiple splice descriptors per splice command are supported. 
+```python
+>>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
 >>> stuff=threefive.Splice(mesg)
 >>> stuff.show_descriptors()
@@ -266,26 +232,23 @@ segmentation_type_id : 16
 segmentation_type : Program Start
 segment_num : 0
 segments_expected : 0
-
 ```
 
 ###  threefive.Splice.show() 
 #### Shows all data
-```python3
-
+```python
 >>> import threefive                
 >>> mesg='/DBIAAAAAAAA///wBQb+ky44CwAyAhdDVUVJSAAACn+fCAgAAAAALKCh4xgAAAIX
 Q1VFSUgAAAl/nwgIAAAAACygoYoRAAC0IX6w')
 >>> fu=threefive.Splice(mesg)
 >>> fu.show()
 ```
+
 ###  Read individual values 
-
-```python3
-import threefive
-mesg='/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo='
-scte_data=threefive.Splice(mesg)
-
+```python
+>>> import threefive
+>>> mesg='/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo='
+>>> scte_data=threefive.Splice(mesg)
 >>> scte_data.command.name    
 'Splice Insert'
 >>> scte_data.command.splice_immediate_flag
@@ -294,6 +257,4 @@ False
 '21514.559089'
 >>> scte_data.command.break_duration
 '60.293567'
-
-
 ```
