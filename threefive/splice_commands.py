@@ -19,22 +19,17 @@ class Splice_Command:
 class Splice_Null(Splice_Command):
     """
     Table 7 - splice_null()
-    """
-    name = "Splice Null"
-    splice_type = 0
-    
+    """    
     def __init__(self, bitbin):
-        pass
+        self.name = "Splice Null"
 
 
 class Splice_Schedule(Splice_Command):
     """
     Table 8 - splice_schedule()
     """
-    name = "Splice Schedule"
-    splice_type = 4
-    
     def __init__(self, bitbin):
+        self.name = "Splice Schedule"
         splice_count = bitbin.asint(8)
         for i in range(0, splice_count):
             self.splice_event_id = bitbin.asint(32)
@@ -66,10 +61,8 @@ class Splice_Insert(Splice_Command):
     """
     Table 9 - splice_insert()
     """
-    name = "Splice Insert"
-    splice_type = 5
-    
     def __init__(self, bitbin):
+        self.name = "Splice Insert"
         self.splice_event_id = bitbin.asint(32)
         self.splice_event_cancel_indicator = bitbin.asflag(1)
         reserved = bitbin.asint(7)
@@ -99,30 +92,23 @@ class Time_Signal(Splice_Command):
     """
     Table 10 - time_signal()
     """
-    name = "Time Signal"
-    splice_type = 6
-       
     def __init__(self, bitbin):
-         self.splice_time(bitbin)
+        self.name = "Time Signal"       
+        self.splice_time(bitbin)
 
 
 class Bandwidth_Reservation(Splice_Command):
     """
     Table 11 - bandwidth_reservation()
     """
-    name = "Bandwidth Reservation"
-    splice_type = 7
-    
     def __init__(self, bitbin):
-        pass
+        self.name = "Bandwidth Reservation"
         
 
 class Private_Command(Splice_Command):
     """
     Table 12 - private_command()
-    """
-    name = "Private Command"
-    splice_type = 255
-    
+    """ 
     def __init__(self, bitbin):
+        self.name = "Private Command"
         self.identifier = bitbin.asint(32)
