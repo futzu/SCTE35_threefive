@@ -3,6 +3,8 @@ from .descriptors import *
 from .splice_info_section import Splice_Info_Section
 from  bitn import BitBin
 import base64
+import json
+
 
 class Splice:
 
@@ -42,12 +44,10 @@ class Splice:
 
 
     def kvprint(self,obj):
-        stuff=[]
-        for k,v in vars(obj).items(): stuff.append(f'{k} : {v}')
-        print(' '.join(stuff))
+        print(f'{json.dumps(vars(obj))}')
                                                             
     def sectionstart(self, section_name):
-        print(f'\n{section_name}')
+        print(f'{section_name}')
                                                                                                                                                                                               
  
     def mkbits(self,s):
@@ -88,5 +88,3 @@ class Splice:
         self.show_command()
         self.show_descriptors()
 	
-
-
