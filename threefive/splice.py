@@ -22,6 +22,7 @@ class Splice:
                 255: Private_Command}
 
     def __init__(self,mesg):
+        #inv=mesg
         mesg=self.mkbits(mesg)
         bitbin=BitBin(mesg)
         self.descriptors=[]
@@ -31,7 +32,8 @@ class Splice:
         self.info_section.crc=bitbin.ashex(32)
 
     def descriptorloop(self,bitbin):
-        dll = self.info_section.descriptor_loop_length = bitbin.asint(16) 
+        self.info_section.descriptor_loop_length.do(bitbin) 
+        dll=self.info_section.descriptor_loop_length.value
         tag_plus_header_size=2 # 1 byte for descriptor_tag, 1 byte for header?
         while dll> 0:
             try: 
@@ -44,7 +46,14 @@ class Splice:
 
 
     def kvprint(self,obj):
-        print(f'{json.dumps(vars(obj))}')
+        stuff=[]
+        for k,v in vars(obj).items():
+            try:
+                stuff.append(f'{k} :{v.value}')
+            except:
+                stuff.append(f'{k} :{v}')
+
+        print(' '.join(stuff))
                                                             
     def sectionstart(self, section_name):
         print(f'{section_name}')
@@ -58,7 +67,7 @@ class Splice:
 
     def set_splice_command(self,bitbin):
 
-        sct=self.info_section.splice_command_type
+        sct=self.info_section.splice_command_type.value
         if sct in self.command_map.keys(): 
             self.command = self.command_map[sct](bitbin)
    

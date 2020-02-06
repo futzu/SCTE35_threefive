@@ -1,45 +1,40 @@
+from .scte35var import S35DeHex,S35Flag, S35Hex,S35Int,S3590K
+
 class Splice_Info_Section:
     """
     Table 5 - splice_info_section()
     """
-    def __init__(self, bitbin = None):
-        if not bitbin: self.novalues()
-        else: self.parsevalues(bitbin)
+    def __init__(self, bitbin):
+        self.table_id = S35Hex(8)
+        self.section_syntax_indicator = S35Flag(1)
+        self.private = S35Flag(1)
+        self.reserved = S35Int(2)
+        self.section_length = S35Int(12)
+        self.protocol_version = S35Int(8)
+        self.encrypted_packet = S35Flag(1)
+        self.encryption_algorithm = S35Int(6)
+        self.pts_adjustment = S3590K(33)
+        self.cw_index = S35Hex(8)
+        self.tier = S35Hex(12)
+        self.splice_command_length = S35Int(12)
+        self.splice_command_type = S35Int(8)
+        self.decode(bitbin)
+        self.descriptor_loop_length=S35Int(16)
  
-    def novalues(self):
-        '''
-        create a splice_info_section instance
-        with all vars set to None
-        '''                 
-        self.table_id = None
-        self.section_syntax_indicator = None
-        self.private = None
-        self.reserved = None
-        self.section_length = None
-        self.protocol_version = None
-        self.encrypted_packet = None
-        self.encryption_algorithm =None
-        self.pts_adjustment = None
-        self.cw_index = None
-        self.tier = None
-        self.splice_command_length = None
-        self.splice_command_type = None
-
-    def parsevalues(self, bitbin):
-        '''
-        create a splice_info_section instance
-        and set vars from bitbin
-        '''
-        self.table_id = bitbin.ashex(8)
-        self.section_syntax_indicator = bitbin.asflag(1)
-        self.private = bitbin.asflag(1)
-        self.reserved = bitbin.asint(2)
-        self.section_length = bitbin.asint(12)
-        self.protocol_version = bitbin.asint(8)
-        self.encrypted_packet = bitbin.asflag(1)
-        self.encryption_algorithm = bitbin.asint(6)
-        self.pts_adjustment = bitbin.as90k(33)
-        self.cw_index = bitbin.ashex(8)
-        self.tier = bitbin.ashex(12)
-        self.splice_command_length = bitbin.asint(12)
-        self.splice_command_type = bitbin.asint(8)
+    def decode(self,bitbin):               
+        self.table_id.do(bitbin)
+        self.section_syntax_indicator.do(bitbin)
+        self.private.do(bitbin)
+        self.reserved.do(bitbin)
+        self.section_length.do(bitbin)
+        self.protocol_version.do(bitbin)
+        self.encrypted_packet.do(bitbin)
+        self.encryption_algorithm.do(bitbin)
+        self.pts_adjustment.do(bitbin)
+        self.cw_index.do(bitbin)
+        self.tier.do(bitbin)
+        self.splice_command_length.do(bitbin)
+        self.splice_command_type.do(bitbin)
+     
+      
+      
