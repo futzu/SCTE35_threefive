@@ -1,12 +1,12 @@
 import sys
 from .splice import Splice
 from .stream import Stream
-
+from .live_stream import LiveStream
     
 def read_stdin(scte35):
     print(f'\n Reading from stdin')
     try:
-        scte35 = Stream(tsstream=sys.stdin.buffer, show_null=False)
+        scte35 = LiveStream(tsstream=sys.stdin.buffer, show_null=False)
     except BaseException:
         scte35 = Splice(sys.stdin.buffer) 
         scte35.show()
@@ -19,7 +19,7 @@ def read_stuff(stuff,scte35):
     except BaseException:
         try:
             print(f'\nfile: {stuff}')
-            scte35 = Stream(tsfile=stuff, show_null=False)
+            scte35 = Live_Stream(tsfile=stuff, show_null=False)
         except BaseException:
             pass
     return scte35

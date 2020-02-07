@@ -49,10 +49,8 @@ class Splice:
         stuff=[]
         for k,v in vars(obj).items():
             try:
-		# for the new classes
                 stuff.append(f'{k} :{v.value}')
             except:
-		# for the old vars
                 stuff.append(f'{k} :{v}')
 
         print(' '.join(stuff))
