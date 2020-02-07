@@ -19,7 +19,7 @@ def read_stuff(stuff,scte35):
     except BaseException:
         try:
             print(f'\nfile: {stuff}')
-            scte35 = Live_Stream(tsfile=stuff, show_null=False)
+            scte35 = Stream(tsfile=stuff, show_null=False)
         except BaseException:
             pass
     return scte35
