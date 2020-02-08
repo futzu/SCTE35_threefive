@@ -5,12 +5,12 @@ class Splice_Info_Section:
     """
     def __init__(self,bitbin):
         self.table_id = S35Hex8()
-        self.section_syntax_indicator = S35Flag(1)
-        self.private = S35Flag(1)
+        self.section_syntax_indicator = S35Flag()
+        self.private = S35Flag()
         self.reserved = S35Int2()
         self.section_length = S35Int12()
         self.protocol_version = S35Int8()
-        self.encrypted_packet = S35Flag(1)
+        self.encrypted_packet = S35Flag()
         self.encryption_algorithm = S35Int6()
         self.pts_adjustment = S3590K(33)
         self.cw_index = S35Hex8()
