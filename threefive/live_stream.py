@@ -6,7 +6,7 @@ SYNC_BYTE=b'\x47'
 NON_PTS_STREAM_IDS=[188,190,191,240,241,242,248]
 
 class LiveStream:
-    def __init__(self,tsfile=None,tsstream=None,show_null=True):
+    def __init__(self,tsfile=None,tsstream=None,show_null=False):
         self.splices=[]
         self.PID=False
         self.show_null=show_null
@@ -71,8 +71,6 @@ class LiveStream:
                                     out = f'{out}\033[0mEvent: \033[92m{self.tf.command.splice_event_id} \033[0m'   
                             print(f'\r{out}', end="\r")
             
-            
-                                                       
         scramble=three_bytes.asint(2)
         afc=three_bytes.asint(2)
         count=three_bytes.asint(4)
@@ -86,6 +84,7 @@ class LiveStream:
         '''
         if packet[4] !=0xfc: return            
         if self.PID and (pid !=self.PID): return
+        if not self.show_null and (cue[13] == 0): return
         try:
             tf=Splice(cue)
         except: 
@@ -97,6 +96,7 @@ class LiveStream:
         except: pass
         if not self.PID: 
            self.PID=pid
+
         self.splices.append(tf)       
         return
 

@@ -24,20 +24,25 @@ class Splice:
     def __init__(self,mesg):
         #inv=mesg
         mesg=self.mkbits(mesg)
-        bitbin=BitBin(mesg)
+        self.bitbin=BitBin(mesg)
         self.descriptors=[]
-        self.info_section=Splice_Info_Section(bitbin)
-        self.set_splice_command(bitbin) 
-        self.descriptorloop(bitbin)
-        self.info_section.crc=bitbin.ashex(32)
+        self.info_section= None
+        self.command = None
+        self.do()
+        
+    def do(self):        
+        self.info_section=Splice_Info_Section(self.bitbin)
+        self.set_splice_command() 
+        self.descriptorloop()
+        self.info_section.crc=self.bitbin.ashex(32)
 
-    def descriptorloop(self,bitbin):
-        self.info_section.descriptor_loop_length.do(bitbin) 
+    def descriptorloop(self):
+        self.info_section.descriptor_loop_length.do(self.bitbin) 
         dll=self.info_section.descriptor_loop_length.value
         tag_plus_header_size=2 # 1 byte for descriptor_tag, 1 byte for header?
         while dll> 0:
             try: 
-                sd=self.set_splice_descriptor(bitbin)
+                sd=self.set_splice_descriptor()
                 sdl=sd.descriptor_length
                 self.descriptors.append(sd)
             except: sdl=0
@@ -65,17 +70,16 @@ class Splice:
         try: return base64.b64decode(s)
         except: return s
 
-    def set_splice_command(self,bitbin):
-
+    def set_splice_command(self):
         sct=self.info_section.splice_command_type.value
         if sct in self.command_map.keys(): 
-            self.command = self.command_map[sct](bitbin)
+            self.command = self.command_map[sct](self.bitbin)
    
-    def set_splice_descriptor(self,bitbin):
+    def set_splice_descriptor(self):
         # splice_descriptor_tag 8 uimsbf
-        tag= bitbin.asint(8)
+        tag= self.bitbin.asint(8)
         if tag in self.descriptor_map.keys(): 
-            return self.descriptor_map[tag](bitbin,tag)
+            return self.descriptor_map[tag](self.bitbin,tag)
                 
     def show_info_section(self):
         self.sectionstart('Splice Info Section')

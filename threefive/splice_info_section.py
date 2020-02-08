@@ -1,25 +1,24 @@
-from .scte35var import S35DeHex,S35Flag, S35Hex,S35Int,S3590K
-
+from .scte35var import *
 class Splice_Info_Section:
     """
     Table 5 - splice_info_section()
     """
-    def __init__(self, bitbin):
-        self.table_id = S35Hex(8)
+    def __init__(self,bitbin):
+        self.table_id = S35Hex8()
         self.section_syntax_indicator = S35Flag(1)
         self.private = S35Flag(1)
-        self.reserved = S35Int(2)
-        self.section_length = S35Int(12)
-        self.protocol_version = S35Int(8)
+        self.reserved = S35Int2()
+        self.section_length = S35Int12()
+        self.protocol_version = S35Int8()
         self.encrypted_packet = S35Flag(1)
-        self.encryption_algorithm = S35Int(6)
+        self.encryption_algorithm = S35Int6()
         self.pts_adjustment = S3590K(33)
-        self.cw_index = S35Hex(8)
-        self.tier = S35Hex(12)
-        self.splice_command_length = S35Int(12)
-        self.splice_command_type = S35Int(8)
+        self.cw_index = S35Hex8()
+        self.tier = S35Hex12()
+        self.splice_command_length = S35Int12()
+        self.splice_command_type = S35Int8()
         self.decode(bitbin)
-        self.descriptor_loop_length=S35Int(16)
+        self.descriptor_loop_length=S35Int16()
  
     def decode(self,bitbin):               
         self.table_id.do(bitbin)
