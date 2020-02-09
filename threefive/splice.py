@@ -22,7 +22,6 @@ class Splice:
                 255: Private_Command}
 
     def __init__(self,mesg):
-        #inv=mesg
         mesg=self.mkbits(mesg)
         self.bitbin=BitBin(mesg)
         self.descriptors=[]

@@ -1,69 +1,70 @@
 class Scte35:
-    def __init__(self,bitsize):
-        self.bitsize = bitsize
+    bitsize = 0
+    def __init__(self):
         self.value= None
  
-class S3590K(Scte35): 
+class t90K33(Scte35):
+    bitsize = 33 
     def do(self,bitbin):
         self.value=bitbin.as90k(self.bitsize)  
 
 
-class S35DeHex(Scte35): 
+class DeHexed(Scte35):
+    bitsize = 0 
     def do(self,bitbin):
         self.value=bitbin.asdecodedhex(self.bitsize) 
 
     
-class S35Flag: 
+class Flag: 
     bitsize = 1
-    def __init__(self):
-        self.value= None      
-    
     def do(self,bitbin):
         self.value=bitbin.asflag(self.bitsize)
 
 
-class S35Hex8:
-    bitsize = 8 
-    def __init__(self):
-        self.value= None
-    
+class Hexed(Scte35):
+    bitsize = 1 
     def do(self,bitbin):
         self.value=bitbin.ashex(self.bitsize) 
 
 
-class S35Hex12(S35Hex8):
+class Hexed8(Hexed):
+    bitsize = 8 
+
+
+class Hexed12(Hexed):
     bitsize = 12 
 
 
-class S35Int2:
-    bitsize=2    
-    def __init__(self):
-        self.value= None
-               
-    def do(self,bitbin):
+class uInt(Scte35):
+   bitsize = 1               
+   def do(self,bitbin):
         self.value=bitbin.asint(self.bitsize)
 
+
+class uInt2(uInt):
+    bitsize=2    
+ 
         
-class S35Int4(S35Int2):
+class uInt4(uInt):
     bitsize=4       
 
 
-class S35Int6(S35Int2):
+class uInt6(uInt):
     bitsize=6       
 
-        
-class S35Int8(S35Int2):
+
+class uInt8(uInt):
     bitsize=8
     
         
-class S35Int10(S35Int2):
+class uInt10(uInt):
     bitsize=10       
 
 
-class S35Int12(S35Int2):
+class uInt12(uInt):
     bitsize=12      
 
         
-class S35Int16(S35Int2):
+class uInt16(uInt):
     bitsize=16
     
