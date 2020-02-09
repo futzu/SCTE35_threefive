@@ -33,6 +33,7 @@ class LiveStream:
 
     def parse_pusi(self, packet):
         bitbin=BitBin(packet[3:])
+        print(vars(bitbin))
         if bitbin.asint(24)==1 and bitbin.asint(8) not in NON_PTS_STREAM_IDS :
             PES_packet_length=bitbin.asint(16)
             if bitbin.asint(2)==2:

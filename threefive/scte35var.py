@@ -27,6 +27,9 @@ class Hexed(Scte35):
         self.value=bitbin.ashex(self.bitsize) 
 
 
+class Hexed2(Hexed):
+    bitsize = 2 
+
 class Hexed8(Hexed):
     bitsize = 8 
 
@@ -34,6 +37,12 @@ class Hexed8(Hexed):
 class Hexed12(Hexed):
     bitsize = 12 
 
+
+class Hexed32(Hexed):
+    bitsize = 32 
+
+class Hexed64(Hexed):
+    bitsize = 64
 
 class uInt(Scte35):
    bitsize = 1               
@@ -44,13 +53,22 @@ class uInt(Scte35):
 class uInt2(uInt):
     bitsize=2    
  
+
+class uInt3(uInt):
+    bitsize=3       
+
         
 class uInt4(uInt):
     bitsize=4       
 
+class uInt5(uInt):
+    bitsize=5       
 
 class uInt6(uInt):
     bitsize=6       
+
+class uInt7(uInt):
+    bitsize=7       
 
 
 class uInt8(uInt):
@@ -68,3 +86,6 @@ class uInt12(uInt):
 class uInt16(uInt):
     bitsize=16
     
+
+class uInt32(uInt):
+    bitsize=32
