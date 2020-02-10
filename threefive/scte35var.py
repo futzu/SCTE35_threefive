@@ -82,7 +82,11 @@ class uInt10(uInt):
 class uInt12(uInt):
     bitsize=12      
 
-        
+
+class uInt13(uInt):
+    bitsize=13
+    
+           
 class uInt16(uInt):
     bitsize=16
     

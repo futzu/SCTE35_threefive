@@ -8,7 +8,6 @@ NON_PTS_STREAM_IDS=[188,190,191,240,241,242,248]
 class LiveStream:
     def __init__(self,tsfile=None,tsstream=None,show_null=False):
         self.splices=[]
-        self.tfc=0
         self.pktc=0
         self.PID=False
         self.show_null=show_null
@@ -17,7 +16,7 @@ class LiveStream:
         if tsfile: self.parse_tsfile(tsfile)
         if tsstream: self.parse_tsdata(tsstream)
         print('\n\n')
-        print(f'splice calls:{self.tfc} packets{self.pktc}')
+        
         
     def parse_tsfile(self,tsfile):
         with open(tsfile,'rb') as tsdata:
@@ -32,8 +31,7 @@ class LiveStream:
             else: return 
 
     def parse_pusi(self, packet):
-        bitbin=BitBin(packet[3:])
-        print(vars(bitbin))
+        bitbin=BitBin(packet[3:]) 
         if bitbin.asint(24)==1 and bitbin.asint(8) not in NON_PTS_STREAM_IDS :
             PES_packet_length=bitbin.asint(16)
             if bitbin.asint(2)==2:
@@ -64,6 +62,7 @@ class LiveStream:
         ts_priority=three_bytes.asflag(1)
         pid=three_bytes.asint(13)
         if pusi: 
+        
             self.parse_pusi(packet)
         scramble=three_bytes.asint(2)
         afc=three_bytes.asint(2)
@@ -86,14 +85,13 @@ class LiveStream:
             if packet[17] == 0:
                 return
         try:
-            self.tfc += 1
             self.tf =Splice(cue)            
-        except: 
+        except:
             return    
         print()
         self.tf.show_command()
         if not self.PID: 
-            self.PID=pid
+            self.PID=pid   
         self.splices.append(self.tf) 
         self.tf = None      
         return

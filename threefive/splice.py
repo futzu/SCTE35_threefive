@@ -36,8 +36,8 @@ class Splice:
         self.info_section.crc=self.bitbin.ashex(32)
 
     def descriptorloop(self):
-        self.info_section.descriptor_loop_length.do(self.bitbin) 
-        dll=self.info_section.descriptor_loop_length.value
+        self.info_section.descriptor_loop_length=self.bitbin.asint(16)
+        dll=self.info_section.descriptor_loop_length
         tag_plus_header_size=2 # 1 byte for descriptor_tag, 1 byte for header?
         while dll> 0:
             try: 
@@ -50,14 +50,7 @@ class Splice:
 
 
     def kvprint(self,obj):
-        stuff=[]
-        for k,v in vars(obj).items():
-            try:
-                stuff.append(f'{k} :{v.value}')
-            except:
-                stuff.append(f'{k} :{v}')
-
-        print(' '.join(stuff))
+        print(f'{json.dumps(vars(obj))}')
                                                             
     def sectionstart(self, section_name):
         print(f'{section_name}')
@@ -70,7 +63,7 @@ class Splice:
         except: return s
 
     def set_splice_command(self):
-        sct=self.info_section.splice_command_type.value
+        sct=self.info_section.splice_command_type
         if sct in self.command_map.keys(): 
             self.command = self.command_map[sct](self.bitbin)
    
