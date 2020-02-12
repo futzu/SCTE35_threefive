@@ -2,6 +2,7 @@ from .splice import Splice
 from bitn import BitBin
 from multiprocessing import Pool
 
+
 class Stream:
     '''
     threefive.Decode uses a threefive.Stream instance to handle files and streams. 

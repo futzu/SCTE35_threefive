@@ -64,8 +64,10 @@ class Splice:
 
     def set_splice_command(self):
         sct=self.info_section.splice_command_type
-        if sct in self.command_map.keys(): 
-            self.command = self.command_map[sct](self.bitbin)
+        if sct not in self.command_map.keys():
+            raise ValueError('unknown splice command type') 
+        self.command = self.command_map[sct](self.bitbin)
+    
    
     def set_splice_descriptor(self):
         # splice_descriptor_tag 8 uimsbf
@@ -74,22 +76,33 @@ class Splice:
             return self.descriptor_map[tag](self.bitbin,tag)
                 
     def show_info_section(self):
-        self.sectionstart('Splice Info Section')
-        self.kvprint(self.info_section)
-
+        if self.info_section and self.command:
+            self.sectionstart('Splice Info Section')
+            self.kvprint(self.info_section)
+        else:
+            return False
+            
     def show_command(self):
-        self.sectionstart('Splice Command')
-        self.kvprint(self.command)
-		
+        if self.command:
+            self.sectionstart('Splice Command')
+            self.kvprint(self.command)
+        else:
+            return False
+            	
     def show_descriptors(self):
-        for d in self.descriptors:
-            idx=self.descriptors.index(d)
-            self.sectionstart(f'Splice Descriptor {idx}')
-            self.kvprint(d)
+        if len(self.descriptors) > 0:
+            for d in self.descriptors:
+                idx=self.descriptors.index(d)
+                self.sectionstart(f'Splice Descriptor {idx}')
+                self.kvprint(d)
 		
     def show(self):
-        self.sectionstart('[SCTE 35 Message]')
-        self.show_info_section()
-        self.show_command()
-        self.show_descriptors()
+        if self.info_section and self.command:
+            self.sectionstart('[SCTE 35 Message]')
+            self.show_info_section()
+            self.show_command()
+            self.show_descriptors()
+        else:
+        
+            return False
 	
