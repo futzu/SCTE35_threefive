@@ -3,16 +3,17 @@ from bitn import BitBin
 from struct import unpack
 
 class Stream:
+    '''
+    Parse mpegts files and streams for SCTE 35 packets
+    '''
     PACKET_SIZE = 188
     SYNC_BYTE = b'\x47'
     NON_PTS_STREAM_IDS = [188,190,191,240,241,242,248]
                     
     def __init__(self,tsfile = None,tsstream = None,show_null = True):
-        self.splices = []
         self.PID = False
         self.show_null = show_null
         self.tf = False
-        self.cueout= self.cuein = False
         if tsfile: self.parse_tsfile(tsfile)
         if tsstream: self.parse_tsdata(tsstream)
         
@@ -25,8 +26,7 @@ class Stream:
             sb = tsdata.read(1) 
             if sb == self.SYNC_BYTE: 
                 packet = tsdata.read(self.PACKET_SIZE - 1)
-                if packet:
-                    self.parse_tspacket(packet)
+                if packet: self.parse_tspacket(packet)
                 else: break
             else: return 
 
@@ -49,7 +49,6 @@ class Stream:
                         bitbin.asflag(1)
                         c = bitbin.asint(15)
                         d = (a+b+c)/90000.0
-                        self.pts=d
                         fpts = f'PTS \033[92m{d:.3f}\033[0m ' 
                         print(f'\r{fpts}', end = "\r")
                                                                                             
@@ -62,24 +61,16 @@ class Stream:
         scramble = one_byte >>6
         afc = (one_byte & 48) >> 4
         count = one_byte & 15
-        if pusi: 
-            self.parse_pusi(packet)
-        if packet[4] !=0xfc: 
-            return
+        if pusi: self.parse_pusi(packet)
+        if packet[4] !=0xfc: return
         cue = packet[4:]
-        if pid  == 101:
-            return     
-        if self.PID and (pid != self.PID): 
-            return
+        if pid  == 101: return     
+        if self.PID and (pid != self.PID): return
         if not self.show_null:
-            if packet[17] == 0:
-                return
-        try:
-            self.tf = Splice(cue)           
-        except:
-            return
+            if packet[17] == 0: return
+        try: self.tf = Splice(cue)           
+        except: return
         print()
         self.tf.show()
-        if not self.PID: 
-            self.PID = pid   
+        if not self.PID: self.PID = pid   
         return
