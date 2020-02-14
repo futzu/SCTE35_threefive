@@ -13,4 +13,4 @@ class Splice_Info_Section:
             self.tier = bitbin.ashex(12)
             self.splice_command_length = bitbin.asint(12)
             self.splice_command_type = bitbin.asint(8)
-            self.splice_descriptor_loop_length = None
+            self.descriptor_loop_length = False

@@ -1,6 +1,6 @@
 from .splice import Splice
 from bitn import BitBin
-
+from struct import unpack
 
 class Stream:
     PACKET_SIZE = 188
@@ -12,9 +12,9 @@ class Stream:
         self.PID = False
         self.show_null = show_null
         self.tf = False
+        self.cueout= self.cuein = False
         if tsfile: self.parse_tsfile(tsfile)
         if tsstream: self.parse_tsdata(tsstream)
-        
         
     def parse_tsfile(self,tsfile):
         with open(tsfile,'rb') as tsdata:
@@ -22,9 +22,11 @@ class Stream:
 
     def parse_tsdata(self,tsdata):
         while tsdata:
-            if tsdata.read(1) == self.SYNC_BYTE: 
+            sb = tsdata.read(1) 
+            if sb == self.SYNC_BYTE: 
                 packet = tsdata.read(self.PACKET_SIZE - 1)
-                if packet: self.parse_tspacket(packet)
+                if packet:
+                    self.parse_tspacket(packet)
                 else: break
             else: return 
 
@@ -47,22 +49,23 @@ class Stream:
                         bitbin.asflag(1)
                         c = bitbin.asint(15)
                         d = (a+b+c)/90000.0
+                        self.pts=d
                         fpts = f'PTS \033[92m{d:.3f}\033[0m ' 
                         print(f'\r{fpts}', end = "\r")
                                                                                             
     def parse_tspacket(self,packet):
-        three_bytes = BitBin(packet[:3])
-        tei = three_bytes.asflag(1)
-        pusi = three_bytes.asflag(1)
+        two_bytes,one_byte = unpack('>HB', packet[:3])
+        tei = two_bytes >> 15 
+        pusi = two_bytes >> 14 & 0x1
+        ts_priority = two_bytes >>13 & 0x1
+        pid = two_bytes & 0x1fff
+        scramble = one_byte >>6
+        afc = (one_byte & 48) >> 4
+        count = one_byte & 15
         if pusi: 
             self.parse_pusi(packet)
-        ts_priority = three_bytes.asflag(1)
-        pid = three_bytes.asint(13)
         if packet[4] !=0xfc: 
-            return   
-        scramble = three_bytes.asint(2)
-        afc = three_bytes.asint(2)
-        count = three_bytes.asint(4)
+            return
         cue = packet[4:]
         if pid  == 101:
             return     
@@ -80,6 +83,3 @@ class Stream:
         if not self.PID: 
             self.PID = pid   
         return
-
-
-
