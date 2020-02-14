@@ -4,10 +4,8 @@ from .splice_info_section import Splice_Info_Section
 from  bitn import BitBin
 import base64
 import json
-import pprint
 
 class Splice:
-
     descriptor_map = {0: Avail_Descriptor,
                     1: Dtmf_Descriptor,
                     2: Segmentation_Descriptor,
@@ -48,14 +46,12 @@ class Splice:
             bit_move=sdl+ tag_plus_header_size
             dll -=(bit_move)
 
-
     def kvprint(self,obj):
         print(f'{json.dumps(vars(obj))}')
                                                             
     def sectionstart(self, section_name):
         print(f'{section_name}')
                                                                                                                                                                                               
- 
     def mkbits(self,s):
         if s[:2].lower()=='0x': s=s[2:]
         if s[:2].lower()=='fc': return bytes.fromhex(s)
@@ -67,8 +63,7 @@ class Splice:
         if sct not in self.command_map.keys():
             raise ValueError('unknown splice command type') 
         self.command = self.command_map[sct](self.bitbin)
-    
-   
+       
     def set_splice_descriptor(self):
         # splice_descriptor_tag 8 uimsbf
         tag= self.bitbin.asint(8)
@@ -105,6 +100,3 @@ class Splice:
         else:
         
             return False
-	
-
-
