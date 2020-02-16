@@ -97,7 +97,7 @@ name :Avail Descriptor  splice_descriptor_tag :0  descriptor_length :8  identifi
 [  SCTE 35 Stream found with Pid 0x135  ]
 ```
 ### Output for Mpegts streams and files
-```
+```js
 PTS 89730.290 
 
 [SCTE 35 Message]
