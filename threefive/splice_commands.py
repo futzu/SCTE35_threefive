@@ -1,8 +1,11 @@
 class Splice_Command:
-    def __init__(self, bitbin):
+    def __init__(self):
+        pass
+
+    def decode(self,bitn):
         pass
         
-    def break_duration(self, bitbin):
+    def parse_break(self, bitbin):
         self.break_auto_return = bitbin.asflag(1)
         reserved = bitbin.asint(6)
         self.break_duration = bitbin.as90k(33)
@@ -20,7 +23,7 @@ class Splice_Null(Splice_Command):
     """
     Table 7 - splice_null()
     """    
-    def __init__(self, bitbin):
+    def decode(self,bitbin):
         self.name = "Splice Null"
 
 
@@ -28,7 +31,8 @@ class Splice_Schedule(Splice_Command):
     """
     Table 8 - splice_schedule()
     """
-    def __init__(self, bitbin):
+
+    def decode(self, bitbin):
         self.name = "Splice Schedule"
         splice_count = bitbin.asint(8)
         for i in range(0, splice_count):
@@ -61,11 +65,30 @@ class Splice_Insert(Splice_Command):
     """
     Table 9 - splice_insert()
     """
-    def __init__(self, bitbin):
+    def __init__(self):
+        self.splice_event_id = None
+        self.splice_event_cancel_indicator = None
+        self.out_of_network_indicator = None
+        self.program_splice_flag = None
+        self.duration_flag = None
+        self.splice_immediate_flag = None
+        self.component_count = None
+        self.components = []
+        self.duration_flag=None
+        self.unique_program_id = None
+        self.avail_num = None
+        self.avail_expected = None
+        self.break_auto_return = None
+        self.break_duration = None
+        self.time_specified_flag = None
+        self.pts_time = None
+
+
+    def decode(self, bitbin):
         self.name = "Splice Insert"
         self.splice_event_id = bitbin.asint(32)
         self.splice_event_cancel_indicator = bitbin.asflag(1)
-        reserved = bitbin.asint(7)
+        reserved = bitbin.forward(7)
         if not self.splice_event_cancel_indicator:
             self.out_of_network_indicator = bitbin.asflag(1)
             self.program_splice_flag = bitbin.asflag(1)
@@ -82,7 +105,7 @@ class Splice_Insert(Splice_Command):
                 if not self.splice_immediate_flag:
                     self.splice_time(bitbin)
             if self.duration_flag:
-                self.break_duration(bitbin)
+                self.parse_break(bitbin)
             self.unique_program_id = bitbin.asint(16)
             self.avail_num = bitbin.asint(8)
             self.avail_expected = bitbin.asint(8)
@@ -92,7 +115,11 @@ class Time_Signal(Splice_Command):
     """
     Table 10 - time_signal()
     """
-    def __init__(self, bitbin):
+    def __init__(self):
+        self.time_specified_flag = None
+        self.pts_time = None
+        
+    def decode(self, bitbin):
         self.name = "Time Signal"       
         self.splice_time(bitbin)
 
@@ -101,14 +128,17 @@ class Bandwidth_Reservation(Splice_Command):
     """
     Table 11 - bandwidth_reservation()
     """
-    def __init__(self, bitbin):
+    def decode(self, bitbin):
         self.name = "Bandwidth Reservation"
         
 
 class Private_Command(Splice_Command):
     """
     Table 12 - private_command()
-    """ 
-    def __init__(self, bitbin):
+    """
+    def __init__(self):
+        self.identifier = None
+    
+    def decode(self, bitbin):
         self.name = "Private Command"
         self.identifier = bitbin.asint(32)

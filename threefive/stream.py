@@ -14,6 +14,7 @@ class Stream:
         self.PID = False
         self.show_null = show_null
         self.tf = False
+        self.fpts = None
         if tsfile: self.parse_tsfile(tsfile)
         if tsstream: self.parse_tsdata(tsstream)
         
@@ -23,20 +24,20 @@ class Stream:
 
     def parse_tsdata(self,tsdata):
         while tsdata:
-            tenpackets=tsdata.read(self.PACKET_SIZE *10)
-            if not tenpackets: break
-            while tenpackets:
-                p,tenpackets = tenpackets[:188], tenpackets[188:]
-                if p[0]== self.SYNCBYTE:
+            packets = tsdata.read(self.PACKET_SIZE *25)
+            if not packets: break
+            while packets:
+                p,packets = packets[:188], packets[188:]
+                if p[0] == self.SYNCBYTE:
                     self.parse_tspacket(p[1:])
                     
     def parse_pusi(self, packet):
-        bitbin= BitBin(packet) 
+        bitbin = BitBin(packet) 
         if bitbin.asint(24) == 1 and bitbin.asint(8) not in self.NON_PTS_STREAM_IDS :
             #PES_packet_length = 
-            bitbin.asint(16)
+            bitbin.forward(16)
             if bitbin.asint(2) == 2:
-                bitbin.asint(6)
+                bitbin.forward(6)
                 '''
                 PES_scramble_control = bitbin.asint(2)
                 PES_priority = bitbin.asint(1)
@@ -45,37 +46,37 @@ class Stream:
                 orig_or_copy = bitbin.asint(1)
                 '''
                 if bitbin.asint(2) == 2:
-                    bitbin.asint(14)
+                    bitbin.forward(14)
                     if bitbin.asint(4) == 2:
-                        a = bitbin.asint(3)<<30
+                        a = bitbin.asint(3) << 30
                         bitbin.asflag(1)
                         b = bitbin.asint(15) << 15
                         bitbin.asflag(1)
                         c = bitbin.asint(15)
                         d = (a+b+c)/90000.0
-                        fpts = f'PTS \033[92m{d:.3f}\033[0m ' 
-                        print(f'\r{fpts}', end = "\r")
+                        self.fpts = f'PTS \033[92m{d:.3f}\033[0m ' 
+                        print(f'\r{self.fpts}', end = "\r")
                                                                                             
-    def parse_tspacket(self,packet):        
-        two_bytes,one_byte = unpack('>HB', packet[:3])
-        tei = two_bytes >> 15 
+    def parse_tspacket(self,packet):  
+        two_bytes = unpack('>H', packet[:2])[0] 
+       # tei = two_bytes >> 15 
         pusi = two_bytes >> 14 & 0x1
-        ts_priority = two_bytes >>13 & 0x1
+        #ts_priority = two_bytes >>13 & 0x1
         pid = two_bytes & 0x1fff
         #scramble = one_byte >>6
         #afc = (one_byte & 48) >> 4
         #count = one_byte & 15
-
-        if pusi: 
-            self.parse_pusi(packet[3:19])
-        if packet[4] !=0xfc: return
         if pid  == 101: return     
-        if self.PID and (pid != self.PID): return
+        if pusi: 
+            self.parse_pusi(packet[3:19])  
+        if packet[4] != 0xfc: return
         if not self.show_null:
             if packet[17] == 0: return
+        if self.PID and (pid != self.PID): return
         try: self.tf = Splice(packet[4:])           
         except: return
         print()
+        #print(f'\r{self.fpts}', end = "\r")
         self.tf.show()
         if not self.PID: self.PID = pid   
         return

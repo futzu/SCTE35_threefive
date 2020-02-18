@@ -22,30 +22,31 @@ class Splice:
 
     def __init__(self,mesg):
         mesg=self.mkbits(mesg)
-        self.bitbin=BitBin(mesg)
-        self.descriptors=[]
-        self.info_section= None
+        self.bitbin = BitBin(mesg)
+        self.descriptors = []
+        self.info_section = None
         self.command = None
         self.do()
         
     def do(self):        
-        self.info_section=Splice_Info_Section(self.bitbin)
+        self.info_section = Splice_Info_Section()
+        self.info_section.decode(self.bitbin)
         self.set_splice_command() 
         self.descriptorloop()
-        self.info_section.crc=self.bitbin.ashex(32)
+        self.info_section.crc = self.bitbin.ashex(32)
 
     def descriptorloop(self):
-        self.info_section.descriptor_loop_length=self.bitbin.asint(16)
-        dll=self.info_section.descriptor_loop_length
-        tag_plus_header_size=2 # 1 byte for descriptor_tag, 1 byte for header?
-        while dll> 0:
+        self.info_section.descriptor_loop_length = self.bitbin.asint(16)
+        dll = self.info_section.descriptor_loop_length
+        tag_plus_header_size = 2 # 1 byte for descriptor_tag, 1 byte for header?
+        while dll > 0:
             try: 
-                sd=self.set_splice_descriptor()
-                sdl=sd.descriptor_length
+                sd = self.set_splice_descriptor()
+                sdl = sd.descriptor_length
                 self.descriptors.append(sd)
-            except: sdl=0
-            bit_move=sdl+ tag_plus_header_size
-            dll -=(bit_move)
+            except: sdl = 0
+            bit_move = sdl+ tag_plus_header_size
+            dll -= bit_move
 
 
     def kvprint(self,obj):
@@ -56,21 +57,22 @@ class Splice:
                                                                                                                                                                                               
  
     def mkbits(self,s):
-        if s[:2].lower()=='0x': s=s[2:]
-        if s[:2].lower()=='fc': return bytes.fromhex(s)
+        if s[:2].lower() == '0x': s = s[2:]
+        if s[:2].lower() == 'fc': return bytes.fromhex(s)
         try: return b64decode(s)
         except: return s
 
     def set_splice_command(self):
-        sct=self.info_section.splice_command_type
+        sct = self.info_section.splice_command_type
         if sct not in self.command_map.keys():
             raise ValueError('unknown splice command type') 
-        self.command = self.command_map[sct](self.bitbin)
+        self.command = self.command_map[sct]()
+        self.command.decode(self.bitbin)
     
    
     def set_splice_descriptor(self):
         # splice_descriptor_tag 8 uimsbf
-        tag= self.bitbin.asint(8)
+        tag = self.bitbin.asint(8)
         if tag in self.descriptor_map.keys(): 
             return self.descriptor_map[tag](self.bitbin,tag)
                 
@@ -91,7 +93,7 @@ class Splice:
     def show_descriptors(self):
         if len(self.descriptors) > 0:
             for d in self.descriptors:
-                idx=self.descriptors.index(d)
+                idx = self.descriptors.index(d)
                 self.sectionstart(f'Splice Descriptor {idx}')
                 self.kvprint(d)
 		
@@ -101,6 +103,5 @@ class Splice:
             self.show_info_section()
             self.show_command()
             self.show_descriptors()
-        else:
-        
+        else:        
             return False
