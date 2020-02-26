@@ -4,10 +4,8 @@ Example from the specification
 14.1. Time_Signal–Placement_Opportunity_Start
 """
 
-import threefive
+from threefive import decode
 
 Base64 = "/DA0AAAAAAAA///wBQb+cr0AUAAeAhxDVUVJSAAAjn/PAAGlmbAICAAAAAAsoKGKNAIAmsnRfg=="
 
-tf = threefive.Splice
-
-tf(Base64).show()
+decode(Base64)

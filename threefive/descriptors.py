@@ -15,8 +15,9 @@ class Splice_Descriptor:
         self.descriptor_length = bs.asint(8)
         # identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
         self.identifier = bs.asdecodedhex(32)
-        return self.identifier == "CUEI"
-
+        if self.identifier != "CUEI":
+            raise ValueError('All descriptors must have a identifier of "CUEI"')
+        else: return self.identifier
 
 class Avail_Descriptor(Splice_Descriptor):
     """
@@ -35,16 +36,16 @@ class Dtmf_Descriptor(Splice_Descriptor):
     Table 18 -  DTMF_descriptor()
     """
 
-    def __init__(self, bs, tag):
+    def __init__(self, bitbin, tag):
         if not super().__init__(bs, tag):
             return False
         self.name = "DTMF Descriptor"
-        self.preroll = bs.asint(8)
-        self.dtmf_count = bs.asint(3)
-        reserved = bs.asint(5)
+        self.preroll = bitbin.asint(8)
+        self.dtmf_count = bitbin.asint(3)
+        bitbin.forward(5)
         self.dtmf_chars = []
         for i in range(0, self.dtmf_count):
-            self.dtmf_chars.append(bs.asint(8))
+            self.dtmf_chars.append(bitbin.asint(8))
 
 
 class Segmentation_Descriptor(Splice_Descriptor):
