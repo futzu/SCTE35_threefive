@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="threefive",
-    version="2.0.37",
+    version="2.0.39",
     author="fu-corp",
     author_email="spam@futzu.com",
     description="SCTE 35 Parser/Decoder",
@@ -13,7 +13,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/threefive",
     packages=setuptools.find_packages(),
-    install_requires=["bitn>=0.0.15",],
+    install_requires=["bitn>=0.0.17",],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
