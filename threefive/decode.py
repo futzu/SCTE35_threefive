@@ -2,7 +2,7 @@ import sys
 from .splice import Splice
 from .stream import Stream
     
-def read_stdin(scte35):
+def read_stdin():
     print(f'\n Reading from stdin')
     try:
         scte35 = Stream(tsstream=sys.stdin.buffer, show_null=False)
@@ -11,7 +11,7 @@ def read_stdin(scte35):
         scte35.show()
     return scte35
 
-def read_stuff(stuff,scte35):
+def read_stuff(stuff):
     try:
         scte35 = Splice(stuff)
         scte35.show()
@@ -58,12 +58,9 @@ def decode(stuff = None):
     
     
     """
-    
-    scte35 = None
+
     
     if stuff in [None,sys.stdin.buffer]: 
-        return read_stdin(scte35)
+        return read_stdin()
     else: 
-        return read_stuff(stuff,scte35)
-
-
+        return read_stuff(stuff)
