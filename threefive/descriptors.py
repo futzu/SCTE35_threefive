@@ -16,8 +16,11 @@ class Splice_Descriptor:
         # identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
         self.identifier = bs.asdecodedhex(32)
         if self.identifier != "CUEI":
-            raise ValueError('All descriptors must have a identifier of "CUEI"')
-        else: return self.identifier
+            raise ValueError(
+                'All descriptors must have a identifier of "CUEI"')
+        else:
+            return self.identifier
+
 
 class Avail_Descriptor(Splice_Descriptor):
     """

@@ -2,7 +2,7 @@ class Splice_Command:
     def __init__(self):
         pass
 
-    def decode(self,bitn):
+    def decode(self, bitn):
         pass
 
     def parse_break(self, bitbin):
@@ -23,7 +23,8 @@ class Splice_Null(Splice_Command):
     """
     Table 7 - splice_null()
     """
-    def decode(self,bitbin):
+
+    def decode(self, bitbin):
         self.name = "Splice Null"
 
 
@@ -65,6 +66,7 @@ class Splice_Insert(Splice_Command):
     """
     Table 9 - splice_insert()
     """
+
     def __init__(self):
         self.splice_event_id = None
         self.splice_event_cancel_indicator = None
@@ -74,7 +76,7 @@ class Splice_Insert(Splice_Command):
         self.splice_immediate_flag = None
         self.component_count = None
         self.components = []
-        self.duration_flag=None
+        self.duration_flag = None
         self.unique_program_id = None
         self.avail_num = None
         self.avail_expected = None
@@ -82,7 +84,6 @@ class Splice_Insert(Splice_Command):
         self.break_duration = None
         self.time_specified_flag = None
         self.pts_time = None
-
 
     def decode(self, bitbin):
         self.name = "Splice Insert"
@@ -115,6 +116,7 @@ class Time_Signal(Splice_Command):
     """
     Table 10 - time_signal()
     """
+
     def __init__(self):
         self.time_specified_flag = None
         self.pts_time = None
@@ -128,6 +130,7 @@ class Bandwidth_Reservation(Splice_Command):
     """
     Table 11 - bandwidth_reservation()
     """
+
     def decode(self, bitbin):
         self.name = "Bandwidth Reservation"
 
@@ -136,6 +139,7 @@ class Private_Command(Splice_Command):
     """
     Table 12 - private_command()
     """
+
     def __init__(self):
         self.identifier = None
 
