@@ -33,8 +33,7 @@ class Splice:
         self.info_section = Splice_Info_Section()
         self.info_section.decode(self.bitbin)
         self.set_splice_command()
-        if not self.descriptorloop():
-            return False
+        self.descriptorloop()
         self.info_section.crc = self.bitbin.ashex(32)
 
     def descriptorloop(self):
