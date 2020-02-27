@@ -5,10 +5,9 @@ Example from the specification
 
 """
 
-import threefive
+from threefive import decode
 
 Base64 = "/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g="
 
-stuff = threefive.Splice(Base64)
+decode(Base64)
 
-stuff.show()

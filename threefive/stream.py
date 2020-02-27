@@ -27,7 +27,7 @@ class Stream:
 
     def parse_tsdata(self, tsdata):
         while tsdata:
-            packets = tsdata.read(self.PACKET_SIZE * 25)
+            packets = tsdata.read(self.PACKET_SIZE * 5)
             if not packets:
                 break
             while packets:

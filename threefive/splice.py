@@ -35,17 +35,11 @@ class Splice:
         self.set_splice_command()
         if not self.descriptorloop():
             return False
-        try:
-            self.info_section.crc = self.bitbin.ashex(32)
-        except:
-            return False
+        self.info_section.crc = self.bitbin.ashex(32)
 
     def descriptorloop(self):
         self.info_section.descriptor_loop_length = self.bitbin.asint(16)
         dll = self.info_section.descriptor_loop_length
-        if self.bitbin.idx < (dll+32):
-            raise ValueError(f'bitbin index is {self.bitbin.idx} should be {(dll+32)}')
-            return False
         tag_plus_header_size = 2  # 1 byte for descriptor_tag, 1 byte for header?
         while dll > 0:
             try:
