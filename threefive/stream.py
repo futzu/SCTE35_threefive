@@ -10,16 +10,15 @@ class Stream:
     PACKET_SIZE = 188
     SYNCBYTE = 0x47
     NON_PTS_STREAM_IDS = [188, 190, 191, 240, 241, 242, 248]
+    SCTE35_TID=0xfc
 
     def __init__(self, tsfile=None, tsstream=None, show_null=False):
         self.PID = False
         self.show_null = show_null
         self.tf = False
         self.fpts = None
-        if tsfile:
-            self.parse_tsfile(tsfile)
-        if tsstream:
-            self.parse_tsdata(tsstream)
+        if tsfile: self.parse_tsfile(tsfile)
+        if tsstream: self.parse_tsdata(tsstream)
 
     def parse_tsfile(self, tsfile):
         with open(tsfile, 'rb') as tsdata:
@@ -28,8 +27,7 @@ class Stream:
     def parse_tsdata(self, tsdata):
         while tsdata:
             packets = tsdata.read(self.PACKET_SIZE * 5)
-            if not packets:
-                break
+            if not packets: break
             while packets:
                 p, packets = packets[:188], packets[188:]
                 if p[0] == self.SYNCBYTE:
@@ -69,25 +67,25 @@ class Stream:
         pid = two_bytes & 0x1fff
         #scramble = one_byte >>6
         #afc = (one_byte & 48) >> 4
-        #count = one_byte & 15
-        if pid == 101:
-            return
-        if pusi:
-            self.parse_pusi(packet[3:19])
-        if packet[4] != 0xfc:
-            return
+        #count = o
+
+        # No PTS times in pid 101
+        if pid == 101: return
+        # Here's where you find PTS
+        if pusi: self.parse_pusi(packet[3:19])
+        # SCTE35_TID (0xfc) is required .
+        if packet[4] != self.SCTE35_TID: return
+        #  If the SCTE 35 pid is known, the packet pid must match.
+        if self.PID and (pid != self.PID): return
+
+        #  Only show splice_null commands if self.show_null is True
         if not self.show_null:
-            if packet[17] == 0:
-                return
-        if self.PID and (pid != self.PID):
-            return
-        try:
-            self.tf = Splice(packet[4:])
-        except:
-            return
+            if packet[17] == 0: return
+        try: self.tf = Splice(packet[4:])
+        except: return
+
         print()
-        # print(f'\r{self.fpts}', end = "\r")
         self.tf.show()
-        if not self.PID:
-            self.PID = pid
+
+        if not self.PID: self.PID = pid
         return
