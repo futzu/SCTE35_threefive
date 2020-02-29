@@ -1,7 +1,7 @@
 from .splice import Splice
 from bitn import BitBin
 from struct import unpack
-
+from .afc import adaptation_fields
 
 class Stream:
     '''
@@ -60,15 +60,19 @@ class Stream:
                         print(f'\r{self.fpts}', end="\r")
 
     def parse_tspacket(self, packet):
-        two_bytes = unpack('>H', packet[:2])[0]
+        two_bytes,one_byte = unpack('>HB', packet[:3])
        # tei = two_bytes >> 15
         pusi = two_bytes >> 14 & 0x1
         #ts_priority = two_bytes >>13 & 0x1
         pid = two_bytes & 0x1fff
-        #scramble = one_byte >>6
-        #afc = (one_byte & 48) >> 4
-        #count = o
-
+        scramble = one_byte >>6
+        afc = (one_byte & 48) >> 4
+        count = o
+        if afc in [2,3]:
+            print('pid',hex(pid),'afc',afc)
+            bitbin=BitBin(packet[4:])
+            adaptation_fields(bitbin)
+            return
         # No PTS times in pid 101
         if pid == 101: return
         # Here's where you find PTS
