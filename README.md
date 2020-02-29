@@ -38,9 +38,42 @@ Successfully installed bitn-0.0.15 threefive-2.0.35
 
 ```
 
-##  Run 
-#### The Easy Way. 
-### Call threefive.decode.
+ ## Fast Start 
+ #### (Immediate Gratification)
+ 
+* pip
+```python
+pip install threefive
+```
+* Create a file call it cli.py, and put the following in it.
+ ```python
+ #!/usr/bin/env python3
+
+import sys
+import threefive
+ 
+def do():
+    try: 
+        threefive.decode(sys.argv[1])
+    except: 
+        # Handles piped in data
+        try: threefive.decode()
+        except: pass
+
+do()   
+```
+* chmod cli.py
+```bash
+chmod +x cli.py
+```
+* Parse SCTE 35 and PTS data from a video over the network( requires curl )
+```bash
+ curl -s https://futzu.com/mpegwithscte35.ts -o - | ./cli.py 
+```
+
+
+##  Using threefive  
+#### Call threefive.decode.
 
  *  mpegts files
  *  binary files
@@ -48,6 +81,7 @@ Successfully installed bitn-0.0.15 threefive-2.0.35
  *  hex encoded strings
  *  binary byte strings
  
+
  ####  Parse mpegts files 
 ```python
 >>> import threefive
