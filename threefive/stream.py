@@ -67,12 +67,12 @@ class Stream:
         pid = two_bytes & 0x1fff
         scramble = one_byte >>6
         afc = (one_byte & 48) >> 4
-        count = o
+        count = 0
         if afc in [2,3]:
-            print('pid',hex(pid),'afc',afc)
+            #print('pid',hex(pid),'afc',afc)
             bitbin=BitBin(packet[4:])
             adaptation_fields(bitbin)
-            return
+
         # No PTS times in pid 101
         if pid == 101: return
         # Here's where you find PTS
