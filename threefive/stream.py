@@ -72,7 +72,8 @@ class Stream:
             #print('pid',hex(pid),'afc',afc)
             bitbin=BitBin(packet[4:])
             adaptation_fields(bitbin)
-
+            return
+        
         # No PTS times in pid 101
         if pid == 101: return
         # Here's where you find PTS
