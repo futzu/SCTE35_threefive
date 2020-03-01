@@ -4,6 +4,7 @@ from .stream import Stream
 
 
 def read_stdin():
+    scte35 = None
     print(f'\n Reading from stdin')
     try:
         scte35 = Stream(tsstream=sys.stdin.buffer, show_null=False)
@@ -14,6 +15,7 @@ def read_stdin():
 
 
 def read_stuff(stuff):
+    scte35 = None
     try:
         scte35 = Splice(stuff)
         scte35.show()
