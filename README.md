@@ -4,7 +4,7 @@
 *  Parse SCTE 35 messages from Mpeg Transport Streams and Binary files. 
 *  Parse SCTE 35 messages encoded in Base64, Binary, or Hex. 
 
-### 2019 Specification 
+### 2019 Specification ( Link is down )
 [SCTE35 2019 specification](https://www.scte.org/standard/scte-35-2019/)
 
 ###  Splice Commands 
@@ -39,14 +39,15 @@ Successfully installed bitn-0.0.15 threefive-2.0.35
 ```
 
  ## Fast Start 
- #### (Immediate Gratification)
+ 
+* Immediate Gratification
  
 * pip
 ```python
 pip install threefive
 ```
 * Create a file call it cli.py, and put the following in it.
- ```python
+ ```sh
  #!/usr/bin/env python3
 
 import sys
