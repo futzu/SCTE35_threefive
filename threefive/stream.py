@@ -68,7 +68,7 @@ class Stream:
         if not self.show_null:
             if packet[17] == 0: return
         try: tf = Splice(packet[4:])
-        except: returnremoving code
+        except: return
         print(f'SCTE 35 Packet @ \033[92m{self.PTS:.06f}\033[0m')
         tf.show()
         if not self.PID: self.PID = pid
