@@ -1,7 +1,6 @@
 from .splice import Splice
 from bitn import BitBin
 from struct import unpack
-from .afc import adaptation_fields
 
 class Stream:
     '''
@@ -14,6 +13,7 @@ class Stream:
 
     def __init__(self, tsfile = None, tsstream = None, show_null = False):
         self.PID = False
+        self.PTS= False
         self.show_null = show_null
         self.tf = False
         if tsfile: self.parse_tsfile(tsfile)
@@ -25,28 +25,21 @@ class Stream:
 
     def parse_tsdata(self, tsdata):
         while tsdata:
-            packets = tsdata.read(self.PACKET_SIZE * 3)
+            packets = tsdata.read(self.PACKET_SIZE * 4)
             if not packets: break
             while packets:
                 p, packets = packets[:188], packets[188:]
                 if p[0] != self.SYNCBYTE: return
                 self.parse_tspacket(p[1:])
+        print(f'End @ \033[92m{self.PTS:.06f}\033[0m')
 
     def parse_pusi(self, packet):
         bitbin = BitBin(packet)
         if bitbin.asint(24) != 1: return
         if bitbin.asint(8) in self.NON_PTS_STREAM_IDS: return
-        # PES_packet_length =
         bitbin.forward(16)
         if bitbin.asint(2) != 2: return
         bitbin.forward(6)
-        '''
-        PES_scramble_control = bitbin.asint(2)
-        PES_priority = bitbin.asint(1)
-        data_align_ind = bitbin.asint(1)
-        copyright = bitbin.asint(1)
-        orig_or_copy = bitbin.asint(1)
-        '''
         if bitbin.asint(2) != 2: return
         bitbin.forward(14)
         if bitbin.asint(4) != 2: return
@@ -56,26 +49,14 @@ class Stream:
         bitbin.forward(1)
         c = bitbin.asint(15)
         d = (a+b+c)/90000.0
-        fpts = f'PTS \033[92m{d:.3f}\033[0m '
-        print(f'\r{fpts}', end="\r")
+        if not self.PTS: print(f'Start @ \033[92m{d:.06f}\033[0m')
+        self.PTS=d
         return
 
     def parse_tspacket(self, packet):
-        two_bytes,one_byte = unpack('>HB', packet[:3])
-        # tei = two_bytes >> 15
+        two_bytes = unpack('>H', packet[:2])[0]
         pusi = two_bytes >> 14 & 0x1
-        # ts_priority = two_bytes >>13 & 0x1
         pid = two_bytes & 0x1fff
-        # scramble = one_byte >>6
-        afc = (one_byte & 48) >> 4
-        # count = 0
-        if afc in [2,3]:
-            afcl=unpack('>B',packet[4:5])[0]
-            afcl += 12
-            fu = packet[4:afcl]
-            bitbin = BitBin(fu)
-            adaptation_fields(bitbin)
-            return
         # No PTS times in pid 101
         if pid == 101: return
         # Here's where you find PTS
@@ -88,8 +69,8 @@ class Stream:
         if not self.show_null:
             if packet[17] == 0: return
         try: tf = Splice(packet[4:])
-        except: return
-        print()
+        except: returnremoving code
+        print(f'SCTE 35 Packet @ \033[92m{self.PTS:.06f}\033[0m')
         tf.show()
         if not self.PID: self.PID = pid
         return
