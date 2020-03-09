@@ -4,6 +4,44 @@
 *  Parse SCTE 35 messages from Mpeg Transport Streams and Binary files. 
 *  Parse SCTE 35 messages encoded in Base64, Binary, or Hex. 
 
+
+ ### Fast Start 
+
+1. Install python3 and curl
+ 
+2. pip install threefive
+```python
+pip install threefive
+```
+3. Create a file call it cli.py, and put the following in it.
+ ```sh
+#!/usr/bin/env python3
+
+import sys
+import threefive
+ 
+def do():
+    try: 
+        threefive.decode(sys.argv[1])
+    except: 
+        # Handles piped in data
+        try: threefive.decode()
+        except: pass
+if __name__ == '__main__':
+    do()   
+```
+4. chmod cli.py
+```bash
+chmod +x cli.py
+```
+5. Parse SCTE 35 and PTS data from a video over the network( requires curl )
+```bash
+ curl -s https://futzu.com/mpegwithscte35.ts -o - | ./cli.py 
+```
+
+
+
+
 ### 2019 Specification 
 [SCTE35 2019 specification](https://scte-cms-resource-storage.s3.amazonaws.com/ANSI_SCTE-35-2019a-1582645390859.pdf)
 
