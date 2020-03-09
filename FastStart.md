@@ -1,8 +1,7 @@
 
 
- ### Fast Start 
+ ## Fast Start  (Requires Python3 and Curl)
 
-* Install python3 and curl
 * pip install threefive
 ```python
 pip install threefive
@@ -29,7 +28,7 @@ if __name__ == '__main__':
 ```bash
 chmod +x cli.py
 ```
-* Parse SCTE 35 and PTS data from a video over the network( requires curl )
+* Parse SCTE 35 and PTS data from a video over the network
 ```bash
  curl -s https://futzu.com/mpegwithscte35.ts -o - | ./cli.py 
 ```
