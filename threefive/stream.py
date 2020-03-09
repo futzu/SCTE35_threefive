@@ -15,7 +15,6 @@ class Stream:
         self.PID = False
         self.PTS= False
         self.show_null = show_null
-        self.tf = False
         if tsfile: self.parse_tsfile(tsfile)
         if tsstream: self.parse_tsdata(tsstream)
 
