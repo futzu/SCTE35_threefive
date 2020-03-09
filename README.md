@@ -4,8 +4,8 @@
 *  Parse SCTE 35 messages from Mpeg Transport Streams and Binary files. 
 *  Parse SCTE 35 messages encoded in Base64, Binary, or Hex. 
 
-### 2019 Specification ( Link is down )
-[SCTE35 2019 specification](https://www.scte.org/standard/scte-35-2019/)
+### 2019 Specification 
+[SCTE35 2019 specification](https://scte-cms-resource-storage.s3.amazonaws.com/ANSI_SCTE-35-2019a-1582645390859.pdf)
 
 ###  Splice Commands 
 *  Splice Null  
