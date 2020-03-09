@@ -40,7 +40,7 @@ Successfully installed bitn-0.0.15 threefive-2.0.35
 
  ## Fast Start 
  
-* Immediate Gratification
+ Immediate Gratification
  
 * pip
 ```python
