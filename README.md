@@ -22,6 +22,41 @@
 *  Time Descriptor 
 *  Audio Descriptor (lightly tested)
 
+ ### Fast Start 
+
+1. Install python3 and curl
+ 
+2. pip install threefive
+```python
+pip install threefive
+```
+3. Create a file call it cli.py, and put the following in it.
+ ```sh
+#!/usr/bin/env python3
+
+import sys
+import threefive
+ 
+def do():
+    try: 
+        threefive.decode(sys.argv[1])
+    except: 
+        # Handles piped in data
+        try: threefive.decode()
+        except: pass
+if __name__ == '__main__':
+    do()   
+```
+4. chmod cli.py
+```bash
+chmod +x cli.py
+```
+5. Parse SCTE 35 and PTS data from a video over the network( requires curl )
+```bash
+ curl -s https://futzu.com/mpegwithscte35.ts -o - | ./cli.py 
+```
+
+
 ###  Dependencies 
 * Python 3
 * bitn
@@ -37,41 +72,6 @@ Installing collected packages: bitn, threefive
 Successfully installed bitn-0.0.15 threefive-2.0.35
 
 ```
-
- ## Fast Start 
- 
- Immediate Gratification
- 
-* pip
-```python
-pip install threefive
-```
-* Create a file call it cli.py, and put the following in it.
- ```sh
- #!/usr/bin/env python3
-
-import sys
-import threefive
- 
-def do():
-    try: 
-        threefive.decode(sys.argv[1])
-    except: 
-        # Handles piped in data
-        try: threefive.decode()
-        except: pass
-
-do()   
-```
-* chmod cli.py
-```bash
-chmod +x cli.py
-```
-* Parse SCTE 35 and PTS data from a video over the network( requires curl )
-```bash
- curl -s https://futzu.com/mpegwithscte35.ts -o - | ./cli.py 
-```
-
 
 ##  Using threefive  
 #### Call threefive.decode.
