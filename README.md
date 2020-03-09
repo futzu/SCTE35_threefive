@@ -3,17 +3,35 @@
 ## SCTE35 Decoder
 *  Parse SCTE 35 messages from Mpeg Transport Streams and Binary files. 
 *  Parse SCTE 35 messages encoded in Base64, Binary, or Hex. 
+### 2019 Specification 
+[SCTE35 2019 specification](https://scte-cms-resource-storage.s3.amazonaws.com/ANSI_SCTE-35-2019a-1582645390859.pdf)
+###  Splice Commands 
+*  Splice Null  
+*  Splice Schedule  (lightly tested)
+*  Splice Insert 
+*  Time Signal 
+*  Bandwidth Reservation  (lightly tested)
+###  Splice Descriptors 
+*  DTMF Descriptor 
+*  Segmentation Descriptor
+  *  Segmentation UPID  (partially implemented)
+  *  Segmentation Types and Messages 
+*  Time Descriptor 
+*  Audio Descriptor (lightly tested)
+
+###  Dependencies 
+* Python 3
+* bitn
 
 
  ### Fast Start 
 
-##### Install python3 and curl
- 
-##### pip install threefive
+* Install python3 and curl
+* pip install threefive
 ```python
 pip install threefive
 ```
-##### Create a file call it cli.py, and put the following in it.
+* Create a file call it cli.py, and put the following in it.
  ```sh
 #!/usr/bin/env python3
 
@@ -30,40 +48,16 @@ def do():
 if __name__ == '__main__':
     do()   
 ```
-##### chmod cli.py
+* Chmod cli.py
 ```bash
 chmod +x cli.py
 ```
-##### Parse SCTE 35 and PTS data from a video over the network( requires curl )
+* Parse SCTE 35 and PTS data from a video over the network( requires curl )
 ```bash
  curl -s https://futzu.com/mpegwithscte35.ts -o - | ./cli.py 
 ```
 
 
-
-
-### 2019 Specification 
-[SCTE35 2019 specification](https://scte-cms-resource-storage.s3.amazonaws.com/ANSI_SCTE-35-2019a-1582645390859.pdf)
-
-###  Splice Commands 
-*  Splice Null  
-*  Splice Schedule  (lightly tested)
-*  Splice Insert 
-*  Time Signal 
-*  Bandwidth Reservation  (lightly tested)
-
-###  Splice Descriptors 
-*  DTMF Descriptor 
-*  Segmentation Descriptor
-  *  Segmentation UPID  (partially implemented)
-  *  Segmentation Types and Messages 
-*  Time Descriptor 
-*  Audio Descriptor (lightly tested)
-
-
-###  Dependencies 
-* Python 3
-* bitn
 
 ##  Install 
 ```
