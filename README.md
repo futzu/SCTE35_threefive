@@ -5,7 +5,7 @@
 *  Parse SCTE 35 messages encoded in Base64, Binary, or Hex. 
 
 ### Fast Start Directions.
-*  ['Up and Running in Less Than Thirty-Seven Seconds'](FastStart.md) 
+*  ['Up and Running in Less Than Thirty-Seven Seconds'](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
 
 ### 2019 Specification 
