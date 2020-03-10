@@ -24,12 +24,13 @@ class Stream:
 
     def parse_tsdata(self, tsdata):
         while tsdata:
-            packets = tsdata.read(self.PACKET_SIZE * 4)
+            packets = tsdata.read(self.PACKET_SIZE * 8)
             if not packets: break
             while packets:
                 p, packets = packets[:188], packets[188:]
                 if p[0] != self.SYNCBYTE: return
                 self.parse_tspacket(p[1:])
+            
         print(f'End @ \033[92m{self.PTS:.06f}\033[0m')
 
     def parse_pusi(self, packet):
@@ -60,10 +61,11 @@ class Stream:
         if pid == 101: return
         # Here's where you find PTS
         if pusi: self.parse_pusi(packet[3:19])
+        if self.PID and (pid != self.PID): return
+
         # SCTE35_TID (0xfc) is required .
         if packet[4] != self.SCTE35_TID: return
         #  If the SCTE 35 pid is known, the packet pid must match.
-        if self.PID and (pid != self.PID): return
         #  Only show splice_null commands if self.show_null is True
         if not self.show_null:
             if packet[17] == 0: return
