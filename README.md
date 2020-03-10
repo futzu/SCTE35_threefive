@@ -4,8 +4,8 @@
 *  Parse SCTE 35 messages from Mpeg Transport Streams and Binary files. 
 *  Parse SCTE 35 messages encoded in Base64, Binary, or Hex. 
 
-### Fast Start
-['Up and Running in Less Than Thirty-Seven Seconds'](FastStart.md) 
+### Fast Start Directions.
+*  ['Up and Running in Less Than Thirty-Seven Seconds'](FastStart.md) 
 
 
 ### 2019 Specification 
