@@ -1,9 +1,12 @@
-## Fast Start  (Requires Python3 and Curl)
+## Fast Start  
+* Requires python3 and curl.
 
 
 ### Up and Running in Less Than 7 Seconds.
 
 
+
+#### Step One of Two
 
 * Estimated time to complete this step : 2.0 - 2.5 seconds
 
@@ -15,7 +18,7 @@ pip install threefive
 
 
 
-
+#### Step Two of Two
 *  Estimated time to complete this step : 3.0 - 4.5 seconds 
 ```js
  curl -s https://futzu.com/mpegwithscte35.ts -o - | python3 -c 'import threefive; threefive.decode()' 
