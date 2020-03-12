@@ -11,18 +11,18 @@
 ### 2019 Specification 
 [SCTE35 2019 specification](https://scte-cms-resource-storage.s3.amazonaws.com/ANSI_SCTE-35-2019a-1582645390859.pdf)
 ###  Splice Commands 
-*  Splice Null  
-*  Splice Schedule  (lightly tested)
-*  Splice Insert 
-*  Time Signal 
-*  Bandwidth Reservation  (lightly tested)
+- [x] Splice Null  
+- [x] Splice Schedule  (lightly tested)
+- [x] Splice Insert 
+- [x] Time Signal 
+- [x] Bandwidth Reservation  (lightly tested)
 ###  Splice Descriptors 
-*  DTMF Descriptor 
-*  Segmentation Descriptor
-  *  Segmentation UPID  (partially implemented)
-  *  Segmentation Types and Messages 
-*  Time Descriptor 
-*  Audio Descriptor (lightly tested)
+- [x]  DTMF Descriptor 
+- [x]  Segmentation Descriptor
+- [x]  Segmentation UPID  (partially implemented)
+- [x]  Segmentation Types and Messages 
+- [x]  Time Descriptor 
+- [x]  Audio Descriptor (lightly tested)
 
 ###  Dependencies 
 * Python 3
@@ -42,11 +42,11 @@ Successfully installed bitn-0.0.15 threefive-2.0.35
 ##  Using threefive  
 #### Call threefive.decode.
 
- *  mpegts files
- *  binary files
- *  base64 encoded strings
- *  hex encoded strings
- *  binary byte strings
+- [x] mpegts files
+- [x]  binary files
+- [x]  base64 encoded strings
+- [x]  hex encoded strings
+- [x]  binary byte strings
  
 
  ####  Parse mpegts files 
