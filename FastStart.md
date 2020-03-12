@@ -4,7 +4,7 @@
 ### Up and Running in Less Than 7 Seconds.
 
 
-#### pip install threefive 
+1) pip install threefive 
 
 
 * Estimated time to complete this step : 2.0 - 2.5 seconds
@@ -14,8 +14,7 @@ pip install threefive
 
 
 ```
-#### Start threefive.decode to parse SCTE 35 messages 
-#### from  a video over the network
+2) Start threefive.decode to parse SCTE 35 messages from  a video over the network
 
 *  Estimated time to complete this step : 3.0 - 4.5 seconds 
 ```js
