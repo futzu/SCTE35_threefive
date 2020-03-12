@@ -5,7 +5,9 @@
 
 
 * pip install threefive 
-**(Estimated time to complete this step : 2.0 - 2.5 seconds)
+
+
+** Estimated time to complete this step : 2.0 - 2.5 seconds
 ```go
 pip install threefive
 
