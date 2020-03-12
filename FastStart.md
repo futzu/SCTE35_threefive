@@ -1,9 +1,6 @@
-## Fast Start  
-* Requires python3 and curl.
-
-
 ### Up and Running in Less Than 7 Seconds.
 
+* Requires python3 and curl.
 
 
 #### Step One of Two
