@@ -1,22 +1,24 @@
 ## Fast Start  (Requires Python3 and Curl)
 
 
-### Up and Running in Less Than 17 Seconds.
+### Up and Running in Less Than 7 Seconds.
 
 
-* pip install threefive
+* pip install threefive 
+(Estimated time to complete this step : 2.0 - 2.5 seconds)
 ```go
 pip install threefive
 
 
 ```
 * Parse SCTE 35 and PTS data from a video over the network
+( Estimated time to complete this step : 3.0 - 4.5 seconds )
 ```js
  curl -s https://futzu.com/mpegwithscte35.ts -o - | python3 -c 'import threefive; threefive.decode()' 
 ```
 
 * Ouput looks like this.
-```
+```json
  Reading from stdin
 Start @ 89668.801522
 SCTE 35 Packet @ 89730.289522
