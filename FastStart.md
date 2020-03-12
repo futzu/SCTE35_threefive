@@ -1,6 +1,6 @@
 ### Up and Running in Less Than 7 Seconds.
 
-* Requires python3 and curl.
+* Requires curl, pip3, and python3.
 
 
 #### Step One of Two
