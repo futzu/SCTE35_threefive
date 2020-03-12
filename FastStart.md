@@ -4,8 +4,6 @@
 ### Up and Running in Less Than 7 Seconds.
 
 
-1) pip install threefive 
-
 
 * Estimated time to complete this step : 2.0 - 2.5 seconds
 
@@ -14,12 +12,19 @@ pip install threefive
 
 
 ```
-2) Start threefive.decode to parse SCTE 35 messages from  a video over the network
+
+
+
 
 *  Estimated time to complete this step : 3.0 - 4.5 seconds 
 ```js
  curl -s https://futzu.com/mpegwithscte35.ts -o - | python3 -c 'import threefive; threefive.decode()' 
 ```
+
+
+
+
+
 
 * Ouput looks like this.
 ```js
