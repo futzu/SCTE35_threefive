@@ -22,7 +22,7 @@ pip install threefive
 ```
 
 * Ouput looks like this.
-```json
+```js
  Reading from stdin
 Start @ 89668.801522
 SCTE 35 Packet @ 89730.289522
