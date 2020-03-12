@@ -14,7 +14,8 @@ pip install threefive
 
 
 ```
-#### Parse SCTE 35 and PTS data from a video over the network
+#### Start threefive.decode to parse SCTE 35 messages 
+#### from  a video over the network
 
 *  Estimated time to complete this step : 3.0 - 4.5 seconds 
 ```js
