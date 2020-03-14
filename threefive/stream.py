@@ -24,7 +24,7 @@ class Stream:
 
     def parse_tsdata(self, tsdata):
         while tsdata:
-            packets = tsdata.read(self.PACKET_SIZE * 8)
+            packets = tsdata.read(self.PACKET_SIZE * 4)
             if not packets: break
             while packets:
                 p, packets = packets[:188], packets[188:]
@@ -60,7 +60,8 @@ class Stream:
         # No PTS times in pid 101
         if pid == 101: return
         # Here's where you find PTS
-        if pusi: self.parse_pusi(packet[3:19])
+        if pusi: 
+            self.parse_pusi(packet[3:19])
         if self.PID and (pid != self.PID): return
 
         # SCTE35_TID (0xfc) is required .
@@ -68,10 +69,11 @@ class Stream:
         #  If the SCTE 35 pid is known, the packet pid must match.
         #  Only show splice_null commands if self.show_null is True
         if not self.show_null:
+            print(f'PTS: \033[92m{self.PTS:.06f}\033[0m', end='\r')
             if packet[17] == 0: return
         try: tf = Splice(packet[4:])
         except: return
-        print(f'SCTE 35 Packet @ \033[92m{self.PTS:.06f}\033[0m')
+        print(f'SCTE 35 Packet PID {self.PID} @ \033[92m{self.PTS:.06f}\033[0m')
         tf.show()
         if not self.PID: self.PID = pid
         return
