@@ -66,25 +66,6 @@ class Splice_Insert(Splice_Command):
     """
     Table 9 - splice_insert()
     """
-
-    def __init__(self):
-        self.splice_event_id = None
-        self.splice_event_cancel_indicator = None
-        self.out_of_network_indicator = None
-        self.program_splice_flag = None
-        self.duration_flag = None
-        self.splice_immediate_flag = None
-        self.component_count = None
-        self.components = []
-        self.duration_flag = None
-        self.unique_program_id = None
-        self.avail_num = None
-        self.avail_expected = None
-        self.break_auto_return = None
-        self.break_duration = None
-        self.time_specified_flag = None
-        self.pts_time = None
-
     def decode(self, bitbin):
         self.name = "Splice Insert"
         self.splice_event_id = bitbin.asint(32)

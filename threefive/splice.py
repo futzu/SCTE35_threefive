@@ -6,13 +6,20 @@ from base64 import b64decode
 
 
 class Splice:
-
+    '''
+    the threefive.Splice class handles parsing
+    SCTE 35 message strings.
+    The data may come as a mpegts packet payload,
+    a hex encoded string, or base64 encoded string.
+    '''
+    # map of known descriptors and associated classes
     descriptor_map = {0: Avail_Descriptor,
                       1: Dtmf_Descriptor,
                       2: Segmentation_Descriptor,
                       3: Time_Descriptor,
                       4: Audio_Descriptor}
-
+    
+    # map of known splice commands and associated classes
     command_map = {0: Splice_Null,
                    4: Splice_Schedule,
                    5: Splice_Insert,
@@ -67,6 +74,10 @@ class Splice:
             return s
 
     def set_splice_command(self):
+        '''
+        splice commands looked up in self.command_map
+        
+        '''
         sct = self.info_section.splice_command_type
         if sct not in self.command_map.keys():
             raise ValueError('unknown splice command type')
@@ -75,6 +86,10 @@ class Splice:
         self.command.decode(self.bitbin)
 
     def set_splice_descriptor(self):
+        '''
+        splice descriptors looked up in self.descriptor_map
+        
+        '''
         # splice_descriptor_tag 8 uimsbf
         tag = self.bitbin.asint(8)
         if tag in self.descriptor_map.keys():
@@ -87,6 +102,7 @@ class Splice:
             self.sectionstart('Splice Info Section')
             self.kvprint(self.info_section)
         else:
+
             return False
 
     def show_command(self):
@@ -104,10 +120,7 @@ class Splice:
                 self.kvprint(d)
 
     def show(self):
-        if self.info_section and self.command:
-            #self.sectionstart('[SCTE 35 Message]')
-            self.show_info_section()
-            self.show_command()
-            self.show_descriptors()
-        else:
-            return False
+        self.show_info_section()
+        self.show_command()
+        self.show_descriptors()
+ 
