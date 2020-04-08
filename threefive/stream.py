@@ -35,7 +35,7 @@ class Stream:
             packets = tsdata.read(self.PACKET_SIZE * 8) # read 8 packets
             if not packets: break
             while packets:
-                p, packets = packets[:188], packets[188:] # take first 188 bytes
+                p, packets = packets[:self.PACKET_SIZE], packets[self.PACKET_SIZE:] # take first 188 bytes
                 if p[0] != self.SYNCBYTE: return # check sync byte
                 self.parse_tspacket(p[1:]) # drop syncbyte and pass to parse_tspacket
             
