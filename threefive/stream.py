@@ -27,20 +27,13 @@ class Stream:
 
     def parse_tsdata(self, tsdata):
         '''
-        read data, 
-        split it into packets,
-        pass to parse_tspacket
+         split tsdata into packets for parsing
         '''
         while tsdata:
-            packets = tsdata.read(self.PACKET_SIZE * 8) # read 8 packets
-            if not packets: break
-            while packets:
-                p, packets = packets[:self.PACKET_SIZE], packets[self.PACKET_SIZE:] # take first 188 bytes
-                if p[0] != self.SYNCBYTE: return # check sync byte
-                self.parse_tspacket(p[1:]) # drop syncbyte and pass to parse_tspacket
-            
-        print(f'End @ \033[92m{self.PTS:.06f}\033[0m') # prints last PTS timestamp found
-
+            packet_count=24
+            packets = [tsdata.read(self.PACKET_SIZE) for i in range(packet_count)]
+            [self.parse_tspacket(packet) for packet in packets]
+        
     def parse_pusi(self, packet):
         bitbin = BitBin(packet)  # bitn.BitBin see https://github.com/futzu/bitn
         # read 24 bits as unsigned int and return if it is not 1
@@ -78,9 +71,11 @@ class Stream:
         check if it's a scte 35 packet,
         parse it if it is scte 35
         set self.PID to the scte35 pid.
-        ''' 
+        '''
+        if packet[0] != self.SYNCBYTE: return
+        packet = packet[1:]
         # unpack two bytes or 16 bits
-        two_bytes = unpack('>H', packet[:2])[0]
+        two_bytes = unpack('>H', packet[0:2])[0]
         # bit 15 is the Payload unit start indicator or pusi.
         # if pusi, parse for pts
         pusi = two_bytes >> 14 & 0x1
@@ -101,7 +96,7 @@ class Stream:
         try: tf = Splice(packet[4:])
         except: return
         # print PTS time of scte35 packet
-        print(f'SCTE 35 Packet @ \033[92m{self.PTS:.06f}\033[0m')
+        print(f'PID {hex(pid)} SCTE 35 Packet @ \033[92m{self.PTS:.06f}\033[0m')
         # show scte 35 data 
         tf.show()
         # Set self.PID if not set yet, this is the scte35 pid 
