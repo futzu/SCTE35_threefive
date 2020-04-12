@@ -8,7 +8,6 @@ class Splice_Descriptor:
             descriptor_length        8 uimsbf
             identifier              32 uimsbf
     """
-
     def __init__(self, bitbin, tag):
         self.name = "Unknown Descriptor"
         self.splice_descriptor_tag = tag
@@ -26,10 +25,8 @@ class Avail_Descriptor(Splice_Descriptor):
     """
     Table 17 -  avail_descriptor()
     """
-
     def __init__(self, bitbin, tag):
-        if not super().__init__(bitbin, tag):
-            return False
+        if not super().__init__(bitbin, tag): return False
         self.name = "Avail Descriptor"
         self.provider_avail_id = bitbin.asint(32)
 
@@ -38,10 +35,8 @@ class Dtmf_Descriptor(Splice_Descriptor):
     """
     Table 18 -  DTMF_descriptor()
     """
-
     def __init__(self, bitbin, tag):
-        if not super().__init__(bitbin, tag):
-            return False
+        if not super().__init__(bitbin, tag): return False
         self.name = "DTMF Descriptor"
         self.preroll = bitbin.asint(8)
         self.dtmf_count = bitbin.asint(3)
@@ -55,10 +50,8 @@ class Segmentation_Descriptor(Splice_Descriptor):
     """
     Table 19 - segmentation_descriptor()
     """
-
     def __init__(self, bitbin, tag):
-        if not super().__init__(bitbin, tag):
-            return False
+        if not super().__init__(bitbin, tag): return False
         self.name = "Segmentation Descriptor"
         self.segmentation_event_id = bitbin.ashex(32)
         self.segmentation_event_cancel_indicator = bitbin.asflag(1)
@@ -107,10 +100,8 @@ class Time_Descriptor(Splice_Descriptor):
     """
     Table 25 - time_descriptor()
     """
-
     def __init__(self, bitbin, tag):
-        if not super().__init__(bitbin, tag):
-            return False
+        if not super().__init__(bitbin, tag): return False
         self.name = "Time Descriptor"
         self.TAI_seconds = bitbin.asint(48)
         self.TAI_ns = bitbin.asint(32)
@@ -121,10 +112,8 @@ class Audio_Descriptor(Splice_Descriptor):
     """
     Table 26 - audio_descriptor()
     """
-
     def __init__(self, bitbin, tag):
-        if not super().__init__(bitbin, tag):
-            return False
+        if not super().__init__(bitbin, tag): return False
         self.name = "Audio Descriptor"
         self.components = []
         self.audio_count = bitbin.asint(4)

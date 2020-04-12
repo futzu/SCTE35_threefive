@@ -1,8 +1,7 @@
-from .splice_commands import *
-from .descriptors import *
-from .splice_info_section import Splice_Info_Section
-from bitn import BitBin
 from base64 import b64decode
+from bitn import BitBin
+from threefive import (splice_commands as spcmd,
+    descriptors as dscprs, splice_info_section as spinfo)
 
 
 class Splice:
@@ -13,19 +12,19 @@ class Splice:
     a hex encoded string, or base64 encoded string.
     '''
     # map of known descriptors and associated classes
-    descriptor_map = {0: Avail_Descriptor,
-                      1: Dtmf_Descriptor,
-                      2: Segmentation_Descriptor,
-                      3: Time_Descriptor,
-                      4: Audio_Descriptor}
+    descriptor_map = {0: dscprs.Avail_Descriptor,
+                      1: dscprs.Dtmf_Descriptor,
+                      2: dscprs.Segmentation_Descriptor,
+                      3: dscprs.Time_Descriptor,
+                      4: dscprs.Audio_Descriptor}
     
     # map of known splice commands and associated classes
-    command_map = {0: Splice_Null,
-                   4: Splice_Schedule,
-                   5: Splice_Insert,
-                   6: Time_Signal,
-                   7: Bandwidth_Reservation,
-                   255: Private_Command}
+    command_map = {0: spcmd.Splice_Null,
+                   4: spcmd.Splice_Schedule,
+                   5: spcmd.Splice_Insert,
+                   6: spcmd.Time_Signal,
+                   7: spcmd.Bandwidth_Reservation,
+                   255: spcmd.Private_Command}
 
     def __init__(self, mesg):
         mesg = self.mkbits(mesg)
@@ -37,7 +36,7 @@ class Splice:
         self.do()
 
     def do(self):
-        self.info_section = Splice_Info_Section()
+        self.info_section = spinfo.Splice_Info_Section()
         self.info_section.decode(self.infobb)
         self.set_splice_command()
         self.descriptorloop()
@@ -64,6 +63,12 @@ class Splice:
         print(f'{section_name}')
 
     def mkbits(self, s):
+        '''
+        trim, decode, and sanitize
+        SCTE 35 messages so
+        they can be passed into an
+        instance of bitn.BitBin 
+        '''
         if s[:2].lower() == '0x':
             s = s[2:]
         if s[:2].lower() == 'fc':
@@ -76,7 +81,6 @@ class Splice:
     def set_splice_command(self):
         '''
         splice commands looked up in self.command_map
-        
         '''
         sct = self.info_section.splice_command_type
         if sct not in self.command_map.keys():
@@ -88,39 +92,33 @@ class Splice:
     def set_splice_descriptor(self):
         '''
         splice descriptors looked up in self.descriptor_map
-        
         '''
         # splice_descriptor_tag 8 uimsbf
         tag = self.bitbin.asint(8)
         if tag in self.descriptor_map.keys():
             return self.descriptor_map[tag](self.bitbin, tag)
-        else:
-            return False
+        else: return False
 
     def show_info_section(self):
         if self.info_section:
             self.sectionstart('Splice Info Section')
             self.kvprint(self.info_section)
-        else:
-
-            return False
+        else: return False
 
     def show_command(self):
         if self.command:
             self.sectionstart('Splice Command')
             self.kvprint(self.command)
-        else:
-            return False
+        else: return False
 
     def show_descriptors(self):
         if len(self.descriptors) > 0:
             for d in self.descriptors:
                 idx = self.descriptors.index(d)
-                self.sectionstart(f'Splice Descriptor {idx}')
+                self.sectionstart(f'Splice Descriptor [ {idx} ]')
                 self.kvprint(d)
 
     def show(self):
         self.show_info_section()
         self.show_command()
         self.show_descriptors()
- 

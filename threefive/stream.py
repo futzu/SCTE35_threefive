@@ -2,6 +2,7 @@ from .splice import Splice
 from bitn import BitBin
 from struct import unpack
 
+
 class Stream:
     '''
     Parse mpegts files and streams for SCTE 35 packets
@@ -30,9 +31,13 @@ class Stream:
          split tsdata into packets for parsing
         '''
         while tsdata:
-            packet_count=24
-            packets = [tsdata.read(self.PACKET_SIZE) for i in range(packet_count)]
+            pcount=256
+            chunky = tsdata.read(self.PACKET_SIZE * pcount)
+            packets= [chunky[i:i+self.PACKET_SIZE] for i in range(0, len(chunky), self.PACKET_SIZE)]
+            if not packets: break
             [self.parse_tspacket(packet) for packet in packets]
+        print(f'End @ \033[92m{self.PTS:.06f}\033[0m')           
+      
         
     def parse_pusi(self, packet):
         bitbin = BitBin(packet)  # bitn.BitBin see https://github.com/futzu/bitn
@@ -75,7 +80,9 @@ class Stream:
         if packet[0] != self.SYNCBYTE: return
         packet = packet[1:]
         # unpack two bytes or 16 bits
-        two_bytes = unpack('>H', packet[0:2])[0]
+
+        #two_bytes = unpack('>H', packet[:2])[0]
+        two_bytes= int.from_bytes(packet[:2],byteorder='big')
         # bit 15 is the Payload unit start indicator or pusi.
         # if pusi, parse for pts
         pusi = two_bytes >> 14 & 0x1

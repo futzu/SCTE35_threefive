@@ -1,4 +1,8 @@
 class Splice_Command:
+    '''
+    Base class for all splice command classes,
+    not used directly.
+    '''
     def __init__(self):
         pass
 
@@ -23,7 +27,6 @@ class Splice_Null(Splice_Command):
     """
     Table 7 - splice_null()
     """
-
     def decode(self, bitbin):
         self.name = "Splice Null"
 
@@ -32,7 +35,6 @@ class Splice_Schedule(Splice_Command):
     """
     Table 8 - splice_schedule()
     """
-
     def decode(self, bitbin):
         self.name = "Splice Schedule"
         splice_count = bitbin.asint(8)
@@ -97,7 +99,6 @@ class Time_Signal(Splice_Command):
     """
     Table 10 - time_signal()
     """
-
     def __init__(self):
         self.time_specified_flag = None
         self.pts_time = None
@@ -111,7 +112,6 @@ class Bandwidth_Reservation(Splice_Command):
     """
     Table 11 - bandwidth_reservation()
     """
-
     def decode(self, bitbin):
         self.name = "Bandwidth Reservation"
 
@@ -120,7 +120,6 @@ class Private_Command(Splice_Command):
     """
     Table 12 - private_command()
     """
-
     def __init__(self):
         self.identifier = None
 
