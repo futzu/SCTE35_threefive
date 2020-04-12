@@ -1,5 +1,5 @@
 # threefive
-
+- [x] Special Easter Release 2.0.59 aka 'A Bitwise Bunny for Bobo' Now Available!
 ## SCTE35 Decoder
 *  Parse SCTE 35 messages from Mpeg Transport Streams and Binary files. 
 *  Parse SCTE 35 messages encoded in Base64, Binary, or Hex. 
