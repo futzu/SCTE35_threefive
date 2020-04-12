@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="threefive",
-    version="2.0.57",
+    version="2.0.59",
     author="fu-corp",
     author_email="spam@futzu.com",
-    description="The SCTE 35 parser For The Dystopian Pandemic ",
+    description="The SCTE 35 parser Used By Tens of People.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/threefive",
