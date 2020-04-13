@@ -84,7 +84,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
                 self.turner_identifier = bitbin.ashex(64)
             self.segmentation_type_id = bitbin.asint(8)
             if self.segmentation_type_id in table22.keys():
-                self.segmentation_message = table22[self.segmentation_type_id][0]
+                self.segmentation_message = table22[self.segmentation_type_id]
             if self.segmentation_type_id == 0:
                 self.segment_num = 0
                 self.segments_expected = 0

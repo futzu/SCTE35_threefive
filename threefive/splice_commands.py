@@ -57,8 +57,7 @@ class Splice_Schedule(Splice_Command):
                             "component_tag": bitbin.asint(8),
                             "utc_splice_time": bitbin.asint(32),
                         }
-                if self.duration_flag:
-                    self.break_duration(bitbin)
+                if self.duration_flag: self.break_duration(bitbin)
                 self.unique_program_id = bitbin.asint(16)
                 self.avail_num = bitbin.asint(8)
                 self.avails_expected = bitbin.asint(8)
@@ -86,10 +85,8 @@ class Splice_Insert(Splice_Command):
                 self.components = []
                 for i in range(0, self.component_count):
                     self.components[i] = bitbin.asint(8)
-                if not self.splice_immediate_flag:
-                    self.splice_time(bitbin)
-            if self.duration_flag:
-                self.parse_break(bitbin)
+                if not self.splice_immediate_flag: self.splice_time(bitbin)
+            if self.duration_flag: self.parse_break(bitbin)
             self.unique_program_id = bitbin.asint(16)
             self.avail_num = bitbin.asint(8)
             self.avail_expected = bitbin.asint(8)
