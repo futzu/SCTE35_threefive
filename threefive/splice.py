@@ -10,8 +10,6 @@ class Splice:
     '''
     The threefive.Splice class handles parsing
     SCTE 35 message strings.
-    The data may come as a mpegts packet payload,
-    a hex encoded string, or base64 encoded string.
     '''
     # map of known descriptors and associated classes
     descriptor_map = {0: dscprs.Avail_Descriptor,
