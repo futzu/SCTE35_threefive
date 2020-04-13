@@ -1,4 +1,5 @@
 # threefive
+- [x] Special Easter Release  ``` A Bitwise Bunny for Bobo (2.0.59)``` Now Available!
 
 ## SCTE35 Decoder
 *  Parse SCTE 35 messages from Mpeg Transport Streams and Binary files. 
@@ -33,7 +34,7 @@ pip install threefive
 Collecting threefive
   Downloading threefive-2.0.35-py3-none-any.whl (12 kB)
 Collecting bitn>=0.0.15
-  Downloading bitn-0.0.15-py3-none-any.whl (3.0 kB)
+  Downloading bitn-0.0.15-py3-none-any.whl (3.0 
 Installing collected packages: bitn, threefive
 Successfully installed bitn-0.0.15 threefive-2.0.35
 
