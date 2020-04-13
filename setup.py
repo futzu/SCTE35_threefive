@@ -8,7 +8,7 @@ setuptools.setup(
     version="2.0.61",
     author="fu-corp",
     author_email="spam@futzu.com",
-    description="Threefive, The SCTE 35 Decoder" 
+    description="Threefive,A SCTE 35 Decoder" 
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/threefive",
