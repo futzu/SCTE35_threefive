@@ -1,12 +1,14 @@
 from base64 import b64decode
 from bitn import BitBin
-from threefive import (splice_commands as spcmd,
-    descriptors as dscprs, splice_info_section as spinfo)
+from threefive import (
+    descriptors as dscprs,
+    splice_info_section as spinfo,
+    splice_commands as spcmd)
 
 
 class Splice:
     '''
-    the threefive.Splice class handles parsing
+    The threefive.Splice class handles parsing
     SCTE 35 message strings.
     The data may come as a mpegts packet payload,
     a hex encoded string, or base64 encoded string.
@@ -64,34 +66,28 @@ class Splice:
 
     def mkbits(self, s):
         '''
-        trim, decode, and sanitize
-        SCTE 35 messages so
-        they can be passed into an
-        instance of bitn.BitBin 
+        Trim, decode, and sanitize
+        SCTE 35 message strings.
         '''
-        if s[:2].lower() == '0x':
-            s = s[2:]
-        if s[:2].lower() == 'fc':
-            return bytes.fromhex(s)
-        try:
-            return b64decode(s)
-        except:
-            return s
+        if s[:2].lower() == '0x': s = s[2:]
+        if s[:2].lower() == 'fc': return bytes.fromhex(s)
+        try: return b64decode(s)
+        except: return s
 
     def set_splice_command(self):
         '''
-        splice commands looked up in self.command_map
+        Splice Commands looked up in self.command_map
         '''
         sct = self.info_section.splice_command_type
         if sct not in self.command_map.keys():
-            raise ValueError('unknown splice command type')
+            raise ValueError('Unknown Splice Command Type')
             return False
         self.command = self.command_map[sct]()
         self.command.decode(self.bitbin)
 
     def set_splice_descriptor(self):
         '''
-        splice descriptors looked up in self.descriptor_map
+        Splice Descriptors looked up in self.descriptor_map
         '''
         # splice_descriptor_tag 8 uimsbf
         tag = self.bitbin.asint(8)

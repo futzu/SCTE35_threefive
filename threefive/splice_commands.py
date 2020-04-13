@@ -99,11 +99,9 @@ class Time_Signal(Splice_Command):
     """
     Table 10 - time_signal()
     """
-    def __init__(self):
+    def decode(self, bitbin):
         self.time_specified_flag = None
         self.pts_time = None
-
-    def decode(self, bitbin):
         self.name = "Time Signal"
         self.splice_time(bitbin)
 
@@ -120,10 +118,6 @@ class Private_Command(Splice_Command):
     """
     Table 12 - private_command()
     """
-    def __init__(self):
-        self.identifier = None
-
     def decode(self, bitbin):
         self.name = "Private Command"
         self.identifier = bitbin.asint(32)
-        return False
