@@ -1,5 +1,7 @@
 from base64 import b64decode
 from bitn import BitBin
+import json
+import pprint
 from threefive import (
     descriptors as dscprs,
     splice_info_section as spinfo,
@@ -26,8 +28,10 @@ class Splice:
                    7: spcmd.Bandwidth_Reservation,
                    255: spcmd.Private_Command}
 
-    def __init__(self, mesg):
+    def __init__(self, mesg,pid=False,pts=False):
         mesg = self.mkbits(mesg)
+        if pid: self.pid = pid
+        if pts: self.pts = pts
         self.infobb= BitBin(mesg[:14])
         self.bitbin=BitBin(mesg[14:])
         self.descriptors = []
@@ -64,8 +68,7 @@ class Splice:
 
     def mkbits(self, s):
         '''
-        Trim, decode, and sanitize
-        SCTE 35 message strings.
+        Convert Hex and Base64 strings into bytes.
         '''
         if s[:2].lower() == '0x': s = s[2:]
         if s[:2].lower() == 'fc': return bytes.fromhex(s)
@@ -95,24 +98,30 @@ class Splice:
 
     def show_info_section(self):
         if self.info_section:
-            self.sectionstart('Splice Info Section')
-            self.kvprint(self.info_section)
+            return vars(self.info_section)
         else: return False
 
     def show_command(self):
         if self.command:
-            self.sectionstart('Splice Command')
-            self.kvprint(self.command)
+            return vars(self.info_section)
         else: return False
 
     def show_descriptors(self):
+        dlist =[]
         if len(self.descriptors) > 0:
             for d in self.descriptors:
-                idx = self.descriptors.index(d)
-                self.sectionstart(f'Splice Descriptor [ {idx} ]')
-                self.kvprint(d)
+                dlist.append(vars(d))
+        return dlist
 
     def show(self):
-        self.show_info_section()
-        self.show_command()
-        self.show_descriptors()
+        jason ={}
+        jason['Info_Section'] = self.show_info_section()
+        jason['Splice_Command']= self.show_command()
+        jason['Splice_Descriptors'] = self.show_descriptors()
+        if self.pid or self.pts:
+            packet = {}
+            if self.pid: packet['pid'] = hex(self.pid)
+            if self.pts: packet['pts'] = f'{self.pts:0.6f}'
+            jason['Stream_Packet_Data'] = packet
+            
+        pprint.pprint(jason)

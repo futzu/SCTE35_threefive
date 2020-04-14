@@ -75,9 +75,10 @@ class Stream:
         #  Only show splice_null commands if self.show_null is True
         if not self.show_null:
             if packet[17] == 0: return
-        try: tf = Splice(packet[4:])
-        except: return
-        print(f'PID \033[92m{hex(pid)}\033[0m SCTE 35 Packet @ \033[92m{self.PTS:.06f}\033[0m')
+        try: tf = Splice(packet[4:],pid=pid, pts=self.PTS)
+        except: return 
+        
+        #print(f'PID \033[92m{hex(pid)}\033[0m SCTE 35 Packet @ \033[92m{self.PTS:.06f}\033[0m')
         tf.show()
         if not self.SCTE35_PID: self.SCTE35_PID = pid
         return
