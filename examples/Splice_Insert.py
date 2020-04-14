@@ -13,15 +13,11 @@ Base64 = "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
 Using Hex
 """
 htf = threefive.Splice(Hex)
-htf.show_info_section()
-htf.show_command()
-htf.show_descriptors()
+htf.show()
 
 """
 Using Base64 auto
 (output should be the same as above)
 """
 btf = threefive.Splice(Base64)
-btf.show_info_section()
-btf.show_command()
-btf.show_descriptors()
+btf.show()

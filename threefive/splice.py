@@ -63,9 +63,6 @@ class Splice:
     def kvprint(self, obj):
         print(vars(obj))
 
-    def sectionstart(self, section_name):
-        print(f'{section_name}')
-
     def mkbits(self, s):
         '''
         Convert Hex and Base64 strings into bytes.
@@ -96,16 +93,6 @@ class Splice:
             return self.descriptor_map[tag](self.bitbin, tag)
         else: return False
 
-    def show_info_section(self):
-        if self.info_section:
-            return vars(self.info_section)
-        else: return False
-
-    def show_command(self):
-        if self.command:
-            return vars(self.info_section)
-        else: return False
-
     def show_descriptors(self):
         dlist =[]
         if len(self.descriptors) > 0:
@@ -114,14 +101,14 @@ class Splice:
         return dlist
 
     def show(self):
-        jason ={}
-        jason['Info_Section'] = self.show_info_section()
-        jason['Splice_Command']= self.show_command()
-        jason['Splice_Descriptors'] = self.show_descriptors()
+        scte35 = {'SCTE35' :{'Info_Section' : vars(self.info_section),
+                               'Splice_Command': vars(self.command),
+                                'Splice_Descriptors': self.show_descriptors()
+                              }
+                  }
         if self.pid or self.pts:
             packet = {}
             if self.pid: packet['pid'] = hex(self.pid)
             if self.pts: packet['pts'] = f'{self.pts:0.6f}'
-            jason['Stream_Packet_Data'] = packet
-            
-        pprint.pprint(jason)
+            scte35['Packet'] = packet  
+        pprint.pprint(scte35,width=40,indent=4)

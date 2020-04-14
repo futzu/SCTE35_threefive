@@ -34,7 +34,7 @@ class Stream:
             packets= [chunky[i:i+self.PACKET_SIZE] for i in range(0, len(chunky), self.PACKET_SIZE)]
             if not packets: break
             [self.parse_tspacket(packet) for packet in packets]
-        print(f'End @ \033[92m{self.PTS:.06f}\033[0m')           
+       # print(f'End @ \033[92m{self.PTS:.06f}\033[0m')           
       
     def parse_pusi(self, packet):
         bitbin = BitBin(packet)  # bitn.BitBin see https://github.com/futzu/bitn
@@ -52,7 +52,7 @@ class Stream:
         bitbin.forward(1)          
         c = bitbin.asint(15)        # read 15 bits as unsigned int
         d = (a+b+c)/90000.0         
-        if not self.PTS: print(f'Start @ \033[92m{d:.06f}\033[0m')
+        # if not self.PTS: print(f'Start @ \033[92m{d:.06f}\033[0m')
         self.PTS=d
         return
 
