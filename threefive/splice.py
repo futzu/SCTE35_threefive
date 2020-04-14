@@ -30,8 +30,8 @@ class Splice:
 
     def __init__(self, mesg,pid=False,pts=False):
         mesg = self.mkbits(mesg)
-        if pid: self.pid = pid
-        if pts: self.pts = pts
+        self.pid = pid
+        self.pts = pts
         self.infobb= BitBin(mesg[:14])
         self.bitbin=BitBin(mesg[14:])
         self.descriptors = []
