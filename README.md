@@ -87,7 +87,7 @@ Successfully installed bitn-0.0.21 threefive-2.0.69
 - [x] SCTE 35 Command
 - [x] SCTE 35 Descriptors
 
-```python
+```js
 {   'SCTE35': {   'Info_Section': {   'crc': '0x62dba30a',
                                       'cw_index': '0xff',
                                       'descriptor_loop_length': 10,
@@ -135,7 +135,7 @@ Successfully installed bitn-0.0.21 threefive-2.0.69
 
 
 ```js
-}
+
 {   'Packet': {   'pid': '0x135',
                   'pts': '89977.249522'},
     'SCTE35': {   'Info_Section': {   'crc': '0x6e33321e',
