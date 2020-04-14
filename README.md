@@ -31,51 +31,51 @@
 ```
 pip install threefive
 Collecting threefive
-  Downloading threefive-2.0.35-py3-none-any.whl (12 kB)
-Collecting bitn>=0.0.15
-  Downloading bitn-0.0.15-py3-none-any.whl (3.0 
+  Downloading threefive-2.0.69-py3-none-any.whl (12 kB)
+Collecting bitn>=0.0.21
+  Downloading bitn-0.0.21-py3-none-any.whl (3.0 kB)
 Installing collected packages: bitn, threefive
-Successfully installed bitn-0.0.15 threefive-2.0.35
+Successfully installed bitn-0.0.21 threefive-2.0.69
 
 ```
 
 ##  Using threefive  
 #### Call threefive.decode.
 
-- [x] mpegts files
+- [x]  mpegts files
 - [x]  binary files
 - [x]  base64 encoded strings
 - [x]  hex encoded strings
 - [x]  binary byte strings
  
 
- ####  Parse mpegts files 
+ ####  Parse Mpegts Files 
 ```python
 >>> import threefive
 >>> threefive.decode('/path/to/mpegwithscte35.ts') 
 ```
 
-####  Parse binary encoded messages from a file
+####  Parse Binary Encoded Messages From a File
 ```python
 >>> import threefive
 >>> stuff=threefive.decode('/mnt/build/file.bin')
 ```
 
-####  Parse base64 encoded messages 
+####  Parse Base64 Encoded Messages 
 ```python
 >>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUg/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
 >>> t=threefive.decode(mesg)
 ```
 
-####  Parse hex encoded messages 
+####  Parse Hex Encoded Messages 
 
 ```python
 >>> import threefive
 >>> u=threefive.decode('0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A')
 ```
 
-#### Parse binary byte string messages
+#### Parse Binary Byte String Messages
 ```python
 >>> import threefive
 >>> f=open('/mnt/build/file.bin','rb').read()
@@ -83,7 +83,10 @@ Successfully installed bitn-0.0.15 threefive-2.0.35
 ```
 
 ### Output for Base64 and Hex Strings
-- SCTE 35 data
+- [x] SCTE 35 Info Section
+- [x] SCTE 35 Command
+- [x] SCTE 35 Descriptors
+
 ```python
 {   'SCTE35': {   'Info_Section': {   'crc': '0x62dba30a',
                                       'cw_index': '0xff',
@@ -124,8 +127,12 @@ Successfully installed bitn-0.0.15 threefive-2.0.35
 
 ```
 ### Output for Mpegts streams and Files
-- SCTE 35 Message data
-- Packet Pid and PTS
+- [x] Packet Pid
+- [x] Packet PTS
+- [x] SCTE 35 Info Section
+- [x] SCTE 35 Command
+- [x] SCTE 35 Descriptors
+
 
 ```js
 }
