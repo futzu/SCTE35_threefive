@@ -1,6 +1,7 @@
 # threefive
 
-## Full disclosure statement: 
+
+### Head's Up.
 ### I Gonzo'ed the pip builds 2.0.63 and 2.0.65, please update to 2.0.69. 
 
 ## SCTE35 Decoder
