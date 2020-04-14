@@ -1,5 +1,4 @@
 # threefive
-- [x] Special Easter Release  ``` A Bitwise Bunny for Bobo (2.0.59)``` Now Available!
 
 ## SCTE35 Decoder
 *  Parse SCTE 35 messages from Mpeg Transport Streams and Binary files. 
@@ -83,180 +82,93 @@ Successfully installed bitn-0.0.15 threefive-2.0.35
 >>> scte35=threefive.decode(f)
 ```
 
-### Output looks like this
+### Output for Base64 and Hex Strings
+- SCTE 35 data
 ```python
-[SCTE 35 Message]
+{   'SCTE35': {   'Info_Section': {   'crc': '0x62dba30a',
+                                      'cw_index': '0xff',
+                                      'descriptor_loop_length': 10,
+                                      'encrypted_packet': False,
+                                      'encryption_algorithm': 0,
+                                      'private': False,
+                                      'protocol_version': 0,
+                                      'pts_adjustment': '0.000000',
+                                      'reserved': 3,
+                                      'section_length': 47,
+                                      'section_syntax_indicator': False,
+                                      'splice_command_length': 20,
+                                      'splice_command_type': 5,
+                                      'table_id': '0xfc',
+                                      'tier': '0xfff'},
+                  'Splice_Command': {   'avail_expected': 0,
+                                        'avail_num': 0,
+                                        'break_auto_return': True,
+                                        'break_duration': '60.293567',
+                                        'duration_flag': True,
+                                        'name': 'Splice '
+                                                'Insert',
+                                        'out_of_network_indicator': True,
+                                        'program_splice_flag': True,
+                                        'pts_time': '21514.559089',
+                                        'splice_event_cancel_indicator': False,
+                                        'splice_event_id': 1207959695,
+                                        'splice_immediate_flag': False,
+                                        'time_specified_flag': True,
+                                        'unique_program_id': 0},
+                  'Splice_Descriptors': [   {   'descriptor_length': 8,
+                                                'identifier': 'CUEI',
+                                                'name': 'Avail '
+                                                        'Descriptor',
+                                                'provider_avail_id': 309,
+                                                'splice_descriptor_tag': 0}]}}
 
- Splice Info Section:
-table_id :0xfc  section_syntax_indicator :False  private :False  reserved :3  section_length :47  protocol_version :0  encrypted_packet :False  encryption_algorithm :0  pts_adjustment :0.000000  cw_index :0x0  tier :0xfff  splice_command_length :4095  splice_command_type :5  descriptor_loop_length :10  crc :0x10fa4d9e 
-
- Splice Command:
-splice_type :5  name :Splice Insert  splice_event_id :662  splice_event_cancel_indicator :False  out_of_network_indicator :True  program_splice_flag :True  duration_flag :True  splice_immediate_flag :False  time_specified_flag :True  pts_time :89742.161689  break_auto_return :False  break_duration :242.000000  unique_program_id :1  avail_num :0  avail_expected :0 
-
- Splice Descriptor 0:
-name :Avail Descriptor  splice_descriptor_tag :0  descriptor_length :8  identifier :CUEI  provider_avail_id :0 
-
-[  SCTE 35 Stream found with Pid 0x135  ]
 ```
-### Output for Mpegts streams and files
+### Output for Mpegts streams and Files
+- SCTE 35 Message data
+- Packet Pid and PTS
+
 ```js
-PTS 89730.290 
-
-[SCTE 35 Message]
-Splice Info Section
-{"table_id": "0xfc", "section_syntax_indicator": false, "private": false, "reserved": 3, "section_length": 47, "protocol_version": 0, "encrypted_packet": false, "encryption_algorithm": 0, "pts_adjustment": "0.000000", "cw_index": "0x0", "tier": "0xfff", "splice_command_length": 4095, "splice_command_type": 5, "descriptor_loop_length": 10, "crc": "0x10fa4d9e"}
-Splice Command
-{"name": "Splice Insert", "splice_event_id": 662, "splice_event_cancel_indicator": false, "out_of_network_indicator": true, "program_splice_flag": true, "duration_flag": true, "splice_immediate_flag": false, "time_specified_flag": true, "pts_time": "89742.161689", "break_auto_return": false, "break_duration": "242.000000", "unique_program_id": 1, "avail_num": 0, "avail_expected": 0}
-Splice Descriptor 0
-{"name": "Avail Descriptor", "splice_descriptor_tag": 0, "descriptor_length": 8, "identifier": "CUEI", "provider_avail_id": 0}
-
-PTS 89730.290 
-
-[SCTE 35 Message]
-Splice Info Section
-{"table_id": "0xfc", "section_syntax_indicator": false, "private": false, "reserved": 3, "section_length": 47, "protocol_version": 0, "encrypted_packet": false, "encryption_algorithm": 0, "pts_adjustment": "0.000000", "cw_index": "0x0", "tier": "0xfff", "splice_command_length": 4095, "splice_command_type": 5, "descriptor_loop_length": 10, "crc": "0x10fa4d9e"}
-Splice Command
-{"name": "Splice Insert", "splice_event_id": 662, "splice_event_cancel_indicator": false, "out_of_network_indicator": true, "program_splice_flag": true, "duration_flag": true, "splice_immediate_flag": false, "time_specified_flag": true, "pts_time": "89742.161689", "break_auto_return": false, "break_duration": "242.000000", "unique_program_id": 1, "avail_num": 0, "avail_expected": 0}
-Splice Descriptor 0
-{"name": "Avail Descriptor", "splice_descriptor_tag": 0, "descriptor_length": 8, "identifier": "CUEI", "provider_avail_id": 0}
-
-PTS 89977.250 
-
-[SCTE 35 Message]
-Splice Info Section
-{"table_id": "0xfc", "section_syntax_indicator": false, "private": false, "reserved": 3, "section_length": 42, "protocol_version": 0, "encrypted_packet": false, "encryption_algorithm": 0, "pts_adjustment": "0.000000", "cw_index": "0x0", "tier": "0xfff", "splice_command_length": 4095, "splice_command_type": 5, "descriptor_loop_length": 10, "crc": "0x6e33321e"}
-Splice Command
-{"name": "Splice Insert", "splice_event_id": 662, "splice_event_cancel_indicator": false, "out_of_network_indicator": false, "program_splice_flag": true, "duration_flag": false, "splice_immediate_flag": false, "time_specified_flag": true, "pts_time": "89984.161689", "unique_program_id": 1, "avail_num": 0, "avail_expected": 0}
-Splice Descriptor 0
-{"name": "Avail Descriptor", "splice_descriptor_tag": 0, "descriptor_length": 8, "identifier": "CUEI", "provider_avail_id": 0}
-
-PTS 90042.338 
-
-[SCTE 35 Message]
-Splice Info Section
-{"table_id": "0xfc", "section_syntax_indicator": false, "private": false, "reserved": 3, "section_length": 78, "protocol_version": 0, "encrypted_packet": false, "encryption_algorithm": 0, "pts_adjustment": "0.000000", "cw_index": "0x0", "tier": "0xfff", "splice_command_length": 5, "splice_command_type": 6, "descriptor_loop_length": 60, "crc": "0x54590000"}
-Splice Command
-{"name": "Time Signal", "time_specified_flag": true, "pts_time": "0.555556"}
-Splice Descriptor 0
-{"name": "Segmentation Descriptor", "splice_descriptor_tag": 2, "descriptor_length": 58, "identifier": "CUEI", "segmentation_event_id": "0x3", "segmentation_event_cancel_indicator": false, "program_segmentation_flag": true, "segmentation_duration_flag": true, "delivery_not_restricted_flag": true, "segmentation_duration": "0.000178", "segmentation_upid_type": 12, "segmentation_type_id": 38, "segmentation_message": "Closing Credit Start", "segment_num": 76, "segments_expected": 66}
-```
-
-
-
-##  Splice Methods
-####  threefive.Splice.show_info_section() 
-```python
->>> import threefive
->>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
->>> splice=threefive.Splice(mesg)
->>> splice.show_info_section()
-
-[ Splice Info Section ]
-table_id : 0xfc
-section_syntax_indicator : False
-private : False
-reserved : 3
-section_length : 97
-protocol_version : 0
-encrypted_packet : False
-encryption_algorithm : 0
-pts_adjustment : 0
-cw_index : 0xff
-tier : 0xfff
-splice_command_length : 5
-splice_command_type : 6
-descriptor_loop_length : 75
-
-```
-####  threefive.Splice.show_command() 
-```python
->>> import threefive
->>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
->>> splice=threefive.Splice(mesg)
->>> splice.show_command()
-
-[ Splice Command ]
-splice_type : 6
-name : Time Signal
-time_specified_flag : True
-pts_time : 31466.942367
+}
+{   'Packet': {   'pid': '0x135',
+                  'pts': '89977.249522'},
+    'SCTE35': {   'Info_Section': {   'crc': '0x6e33321e',
+                                      'cw_index': '0x0',
+                                      'descriptor_loop_length': 10,
+                                      'encrypted_packet': False,
+                                      'encryption_algorithm': 0,
+                                      'private': False,
+                                      'protocol_version': 0,
+                                      'pts_adjustment': '0.000000',
+                                      'reserved': 3,
+                                      'section_length': 42,
+                                      'section_syntax_indicator': False,
+                                      'splice_command_length': 4095,
+                                      'splice_command_type': 5,
+                                      'table_id': '0xfc',
+                                      'tier': '0xfff'},
+                  'Splice_Command': {   'avail_expected': 0,
+                                        'avail_num': 0,
+                                        'duration_flag': False,
+                                        'name': 'Splice '
+                                                'Insert',
+                                        'out_of_network_indicator': False,
+                                        'program_splice_flag': True,
+                                        'pts_time': '89984.161689',
+                                        'splice_event_cancel_indicator': False,
+                                        'splice_event_id': 662,
+                                        'splice_immediate_flag': False,
+                                        'time_specified_flag': True,
+                                        'unique_program_id': 1},
+                  'Splice_Descriptors': [   {   'descriptor_length': 8,
+                                                'identifier': 'CUEI',
+                                                'name': 'Avail '
+                                                        'Descriptor',
+                                                'provider_avail_id': 0,
+                                                'splice_descriptor_tag': 0}]}}
 
 ```
 
-####  threefive.Splice.show_descriptors()
-##### Multiple splice descriptors per splice command are supported. 
-```python
->>> import threefive
->>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
->>> stuff=threefive.Splice(mesg)
->>> stuff.show_descriptors()
 
-[ Splice Descriptor  0  ]
-name : Segmentation Descriptor
-splice_descriptor_tag : 2
-descriptor_length : 23
-identifier : CUEI
-segmentation_event_id : 0x480000ad
-segmentation_event_cancel_indicator : False
-program_segmentation_flag : True
-segmentation_duration_flag : False
-delivery_not_restricted_flag : False
-web_delivery_allowed_flag : True
-no_regional_blackout_flag : True
-archive_allowed_flag : True
-device_restrictions : 0x3
-segmentation_upid_type : 8
-segmentation_upid_length : 8
-turner_identifier : 0x000000002cb2d79d
-segmentation_type_id : 53
-segmentation_type : Provider Placement Opportunity End
-segment_num : 2
-segments_expected : 0
-
-[ Splice Descriptor  1  ]
-name : Segmentation Descriptor
-splice_descriptor_tag : 2
-descriptor_length : 23
-identifier : CUEI
-segmentation_event_id : 0x48000026
-segmentation_event_cancel_indicator : False
-program_segmentation_flag : True
-segmentation_duration_flag : False
-delivery_not_restricted_flag : False
-web_delivery_allowed_flag : True
-no_regional_blackout_flag : True
-archive_allowed_flag : True
-device_restrictions : 0x3
-segmentation_upid_type : 8
-segmentation_upid_length : 8
-turner_identifier : 0x000000002cb2d79d
-segmentation_type_id : 17
-segmentation_type : Program End
-segment_num : 0
-segments_expected : 0
-
-[ Splice Descriptor  2  ]
-name : Segmentation Descriptor
-splice_descriptor_tag : 2
-descriptor_length : 23
-identifier : CUEI
-segmentation_event_id : 0x48000027
-segmentation_event_cancel_indicator : False
-program_segmentation_flag : True
-segmentation_duration_flag : False
-delivery_not_restricted_flag : False
-web_delivery_allowed_flag : True
-no_regional_blackout_flag : True
-archive_allowed_flag : True
-device_restrictions : 0x3
-segmentation_upid_type : 8
-segmentation_upid_length : 8
-turner_identifier : 0x000000002cb2d7b3
-segmentation_type_id : 16
-segmentation_type : Program Start
-segment_num : 0
-segments_expected : 0
-```
 
 ###  threefive.Splice.show() 
 #### Shows all data
