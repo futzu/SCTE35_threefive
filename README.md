@@ -1,7 +1,7 @@
 # threefive
 
-## Full disclosure statement: I Gonzo'ed the pip builds 2.0.63 and 2.0.65, please update to 2.0.69. 
-## I apologize for my mistakes.
+## Full disclosure statement: 
+### I Gonzo'ed the pip builds 2.0.63 and 2.0.65, please update to 2.0.69.I apologize for my mistakes.
 
 ## SCTE35 Decoder
 *  Parse SCTE 35 messages from Mpeg Transport Streams and Binary files. 
