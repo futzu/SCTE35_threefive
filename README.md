@@ -25,8 +25,9 @@
 - [x]  Audio Descriptor (lightly tested)
 
 ###  Dependencies 
-* Python 3
-* bitn
+- [x] Python 3
+- [x] bitn
+
 ##  Install 
 ```
 pip install threefive
