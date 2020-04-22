@@ -109,6 +109,6 @@ class Splice:
         if self.pid or self.pts:
             packet = {}
             if self.pid: packet['pid'] = hex(self.pid)
-            if self.pts: packet['pts'] = f'{self.pts:0.6f}'
+            if self.pts: packet['pts'] = self.pts
             scte35['Packet'] = packet  
         pprint.pprint(scte35,width=40,indent=4)

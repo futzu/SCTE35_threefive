@@ -53,7 +53,7 @@ class Stream:
         c = bitbin.asint(15)        # read 15 bits as unsigned int
         d = (a+b+c)/90000.0         
         # if not self.PTS: print(f'Start @ \033[92m{d:.06f}\033[0m')
-        self.PTS=d
+        self.PTS=round(d,6)
         return
 
     def parse_tspacket(self, packet):
