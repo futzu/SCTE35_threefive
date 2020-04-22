@@ -91,10 +91,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
             else:
                 self.segment_num = bitbin.asint(8)
                 self.segments_expected = bitbin.asint(8)
-            if self.segmentation_type_id in [0x34, 0x36]:
-                self.sub_segment_num = bitbin.asint(8)
-                self.sub_segments_expected = bitbin.asint(8)
-
+                
 
 class Time_Descriptor(Splice_Descriptor):
     """
