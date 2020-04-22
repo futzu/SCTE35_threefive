@@ -5,7 +5,6 @@ from .stream import Stream
 
 def read_stdin():
     scte35 = None
-    print(f'\n Reading from stdin')
     try:
         scte35 = Stream(tsstream=sys.stdin.buffer, show_null=False)
     except BaseException:
@@ -21,7 +20,6 @@ def read_stuff(stuff):
         scte35.show()
     except BaseException:
         try:
-            print(f'\nfile: {stuff}')
             scte35 = Stream(tsfile=stuff, show_null=False)
         except BaseException:
             pass
