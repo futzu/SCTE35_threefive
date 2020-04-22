@@ -111,4 +111,4 @@ class Splice:
             if self.pid: packet['pid'] = hex(self.pid)
             if self.pts: packet['pts'] = self.pts
             scte35['Packet'] = packet  
-        pprint.pprint(scte35,width=40,indent=4)
+        pprint.pprint(scte35,width=30,indent=2)
