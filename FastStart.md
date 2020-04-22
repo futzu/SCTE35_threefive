@@ -29,9 +29,6 @@ pip install threefive
 * Ouput looks like this.
 ```js
 
- Reading from stdin
-
-
 { 'Packet': { 'pid': '0x135',
               'pts': 89730.289522},
   'SCTE35': { 'Info_Section': { 'crc': '0x10fa4d9e',
