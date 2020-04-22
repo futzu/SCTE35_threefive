@@ -93,17 +93,27 @@ class Splice:
             return self.descriptor_map[tag](self.bitbin, tag)
         else: return False
 
-    def show_descriptors(self):
+    def list_descriptors(self):
         dlist =[]
         if len(self.descriptors) > 0:
             for d in self.descriptors:
                 dlist.append(vars(d))
         return dlist
 
+    def show_descriptors(self):
+        dlist=self.list_descriptors()
+        pprint.pprint(dlist,width=30,indent=2)
+         
+    def show_command(self):
+        pprint.pprint(vars(self.command),width=30,indent=2)
+
+    def show_info_section(self):
+        pprint.pprint(vars(self.info_section),width=30,indent=2)
+
     def show(self):
         scte35 = {'SCTE35' :{'Info_Section' : vars(self.info_section),
                                'Splice_Command': vars(self.command),
-                                'Splice_Descriptors': self.show_descriptors()
+                                'Splice_Descriptors': self.list_descriptors()
                               }
                   }
         if self.pid or self.pts:
