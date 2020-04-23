@@ -61,7 +61,7 @@ class Splice:
             dll -= bit_move
 
     def kvprint(self, obj):
-        print(vars(obj))
+        pprint.pprint(obj,width=30,indent=2)
 
     def mkbits(self, s):
         '''
@@ -93,17 +93,36 @@ class Splice:
             return self.descriptor_map[tag](self.bitbin, tag)
         else: return False
 
-    def show_descriptors(self):
+    def list_descriptors(self):
         dlist =[]
         if len(self.descriptors) > 0:
             for d in self.descriptors:
                 dlist.append(vars(d))
         return dlist
 
+    def show_descriptors(self):
+        scte35 = {'SCTE35' :{
+                             'Splice_Descriptors': self.list_descriptors()
+                              }
+                  }
+        self.kvprint(scte35)
+
+    def show_command(self):
+        scte35 = {'SCTE35' :{
+                             'Splice_Command': vars(self.command)
+                              }          }
+        self.kvprint(scte35)
+        
+    def show_info_section(self):
+        scte35 = {'SCTE35' :{
+                             'Info_Section' : vars(self.info_section)
+                              }          }
+        self.kvprint(scte35)
+
     def show(self):
         scte35 = {'SCTE35' :{'Info_Section' : vars(self.info_section),
                                'Splice_Command': vars(self.command),
-                                'Splice_Descriptors': self.show_descriptors()
+                                'Splice_Descriptors': self.list_descriptors()
                               }
                   }
         if self.pid or self.pts:
@@ -111,4 +130,4 @@ class Splice:
             if self.pid: packet['pid'] = hex(self.pid)
             if self.pts: packet['pts'] = self.pts
             scte35['Packet'] = packet  
-        pprint.pprint(scte35,width=30,indent=2)
+        self.kvprint(scte35)

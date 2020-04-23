@@ -37,7 +37,8 @@ with open(sys.argv[1],'r') as manifest:
             t=l.split(":")[1].split(',')[0]
             t=float(t)
             hls_time+=t
-            print(f' hls time: {hls_time}')
+            next_segment=manifest.readline()[:-1]
+            print(f'Segment:  {next_segment} @ {hls_time}')
         if l.startswith('#EXT-X-SCTE35'): 
             cue=l.split('CUE=')[1]
             do(cue)
