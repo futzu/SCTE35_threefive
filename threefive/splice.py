@@ -94,11 +94,7 @@ class Splice:
         else: return False
 
     def list_descriptors(self):
-        dlist =[]
-        if len(self.descriptors) > 0:
-            for d in self.descriptors:
-                dlist.append(vars(d))
-        return dlist
+        return [vars(d) for d in self.descriptors]
 
     def show_descriptors(self):
         scte35 = {'SCTE35' :{
