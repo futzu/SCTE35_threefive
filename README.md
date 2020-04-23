@@ -82,8 +82,7 @@ Successfully installed bitn-0.0.21 threefive-2.0.69
 #### Parse Binary Byte String Messages
 ```python
 >>> import threefive
->>> f=open('/mnt/build/file.bin','rb').read()
->>> scte35=threefive.decode(f)
+>>> scte35=threefive.decode('/path/to/some_file.bin')
 ```
 
 ### Output for Base64 and Hex Strings
