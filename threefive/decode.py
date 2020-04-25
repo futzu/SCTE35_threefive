@@ -20,7 +20,7 @@ def read_stuff(stuff):
         scte35.show()
     except BaseException:
         try:
-            scte35 = Stream(tsfile=stuff, show_null=False)
+            scte35 = Stream(tsfile=stuff)
         except BaseException:
             pass
     return scte35
