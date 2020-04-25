@@ -50,13 +50,13 @@ class Splice:
         self.info_section.descriptor_loop_length = self.bitbin.asint(16)
         dll = self.info_section.descriptor_loop_length
         tag_plus_header_size = 1  # 1 byte for descriptor_tag, 1 byte for header?
-        while dll > 1:
+        while dll > 4:
             try:
                 sd = self.set_splice_descriptor()
                 sdl = sd.descriptor_length
                 self.descriptors.append(sd)
             except:
-                sdl = 0
+                break
             bit_move = sdl + tag_plus_header_size
             dll -= bit_move
 
