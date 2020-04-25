@@ -97,30 +97,25 @@ class Splice:
         return [vars(d) for d in self.descriptors]
 
     def show_descriptors(self):
-        scte35 = {'SCTE35' :{
-                             'Splice_Descriptors': self.list_descriptors()
-                              }
-                  }
+        scte35 = {'SCTE35' :
+                    {'Splice_Descriptors': self.list_descriptors()} }
         self.kvprint(scte35)
 
     def show_command(self):
-        scte35 = {'SCTE35' :{
-                             'Splice_Command': vars(self.command)
-                              }          }
+        scte35 = {'SCTE35' :
+                    {'Splice_Command': vars(self.command)} }
         self.kvprint(scte35)
         
     def show_info_section(self):
-        scte35 = {'SCTE35' :{
-                             'Info_Section' : vars(self.info_section)
-                              }          }
+        scte35 = {'SCTE35' :
+                    {'Info_Section' : vars(self.info_section)} }
         self.kvprint(scte35)
 
     def show(self):
-        scte35 = {'SCTE35' :{'Info_Section' : vars(self.info_section),
-                               'Splice_Command': vars(self.command),
-                                'Splice_Descriptors': self.list_descriptors()
-                              }
-                  }
+        scte35 = {'SCTE35' :
+                    {'Info_Section' : vars(self.info_section),
+                    'Splice_Command': vars(self.command),
+                    'Splice_Descriptors': self.list_descriptors()} }
         if self.pid or self.pts:
             packet = {}
             if self.pid: packet['pid'] = hex(self.pid)

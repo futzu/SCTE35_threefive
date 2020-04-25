@@ -1,17 +1,18 @@
 from .splice import Splice
 from bitn import BitBin
 
+
 class Stream:
     '''
     Parse mpegts files and streams for SCTE 35 packets
     '''
     PACKET_SIZE = 188
-    PACKET_COUNT = 256
+    PACKET_COUNT = 512
     SYNC_BYTE = 0x47
     NON_PTS_STREAM_IDS = [188, 190, 191, 240, 241, 242, 248]
     SCTE35_TID = 0xfc
 
-    def __init__(self, tsfile = None, tsstream = None, show_null = True):
+    def __init__(self, tsfile = None, tsstream = None, show_null = False):
         self.SCTE35_PID = False
         self.PTS= False
         self.show_null = show_null
@@ -34,7 +35,7 @@ class Stream:
             chunky = tsdata.read(self.PACKET_SIZE * self.PACKET_COUNT)
             if not chunky: break
             [self.parse_tspacket(chunky[i:i+self.PACKET_SIZE] )
-             for i in range(0, len(chunky), self.PACKET_SIZE)]
+                     for i in range(0, len(chunky), self.PACKET_SIZE)]
         return
     
     def verify_pusi(self,bitbin):
@@ -69,7 +70,7 @@ class Stream:
         return
     
     def parse_pusi(self, packet):
-        bitbin = BitBin(packet)  # bitn.BitBin see https://github.com/futzu/bitn
+        bitbin = BitBin(packet)
         self.verify_pusi(bitbin)
         return
 
@@ -79,9 +80,8 @@ class Stream:
         is equal to self.SYNC_BYTE,
         
         '''
-        if first_byte != self.SYNC_BYTE: return False
-        return True
-
+        return (first_byte == self.SYNC_BYTE)
+    
     def next_two_bytes(self,two_bytes):
         '''
         returns the second and third
@@ -91,7 +91,6 @@ class Stream:
         
     def packet_has_pusi(self,two_bytes):
         pusi = two_bytes >> 14 & 0x1
-        if not pusi: return False
         return pusi
             
     def the_packet_pid(self,two_bytes):
@@ -121,7 +120,6 @@ class Stream:
         parse a mpegts packet for SCTE 35 and/or PTS
         '''
         if not self.has_sync_byte(packet[0]):return
-
         two_bytes=self.next_two_bytes(packet[1:3])
         pid = self.the_packet_pid(two_bytes)
         # No PTS times in pid 101
@@ -129,7 +127,6 @@ class Stream:
         if self.packet_has_pusi(two_bytes): self.parse_pusi(packet[4:20])
         if not self.has_scte35_tid(packet[5]) : return   
         if self.SCTE35_PID and (pid != self.SCTE35_PID): return
-        #  Only show splice_null commands if self.show_null is True
         if not self.show_null:
             if packet[18] == 0: return
         if not self.try_splice(packet[5:],pid): return
