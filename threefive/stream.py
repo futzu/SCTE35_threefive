@@ -125,7 +125,7 @@ class Stream:
         # No PTS times in pid 101
         if pid == 101: return
         if self.packet_has_pusi(two_bytes): self.parse_pusi(packet[4:20])
-        if not self.has_scte35_tid(packet[5]) : return   
+        if not self.has_scte35_tid(packet[5]) : return  
         if self.SCTE35_PID and (pid != self.SCTE35_PID): return
         if not self.show_null:
             if packet[18] == 0: return

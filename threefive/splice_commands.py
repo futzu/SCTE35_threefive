@@ -6,6 +6,9 @@ class Splice_Command:
     def __init__(self):
         pass
 
+    def __repr__(self):
+        return str(vars(self))
+
     def decode(self, bitn):
         pass
 

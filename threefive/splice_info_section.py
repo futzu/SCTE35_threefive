@@ -1,7 +1,10 @@
 class Splice_Info_Section:
     def __init__(self):
          pass
-        
+
+    def __repr__(self):
+        return str(vars(self))
+
     def decode(self, bitbin):
         self.table_id = bitbin.ashex(8)
         self.section_syntax_indicator = bitbin.asflag(1)
@@ -19,3 +22,7 @@ class Splice_Info_Section:
         self.splice_command_length = bitbin.asint(12)
         self.splice_command_type = bitbin.asint(8)
         self.descriptor_loop_length = False
+
+    def get(self):
+        return vars(self)
+     

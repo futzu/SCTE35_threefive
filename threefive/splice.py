@@ -39,7 +39,13 @@ class Splice:
         self.command = None
         self.do()
 
+    def __repr__(self):
+        return f'{self.info_section}\n{self.command}\n{self.descriptors}\n'
+
     def do(self):
+        '''
+        called by __init__ to parse SCTE 35 data
+        '''
         self.info_section = spinfo.Splice_Info_Section()
         self.info_section.decode(self.infobb)
         self.set_splice_command()
@@ -47,9 +53,12 @@ class Splice:
         self.info_section.crc = self.bitbin.ashex(32)
 
     def descriptorloop(self):
+        '''
+        parses all splice descriptors
+        '''
         self.info_section.descriptor_loop_length = self.bitbin.asint(16)
         dll = self.info_section.descriptor_loop_length
-        tag_plus_header_size = 1  # 1 byte for descriptor_tag, 1 byte for header?
+        d_tag = 1  # 1 byte for descriptor_tag
         while dll > 4:
             try:
                 sd = self.set_splice_descriptor()
@@ -57,11 +66,57 @@ class Splice:
                 self.descriptors.append(sd)
             except:
                 break
-            bit_move = sdl + tag_plus_header_size
+            bit_move = sdl + d_tag
             dll -= bit_move
+
+    def get(self,obj=False):
+        '''
+        returns obj as dict. if obj is False,
+        Returns a dict of dicts for all three parts
+        of a SCTE 35 message.
+        '''
+        if not obj:
+            scte35 = {'Info_Section' : vars(self.info_section),
+                    'Splice_Command': vars(self.command),
+                    'Splice_Descriptors': self.list_descriptors()}
+            if self.pid or self.pts:
+                packet = {}
+                if self.pid: packet['pid'] = hex(self.pid)
+                if self.pts: packet['pts'] = self.pts
+                scte35['Packet'] = packet
+        else:
+            scte35 = vars(obj)
+        return scte35    
+
+    def get_command(self):
+        '''
+        returns the SCTE 35
+        splice command data as a dict.
+        '''  
+        return self.get(self.command)
+
+    def get_descriptors(self):
+        '''
+        Returns a list of SCTE 35
+        splice descriptors as dicts.
+        '''
+        return self.list_descriptors()
+     
+    def get_info_section(self):
+        '''
+        Returns SCTE 35
+        splice info section as a dict
+        '''
+        return self.get(self.info_section)
 
     def kvprint(self, obj):
         pprint.pprint(obj,width=30,indent=2)
+
+    def list_descriptors(self):
+        '''
+        returns SCTE 35 splice descriptors in list
+        '''
+        return [vars(d) for d in self.descriptors]
 
     def mkbits(self, s):
         '''
@@ -93,32 +148,26 @@ class Splice:
             return self.descriptor_map[tag](self.bitbin, tag)
         else: return False
 
-    def list_descriptors(self):
-        return [vars(d) for d in self.descriptors]
-
-    def show_descriptors(self):
-        scte35 = {'SCTE35' :
-                    {'Splice_Descriptors': self.list_descriptors()} }
-        self.kvprint(scte35)
+    def show(self):
+        '''
+        pretty prints the SCTE 35 message
+        '''    
+        self.kvprint(self.get())
 
     def show_command(self):
-        scte35 = {'SCTE35' :
-                    {'Splice_Command': vars(self.command)} }
-        self.kvprint(scte35)
+        '''
+        pretty prints SCTE 35 splice command
+        '''
+        self.kvprint(self.get_command())
         
-    def show_info_section(self):
-        scte35 = {'SCTE35' :
-                    {'Info_Section' : vars(self.info_section)} }
-        self.kvprint(scte35)
+    def show_descriptors(self):
+        '''
+        pretty prints SCTE 35 splice descriptors
+        '''
+        self.kvprint(self.get_descriptors())
 
-    def show(self):
-        scte35 = {'SCTE35' :
-                    {'Info_Section' : vars(self.info_section),
-                    'Splice_Command': vars(self.command),
-                    'Splice_Descriptors': self.list_descriptors()} }
-        if self.pid or self.pts:
-            packet = {}
-            if self.pid: packet['pid'] = hex(self.pid)
-            if self.pts: packet['pts'] = self.pts
-            scte35['Packet'] = packet  
-        self.kvprint(scte35)
+    def show_info_section(self):
+        '''
+        pretty prints SCTE 35 splice info section
+        '''
+        self.kvprint(self.get_info_section)
