@@ -1,8 +1,4 @@
 # threefive
-
-#### I welcome all feedback and ideas. 
-
-
 ## SCTE35 Decoder
 *  Parse SCTE 35 messages from Mpeg Transport Streams and Binary files. 
 *  Parse SCTE 35 messages encoded in Base64, Binary, or Hex. 
@@ -10,9 +6,6 @@
 ### Fast Start Directions.
 *  ['Up and Running in Less Than Seven Seconds'](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
-
-### 2019 Specification 
-[SCTE35 2019 specification](https://scte-cms-resource-storage.s3.amazonaws.com/ANSI_SCTE-35-2019a-1582645390859.pdf)
 ###  Splice Commands 
 - [x] Splice Null  
 - [x] Splice Schedule  (lightly tested)
@@ -226,27 +219,43 @@ Successfully installed bitn-0.0.21 threefive-2.0.69
 
 
 
-###  threefive.Splice.show() 
-#### Shows all data
-```python
->>> import threefive                
->>> mesg='/DBIAAAAAAAA///wBQb+ky44CwAyAhdDVUVJSAAACn+fCAgAAAAALKCh4xgAAAIX
-Q1VFSUgAAAl/nwgIAAAAACygoYoRAAC0IX6w')
->>> fu=threefive.Splice(mesg)
->>> fu.show()
-```
+###  Using threefive.Splice
 
-###  Read individual values 
 ```python
->>> import threefive
->>> mesg='/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo='
->>> scte_data=threefive.Splice(mesg)
->>> scte_data.command.name    
-'Splice Insert'
->>> scte_data.command.splice_immediate_flag
-False
->>> scte_data.command.pts_time
-'21514.559089'
->>> scte_data.command.break_duration
-'60.293567'
+
+a@fuhq:~/SCTE35-threefive$ python3
+Python 3.8.2 (default, Apr  1 2020, 15:52:55) 
+[GCC 9.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from threefive import Splice
+>>> Base64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAABl/nwgIAAAAACyk26AQAACZcuND"
+>>> 
+>>> scte35 = Splice(Base64)
+````
+#### Show all data
+```python
+>>> scte35.show()
+
+```
+#### Return a dict of the SCTE 35 message.
+```python
+>>> scte35.get()
+```
+#### Show the splice command.
+```python
+>>> scte35.show_command()
+
+{ 'name': 'Time Signal',
+  'pts_time': 22798.906911,
+  'time_specified_flag': True}
+```
+#### Return a dict of the splice command.
+```python
+>>> scte35.get_command()
+{'time_specified_flag': True, 'pts_time': 22798.906911, 'name': 'Time Signal'}
+```
+#### Return the splice command pts_time.
+```
+>>> scte35.command.pts_time
+22798.906911
 ```
