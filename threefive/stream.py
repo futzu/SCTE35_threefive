@@ -124,11 +124,12 @@ class Stream:
         pid = self.the_packet_pid(two_bytes)
         # No PTS times in pid 101
         if pid == 101: return
-        if self.packet_has_pusi(two_bytes): self.parse_pusi(packet[4:20])
-        if not self.has_scte35_tid(packet[5]) : return  
-        if self.SCTE35_PID and (pid != self.SCTE35_PID): return
-        if not self.show_null:
-            if packet[18] == 0: return
-        if not self.try_splice(packet[5:],pid): return
-        if not self.SCTE35_PID: self.SCTE35_PID = pid
+        if self.packet_has_pusi(two_bytes):
+            self.parse_pusi(packet[4:20])
+        if self.has_scte35_tid(packet[5]) :
+            if self.SCTE35_PID and (pid != self.SCTE35_PID): return
+            if not self.show_null:
+                if packet[18] == 0: return
+            if not self.try_splice(packet[5:],pid): return
+            if not self.SCTE35_PID: self.SCTE35_PID = pid
         return

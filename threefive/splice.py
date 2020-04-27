@@ -40,7 +40,7 @@ class Splice:
         self.do()
 
     def __repr__(self):
-        return f'{self.info_section}\n{self.command}\n{self.descriptors}\n'
+        return str(self.get())
 
     def do(self):
         '''
@@ -170,4 +170,4 @@ class Splice:
         '''
         pretty prints SCTE 35 splice info section
         '''
-        self.kvprint(self.get_info_section)
+        self.kvprint(self.get_info_section())
