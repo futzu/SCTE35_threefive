@@ -44,21 +44,21 @@ import threefive
 ```
 - [x]  mpegts files
 ```python
-    threefive.decode('/path/to/mpegwithscte35.ts') 
+threefive.decode('/path/to/mpegwithscte35.ts') 
 ```
 - [x]  binary files
 ```python
-    threefive.decode('/mnt/build/file.bin')
+threefive.decode('/mnt/build/file.bin')
 ```
 - [x]  base64 encoded strings
 ```python
-    mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUg/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
-    threefive.decode(mesg)
+mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUg/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
+threefive.decode(mesg)
 ```
 - [x]  hex encoded strings
 ```python
-    hexed='0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A'
-    threefive.decode(hexed)
+hexed='0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A'
+threefive.decode(hexed)
 ```
 
 ### Output for Base64 and Hex Strings
@@ -120,7 +120,6 @@ import threefive
 *  SCTE 35 Command
 *  SCTE 35 Descriptors
 
-
 ```js
 { 'Packet': { 'pid': '0x135',
               'pts': 89730.289522},
@@ -128,7 +127,7 @@ import threefive
                                 'cw_index': '0x0',
                                 'descriptor_loop_length': 10,
                                 'encrypted_packet': False,
-                                'encryption_algorithm': 0,
+\                                'encryption_algorithm': 0,
                                 'private': False,
                                 'protocol_version': 0,
                                 'pts_adjustment': 0.0,
@@ -160,44 +159,8 @@ import threefive
                                                 'Descriptor',
                                         'provider_avail_id': 0,
                                         'splice_descriptor_tag': 0}]}}
-{ 'Packet': { 'pid': '0x135',
-              'pts': 89977.249522},
-  'SCTE35': { 'Info_Section': { 'crc': '0x6e33321e',
-                                'cw_index': '0x0',
-                                'descriptor_loop_length': 10,
-                                'encrypted_packet': False,
-                                'encryption_algorithm': 0,
-                                'private': False,
-                                'protocol_version': 0,
-                                'pts_adjustment': 0.0,
-                                'reserved': 3,
-                                'section_length': 42,
-                                'section_syntax_indicator': False,
-                                'splice_command_length': 4095,
-                                'splice_command_type': 5,
-                                'table_id': '0xfc',
-                                'tier': '0xfff'},
-              'Splice_Command': { 'avail_expected': 0,
-                                  'avail_num': 0,
-                                  'duration_flag': False,
-                                  'name': 'Splice '
-                                          'Insert',
-                                  'out_of_network_indicator': False,
-                                  'program_splice_flag': True,
-                                  'pts_time': 89984.161689,
-                                  'splice_event_cancel_indicator': False,
-                                  'splice_event_id': 662,
-                                  'splice_immediate_flag': False,
-                                  'time_specified_flag': True,
-                                  'unique_program_id': 1},
-              'Splice_Descriptors': [ { 'descriptor_length': 8,
-                                        'identifier': 'CUEI',
-                                        'name': 'Avail '
-                                                'Descriptor',
-                                        'provider_avail_id': 0,
-                                        'splice_descriptor_tag': 0}]}}
-```
 
+```
 
 ###  Using threefive.Splice
 
@@ -207,42 +170,42 @@ threefive.Splice provides several methods to access the parsed data.
 
 ```python
 
-    from threefive import Splice
+from threefive import Splice
 
-    b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAABl/nwgIAAAAACyk26AQAACZcuND"
+b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAABl/nwgIAAAAACyk26AQAACZcuND"
 
-    scte35 = Splice(b64)
+scte35 = Splice(b64)
 
 ````
+- [x] Pretty print the SCTE 35 message data.
+```python
+scte35.show()
+```
 - [x] Return all message data in a dict.
 ```python
-    scte35.get()
+scte35.get()
+```
+- [x] Pretty print SCTE 35 splice info section.
+```python
+scte35.show_info_section()
+```
+- [x] Return SCTE 35 splice info section as a dict.
+```python
+scte35.get_info_section()
+```        
+- [x] Pretty print SCTE 35 splice command.
+```python
+scte35.show_command()
 ```
 - [x] Return the SCTE 35 splice command data as a dict.
 ```python
-    scte35.get_command()
-```        
-- [x]  Return a list of SCTE 35 splice descriptors as dicts.
+scte35.get_command()
+```     
+- [x] Pretty print SCTE 35 splice descriptors.
 ```python
-    scte35.get_descriptors()
-```      
-- [x] Return SCTE 35 splice info section as a dict 
-```python
-    scte35.get_info_section()
-```        
-- [x] Pretty print the SCTE 35 message
-```python
-    scte35.show()
-```
-- [x] Pretty prints SCTE 35 splice command
-```python
-    scte35.show_command()
-```
-- [x] Pretty prints SCTE 35 splice descriptors
-```python
-    scte35.show_descriptors()
+scte35.show_descriptors()
 ```    
-- [x] Pretty prints SCTE 35 splice info section
+- [x] Return a list of SCTE 35 splice descriptors as dicts.
 ```python
-    scte35.show_info_section()
-```
+scte35.get_descriptors()
+```      
