@@ -39,9 +39,7 @@ Successfully installed bitn-0.0.21 threefive-2.0.69
 
 #### Call threefive.decode.
 
-- [x]  binary byte strings
- 
-```python
+ ```python
 import threefive
 ```
 - [x]  mpegts files
