@@ -67,7 +67,7 @@ threefive.decode(hexed)
 *  SCTE 35 Descriptors
 
 ```js
-{ 'SCTE35': { 'Info_Section': { 'crc': '0x9ac9d17e',
+ { 'Info_Section': { 'crc': '0x9ac9d17e',
                                 'cw_index': '0xff',
                                 'descriptor_loop_length': 30,
                                 'encrypted_packet': False,
@@ -110,7 +110,7 @@ threefive.decode(hexed)
                                         'segments_expected': 0,
                                         'splice_descriptor_tag': 2,
                                         'turner_identifier': '0x2ca0a18a',
-                                        'web_delivery_allowed_flag': False}]}}
+                                        'web_delivery_allowed_flag': False}]}
 
 ```
 ### Output for Mpegts streams and Files
@@ -121,44 +121,74 @@ threefive.decode(hexed)
 *  SCTE 35 Descriptors
 
 ```js
-{ 'Packet': { 'pid': '0x135',
-              'pts': 89730.289522},
-  'SCTE35': { 'Info_Section': { 'crc': '0x10fa4d9e',
-                                'cw_index': '0x0',
-                                'descriptor_loop_length': 10,
-                                'encrypted_packet': False,
-\                                'encryption_algorithm': 0,
-                                'private': False,
-                                'protocol_version': 0,
-                                'pts_adjustment': 0.0,
-                                'reserved': 3,
-                                'section_length': 47,
-                                'section_syntax_indicator': False,
-                                'splice_command_length': 4095,
-                                'splice_command_type': 5,
-                                'table_id': '0xfc',
-                                'tier': '0xfff'},
-              'Splice_Command': { 'avail_expected': 0,
-                                  'avail_num': 0,
-                                  'break_auto_return': False,
-                                  'break_duration': 242.0,
-                                  'duration_flag': True,
-                                  'name': 'Splice '
-                                          'Insert',
-                                  'out_of_network_indicator': True,
-                                  'program_splice_flag': True,
-                                  'pts_time': 89742.161689,
-                                  'splice_event_cancel_indicator': False,
-                                  'splice_event_id': 662,
-                                  'splice_immediate_flag': False,
-                                  'time_specified_flag': True,
-                                  'unique_program_id': 1},
-              'Splice_Descriptors': [ { 'descriptor_length': 8,
-                                        'identifier': 'CUEI',
-                                        'name': 'Avail '
-                                                'Descriptor',
-                                        'provider_avail_id': 0,
-                                        'splice_descriptor_tag': 0}]}}
+ )
+{ 'name': 'Time Signal',
+  'pts_time': 22798.906911,
+  'time_specified_flag': True}
+>>> scte35.show()
+{ 'Info_Section': { 'crc': '0x9972e343',
+                    'cw_index': '0xff',
+                    'descriptor_loop_length': 50,
+                    'encrypted_packet': False,
+                    'encryption_algorithm': 0,
+                    'private': False,
+                    'protocol_version': 0,
+                    'pts_adjustment': 0.0,
+                    'reserved': 3,
+                    'section_length': 72,
+                    'section_syntax_indicator': False,
+                    'splice_command_length': 5,
+                    'splice_command_type': 6,
+                    'table_id': '0xfc',
+                    'tier': '0xfff'},
+  'Splice_Command': { 'name': 'Time '
+                              'Signal',
+                      'pts_time': 22798.906911,
+                      'time_specified_flag': True},
+  'Splice_Descriptors': [ { 'archive_allowed_flag': True,
+                            'delivery_not_restricted_flag': False,
+                            'descriptor_length': 23,
+                            'device_restrictions': '0x3',
+                            'identifier': 'CUEI',
+                            'name': 'Segmentation '
+                                    'Descriptor',
+                            'no_regional_blackout_flag': True,
+                            'program_segmentation_flag': True,
+                            'segment_num': 0,
+                            'segmentation_duration_flag': False,
+                            'segmentation_event_cancel_indicator': False,
+                            'segmentation_event_id': '0x48000018',
+                            'segmentation_message': 'Program '
+                                                    'End',
+                            'segmentation_type_id': 17,
+                            'segmentation_upid_length': 8,
+                            'segmentation_upid_type': 8,
+                            'segments_expected': 0,
+                            'splice_descriptor_tag': 2,
+                            'turner_identifier': '0x2ccbc344',
+                            'web_delivery_allowed_flag': True},
+                          { 'archive_allowed_flag': True,
+                            'delivery_not_restricted_flag': False,
+                            'descriptor_length': 23,
+                            'device_restrictions': '0x3',
+                            'identifier': 'CUEI',
+                            'name': 'Segmentation '
+                                    'Descriptor',
+                            'no_regional_blackout_flag': True,
+                            'program_segmentation_flag': True,
+                            'segment_num': 0,
+                            'segmentation_duration_flag': False,
+                            'segmentation_event_cancel_indicator': False,
+                            'segmentation_event_id': '0x48000019',
+                            'segmentation_message': 'Program '
+                                                    'Start',
+                            'segmentation_type_id': 16,
+                            'segmentation_upid_length': 8,
+                            'segmentation_upid_type': 8,
+                            'segments_expected': 0,
+                            'splice_descriptor_tag': 2,
+                            'turner_identifier': '0x2ca4dba0',
+                            'web_delivery_allowed_flag': True}]}
 
 ```
 
@@ -193,7 +223,7 @@ scte35.show_info_section()
 ```python
 scte35.get_info_section()
 ```
-* Output
+*   
 ```python
 {'table_id': '0xfc', 'section_syntax_indicator': False, 'private': False, 'reserved': 3, 'section_length': 72, 'protocol_version': 0, 'encrypted_packet': False, 'encryption_algorithm': 0, 'pts_adjustment': 0.0, 'cw_index': '0xff', 'tier': '0xfff', 'splice_command_length': 5, 'splice_command_type': 6, 'descriptor_loop_length': 50, 'crc': '0x9972e343'}
 
@@ -202,7 +232,7 @@ scte35.get_info_section()
 ```python
 scte35.show_command()
 ```
-* Output
+* 
 ```python
 { 'name': 'Time Signal',
   'pts_time': 22798.906911,
