@@ -220,6 +220,8 @@ Successfully installed bitn-0.0.21 threefive-2.0.69
 
 
 ###  Using threefive.Splice
+The threefive.Splice class can be used to decode a SCTE35 message. 
+threefive.Splice provides several methods to access the parsed data.
 
 ```python
 
@@ -232,30 +234,33 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> 
 >>> scte35 = Splice(Base64)
 ````
-#### Show all data
-```python
->>> scte35.show()
-
-```
-#### Return a dict of the SCTE 35 message.
+- [x] Return all message data in a dict.
 ```python
 >>> scte35.get()
 ```
-#### Show the splice command.
+- [x] Return the SCTE 35 splice command data as a dict.
 ```python
->>> scte35.show_command()
-
-{ 'name': 'Time Signal',
-  'pts_time': 22798.906911,
-  'time_specified_flag': True}
-```
-#### Return a dict of the splice command.
+    scte35.get_command()
+```        
+- [x]  Return a list of SCTE 35 splice descriptors as dicts.
 ```python
->>> scte35.get_command()
-{'time_specified_flag': True, 'pts_time': 22798.906911, 'name': 'Time Signal'}
+    scte35.get_descriptors()
 ```
-#### Return the splice command pts_time.
-```
->>> scte35.command.pts_time
-22798.906911
-```
+        
+- [x] Return SCTE 35 splice info section as a dict 
+```python
+    scte35.get_info_section()
+```        
+    
+    show(self)
+- [x] Pretty print the SCTE 35 message
+    
+    show_command(self)
+- [x] Pretty prints SCTE 35 splice command
+    
+    show_descriptors(self)
+- [x] Pretty prints SCTE 35 splice descriptors
+    
+    show_info_section(self)
+- [x] Pretty prints SCTE 35 splice info section
+    
