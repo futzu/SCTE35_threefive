@@ -21,8 +21,8 @@
 - [x]  Audio Descriptor (lightly tested)
 
 ###  Dependencies 
-- [x] Python 3
-- [x] bitn
+*  Python 3
+*  bitn
 
 ##  Install 
 ```
@@ -36,36 +36,37 @@ Successfully installed bitn-0.0.21 threefive-2.0.69
 
 ```
 ##  Using threefive  
+
 #### Call threefive.decode.
 
 - [x]  binary byte strings
  
 ```python
->>> import threefive
+import threefive
 ```
 - [x]  mpegts files
 ```python
->>> threefive.decode('/path/to/mpegwithscte35.ts') 
+    threefive.decode('/path/to/mpegwithscte35.ts') 
 ```
 - [x]  binary files
 ```python
->>> threefive.decode('/mnt/build/file.bin')
+    threefive.decode('/mnt/build/file.bin')
 ```
 - [x]  base64 encoded strings
 ```python
->>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUg/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
->>> threefive.decode(mesg)
+    mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUg/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
+    threefive.decode(mesg)
 ```
 - [x]  hex encoded strings
 ```python
->>> hexed='0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A'
->>> threefive.decode(hexed)
+    hexed='0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A'
+    threefive.decode(hexed)
 ```
 
 ### Output for Base64 and Hex Strings
-- [x] SCTE 35 Info Section
-- [x] SCTE 35 Command
-- [x] SCTE 35 Descriptors
+*  SCTE 35 Info Section
+*  SCTE 35 Command
+*  SCTE 35 Descriptors
 
 ```js
 { 'SCTE35': { 'Info_Section': { 'crc': '0x9ac9d17e',
@@ -115,11 +116,11 @@ Successfully installed bitn-0.0.21 threefive-2.0.69
 
 ```
 ### Output for Mpegts streams and Files
-- [x] Packet Pid
-- [x] Packet PTS
-- [x] SCTE 35 Info Section
-- [x] SCTE 35 Command
-- [x] SCTE 35 Descriptors
+*  Packet Pid
+*  Packet PTS
+*  SCTE 35 Info Section
+*  SCTE 35 Command
+*  SCTE 35 Descriptors
 
 
 ```js
@@ -197,30 +198,27 @@ Successfully installed bitn-0.0.21 threefive-2.0.69
                                                 'Descriptor',
                                         'provider_avail_id': 0,
                                         'splice_descriptor_tag': 0}]}}
-
-
 ```
 
 
-
 ###  Using threefive.Splice
+
 The threefive.Splice class can be used to decode a SCTE35 message. 
+
 threefive.Splice provides several methods to access the parsed data.
 
 ```python
 
-a@fuhq:~/SCTE35-threefive$ python3
-Python 3.8.2 (default, Apr  1 2020, 15:52:55) 
-[GCC 9.3.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>> from threefive import Splice
->>> Base64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAABl/nwgIAAAAACyk26AQAACZcuND"
->>> 
->>> scte35 = Splice(Base64)
+    from threefive import Splice
+
+    b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAABl/nwgIAAAAACyk26AQAACZcuND"
+
+    scte35 = Splice(b64)
+
 ````
 - [x] Return all message data in a dict.
 ```python
->>> scte35.get()
+    scte35.get()
 ```
 - [x] Return the SCTE 35 splice command data as a dict.
 ```python
@@ -228,25 +226,25 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```        
 - [x]  Return a list of SCTE 35 splice descriptors as dicts.
 ```python
-  scte35.get_descriptors()
+    scte35.get_descriptors()
 ```      
 - [x] Return SCTE 35 splice info section as a dict 
 ```python
-  scte35.get_info_section()
+    scte35.get_info_section()
 ```        
 - [x] Pretty print the SCTE 35 message
 ```python
-  scte35.show()
+    scte35.show()
 ```
 - [x] Pretty prints SCTE 35 splice command
 ```python
-  scte35.show_command()
+    scte35.show_command()
 ```
 - [x] Pretty prints SCTE 35 splice descriptors
 ```python
-  scte35.show_descriptors()
+    scte35.show_descriptors()
 ```    
 - [x] Pretty prints SCTE 35 splice info section
 ```python
-   scte35.show_info_section()
+    scte35.show_info_section()
 ```
