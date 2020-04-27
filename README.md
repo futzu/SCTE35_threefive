@@ -35,47 +35,31 @@ Installing collected packages: bitn, threefive
 Successfully installed bitn-0.0.21 threefive-2.0.69
 
 ```
-
 ##  Using threefive  
 #### Call threefive.decode.
 
-- [x]  mpegts files
-- [x]  binary files
-- [x]  base64 encoded strings
-- [x]  hex encoded strings
 - [x]  binary byte strings
  
-
- ####  Parse Mpegts Files 
 ```python
 >>> import threefive
+```
+- [x]  mpegts files
+```python
 >>> threefive.decode('/path/to/mpegwithscte35.ts') 
 ```
-
-####  Parse Binary Encoded Messages From a File
+- [x]  binary files
 ```python
->>> import threefive
->>> stuff=threefive.decode('/mnt/build/file.bin')
+>>> threefive.decode('/mnt/build/file.bin')
 ```
-
-####  Parse Base64 Encoded Messages 
+- [x]  base64 encoded strings
 ```python
->>> import threefive
 >>> mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUg/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
->>> t=threefive.decode(mesg)
+>>> threefive.decode(mesg)
 ```
-
-####  Parse Hex Encoded Messages 
-
+- [x]  hex encoded strings
 ```python
->>> import threefive
->>> u=threefive.decode('0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A')
-```
-
-#### Parse Binary Byte String Messages
-```python
->>> import threefive
->>> scte35=threefive.decode('/path/to/some_file.bin')
+>>> hexed='0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A'
+>>> threefive.decode(hexed)
 ```
 
 ### Output for Base64 and Hex Strings
@@ -244,23 +228,25 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```        
 - [x]  Return a list of SCTE 35 splice descriptors as dicts.
 ```python
-    scte35.get_descriptors()
-```
-        
+  scte35.get_descriptors()
+```      
 - [x] Return SCTE 35 splice info section as a dict 
 ```python
-    scte35.get_info_section()
+  scte35.get_info_section()
 ```        
-    
-    show(self)
 - [x] Pretty print the SCTE 35 message
-    
-    show_command(self)
+```python
+  scte35.show()
+```
 - [x] Pretty prints SCTE 35 splice command
-    
-    show_descriptors(self)
+```python
+  scte35.show_command()
+```
 - [x] Pretty prints SCTE 35 splice descriptors
-    
-    show_info_section(self)
+```python
+  scte35.show_descriptors()
+```    
 - [x] Pretty prints SCTE 35 splice info section
-    
+```python
+   scte35.show_info_section()
+```
