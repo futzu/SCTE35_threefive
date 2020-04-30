@@ -19,10 +19,11 @@ class Splice_Info_Section:
         self.pts_adjustment = bitbin.as90k(33)
         self.cw_index = bitbin.ashex(8)
         self.tier = bitbin.ashex(12)
+        if self.tier != '0xfff':
+            raise ValueError('splice_info_section.tier should be 0xfff')
         self.splice_command_length = bitbin.asint(12)
         self.splice_command_type = bitbin.asint(8)
         self.descriptor_loop_length = False
 
     def get(self):
         return vars(self)
-     
