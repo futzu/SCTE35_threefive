@@ -3,6 +3,11 @@
 *  Parse SCTE 35 messages from Mpeg Transport Streams and Binary files. 
 *  Parse SCTE 35 messages encoded in Base64, Binary, or Hex. 
 
+### How Fast is it?
+*  On an Intel i3 processor using a single core, 
+threefive can parse 800,000+ mpeg-ts packets 
+or about 150MB of video a second. 
+
 ### Fast Start Directions.
 *  ['Up and Running in Less Than Seven Seconds'](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
@@ -35,6 +40,7 @@ Installing collected packages: bitn, threefive
 Successfully installed bitn-0.0.21 threefive-2.0.69
 
 ```
+
 ##  Using threefive  
 
 #### Call threefive.decode.
