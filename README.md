@@ -209,18 +209,16 @@ scte35.show_info_section()
 ```python
 scte35.get_info_section()
 
-{'table_id': '0xfc', 'section_syntax_indicator': False, 'private': False, 'reserved': 3, 'section_length': 72, 'protocol_version': 0, 'encrypted_packet': False, 'encryption_algorithm': 0, 'pts_adjustment': 0.0, 'cw_index': '0xff', 'tier': '0xfff', 'splice_command_length': 5, 'splice_command_type': 6, 'descriptor_loop_length': 50, 'crc': '0x9972e343'}
-
 ```        
 - [x] Pretty print SCTE 35 splice command.
 ```python
+
 scte35.show_command()
-```
-* 
-```python
+
 { 'name': 'Time Signal',
   'pts_time': 22798.906911,
   'time_specified_flag': True}
+  
 ```
 - [x] Return the SCTE 35 splice command data as a dict.
 ```python
