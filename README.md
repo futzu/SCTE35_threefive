@@ -208,9 +208,7 @@ scte35.show_info_section()
 - [x] Return SCTE 35 splice info section as a dict.
 ```python
 scte35.get_info_section()
-```
-*   
-```js
+
 {'table_id': '0xfc', 'section_syntax_indicator': False, 'private': False, 'reserved': 3, 'section_length': 72, 'protocol_version': 0, 'encrypted_packet': False, 'encryption_algorithm': 0, 'pts_adjustment': 0.0, 'cw_index': '0xff', 'tier': '0xfff', 'splice_command_length': 5, 'splice_command_type': 6, 'descriptor_loop_length': 50, 'crc': '0x9972e343'}
 
 ```        
