@@ -4,7 +4,12 @@ from bitn import BitBin
 
 
 class StreamPlus(Stream):
-  
+    '''
+    Subclass of the Stream Class
+    that also parses the PTS
+    for the SCTE 35 packet.
+    '''
+    
     def verify_pusi(self,bitbin):
         '''
         If the pusi data contains these markers,
@@ -36,11 +41,15 @@ class StreamPlus(Stream):
         self.PTS=round(d,6)
         return
     
-    def parse_pusi(self, packet):
-        bitbin = BitBin(packet)
+    def parse_pusi(self, packetdata):
+        bitbin = BitBin(packetdata)
         self.verify_pusi(bitbin)
         return
+    
     def packet_has_pusi(self,two_bytes):
+        '''
+        check for pusi in header
+        '''
         pusi = two_bytes >> 14 & 0x1
         return pusi
 
