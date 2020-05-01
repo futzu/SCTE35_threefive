@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="threefive",
-    version="2.0.95",
+    version="2.0.97",
     author="fu-corp",
     author_email="spam@futzu.com",
-    description="A SCTE 35 Decoder for Mpeg-TS video, and Hex or Base64 messages", 
+    description="A SCTE 35 Decoder for Mpeg-TS video, and Base64 or Hex encoded messages", 
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/threefive",

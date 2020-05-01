@@ -80,12 +80,12 @@ class Stream:
         parse a mpegts packet for SCTE 35 and/or PTS
         '''
         if not self.has_sync_byte(packet[0]):return
-        if not self.has_scte35_tid(packet[5]) : return 
-        two_bytes=self.next_two_bytes(packet[1:3])
-        pid = self.the_packet_pid(two_bytes)
-        if self.SCTE35_PID and (pid != self.SCTE35_PID): return
-        if not self.show_null:
-            if packet[18] == 0: return
-        if not self.try_splice(packet[5:],pid): return
-        if not self.SCTE35_PID: self.SCTE35_PID = pid
+        if self.has_scte35_tid(packet[5]) : 
+            two_bytes=self.next_two_bytes(packet[1:3])
+            pid = self.the_packet_pid(two_bytes)
+            if self.SCTE35_PID and (pid != self.SCTE35_PID): return
+            if not self.show_null:
+                if packet[18] == 0: return
+            if not self.try_splice(packet[5:],pid): return
+            if not self.SCTE35_PID: self.SCTE35_PID = pid
         return
