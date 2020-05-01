@@ -12,6 +12,7 @@ Base64 = "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
 """
 Using Hex
 """
+print(f'parsing {Hex}') 
 htf = threefive.Splice(Hex)
 htf.show()
 
@@ -19,5 +20,6 @@ htf.show()
 Using Base64 auto
 (output should be the same as above)
 """
+print(f'parsing {Base64}')
 btf = threefive.Splice(Base64)
 btf.show()
