@@ -13,6 +13,7 @@
 * [The decode Function](#the-decode-function)
   * [MpegTS Files](#mpegts-files)
   * [Binary Files](#binary-files)
+  * ;Output for MpegTS and Binary Files and Streams](#output-for-mpegts-and-binary-files-and-streams)
   * [Base64 Encoded Strings](#base64-encoded-strings)
   * [Hex Encoded Strings](#hex-encoded-strings)
   * [Output for Base64 and Hex Strings](#output-for-base64-and-hex-strings)
@@ -70,6 +71,46 @@ threefive.decode('/path/to/mpegwithscte35.ts')
 #### Binary Files
 ```python
 threefive.decode('/mnt/build/file.bin')
+```
+#### Output for MpegTS and Binary Files and Streams
+```python3
+{ 'SCTE35': { 'Info_Section': { 'crc': '0x10fa4d9e',
+                                'cw_index': '0x0',
+                                'descriptor_loop_length': 10,
+                                'encrypted_packet': False,
+                                'encryption_algorithm': 0,
+                                'private': False,
+                                'protocol_version': 0,
+                                'pts_adjustment': 0.0,
+                                'reserved': '0x3',
+                                'section_length': 47,
+                                'section_syntax_indicator': False,
+                                'splice_command_length': 4095,
+                                'splice_command_type': 5,
+                                'table_id': '0xfc',
+                                'tier': '0xfff'},
+              'Packet': { 'pid': '0x135'},
+              'Splice_Command': { 'avail_expected': 0,
+                                  'avail_num': 0,
+                                  'break_auto_return': False,
+                                  'break_duration': 242.0,
+                                  'duration_flag': True,
+                                  'name': 'Splice '
+                                          'Insert',
+                                  'out_of_network_indicator': True,
+                                  'program_splice_flag': True,
+                                  'pts_time': 89742.161689,
+                                  'splice_event_cancel_indicator': False,
+                                  'splice_event_id': 662,
+                                  'splice_immediate_flag': False,
+                                  'time_specified_flag': True,
+                                  'unique_program_id': 1},
+              'Splice_Descriptors': [ { 'descriptor_length': 8,
+                                        'identifier': 'CUEI',
+                                        'name': 'Avail '
+                                                'Descriptor',
+                                        'provider_avail_id': 0,
+                                        'splice_descriptor_tag': 0}]}}
 ```
 ####  Base64 Encoded Strings
 ```python
