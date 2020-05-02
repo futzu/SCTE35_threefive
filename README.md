@@ -165,45 +165,6 @@ threefive.decode(hexed)
                                         'splice_descriptor_tag': 0}]}}
 
 
-Base64 = "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
-threefive.decode(Base64)
-
-{ 'SCTE35': { 'Info_Section': { 'crc': '0x62dba30a',
-                                'cw_index': '0xff',
-                                'descriptor_loop_length': 10,
-                                'encrypted_packet': False,
-                                'encryption_algorithm': 0,
-                                'private': False,
-                                'protocol_version': 0,
-                                'pts_adjustment': 0.0,
-                                'reserved': '0x3',
-                                'section_length': 47,
-                                'section_syntax_indicator': False,
-                                'splice_command_length': 20,
-                                'splice_command_type': 5,
-                                'table_id': '0xfc',
-                                'tier': '0xfff'},
-              'Splice_Command': { 'avail_expected': 0,
-                                  'avail_num': 0,
-                                  'break_auto_return': True,
-                                  'break_duration': 60.293567,
-                                  'duration_flag': True,
-                                  'name': 'Splice '
-                                          'Insert',
-                                  'out_of_network_indicator': True,
-                                  'program_splice_flag': True,
-                                  'pts_time': 21514.559089,
-                                  'splice_event_cancel_indicator': False,
-                                  'splice_event_id': 1207959695,
-                                  'splice_immediate_flag': False,
-                                  'time_specified_flag': True,
-                                  'unique_program_id': 0},
-              'Splice_Descriptors': [ { 'descriptor_length': 8,
-                                        'identifier': 'CUEI',
-                                        'name': 'Avail '
-                                                'Descriptor',
-                                        'provider_avail_id': 309,
-                                        'splice_descriptor_tag': 0}]}}
 
 ```
 
@@ -223,26 +184,28 @@ b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAA
 scte35 = Splice(b64)
 
 ````
-- [x] Pretty print the SCTE 35 message data.
+#### Pretty Print SCTE 35 Message
 ```python
 scte35.show()
 ```
-- [x] Return all message data in a dict.
+
+#### Return SCTE 35 Message
 ```python
 scte35.get()
 ```
-- [x] Pretty print SCTE 35 splice info section.
+
+#### Pretty Print Splice Info Section
 ```python
 scte35.show_info_section()
 ```
-- [x] Return SCTE 35 splice info section as a dict.
+
+#### Return Splice Info Section
 ```python
 scte35.get_info_section()
 
 ```        
-- [x] Pretty print SCTE 35 splice command.
+#### Pretty print Splice Command.
 ```python
-
 scte35.show_command()
 
 { 'name': 'Time Signal',
@@ -250,15 +213,20 @@ scte35.show_command()
   'time_specified_flag': True}
   
 ```
-- [x] Return the SCTE 35 splice command data as a dict.
+
+#### Return Splice Command
 ```python
 scte35.get_command()
-```     
-- [x] Pretty print SCTE 35 splice descriptors.
+
+``` 
+
+#### Pretty Print Splice Descriptors
 ```python
 scte35.show_descriptors()
+
 ```    
-- [x] Return a list of SCTE 35 splice descriptors as dicts.
+#### Return Splice Descriptors
 ```python
 scte35.get_descriptors()
+
 ```      
