@@ -86,6 +86,8 @@ python3  Splice_Insert.py
 
 ```python3
 
+python3 Time_Signal-Placement_Opportunity_Start.py 
+
 { 'SCTE35': { 'Info_Section': { 'crc': '0x9ac9d17e',
                                 'cw_index': '0xff',
                                 'descriptor_loop_length': 30,
