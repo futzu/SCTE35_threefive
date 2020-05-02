@@ -10,7 +10,7 @@
 * [Parsing SCTE 35 messages encoded in Base64, Binary, or Hex](#base64-encoded-strings)
 ---
 * [__Easy threefive__](#easy-threefive)
-  * [The decode Function](#the-decode-function)
+  * [The __decode__ Function](#the-decode-function)
     * [MpegTS Files](#mpegts-files)
     * [Binary Files](#binary-files)
     * [Output for MpegTS and Binary Files and Streams](#output-for-mpegts-and-binary-files-and-streams)
@@ -19,7 +19,7 @@
     * [Output for Base64 and Hex Strings](#output-for-base64-and-hex-strings)
 ---
 * [__Advanced threefive__](#advanced-threefive)
-  * [Using The Splice Class](#using-the-splice-class)
+  * [Using The __Splice Class__](#using-the-splice-class)
     * [Pretty Print SCTE 35 Message](#pretty-print-scte-35-message)
     * [Return SCTE 35 Message](#return-scte-35-message)
     * [Pretty Print Splice Info Section](#pretty-print-splice-info-section)
@@ -28,10 +28,10 @@
     * [Return Splice Command](#return-splice-command)
     * [Pretty Print Splice Descriptors](#pretty-print-splice-descriptors)
     * [Return Splice Descriptors](#return-splice-descriptors)  
-  * [Using The Stream Class](#using-the-stream-class)
+  * [Using The __Stream Class__](#using-the-stream-class)
     * [Parse a Local File with a Stream Instance](#parse-a-local-file-with-a-stream-instance)
     * [Pipe a Video to Stream](#pipe-a-video-to-stream)
-  * [Using The StreamPlus Class](#using-the-streamplus-class)
+  * [Using The __StreamPlus Class__](#using-the-streamplus-class)
     * [Parse a Local File with a StreamPlus Instance](#parse-a-local-file-with-a-streamplus-instance)
     * [Pipe a Video to StreamPlus](#pipe-a-video-to-streamplus)
 ---  
