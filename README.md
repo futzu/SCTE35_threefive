@@ -8,6 +8,7 @@
 threefive can parse 800,000+ mpeg-ts packets 
 or about 150MB of video a second. 
 * [Fast Start Directions](#fast-start-directions)
+* [Splice Commands](#splice-commands)
 * [Dependencies](#dependencies)
 * [Install](#install)
 * [Using threefive](#using-threefive)
