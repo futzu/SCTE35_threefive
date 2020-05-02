@@ -1,5 +1,6 @@
 # threefive
 ## SCTE35 Decoder
+---
 * [Supported Splice Commands](#splice-commands)
 * [Supported Splice Descriptors](#splice-descriptors)
 * [Fast Start Directions](#fast-start-directions)
@@ -7,7 +8,8 @@
 * [Install](#install)
 * [Parsing SCTE 35 messages from Mpeg Transport Streams and Binary files](#mpegts-files)
 * [Parsing SCTE 35 messages encoded in Base64, Binary, or Hex](#base64-encoded-strings)
-* [Using threefive](#using-threefive)
+---
+* [Easy threefive](#easy-threefive)
   * [The decode Function](#the-decode-function)
     * [MpegTS Files](#mpegts-files)
     * [Binary Files](#binary-files)
@@ -15,6 +17,8 @@
     * [Base64 Encoded Strings](#base64-encoded-strings)
     * [Hex Encoded Strings](#hex-encoded-strings)
     * [Output for Base64 and Hex Strings](#output-for-base64-and-hex-strings)
+---
+* [Advanced threefive](#advanced-threefive)
   * [Using The Splice Class](#using-the-splice-class)
     * [Pretty Print SCTE 35 Message](#pretty-print-scte-35-message)
     * [Return SCTE 35 Message](#return-scte-35-message)
@@ -26,14 +30,14 @@
     * [Return Splice Descriptors](#return-splice-descriptors)  
   * [Using The Stream Class](#using-the-stream-class)
   
-  
-###  Splice Commands 
+---  
+##  Splice Commands 
 - [x] Splice Null  
 - [x] Splice Schedule  (lightly tested)
 - [x] Splice Insert 
 - [x] Time Signal 
 - [x] Bandwidth Reservation  (lightly tested)
-###  Splice Descriptors 
+##  Splice Descriptors 
 - [x]  DTMF Descriptor 
 - [x]  Segmentation Descriptor
 - [x]  Segmentation UPID  (partially implemented)
@@ -43,11 +47,12 @@
 
 
 
-### Fast Start Directions.
+## Fast Start Directions.
+---
 *  ['Up and Running in Less Than Seven Seconds'](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
 
-###  Dependencies 
+##  Dependencies 
 *  Python 3
 *  bitn
 
@@ -63,8 +68,8 @@ Successfully installed bitn-0.0.21 threefive-2.0.69
 
 ```
 
-##  Using threefive  
-
+##  Easy threefive  
+---
 ### The decode Function
 
  ```python
@@ -174,8 +179,9 @@ threefive.decode(hexed)
 
 ```
 
-
-##  Using The Splice Class
+## Advanced threefive
+---
+###  Using The Splice Class
 
 The threefive.Splice class can be used to decode a SCTE35 message. 
 
