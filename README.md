@@ -3,11 +3,6 @@
 *  Parse SCTE 35 messages from Mpeg Transport Streams and Binary files. 
 *  Parse SCTE 35 messages encoded in Base64, Binary, or Hex. 
 
-### How Fast is it?
-*  On an Intel i3 processor using a single core, 
-threefive can parse 800,000+ mpeg-ts packets 
-or about 150MB of video a second. 
-
 * [Fast Start Directions](#fast-start-directions)
 * [Splice Commands](#splice-commands)
 * [Splice Descriptors](#splice-descriptors)
