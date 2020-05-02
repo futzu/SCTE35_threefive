@@ -73,7 +73,7 @@ class Stream:
         try:
             tf = Splice(payload,pid=pid)
             tf.show()
-            return True
+            return tf
         except:
             return False
         
@@ -92,4 +92,5 @@ class Stream:
             if tf:
                 if not self.SCTE35_PID:
                     self.SCTE35_PID = pid
+            tf = False
             return

@@ -84,4 +84,5 @@ class StreamPlus(Stream):
         if tf:
             if not self.SCTE35_PID:
                 self.SCTE35_PID = pid
+        tf = False
         return
