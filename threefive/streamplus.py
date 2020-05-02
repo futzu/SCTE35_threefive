@@ -9,7 +9,10 @@ class StreamPlus(Stream):
     that also parses the PTS
     for the SCTE 35 packet.
     '''
-    
+    def __init__(self, tsfile = None, tsstream = None, show_null = False):
+        super().__init__(tsfile, tsstream, show_null)
+        self.PTS= False
+
     def verify_pusi(self,bitbin):
         '''
         If the pusi data contains these markers,
@@ -53,7 +56,7 @@ class StreamPlus(Stream):
         pusi = two_bytes >> 14 & 0x1
         return pusi
 
-    def try_splice(self,payload,pid):
+    def parse_payload(self,payload,pid):
         try:
             tf = Splice(payload,pid=pid, pts=self.PTS)
             tf.show()
@@ -76,6 +79,6 @@ class StreamPlus(Stream):
         if self.SCTE35_PID and (pid != self.SCTE35_PID): return
         if not self.show_null:
             if packet[18] == 0: return
-        if not self.try_splice(packet[5:],pid): return
+        if not self.parse_payload(packet[5:],pid): return
         if not self.SCTE35_PID: self.SCTE35_PID = pid
         return

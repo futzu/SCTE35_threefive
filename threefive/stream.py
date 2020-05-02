@@ -14,7 +14,6 @@ class Stream:
 
     def __init__(self, tsfile = None, tsstream = None, show_null = False):
         self.SCTE35_PID = False
-        self.PTS= False
         self.show_null = show_null
         if tsfile: self.parse_tsfile(tsfile) # for files
         if tsstream: self.parse_tsdata(tsstream) # for reading from stdin
@@ -67,7 +66,11 @@ class Stream:
         '''
         return (byte5 == self.SCTE35_TID)
 
-    def try_splice(self,payload,pid):
+    def parse_payload(self,payload,pid):
+        '''
+        If you want to customize output,
+        subclass Stream and change this method.
+        '''
         try:
             tf = Splice(payload,pid=pid)
             tf.show()
@@ -86,6 +89,6 @@ class Stream:
             if self.SCTE35_PID and (pid != self.SCTE35_PID): return
             if not self.show_null:
                 if packet[18] == 0: return
-            if not self.try_splice(packet[5:],pid): return
+            if not self.parse_payload(packet[5:],pid): return
             if not self.SCTE35_PID: self.SCTE35_PID = pid
         return

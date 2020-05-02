@@ -76,14 +76,14 @@ class Splice:
         of a SCTE 35 message.
         '''
         if not obj:
-            scte35 = {'Info_Section' : vars(self.info_section),
+            scte35 = {'SCTE35':{'Info_Section' : vars(self.info_section),
                     'Splice_Command': vars(self.command),
-                    'Splice_Descriptors': self.list_descriptors()}
+                    'Splice_Descriptors': self.list_descriptors()}}
             if self.pid or self.pts:
                 packet = {}
                 if self.pid: packet['pid'] = hex(self.pid)
                 if self.pts: packet['pts'] = self.pts
-                scte35['Packet'] = packet
+                scte35['SCTE35']['Packet'] = packet
         else:
             scte35 = vars(obj)
         return scte35    
@@ -93,21 +93,21 @@ class Splice:
         returns the SCTE 35
         splice command data as a dict.
         '''  
-        return self.get(self.command)
-
+        return {'SCTE35':{'Splice_Command': self.get(self.command)}}
+    
     def get_descriptors(self):
         '''
         Returns a list of SCTE 35
         splice descriptors as dicts.
         '''
-        return self.list_descriptors()
+        return {'SCTE35':{'Splice_Descriptors': self.list_descriptors()}}
      
     def get_info_section(self):
         '''
         Returns SCTE 35
         splice info section as a dict
         '''
-        return self.get(self.info_section)
+        return {'SCTE35':{'Info_Section':self.get(self.info_section)}}
 
     def kvprint(self, obj):
         pprint.pprint(obj,width=30,indent=2)
