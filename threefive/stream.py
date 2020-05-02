@@ -80,7 +80,7 @@ class Stream:
         
     def parse_tspacket(self, packet):
         '''
-        parse a mpegts packet for SCTE 35 and/or PTS
+        parse an mpegts packet for SCTE 35 messages
         '''
         if not self.has_sync_byte(packet[0]):return
         if self.has_scte35_tid(packet[5]) : 
