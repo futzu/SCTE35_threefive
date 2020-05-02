@@ -9,6 +9,9 @@ threefive can parse 800,000+ mpeg-ts packets
 or about 150MB of video a second. 
 * [Fast Start Directions](#fast-start-directions)
 * [Dependencies](#dependencies)
+* [Install](#install)
+* [threefive.decode](#threefive.decode)
+
 ### Fast Start Directions.
 *  ['Up and Running in Less Than Seven Seconds'](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
@@ -44,7 +47,7 @@ Successfully installed bitn-0.0.21 threefive-2.0.69
 
 ##  Using threefive  
 
-#### Call threefive.decode.
+#### threefive.decode.
 
  ```python
 import threefive
