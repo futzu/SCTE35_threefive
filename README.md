@@ -60,7 +60,7 @@ Successfully installed bitn-0.0.21 threefive-2.0.69
  ```python
 import threefive
 ```
-- [x]  MpegTS Files
+#### MpegTS Files
 ```python
 threefive.decode('/path/to/mpegwithscte35.ts') 
 ```
