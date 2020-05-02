@@ -1,6 +1,6 @@
 # threefive
 ## SCTE35 Decoder
-*  Parse SCTE 35 messages from Mpeg Transport Streams and Binary files. 
+* [Parse SCTE 35 messages from Mpeg Transport Streams and Binary files](#mpegts-files)
 *  Parse SCTE 35 messages encoded in Base64, Binary, or Hex. 
 
 
