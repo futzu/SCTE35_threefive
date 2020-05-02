@@ -127,13 +127,6 @@ threefive.decode(hexed)
 
 ```python3
 
-import threefive
-
-Hex = "0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A"
-
-threefive.decode(Hex)
-
-
 { 'SCTE35': { 'Info_Section': { 'crc': '0x62dba30a',
                                 'cw_index': '0xff',
                                 'descriptor_loop_length': 10,
