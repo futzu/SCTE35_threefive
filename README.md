@@ -7,16 +7,24 @@
 *  On an Intel i3 processor using a single core, 
 threefive can parse 800,000+ mpeg-ts packets 
 or about 150MB of video a second. 
+
 * [Fast Start Directions](#fast-start-directions)
 * [Splice Commands](#splice-commands)
+* [Splice Descriptors](#splice-descriptors)
 * [Dependencies](#dependencies)
 * [Install](#install)
 * [Using threefive](#using-threefive)
 * [The decode Function](#the-decode-function)
 * [Output for SCTE 35 Strings](#output-for-scte-35-strings)
 * [Using The Splice Class](#using-the-splice-class)
+
+
+
+
+
 ### Fast Start Directions.
 *  ['Up and Running in Less Than Seven Seconds'](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+
 
 ###  Splice Commands 
 - [x] Splice Null  
@@ -164,51 +172,7 @@ threefive.decode(Base64)
                                         'splice_descriptor_tag': 0}]}}
 
 ```
-### Output for Mpegts streams and Files
-*  Packet Pid
-*  Packet PTS
-*  SCTE 35 Info Section
-*  SCTE 35 Command
-*  SCTE 35 Descriptors
 
-```js
-{ 'Info_Section': { 'crc': '0x6e33321e',
-                    'cw_index': '0x0',
-                    'descriptor_loop_length': 10,
-                    'encrypted_packet': False,
-                    'encryption_algorithm': 0,
-                    'private': False,
-                    'protocol_version': 0,
-                    'pts_adjustment': 0.0,
-                    'reserved': 3,
-                    'section_length': 42,
-                    'section_syntax_indicator': False,
-                    'splice_command_length': 4095,
-                    'splice_command_type': 5,
-                    'table_id': '0xfc',
-                    'tier': '0xfff'},
-  'Packet': { 'pid': '0x135',
-              'pts': 89977.249522},
-  'Splice_Command': { 'avail_expected': 0,
-                      'avail_num': 0,
-                      'duration_flag': False,
-                      'name': 'Splice '
-                              'Insert',
-                      'out_of_network_indicator': False,
-                      'program_splice_flag': True,
-                      'pts_time': 89984.161689,
-                      'splice_event_cancel_indicator': False,
-                      'splice_event_id': 662,
-                      'splice_immediate_flag': False,
-                      'time_specified_flag': True,
-                      'unique_program_id': 1},
-  'Splice_Descriptors': [ { 'descriptor_length': 8,
-                            'identifier': 'CUEI',
-                            'name': 'Avail '
-                                    'Descriptor',
-                            'provider_avail_id': 0,
-                            'splice_descriptor_tag': 0}]}
-```
 
 ###  Using The Splice Class
 
