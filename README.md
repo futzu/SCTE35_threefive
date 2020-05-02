@@ -65,11 +65,11 @@
 ```
 pip install threefive
 Collecting threefive
-  Downloading threefive-2.0.69-py3-none-any.whl (12 kB)
-Collecting bitn>=0.0.21
-  Downloading bitn-0.0.21-py3-none-any.whl (3.0 kB)
+  Downloading threefive-2.0.99-py3-none-any.whl (12 kB)
+Collecting bitn>=0.0.27
+  Downloading bitn-0.0.27-py3-none-any.whl (3.0 kB)
 Installing collected packages: bitn, threefive
-Successfully installed bitn-0.0.21 threefive-2.0.69
+Successfully installed bitn-0.0.27 threefive-2.0.99
 
 ```
 
