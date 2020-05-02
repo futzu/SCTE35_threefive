@@ -19,11 +19,13 @@
   * [Output for Base64 and Hex Strings](#output-for-base64-and-hex-strings)
 * [Using The Splice Class](#using-the-splice-class)
   * [Pretty Print SCTE 35 Message](#pretty-print-scte-35-message)
-  * [](#)
-  * [](#)
-  * [](#)
-  * [](#)
-  * [](#)
+  * [Return SCTE 35 Message](#return-scte-35-message)
+  * [Pretty Print Splice Info Section](#pretty-print-splice-info-section)
+  * [Return Splice Info Section](#return-splice-info-section)
+  * [Pretty Print Splice Command](#pretty-print-splice-command)
+  * [Return Splice Command](#return-splice-command)
+  * [Pretty Print Splice Descriptors](#pretty-print-splice-descriptors)
+  * [Return Splice Descriptors](#return-splice-descriptors)
   
 ###  Splice Commands 
 - [x] Splice Null  
