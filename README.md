@@ -29,7 +29,8 @@
     * [Pretty Print Splice Descriptors](#pretty-print-splice-descriptors)
     * [Return Splice Descriptors](#return-splice-descriptors)  
   * [Using The Stream Class](#using-the-stream-class)
-  
+  * [Using The StreamPlus Class](#using-the-streamplus-class)
+ 
 ---  
 ##  Splice Commands 
 - [x] Splice Null  
@@ -338,12 +339,12 @@ curl -s https://futzu.com/xaa.ts -o - | python3 -c 'import sys;import threefive;
                                 'table_id': '0xfc',
                                 'tier': '0xfff'},
 ```
-* 
+---
 ```python3
               'Packet': { 'pid': '0x135',              <-- Pid of the SCTE 35 Packet
                           'pts': 89730.289522},        <-- PTS of the SCTE 35 Packet
 ```
-*
+---
 ```python3                          
               'Splice_Command': { 'avail_expected': 0,
                                   'avail_num': 0,
