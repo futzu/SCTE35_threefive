@@ -49,12 +49,12 @@
 
 ## Fast Start Directions.
 
-*  ['Up and Running in Less Than Seven Seconds'](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+*  [Up and Running in Less Than Seven Seconds](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
 
 ##  Dependencies 
 *  Python 3
-*  ['bitn'](https://github.com/futzu/bitn)
+*  [bitn](https://github.com/futzu/bitn)
 
 ##  Install 
 ```
@@ -245,13 +245,19 @@ scte35.get_descriptors()
 ```      
 ###  Using The Stream Class
 ---
-* threefive.Stream can be called with three args.
-  ```python3
-  threefive.Stream(tsfile = None, tsstream = None, show_null = False)
+```python3
+  threefive.Stream(tsdata, show_null = False)
   ```
-     * Either tsstream or tsfile must be set.
-     * tsfile is for mpegts and binary files
-     * tsstream, when used, is usually sys.stdin.buffer, to enable piping in streams.
+     * tsdata is an open file handle or sys.stdin.buffer to read 'piped' in data.
      * show_null if set to True, enables showing SCTE 35 Null Commands.
-     
+ ```python3
+ 
+ import sys
+ from threefive import Stream
+ 
+ if __name__ =='__main__':
+    with open(sys.argv[1],'rb') as tsdata:
+        Stream(tsdata)
+
+```
      
