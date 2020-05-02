@@ -18,8 +18,13 @@
   * [Hex Encoded Strings](#hex-encoded-strings)
   * [Output for Base64 and Hex Strings](#output-for-base64-and-hex-strings)
 * [Using The Splice Class](#using-the-splice-class)
-
-
+  * [Pretty Print SCTE 35 Message](#pretty-print-scte-35-message)
+  * [](#)
+  * [](#)
+  * [](#)
+  * [](#)
+  * [](#)
+  
 ###  Splice Commands 
 - [x] Splice Null  
 - [x] Splice Schedule  (lightly tested)
