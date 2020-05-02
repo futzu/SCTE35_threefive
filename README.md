@@ -1,14 +1,12 @@
 # threefive
 ## SCTE35 Decoder
-* [Parse SCTE 35 messages from Mpeg Transport Streams and Binary files](#mpegts-files)
-* [Parse SCTE 35 messages encoded in Base64, Binary, or Hex](#base64-encoded-strings)
-
-
-* [Splice Commands](#splice-commands)
-* [Splice Descriptors](#splice-descriptors)
+* [Supported Splice Commands](#splice-commands)
+* [Supported Splice Descriptors](#splice-descriptors)
 * [Fast Start Directions](#fast-start-directions)
 * [Dependencies](#dependencies)
 * [Install](#install)
+* [Parsing SCTE 35 messages from Mpeg Transport Streams and Binary files](#mpegts-files)
+* [Parsing SCTE 35 messages encoded in Base64, Binary, or Hex](#base64-encoded-strings)
 * [Using threefive](#using-threefive)
 * [The decode Function](#the-decode-function)
   * [MpegTS Files](#mpegts-files)
@@ -45,7 +43,6 @@
 
 ### Fast Start Directions.
 *  ['Up and Running in Less Than Seven Seconds'](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
-
 
 
 ###  Dependencies 
@@ -176,7 +173,7 @@ threefive.decode(hexed)
 ```
 
 
-###  Using The Splice Class
+##  Using The Splice Class
 
 The threefive.Splice class can be used to decode a SCTE35 message. 
 
