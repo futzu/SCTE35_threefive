@@ -30,10 +30,10 @@
     * [Return Splice Descriptors](#return-splice-descriptors)  
   * [Using The Stream Class](#using-the-stream-class)
     * [Parse a Local File with a Stream Instance](#parse-a-local-file-with-a-stream-instance)
-    * [Pipe a MpegTS video to a Stream Instance for Parsing as it Downloads](#pipe-a-mpegts-video-to-a-stream- instance-for-parsing-as-it-downloads)
+    * [Pipe a Video to Stream](#pipe-a-video-to-stream)
   * [Using The StreamPlus Class](#using-the-streamplus-class)
     * [Parse a Local File with a StreamPlus Instance](#parse-a-local-file-with-a-streamplus-instance)
-    * [Pipe a MpegTS video to a StreamPlus Instance for Parsing as it Downloads](#pipe-a-mpegts-video-to-a-streamplus- instance-for-parsing-as-it-downloads)
+    * [Pipe a Video to StreamPlus](#pipe-a-video-to-streamplus)
 ---  
 ##  Splice Commands 
 - [x] Splice Null  
@@ -254,7 +254,7 @@ scte35.get_descriptors()
    * show_null if set to True, enables showing SCTE 35 Null Commands.
   
  #### Parse a Local File with a Stream Instance
- ---
+ 
  ```python3
  
  import sys
@@ -267,8 +267,8 @@ scte35.get_descriptors()
 
 ```
 
-#### Pipe a MpegTS video to a Stream Instance for Parsing as it Downloads.
----
+#### Pipe a Video to Stream
+
 ```sh
 
 curl -s https://futzu.com/xaa.ts -o -  \
@@ -323,7 +323,7 @@ curl -s https://futzu.com/xaa.ts -o -  \
 * StreamPlus Adds The PTS timestamp for Each SCTE 35 Packet.
 
 #### Parse a Local File with a StreamPlus Instance
- ---
+ 
  ```python3
  
  import sys
@@ -336,8 +336,8 @@ curl -s https://futzu.com/xaa.ts -o -  \
 
 ```
 
-#### Pipe a MpegTS video to a StreamPlus Instance for Parsing as it Downloads
----
+#### Pipe a Video to StreamPlus
+
 ```sh
 curl -s https://futzu.com/xaa.ts -o - \
 | python3 -c 'import sys;import threefive; threefive.StreamPlus(sys.stdin.buffer)'
