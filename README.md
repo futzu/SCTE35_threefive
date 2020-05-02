@@ -12,6 +12,9 @@
 * [Using threefive](#using-threefive)
 * [The decode Function](#the-decode-function)
   * [MpegTS Files](#mpegts-files)
+  * [Binary Files](#binary-files)
+  * [Base64 Encoded Strings](#base64-encoded-strings)
+  * [Hex Encoded Strings](#hex-encoded-strings)
   * [Output for SCTE 35 Strings](#output-for-scte-35-strings)
 * [Using The Splice Class](#using-the-splice-class)
 
@@ -64,16 +67,16 @@ import threefive
 ```python
 threefive.decode('/path/to/mpegwithscte35.ts') 
 ```
-- [x]  binary files
+#### Binary Files
 ```python
 threefive.decode('/mnt/build/file.bin')
 ```
-- [x]  base64 encoded strings
+####  Base64 Encoded Strings
 ```python
 mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUg/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
 threefive.decode(mesg)
 ```
-- [x]  hex encoded strings
+#### Hex Encoded Strings
 ```python
 hexed='0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A'
 threefive.decode(hexed)
