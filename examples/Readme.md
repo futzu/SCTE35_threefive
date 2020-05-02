@@ -1,7 +1,7 @@
 ### Running The Examples.
 
 
-1. Running scripts.
+#### Running scripts.
 
 - [x] Splice_Insert.py
 
@@ -135,7 +135,7 @@ python3 Time_Signal-Placement_Opportunity_Start.py
 
 ```
 
-2. Using the bin files.
+#### Using the bin files.
 
 * Each bin file is a single SCTE 35 packet. 
 
