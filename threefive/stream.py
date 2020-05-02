@@ -40,7 +40,6 @@ class Stream:
         '''
         return True if first_byte
         is equal to self.SYNC_BYTE,
-        
         '''
         return (first_byte == self.SYNC_BYTE)
     

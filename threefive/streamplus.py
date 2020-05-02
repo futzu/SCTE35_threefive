@@ -59,6 +59,9 @@ class StreamPlus(Stream):
         return pusi
 
     def parse_payload(self,payload,pid):
+        '''
+        Override this method to customize output
+        '''
         try:
             tf = Splice(payload,pid=pid, pts=self.PTS)
             tf.show()
