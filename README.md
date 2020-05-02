@@ -15,7 +15,7 @@
   * [Binary Files](#binary-files)
   * [Base64 Encoded Strings](#base64-encoded-strings)
   * [Hex Encoded Strings](#hex-encoded-strings)
-  * [Output for SCTE 35 Strings](#output-for-scte-35-strings)
+  * [Output for Base64 and Hex Strings](#output-for-base64-and-hex-strings)
 * [Using The Splice Class](#using-the-splice-class)
 
 
@@ -82,7 +82,7 @@ hexed='0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000
 threefive.decode(hexed)
 ```
 
-### Output for SCTE 35 Strings
+#### Output for Base64 and Hex Strings
 
 ```python3
 
