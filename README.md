@@ -251,8 +251,8 @@ scte35.get_descriptors()
    * tsdata is an open file handle or sys.stdin.buffer to read 'piped' in data.
    * show_null if set to True, enables showing SCTE 35 Null Commands.
   
- * Parse a local file with threefive.Stream 
- 
+ #### Parse a local file with threefive.Stream 
+ ---
  ```python3
  
  import sys
@@ -265,7 +265,8 @@ scte35.get_descriptors()
 
 ```
 
-* Pipe a MpegTS video to threefive.Stream for Parsing as it Downloads.
+#### Pipe a MpegTS video to threefive.Stream for Parsing as it Downloads.
+---
 ```python3
 
 curl -s https://futzu.com/xaa.ts -o - | python3 -c 'import threefive; threefive.decode()' 
