@@ -252,7 +252,7 @@ scte35.get_descriptors()
   threefive.Stream(tsdata, show_null = False)
   ```
    * __tsdata__ is an open file handle or sys.stdin.buffer to read 'piped' in data.
-   * __show_null__ if set to True, enables showing SCTE 35 Null Commands.
+   * __show_null__ if set to True, enables showing SCTE 35 null commands.
   
  #### Parse a Local File with a Stream Instance
  
@@ -323,9 +323,9 @@ curl -s https://futzu.com/xaa.ts -o -  \
   threefive.StreamPlus(tsdata, show_null = False)
 ```
    * __tsdata__ is an open file handle or sys.stdin.buffer to read 'piped' in data.
-   * __show_null__ if set to True, enables showing SCTE 35 Null Commands.
+   * __show_null__ if set to True, enables showing SCTE 35 null commands.
     
-   * __threefive.StreamPlus__ Adds The PTS timestamp for Each SCTE 35 Packet.
+   * __threefive.StreamPlus__ adds the PTS timestamp for each SCTE 35 packet.
 
 #### Parse a Local File with a StreamPlus Instance
  
