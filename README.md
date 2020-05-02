@@ -251,7 +251,7 @@ scte35.get_descriptors()
    * tsdata is an open file handle or sys.stdin.buffer to read 'piped' in data.
    * show_null if set to True, enables showing SCTE 35 Null Commands.
   
- #### Parse a local file with threefive.Stream 
+ #### Parse a Local File with threefive.Stream 
  ---
  ```python3
  
@@ -269,7 +269,7 @@ scte35.get_descriptors()
 ---
 ```python3
 
-curl -s https://futzu.com/xaa.ts -o - | python3 -c 'import threefive; threefive.decode()' 
+curl -s https://futzu.com/xaa.ts -o - | python3 -c 'import sys;import threefive; threefive.Stream(sys.stdin.buffer)' 
 
 
 { 'SCTE35': { 'Info_Section': { 'crc': '0x10fa4d9e',
@@ -311,5 +311,59 @@ curl -s https://futzu.com/xaa.ts -o - | python3 -c 'import threefive; threefive.
                                         'splice_descriptor_tag': 0}]}}
 ```
 
-
+###  Using The StreamPlus Class
+---
      
+* StreamPlus is a SubClass of the Stream Class
+* StreamPlus Adds The PTS timestamp for Each SCTE 35 Packet.
+
+```python3
+curl -s https://futzu.com/xaa.ts -o - | python3 -c 'import sys;import threefive; threefive.StreamPlus(sys.stdin.buffer)'
+
+
+ 
+{ 'SCTE35': { 'Info_Section': { 'crc': '0x10fa4d9e',
+                                'cw_index': '0x0',
+                                'descriptor_loop_length': 10,
+                                'encrypted_packet': False,
+                                'encryption_algorithm': 0,
+                                'private': False,
+                                'protocol_version': 0,
+                                'pts_adjustment': 0.0,
+                                'reserved': '0x3',
+                                'section_length': 47,
+                                'section_syntax_indicator': False,
+                                'splice_command_length': 4095,
+                                'splice_command_type': 5,
+                                'table_id': '0xfc',
+                                'tier': '0xfff'},
+```
+* 
+```python3
+              'Packet': { 'pid': '0x135',              <-- Pid of the SCTE 35 Packet
+                          'pts': 89730.289522},        <-- PTS of the SCTE 35 Packet
+```
+*
+```python3                          
+              'Splice_Command': { 'avail_expected': 0,
+                                  'avail_num': 0,
+                                  'break_auto_return': False,
+                                  'break_duration': 242.0,
+                                  'duration_flag': True,
+                                  'name': 'Splice '
+                                          'Insert',
+                                  'out_of_network_indicator': True,
+                                  'program_splice_flag': True,
+                                  'pts_time': 89742.161689,
+                                  'splice_event_cancel_indicator': False,
+                                  'splice_event_id': 662,
+                                  'splice_immediate_flag': False,
+                                  'time_specified_flag': True,
+                                  'unique_program_id': 1},
+              'Splice_Descriptors': [ { 'descriptor_length': 8,
+                                        'identifier': 'CUEI',
+                                        'name': 'Avail '
+                                                'Descriptor',
+                                        'provider_avail_id': 0,
+                                        'splice_descriptor_tag': 0}]}}
+```
