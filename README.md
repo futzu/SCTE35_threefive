@@ -3,9 +3,9 @@
 ---
 * [Supported Splice Commands](#splice-commands)
 * [Supported Splice Descriptors](#splice-descriptors)
-* [Fast Start Directions](#fast-start-directions)
+* [__Fast Start Directions__](#fast-start-directions)
 * [Dependencies](#dependencies)
-* [Install](#install)
+* [__Install__](#install)
 * [Parsing SCTE 35 messages from Mpeg Transport Streams and Binary files](#mpegts-files)
 * [Parsing SCTE 35 messages encoded in Base64, Binary, or Hex](#base64-encoded-strings)
 ---
@@ -18,7 +18,7 @@
     * [Hex Encoded Strings](#hex-encoded-strings)
     * [Output for Base64 and Hex Strings](#output-for-base64-and-hex-strings)
 ---
-* [Advanced threefive](#advanced-threefive)
+* [__Advanced threefive__](#advanced-threefive)
   * [Using The Splice Class](#using-the-splice-class)
     * [Pretty Print SCTE 35 Message](#pretty-print-scte-35-message)
     * [Return SCTE 35 Message](#return-scte-35-message)
