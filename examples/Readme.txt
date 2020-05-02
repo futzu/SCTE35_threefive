@@ -3,7 +3,7 @@ Running The Examples.
 
 1. Running scripts.
 
-Splice_Insert.py
+python3  Splice_Insert.py
 
 { 'SCTE35': { 'Info_Section': { 'crc': '0x62dba30a',
                                 'cw_index': '0xff',
@@ -79,7 +79,7 @@ Splice_Insert.py
                                         'splice_descriptor_tag': 0}]}}
 
 
-Time_Signal-Placement_Opportunity_Start.py
+python3 Time_Signal-Placement_Opportunity_Start.py
 
 { 'SCTE35': { 'Info_Section': { 'crc': '0x9ac9d17e',
                                 'cw_index': '0xff',
@@ -127,7 +127,7 @@ Time_Signal-Placement_Opportunity_Start.py
                                         'web_delivery_allowed_flag': False}]}}
 
 
-Time_Signal-Placement_Opportunity_End.py
+python3 Time_Signal-Placement_Opportunity_End.py
 
 { 'SCTE35': { 'Info_Section': { 'crc': '0xa9cc6758',
                                 'cw_index': '0xff',
@@ -174,7 +174,7 @@ Time_Signal-Placement_Opportunity_End.py
                                         'web_delivery_allowed_flag': True}]}}
 
 
-Time_Signal-Program_Start_End.py
+python3 Time_Signal-Program_Start_End.py
 
 { 'SCTE35': { 'Info_Section': { 'crc': '0x9972e343',
                                 'cw_index': '0xff',
@@ -241,7 +241,7 @@ Time_Signal-Program_Start_End.py
                                         'web_delivery_allowed_flag': True}]}}
 
 
-Time_Signal-Program_Overlap.py
+python3 Time_Signal-Program_Overlap.py
 
 { 'SCTE35': { 'Info_Section': { 'crc': '0x951db0a8',
                                 'cw_index': '0xff',
