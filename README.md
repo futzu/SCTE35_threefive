@@ -10,7 +10,7 @@ or about 150MB of video a second.
 * [Fast Start Directions](#fast-start-directions)
 * [Dependencies](#dependencies)
 * [Install](#install)
-* [threefive.decode](#threefive.decode)
+* [Using threefive](#using-threefive)
 
 ### Fast Start Directions.
 *  ['Up and Running in Less Than Seven Seconds'](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
