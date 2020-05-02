@@ -13,7 +13,7 @@
 * [The decode Function](#the-decode-function)
   * [MpegTS Files](#mpegts-files)
   * [Binary Files](#binary-files)
-  * ;Output for MpegTS and Binary Files and Streams](#output-for-mpegts-and-binary-files-and-streams)
+  * [Output for MpegTS and Binary Files and Streams](#output-for-mpegts-and-binary-files-and-streams)
   * [Base64 Encoded Strings](#base64-encoded-strings)
   * [Hex Encoded Strings](#hex-encoded-strings)
   * [Output for Base64 and Hex Strings](#output-for-base64-and-hex-strings)
