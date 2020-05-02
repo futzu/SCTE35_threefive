@@ -1,6 +1,5 @@
 from base64 import b64decode
 from bitn import BitBin
-import json
 import pprint
 from threefive import (
     descriptors as dscprs,
@@ -48,6 +47,7 @@ class Splice:
         '''
         self.info_section = spinfo.Splice_Info_Section()
         self.info_section.decode(self.infobb)
+        self.infobb=False
         self.set_splice_command()
         self.descriptorloop()
         self.info_section.crc = self.bitbin.ashex(32)

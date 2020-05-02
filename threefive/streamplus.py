@@ -9,6 +9,8 @@ class StreamPlus(Stream):
     that also parses the PTS
     for the SCTE 35 packet.
     '''
+    NON_PTS_STREAM_IDS = [188, 190, 191, 240, 241, 242, 248]
+
     def __init__(self, tsfile = None, tsstream = None, show_null = False):
         super().__init__(tsfile, tsstream, show_null)
         self.PTS= False
@@ -60,9 +62,8 @@ class StreamPlus(Stream):
         try:
             tf = Splice(payload,pid=pid, pts=self.PTS)
             tf.show()
-            return True
-        except:
-            return False
+            return tf
+        except: return False
         
     def parse_tspacket(self, packet):
         '''
@@ -79,6 +80,8 @@ class StreamPlus(Stream):
         if self.SCTE35_PID and (pid != self.SCTE35_PID): return
         if not self.show_null:
             if packet[18] == 0: return
-        if not self.parse_payload(packet[5:],pid): return
-        if not self.SCTE35_PID: self.SCTE35_PID = pid
+        tf = self.parse_payload(packet[5:],pid)
+        if tf:
+            if not self.SCTE35_PID:
+                self.SCTE35_PID = pid
         return

@@ -9,7 +9,6 @@ class Stream:
     PACKET_SIZE = 188
     PACKET_COUNT = 512
     SYNC_BYTE = 0x47
-    NON_PTS_STREAM_IDS = [188, 190, 191, 240, 241, 242, 248]
     SCTE35_TID = 0xfc
 
     def __init__(self, tsfile = None, tsstream = None, show_null = False):
@@ -80,7 +79,7 @@ class Stream:
         
     def parse_tspacket(self, packet):
         '''
-        parse an mpegts packet for SCTE 35 messages
+        parse a mpegts packet for SCTE 35 and/or PTS
         '''
         if not self.has_sync_byte(packet[0]):return
         if self.has_scte35_tid(packet[5]) : 
@@ -89,6 +88,8 @@ class Stream:
             if self.SCTE35_PID and (pid != self.SCTE35_PID): return
             if not self.show_null:
                 if packet[18] == 0: return
-            if not self.parse_payload(packet[5:],pid): return
-            if not self.SCTE35_PID: self.SCTE35_PID = pid
-        return
+            tf = self.parse_payload(packet[5:],pid)
+            if tf:
+                if not self.SCTE35_PID:
+                    self.SCTE35_PID = pid
+            return
