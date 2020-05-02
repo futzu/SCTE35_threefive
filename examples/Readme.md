@@ -83,7 +83,55 @@ python3  Splice_Insert.py
 ```
 
 - [x] Time_Signal-Placement_Opportunity_Start.py
-                                  
+
+```python3
+
+{ 'SCTE35': { 'Info_Section': { 'crc': '0x9ac9d17e',
+                                'cw_index': '0xff',
+                                'descriptor_loop_length': 30,
+                                'encrypted_packet': False,
+                                'encryption_algorithm': 0,
+                                'private': False,
+                                'protocol_version': 0,
+                                'pts_adjustment': 0.0,
+                                'reserved': '0x3',
+                                'section_length': 52,
+                                'section_syntax_indicator': False,
+                                'splice_command_length': 5,
+                                'splice_command_type': 6,
+                                'table_id': '0xfc',
+                                'tier': '0xfff'},
+              'Splice_Command': { 'name': 'Time '
+                                          'Signal',
+                                  'pts_time': 21388.766756,
+                                  'time_specified_flag': True},
+              'Splice_Descriptors': [ { 'archive_allowed_flag': True,
+                                        'delivery_not_restricted_flag': False,
+                                        'descriptor_length': 28,
+                                        'device_restrictions': '0x3',
+                                        'identifier': 'CUEI',
+                                        'name': 'Segmentation '
+                                                'Descriptor',
+                                        'no_regional_blackout_flag': True,
+                                        'program_segmentation_flag': True,
+                                        'segment_num': 2,
+                                        'segmentation_duration': 307.0,
+                                        'segmentation_duration_flag': True,
+                                        'segmentation_event_cancel_indicator': False,
+                                        'segmentation_event_id': '0x4800008e',
+                                        'segmentation_message': 'Provider '
+                                                                'Placement '
+                                                                'Opportunity '
+                                                                'Start',
+                                        'segmentation_type_id': 52,
+                                        'segmentation_upid_length': 8,
+                                        'segmentation_upid_type': 8,
+                                        'segments_expected': 0,
+                                        'splice_descriptor_tag': 2,
+                                        'turner_identifier': '0x2ca0a18a',
+                                        'web_delivery_allowed_flag': False}]}}
+
+```
 
 2. Using the bin files.
 
