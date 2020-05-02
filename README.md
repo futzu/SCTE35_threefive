@@ -54,12 +54,12 @@
 
 ## Fast Start Directions.
 
-*  [Up and Running in Less Than Seven Seconds](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+*  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
 
 ##  Dependencies 
 *  Python 3
-*  [bitn](https://github.com/futzu/bitn)
+*  [__bitn__](https://github.com/futzu/bitn)
 
 ##  Install 
 ```
@@ -187,9 +187,9 @@ threefive.decode(hexed)
 ###  Using The Splice Class
 ---
 
-The threefive.Splice class can be used to decode a SCTE35 message. 
+The __threefive.Splice__ class can be used to decode a SCTE35 message. 
 
-threefive.Splice provides several methods to access the parsed data.
+__threefive.Splice__ provides several methods to access the parsed data.
 
 ```python
 
@@ -251,8 +251,8 @@ scte35.get_descriptors()
 ```python3
   threefive.Stream(tsdata, show_null = False)
   ```
-   * tsdata is an open file handle or sys.stdin.buffer to read 'piped' in data.
-   * show_null if set to True, enables showing SCTE 35 Null Commands.
+   * __tsdata__ is an open file handle or sys.stdin.buffer to read 'piped' in data.
+   * __show_null__ if set to True, enables showing SCTE 35 Null Commands.
   
  #### Parse a Local File with a Stream Instance
  
@@ -319,9 +319,13 @@ curl -s https://futzu.com/xaa.ts -o -  \
 
 ###  Using The StreamPlus Class
 ---
-     
-* StreamPlus is a SubClass of the Stream Class
-* StreamPlus Adds The PTS timestamp for Each SCTE 35 Packet.
+```python3
+  threefive.StreamPlus(tsdata, show_null = False)
+```
+   * __tsdata__ is an open file handle or sys.stdin.buffer to read 'piped' in data.
+   * __show_null__ if set to True, enables showing SCTE 35 Null Commands.
+    
+   * __threefive.StreamPlus__ Adds The PTS timestamp for Each SCTE 35 Packet.
 
 #### Parse a Local File with a StreamPlus Instance
  
