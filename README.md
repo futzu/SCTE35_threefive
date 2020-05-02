@@ -9,7 +9,7 @@
 * [Parsing SCTE 35 messages from Mpeg Transport Streams and Binary files](#mpegts-files)
 * [Parsing SCTE 35 messages encoded in Base64, Binary, or Hex](#base64-encoded-strings)
 ---
-* [Easy threefive](#easy-threefive)
+* [__Easy threefive__](#easy-threefive)
   * [The decode Function](#the-decode-function)
     * [MpegTS Files](#mpegts-files)
     * [Binary Files](#binary-files)
