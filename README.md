@@ -14,6 +14,7 @@ or about 150MB of video a second.
 * [Using threefive](#using-threefive)
 * [The decode Function](#the-decode-function)
 * [Output for SCTE 35 Strings](#output-for-scte-35-strings)
+* [Using threefive.Splice](#using-threefive.splice)
 ### Fast Start Directions.
 *  ['Up and Running in Less Than Seven Seconds'](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
