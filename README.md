@@ -3,22 +3,17 @@
 *  Parse SCTE 35 messages from Mpeg Transport Streams and Binary files. 
 *  Parse SCTE 35 messages encoded in Base64, Binary, or Hex. 
 
-* [Fast Start Directions](#fast-start-directions)
+
 * [Splice Commands](#splice-commands)
 * [Splice Descriptors](#splice-descriptors)
+* [Fast Start Directions](#fast-start-directions)
 * [Dependencies](#dependencies)
 * [Install](#install)
 * [Using threefive](#using-threefive)
 * [The decode Function](#the-decode-function)
-* [Output for SCTE 35 Strings](#output-for-scte-35-strings)
+  * [MpegTS Files](#mpegts-files)
+  * [Output for SCTE 35 Strings](#output-for-scte-35-strings)
 * [Using The Splice Class](#using-the-splice-class)
-
-
-
-
-
-### Fast Start Directions.
-*  ['Up and Running in Less Than Seven Seconds'](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
 
 ###  Splice Commands 
@@ -34,6 +29,13 @@
 - [x]  Segmentation Types and Messages 
 - [x]  Time Descriptor 
 - [x]  Audio Descriptor (lightly tested)
+
+
+
+### Fast Start Directions.
+*  ['Up and Running in Less Than Seven Seconds'](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+
+
 
 ###  Dependencies 
 *  Python 3
@@ -58,7 +60,7 @@ Successfully installed bitn-0.0.21 threefive-2.0.69
  ```python
 import threefive
 ```
-- [x]  mpegts files
+- [x]  MpegTS Files
 ```python
 threefive.decode('/path/to/mpegwithscte35.ts') 
 ```
