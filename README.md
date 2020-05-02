@@ -48,7 +48,7 @@
 
 
 ## Fast Start Directions.
----
+
 *  ['Up and Running in Less Than Seven Seconds'](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
 
@@ -69,9 +69,9 @@ Successfully installed bitn-0.0.21 threefive-2.0.69
 ```
 
 ##  Easy threefive  
----
-### The decode Function
 
+### The decode Function
+---
  ```python
 import threefive
 ```
@@ -180,8 +180,9 @@ threefive.decode(hexed)
 ```
 
 ## Advanced threefive
----
+
 ###  Using The Splice Class
+---
 
 The threefive.Splice class can be used to decode a SCTE35 message. 
 
@@ -242,7 +243,8 @@ scte35.show_descriptors()
 scte35.get_descriptors()
 
 ```      
-##  Using The Stream Class
+###  Using The Stream Class
+---
 * threefive.Stream can be called with three args.
   ```python3
   threefive.Stream(tsfile = None, tsstream = None, show_null = False)
