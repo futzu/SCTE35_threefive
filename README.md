@@ -30,9 +30,10 @@
     * [Return Splice Descriptors](#return-splice-descriptors)  
   * [Using The Stream Class](#using-the-stream-class)
     * [Parse a Local File with a Stream Instance](#parse-a-local-file-with-a-stream-instance)
+    * [Pipe a MpegTS video to a Stream Instance for Parsing as it Downloads](#pipe-a-mpegts-video-to-a-stream- instance-for-parsing-as-it-downloads)
   * [Using The StreamPlus Class](#using-the-streamplus-class)
-     * [Parse a Local File with a StreamPlus Instance](#parse-a-local-file-with-a-streamplus-instance)
-
+    * [Parse a Local File with a StreamPlus Instance](#parse-a-local-file-with-a-streamplus-instance)
+    * [Pipe a MpegTS video to a StreamPlus Instance for Parsing as it Downloads](#pipe-a-mpegts-video-to-a-streamplus- instance-for-parsing-as-it-downloads)
 ---  
 ##  Splice Commands 
 - [x] Splice Null  
