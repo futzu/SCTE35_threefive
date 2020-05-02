@@ -238,7 +238,9 @@ scte35.get_descriptors()
 ```      
 ##  Using The Stream Class
 * threefive.Stream can be called with three args.
-  * threefive.Stream(tsfile = None, tsstream = None, show_null = False)
+  ```python3
+  threefive.Stream(tsfile = None, tsstream = None, show_null = False)
+  ```
      * Either tsstream or tsfile must be set.
      * tsfile is for mpegts and binary files
      * tsstream, when used, is usually sys.stdin.buffer, to enable piping in streams.
