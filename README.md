@@ -29,8 +29,10 @@
     * [Pretty Print Splice Descriptors](#pretty-print-splice-descriptors)
     * [Return Splice Descriptors](#return-splice-descriptors)  
   * [Using The Stream Class](#using-the-stream-class)
+    * [Parse a Local File with a Stream Instance](#parse-a-local-file-with-a-stream-instance)
   * [Using The StreamPlus Class](#using-the-streamplus-class)
- 
+     * [Parse a Local File with a StreamPlus Instance](#parse-a-local-file-with-a-streamplus-instance)
+
 ---  
 ##  Splice Commands 
 - [x] Splice Null  
@@ -176,8 +178,6 @@ threefive.decode(hexed)
                                         'provider_avail_id': 309,
                                         'splice_descriptor_tag': 0}]}}
 
-
-
 ```
 
 ## Advanced threefive
@@ -252,7 +252,7 @@ scte35.get_descriptors()
    * tsdata is an open file handle or sys.stdin.buffer to read 'piped' in data.
    * show_null if set to True, enables showing SCTE 35 Null Commands.
   
- #### Parse a Local File with threefive.Stream 
+ #### Parse a Local File with a Stream Instance
  ---
  ```python3
  
@@ -266,12 +266,15 @@ scte35.get_descriptors()
 
 ```
 
-#### Pipe a MpegTS video to threefive.Stream for Parsing as it Downloads.
+#### Pipe a MpegTS video to a Stream Instance for Parsing as it Downloads.
+---
+```sh
+
+curl -s https://futzu.com/xaa.ts -o -  \
+  | python3 -c 'import sys;import threefive; threefive.Stream(sys.stdin.buffer)' 
+```
 ---
 ```python3
-
-curl -s https://futzu.com/xaa.ts -o - | python3 -c 'import sys;import threefive; threefive.Stream(sys.stdin.buffer)' 
-
 
 { 'SCTE35': { 'Info_Section': { 'crc': '0x10fa4d9e',
                                 'cw_index': '0x0',
@@ -318,10 +321,29 @@ curl -s https://futzu.com/xaa.ts -o - | python3 -c 'import sys;import threefive;
 * StreamPlus is a SubClass of the Stream Class
 * StreamPlus Adds The PTS timestamp for Each SCTE 35 Packet.
 
+#### Parse a Local File with a StreamPlus Instance
+ ---
+ ```python3
+ 
+ import sys
+ from threefive import StreamPlus
+ '''
+ 
+ if __name__ =='__main__':
+    with open(sys.argv[1],'rb') as tsdata:
+        StreamPlus(tsdata)
+
+```
+
+#### Pipe a MpegTS video to a StreamPlus Instance for Parsing as it Downloads
+---
+```sh
+curl -s https://futzu.com/xaa.ts -o - \
+| python3 -c 'import sys;import threefive; threefive.StreamPlus(sys.stdin.buffer)'
+```
+---
+
 ```python3
-curl -s https://futzu.com/xaa.ts -o - | python3 -c 'import sys;import threefive; threefive.StreamPlus(sys.stdin.buffer)'
-
-
  
 { 'SCTE35': { 'Info_Section': { 'crc': '0x10fa4d9e',
                                 'cw_index': '0x0',
