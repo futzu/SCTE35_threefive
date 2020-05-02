@@ -23,7 +23,9 @@
     * [Pretty Print Splice Command](#pretty-print-splice-command)
     * [Return Splice Command](#return-splice-command)
     * [Pretty Print Splice Descriptors](#pretty-print-splice-descriptors)
-    * [Return Splice Descriptors](#return-splice-descriptors)
+    * [Return Splice Descriptors](#return-splice-descriptors)  
+  * [Using The Stream Class](#using-the-stream-class)
+  
   
 ###  Splice Commands 
 - [x] Splice Null  
@@ -234,3 +236,12 @@ scte35.show_descriptors()
 scte35.get_descriptors()
 
 ```      
+##  Using The Stream Class
+* threefive.Stream can be called with three args.
+  *    Stream.__init__(tsfile = None, tsstream = None, show_null = False)
+     * Either tsstream or tsfile must be set.
+     * tsfile is for mpegts and binary files
+     * tsstream, when used, is usually sys.stdin.buffer, to enable piping in streams.
+     * show_null if set to True, enables showing SCTE 35 Null Commands.
+     
+     
