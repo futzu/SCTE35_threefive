@@ -54,7 +54,7 @@
 
 ##  Dependencies 
 *  Python 3
-*  [bitn](#https://github.com/futzu/bitn)
+*  ['bitn'](https://github.com/futzu/bitn)
 
 ##  Install 
 ```
