@@ -88,6 +88,9 @@ python3  Splice_Insert.py
 2. Using the bin files.
 
 * Each bin file is a single SCTE 35 packet. 
+
+- [x]  file.bin
+
 ```python3
 Python 3.7.4 (default, Jul 16 2019, 07:12:58) 
 [GCC 9.1.0] on linux
