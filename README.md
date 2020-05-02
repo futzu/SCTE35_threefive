@@ -8,6 +8,7 @@
 * [__Install__](#install)
 * [Parsing SCTE 35 messages from Mpeg Transport Streams and Binary files](#mpegts-files)
 * [Parsing SCTE 35 messages encoded in Base64, Binary, or Hex](#base64-encoded-strings)
+* [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
 ---
 * [__Easy threefive__](#easy-threefive)
   * [The __decode__ Function](#the-decode-function)
