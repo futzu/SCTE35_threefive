@@ -11,8 +11,8 @@ class StreamPlus(Stream):
     '''
     NON_PTS_STREAM_IDS = [188, 190, 191, 240, 241, 242, 248]
 
-    def __init__(self, tsfile = None, tsstream = None, show_null = False):
-        super().__init__(tsfile, tsstream, show_null)
+    def __init__(self, tsdata, show_null = False):
+        super().__init__(tsdata, show_null)
         self.PTS= False
 
     def verify_pusi(self,bitbin):

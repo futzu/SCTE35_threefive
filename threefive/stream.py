@@ -11,19 +11,10 @@ class Stream:
     SYNC_BYTE = 0x47
     SCTE35_TID = 0xfc
 
-    def __init__(self, tsfile = None, tsstream = None, show_null = False):
+    def __init__(self, tsdata, show_null = False):
         self.SCTE35_PID = False
         self.show_null = show_null
-        if tsfile: self.parse_tsfile(tsfile) # for files
-        if tsstream: self.parse_tsdata(tsstream) # for reading from stdin
-
-    def parse_tsfile(self, tsfile):
-        '''
-        used only to open a local file
-        '''
-        with open(tsfile, 'rb') as tsdata:
-            self.parse_tsdata(tsdata)
-        return     
+        self.parse_tsdata(tsdata)
 
     def parse_tsdata(self, tsdata):
         '''
