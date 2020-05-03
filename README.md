@@ -38,13 +38,13 @@
       * [Parse a Local File with a StreamPlus Instance](#parse-a-local-file-with-a-streamplus-instance)
       * [Pipe a Video to StreamPlus](#pipe-a-video-to-streamplus)
 ---  
-##  ```Splice Commands``` 
+##  ```Splice Commands``` [splice_commands.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/splice_commands.py)
   *  Splice Null  
   *  Splice Schedule  (lightly tested)
   *  Splice Insert 
   *  Time Signal 
   *  Bandwidth Reservation  (lightly tested)
-##  ```Splice Descriptors``` 
+##  ```Splice Descriptors```  [descriptors.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)
   *  DTMF Descriptor 
   *  Segmentation Descriptor
   *  Segmentation UPID  (partially implemented)
@@ -83,7 +83,7 @@ Successfully installed bitn-0.0.27 threefive-2.0.99
 
 ##  ```Easy threefive```  
 
-###   ```The decode Function```
+###   ```The decode Function``` [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)
  * __threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.
 
  ```python
@@ -97,8 +97,6 @@ threefive.decode('/path/to/mpegwithscte35.ts')
 ```python
 threefive.decode('/mnt/build/file.bin')
 ```
-
-
 
 ####    ```Output for MpegTS and Binary Files and Streams```
 ```python3
@@ -197,7 +195,7 @@ threefive.decode(hexed)
  [🡡 top](#threefive)
  
 
-## Advanced threefive
+## ```Advanced threefive```
 
 ###  ```Splice Class```  [splice.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/splice.py)
 
@@ -244,18 +242,18 @@ scte35.show_command()
   
 ```
 
-#### Return Splice Command
+#### ```Return Splice Command```
 ```python
 scte35.get_command()
 
 ``` 
 
-#### Pretty Print Splice Descriptors
+#### ```Pretty Print Splice Descriptors```
 ```python
 scte35.show_descriptors()
 
 ```    
-#### Return Splice Descriptors
+#### ```Return Splice Descriptors```
 ```python
 scte35.get_descriptors()
 
@@ -265,7 +263,7 @@ scte35.get_descriptors()
  
  
 ---
-###  ```Stream Class```
+###  ```Stream Class``` [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
 
   * The __threefive.Stream__ class parses SCTE35 messages from a file or stream.
   
@@ -275,7 +273,7 @@ scte35.get_descriptors()
    * __tsdata__ is an open file handle or sys.stdin.buffer to read 'piped' in data.
    * __show_null__ if set to True, enables showing SCTE 35 null commands.
   
- #### Parse a Local File with a Stream Instance
+ #### ```Parse a Local File with a Stream Instance```
  
  ```python3
  
@@ -289,7 +287,7 @@ scte35.get_descriptors()
 
 ```
 
-#### Pipe a Video to Stream
+#### ```Pipe a Video to Stream```
 
 ```sh
 
@@ -342,7 +340,7 @@ curl -s https://futzu.com/xaa.ts -o -  \
  [🡡 top](#threefive)
 
 ---
-###  ```StreamPlus Class```
+###  ```StreamPlus Class``` [streamplus.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/streamplus.py)
   * __threefive.StreamPlus__ is a sub class of  __threefive.Stream__
 
 ```python3
@@ -353,7 +351,7 @@ curl -s https://futzu.com/xaa.ts -o -  \
     
    * __threefive.StreamPlus__ adds the PTS timestamp for each SCTE 35 packet.
 
-#### Parse a Local File with a StreamPlus Instance
+#### ```Parse a Local File with a StreamPlus Instance```
  
  ```python3
  
@@ -367,7 +365,7 @@ curl -s https://futzu.com/xaa.ts -o -  \
 
 ```
 
-#### Pipe a Video to StreamPlus
+#### ```Pipe a Video to StreamPlus```
 
 ```sh
 curl -s https://futzu.com/xaa.ts -o - \
