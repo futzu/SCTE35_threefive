@@ -3,38 +3,40 @@
 ---
 * [Supported Splice Commands](#splice-commands)
 * [Supported Splice Descriptors](#splice-descriptors)
+---
 * [__Fast Start Directions__](#fast-start-directions)
 * [Dependencies](#dependencies)
 * [__Install__](#install)
+---
 * [Parsing SCTE 35 messages from Mpeg Transport Streams and Binary files](#mpegts-files)
 * [Parsing SCTE 35 messages encoded in Base64, Binary, or Hex](#base64-encoded-strings)
 * [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
 ---
 * [__Easy threefive__](#easy-threefive)
-  * [The __decode__ Function](#the-decode-function)
-    * [MpegTS Files](#mpegts-files)
-    * [Binary Files](#binary-files)
-    * [Output for MpegTS and Binary Files and Streams](#output-for-mpegts-and-binary-files-and-streams)
-    * [Base64 Encoded Strings](#base64-encoded-strings)
-    * [Hex Encoded Strings](#hex-encoded-strings)
-    * [Output for Base64 and Hex Strings](#output-for-base64-and-hex-strings)
+  *   [The __decode__ Function](#the-decode-function)
+      * [MpegTS Files](#mpegts-files)
+      * [Binary Files](#binary-files)
+      * [Output for MpegTS and Binary Files and Streams](#output-for-mpegts-and-binary-files-and-streams)
+      * [Base64 Encoded Strings](#base64-encoded-strings)
+      * [Hex Encoded Strings](#hex-encoded-strings)
+      * [Output for Base64 and Hex Strings](#output-for-base64-and-hex-strings)
 ---
 * [__Advanced threefive__](#advanced-threefive)
-  * [Using The __Splice Class__](#using-the-splice-class)
-    * [Pretty Print SCTE 35 Message](#pretty-print-scte-35-message)
-    * [Return SCTE 35 Message](#return-scte-35-message)
-    * [Pretty Print Splice Info Section](#pretty-print-splice-info-section)
-    * [Return Splice Info Section](#return-splice-info-section)
-    * [Pretty Print Splice Command](#pretty-print-splice-command)
-    * [Return Splice Command](#return-splice-command)
-    * [Pretty Print Splice Descriptors](#pretty-print-splice-descriptors)
-    * [Return Splice Descriptors](#return-splice-descriptors)  
-  * [Using The __Stream Class__](#using-the-stream-class)
-    * [Parse a Local File with a Stream Instance](#parse-a-local-file-with-a-stream-instance)
-    * [Pipe a Video to Stream](#pipe-a-video-to-stream)
-  * [Using The __StreamPlus Class__](#using-the-streamplus-class)
-    * [Parse a Local File with a StreamPlus Instance](#parse-a-local-file-with-a-streamplus-instance)
-    * [Pipe a Video to StreamPlus](#pipe-a-video-to-streamplus)
+  *   [__Splice Class__](#splice-class)
+      * [Pretty Print SCTE 35 Message](#pretty-print-scte-35-message)
+      * [Return SCTE 35 Message](#return-scte-35-message)
+      * [Pretty Print Splice Info Section](#pretty-print-splice-info-section)
+      * [Return Splice Info Section](#return-splice-info-section)
+      * [Pretty Print Splice Command](#pretty-print-splice-command)
+      * [Return Splice Command](#return-splice-command)
+      * [Pretty Print Splice Descriptors](#pretty-print-splice-descriptors)
+      * [Return Splice Descriptors](#return-splice-descriptors)  
+  *   [__Stream Class__](#stream-class)
+      * [Parse a Local File with a Stream Instance](#parse-a-local-file-with-a-stream-instance)
+      * [Pipe a Video to Stream](#pipe-a-video-to-stream)
+  *  [__StreamPlus Class__](#streamplus-class)
+      * [Parse a Local File with a StreamPlus Instance](#parse-a-local-file-with-a-streamplus-instance)
+      * [Pipe a Video to StreamPlus](#pipe-a-video-to-streamplus)
 ---  
 ##  Splice Commands 
 - [x] Splice Null  
@@ -75,21 +77,21 @@ Successfully installed bitn-0.0.27 threefive-2.0.99
 
 ##  Easy threefive  
 
-### The decode Function
-* __threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.
+###   The decode Function
+ * __threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.
 ---
  ```python
 import threefive
 ```
-#### MpegTS Files
+####    MpegTS Files
 ```python
 threefive.decode('/path/to/mpegwithscte35.ts') 
 ```
-#### Binary Files
+####    Binary Files
 ```python
 threefive.decode('/mnt/build/file.bin')
 ```
-#### Output for MpegTS and Binary Files and Streams
+####    Output for MpegTS and Binary Files and Streams
 ```python3
 { 'SCTE35': { 'Info_Section': { 'crc': '0x10fa4d9e',
                                 'cw_index': '0x0',
