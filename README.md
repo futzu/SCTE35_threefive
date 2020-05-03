@@ -8,24 +8,20 @@
 * [Dependencies](#dependencies)
 * [__Install__](#install)
 ---
-* [Parsing SCTE 35 messages from Mpeg Transport Streams and Binary files](#mpegts)
-* [Parsing SCTE 35 messages encoded in Base64, Binary, or Hex](#base64-encoded-strings)
 * [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
 ---
 * [__Easy threefive__](#easy-threefive)
   *   [The __decode__ Function](#the-decode-function)
-      * [MpegTS](#mpegts)
-      * [Binary](#binary)
+      * [Parsing SCTE 35 messages from Mpeg Transport Streams and Binary files](#mpegts)
         * [Output for MpegTS and Binary Files and Streams](#output-for-mpegts-and-binary-files-and-streams)
-      * [Base64 Encoded Strings](#base64-encoded-strings)
-      * [Hex Encoded Strings](#hex-encoded-strings)
+      * [Parsing SCTE 35 messages encoded in Base64, Binary, or Hex](#base64-encoded-strings)
         * [Output for Base64 and Hex Strings](#output-for-base64-and-hex-strings)
 ---
 * [__Advanced threefive__](#advanced-threefive)
   *   [__Splice Class__](#splice-class)
       * [Pretty Print SCTE 35 Message](#pretty-print-scte-35-message)
       * [Return SCTE 35 Message](#return-scte-35-message)
-      ---
+        ---
       * [Pretty Print Splice Info Section](#pretty-print-splice-info-section)
       * [Return Splice Info Section](#return-splice-info-section)
       * [Pretty Print Splice Command](#pretty-print-splice-command)
