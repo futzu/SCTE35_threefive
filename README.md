@@ -77,7 +77,7 @@ Successfully installed bitn-0.0.27 threefive-2.0.99
 
 ##  Easy threefive  
 
-###   The decode Function
+###   ```The decode Function```
  * __threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.
 
  ```python
