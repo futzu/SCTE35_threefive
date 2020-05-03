@@ -39,18 +39,18 @@
       * [Pipe a Video to StreamPlus](#pipe-a-video-to-streamplus)
 ---  
 ##  Splice Commands 
-- [x] Splice Null  
-- [x] Splice Schedule  (lightly tested)
-- [x] Splice Insert 
-- [x] Time Signal 
-- [x] Bandwidth Reservation  (lightly tested)
+  *  Splice Null  
+  *  Splice Schedule  (lightly tested)
+  *  Splice Insert 
+  *  Time Signal 
+  *  Bandwidth Reservation  (lightly tested)
 ##  Splice Descriptors 
-- [x]  DTMF Descriptor 
-- [x]  Segmentation Descriptor
-- [x]  Segmentation UPID  (partially implemented)
-- [x]  Segmentation Types and Messages 
-- [x]  Time Descriptor 
-- [x]  Audio Descriptor (lightly tested)
+  *  DTMF Descriptor 
+  *  Segmentation Descriptor
+  *  Segmentation UPID  (partially implemented)
+  *  Segmentation Types and Messages 
+  *  Time Descriptor 
+  *  Audio Descriptor (lightly tested)
 
 
 
@@ -373,12 +373,12 @@ curl -s https://futzu.com/xaa.ts -o - \
                                 'table_id': '0xfc',
                                 'tier': '0xfff'},
 ```
----
+
 ```python3
               'Packet': { 'pid': '0x135',              <-- Pid of the SCTE 35 Packet
                           'pts': 89730.289522},        <-- PTS of the SCTE 35 Packet
 ```
----
+
 ```python3                          
               'Splice_Command': { 'avail_expected': 0,
                                   'avail_num': 0,
