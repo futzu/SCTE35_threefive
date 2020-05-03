@@ -3,25 +3,25 @@
 ---
 * [Supported Splice Commands](#splice-commands)
 * [Supported Splice Descriptors](#splice-descriptors)
----
+
 * [__Fast Start Directions__](#fast-start-directions)
 * [Dependencies](#dependencies)
 * [__Install__](#install)
----
+
 * [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
     * [Splice Insert](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Splice_Insert.py)
     * [Time Signal Placement Opportunity Start](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal-Placement_Opportunity_Start.py)
     * [Time Signal Placement Opportunity End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal-Placement_Opportunity_End.py)
     * [Time Signal Program Overlap ](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal-Program_Overlap.py)
     * [Time Signal Program Start End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal-Program_Start_End.py)
----
+
 * [__Easy threefive__](#easy-threefive)
   *   [The __decode__ Function](#the-decode-function)
       * [Parsing SCTE 35 messages from Mpeg Transport Streams and Binary files](#mpegts)
         * [Output for MpegTS and Binary Files and Streams](#output-for-mpegts-and-binary-files-and-streams)
       * [Parsing SCTE 35 messages encoded in Base64, Binary, or Hex](#base64-encoded-strings)
         * [Output for Base64 and Hex Strings](#output-for-base64-and-hex-strings)
----
+
 * [__Advanced threefive__](#advanced-threefive)
   *   [__Splice Class__](#splice-class)
       * [Pretty Print SCTE 35 Message](#pretty-print-scte-35-message)
