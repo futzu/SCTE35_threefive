@@ -264,7 +264,8 @@ scte35.get_descriptors()
  
  
 ---
-###  ```Stream Class``` [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
+###  ```Stream Class``` 
+[stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
 
   * The __threefive.Stream__ class parses SCTE35 messages from a file or stream.
   
