@@ -51,7 +51,9 @@
   *  Segmentation Types and Messages 
   *  Time Descriptor 
   *  Audio Descriptor (lightly tested)
-[🡡](#threefive)
+  
+  
+  [🡡](#threefive)
 
 
 ## Fast Start Directions.
@@ -74,6 +76,10 @@ Installing collected packages: bitn, threefive
 Successfully installed bitn-0.0.27 threefive-2.0.99
 
 ```
+ 
+  
+[🡡](#threefive)
+
 
 ##  Easy threefive  
 
@@ -91,6 +97,12 @@ threefive.decode('/path/to/mpegwithscte35.ts')
 ```python
 threefive.decode('/mnt/build/file.bin')
 ```
+
+ 
+  
+[🡡](#threefive)
+
+
 ####    Output for MpegTS and Binary Files and Streams
 ```python3
 { 'SCTE35': { 'Info_Section': { 'crc': '0x10fa4d9e',
