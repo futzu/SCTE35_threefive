@@ -38,13 +38,13 @@
       * [Parse a Local File with a StreamPlus Instance](#parse-a-local-file-with-a-streamplus-instance)
       * [Pipe a Video to StreamPlus](#pipe-a-video-to-streamplus)
 ---  
-##  Splice Commands 
+##  ```Splice Commands``` 
   *  Splice Null  
   *  Splice Schedule  (lightly tested)
   *  Splice Insert 
   *  Time Signal 
   *  Bandwidth Reservation  (lightly tested)
-##  Splice Descriptors 
+##  ```Splice Descriptors``` 
   *  DTMF Descriptor 
   *  Segmentation Descriptor
   *  Segmentation UPID  (partially implemented)
@@ -56,16 +56,16 @@
   [🡡 top](#threefive)
 
 
-## Fast Start Directions.
+## ```Fast Start Directions```
 
 *  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
 
-##  Dependencies 
+##  ```Dependencies``` 
 *  Python 3
 *  [__bitn__](https://github.com/futzu/bitn)
 
-##  Install 
+##  ```Install``` 
 ```
 pip install threefive
 Collecting threefive
@@ -81,7 +81,7 @@ Successfully installed bitn-0.0.27 threefive-2.0.99
 [🡡 top](#threefive)
 
 
-##  Easy threefive  
+##  ```Easy threefive```  
 
 ###   ```The decode Function```
  * __threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.
@@ -89,20 +89,18 @@ Successfully installed bitn-0.0.27 threefive-2.0.99
  ```python
 import threefive
 ```
-####    MpegTS Files
+####    ```MpegTS```
 ```python
 threefive.decode('/path/to/mpegwithscte35.ts') 
 ```
-####    Binary Files
+####    ```Binary```
 ```python
 threefive.decode('/mnt/build/file.bin')
 ```
 
-  
- [🡡 top](#threefive)
 
 
-####    Output for MpegTS and Binary Files and Streams
+####    ```Output for MpegTS and Binary Files and Streams```
 ```python3
 { 'SCTE35': { 'Info_Section': { 'crc': '0x10fa4d9e',
                                 'cw_index': '0x0',
@@ -142,18 +140,18 @@ threefive.decode('/mnt/build/file.bin')
                                         'provider_avail_id': 0,
                                         'splice_descriptor_tag': 0}]}}
 ```
-####  Base64 Encoded Strings
+####  ```Base64 Encoded Strings```
 ```python
 mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUg/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
 threefive.decode(mesg)
 ```
-#### Hex Encoded Strings
+#### ```Hex Encoded Strings```
 ```python
 hexed='0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A'
 threefive.decode(hexed)
 ```
 
-#### Output for Base64 and Hex Strings
+#### ```Output for Base64 and Hex Strings```
 
 ```python3
 
@@ -201,7 +199,7 @@ threefive.decode(hexed)
 
 ## Advanced threefive
 
-###  ```Splice Class```
+###  ```Splice Class```  [splice.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/splice.py)
 
 
    *  The __threefive.Splice__ class decodes a SCTE35 binary, base64, or hex encoded string. 
@@ -216,27 +214,27 @@ b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAA
 scte35 = Splice(b64)
 
 ````
-#### Pretty Print SCTE 35 Message
+#### ```Pretty Print SCTE 35 Message```
 ```python
 scte35.show()
 ```
 
-#### Return SCTE 35 Message
+#### ```Return SCTE 35 Message```
 ```python
 scte35.get()
 ```
 
-#### Pretty Print Splice Info Section
+#### ```Pretty Print Splice Info Section```
 ```python
 scte35.show_info_section()
 ```
 
-#### Return Splice Info Section
+#### ```Return Splice Info Section```
 ```python
 scte35.get_info_section()
 
 ```        
-#### Pretty print Splice Command.
+#### ```Pretty print Splice Command```
 ```python
 scte35.show_command()
 
