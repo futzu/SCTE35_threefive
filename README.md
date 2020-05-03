@@ -79,7 +79,7 @@ Successfully installed bitn-0.0.27 threefive-2.0.99
 
 ###   The decode Function
  * __threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.
----
+
  ```python
 import threefive
 ```
@@ -188,7 +188,7 @@ threefive.decode(hexed)
 ## Advanced threefive
 
 ###  Splice Class
----
+
 
    *  The __threefive.Splice__ class decodes a SCTE35 binary, base64, or hex encoded string. 
    *  __threefive.Splice__ provides several methods to access the parsed data.
@@ -323,7 +323,7 @@ curl -s https://futzu.com/xaa.ts -o -  \
 
 ###  StreamPlus Class
   * __threefive.StreamPlus__ is a sub class of  __threefive.Stream__
----
+
 ```python3
   threefive.StreamPlus(tsdata, show_null = False)
 ```
