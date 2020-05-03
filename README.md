@@ -40,14 +40,14 @@
       * [Pipe a Video to StreamPlus](#pipe-a-video-to-streamplus)
 ---  
 ##  ```Splice Commands``` 
-[splice_commands.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/splice_commands.py)
+  *  source [splice_commands.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/splice_commands.py)
   *  Splice Null  
   *  Splice Schedule  (lightly tested)
   *  Splice Insert 
   *  Time Signal 
   *  Bandwidth Reservation  (lightly tested)
 ##  ```Splice Descriptors```  
-[descriptors.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)
+  *  source [descriptors.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)
   *  DTMF Descriptor 
   *  Segmentation Descriptor
   *  Segmentation UPID  (partially implemented)
@@ -87,7 +87,7 @@ Successfully installed bitn-0.0.27 threefive-2.0.99
 ##  ```Easy threefive```  
 
 ###   ```The decode Function``` 
- * [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)
+ *   source [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)
  * __threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.
 
  ```python
@@ -202,8 +202,7 @@ threefive.decode(hexed)
 ## ```Advanced threefive```
 
 ###  ```Splice Class```  
-
-   * [splice.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/splice.py)
+   *  source [splice.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/splice.py)
 
    *  The __threefive.Splice__ class decodes a SCTE35 binary, base64, or hex encoded string. 
    *  __threefive.Splice__ provides several methods to access the parsed data.
@@ -269,7 +268,7 @@ scte35.get_descriptors()
  
 ---
 ###  ```Stream Class``` 
-  * [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
+  * source [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
 
   * The __threefive.Stream__ class parses SCTE35 messages from a file or stream.
   
@@ -399,7 +398,7 @@ curl -s https://futzu.com/xaa.ts -o - \
                                 'tier': '0xfff'},
 ```
 
-```python3
+```js
               'Packet': { 'pid': '0x135',              <-- Pid of the SCTE 35 Packet
                           'pts': 89730.289522},        <-- PTS of the SCTE 35 Packet
 ```
