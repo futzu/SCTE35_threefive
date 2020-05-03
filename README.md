@@ -9,6 +9,9 @@
 * [__Install__](#install)
 ---
 * [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
+    * [Splice Insert](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Splice_Insert.py)
+    * [Time Signal Placement Opportunity Start](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal-Placement_Opportunity_Start.py)
+    * [Time Signal Placement Opportunity End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal-Placement_Opportunity_End.py)
 ---
 * [__Easy threefive__](#easy-threefive)
   *   [The __decode__ Function](#the-decode-function)
@@ -21,7 +24,6 @@
   *   [__Splice Class__](#splice-class)
       * [Pretty Print SCTE 35 Message](#pretty-print-scte-35-message)
       * [Return SCTE 35 Message](#return-scte-35-message)
-        ---
       * [Pretty Print Splice Info Section](#pretty-print-splice-info-section)
       * [Return Splice Info Section](#return-splice-info-section)
       * [Pretty Print Splice Command](#pretty-print-splice-command)
