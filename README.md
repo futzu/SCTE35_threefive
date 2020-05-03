@@ -187,11 +187,11 @@ threefive.decode(hexed)
 
 ## Advanced threefive
 
-###  Using The Splice Class
+###  Splice Class
 ---
 
- *  The __threefive.Splice__ class decodes a SCTE35 binary, base64, or hex encoded string. 
- *  __threefive.Splice__ provides several methods to access the parsed data.
+   *  The __threefive.Splice__ class decodes a SCTE35 binary, base64, or hex encoded string. 
+   *  __threefive.Splice__ provides several methods to access the parsed data.
 
 ```python
 
@@ -248,7 +248,7 @@ scte35.show_descriptors()
 scte35.get_descriptors()
 
 ```      
-###  Using The Stream Class
+###  Stream Class
 ---
   * The __threefive.Stream__ class parses SCTE35 messages from a file or stream.
   
@@ -321,7 +321,7 @@ curl -s https://futzu.com/xaa.ts -o -  \
                                         'splice_descriptor_tag': 0}]}}
 ```
 
-###  Using The StreamPlus Class
+###  StreamPlus Class
   * __threefive.StreamPlus__ is a sub class of  __threefive.Stream__
 ---
 ```python3
