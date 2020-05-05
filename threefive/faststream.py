@@ -9,8 +9,7 @@ class FastStream:
     PACKET_SIZE = 188
     PACKET_COUNT = 300
     
-    def __init__(self, tsdata, show_null = False):
-        self.show_null = show_null
+    def __init__(self, tsdata):
         self.parse_tsdata(tsdata)
 
     def parse_tsdata(self, tsdata):
@@ -32,9 +31,8 @@ class FastStream:
         '''
         parse a mpegts packet for SCTE 35 and/or PTS
         '''
-        if packet[0] != self.SYNC_BYTE: return
         if packet[5] != self.SCTE35_TID : return
-        if not self.show_null:
-            if packet[18] == 0: return
+      #  if not self.show_null:
+        if packet[18] == 0: return
         self.parse_payload(packet[5:])
         return
