@@ -1,4 +1,4 @@
-from threefive import Splice
+from .splice import Splice
 
 class FastStream:
     '''
