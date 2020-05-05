@@ -7,7 +7,8 @@ class FastStream:
     SYNC_BYTE = 0x47
     SCTE35_TID = 0xfc
     PACKET_SIZE = 188
-    PACKET_COUNT = 300
+    PACKET_COUNT = 386
+    SPLICE_CMD_TYPES = [4,5,6,7,255]
     
     def __init__(self, tsdata):
         self.parse_tsdata(tsdata)
@@ -31,8 +32,7 @@ class FastStream:
         '''
         parse a mpegts packet for SCTE 35 and/or PTS
         '''
-        if packet[5] != self.SCTE35_TID : return
-      #  if not self.show_null:
-        if packet[18] == 0: return
-        self.parse_payload(packet[5:])
+        if packet[5] == self.SCTE35_TID : 
+            if packet[18] in self.SPLICE_CMD_TYPES:
+                self.parse_payload(packet[5:])
         return

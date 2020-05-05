@@ -26,8 +26,6 @@ class Splice_Info_Section:
         self.encryption_algorithm = bitbin.asint(6)
         self.pts_adjustment = bitbin.as90k(33)
         self.cw_index = bitbin.ashex(8)
-        if self.cw_index > 256:
-            raise ValueError('splice_info_section.cw_index should be less than 256') 
         self.tier = bitbin.ashex(12)
         if int(self.tier,16) > 4095:
             raise ValueError('splice_info_section.tier should less than 0xfff')
