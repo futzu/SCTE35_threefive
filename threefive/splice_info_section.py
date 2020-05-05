@@ -1,9 +1,7 @@
 class Splice_Info_Section:
+
     def __init__(self):
          pass
-
-    def __repr__(self):
-        return str(vars(self))
 
     def decode(self, bitbin):
         self.table_id = bitbin.ashex(8)
@@ -19,11 +17,18 @@ class Splice_Info_Section:
         if self.reserved != '0x3':
             raise ValueError('splice_info_section.reserved should be 0x3')
         self.section_length = bitbin.asint(12)
+        if self.section_length > 4093:
+            raise ValueError('splice_info_section.section_length cannot be greater than 4093') 
         self.protocol_version = bitbin.asint(8)
+        if self.protocol_version != 0:
+            raise ValueError('splice_info_section.protocol_version should be 0') 
         self.encrypted_packet = bitbin.asflag(1)
         self.encryption_algorithm = bitbin.asint(6)
         self.pts_adjustment = bitbin.as90k(33)
         self.cw_index = bitbin.ashex(8)
+        if not self.encrypted_packet:
+            if self.cw_index != '0x0':
+                raise ValueError('If not encrypted, splice_info_section.cw_index should be 0x0') 
         self.tier = bitbin.ashex(12)
         if int(self.tier,16) > 4095:
             raise ValueError('splice_info_section.tier should less than 0xfff')
