@@ -6,7 +6,9 @@ class FastStream:
     '''
     SYNC_BYTE = 0x47
     SCTE35_TID = 0xfc
-
+    PACKET_SIZE = 188
+    PACKET_COUNT = 300
+    
     def __init__(self, tsdata, show_null = False):
         self.show_null = show_null
         self.parse_tsdata(tsdata)
@@ -16,19 +18,14 @@ class FastStream:
          split tsdata into packets for parsing
         '''
         while tsdata:
-            packet=tsdata.read(188)
-            if not packet: break
-            self.parse_tspacket(packet)
+            chunky = tsdata.read(self.PACKET_SIZE * self.PACKET_COUNT)
+            if not chunky: break
+            [self.parse_tspacket(chunky[i:i+self.PACKET_SIZE] )
+                     for i in range(0, len(chunky), self.PACKET_SIZE)]
         return
-  
+
     def parse_payload(self,payload):
-        '''
-        If you want to customize output,
-        subclass Stream and change this method.
-        '''
-        try:
-            tf = Splice(payload)
-            tf.show()
+        try: Splice(payload).show()
         except: pass
         
     def parse_tspacket(self, packet):
