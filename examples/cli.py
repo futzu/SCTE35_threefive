@@ -10,5 +10,6 @@ def do():
         # Handles piped in data
         try: threefive.decode()
         except: pass
+        
 if __name__ == '__main__':
     do()   
