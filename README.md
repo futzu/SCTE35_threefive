@@ -120,7 +120,6 @@ threefive.decode('/mnt/build/file.bin')
                                 'splice_command_type': 5,
                                 'table_id': '0xfc',
                                 'tier': '0xfff'},
-              'Packet': { 'pid': '0x135'},
               'Splice_Command': { 'avail_expected': 0,
                                   'avail_num': 0,
                                   'break_auto_return': False,
@@ -318,7 +317,6 @@ curl -s https://futzu.com/xaa.ts -o -  \
                                 'splice_command_type': 5,
                                 'table_id': '0xfc',
                                 'tier': '0xfff'},
-              'Packet': { 'pid': '0x135'},
               'Splice_Command': { 'avail_expected': 0,
                                   'avail_num': 0,
                                   'break_auto_return': False,
@@ -356,7 +354,7 @@ curl -s https://futzu.com/xaa.ts -o -  \
    * __tsdata__ is an open file handle or sys.stdin.buffer to read 'piped' in data.
    * __show_null__ if set to True, enables showing SCTE 35 null commands.
     
-   * __threefive.StreamPlus__ adds the PTS timestamp for each SCTE 35 packet.
+   * __threefive.StreamPlus__ adds the PID and PTS timestamp for each SCTE 35 packet.
 
 #### ```Parse a Local File with a StreamPlus Instance```
  
