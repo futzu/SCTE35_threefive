@@ -1,19 +1,40 @@
 from .splice import Splice
-from .stream import Stream
 from bitn import BitBin
-
+from .stream import Stream
 
 class StreamPlus(Stream):
     '''
-    Subclass of the Stream Class
-    that also parses the PTS
-    for the SCTE 35 packet.
+    StreamPlus adds PID and PTS for the SCTE 35 packets
+    to the Stream class.
     '''
+    SYNC_BYTE = 0x47
     NON_PTS_STREAM_IDS = [188, 190, 191, 240, 241, 242, 248]
 
     def __init__(self, tsdata, show_null = False):
-        super().__init__(tsdata, show_null)
+        self.SCTE35_PID = False
         self.PTS= False
+        super().__init__(tsdata,show_null)
+  
+    def has_sync_byte(self,first_byte):
+        '''
+        return True if first_byte
+        is equal to self.SYNC_BYTE,
+        '''
+        return (first_byte == self.SYNC_BYTE)
+    
+    def next_two_bytes(self,two_bytes):
+        '''
+        returns the second and third
+        header bytes as an int
+        '''
+        return int.from_bytes(two_bytes,byteorder='big')
+  
+    def the_packet_pid(self,two_bytes):
+        '''
+        parse packet pid from two bytes
+        of the header
+        '''
+        return two_bytes & 0x1fff
 
     def verify_pusi(self,bitbin):
         '''
@@ -57,6 +78,13 @@ class StreamPlus(Stream):
         '''
         pusi = two_bytes >> 14 & 0x1
         return pusi
+        
+    def has_scte35_tid(self,byte5):
+        '''
+        byte 5 of a SCTE 35 packet must be
+        self.SCTE35_TID to be valid
+        '''
+        return (byte5 == self.SCTE35_TID)
 
     def parse_payload(self,payload,pid):
         '''
@@ -72,20 +100,18 @@ class StreamPlus(Stream):
         '''
         parse a mpegts packet for SCTE 35 and/or PTS
         '''
-        if not self.has_sync_byte(packet[0]):return
+        if not self.has_sync_byte(packet[0]): return
         two_bytes=self.next_two_bytes(packet[1:3])
         pid = self.the_packet_pid(two_bytes)
         # No PTS times in pid 101
         if pid == 101: return
-        if self.packet_has_pusi(two_bytes):
-            self.parse_pusi(packet[4:20])
+        if self.packet_has_pusi(two_bytes): self.parse_pusi(packet[4:20])
         if not self.has_scte35_tid(packet[5]) : return 
-        if self.SCTE35_PID and (pid != self.SCTE35_PID): return
-        if not self.show_null:
-            if packet[18] == 0: return
-        tf = self.parse_payload(packet[5:],pid)
-        if tf:
-            if not self.SCTE35_PID:
-                self.SCTE35_PID = pid
-        tf = False
-        return
+        if (self.SCTE35_PID) and (pid != self.SCTE35_PID): return
+        if packet[18] in self.SPLICE_CMD_TYPES:
+            tf = self.parse_payload(packet[5:],pid)
+            if tf:
+                if not self.SCTE35_PID:
+                    self.SCTE35_PID = pid
+            tf = False
+            return

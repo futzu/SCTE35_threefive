@@ -4,10 +4,9 @@ class FastStream:
     '''
     Parse mpegts files and streams for SCTE 35 packets
     '''
-    SYNC_BYTE = 0x47
-    SCTE35_TID = 0xfc
     PACKET_SIZE = 188
     PACKET_COUNT = 386
+    SCTE35_TID = 0xfc
     SPLICE_CMD_TYPES = [4,5,6,7,255]
     
     def __init__(self, tsdata):
