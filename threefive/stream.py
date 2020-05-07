@@ -5,7 +5,7 @@ class Stream:
     Parse mpegts files and streams for SCTE 35 packets
     '''
     PACKET_SIZE = 188
-    PACKET_COUNT = 4096
+    PACKET_COUNT = 384
     SCTE35_TID = 0xfc
     SPLICE_CMD_TYPES = [4,5,6,7,255]
     
