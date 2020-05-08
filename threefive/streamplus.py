@@ -3,56 +3,18 @@ from bitn import BitBin
 from .stream import Stream
 from struct import unpack
 
+
 class StreamPlus(Stream):
     '''
     StreamPlus adds PID and PTS for the SCTE 35 packets
     to the Stream class.
     '''
-    SYNC_BYTE = b'G'
     NON_PTS_STREAM_IDS = [188, 190, 191, 240, 241, 242, 248]
 
     def __init__(self, tsdata, show_null = False):
         self.SCTE35_PID = False
         self.PTS= False
         super().__init__(tsdata,show_null)
-  
-    def has_sync_byte(self,first_byte):
-        '''
-        return True if first_byte
-        is equal to self.SYNC_BYTE,
-        '''
-        return (first_byte == self.SYNC_BYTE)
-    
-    def next_two_bytes(self,two_bytes):
-        '''
-        returns the second and third
-        header bytes as an int
-        '''
-        return unpack('>H', two_bytes)[0]
-        #return int.from_bytes(two_bytes,byteorder='big')
-  
-    def the_packet_pid(self,two_bytes):
-        '''
-        parse packet pid from two bytes
-        of the header
-        '''
-        return two_bytes & 0x1fff
-
-    def verify_pusi(self,bitbin):
-        '''
-        If the pusi data contains these markers,
-        we can pull a PTS value..
-        '''
-        if bitbin.asint(24) != 1: return False
-        if bitbin.asint(8) in self.NON_PTS_STREAM_IDS: return False 
-        bitbin. forward(16) 
-        if bitbin.asint(2) != 2: return False
-        bitbin.forward(6)
-        if bitbin.asint(2) != 2: return False 
-        bitbin.forward(14) 
-        if bitbin.asint(4) != 2: return False 
-        self.parse_pts(bitbin)
-        return
 
     def parse_pts(self,bitbin):
         '''
@@ -83,7 +45,6 @@ class StreamPlus(Stream):
         self.parse_pts(bitbin)
         return
 
-
     def parse_payload(self,payload,pid):
         '''
         Override this method to customize output
@@ -97,7 +58,7 @@ class StreamPlus(Stream):
         '''
         parse a mpegts packet for SCTE 35 and/or PTS
         '''
-        two_bytes=unpack('>H', packet[1:3])[0]
+        two_bytes = unpack('>H', packet[1:3])[0]
         pid = two_bytes & 0x1fff
         pusi = two_bytes >> 14 & 0x1
         if pusi: self.parse_pusi(packet[4:20])
