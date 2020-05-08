@@ -54,11 +54,8 @@ table 22 from page 62 of
 https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
 I am using the segmentation_type_id as a key.
 
-Segmentation_type_id = [segmentation_message,
-			segment_num,
-			segments_expected,
-			sub_segment_num,
-			sub_segments_expected]
+Segmentation_type_id : segmentation_message
+	
 """
 table22 = {
     0x00: "Not Indicated",
