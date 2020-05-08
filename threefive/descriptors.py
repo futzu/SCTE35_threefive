@@ -20,8 +20,6 @@ class Splice_Descriptor:
         else:
             return self.identifier
 
-    def __repr__(self):
-        return str(vars(self))
 
 class Avail_Descriptor(Splice_Descriptor):
     """
