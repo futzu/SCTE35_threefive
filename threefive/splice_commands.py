@@ -6,9 +6,6 @@ class Splice_Command:
     def __init__(self):
         pass
 
-    def __repr__(self):
-        return str(vars(self))
-
     def decode(self, bitn):
         pass
 
@@ -100,8 +97,6 @@ class Time_Signal(Splice_Command):
     Table 10 - time_signal()
     """
     def decode(self, bitbin):
-        self.time_specified_flag = None
-        self.pts_time = None
         self.name = "Time Signal"
         self.splice_time(bitbin)
 
