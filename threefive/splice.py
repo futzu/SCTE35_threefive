@@ -101,10 +101,9 @@ class Splice:
         return {'Info_Section':self.get(self.info_section)}
 
     def kvprint(self, obj):
-        print('\nSCTE35:\n')
+        print('\n')
         for k, v in obj.items():
             print(f'\t{k} = {v}')
-        #pprint.pprint(obj,width=1,indent=1)
 
     def list_descriptors(self):
         '''
