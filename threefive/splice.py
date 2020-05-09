@@ -1,5 +1,6 @@
 from base64 import b64decode, decodebytes
 from bitn import BitBin
+import pprint
 from threefive import (
     descriptors as dscprs,
     splice_info_section as spinfo,
@@ -60,23 +61,16 @@ class Splice:
             bit_move = sdl + d_tag
             dll -= bit_move
 
-    def get(self,obj=False):
+    def get(self):
         '''
-        returns obj as dict. if obj is False,
         Returns a dict of dicts for all three parts
         of a SCTE 35 message.
         '''
-        if not obj:
-            scte35 = {'Info_Section' : vars(self.info_section),
-                    'Splice_Command': vars(self.command),
-                    'Splice_Descriptors': self.list_descriptors()}
-            if self.pid or self.pts:
-                packet = {}
-                if self.pid: packet['pid'] = hex(self.pid)
-                if self.pts: packet['pts'] = self.pts
-                scte35['Packet'] = packet
-        else:
-            scte35 = vars(obj)
+        scte35 = {**self.get_info_section(),
+                    **self.get_command(),
+                    **self.get_descriptors()}
+        if self.pid or self.pts:
+            scte35.update(self.get_packet_data())
         return scte35    
 
     def get_command(self):
@@ -84,7 +78,7 @@ class Splice:
         returns the SCTE 35
         splice command data as a dict.
         '''  
-        return {'Splice_Command': self.get(self.command)}
+        return {'Splice_Command': vars(self.command)}
     
     def get_descriptors(self):
         '''
@@ -98,12 +92,17 @@ class Splice:
         Returns SCTE 35
         splice info section as a dict
         '''
-        return {'Info_Section':self.get(self.info_section)}
+        return {'Info_Section':vars(self.info_section)}
+
+    def get_packet_data(self):
+        packet = {}
+        if self.pid: packet['pid'] = hex(self.pid)
+        if self.pts: packet['pts'] = self.pts
+        return {'Packet_Data':packet}
 
     def kvprint(self, obj):
         print('\n')
-        for k, v in obj.items():
-            print(f'\t{k} = {v}')
+        pprint.pprint(obj,width=1,indent=2)
 
     def list_descriptors(self):
         '''
