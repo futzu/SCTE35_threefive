@@ -102,7 +102,7 @@ class Splice:
 
     def kvprint(self, obj):
         print('\n')
-        pprint.pprint(obj,width=1,indent=2)
+        pprint.pprint({'SCTE35':obj},width=1,indent=2)
 
     def list_descriptors(self):
         '''
