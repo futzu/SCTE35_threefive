@@ -12,7 +12,6 @@ class StreamPlus(Stream):
     NON_PTS_STREAM_IDS = [188, 190, 191, 240, 241, 242, 248]
 
     def __init__(self, tsdata, show_null = False):
-        self.SCTE35_PID = False
         self.PTS= False
         super().__init__(tsdata,show_null)
 
