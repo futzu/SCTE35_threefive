@@ -19,10 +19,9 @@ class StreamStats(StreamPlus):
         try:
             tf = Splice(payload,pid=pid, pts=self.PTS)
             print(f'\033[92mSCTE35\033[0m {tf.command.name} @ \033[92m{self.PTS:0.3f}\033[0m')
-            if tf.info_section.splice_command_type != 0: tf.show_command()
+            tf.show_command()
             print('\n')
-            return tf
-        except: return False
+        except: pass
         
     def parse_tspacket(self, packet):
         '''
@@ -33,5 +32,5 @@ class StreamStats(StreamPlus):
         return
        
 if __name__ == '__main__':
-    with open(sys.argv[1],'rb') as stuff:
-        StreamStats(stuff)
+    # pipe the video in 
+    StreamStats(sys.stdin.buffer)
