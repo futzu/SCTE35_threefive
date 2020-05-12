@@ -29,7 +29,7 @@ class Splice_Null(Splice_Command):
     """
     def decode(self, bitbin):
         self.name = "Splice Null"
-        self.splice_command_length=0
+        self.splice_command_length = 0
 
 
 class Splice_Schedule(Splice_Command):
@@ -69,7 +69,7 @@ class Splice_Insert(Splice_Command):
     Table 9 - splice_insert()
     """
     def decode(self, bitbin):
-        bstart=bitbin.idx
+        bit_start = bitbin.idx
         self.name = "Splice Insert"
         self.splice_event_id = bitbin.asint(32)
         self.splice_event_cancel_indicator = bitbin.asflag(1)
@@ -92,8 +92,8 @@ class Splice_Insert(Splice_Command):
             self.unique_program_id = bitbin.asint(16)
             self.avail_num = bitbin.asint(8)
             self.avail_expected = bitbin.asint(8)
-            bend=bitbin.idx
-            self.splice_command_length=int((bstart -bend)/8)
+            bit_end = bitbin.idx
+            self.splice_command_length = int((bit_start - bit_end) / 8)
             
 
 
