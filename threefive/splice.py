@@ -1,6 +1,6 @@
 from base64 import b64decode, decodebytes
 from bitn import BitBin
-import pprint
+import json
 from threefive import (
     descriptors as dscprs,
     splice_info_section as spinfo,
@@ -27,16 +27,16 @@ class Splice:
                    7: spcmd.Bandwidth_Reservation,
                    255: spcmd.Private_Command}
 
-    def __init__(self, mesg,pid=False,pts=False):
+    def __init__(self, mesg,pid = False,pts = False):
         self.mesg = self.mkbits(mesg)
         self.pid = pid
         self.pts = pts
         self.infobb = BitBin(self.mesg[:14])
-        self.mesg=self.mesg[14:]
+        self.mesg = self.mesg[14:]
         self.info_section = spinfo.Splice_Info_Section()
         self.info_section.decode(self.infobb)
         self.descriptors = []
-        cmdl=self.info_section.splice_command_length
+        cmdl = self.info_section.splice_command_length
         # fix for bad self.info_section.splice_command_length 
         if cmdl > 188:
             self.cmdbb = BitBin(self.mesg)
@@ -48,7 +48,7 @@ class Splice:
             self.set_splice_command()
             self.mesg = self.mesg[cmdl:]
         self.descriptorloop()
-        self.info_section.crc = hex(int.from_bytes(self.mesg[0:4],byteorder='big'))
+        self.info_section.crc = hex(int.from_bytes(self.mesg[0:4],byteorder = 'big'))
 
     def __repr__(self):
         return str(self.get())
@@ -57,14 +57,14 @@ class Splice:
         '''
         parses all splice descriptors
         '''
-        self.info_section.descriptor_loop_length = int.from_bytes(self.mesg[0:2],byteorder='big')
-        self.mesg=self.mesg[2:]
+        self.info_section.descriptor_loop_length = int.from_bytes(self.mesg[0:2],byteorder = 'big')
+        self.mesg = self.mesg[2:]
         dll = self.info_section.descriptor_loop_length
         while dll > 0:
             try:
                 sd = self.set_splice_descriptor()
                 sdl = sd.descriptor_length
-                dll-=sdl+2
+                dll-= sdl+2
                 self.descriptors.append(sd)
             except:
                 break
@@ -111,7 +111,7 @@ class Splice:
 
     def kvprint(self, obj):
         print('\n')
-        pprint.pprint({'SCTE35':obj},width=1,indent=1)
+        print(json.dumps({'SCTE35':obj},indent = 8))
 
     def list_descriptors(self):
         '''
@@ -134,7 +134,7 @@ class Splice:
         '''
         sct = self.info_section.splice_command_type
         if sct not in self.command_map.keys():
-            #raise ValueError('Unknown Splice Command Type')
+            raise ValueError('Unknown Splice Command Type')
             return False
         self.command = self.command_map[sct]()
         self.command.decode(self.cmdbb)
@@ -147,11 +147,11 @@ class Splice:
         tag = self.mesg[0]
         desc_len = self.mesg[1]
         self.mesg = self.mesg[2:]
-        bitbin=BitBin(self.mesg[:desc_len])
-        self.mesg=self.mesg[desc_len:]
+        bitbin = BitBin(self.mesg[:desc_len])
+        self.mesg = self.mesg[desc_len:]
         if tag in self.descriptor_map.keys():
             sd = self.descriptor_map[tag](bitbin,tag)
-            sd.descriptor_length= desc_len
+            sd.descriptor_length = desc_len
             return sd
         else: return False
 
