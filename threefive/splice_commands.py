@@ -29,6 +29,7 @@ class Splice_Null(Splice_Command):
     """
     def decode(self, bitbin):
         self.name = "Splice Null"
+        self.splice_command_length=0
 
 
 class Splice_Schedule(Splice_Command):
