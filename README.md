@@ -321,7 +321,7 @@ scte35.get_command()
 
 ``` 
 
-#### ``` JSON Pretty Print Splice Descriptors```
+#### ```JSON Pretty Print Splice Descriptors```
 ```python
 scte35.show_descriptors()
 
