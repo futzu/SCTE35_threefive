@@ -3,14 +3,15 @@ from threefive import Splice,StreamPlus
 
 '''
 Subclassing example
+
+Usage: python3 streamstats.py < video.ts
+
 '''
 
 class StreamStats(StreamPlus):
     '''
     monitor a live video stream
     '''
-    def __init__(self, tsdata, show_null = False):
-        super().__init__(tsdata, show_null)
 
     def parse_payload(self,payload,pid):
         '''
