@@ -1,4 +1,4 @@
-from .tables import table22
+from .tables import table21,table22
 
 
 class Splice_Descriptor:
@@ -8,10 +8,8 @@ class Splice_Descriptor:
             descriptor_length        8 uimsbf
             identifier              32 uimsbf
     """
-    def __init__(self, bitbin, tag):
-        self.name = "Unknown Descriptor"
-        self.splice_descriptor_tag = tag
-        self.descriptor_length = bitbin.asint(8)
+    def __init__(self,bitbin,tag):
+        self.tag =tag
         # identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
         self.identifier = bitbin.asdecodedhex(32)
         if self.identifier != "CUEI":
@@ -44,7 +42,6 @@ class Dtmf_Descriptor(Splice_Descriptor):
         self.dtmf_chars = []
         for i in range(0, self.dtmf_count):
             self.dtmf_chars.append(bitbin.asint(8))
-
 
 class Segmentation_Descriptor(Splice_Descriptor):
     """
@@ -84,15 +81,14 @@ class Segmentation_Descriptor(Splice_Descriptor):
                 self.turner_identifier = bitbin.ashex(64)
             self.segmentation_type_id = bitbin.asint(8)
             if self.segmentation_type_id in table22.keys():
-                self.segmentation_message = table22[self.segmentation_type_id]
-            if self.segmentation_type_id == 0:
-                self.segment_num = 0
-                self.segments_expected = 0
+                self.segmentation_message = table22[self.segmentation_type_id][0]
+                self.segment_num = table22[self.segmentation_type_id][1]
+                self.segments_expected = table22[self.segmentation_type_id][2]
             else:
                 self.segment_num = bitbin.asint(8)
                 self.segments_expected = bitbin.asint(8)
-                
 
+                
 class Time_Descriptor(Splice_Descriptor):
     """
     Table 25 - time_descriptor()

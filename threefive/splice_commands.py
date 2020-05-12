@@ -68,13 +68,14 @@ class Splice_Insert(Splice_Command):
     Table 9 - splice_insert()
     """
     def decode(self, bitbin):
+        bstart=bitbin.idx
         self.name = "Splice Insert"
         self.splice_event_id = bitbin.asint(32)
         self.splice_event_cancel_indicator = bitbin.asflag(1)
         bitbin.forward(7)
-        if not self.splice_event_cancel_indicator:
+        if not self.splice_event_cancel_indicator: 
             self.out_of_network_indicator = bitbin.asflag(1)
-            self.program_splice_flag = bitbin.asflag(1)
+            self.program_splice_flag = bitbin.asflag(1) 
             self.duration_flag = bitbin.asflag(1)
             self.splice_immediate_flag = bitbin.asflag(1)
             bitbin.forward(4)
@@ -90,6 +91,9 @@ class Splice_Insert(Splice_Command):
             self.unique_program_id = bitbin.asint(16)
             self.avail_num = bitbin.asint(8)
             self.avail_expected = bitbin.asint(8)
+            bend=bitbin.idx
+            self.splice_command_length=int((bstart -bend)/8)
+            
 
 
 class Time_Signal(Splice_Command):

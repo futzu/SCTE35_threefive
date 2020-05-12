@@ -28,18 +28,27 @@ class Splice:
                    255: spcmd.Private_Command}
 
     def __init__(self, mesg,pid=False,pts=False):
-        mesg = self.mkbits(mesg)
+        self.mesg = self.mkbits(mesg)
         self.pid = pid
         self.pts = pts
-        self.infobb= BitBin(mesg[:14])
+        self.infobb = BitBin(self.mesg[:14])
+        self.mesg=self.mesg[14:]
         self.info_section = spinfo.Splice_Info_Section()
         self.info_section.decode(self.infobb)
-        self.infobb=False
-        self.bitbin=BitBin(mesg[14:])
         self.descriptors = []
-        self.set_splice_command()
+        cmdl=self.info_section.splice_command_length
+        # fix for bad self.info_section.splice_command_length 
+        if cmdl > 188:
+            self.cmdbb = BitBin(self.mesg)
+            self.set_splice_command()
+            self.mesg = self.mesg[self.command.splice_command_length:]
+            self.info_section.splice_command_length = self.command.splice_command_length
+        else:
+            self.cmdbb = BitBin(self.mesg[:cmdl])
+            self.set_splice_command()
+            self.mesg = self.mesg[cmdl:]
         self.descriptorloop()
-        self.info_section.crc = self.bitbin.ashex(32)
+        self.info_section.crc = hex(int.from_bytes(self.mesg[0:4],byteorder='big'))
 
     def __repr__(self):
         return str(self.get())
@@ -48,19 +57,19 @@ class Splice:
         '''
         parses all splice descriptors
         '''
-        self.info_section.descriptor_loop_length = self.bitbin.asint(16)
+        self.info_section.descriptor_loop_length = int.from_bytes(self.mesg[0:2],byteorder='big')
+        self.mesg=self.mesg[2:]
         dll = self.info_section.descriptor_loop_length
-        d_tag = 1  # 1 byte for descriptor_tag
-        while dll > 4:
+        while dll > 0:
             try:
                 sd = self.set_splice_descriptor()
                 sdl = sd.descriptor_length
+                dll-=sdl+2
                 self.descriptors.append(sd)
             except:
                 break
-            bit_move = sdl + d_tag
-            dll -= bit_move
-
+           
+            
     def get(self):
         '''
         Returns a dict of dicts for all three parts
@@ -102,7 +111,7 @@ class Splice:
 
     def kvprint(self, obj):
         print('\n')
-        pprint.pprint({'SCTE35':obj},width=1,indent=2)
+        pprint.pprint({'SCTE35':obj},width=1,indent=1)
 
     def list_descriptors(self):
         '''
@@ -125,19 +134,25 @@ class Splice:
         '''
         sct = self.info_section.splice_command_type
         if sct not in self.command_map.keys():
-            raise ValueError('Unknown Splice Command Type')
+            #raise ValueError('Unknown Splice Command Type')
             return False
         self.command = self.command_map[sct]()
-        self.command.decode(self.bitbin)
+        self.command.decode(self.cmdbb)
 
     def set_splice_descriptor(self):
         '''
         Splice Descriptors looked up in self.descriptor_map
         '''
         # splice_descriptor_tag 8 uimsbf
-        tag = self.bitbin.asint(8)
+        tag = self.mesg[0]
+        desc_len = self.mesg[1]
+        self.mesg = self.mesg[2:]
+        bitbin=BitBin(self.mesg[:desc_len])
+        self.mesg=self.mesg[desc_len:]
         if tag in self.descriptor_map.keys():
-            return self.descriptor_map[tag](self.bitbin, tag)
+            sd = self.descriptor_map[tag](bitbin,tag)
+            sd.descriptor_length= desc_len
+            return sd
         else: return False
 
     def show(self):
