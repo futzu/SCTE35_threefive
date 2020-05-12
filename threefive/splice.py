@@ -1,4 +1,4 @@
-from base64 import b64decode, decodebytes
+from base64 import b64decode
 from bitn import BitBin
 import json
 from threefive import (
@@ -38,7 +38,7 @@ class Splice:
         self.descriptors = []
         cmdl = self.info_section.splice_command_length
         # fix for bad self.info_section.splice_command_length 
-        if cmdl > 188:
+        if cmdl > 174:   # 188 bytes per packet - 14 bytes for splice_info_section
             self.cmdbb = BitBin(self.mesg)
             self.set_splice_command()
             self.mesg = self.mesg[self.command.splice_command_length:]
@@ -57,9 +57,8 @@ class Splice:
         '''
         parses all splice descriptors
         '''
-        self.info_section.descriptor_loop_length = int.from_bytes(self.mesg[0:2],byteorder = 'big')
+        dll = self.info_section.descriptor_loop_length = int.from_bytes(self.mesg[0:2],byteorder = 'big')
         self.mesg = self.mesg[2:]
-        dll = self.info_section.descriptor_loop_length
         while dll > 0:
             try:
                 sd = self.set_splice_descriptor()
