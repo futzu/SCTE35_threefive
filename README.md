@@ -1,6 +1,6 @@
 # threefive
 ## SCTE35 Decoder
-* [ Latest Pip Version is 2.1.11]( https://pypi.org/project/threefive/)
+* [ Latest Pip Version]( https://pypi.org/project/threefive/)
 ---
 * [Supported Splice Commands](#splice-commands)
 * [Supported Splice Descriptors](#splice-descriptors)
