@@ -2,12 +2,6 @@ from .tables import table21,table22
 
 
 class Splice_Descriptor:
-    """
-    The first six bytes of all descriptors:
-            splice_descriptor_tag    8 uimsbf
-            descriptor_length        8 uimsbf
-            identifier              32 uimsbf
-    """
     def __init__(self,bitbin,tag):
         self.tag =tag
         # identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
