@@ -68,8 +68,7 @@ class Splice:
                 self.descriptors.append(sd)
             except:
                 break
-           
-            
+  
     def get(self):
         '''
         Returns a dict of dicts for all three parts
