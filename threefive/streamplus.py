@@ -37,8 +37,9 @@ class StreamPlus(Stream):
         '''
         if  packetdata[2] != 1: return False
         if packetdata[3] in self.NON_PTS_STREAM_IDS: return False 
-        if (packetdata[6]>>6) != (packetdata[7]>>6): return False
-        if packetdata[9] >> 4 != 2: return False
+        if (packetdata[6] >> 6) is not 2: return False
+        if (packetdata[7] >> 6) is not 2: return False
+        if (packetdata[9] >> 4) is not 2: return False
         bitbin = BitBin(packetdata[9:])
         bitbin.forward(4)
         self.parse_pts(bitbin)
