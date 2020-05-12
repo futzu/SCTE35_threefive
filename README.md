@@ -33,7 +33,7 @@
       * [Return Splice Info Section](#return-splice-info-section)
       * [JSON Pretty Print Splice Command](#json-pretty-print-splice-command)
       * [Return Splice Command](#return-splice-command)
-      * [JSON Pretty Print Splice Descriptors](#json-pretty-print-splice-descriptors)
+      * [JSON Pretty Print Splice Descriptors](https://github.com/futzu/SCTE35-threefive#-json-pretty-print-splice-descriptors)
       * [Return Splice Descriptors](#return-splice-descriptors)  
   *   [__Stream Class__](#stream-class)
       * [Parse a Local File with a Stream Instance](#parse-a-local-file-with-a-stream-instance)
