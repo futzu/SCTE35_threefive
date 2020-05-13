@@ -17,7 +17,7 @@ class Stream:
         '''
          split tsdata into packets for parsing
         '''
-        for packet in iter(partial(tsdata.read, 188), b''):
+        for packet in iter(partial(tsdata.read, self.PACKET_SIZE), b''):
             self.parse_tspacket(packet)
         return
 
