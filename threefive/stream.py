@@ -20,15 +20,13 @@ class Stream:
         for packet in iter(partial(tsdata.read, self.PACKET_SIZE), b''):
             self.parse_tspacket(packet)
         return
-
-    def parse_payload(self,payload):
-        try: Splice(payload).show()
-        except: pass
-        
+ 
     def parse_tspacket(self, packet):
         '''
         parse a mpegts packet for SCTE 35 and/or PTS
         '''
         if packet[5] is not self.SCTE35_TID : return
-        if packet[18] in self.SPLICE_CMD_TYPES: self.parse_payload(packet[5:])        
+        if packet[18] in self.SPLICE_CMD_TYPES:
+            try: Splice(packet[5:]).show()
+            except: pass  
         return

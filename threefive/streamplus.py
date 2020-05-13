@@ -42,15 +42,6 @@ class StreamPlus(Stream):
         bitbin.forward(4)
         self.parse_pts(bitbin)
         return
-
-    def parse_payload(self,payload,pid):
-        '''
-        Override this method to customize output
-        '''
-        try:
-            tf = Splice(payload,pid=pid, pts=self.PTS)
-            tf.show()
-        except: pass
         
     def parse_tspacket(self, packet):
         '''
@@ -60,7 +51,8 @@ class StreamPlus(Stream):
         pid = two_bytes & 0x1fff
         pusi = two_bytes >> 14 & 0x1
         if pusi: self.parse_pusi(packet[4:20])
-        if packet[5] is not self.SCTE35_TID : return  False
-        if packet[18] not in self.SPLICE_CMD_TYPES: return False
-        self.parse_payload(packet[5:],pid)
+        if packet[5] is not self.SCTE35_TID : return
+        if packet[18] in self.SPLICE_CMD_TYPES:
+            try: Splice(packet[5:], pid = pid, pts = self.PTS).show()
+            except: pass  
         return
