@@ -164,7 +164,6 @@ class Splice:
         pretty prints the SCTE 35 message
         '''    
         self.kvprint(self.get())
-        print(self.raw)
 
     def show_command(self):
         '''
