@@ -12,6 +12,9 @@ class Splice:
     The threefive.Splice class handles parsing
     SCTE 35 message strings.
     '''
+    HEADER = 4
+    PAYLOAD = 183
+    PACKET = 188
     # map of known descriptors and associated classes
     descriptor_map = {0: dscprs.Avail_Descriptor,
                       1: dscprs.Dtmf_Descriptor,
@@ -27,28 +30,31 @@ class Splice:
                    7: spcmd.Bandwidth_Reservation,
                    255: spcmd.Private_Command}
 
-    def __init__(self, mesg,pid = False,pts = False):
-        self.mesg = self.mkbits(mesg)
+    def __init__(self, data, pid = False, pts = False):
+        if len(data) == self.PACKET:
+            header = data[:self.HEADER]
+            data = data[self.HEADER+1:]
+        payload = data
+        self.payload = self.mkbits(payload)
         self.pid = pid
         self.pts = pts
-        self.infobb = BitBin(self.mesg[:14])
-        self.mesg = self.mesg[14:]
+        self.infobb = BitBin(self.payload[:14])
         self.info_section = spinfo.Splice_Info_Section()
         self.info_section.decode(self.infobb)
+        self.payload = self.payload[14:]
         self.descriptors = []
         cmdl = self.info_section.splice_command_length
         # fix for bad self.info_section.splice_command_length 
-        if cmdl > 174:   # 188 bytes per packet - 14 bytes for splice_info_section
-            self.cmdbb = BitBin(self.mesg)
+        if cmdl > len(self.payload) :   
+            self.cmdbb = BitBin(self.payload)
             self.set_splice_command()
-            self.mesg = self.mesg[self.command.splice_command_length:]
-            self.info_section.splice_command_length = self.command.splice_command_length
+            cmdl = self.info_section.splice_command_length = self.command.splice_command_length
         else:
-            self.cmdbb = BitBin(self.mesg[:cmdl])
+            self.cmdbb = BitBin(self.payload[:cmdl])
             self.set_splice_command()
-            self.mesg = self.mesg[cmdl:]
+        self.payload = self.payload[cmdl:]
         self.descriptorloop()
-        self.info_section.crc = hex(int.from_bytes(self.mesg[0:4],byteorder = 'big'))
+        self.info_section.crc = hex(int.from_bytes(self.payload[0:4],byteorder = 'big'))
 
     def __repr__(self):
         return str(self.get())
@@ -57,8 +63,8 @@ class Splice:
         '''
         parses all splice descriptors
         '''
-        dll = self.info_section.descriptor_loop_length = int.from_bytes(self.mesg[0:2],byteorder = 'big')
-        self.mesg = self.mesg[2:]
+        dll = self.info_section.descriptor_loop_length = int.from_bytes(self.payload[0:2],byteorder = 'big')
+        self.payload = self.payload[2:]
         while dll > 0:
             try:
                 sd = self.set_splice_descriptor()
@@ -142,11 +148,11 @@ class Splice:
         Splice Descriptors looked up in self.descriptor_map
         '''
         # splice_descriptor_tag 8 uimsbf
-        tag = self.mesg[0]
-        desc_len = self.mesg[1]
-        self.mesg = self.mesg[2:]
-        bitbin = BitBin(self.mesg[:desc_len])
-        self.mesg = self.mesg[desc_len:]
+        tag = self.payload[0]
+        desc_len = self.payload[1]
+        self.payload = self.payload[2:]
+        bitbin = BitBin(self.payload[:desc_len])
+        self.payload = self.payload[desc_len:]
         if tag in self.descriptor_map.keys():
             sd = self.descriptor_map[tag](bitbin,tag)
             sd.descriptor_length = desc_len
@@ -158,6 +164,7 @@ class Splice:
         pretty prints the SCTE 35 message
         '''    
         self.kvprint(self.get())
+        print(self.raw)
 
     def show_command(self):
         '''
