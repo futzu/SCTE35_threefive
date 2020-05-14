@@ -70,19 +70,18 @@ class Segmentation_Descriptor(Splice_Descriptor):
             if self.segmentation_duration_flag:
                 self.segmentation_duration = bitbin.as90k(40)
             self.segmentation_upid_type = bitbin.asint(8)
-            if self.segmentation_upid_type == 8:
-                self.segmentation_upid_length = bitbin.asint(8)
-                self.turner_identifier = bitbin.ashex(64)
+            self.segmentation_upid_length = bitbin.asint(8)
+            self.segmentation_upid =f'{table21[self.segmentation_upid_type][1]}:{bitbin.ashex(self.segmentation_upid_length*8)}'
             self.segmentation_type_id = bitbin.asint(8)
             if self.segmentation_type_id in table22.keys():
                 self.segmentation_message = table22[self.segmentation_type_id][0]
                 self.segment_num = table22[self.segmentation_type_id][1]
                 self.segments_expected = table22[self.segmentation_type_id][2]
-            else:
-                self.segment_num = bitbin.asint(8)
-                self.segments_expected = bitbin.asint(8)
+                if self.segmentation_type_id in [0x34, 0x36, 0x38, 0x3a]:
+                    self.segment_num = 0
+                    self.segments_expected = 0
 
-                
+
 class Time_Descriptor(Splice_Descriptor):
     """
     Table 25 - time_descriptor()
