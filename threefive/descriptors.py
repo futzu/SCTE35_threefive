@@ -1,4 +1,4 @@
-from .tables import table21,table22
+from .tables import table20, table21, table22
 
 
 class Splice_Descriptor:
@@ -55,7 +55,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
                 self.web_delivery_allowed_flag = bitbin.asflag(1)
                 self.no_regional_blackout_flag = bitbin.asflag(1)
                 self.archive_allowed_flag = bitbin.asflag(1)
-                self.device_restrictions = bitbin.ashex(2)
+                self.device_restrictions = table20[bitbin.asint(2)]
             else:
                 bitbin.forward(5)
             if not self.program_segmentation_flag:
@@ -71,7 +71,11 @@ class Segmentation_Descriptor(Splice_Descriptor):
                 self.segmentation_duration = bitbin.as90k(40)
             self.segmentation_upid_type = bitbin.asint(8)
             self.segmentation_upid_length = bitbin.asint(8)
-            self.segmentation_upid =f'{table21[self.segmentation_upid_type][1]}:{bitbin.ashex(self.segmentation_upid_length*8)}'
+            if self.segmentation_upid_type ==  0x0F:
+                upid_id = bitbin.asdecodedhex(self.segmentation_upid_length*8)
+            else:
+                upid_id = bitbin.ashex(self.segmentation_upid_length*8)
+            self.segmentation_upid =f'{table21[self.segmentation_upid_type][1]}:{upid_id}'
             self.segmentation_type_id = bitbin.asint(8)
             if self.segmentation_type_id in table22.keys():
                 self.segmentation_message = table22[self.segmentation_type_id][0]
