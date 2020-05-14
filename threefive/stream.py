@@ -27,6 +27,6 @@ class Stream:
         '''
         if packet[5] is not self.SCTE35_TID : return
         if packet[18] in self.SPLICE_CMD_TYPES:
-            try: Splice(packet[5:]).show()
+            try: Splice(packet).show()
             except: pass  
         return
