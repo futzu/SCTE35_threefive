@@ -37,6 +37,7 @@ class Dtmf_Descriptor(Splice_Descriptor):
         for i in range(0, self.dtmf_count):
             self.dtmf_chars.append(bitbin.asint(8))
 
+            
 class Segmentation_Descriptor(Splice_Descriptor):
     """
     Table 19 - segmentation_descriptor()
