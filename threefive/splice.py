@@ -115,7 +115,7 @@ class Splice:
 
     def kvprint(self, obj):
         print('\n')
-        print(json.dumps({'SCTE35':obj},indent = 8))
+        print(json.dumps({'SCTE35':obj},indent = 4))
 
     def list_descriptors(self):
         '''

@@ -5,10 +5,10 @@ def gte_zero(i):
     return i >= 0
 
 def MPU():
-    pass
+    return 'MPU()'
 
 def MID():
-    pass
+    return 'MID()'
 """
 Table 20 from page 58 of
 https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
@@ -40,13 +40,13 @@ table21 = {
     0x07: [12, "TID"],
     0x08: [8, "AiringID"],
     0x09: [gte_zero, "ADI"],
-    0x0A: [12, "EIDR"],
-    0x0B: [gte_zero, "ATSC"],
-    0x0C: [gte_zero, MPU],
-    0x0D: [gte_zero, MID],
-    0x0E: [gte_zero, "ADS Info"],
-    0x0F: [gte_zero, "URI"],
-    0x10 - 0xFF: [gte_zero, "Reserved"],
+    0x0a: [12, "EIDR"],
+    0x0b: [gte_zero, "ATSC"],
+    0x0c: [gte_zero, MPU()],
+    0x0d: [gte_zero, MID()],
+    0x0e: [gte_zero, "ADS Info"],
+    0x0f: [gte_zero, "URI"],
+    0x10 - 0xff: [gte_zero, "Reserved"],
 }
 
 """
@@ -88,8 +88,8 @@ table22 = {
     0x37: ["Distributor Placement Opportunity End",  0,0],
     0x38: ["Provider Overlay Placement Opportunity Start", 0,0],
     0x39: ["Provider Overlay Placement Opportunity End", 0,0],
-    0x3A: ["Distributor Overlay Placement Opportunity Start", 0,0],
-    0x3B: ["Distributor Overlay Placement Opportunity End", 0,0],
+    0x3a: ["Distributor Overlay Placement Opportunity Start", 0,0],
+    0x3b: ["Distributor Overlay Placement Opportunity End", 0,0],
     0x40: ["Unscheduled Event Start",  0,0],
     0x41: ["Unscheduled Event End",  0,0],
     0x50: ["Network Start", 0,0],

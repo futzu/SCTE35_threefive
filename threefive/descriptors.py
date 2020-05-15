@@ -48,16 +48,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
         self.segmentation_event_cancel_indicator = bitbin.asflag(1)
         bitbin.forward(7)
         if not self.segmentation_event_cancel_indicator:
-            self.program_segmentation_flag = bitbin.asflag(1)
-            self.segmentation_duration_flag = bitbin.asflag(1)
-            self.delivery_not_restricted_flag = bitbin.asflag(1)
-            if not self.delivery_not_restricted_flag:
-                self.web_delivery_allowed_flag = bitbin.asflag(1)
-                self.no_regional_blackout_flag = bitbin.asflag(1)
-                self.archive_allowed_flag = bitbin.asflag(1)
-                self.device_restrictions = table20[bitbin.asint(2)]
-            else:
-                bitbin.forward(5)
+            self.set_flags(bitbin)
             if not self.program_segmentation_flag:
                 self.component_count = bitbin.asint(8)
                 self.components = []
@@ -67,23 +58,51 @@ class Segmentation_Descriptor(Splice_Descriptor):
                     bitbin.forward(7)
                     comp["pts_offset"] = bitbin.as90k(33)
                     self.components.append(comp)
-            if self.segmentation_duration_flag:
-                self.segmentation_duration = bitbin.as90k(40)
-            self.segmentation_upid_type = bitbin.asint(8)
-            self.segmentation_upid_length = bitbin.asint(8)
-            if self.segmentation_upid_type ==  0x0F:
+            self.set_segmentation(bitbin)  
+      
+    def set_flags(self, bitbin):
+        self.program_segmentation_flag = bitbin.asflag(1)
+        self.segmentation_duration_flag = bitbin.asflag(1)
+        self.delivery_not_restricted_flag = bitbin.asflag(1)
+        if not self.delivery_not_restricted_flag:
+            self.web_delivery_allowed_flag = bitbin.asflag(1)
+            self.no_regional_blackout_flag = bitbin.asflag(1)
+            self.archive_allowed_flag = bitbin.asflag(1)
+            self.device_restrictions = table20[bitbin.asint(2)]
+        else:
+            bitbin.forward(5)
+
+    def set_segmentation(self,bitbin):
+        if self.segmentation_duration_flag:
+            self.segmentation_duration = bitbin.as90k(40)
+        self.segmentation_upid_type = bitbin.asint(8)
+        self.segmentation_upid_length = bitbin.asint(8)
+        self.set_segmentation_upid(bitbin)
+        self.segmentation_type_id = bitbin.asint(8)
+        if self.segmentation_type_id in table22.keys():
+            self.segmentation_message = table22[self.segmentation_type_id][0]
+            self.set_segments(bitbin)
+                
+    def set_segmentation_upid(self,bitbin):
+        if self.segmentation_upid_type in [ 0x0c, 0x0d]:
+            upid_id =' Not Yet Implemented'
+        else:
+            if self.segmentation_upid_type ==  0x0f:
                 upid_id = bitbin.asdecodedhex(self.segmentation_upid_length*8)
-            else:
+            else :
                 upid_id = bitbin.ashex(self.segmentation_upid_length*8)
-            self.segmentation_upid =f'{table21[self.segmentation_upid_type][1]}:{upid_id}'
-            self.segmentation_type_id = bitbin.asint(8)
-            if self.segmentation_type_id in table22.keys():
-                self.segmentation_message = table22[self.segmentation_type_id][0]
-                self.segment_num = table22[self.segmentation_type_id][1]
-                self.segments_expected = table22[self.segmentation_type_id][2]
-                if self.segmentation_type_id in [0x34, 0x36, 0x38, 0x3a]:
-                    self.segment_num = 0
-                    self.segments_expected = 0
+        self.segmentation_upid =f'{table21[self.segmentation_upid_type][1]}:{upid_id}'
+
+    def set_segments(self, bitbin):            
+        self.segment_num = bitbin.asint(8)
+        self.segments_expected = bitbin.asint(8)
+        if self.segmentation_type_id in [0x34, 0x36, 0x38, 0x3a]:
+            '''
+            if there are 16 more bits in bitbin, read them.
+            '''
+            if bitbin.idx >= 16:
+                self.sub_segment_num = bitbin.asint(8)
+                self.sub_segments_expected = bitbin.asint(8)
 
 
 class Time_Descriptor(Splice_Descriptor):
