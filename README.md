@@ -207,7 +207,7 @@ threefive.decode('/mnt/build/file.bin')
 ```
 ####  ```Base64 Encoded Strings```
 ```python
-mesg='/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUg/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw=='
+mesg='/DBUAAAAAAAA///wBQb+AAAAAAA+AjxDVUVJAAAACn+/Dy11cm46dXVpZDphYTg1YmJiNi01YzQzLTRiNmEtYmViYi1lZTNiMTNlYjc5OTkRAAB2c6LA'
 threefive.decode(mesg)
 ```
 #### ```Hex Encoded Strings```
@@ -221,53 +221,51 @@ threefive.decode(hexed)
 ```python3
 
 {
-        "SCTE35": {
-                "Info_Section": {
-                        "table_id": "0xfc",
-                        "section_syntax_indicator": false,
-                        "private": false,
-                        "reserved": "0x3",
-                        "section_length": 47,
-                        "protocol_version": 0,
-                        "encrypted_packet": false,
-                        "encryption_algorithm": 0,
-                        "pts_adjustment": 0.0,
-                        "cw_index": "0xff",
-                        "tier": "0xfff",
-                        "splice_command_length": 20,
-                        "splice_command_type": 5,
-                        "descriptor_loop_length": 10,
-                        "crc": "0x62dba30a"
-                },
-                "Splice_Command": {
-                        "name": "Splice Insert",
-                        "splice_event_id": 1207959695,
-                        "splice_event_cancel_indicator": false,
-                        "out_of_network_indicator": true,
-                        "program_splice_flag": true,
-                        "duration_flag": true,
-                        "splice_immediate_flag": false,
-                        "time_specified_flag": true,
-                        "pts_time": 21514.559089,
-                        "break_auto_return": true,
-                        "break_duration": 60.293567,
-                        "unique_program_id": 0,
-                        "avail_num": 0,
-                        "avail_expected": 0,
-                        "splice_command_length": 20
-                },
-                "Splice_Descriptors": [
-                        {
-                                "tag": 0,
-                                "identifier": "CUEI",
-                                "name": "Avail Descriptor",
-                                "provider_avail_id": 309,
-                                "descriptor_length": 8
-                        }
-                ]
-        }
+    "SCTE35": {
+        "Info_Section": {
+            "table_id": "0xfc",
+            "section_syntax_indicator": false,
+            "private": false,
+            "reserved": "0x3",
+            "section_length": 84,
+            "protocol_version": 0,
+            "encrypted_packet": false,
+            "encryption_algorithm": 0,
+            "pts_adjustment": 0.0,
+            "cw_index": "0xff",
+            "tier": "0xfff",
+            "splice_command_length": 5,
+            "splice_command_type": 6,
+            "descriptor_loop_length": 62,
+            "crc": "0x7673a2c0"
+        },
+        "Splice_Command": {
+            "name": "Time Signal",
+            "time_specified_flag": true,
+            "pts_time": 0.0
+        },
+        "Splice_Descriptors": [
+            {
+                "tag": 2,
+                "identifier": "CUEI",
+                "name": "Segmentation Descriptor",
+                "segmentation_event_id": "0xa",
+                "segmentation_event_cancel_indicator": false,
+                "program_segmentation_flag": true,
+                "segmentation_duration_flag": false,
+                "delivery_not_restricted_flag": true,
+                "segmentation_upid_type": 15,
+                "segmentation_upid_length": 45,
+                "segmentation_upid": "URI:urn:uuid:aa85bbb6-5c43-4b6a-bebb-ee3b13eb7999",
+                "segmentation_type_id": 17,
+                "segmentation_message": "Program End",
+                "segment_num": 0,
+                "segments_expected": 0,
+                "descriptor_length": 60
+            }
+        ]
+    }
 }
-
 
 ```
 
