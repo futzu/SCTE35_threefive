@@ -90,13 +90,11 @@ class Segmentation_Descriptor(Splice_Descriptor):
         self.bitbin = None   
             
     def set_segmentation_upid(self):
-        print(self.segmentation_upid_type)
         '''
         These segmentation upid types
         do not yet have formatted output.
         0x05: ISAN,
         0x06: ISAN",
-        0x07: TID",
         0x09: ADI",
         0x0b: ATSC",
         0x0d: MID",
@@ -107,6 +105,9 @@ class Segmentation_Descriptor(Splice_Descriptor):
             0x02: self.AdID,
             0x03: self.AdID,
             0x04: self.UMID,
+            0x05: self.ISAN,
+            0x06: self.ISAN,
+            0x07: self.TID,
             0x08: self.airID,
             0x0a: self.EIDR,
             0x0c: self.MPU,
@@ -122,8 +123,6 @@ class Segmentation_Descriptor(Splice_Descriptor):
         self.segmentation_upid =f'{table21[self.segmentation_upid_type][1]}:{upid_id}'
 
     def set_segments(self): 
-        print(vars(self))
-        print (self.bitbin.idx)
         self.segment_num = self.bitbin.asint(8)
         self.segments_expected = self.bitbin.asint(8)
         if self.segmentation_type_id in [0x34, 0x36, 0x38, 0x3a]:
@@ -140,7 +139,13 @@ class Segmentation_Descriptor(Splice_Descriptor):
     
     def airID(self):
         return self.bitbin.ashex(self.segmentation_upid_length*8)
-    
+
+    def ISAN(self):
+        pre = '0000-0000-'
+        middle = self.bitbin.ashex(self.segmentation_upid_length*8)
+        post = '-0000-Z-0000-0000-6'
+        return f'{pre}{middle[2:6]}{post}'
+        
     def UMID(self):
         n=8
         pre = ''.join(self.airID().split('x',1))
@@ -160,6 +165,9 @@ class Segmentation_Descriptor(Splice_Descriptor):
         pre= self.bitbin.asint(16)
         post =self.bitbin.ashex(80)
         return f'10.{pre}/{post[2:6]}-{post[6:10]}-{post[10:14]}-{post[14:18]}-T'        
+
+    def TID(self):
+        return self.URI()
 
     def URI(self):
         return self.bitbin.asdecodedhex(self.segmentation_upid_length*8)
