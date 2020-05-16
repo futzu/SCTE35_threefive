@@ -93,8 +93,6 @@ class Segmentation_Descriptor(Splice_Descriptor):
         '''
         These segmentation upid types
         do not yet have formatted output.
-        0x05: ISAN,
-        0x06: ISAN",
         0x09: ADI",
         0x0b: ATSC",
         0x0d: MID",
@@ -108,7 +106,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
             0x05: self.ISAN,
             0x06: self.ISAN,
             0x07: self.TID,
-            0x08: self.airID,
+            0x08: self.AirID,
             0x0a: self.EIDR,
             0x0c: self.MPU,
             0x0d: self.MID,
@@ -137,7 +135,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
     def AdID(self):
         return self.URI()
     
-    def airID(self):
+    def AirID(self):
         return self.bitbin.ashex(self.segmentation_upid_length*8)
 
     def ISAN(self):
