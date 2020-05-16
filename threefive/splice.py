@@ -66,13 +66,10 @@ class Splice:
         dll = self.info_section.descriptor_loop_length = int.from_bytes(self.payload[0:2],byteorder = 'big')
         self.payload = self.payload[2:]
         while dll > 0:
-            try:
-                sd = self.set_splice_descriptor()
-                sdl = sd.descriptor_length
-                dll-= sdl+2
-                self.descriptors.append(sd)
-            except:
-                break
+            sd = self.set_splice_descriptor()
+            sdl = sd.descriptor_length
+            dll-= sdl+2
+            self.descriptors.append(sd)
   
     def get(self):
         '''
