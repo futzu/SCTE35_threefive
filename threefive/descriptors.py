@@ -90,15 +90,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
         self.bitbin = None   
             
     def set_segmentation_upid(self):
-        '''
-        These segmentation upid types
-        do not yet have formatted output.
-        0x09: ADI",
-        0x0b: ATSC",
-        0x0d: MID",
-        0x0e: ADS Info
-        '''
-        
+
         upid_map={
             0x02: self.AdID,
             0x03: self.AdID,
@@ -107,9 +99,12 @@ class Segmentation_Descriptor(Splice_Descriptor):
             0x06: self.ISAN,
             0x07: self.TID,
             0x08: self.AirID,
+            0x09: self.ADI,
             0x0a: self.EIDR,
+            0x0b: self.ATSC,
             0x0c: self.MPU,
             0x0d: self.MID,
+            0x0e: self.ADS,
             0x0f: self.URI
 
             }
@@ -132,22 +127,34 @@ class Segmentation_Descriptor(Splice_Descriptor):
                 self.sub_segments_expected = self.bitbin.asint(8)
 
 
+    def ADI(self):
+        return self.URI()
+
     def AdID(self):
+        return self.URI()
+
+    def ADS(self):
         return self.URI()
     
     def AirID(self):
         return self.bitbin.ashex(self.segmentation_upid_length*8)
+
+    def ATSC(self):
+        TSID = self.bitbin.asint(16)
+        self.bitbin.forward(2)
+        end_of_day = self.bitbin.asint(5)
+        unique_for = self.bitbin.asint(9)
+        content_id = self.bitbin.asdecodedhex((self.segmentation_upid_length -4)*8)
+        return { 'TSID': TSID,
+                   'end_of_day':end_of_day,
+                    'unique_for':unique_for,
+                   'content_id': content_id}
 
     def ISAN(self):
         pre = '0000-0000-'
         middle = self.bitbin.ashex(self.segmentation_upid_length*8)
         post = '-0000-Z-0000-0000-6'
         return f'{pre}{middle[2:6]}{post}'
-        
-    def UMID(self):
-        n=8
-        pre = ''.join(self.airID().split('x',1))
-        return '.'.join([pre[i:i+n] for i in range(0, len(pre), n)])
         
     def MID(self):
         return 'Not Yet Implemented'
@@ -166,6 +173,11 @@ class Segmentation_Descriptor(Splice_Descriptor):
 
     def TID(self):
         return self.URI()
+
+    def UMID(self):
+        n=8
+        pre = ''.join(self.AirID().split('x',1))
+        return '.'.join([pre[i:i+n] for i in range(0, len(pre), n)])
 
     def URI(self):
         return self.bitbin.asdecodedhex(self.segmentation_upid_length*8)
