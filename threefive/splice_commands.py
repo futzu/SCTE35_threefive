@@ -36,6 +36,7 @@ class Splice_Command:
             st_bytes += (self.pts_time * 90000)
         return int.to_bytes(st_bytes, 5, byteorder='big')
 
+
 class Splice_Null(Splice_Command):
     """
     Table 7 - splice_null()

@@ -4,11 +4,7 @@ def not_zero(i):
 def gte_zero(i):
     return i >= 0
 
-def MPU():
-    return 'MPU()'
 
-def MID():
-    return 'MID()'
 """
 Table 20 from page 58 of
 https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
@@ -42,8 +38,8 @@ table21 = {
     0x09: [gte_zero, "ADI"],
     0x0a: [12, "EIDR"],
     0x0b: [gte_zero, "ATSC"],
-    0x0c: [gte_zero, MPU()],
-    0x0d: [gte_zero, MID()],
+    0x0c: [gte_zero, "MPU"],
+    0x0d: [gte_zero, "MID"],
     0x0e: [gte_zero, "ADS Info"],
     0x0f: [gte_zero, "URI"],
     0x10 - 0xff: [gte_zero, "Reserved"],
