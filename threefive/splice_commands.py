@@ -14,6 +14,13 @@ class Splice_Command:
         bitbin.forward(6)
         self.break_duration = bitbin.as90k(33)
 
+    def encode_break(self):
+        break_bytes=0
+        if self.break_auto_return:
+            break_bytes = 1 << 39 
+        break_bytes += (self.break_duration * 90000)
+        return int.to_bytes(break_bytes, 5, byteorder='big')
+
     def splice_time(self, bitbin):  # 40bits
         self.time_specified_flag = bitbin.asflag(1)
         if self.time_specified_flag:
@@ -22,6 +29,12 @@ class Splice_Command:
         else:
             bitbin.forward(7)
 
+    def encode_splice_time(self):
+        st_bytes=0
+        if self.time_specified_flag:
+            st_bytes = 1 << 39
+            st_bytes += (self.pts_time * 90000)
+        return int.to_bytes(st_bytes, 5, byteorder='big')
 
 class Splice_Null(Splice_Command):
     """
@@ -68,6 +81,23 @@ class Splice_Insert(Splice_Command):
     """
     Table 9 - splice_insert()
     """
+    def __init__(self):        
+        self.splice_event_id = None 
+        self.splice_event_cancel_indicator = None 
+        self.out_of_network_indicator = None
+        self.program_splice_flag = None
+        self.duration_flag = None
+        self.splice_immediate_flag = None
+        self.component_count = 0
+        self.components = []
+        self.time_specified_flag = None
+        self.pts_time = None
+        self.break_auto_return = None
+        self.break_duration = None
+        self.unique_program_id = None
+        self.avail_num = None
+        self.avail_expected = None
+
     def decode(self, bitbin):
         bit_start = bitbin.idx
         self.name = "Splice Insert"
@@ -101,9 +131,16 @@ class Time_Signal(Splice_Command):
     """
     Table 10 - time_signal()
     """
+    def __init__(self):
+        self.time_specified_flag = None
+        self.pts_time = None
+    
     def decode(self, bitbin):
         self.name = "Time Signal"
         self.splice_time(bitbin)
+        
+    def encode(self):
+        command_bytes =self.encode_splice_time()
 
 
 class Bandwidth_Reservation(Splice_Command):
@@ -118,6 +155,12 @@ class Private_Command(Splice_Command):
     """
     Table 12 - private_command()
     """
+    def __init__(self):
+        self.identifier = None
+       
     def decode(self, bitbin):
         self.name = "Private Command"
         self.identifier = bitbin.asint(32)
+    
+    def encode(self):
+        command_bytes = int.to_bytes(self.identifier, 4, byteorder='big')

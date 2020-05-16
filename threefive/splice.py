@@ -88,7 +88,8 @@ class Splice:
         returns the SCTE 35
         splice command data as a dict.
         '''  
-        return {'Splice_Command': vars(self.command)}
+        cleaned_command = self.kvclean(vars(self.command))
+        return {'Splice_Command': cleaned_command }
     
     def get_descriptors(self):
         '''
@@ -102,13 +103,20 @@ class Splice:
         Returns SCTE 35
         splice info section as a dict
         '''
-        return {'Info_Section':vars(self.info_section)}
+        cleaned_info_section = self.kvclean(vars(self.info_section))
+        return {'Info_Section': cleaned_info_section}
 
     def get_packet_data(self):
         packet = {}
         if self.pid: packet['pid'] = hex(self.pid)
         if self.pts: packet['pts'] = self.pts
         return {'Packet_Data':packet}
+
+    def kvclean(self,obj):
+        '''
+        kvclean removes items from a dict if the value is None
+        '''
+        return {k: v for k, v in obj.items() if v is not None}
 
     def kvprint(self, obj):
         print('\n')
@@ -118,7 +126,7 @@ class Splice:
         '''
         returns SCTE 35 splice descriptors in list
         '''
-        return [vars(d) for d in self.descriptors]
+        return [self.kvclean(vars(d)) for d in self.descriptors]
 
     def mkbits(self, s):
         '''
