@@ -81,7 +81,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
             self.segmentation_duration = self.bitbin.as90k(40)
         self.segmentation_upid_type = self.bitbin.asint(8)
         self.segmentation_upid_length = self.bitbin.asint(8)
-        self.set_segmentation_upid()
+        self.segmentation_upid = self.set_segmentation_upid(self.segmentation_upid_type,self.segmentation_upid_length)
         self.segmentation_type_id = self.bitbin.asint(8)
 
         if self.segmentation_type_id in table22.keys():
@@ -89,8 +89,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
             self.set_segments()
         self.bitbin = None   
             
-    def set_segmentation_upid(self):
-
+    def set_segmentation_upid(self,upid_type,upid_length):
         upid_map={
             0x02: self.AdID,
             0x03: self.AdID,
@@ -106,14 +105,13 @@ class Segmentation_Descriptor(Splice_Descriptor):
             0x0d: self.MID,
             0x0e: self.ADS,
             0x0f: self.URI
-
             }
         upid_id=""
-        if self.segmentation_upid_type in upid_map.keys():
-            upid_id= upid_map[self.segmentation_upid_type]()
+        if upid_type in upid_map.keys():
+            upid_id= upid_map[upid_type](upid_length)
         else:
-            upid_id =self.bitbin.asint(self.segmentation_upid_length*8)
-        self.segmentation_upid =f'{table21[self.segmentation_upid_type][1]}:{upid_id}'
+            upid_id =self.bitbin.asint(upid_length*8)
+        return f'{table21[upid_type][1]}:{upid_id}'
 
     def set_segments(self): 
         self.segment_num = self.bitbin.asint(8)
@@ -127,60 +125,70 @@ class Segmentation_Descriptor(Splice_Descriptor):
                 self.sub_segments_expected = self.bitbin.asint(8)
 
 
-    def ADI(self):
-        return self.URI()
+    def ADI(self,upid_length):
+        return self.URI(upid_length)
 
-    def AdID(self):
-        return self.URI()
+    def AdID(self,upid_length):
+        return self.URI(upid_length)
 
-    def ADS(self):
-        return self.URI()
+    def ADS(self,upid_length):
+        return self.URI(upid_length)
     
-    def AirID(self):
-        return self.bitbin.ashex(self.segmentation_upid_length*8)
+    def AirID(self,upid_length):
+        return self.bitbin.ashex(upid_length*8)
 
-    def ATSC(self):
+    def ATSC(self,upid_length):
         TSID = self.bitbin.asint(16)
         self.bitbin.forward(2)
         end_of_day = self.bitbin.asint(5)
         unique_for = self.bitbin.asint(9)
-        content_id = self.bitbin.asdecodedhex((self.segmentation_upid_length -4)*8)
+        content_id = self.bitbin.asdecodedhex((upid_length -4)*8)
         return { 'TSID': TSID,
                    'end_of_day':end_of_day,
                     'unique_for':unique_for,
                    'content_id': content_id}
 
-    def ISAN(self):
+    def ISAN(self,upid_length):
         pre = '0000-0000-'
-        middle = self.bitbin.ashex(self.segmentation_upid_length*8)
+        middle = self.bitbin.ashex(upid_length*8)
         post = '-0000-Z-0000-0000-6'
         return f'{pre}{middle[2:6]}{post}'
         
-    def MID(self):
-        return 'Not Yet Implemented'
+    def MID(self,upid_length):
+        upids=[]
+        bitcount= (upid_length*8)
+        while bitcount > 0:
+            upid_type = self.bitbin.asint(8)
+            bitcount -= 8
+            upid_length = self.bitbin.asint(8)
+            bitcount -= 8
+            segmentation_upid = self.set_segmentation_upid(upid_type,upid_length)
+            bitcount -= (upid_length * 8)
+            upids.append(segmentation_upid)
+        return upids     
         
-    def MPU(self):
-        bitcount= (self.segmentation_upid_length*8)
+    def MPU(self,upid_length):
+        bitcount= (upid_length*8)
         format_identifier = self.bitbin.asint(32)
         private_data = self.bitbin.asint(bitcount -32)
         return {'format identifier':format_identifier,
                 'private data':private_data}
 
-    def EIDR(self):
+    def EIDR(self,upid_length):
         pre= self.bitbin.asint(16)
         post =self.bitbin.ashex(80)
         return f'10.{pre}/{post[2:6]}-{post[6:10]}-{post[10:14]}-{post[14:18]}-T'        
 
-    def TID(self):
-        return self.URI()
+    def TID(self,upid_length):
+        return self.URI(upid_length)
 
-    def UMID(self):
+    def UMID(self,upid_length):
         n=8
-        pre = ''.join(self.AirID().split('x',1))
+        pre = ''.join(self.AirID(upid_length).split('x',1))
         return '.'.join([pre[i:i+n] for i in range(0, len(pre), n)])
 
-    def URI(self):
-        return self.bitbin.asdecodedhex(self.segmentation_upid_length*8)
+    def URI(self,upid_length):
+        return self.bitbin.asdecodedhex(upid_length*8)
 
 
 class Time_Descriptor(Splice_Descriptor):
