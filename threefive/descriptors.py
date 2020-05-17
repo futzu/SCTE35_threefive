@@ -42,8 +42,6 @@ class Segmentation_Descriptor(Splice_Descriptor):
     """
     Table 19 - segmentation_descriptor()
     """
-  
-    
     def __init__(self, bitbin, tag):
         if not super().__init__(bitbin, tag): return False
         self.bitbin = bitbin
@@ -83,7 +81,6 @@ class Segmentation_Descriptor(Splice_Descriptor):
         self.segmentation_upid_length = self.bitbin.asint(8)
         self.segmentation_upid = self.set_segmentation_upid(self.segmentation_upid_type,self.segmentation_upid_length)
         self.segmentation_type_id = self.bitbin.asint(8)
-
         if self.segmentation_type_id in table22.keys():
             self.segmentation_message = table22[self.segmentation_type_id][0]
             self.set_segments()
@@ -123,7 +120,6 @@ class Segmentation_Descriptor(Splice_Descriptor):
             if self.bitbin.idx >= 16:
                 self.sub_segment_num = self.bitbin.asint(8)
                 self.sub_segments_expected = self.bitbin.asint(8)
-
 
     def ADI(self,upid_length):
         return self.URI(upid_length)
