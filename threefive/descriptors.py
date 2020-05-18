@@ -106,9 +106,10 @@ class Segmentation_Descriptor(Splice_Descriptor):
         upid_id=""
         if upid_type in upid_map.keys():
             upid_id= upid_map[upid_type](upid_length)
+            return f'{table21[upid_type][1]}:{upid_id}'
         else:
-            upid_id =self.bitbin.asint(upid_length*8)
-        return f'{table21[upid_type][1]}:{upid_id}'
+            return False
+     #       upid_id =self.bitbin.asint(upid_length*8)
 
     def set_segments(self): 
         self.segment_num = self.bitbin.asint(8)
@@ -134,16 +135,12 @@ class Segmentation_Descriptor(Splice_Descriptor):
         return self.bitbin.ashex(upid_length*8)
 
     def ATSC(self,upid_length):
-        TSID = self.bitbin.asint(16)
-        self.bitbin.forward(2)
-        end_of_day = self.bitbin.asint(5)
-        unique_for = self.bitbin.asint(9)
-        content_id = self.bitbin.asdecodedhex((upid_length -4)*8)
-        return { 'TSID': TSID,
-                   'end_of_day':end_of_day,
-                    'unique_for':unique_for,
-                   'content_id': content_id}
-
+         return {'TSID': self.bitbin.asint(16),
+            'reserved': self.bitbin.asint(2),
+            'end_of_day':self.bitbin.asint(5),
+            'unique_for':self.bitbin.asint(9),
+            'content_id': self.bitbin.asdecodedhex((upid_length -4)*8)}
+      
     def ISAN(self,upid_length):
         pre = '0000-0000-'
         middle = self.bitbin.ashex(upid_length*8)
@@ -165,10 +162,8 @@ class Segmentation_Descriptor(Splice_Descriptor):
         
     def MPU(self,upid_length):
         bitcount= (upid_length*8)
-        format_identifier = self.bitbin.asint(32)
-        private_data = self.bitbin.asint(bitcount -32)
-        return {'format identifier':format_identifier,
-                'private data':private_data}
+        return {'format identifier':self.bitbin.asint(32),
+                'private data':self.bitbin.asint(bitcount -32)}
 
     def EIDR(self,upid_length):
         pre= self.bitbin.asint(16)

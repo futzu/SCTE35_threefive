@@ -1,20 +1,7 @@
 class Splice_Info_Section:
 
     def __init__(self):
-        self.table_id = None
-        self.section_syntax_indicator = None 
-        self.private =  None
-        self.reserved = None
-        self.section_length = None
-        self.protocol_version = None
-        self.encrypted_packet = None
-        self.encryption_algorithm = None
-        self.pts_adjustment = None
-        self.cw_index = None
-        self.tier = None
-        self.splice_command_length = None
-        self.splice_command_type = None
-        self.descriptor_loop_length = None
+        pass
 
     def decode(self, bitbin):
         self.table_id = bitbin.ashex(8) 
