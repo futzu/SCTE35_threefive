@@ -104,11 +104,10 @@ class Segmentation_Descriptor(Splice_Descriptor):
             0x0f: self.URI
             }
         upid_id=""
-        if (upid_length > 0): 
-            if upid_type in upid_map.keys():
-                upid_id= upid_map[upid_type](upid_length)
-                if upid_type == 0x09 : return upid_id
-                else: return f'{table21[upid_type][1]}:{upid_id}'
+        if upid_type in upid_map.keys():
+            upid_id= upid_map[upid_type](upid_length)
+            if upid_type != 0x09 :
+                return f'{table21[upid_type][1]}:{upid_id}'
         return upid_id
 
     def set_segments(self): 
@@ -179,9 +178,9 @@ class Segmentation_Descriptor(Splice_Descriptor):
         return '.'.join([pre[i:i+n] for i in range(0, len(pre), n)])
 
     def URI(self,upid_length):
-        return self.bitbin.asdecodedhex(upid_length*8)
-
-
+        if upid_length > 0: return self.bitbin.asdecodedhex(upid_length*8)
+        return None
+    
 class Time_Descriptor(Splice_Descriptor):
     """
     Table 25 - time_descriptor()
