@@ -131,36 +131,36 @@ class Segmentation_Descriptor(Splice_Descriptor):
         return self.URI(upid_length)
     
     def AirID(self,upid_length):
-        return self.bitbin.ashex(upid_length*8)
+        return self.bitbin.ashex(upid_length <<3)
 
     def ATSC(self,upid_length):
          return {'TSID': self.bitbin.asint(16),
             'reserved': self.bitbin.asint(2),
             'end_of_day':self.bitbin.asint(5),
             'unique_for':self.bitbin.asint(9),
-            'content_id': self.bitbin.asdecodedhex((upid_length -4)*8)}
+            'content_id': self.bitbin.asdecodedhex((upid_length -4) <<3)}
       
     def ISAN(self,upid_length):
         pre = '0000-0000-'
-        middle = self.bitbin.ashex(upid_length*8)
+        middle = self.bitbin.ashex(upid_length <<3)
         post = '-0000-Z-0000-0000-6'
         return f'{pre}{middle[2:6]}{post}'
         
     def MID(self,upid_length):
         upids=[]
-        bitcount= (upid_length*8)
+        bitcount= (upid_length <<3)
         while bitcount > 0:
             upid_type = self.bitbin.asint(8)
             bitcount -= 8
             upid_length = self.bitbin.asint(8)
             bitcount -= 8
             segmentation_upid = self.set_segmentation_upid(upid_type,upid_length)
-            bitcount -= (upid_length * 8)
+            bitcount -= (upid_length <<3)
             upids.append(segmentation_upid)
         return upids     
         
     def MPU(self,upid_length):
-        bitcount= (upid_length*8)
+        bitcount= (upid_length <<3)
         return {'format identifier':self.bitbin.asint(32),
                 'private data':self.bitbin.asint(bitcount -32)}
 
@@ -178,7 +178,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
         return '.'.join([pre[i:i+n] for i in range(0, len(pre), n)])
 
     def URI(self,upid_length):
-        if upid_length > 0: return self.bitbin.asdecodedhex(upid_length*8)
+        if upid_length > 0: return self.bitbin.asdecodedhex(upid_length<<3)
         return None
     
 class Time_Descriptor(Splice_Descriptor):
