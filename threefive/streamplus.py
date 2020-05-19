@@ -53,6 +53,6 @@ class StreamPlus(Stream):
         if pusi: self.parse_pusi(packet[4:20])
         if packet[5] is not self.SCTE35_TID : return
         if packet[18] in self.SPLICE_CMD_TYPES:
-            try: Splice(packet[5:], pid = pid, pts = self.PTS).show()
+            try: Splice(packet, pid = pid, pts = self.PTS).show()
             except: pass  
         return

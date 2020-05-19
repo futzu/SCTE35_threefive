@@ -12,9 +12,6 @@ class Splice:
     The threefive.Splice class handles parsing
     SCTE 35 message strings.
     '''
-    HEADER = 4
-    PAYLOAD = 183
-    PACKET = 188
     # map of known descriptors and associated classes
     descriptor_map = {0: dscprs.Avail_Descriptor,
                       1: dscprs.Dtmf_Descriptor,
@@ -31,11 +28,8 @@ class Splice:
                    255: spcmd.Private_Command}
 
     def __init__(self, data, pid = False, pts = False):
-        if len(data) == self.PACKET:
-            header = data[:self.HEADER]
-            data = data[self.HEADER+1:]
-        payload = data
-        self.payload = self.mkbits(payload)
+        if data[0] == 0x47: self.payload = data[5:]
+        else: self.payload = self.mkbits(data)
         self.pid = pid
         self.pts = pts
         self.infobb = BitBin(self.payload[:14])
@@ -79,7 +73,7 @@ class Splice:
         scte35 = {**self.get_info_section(),
                     **self.get_command(),
                     **self.get_descriptors()}
-        if self.pid or self.pts:
+        if self.pts or self.pid:
             scte35.update(self.get_packet_data())
         return scte35    
 
