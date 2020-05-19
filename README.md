@@ -23,9 +23,9 @@
 * [__Easy threefive__](#easy-threefive)
   *   [The __decode__ Function](#the-decode-function)
       * [Parsing SCTE 35 messages from Mpeg Transport Streams and Binary files](#mpegts)
-        * [Output for MpegTS and Binary Files and Streams](#output-for-mpegts-and-binary-files-and-streams)
+        * [Output for MpegTS and Binary Files and Streams](#json-output-for-mpegts-and-binary-files-and-streams)
       * [Parsing SCTE 35 messages encoded in Base64, Binary, or Hex](#base64-encoded-strings)
-        * [Output for Base64 and Hex Strings](#output-for-base64-and-hex-strings)
+        * [Output for Base64 and Hex Strings](#json-output-for-base64-and-hex-strings)
 
 * [__Advanced threefive__](#advanced-threefive)
   *   [__Splice Class__](#splice-class)
@@ -54,8 +54,7 @@
 ##  ```Splice Descriptors```  
   *  source [descriptors.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)
   *  DTMF Descriptor 
-  *  Segmentation Descriptor
-  *  Segmentation UPID  
+  *  Segmentation Descriptor (all segmentation_upids) 
   *  Segmentation Types and Messages 
   *  Time Descriptor 
   *  Audio Descriptor (lightly tested)
@@ -82,8 +81,9 @@ cd SCTE-threefive
 
 # you need root privilledges to install for the system
 make install
-
-
+```
+---
+```
 ...
 Processing threefive-2.1.39-py3.8.egg
 Copying threefive-2.1.39-py3.8.egg to /usr/local/lib/python3.8/dist-packages
@@ -104,6 +104,10 @@ Finished processing dependencies for threefive==2.1.39
 ##### pip3
 ```sh
 pip3 install threefive
+```
+---
+
+```
 Collecting threefive
   Downloading threefive-2.0.99-py3-none-any.whl (12 kB)
 Collecting bitn>=0.0.27
@@ -244,7 +248,7 @@ hexed='0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000
 threefive.decode(hexed)
 ```
 
-#### ```Output for Base64 and Hex Strings```
+#### ```JSON Output for Base64 and Hex Strings```
 
 ```python3
 
