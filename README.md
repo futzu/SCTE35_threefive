@@ -79,7 +79,7 @@ git clone https://github.com/futzu/SCTE35-threefive.git
 
 cd SCTE-threefive
 
-# you need root privilledges to install for the system
+# you need root to install for the system
 make install
 ```
 ---
