@@ -24,9 +24,9 @@ class Stream:
         while self.tsdata:
             chunky = self.tsdata.read(self.PACKET_SIZE * self.PACKET_COUNT)
             if not chunky: break
-            self.chunks = [chunky[i:i+self.PACKET_SIZE]
+            packets = [chunky[i:i+self.PACKET_SIZE]
                      for i in range(0, len(chunky), self.PACKET_SIZE)]
-            self.parse_packets()
+            self.parse_packets(packets)
 
     def chk_tid(self,pkt):
         '''
@@ -48,8 +48,8 @@ class Stream:
             return  pkt[18] in self.cmd_types
     
 
-    def scte35_packets(self):
-        good =filter(self.chk_type,filter(self.chk_tid,self.chunks))
+    def scte35_packets(self,packets):
+        good =filter(self.chk_type,filter(self.chk_tid,packets))
         [Splice(packet).show() for packet in good]
     						
     def parse_packets(self):
