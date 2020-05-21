@@ -5,7 +5,7 @@ class Stream:
     Parse mpegts files and streams for SCTE 35 packets
     '''
     PACKET_SIZE = 188
-    PACKET_COUNT = 512
+    PACKET_COUNT = 256
     TID = 0xfc # SCTE 35 Table id
     RES = 0x3 # Reserved value in Splice.info_section
     PROTO = 0x0 # Protocol value in Splice,info_section
@@ -24,9 +24,9 @@ class Stream:
         while self.tsdata:
             chunky = self.tsdata.read(self.PACKET_SIZE * self.PACKET_COUNT)
             if not chunky: break
-            packets = [chunky[i:i+self.PACKET_SIZE]
+            self.packets = [chunky[i:i+self.PACKET_SIZE]
                      for i in range(0, len(chunky), self.PACKET_SIZE)]
-            self.parse_packets(packets)
+            self.parse_packets()
 
     def chk_tid(self,pkt):
         '''
@@ -48,10 +48,10 @@ class Stream:
             return  pkt[18] in self.cmd_types
     
 
-    def scte35_packets(self,packets):
-        good =filter(self.chk_type,filter(self.chk_tid,packets))
+    def scte35_packets(self):
+        good =filter(self.chk_type,filter(self.chk_tid,self.packets))
         [Splice(packet).show() for packet in good]
     						
-    def parse_packets(self,packets):
-        self.scte35_packets(packets)
+    def parse_packets(self):
+        self.scte35_packets()
     	    
