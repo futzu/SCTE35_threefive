@@ -42,7 +42,7 @@ ids=[]
 def stuff(t,upid):
     if t not in ids:
         ids.append(t)
-        print(t, '',upid)
+        print(f'\033[92m{hex(t)}\033[0m : {upid}')
         
 [ [stuff(d.segmentation_upid_type,d.segmentation_upid) for d in threefive.Splice(m).descriptors] for m in dmesg]
         
