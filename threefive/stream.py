@@ -52,6 +52,6 @@ class Stream:
         good =filter(self.chk_type,filter(self.chk_tid,packets))
         [Splice(packet).show() for packet in good]
     						
-    def parse_packets(self):
-        self.scte35_packets()
+    def parse_packets(self,packets):
+        self.scte35_packets(packets)
     	    
