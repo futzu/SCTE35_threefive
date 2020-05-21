@@ -78,7 +78,7 @@ class Splice_Schedule(Splice_Command):
                 self.avail_num = bitbin.asint(8)
                 self.avails_expected = bitbin.asint(8)
         bit_end = bitbin.idx
-        self.splice_command_length = int((bit_start - bit_end) / 8)
+        self.splice_command_length = int((bit_start - bit_end) >>3)
             
 
 class Splice_Insert(Splice_Command):
@@ -127,7 +127,7 @@ class Splice_Insert(Splice_Command):
             self.avail_num = bitbin.asint(8)
             self.avail_expected = bitbin.asint(8)
             bit_end = bitbin.idx
-            self.splice_command_length = int((bit_start - bit_end) / 8)
+            self.splice_command_length = int((bit_start - bit_end) >>3)
             
 
 
@@ -144,7 +144,7 @@ class Time_Signal(Splice_Command):
         self.name = "Time Signal"
         self.splice_time(bitbin)
         bit_end = bitbin.idx
-        self.splice_command_length = int((bit_start - bit_end) / 8)
+        self.splice_command_length = int((bit_start - bit_end) >>3)
             
     def encode(self):
         command_bytes =self.encode_splice_time()
@@ -158,7 +158,7 @@ class Bandwidth_Reservation(Splice_Command):
         bit_start = bitbin.idx
         self.name = "Bandwidth Reservation"
         bit_end = bitbin.idx
-        self.splice_command_length = int((bit_start - bit_end) / 8)
+        self.splice_command_length = int((bit_start - bit_end) >>3)
             
 
 class Private_Command(Splice_Command):
@@ -173,7 +173,7 @@ class Private_Command(Splice_Command):
         self.name = "Private Command"
         self.identifier = bitbin.asint(32)
         bit_end = bitbin.idx
-        self.splice_command_length = int((bit_start - bit_end) / 8)
+        self.splice_command_length = int((bit_start - bit_end) >>3)
             
     def encode(self):
         command_bytes = int.to_bytes(self.identifier, 4, byteorder='big')
