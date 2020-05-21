@@ -4,7 +4,8 @@ import json
 from threefive import (
     descriptors as dscprs,
     splice_info_section as spinfo,
-    splice_commands as spcmd)
+    splice_commands as spcmd,
+    )
 
 
 class Splice:
@@ -34,9 +35,9 @@ class Splice:
                            'pts': pts}
         self.pid = pid
         self.pts = pts
-        self.infobb = BitBin(self.payload[:14])
+        #self.infobb = BitBin(self.payload[:14])
         self.info_section = spinfo.Splice_Info_Section()
-        self.info_section.decode(self.infobb)
+        self.info_section.decode(self.payload[:14])
         self.payload = self.payload[14:]
         self.descriptors = []
         cmdl = self.info_section.splice_command_length

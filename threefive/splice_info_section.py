@@ -1,9 +1,14 @@
+from bitn import BitBin
+
 class Splice_Info_Section:
 
     def __init__(self):
         pass
 
-    def decode(self, bitbin):
+    def decode(self, bites):
+        self.raw = [bite for bite in bites]
+        print(self.raw)
+        bitbin = BitBin(bites)
         self.table_id = bitbin.ashex(8) 
         if self.table_id != '0xfc':
             raise ValueError('splice_info_section.table_id should be 0xfc')   
