@@ -28,13 +28,7 @@ def read_stuff(stuff):
 def decode(stuff=None):
     """
     All purpose SCTE 35 decoder function
-    the  stuff arg can be
-         mpegts file,
-         binary file,
-         base64 encoded string,
-         binary encoded string,
-         hex encoded string.
-
+    
     usage:
 
     # for a mpegts video
