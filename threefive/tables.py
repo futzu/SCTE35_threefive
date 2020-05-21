@@ -3,8 +3,6 @@ def not_zero(i):
 
 def gte_zero(i):
     return i >= 0
-
-
 """
 Table 20 from page 58 of
 https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
