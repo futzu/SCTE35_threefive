@@ -97,86 +97,63 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 >>> import threefive
 >>> threefive.decode('file.bin')
-{ 'Info_Section': { 'crc': '0x54590000',
-                    'cw_index': '0x0',
-                    'descriptor_loop_length': 60,
-                    'encrypted_packet': False,
-                    'encryption_algorithm': 0,
-                    'private': False,
-                    'protocol_version': 0,
-                    'pts_adjustment': 0.0,
-                    'reserved': 3,
-                    'section_length': 78,
-                    'section_syntax_indicator': False,
-                    'splice_command_length': 5,
-                    'splice_command_type': 6,
-                    'table_id': '0xfc',
-                    'tier': '0xfff'},
-  'Splice_Command': { 'name': 'Time '
-                              'Signal',
-                      'pts_time': 0.555556,
-                      'time_specified_flag': True},
-  'Splice_Descriptors': [ { 'delivery_not_restricted_flag': True,
-                            'descriptor_length': 58,
-                            'identifier': 'CUEI',
-                            'name': 'Segmentation '
-                                    'Descriptor',
-                            'program_segmentation_flag': True,
-                            'segment_num': 76,
-                            'segmentation_duration': 0.000178,
-                            'segmentation_duration_flag': True,
-                            'segmentation_event_cancel_indicator': False,
-                            'segmentation_event_id': '0x3',
-                            'segmentation_message': 'Closing '
-                                                    'Credit '
-                                                    'Start',
-                            'segmentation_type_id': 38,
-                            'segmentation_upid_type': 12,
-                            'segments_expected': 66,
-                            'splice_descriptor_tag': 2}]}
+{
+ "SCTE35": {
+  "Info_Section": {
+   "table_id": "0xfc",
+   "section_syntax_indicator": false,
+   "private": false,
+   "reserved": "0x3",
+   "section_length": 78,
+   "protocol_version": 0,
+   "encrypted_packet": false,
+   "encryption_algorithm": 0,
+   "pts_adjustment": 0.0,
+   "cw_index": "0x0",
+   "tier": "0xfff",
+   "splice_command_length": 5,
+   "splice_command_type": 6,
+   "descriptor_loop_length": 60,
+   "crc": "0x534500d1"
+  },
+  "Splice_Command": {
+   "time_specified_flag": true,
+   "pts_time": 0.555556,
+   "name": "Time Signal",
+   "splice_command_length": 5
+  },
+  "Splice_Descriptors": [
+   {
+    "tag": 2,
+    "identifier": "CUEI",
+    "name": "Segmentation Descriptor",
+    "segmentation_event_id": "0x3",
+    "segmentation_event_cancel_indicator": false,
+    "program_segmentation_flag": true,
+    "segmentation_duration_flag": true,
+    "delivery_not_restricted_flag": true,
+    "segmentation_duration": 0.000178,
+    "segmentation_upid_type": 12,
+    "segmentation_upid_length": 38,
+    "segmentation_upid": "MPU:{'format identifier': 1279415385, 'private data': 4}",
+    "segmentation_type_id": 54,
+    "segmentation_message": "Distributor Placement Opportunity Start",
+    "segment_num": 0,
+    "segments_expected": 0,
+    "sub_segment_num": 0,
+    "sub_segments_expected": 0,
+    "descriptor_length": 58
+   }
+  ]
+ }
+}
+
+
+
+
+
+
 <threefive.stream.Stream object at 0x7f6667031d10>
-```
-```python3
->>> threefive.Stream('file2.bin')
-{ 'Info_Section': { 'crc': '0x54590000',
-                    'cw_index': '0x0',
-                    'descriptor_loop_length': 60,
-                    'encrypted_packet': False,
-                    'encryption_algorithm': 0,
-                    'private': False,
-                    'protocol_version': 0,
-                    'pts_adjustment': 0.0,
-                    'reserved': 3,
-                    'section_length': 78,
-                    'section_syntax_indicator': False,
-                    'splice_command_length': 5,
-                    'splice_command_type': 6,
-                    'table_id': '0xfc',
-                    'tier': '0xfff'},
-  'Packet': {'pid': '0x135'},
-  'Splice_Command': { 'name': 'Time '
-                              'Signal',
-                      'pts_time': 93221.495456,
-                      'time_specified_flag': True},
-  'Splice_Descriptors': [ { 'delivery_not_restricted_flag': True,
-                            'descriptor_length': 58,
-                            'identifier': 'CUEI',
-                            'name': 'Segmentation '
-                                    'Descriptor',
-                            'program_segmentation_flag': True,
-                            'segment_num': 76,
-                            'segmentation_duration': 0.000189,
-                            'segmentation_duration_flag': True,
-                            'segmentation_event_cancel_indicator': False,
-                            'segmentation_event_id': '0x3',
-                            'segmentation_message': 'Closing '
-                                                    'Credit '
-                                                    'End',
-                            'segmentation_type_id': 39,
-                            'segmentation_upid_type': 13,
-                            'segments_expected': 66,
-                            'splice_descriptor_tag': 2}]}
-<threefive.stream.Stream object at 0x7f6667037750>
 ```
 
 

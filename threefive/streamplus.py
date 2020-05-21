@@ -18,11 +18,11 @@ class StreamPlus(Stream):
         This is the process described in the official
         Mpeg-ts specification.
         '''
-        a = bitbin.asint(3) << 30   # read 3 bits as unsigned int and left shift 30
+        a = bitbin.asint(3) << 30
         bitbin.forward(1)           
-        b = bitbin.asint(15) << 15  # read 15 bits as unsigned int and left shift 15
+        b = bitbin.asint(15) << 15
         bitbin.forward(1)          
-        c = bitbin.asint(15)        # read 15 bits as unsigned int
+        c = bitbin.asint(15)
         d = (a+b+c)/90000.0
         # self.PTS is updated when we find a pts.
         self.PTS=round(d,6)

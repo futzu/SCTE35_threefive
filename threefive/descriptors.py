@@ -82,7 +82,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
         self.segmentation_upid = self.set_segmentation_upid(self.segmentation_upid_type,self.segmentation_upid_length)
         self.segmentation_type_id = self.bitbin.asint(8)
         if self.segmentation_type_id in table22.keys():
-            self.segmentation_message = table22[self.segmentation_type_id][0]
+            self.segmentation_message = table22[self.segmentation_type_id]
             self.set_segments()
         self.bitbin = None   
             
@@ -107,7 +107,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
         if upid_type in upid_map.keys():
             upid_id= upid_map[upid_type](upid_length)
             if upid_type != 0x09 :
-                return f'{table21[upid_type][1]}:{upid_id}'
+                return f'{table21[upid_type]}:{upid_id}'
         return upid_id
 
     def set_segments(self): 

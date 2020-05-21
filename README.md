@@ -389,7 +389,7 @@ scte35.get_descriptors()
  
  if __name__ =='__main__':
     with open(sys.argv[1],'rb') as tsdata:
-        Stream(tsdata)
+        Stream(tsdata).decode()
 
 ```
 
@@ -398,7 +398,7 @@ scte35.get_descriptors()
 ```sh
 
 curl -s https://futzu.com/xaa.ts -o -  \
-  | python3 -c 'import sys;import threefive; threefive.Stream(sys.stdin.buffer)' 
+  | python3 -c 'import sys;import threefive; threefive.Stream(sys.stdin.buffer).decode()' 
 ```
 ---
 ```python3
@@ -478,7 +478,7 @@ curl -s https://futzu.com/xaa.ts -o -  \
  
  if __name__ =='__main__':
     with open(sys.argv[1],'rb') as tsdata:
-        StreamPlus(tsdata)
+        StreamPlus(tsdata).decode()
 
 ```
 
@@ -486,7 +486,7 @@ curl -s https://futzu.com/xaa.ts -o -  \
 
 ```sh
 curl -s https://futzu.com/xaa.ts -o - \
-| python3 -c 'import sys;import threefive; threefive.StreamPlus(sys.stdin.buffer)'
+| python3 -c 'import sys;import threefive; threefive.StreamPlus(sys.stdin.buffer).decode()'
 ```
 ---
 
