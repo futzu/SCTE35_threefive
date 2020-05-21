@@ -183,6 +183,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
         if upid_length > 0: return self.bitbin.asdecodedhex(upid_length<<3)
         return None
     
+    
 class Time_Descriptor(Splice_Descriptor):
     """
     Table 25 - time_descriptor()
