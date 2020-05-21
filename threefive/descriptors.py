@@ -120,7 +120,9 @@ class Segmentation_Descriptor(Splice_Descriptor):
             if self.bitbin.idx >= 16:
                 self.sub_segment_num = self.bitbin.asint(8)
                 self.sub_segments_expected = self.bitbin.asint(8)
-
+            else:
+                self.sub_segment_num = self.sub_segments_expected = 0
+                
     def ADI(self,upid_length):
         return self.URI(upid_length)
         

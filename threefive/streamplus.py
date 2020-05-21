@@ -43,16 +43,15 @@ class StreamPlus(Stream):
         self.parse_pts(bitbin)
         return
         
-    def parse_tspacket(self, packet):
+    def parse_packet(self, packet):
         '''
         parse a mpegts packet for SCTE 35 and/or PTS
         '''
         two_bytes = int.from_bytes(packet[1:3],byteorder='big')
         pid = two_bytes & 0x1fff
         pusi = two_bytes >> 14 & 0x1
-        if pusi: self.parse_pusi(packet[4:20])
-        if packet[5] is not self.SCTE35_TID : return
-        if packet[18] in self.SPLICE_CMD_TYPES:
-            try: Splice(packet, pid = pid, pts = self.PTS).show()
-            except: pass  
+        if pusi: 
+            self.parse_pusi(packet[4:20])
+        if self.scte35_packet(packet[:20]):
+            Splice(packet, pid = pid, pts = self.PTS).show()	
         return

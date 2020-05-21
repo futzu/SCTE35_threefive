@@ -14,18 +14,18 @@ class Splice:
     '''
     # map of known descriptors and associated classes
     descriptor_map = {0: dscprs.Avail_Descriptor,
-                      1: dscprs.Dtmf_Descriptor,
-                      2: dscprs.Segmentation_Descriptor,
-                      3: dscprs.Time_Descriptor,
-                      4: dscprs.Audio_Descriptor}
+									1: dscprs.Dtmf_Descriptor,
+									2: dscprs.Segmentation_Descriptor,
+									3: dscprs.Time_Descriptor,
+									4: dscprs.Audio_Descriptor}
     
     # map of known splice commands and associated classes
     command_map = {0: spcmd.Splice_Null,
-                   4: spcmd.Splice_Schedule,
-                   5: spcmd.Splice_Insert,
-                   6: spcmd.Time_Signal,
-                   7: spcmd.Bandwidth_Reservation,
-                   255: spcmd.Private_Command}
+									4: spcmd.Splice_Schedule,
+									5: spcmd.Splice_Insert,
+									6: spcmd.Time_Signal,
+									7: spcmd.Bandwidth_Reservation,
+									255: spcmd.Private_Command}
 
     def __init__(self, data, pid = False, pts = False):
         if data[0] == 0x47: self.payload = data[5:]
@@ -60,10 +60,13 @@ class Splice:
         dll = self.info_section.descriptor_loop_length = int.from_bytes(self.payload[0:2],byteorder = 'big')
         self.payload = self.payload[2:]
         while dll > 0:
-            sd = self.set_splice_descriptor()
-            sdl = sd.descriptor_length
-            dll-= sdl+2
-            self.descriptors.append(sd)
+            try:
+                sd = self.set_splice_descriptor()
+                sdl = sd.descriptor_length
+                dll-= sdl+2
+                self.descriptors.append(sd)
+            except:
+                dll = -1
   
     def get(self):
         '''
@@ -71,8 +74,8 @@ class Splice:
         of a SCTE 35 message.
         '''
         scte35 = {**self.get_info_section(),
-                    **self.get_command(),
-                    **self.get_descriptors()}
+						**self.get_command(),
+						**self.get_descriptors()}
         if self.pts or self.pid:
             scte35.update(self.get_packet_data())
         return scte35    
