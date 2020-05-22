@@ -19,7 +19,7 @@ class Splice_Command:
     def encode_break(self):
         break_bytes=0
         if self.break_auto_return:
-            break_bytes = 1 << 39 
+            break_bytes = 1 << 39
         break_bytes += (self.break_duration * 90000)
         return int.to_bytes(break_bytes, 5, byteorder='big')
 
@@ -81,15 +81,15 @@ class Splice_Schedule(Splice_Command):
                 self.avails_expected = bitbin.asint(8)
         bit_end = bitbin.idx
         self.splice_command_length = int((bit_start - bit_end) >>3)
-            
+
 
 class Splice_Insert(Splice_Command):
     """
     Table 9 - splice_insert()
     """
-    def __init__(self):        
-        self.splice_event_id = None 
-        self.splice_event_cancel_indicator = None 
+    def __init__(self):
+        self.splice_event_id = None
+        self.splice_event_cancel_indicator = None
         self.out_of_network_indicator = None
         self.program_splice_flag = None
         self.duration_flag = None
@@ -103,7 +103,6 @@ class Splice_Insert(Splice_Command):
         self.unique_program_id = None
         self.avail_num = None
         self.avail_expected = None
-        print(t5.i2b(662,4))
 
     def decode(self, bitbin):
         bit_start = bitbin.idx
@@ -111,9 +110,9 @@ class Splice_Insert(Splice_Command):
         self.splice_event_id = bitbin.asint(32)
         self.splice_event_cancel_indicator = bitbin.asflag(1)
         bitbin.forward(7)
-        if not self.splice_event_cancel_indicator: 
+        if not self.splice_event_cancel_indicator:
             self.out_of_network_indicator = bitbin.asflag(1)
-            self.program_splice_flag = bitbin.asflag(1) 
+            self.program_splice_flag = bitbin.asflag(1)
             self.duration_flag = bitbin.asflag(1)
             self.splice_immediate_flag = bitbin.asflag(1)
             bitbin.forward(4)
@@ -131,7 +130,7 @@ class Splice_Insert(Splice_Command):
             self.avail_expected = bitbin.asint(8)
             bit_end = bitbin.idx
             self.splice_command_length = int((bit_start - bit_end) >>3)
-            
+
     def encode(self):
         bencoded = i2b(self.splice_event_id,4)
         one_byte==0
@@ -149,7 +148,7 @@ class Splice_Insert(Splice_Command):
             if self.splice_immediate_flag:
                 flag_byte += 1 <<4
             bencoded += int.to_bytes(flag_byte,1,byteorder='big')
-            
+
             if self.program_splice_flag and not self.splice_immediate_flag:
                 self.splice_time(bitbin)
             if not self.program_splice_flag:
@@ -170,14 +169,14 @@ class Time_Signal(Splice_Command):
     def __init__(self):
         self.time_specified_flag = None
         self.pts_time = None
-    
+
     def decode(self, bitbin):
         bit_start = bitbin.idx
         self.name = "Time Signal"
         self.splice_time(bitbin)
         bit_end = bitbin.idx
         self.splice_command_length = int((bit_start - bit_end) >>3)
-            
+
     def encode(self):
         command_bytes =self.encode_splice_time()
 
@@ -191,7 +190,7 @@ class Bandwidth_Reservation(Splice_Command):
         self.name = "Bandwidth Reservation"
         bit_end = bitbin.idx
         self.splice_command_length = int((bit_start - bit_end) >>3)
-            
+
 
 class Private_Command(Splice_Command):
     """
@@ -199,13 +198,13 @@ class Private_Command(Splice_Command):
     """
     def __init__(self):
         self.identifier = None
-       
+
     def decode(self, bitbin):
         bit_start = bitbin.idx
         self.name = "Private Command"
         self.identifier = bitbin.asint(32)
         bit_end = bitbin.idx
         self.splice_command_length = int((bit_start - bit_end) >>3)
-            
+
     def encode(self):
         command_bytes = int.to_bytes(self.identifier, 4, byteorder='big')

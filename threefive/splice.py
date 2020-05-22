@@ -16,17 +16,17 @@ class Splice:
     # map of known descriptors and associated classes
     descriptor_map = {  0: dscprs.Avail_Descriptor,
                         1: dscprs.Dtmf_Descriptor,
-			2: dscprs.Segmentation_Descriptor,
-			3: dscprs.Time_Descriptor,
+                        2: dscprs.Segmentation_Descriptor,
+                        3: dscprs.Time_Descriptor,
                         4: dscprs.Audio_Descriptor }
-    
+
     # map of known splice commands and associated classes
     command_map = { 0: spcmd.Splice_Null,
                     4: spcmd.Splice_Schedule,
                     5: spcmd.Splice_Insert,
                     6: spcmd.Time_Signal,
                     7: spcmd.Bandwidth_Reservation,
-		    255: spcmd.Private_Command }
+                    255: spcmd.Private_Command }
 
     def __init__(self, data, pid = None, pts = None):
         if data[0] == 0x47: self.payload = data[5:]
@@ -35,7 +35,6 @@ class Splice:
                            'pts': pts}
         self.pid = pid
         self.pts = pts
-        #self.infobb = BitBin(self.payload[:14])
         self.info_section = spinfo.Splice_Info_Section()
         self.info_section.decode(self.payload[:14])
         self.payload = self.payload[14:]
@@ -66,7 +65,7 @@ class Splice:
                 self.descriptors.append(sd)
             except:
                 dll = -1
-  
+
     def get(self):
         '''
         Returns a dict of dicts for all three parts
@@ -74,27 +73,27 @@ class Splice:
         '''
         scte35 = {  **self.get_info_section(),
                     **self.get_command(),
-		    **self.get_descriptors()}
-        
+                    **self.get_descriptors()}
+
         if self.pts or self.pid:
             scte35.update(self.get_packet_data())
-        return scte35    
+        return scte35
 
     def get_command(self):
         '''
         returns the SCTE 35
         splice command data as a dict.
-        '''  
+        '''
         cleaned_command = self.kvclean(vars(self.command))
         return {'Splice_Command': cleaned_command }
-    
+
     def get_descriptors(self):
         '''
         Returns a list of SCTE 35
         splice descriptors as dicts.
         '''
         return {'Splice_Descriptors': self.list_descriptors()}
-     
+
     def get_info_section(self):
         '''
         Returns SCTE 35
@@ -163,7 +162,7 @@ class Splice:
     def show(self):
         '''
         pretty prints the SCTE 35 message
-        '''    
+        '''
         self.kvprint(self.get())
 
     def show_command(self):
@@ -171,7 +170,7 @@ class Splice:
         pretty prints SCTE 35 splice command
         '''
         self.kvprint(self.get_command())
-        
+
     def show_descriptors(self):
         '''
         pretty prints SCTE 35 splice descriptors
