@@ -1,3 +1,4 @@
+from base64 import b64encode
 from bitn import BitBin
 
 class Splice_Info_Section:
@@ -11,11 +12,7 @@ class Splice_Info_Section:
         if self.table_id != '0xfc':
             raise ValueError('splice_info_section.table_id should be 0xfc')
         self.section_syntax_indicator = bitbin.asflag(1)
-        if self.section_syntax_indicator:
-            raise ValueError('splice_info_section.section_syntax_indicator should be False')
         self.private = bitbin.asflag(1)
-        if self.private:
-            raise ValueError('splice_info_section.private should be False')
         self.reserved = bitbin.ashex(2)
         if self.reserved != '0x3':
             raise ValueError('splice_info_section.reserved should be 0x3')
@@ -30,7 +27,7 @@ class Splice_Info_Section:
         self.tier = bitbin.ashex(12)
         self.splice_command_length = bitbin.asint(12)
         self.splice_command_type = bitbin.asint(8)
-        self.descriptor_loop_length = False
+        self.descriptor_loop_length = 0
 
     def encode(self):
         '''
@@ -89,4 +86,5 @@ class Splice_Info_Section:
         '''
         cmd_byte = self.splice_command_type
         bencoded += int.to_bytes(cmd_byte, 1, byteorder='big')
-        #print(bencoded)
+        print(bencoded)
+        print(b64encode(bencoded))

@@ -1,6 +1,7 @@
-from .splice import Splice
 from bitn import BitBin
+from .splice import Splice
 from .stream import Stream
+
 
 class StreamPlus(Stream):
     '''
@@ -26,7 +27,7 @@ class StreamPlus(Stream):
         d = (a+b+c)/90000.0
         # self.PTS is updated when we find a pts.
         self.PTS=round(d,6)
-        return
+        return 
     
     def parse_pusi(self, packetdata):
         '''
@@ -45,11 +46,13 @@ class StreamPlus(Stream):
 
     def parse_packet(self,packet):
         two_bytes = int.from_bytes(packet[1:3],byteorder='big')
-        pid = two_bytes & 0x1fff
+        pid = hex(two_bytes & 0x1fff)
         if (two_bytes >> 14 & 0x1):
             self.parse_pusi(packet[4:20])
         if self.chk_magic(packet[:20]):
-            Splice(packet, pid = pid, pts = self.PTS).show() 
+            packet_data = {'pid':pid,'pts':self.PTS}
+            Splice(packet,packet_data).show()
+        return 
     
     def parse(self,packets):
         [self.parse_packet(packet) for packet in packets]

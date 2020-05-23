@@ -1,8 +1,10 @@
 from .splice import Splice
+import sys
 
 class Stream:
     '''
-    Parse mpegts files and streams for SCTE 35 packets
+    Fast parse mpegts files and streams
+    for SCTE 35 packets
     '''
     cmd_types = [4,5,6,7,255] # splice command types
 
@@ -12,11 +14,10 @@ class Stream:
 
     def decode(self):
         '''
-        split data into
-        chunks of 188 byte packets
+        Split data into 188 byte packets
         '''
         pkt_sz = 188  # mpegts packet size
-        pkt_ct = 384 # packet count
+        pkt_ct = 256 # packet count
         chunk_sz = pkt_sz * pkt_ct
         while self.tsdata:
             chunk = self.tsdata.read(chunk_sz)
@@ -26,8 +27,7 @@ class Stream:
 
     def chk_magic(self,pkt):
         '''
-        Fast scte35
-        packet detection
+        Fast scte35 packet detection
         '''
         magic_bytes = b'\xfc0'
         if pkt[8] == 0: 
@@ -36,4 +36,7 @@ class Stream:
         return False
     
     def parse(self,packets):
+        '''
+        Parse scte35 packets
+        '''
         [Splice(pkt).show() for pkt in filter(self.chk_magic,packets)]

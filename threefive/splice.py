@@ -29,40 +29,57 @@ class Splice:
                     7: spcmd.Bandwidth_Reservation,
                     255: spcmd.Private_Command }
 
-    def __init__(self, data, pid = None, pts = None):
-        if data[0] == 0x47: self.payload = data[5:]
-        else: self.payload = self.mkbits(data)
-        self.packet_data ={'pid': pid,
-                           'pts': pts}
-        self.pid = pid
-        self.pts = pts
+    def __init__(self, data, packet_data=None):
+        payload = self.mk_payload(data)
+        self.packet_data = packet_data
+        self.decode(payload)
+ 
+    def decode(self,payload):
+        payload = self.mk_info_section(payload)
+        payload = self.mk_command(payload)
+        payload = self.mk_descriptors(payload)
+        self.info_section.crc = hex(int.from_bytes(payload[0:4],byteorder = 'big'))
+
+    def mk_payload(self,data):
+        if data[0] == 0x47: payload = data[5:]
+        else: payload = self.mkbits(data)  
+        return payload
+
+    def mk_info_section(self,payload):
+        info_size = 14
+        info_payload = payload[:info_size]
         self.info_section = spinfo.Splice_Info_Section()
-        self.info_section.decode(self.payload[:14])
-        self.payload = self.payload[14:]
-        self.descriptors = []
+        self.info_section.decode(info_payload)
+        return payload[info_size:]
+
+    def mk_command(self,payload):
         cmdl = self.info_section.splice_command_length
         # fix for bad self.info_section.splice_command_length
-        self.cmdbb = BitBin(self.payload)
-        self.set_splice_command()
+        cmdbb = BitBin(payload)
+        self.set_splice_command(cmdbb)
         cmdl = self.info_section.splice_command_length = self.command.splice_command_length
-        self.payload = self.payload[cmdl:]
-        self.descriptorloop()
-        self.info_section.crc = hex(int.from_bytes(self.payload[0:4],byteorder = 'big'))
+        return payload[cmdl:]
 
+    def mk_descriptors(self,payload):
+        self.descriptors = []
+        dll = self.info_section.descriptor_loop_length = int.from_bytes(payload[0:2],byteorder = 'big')
+        payload = payload[2:]
+        self.descriptorloop(payload,dll)
+        return payload[dll:]
+        
     def __repr__(self):
         return str(self.get())
 
-    def descriptorloop(self):
+    def descriptorloop(self,payload,dll):
         '''
         parses all splice descriptors
         '''
-        dll = self.info_section.descriptor_loop_length = int.from_bytes(self.payload[0:2],byteorder = 'big')
-        self.payload = self.payload[2:]
         while dll > 0:
             try:
-                sd = self.set_splice_descriptor()
+                sd = self.set_splice_descriptor(payload)
                 sdl = sd.descriptor_length
                 dll-= sdl+2
+                payload = payload[sdl+2:]
                 self.descriptors.append(sd)
             except:
                 dll = -1
@@ -72,11 +89,12 @@ class Splice:
         Returns a dict of dicts for all three parts
         of a SCTE 35 message.
         '''
-        scte35 = {  **self.get_info_section(),
+        scte35 = {  
+                    **self.get_info_section(),
                     **self.get_command(),
                     **self.get_descriptors()}
 
-        if self.pts or self.pid:
+        if self.packet_data:
             scte35.update(self.get_packet_data())
         return scte35
 
@@ -133,7 +151,7 @@ class Splice:
         try: return b64decode(s)
         except: return s
 
-    def set_splice_command(self):
+    def set_splice_command(self,cmdbb):
         '''
         Splice Commands looked up in self.command_map
         '''
@@ -142,18 +160,18 @@ class Splice:
             raise ValueError('Unknown Splice Command Type')
             return False
         self.command = self.command_map[sct]()
-        self.command.decode(self.cmdbb)
+        self.command.decode(cmdbb)
 
-    def set_splice_descriptor(self):
+    def set_splice_descriptor(self,payload):
         '''
         Splice Descriptors looked up in self.descriptor_map
         '''
         # splice_descriptor_tag 8 uimsbf
-        tag = self.payload[0]
-        desc_len = self.payload[1]
-        self.payload = self.payload[2:]
-        bitbin = BitBin(self.payload[:desc_len])
-        self.payload = self.payload[desc_len:]
+        tag = payload[0]
+        desc_len = payload[1]
+        payload = payload[2:]
+        bitbin = BitBin(payload[:desc_len])
+        payload = payload[desc_len:]
         if tag in self.descriptor_map.keys():
             sd = self.descriptor_map[tag](bitbin,tag)
             sd.descriptor_length = desc_len

@@ -12,14 +12,14 @@ Base64 = "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
 """
 Using Hex
 """
-print(f'parsing {Hex}') 
-htf = threefive.Splice(Hex)
+htf = threefive.decode(Hex)
 htf.show()
 
 """
 Using Base64 auto
 (output should be the same as above)
 """
-print(f'parsing {Base64}')
-btf = threefive.Splice(Base64)
+btf = threefive.decode(Base64)
 btf.show()
+# Re-encode the info section
+btf.info_section.encode()
