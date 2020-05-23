@@ -1,6 +1,7 @@
 from base64 import b64decode
 from bitn import BitBin
 import json
+from threefive.segmentation import Segmentation_Descriptor
 from threefive import (
     descriptors as dscprs,
     splice_info_section as spinfo,
@@ -16,7 +17,7 @@ class Splice:
     # map of known descriptors and associated classes
     descriptor_map = {  0: dscprs.Avail_Descriptor,
                         1: dscprs.Dtmf_Descriptor,
-                        2: dscprs.Segmentation_Descriptor,
+                        2: Segmentation_Descriptor,
                         3: dscprs.Time_Descriptor,
                         4: dscprs.Audio_Descriptor }
 
