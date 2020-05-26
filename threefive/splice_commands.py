@@ -128,37 +128,7 @@ class Splice_Insert(Splice_Command):
             self.avail_expected = bitbin.asint(8)
             bit_end = bitbin.idx
             self.splice_command_length = int((bit_start - bit_end) >>3)
-
-    def encode(self):
-        bencoded = i2b(self.splice_event_id,4)
-        one_byte==0
-        if self.splice_event_cancel_indicator: one_byte= 1 <<7
-        bitbin.forward(7)
-        bencoded += int.to_bytes(one_byte,1,byteorder='big')
-        if one_byte == 0:
-            flag_byte = 0
-            if self.out_of_network_indicator :
-                flag_byte = 1<<7
-            if self.program_splice_flag :
-                flag_byte += 1<<6
-            if self.duration_flag:
-                flag_byte += 1 <<5
-            if self.splice_immediate_flag:
-                flag_byte += 1 <<4
-            bencoded += int.to_bytes(flag_byte,1,byteorder='big')
-
-            if self.program_splice_flag and not self.splice_immediate_flag:
-                self.splice_time(bitbin)
-            if not self.program_splice_flag:
-                self.component_count = bitbin.asint(8)
-                self.components = []
-                for i in range(0, self.component_count):
-                    self.components[i] = bitbin.asint(8)
-                if not self.splice_immediate_flag: self.splice_time(bitbin)
-            if self.duration_flag: self.parse_break(bitbin)
-            self.unique_program_id = bitbin.asint(16)
-            self.avail_num = bitbin.asint(8)
-            self.avail_expected = bitbin.asint(8)
+            
 
 class Time_Signal(Splice_Command):
     """

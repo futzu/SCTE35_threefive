@@ -163,36 +163,36 @@ class Segmentation_Descriptor(Splice_Descriptor):
         return self.URI(bitbin,upid_length)
     
     def AirID(self, bitbin, upid_length):
-        return bitbin.ashex(upid_length <<3)
+        return bitbin.ashex(upid_length << 3)
 
     def ATSC(self, bitbin, upid_length):
          return {'TSID': bitbin.asint(16),
                 'reserved': bitbin.asint(2),
                 'end_of_day':bitbin.asint(5),
                 'unique_for':bitbin.asint(9),
-                'content_id': bitbin.asdecodedhex((upid_length -4) <<3)}
+                'content_id': bitbin.asdecodedhex((upid_length -4) << 3)}
       
     def ISAN(self, bitbin, upid_length):
         pre = '0000-0000-'
-        middle = bitbin.ashex(upid_length <<3)
+        middle = bitbin.ashex(upid_length << 3)
         post = '-0000-Z-0000-0000-6'
         return f'{pre}{middle[2:6]}{post}'
         
     def MID(self, bitbin, upid_length):
         upids = []
-        bitcount = (upid_length <<3)
+        bitcount = (upid_length << 3)
         while bitcount > 0:
             upid_type = bitbin.asint(8) # 1 byte
             bitcount -= 8
             upid_length = bitbin.asint(8)
             bitcount -= 8
             segmentation_upid = self.set_segmentation_upid(bitbin,upid_type,upid_length)
-            bitcount -= (upid_length <<3)
+            bitcount -= (upid_length << 3)
             upids.append(segmentation_upid)
         return upids     
         
     def MPU(self, bitbin, upid_length):
-        bitcount = (upid_length <<3)
+        bitcount = (upid_length << 3 )
         return {'format identifier':bitbin.asint(32), 
                 'private data':bitbin.asint(bitcount -32)}
 
@@ -210,5 +210,5 @@ class Segmentation_Descriptor(Splice_Descriptor):
         return '.'.join([pre[i:i+n] for i in range(0, len(pre), n)])
 
     def URI(self, bitbin, upid_length):
-        if upid_length > 0: return bitbin.asdecodedhex(upid_length<<3)
+        if upid_length > 0: return bitbin.asdecodedhex(upid_length << 3)
         return None
