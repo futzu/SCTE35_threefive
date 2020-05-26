@@ -50,7 +50,7 @@ class Splice:
         payload = self.mk_descriptors(payload)
         self.info_section.crc = hex(int.from_bytes(payload[0:4],
                                              byteorder = 'big'))
-
+        
     def mk_payload(self,data):
         if data[0] == 0x47:
             payload = data[5:]

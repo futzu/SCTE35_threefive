@@ -2,15 +2,6 @@ from .descriptors import Splice_Descriptor
 """
 Table 20 from page 58 of
 https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
-
-Restrict Group 0 – This segment is restricted for a class of devices
-defined by an out of band message that describes which devices are excluded.
-
-Restrict Group 1 – This segment is restricted for a class of devices
-defined by an out of band message that describes which devices are excluded.
-
-Restrict Group 2 – This segment is restricted for a class of devices
-defined by an out of band message that describes which devices are excluded.
 """
 table20 = {
     0x00: "Restrict Group 0",
@@ -188,8 +179,8 @@ class Segmentation_Descriptor(Splice_Descriptor):
         return f'{pre}{middle[2:6]}{post}'
         
     def MID(self, bitbin, upid_length):
-        upids=[]
-        bitcount= (upid_length <<3)
+        upids = []
+        bitcount = (upid_length <<3)
         while bitcount > 0:
             upid_type = bitbin.asint(8) # 1 byte
             bitcount -= 8
@@ -201,7 +192,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
         return upids     
         
     def MPU(self, bitbin, upid_length):
-        bitcount= (upid_length <<3)
+        bitcount = (upid_length <<3)
         return {'format identifier':bitbin.asint(32), 
                 'private data':bitbin.asint(bitcount -32)}
 
@@ -214,7 +205,7 @@ class Segmentation_Descriptor(Splice_Descriptor):
         return self.URI(bitbin, upid_length)
 
     def UMID(self, bitbin, upid_length):
-        n=8
+        n = 8
         pre = ''.join(self.AirID(upid_length).split('x',1))
         return '.'.join([pre[i:i+n] for i in range(0, len(pre), n)])
 

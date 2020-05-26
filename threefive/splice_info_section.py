@@ -44,7 +44,8 @@ class Splice_Info_Section:
             section_length
         '''
         two_bytes = 0
-        if self.section_syntax_indicator: two_bytes = (1 << 15)
+        if self.section_syntax_indicator:
+            two_bytes = (1 << 15)
         if self.private: two_bytes += (self.private << 14)
         two_bytes += (int(self.reserved,16) << 12)
         two_bytes += self.section_length
@@ -62,7 +63,8 @@ class Splice_Info_Section:
             pts_adjustment
         '''
         five_bytes = 0
-        if self.encrypted_packet: five_bytes = (1 << 39)
+        if self.encrypted_packet:
+            five_bytes = (1 << 39)
         five_bytes += (self.encryption_algorithm  << 33)
         five_bytes += int(self.pts_adjustment  * 90000)
         bencoded += int.to_bytes(five_bytes, 5, byteorder='big')
