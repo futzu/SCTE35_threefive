@@ -27,7 +27,6 @@ class StreamPlus(Stream):
         d = (a+b+c)/90000.0
         # self.PTS is updated when we find a pts.
         self.PTS=round(d,6)
-        return 
     
     def parse_pusi(self, packetdata):
         '''
@@ -42,7 +41,6 @@ class StreamPlus(Stream):
                             bitbin = BitBin(packetdata[9:])
                             bitbin.forward(4)
                             self.parse_pts(bitbin)
-        return
 
     def parse_packet(self,packet):
         two_bytes = int.from_bytes(packet[1:3],byteorder='big')
@@ -52,7 +50,6 @@ class StreamPlus(Stream):
         if self.chk_magic(packet[:20]):
             packet_data = {'pid':pid,'pts':self.PTS}
             Splice(packet,packet_data).show()
-        return 
     
     def parse(self,packets):
         [self.parse_packet(packet) for packet in packets]

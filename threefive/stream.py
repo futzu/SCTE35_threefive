@@ -9,7 +9,8 @@ class Stream:
     cmd_types = [4,5,6,7,255] # splice command types
 
     def __init__(self,tsdata, show_null = False):
-        if show_null: self.cmd_types.append(0)
+        if show_null:
+            self.cmd_types.append(0)
         self.tsdata = tsdata
 
     def decode(self):

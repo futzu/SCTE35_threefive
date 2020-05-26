@@ -1,5 +1,3 @@
-import threefive as t5
-
 class Splice_Command:
     '''
     Base class for all splice command classes,
@@ -16,7 +14,7 @@ class Splice_Command:
         bitbin.forward(6)
         self.break_duration = bitbin.as90k(33)
 
-    def encode_break(self):
+    def encode_break(self): #40bits
         break_bytes=0
         if self.break_auto_return:
             break_bytes = 1 << 39
@@ -107,19 +105,19 @@ class Splice_Insert(Splice_Command):
     def decode(self, bitbin):
         bit_start = bitbin.idx
         self.name = "Splice Insert"
-        self.splice_event_id = bitbin.asint(32)
+        self.splice_event_id = bitbin.asint(32) # uint32
         self.splice_event_cancel_indicator = bitbin.asflag(1)
-        bitbin.forward(7)
+        bitbin.forward(7) #uint8
         if not self.splice_event_cancel_indicator:
             self.out_of_network_indicator = bitbin.asflag(1)
             self.program_splice_flag = bitbin.asflag(1)
             self.duration_flag = bitbin.asflag(1)
             self.splice_immediate_flag = bitbin.asflag(1)
-            bitbin.forward(4)
+            bitbin.forward(4) #uint8
             if self.program_splice_flag and not self.splice_immediate_flag:
-                self.splice_time(bitbin)
+                self.splice_time(bitbin) # uint8 + uint32
             if not self.program_splice_flag:
-                self.component_count = bitbin.asint(8)
+                self.component_count = bitbin.asint(8)# uint 8
                 self.components = []
                 for i in range(0, self.component_count):
                     self.components[i] = bitbin.asint(8)
