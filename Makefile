@@ -2,7 +2,6 @@ PY3 = python3
 PIP3 = pip3
 
 
-
 default: install
 
 clean:
@@ -21,3 +20,6 @@ uninstall: clean
 upload: clean pkg	
 	twine upload dist/*
 
+upgrade:
+	$(PIP3) install --upgrade threefive
+	
