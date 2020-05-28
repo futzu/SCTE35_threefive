@@ -26,14 +26,14 @@ class Stream:
             self.parse([chunk[i:i+pkt_sz]
                         for i in range(0,len(chunk),pkt_sz)])
 
-    def chk_magic(self,pkt):
+    def chk_magic(self,packet):
         '''
         Fast scte35 packet detection
         '''
-        magic_bytes = b'\xfc0'
-        if pkt[8] == 0: 
-            if pkt[18] in self.cmd_types:
-                return pkt[5:7] == magic_bytes
+        if packet[5] == 0xfc:
+            if packet[6] >> 4 == 3: 
+                if packet[8] == 0:
+                    return packet[18] in self.cmd_types
         return False
     
     def parse(self,packets):

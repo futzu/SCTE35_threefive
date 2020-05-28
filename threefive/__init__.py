@@ -1,5 +1,4 @@
 from .decode import decode
-#from .segmentation import Segmentation_Descriptor
 from .splice import Splice
 from .stream import Stream
 from .streamplus import StreamPlus

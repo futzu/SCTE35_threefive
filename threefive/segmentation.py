@@ -76,16 +76,20 @@ class Segmentation_Descriptor(Splice_Descriptor):
         if not self.segmentation_event_cancel_indicator:
             self.set_flags(bitbin) # 1 byte
             if not self.program_segmentation_flag:
-                self.component_count = bitbin.asint(8)# 1 byte
-                self.components = []
-                for i in range(0, self.component_count): # 6 bytes each
-                    comp = {}
-                    comp["component_tag"] = bitbin.asint(8)
-                    bitbin.forward(7)
-                    comp["pts_offset"] = bitbin.as90k(33)
-                    self.components.append(comp)
+                self.set_components(self,bitbin)
             self.set_segmentation(bitbin)  
-      
+
+    def set_components(self,bitbin):
+        self.component_count = bitbin.asint(8)# 1 byte
+        self.components = []
+        for i in range(0, self.component_count): # 6 bytes each
+            comp = {}
+            comp["component_tag"] = bitbin.asint(8)
+            bitbin.forward(7)
+            comp["pts_offset"] = bitbin.as90k(33)
+            self.components.append(comp)
+       
+     
     def set_flags(self,bitbin):  # 1 byte for set flags
         self.program_segmentation_flag = bitbin.asflag(1)
         self.segmentation_duration_flag = bitbin.asflag(1)
