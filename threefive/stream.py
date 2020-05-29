@@ -30,9 +30,9 @@ class Stream:
         '''
         Fast scte35 packet detection
         '''
-        if packet[5] == 0xfc:
-            if packet[6] >> 4 == 3: 
-                if packet[8] == 0:
+        if packet[5] == 0xfc: # info section TID
+            if packet[6] >> 4 == 3: # info section reserved
+                if packet[8] == 0: # info section private 
                     return packet[18] in self.cmd_types
         return False
     
