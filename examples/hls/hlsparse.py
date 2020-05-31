@@ -33,13 +33,12 @@ with open(sys.argv[1],'r') as manifest:
             cue=l.split('CUE=')[1]
             do(cue)   
         if l.startswith('#EXT-OATCLS-SCTE35:'):
-            cue=l.split('#EXT-OATCLS-SCTE35:')[1]
+            cue = l.split('#EXT-OATCLS-SCTE35:')[1]
             do(cue)   
         ##EXT-X-DATERANGE:ID="splice-6FFFFFF0",START-DATE="2014-03-05T11:15:00Z",PLANNED-DURATION=59.993,SCTE35-OUT=0xFC002F0000000000FF000014056FFFFFF000E011622DCAFF000052636200000000000A000829896F50000008700000000
         if l.startswith('#EXT-X-DATERANGE:'):
-            values={}
             for chunk in line.split(','):
-                k,v=chunk.split('=')
+                k,v = chunk.split('=')
                 if k.startswith('SCTE35'):
-                    v=threefive.Splice(v).show()
+                    v = threefive.Splice(v).show()
                   
