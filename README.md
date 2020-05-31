@@ -10,6 +10,7 @@
 * [__Install__](#install)
 
 * [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
+    * [Using threefive with HLS manifests](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
     * [Splice Insert](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Splice_Insert.py)
     * [Splice Insert Too](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Splice_Insert_Too.py)
     * [Splice Null](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Splice_Null.py)
