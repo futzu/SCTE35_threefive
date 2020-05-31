@@ -2,7 +2,6 @@ import sys
 import threefive
 
 
-
 def do(cue):
     print( f'cue: {cue}')
     tf=threefive.Splice(cue)
@@ -25,8 +24,8 @@ with open(sys.argv[1],'r') as manifest:
             print(f'cue in: {cue_in}')
         ##EXTINF:4.000000,
         if l.startswith("#EXTINF:"):
-            t=l.split(":")[1].split(',')[0]
-            t=float(t)
+            t = l.split(":")[1].split(',')[0]
+            t = float(t)
             hls_time += t
             next_segment = manifest.readline()[:-1]
             print(f'Segment:  {next_segment} @ {hls_time}')
