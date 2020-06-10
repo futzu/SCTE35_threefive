@@ -29,27 +29,14 @@ class Stream:
                 self.parse([chunk[i:i+pkt_sz]
                         for i in range(0,len(chunk),pkt_sz)])
 
-    def chk_tid(self,byte5):
-        return byte5 == 0xfc
-
-    def chk_resrvd(self,byte6):
-        return byte6 >> 4 == 3
-
-    def chk_prvt(self, byte8):
-        return byte8 == 0
-
-    def chk_cmdtype(self,byte18):
-        return byte18 in self.cmd_types
-    
     def chk_magic(self,packet):
         '''
         Fast scte35 packet detection
         '''
-        if self.chk_tid(packet[5]):
-            if self.chk_resrvd(packet[6]):
-                if self.chk_prvt(packet[8]): 
-                    if self.chk_cmdtype(packet[18]):
-                        return True
+        if packet[5] == 0xfc:
+            if packet[6] >> 4 == 3:
+                if packet[8] == 0: 
+                    return packet[18] in self.cmd_types
         return False
     
     def parse(self,packets):
