@@ -51,7 +51,6 @@ class Splice_Schedule(Splice_Command):
     Table 8 - splice_schedule()
     """
     def decode(self, bitbin):
-        bit_start = bitbin.idx
         self.name = "Splice Schedule"
         splice_count = bitbin.asint(8)
         for i in range(0, splice_count):
@@ -77,16 +76,13 @@ class Splice_Schedule(Splice_Command):
                 self.unique_program_id = bitbin.asint(16)
                 self.avail_num = bitbin.asint(8)
                 self.avails_expected = bitbin.asint(8)
-        bit_end = bitbin.idx
-        self.splice_command_length = int((bit_start - bit_end) >>3)
-
+      
 
 class Splice_Insert(Splice_Command):
     """
     Table 9 - splice_insert()
     """
     def decode(self, bitbin):
-        bit_start = bitbin.idx
         self.name = "Splice Insert"
         self.splice_event_id = bitbin.asint(32) # uint32
         self.splice_event_cancel_indicator = bitbin.asflag(1)
@@ -109,8 +105,6 @@ class Splice_Insert(Splice_Command):
             self.unique_program_id = bitbin.asint(16)
             self.avail_num = bitbin.asint(8)
             self.avail_expected = bitbin.asint(8)
-            bit_end = bitbin.idx
-            self.splice_command_length = int((bit_start - bit_end) >>3)
             
 
 class Time_Signal(Splice_Command):
@@ -122,11 +116,8 @@ class Time_Signal(Splice_Command):
         self.pts_time = None
 
     def decode(self, bitbin):
-        bit_start = bitbin.idx
         self.name = "Time Signal"
         self.splice_time(bitbin)
-        bit_end = bitbin.idx
-        self.splice_command_length = int((bit_start - bit_end) >>3)
 
     def encode(self):
         command_bytes =self.encode_splice_time()
@@ -137,10 +128,7 @@ class Bandwidth_Reservation(Splice_Command):
     Table 11 - bandwidth_reservation()
     """
     def decode(self, bitbin):
-        bit_start = bitbin.idx
         self.name = "Bandwidth Reservation"
-        bit_end = bitbin.idx
-        self.splice_command_length = int((bit_start - bit_end) >>3)
 
 
 class Private_Command(Splice_Command):
@@ -151,11 +139,8 @@ class Private_Command(Splice_Command):
         self.identifier = None
 
     def decode(self, bitbin):
-        bit_start = bitbin.idx
         self.name = "Private Command"
         self.identifier = bitbin.asint(32)
-        bit_end = bitbin.idx
-        self.splice_command_length = int((bit_start - bit_end) >>3)
 
     def encode(self):
         command_bytes = int.to_bytes(self.identifier, 4, byteorder='big')

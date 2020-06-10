@@ -55,7 +55,7 @@ class Splice:
         if data[0] == 0x47:
             payload = data[5:]
         else:
-            payload = self.mkbits(data)  
+            payload = self.mkbits(data)
         return payload
 
     def mk_info_section(self,payload):
@@ -66,11 +66,12 @@ class Splice:
         return payload[info_size:]
 
     def mk_command(self,payload):
-        cmdl = self.info_section.splice_command_length
-        # fix for bad self.info_section.splice_command_length
         cmdbb = BitBin(payload)
+        bit_start = cmdbb.idx
         self.set_splice_command(cmdbb)
-        cmdl = self.info_section.splice_command_length = self.command.splice_command_length
+        bit_end = cmdbb.idx
+        cmdl = self.command.splice_command_length = int((bit_start - bit_end) >>3)
+        self.info_section.splice_command_length = cmdl
         return payload[cmdl:]
 
     def mk_descriptors(self,payload):
@@ -141,7 +142,6 @@ class Splice:
         return {k: v for k, v in obj.items() if v is not None}
 
     def kvprint(self, obj):
-        print('\n')
         print(json.dumps(obj,indent = 2))
 
     def mkbits(self, s):

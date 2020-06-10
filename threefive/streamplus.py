@@ -47,9 +47,11 @@ class StreamPlus(Stream):
         pid = hex(two_bytes & 0x1fff)
         if (two_bytes >> 14 & 0x1):
             self.parse_pusi(packet[4:20])
-        if self.chk_magic(packet[:20]):
+        if self.chk_magicbytes(packet[:20]):
             packet_data = {'pid':pid,'pts':self.PTS}
-            Splice(packet,packet_data).show()
+            tf = Splice(packet,packet_data)
+            tf.show()
+
     
     def parse(self,packets):
         [self.parse_packet(packet) for packet in packets]
