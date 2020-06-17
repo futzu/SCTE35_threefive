@@ -33,10 +33,9 @@ class Stream:
         '''
         Fast scte35 packet detection
         '''
-        if packet[5] == 0xfc:
-            if packet[6] >> 4 == 3:
-                if packet[8] == 0: 
-                    return packet[18] in self.cmd_types
+        magicbytes = (252,48,0,255)
+        if (packet[5],packet[6],packet[8],packet[15]) == magicbytes:
+            return packet[18] in self.cmd_types
         return False
     
     def parse(self,packets):
