@@ -475,7 +475,6 @@ curl -s https://futzu.com/xaa.ts -o -  \
  
  import sys
  from threefive import StreamPlus
- '''
  
  if __name__ =='__main__':
     with open(sys.argv[1],'rb') as tsdata:
