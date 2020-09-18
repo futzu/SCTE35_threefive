@@ -1,5 +1,6 @@
 from .splice import Splice
 import sys
+from functools import partial
 
 class Stream:
     '''
@@ -8,38 +9,47 @@ class Stream:
     '''
     cmd_types = [4,5,6,7,255] # splice command types
     sync_byte = b'G'
+    packet_size = 188
     def __init__(self,tsdata, show_null = False):
         if show_null:
             self.cmd_types.append(0)
         self.tsdata = tsdata
+        self.parsenext = False
+
+    def parse_packet(self,packet):
+        two_bytes = int.from_bytes(packet[1:3],byteorder='big')
+        pid = hex(two_bytes & 0x1fff)
+        self.packet_data ={'pid':pid}
+        return True
 
     def decode(self):
         '''
-        Split data into 188 byte packets
+        StreamParser.parse reads a
+        file handle object or from stdin
+        to find SCTE-35 packets.
         '''
-        pkt_sz = 188  # mpegts packet size
-        pkt_ct = 384 # packet count
-        chunk_sz = pkt_sz * pkt_ct
-        while self.tsdata:
-            first_byte = self.tsdata.read(1)
-            if not first_byte: break
-            if first_byte == self.sync_byte:
-                chunk = first_byte + self.tsdata.read(chunk_sz -1)
-                if not chunk: break
-                self.parse([chunk[i:i+pkt_sz]
-                        for i in range(0,len(chunk),pkt_sz)])
+        
+        for packet in iter( partial(self.tsdata.read, self.packet_size), b''):
+            if self.parse_packet(packet):
+                if packet[5] == 0xfc:
+                    if packet[6] == 48: 
+                        if packet[8] == 0:
+                            if packet[18] in self.cmd_types:
+                                cuep = Splice(packet,self.packet_data)                            
+                                if self.parsenext:
+                                    return cuep
+                                cuep.show()
 
-    def chk_magic(self,packet):
-        '''
-        Fast scte35 packet detection
-        '''
-        magicbytes = (252,48,0,255)
-        if (packet[5],packet[6],packet[8],packet[15]) == magicbytes:
-            return packet[18] in self.cmd_types
+    def decode_until_found(self):
+        self.parsenext = True
+        cuep = self.decode()
+        if cuep:
+            return cuep
         return False
+
+
+        
     
-    def parse(self,packets):
-        '''
-        Parse scte35 packets
-        '''
-        [Splice(pkt).show() for pkt in filter(self.chk_magic,packets)]
+
+
+                            
