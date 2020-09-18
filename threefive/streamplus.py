@@ -1,6 +1,7 @@
 from bitn import BitBin
 from .splice import Splice
 from .stream import Stream
+from functools import partial
 
 
 class StreamPlus(Stream):
@@ -11,9 +12,33 @@ class StreamPlus(Stream):
     NON_PTS_STREAM_IDS = [188, 190, 191, 240, 241, 242, 248]
 
     def __init__(self, tsdata, show_null = False):
-        self.PTS = None
+        self.PTS = False
         super().__init__(tsdata,show_null)
 
+    def decode(self):
+        '''
+        StreamParser.parse reads a
+        file handle object or from stdin
+        to find SCTE-35 packets.
+        '''
+        
+        for packet in iter( partial(self.tsdata.read, self.packet_size), b''):
+            two_bytes = int.from_bytes(packet[1:3],byteorder='big')
+            pid = hex(two_bytes & 0x1fff)
+            if (two_bytes >> 14 & 0x1):
+                self.parse_pusi(packet[4:20])
+            self.packet_data = {'pid':pid,'pts':self.PTS}
+            if packet[5] == 0xfc:
+                if packet[6] == 48: 
+                    if packet[8] == 0:
+                        if packet[18] in self.cmd_types:
+                            cuep = Splice(packet,self.packet_data)                            
+                            if self.decodenext:
+                                return cuep
+                            cuep.show()
+
+
+        
     def parse_pts(self,bitbin):
         '''
         This is the process described in the official
@@ -25,7 +50,7 @@ class StreamPlus(Stream):
         bitbin.forward(1)          
         c = bitbin.asint(15)
         d = (a+b+c)/90000.0
-        # self.PTS is updated when we find a pts.
+   # self.PTS is updated when we find a pts.
         self.PTS=round(d,6)
     
     def parse_pusi(self, packetdata):
@@ -42,11 +67,4 @@ class StreamPlus(Stream):
                             bitbin.forward(4)
                             self.parse_pts(bitbin)
 
-    def parse_packet(self,packet):
-        two_bytes = int.from_bytes(packet[1:3],byteorder='big')
-        pid = hex(two_bytes & 0x1fff)
-        if (two_bytes >> 14 & 0x1):
-            self.parse_pusi(packet[4:20])
-        self.packet_data = {'pid':pid,'pts':self.PTS}
-        return True
 
