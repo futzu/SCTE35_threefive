@@ -1,22 +1,10 @@
 from base64 import b64decode
 from bitn import BitBin
 import json
-from threefive.segmentation import Segmentation_Descriptor
-from threefive.splice_info_section import Splice_Info_Section
-from threefive.descriptors import (
-    Avail_Descriptor,
-    Dtmf_Descriptor,
-    Time_Descriptor,
-    Audio_Descriptor
-    )
-from threefive.splice_commands import (
-    Splice_Null,
-    Splice_Schedule,
-    Splice_Insert,
-    Time_Signal,
-    Bandwidth_Reservation,
-    Private_Command 
-    )
+from threefive.segmentation import SegmentationDescriptor
+from threefive.section import SpliceInfoSection
+from threefive.descriptor import SpliceDescriptor
+from threefive.command import SpliceCommand
 
 
 class Splice:
@@ -24,76 +12,52 @@ class Splice:
     The threefive.Splice class handles parsing
     SCTE 35 message strings.
     '''
-    # map of known descriptors and associated classes
-    descriptor_map = { 0: Avail_Descriptor,
-                       1: Dtmf_Descriptor,
-                       2: Segmentation_Descriptor,
-                       3: Time_Descriptor,
-                       4: Audio_Descriptor }
+    # splice descriptor tags
+    sd_tags = [0,1,2,3,4]
+    # splice command types
+    cmd_types = [4,5,6,7,255] 
 
-    # map of known splice commands and associated classes
-    command_map = { 0: Splice_Null,
-                    4: Splice_Schedule,
-                    5: Splice_Insert,
-                    6: Time_Signal,
-                    7: Bandwidth_Reservation,
-                  255: Private_Command }
-
-    def __init__(self, data, packet_data=None):
+    def __init__(self, data, packet_data=False):
+        # clear any existing values.
+        self.info_section = self.command = False
+        self.descriptors = []
+        # split off headers, if any.
         payload = self.mk_payload(data)
+        # threefive.Stream passes packet_data. 
+        self.bitbin = BitBin(payload)
         self.packet_data = packet_data
-        self.decode(payload)
- 
-    def decode(self,payload):
-        payload = self.mk_info_section(payload)
-        payload = self.mk_command(payload)
-        payload = self.mk_descriptors(payload)
+        self.info_section = SpliceInfoSection()
+        self.info_section.parse(self.bitbin)
+        self.set_command()
+        self.info_section.descriptor_loop_length = self.bitbin.asint(16)
+        self.descriptorloop()
         self.info_section.crc = hex(int.from_bytes(payload[0:4],
-                                             byteorder = 'big'))
-        
+                                            byteorder = 'big'))
+                
     def mk_payload(self,data):
+        '''
+        Splice.mk_payload trims the
+        header if data is a full SCTE-35 packet
+        '''
         if data[0] == 0x47:
             payload = data[5:]
         else:
             payload = self.mkbits(data)
         return payload
-
-    def mk_info_section(self,payload):
-        info_size = 14
-        info_payload = payload[:info_size]
-        self.info_section = Splice_Info_Section()
-        self.info_section.decode(info_payload)
-        return payload[info_size:]
-
-    def mk_command(self,payload):
-        cmdbb = BitBin(payload)
-        bit_start = cmdbb.idx
-        self.set_splice_command(cmdbb)
-        bit_end = cmdbb.idx
-        cmdl = self.command.splice_command_length = int((bit_start - bit_end) >>3)
-        self.info_section.splice_command_length = cmdl
-        return payload[cmdl:]
-
-    def mk_descriptors(self,payload):
-        self.descriptors = []
-        dll = self.info_section.descriptor_loop_length = int.from_bytes(payload[0:2],byteorder = 'big')
-        payload = payload[2:]
-        self.descriptorloop(payload,dll)
-        return payload[dll:]
-        
+  
     def __repr__(self):
         return str(self.get())
-
-    def descriptorloop(self,payload,dll):
+    
+    def descriptorloop(self):
         '''
         parses all splice descriptors
         '''
+        dll = self.info_section.descriptor_loop_length
         while dll > 0:
             try:
-                sd = self.set_splice_descriptor(payload)
+                sd = self.set_splice_descriptor()
                 sdl = sd.descriptor_length
                 dll-= sdl+2
-                payload = payload[sdl+2:]
                 self.descriptors.append(sd)
             except:
                 dll = -1
@@ -103,37 +67,19 @@ class Splice:
         Returns a dict of dicts for all three parts
         of a SCTE 35 message.
         '''
-        scte35 = {  'info_section':self.get_info_section(),
-                    'command':self.get_command(),
-                    'descriptors':self.get_descriptors()}
+        try:
+            scte35 = {}
+            scte35['info_section'] = self.kvclean(vars(self.info_section))
+            scte35['command'] = self.kvclean(vars(self.command))
+            scte35['descriptors'] = [self.kvclean(vars(d)) for d in self.descriptors]
 
-        if self.packet_data:
-            scte35.update(self.get_packet_data())
-        return scte35
-
-    def get_command(self):
-        '''
-        returns the SCTE 35
-        splice command data as a dict.
-        '''
-        return self.kvclean(vars(self.command))
-
-    def get_descriptors(self):
-        '''
-        Returns a list of SCTE 35
-        splice descriptors as dicts.
-        '''
-        return [self.kvclean(vars(d)) for d in self.descriptors]
-    
-    def get_info_section(self):
-        '''
-        Returns SCTE 35
-        splice info section as a dict
-        '''
-        return self.kvclean(vars(self.info_section))
-
-    def get_packet_data(self):
-        return self.kvclean(self.packet_data)
+        except:
+            scte35 = False
+        finally:
+            if scte35:
+                if self.packet_data:
+                    scte35.update(self.kvclean(self.packet_data))
+            return scte35
 
     def kvclean(self,obj):
         '''
@@ -157,29 +103,34 @@ class Splice:
         except:
             return s
 
-    def set_splice_command(self,cmdbb):
+    def set_command(self):
         '''
-        Splice Commands looked up in self.command_map
+        threefive.Splice.set_command
+        checks the command type and if valid,
+        the splice command data is parsed.
         '''
         sct = self.info_section.splice_command_type
-        if sct not in self.command_map.keys():
+        if sct not in self.cmd_types:
             raise ValueError('Unknown Splice Command Type')
             return False
-        self.command = self.command_map[sct]()
-        self.command.decode(cmdbb)
+        self.command = SpliceCommand()
+        self.command.parse(sct,self.bitbin)
 
-    def set_splice_descriptor(self,payload):
+    def set_splice_descriptor(self):
         '''
-        Splice Descriptors looked up in self.descriptor_map
+
+        threefive.Splice.set_splice_descriptor
+        is called by
         '''
         # splice_descriptor_tag 8 uimsbf
-        tag = payload[0]
-        desc_len = payload[1]
-        payload = payload[2:]
-        bitbin = BitBin(payload[:desc_len])
-        payload = payload[desc_len:]
-        if tag in self.descriptor_map.keys():
-            sd = self.descriptor_map[tag](bitbin,tag)
+        tag = self.bitbin.asint(8)
+        desc_len = self.bitbin.asint(8)
+        if tag in self.sd_tags:
+            if tag == 2:
+                sd = SegmentationDescriptor()
+            else:
+                sd = SpliceDescriptor()
+            sd.parse(self.bitbin,tag)
             sd.descriptor_length = desc_len
             return sd
         else:

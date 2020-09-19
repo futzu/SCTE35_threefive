@@ -1,4 +1,4 @@
-from .descriptors import Splice_Descriptor
+from .descriptor import SpliceDescriptor
 """
 Table 20 from page 58 of
 https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
@@ -11,10 +11,8 @@ table20 = {
 }
 
 """
-table 22 from page 62 of
-https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
+table 22 
 I am using the segmentation_type_id as a key.
-
 Segmentation_type_id : segmentation_message
 	
 """
@@ -62,13 +60,13 @@ table22 = {
     0x51: "Network End"}
 
        
-class Segmentation_Descriptor(Splice_Descriptor):
+class SegmentationDescriptor(SpliceDescriptor):
     """
     Table 19 - segmentation_descriptor()
     """
-    def __init__(self, bitbin, tag):
-        if not super().__init__(bitbin, tag): return False
-        bitbin = bitbin
+    def parse(self, bitbin, tag):
+        self.tag = tag
+        self.chk_identifier(bitbin)
         self.name = "Segmentation Descriptor"
         self.segmentation_event_id = bitbin.ashex(32) # 4 bytes
         self.segmentation_event_cancel_indicator = bitbin.asflag(1)
@@ -105,16 +103,11 @@ class Segmentation_Descriptor(Splice_Descriptor):
     def set_segmentation(self,bitbin):
         if self.segmentation_duration_flag:
             self.segmentation_duration = bitbin.as90k(40)# 5 bytes
-
         self.segmentation_upid_type = bitbin.asint(8) # 1 byte
-
-        self.segmentation_upid_length = bitbin.asint(8) # 1 byte
-        
+        self.segmentation_upid_length = bitbin.asint(8) # 1 byte 
         self.segmentation_upid = self.set_segmentation_upid(bitbin, 
-            self.segmentation_upid_type, self.segmentation_upid_length)
-        
+            self.segmentation_upid_type, self.segmentation_upid_length)  
         self.segmentation_type_id = bitbin.asint(8) # 1 byte
-
         if self.segmentation_type_id in table22.keys():
             self.segmentation_message = table22[self.segmentation_type_id]
             self.set_segments(bitbin)
