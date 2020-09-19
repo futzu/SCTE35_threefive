@@ -6,43 +6,46 @@ from struct import unpack
 
 class StreamPlus(Stream):
     '''
-    StreamPlus adds PID and PTS for the SCTE 35 packets
+    StreamPlus adds PTS for the SCTE 35 packets
     to the Stream class.
     '''
     NON_PTS_STREAM_IDS = [188, 190, 191, 240, 241, 242, 248]
 
     def __init__(self, tsdata, show_null = False):
         self.PTS = False
+        self.pusi_count = 0
         super().__init__(tsdata,show_null)
 
     def decode(self):
         '''
-        StreamParser.parse reads a
-        file handle object or from stdin
+        StreamParser.decode() reads MPEG-TS
         to find SCTE-35 packets.
-        '''
-        pusi_count=0
+        ''' 
         for packet in iter( partial(self.tsdata.read, self.packet_size), b''):
-            two_bytes,one_byte = unpack('>HB', packet[:3])
-            pusi = two_bytes >> 14 & 0x1
-            pid = two_bytes & 0x1fff
-            if pusi:
-                pusi_count +=1
-                if pusi_count == 10:
-                    pusi_count = 0
-                    self.parse_pusi(packet[4:20])
-            self.packet_data = {'pid':pid,'pts':self.PTS}
-            if packet[5] == 0xfc:
-                if packet[6] == 48: 
-                    if packet[8] == 0:
-                        if packet[18] in self.cmd_types:
-                            cuep = Splice(packet,self.packet_data)                            
-                            if self.decodenext:
-                                return cuep
-                            cuep.show()
-        
+            # parse all packets headers first
+            self.parse_header(packet) 
+            if self.chk_magic(packet):
+                return self.parse_payload(packet)
+
+    def parse_header(self,packet):
+        '''
+        StreamParser.parse_header(packet)
+        reads a MPEG-TS packet header
+        for pid and/or pusi.
+        '''
+        two_bytes, = unpack('>H', packet[1:3])
+        pusi = two_bytes >> 14 & 0x1
+        pid = two_bytes & 0x1fff
+        if pusi:
+            self.pusi_count +=1
+            if self.pusi_count == 10:
+                self.pusi_count = 0
+                self.parse_pusi(packet[4:20])
+        self.packet_data = {'pid':pid,'pts':self.PTS}
+      
     def parse_pts(self,bitbin):
         '''
+        StreamPlus.parse_pts(bitbin)
         This is the process described in the official
         Mpeg-ts specification.
         '''
@@ -51,22 +54,20 @@ class StreamPlus(Stream):
         bitbin.forward(1)          
         c = bitbin.asint(15)
         d = (a+b+c)/90000.0
-   # self.PTS is updated when we find a pts.
+        # self.PTS is updated when we find a pts.
         self.PTS=round(d,6)
     
-    def parse_pusi(self, packetdata):
+    def parse_pusi(self, pusidata):
         '''
+        StreamPlus.parse_pusi(pusidata)
         If the pusi data contains these markers,
         we can pull a PTS value..
         '''
-        if packetdata[2] == 1: 
-            if packetdata[3] not in self.NON_PTS_STREAM_IDS:
-                if (packetdata[6] >> 6) == 2:
-                    if (packetdata[7] >> 6) == 2:
-                        if (packetdata[9] >> 4) == 2:
-                            #print(packetdata[6],packetdata[7],packetdata[9])    
-                            bitbin = BitBin(packetdata[9:])
+        if pusidata[2] == 1: 
+            if pusidata[3] not in self.NON_PTS_STREAM_IDS:
+                if (pusidata[6] >> 6) == 2:
+                    if (pusidata[7] >> 6) == 2:
+                        if (pusidata[9] >> 4) == 2:
+                            bitbin = BitBin(pusidata[9:])
                             bitbin.forward(4)
                             self.parse_pts(bitbin)
-
-
