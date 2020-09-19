@@ -46,20 +46,21 @@
       * [Pipe a Video to StreamPlus](#pipe-a-video-to-streamplus)
 ---  
 ##  ```Splice Commands``` 
-  *  source [splice_commands.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/splice_commands.py)
+  *  source [command.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/command.py)
   *  Splice Null  
-  *  Splice Schedule  (lightly tested)
+  *  Splice Schedule
   *  Splice Insert 
   *  Time Signal 
-  *  Bandwidth Reservation  (lightly tested)
+  *  Bandwidth Reservation
 ##  ```Splice Descriptors```  
-  *  source [descriptors.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)
+  *  source [descriptor.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptor.py)
   *  DTMF Descriptor 
-  *  Segmentation Descriptor (all segmentation_upids) 
+  *  Segmentation Descriptor (all segmentation Upids) 
   *  Segmentation Types and Messages 
   *  Time Descriptor 
-  *  Audio Descriptor (lightly tested)
+  *  Audio Descriptor
   
+  ---
   
   [🡡 top](#threefive)
 
