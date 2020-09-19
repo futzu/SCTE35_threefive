@@ -21,5 +21,3 @@ Using Base64 auto
 """
 btf = threefive.decode(Base64)
 btf.show()
-# Re-encode the info section
-btf.info_section.encode()
