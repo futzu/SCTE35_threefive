@@ -1,12 +1,20 @@
 from .splice import Splice
 import sys
 from functools import partial
+from struct import unpack
 
 class Stream:
     '''
-    threefive.Stream class
+    threefive.Stream(tsdata, show_null = False)
     Fast parse mpegts files and streams
     for SCTE 35 packets
+    
+    tsdata should be a file handle,
+    if tsdata is unset, sys.stdin.buffer is read. 
+
+    SCTE-35 Splice null packets are ignored by default. 
+    Set show_null = True to show splice null. 
+
     '''
     cmd_types = [4,5,6,7,255] # splice command types
     packet_size = 188
@@ -14,7 +22,11 @@ class Stream:
         # set show_null to parse splice null packets
         if show_null:
             self.cmd_types.append(0)
-        self.tsdata = tsdata
+
+        if tsdata in [None, sys.stdin.buffer]:
+            self.tsdata = sys.stdin.buffer
+        else:
+            self.tsdata = tsdata 
         self.decodenext = False
 
     def decode(self):
@@ -26,7 +38,10 @@ class Stream:
             if self.chk_magic(packet):
                 # Only parse headers on SCTE-35 packets
                 self.parse_header(packet)
-                return self.parse_payload(packet)
+                cuep = Splice(packet,self.packet_data)                            
+                if self.decodenext:
+                    return cuep
+                cuep.show()
 
     def decode_until_found(self):
         '''
@@ -46,20 +61,10 @@ class Stream:
         reads a MPEG-TS packet header
         for a pid.
         '''
-        two_bytes = int.from_bytes(packet[1:3],byteorder='big')
-        pid = hex(two_bytes & 0x1fff)
+        two_bytes, = unpack('>H', packet[1:3])
+        pid = two_bytes & 0x1fff
         self.packet_data ={'pid':pid}
 
-    def parse_payload(self,packet):
-        '''
-        Stream.parse_payload(packet) creates a
-        Splice instance to parse the packet payload
-        '''
-        cuep = Splice(packet,self.packet_data)                            
-        if self.decodenext:
-            return cuep
-        cuep.show()
-        
     def chk_magic(self,packet):
         '''
         Stream.chk_magic(packet)

@@ -25,8 +25,11 @@ class StreamPlus(Stream):
             # parse all packets headers first
             self.parse_header(packet) 
             if self.chk_magic(packet):
-                return self.parse_payload(packet)
-
+                cuep = Splice(packet,self.packet_data)                            
+                if self.decodenext:
+                    return cuep
+                cuep.show()
+                
     def parse_header(self,packet):
         '''
         StreamParser.parse_header(packet)
@@ -34,8 +37,8 @@ class StreamPlus(Stream):
         for pid and/or pusi.
         '''
         two_bytes, = unpack('>H', packet[1:3])
-        pusi = two_bytes >> 14 & 0x1
         pid = two_bytes & 0x1fff
+        pusi = two_bytes >> 14 & 0x1
         if pusi:
             self.pusi_count +=1
             if self.pusi_count == 10:
