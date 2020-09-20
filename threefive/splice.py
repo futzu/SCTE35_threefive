@@ -6,6 +6,17 @@ from threefive.section import SpliceInfoSection
 from threefive.descriptor import SpliceDescriptor
 from threefive.command import SpliceCommand
 
+class Header:
+    def __init__(self,packet_data):
+        self.pid = self.pts = None
+        if 'pid' in packet_data.keys():
+            self.pid = packet_data['pid']
+        if 'pts' in packet_data.keys():
+            self.pts = packet_data['pts']
+
+    def __repr__(self):
+        return str(vars(self))
+    
 
 class Splice:
     '''
@@ -17,7 +28,7 @@ class Splice:
     # splice command types
     cmd_types = [0,4,5,6,7,255] 
 
-    def __init__(self, data, packet_data=False):
+    def __init__(self, data, packet_data={}):
         # clear any existing values.
         self.info_section = self.command = False
         self.descriptors = []
@@ -25,7 +36,7 @@ class Splice:
         payload = self.mk_payload(data)
         # threefive.Stream passes packet_data. 
         self.bitbin = BitBin(payload)
-        self.packet_data = packet_data
+        self.header = Header(packet_data)
         self.info_section = SpliceInfoSection()
         self.info_section.parse(self.bitbin)
         self.set_command()
@@ -69,6 +80,7 @@ class Splice:
         '''
         try:
             scte35 = {}
+            scte35['header'] = self.kvclean(vars(self.header))
             scte35['info_section'] = self.kvclean(vars(self.info_section))
             scte35['command'] = self.kvclean(vars(self.command))
             scte35['descriptors'] = [self.kvclean(vars(d)) for d in self.descriptors]
@@ -76,9 +88,6 @@ class Splice:
         except:
             scte35 = False
         finally:
-            if scte35:
-                if self.packet_data:
-                    scte35.update(self.kvclean(self.packet_data))
             return scte35
 
     def kvclean(self,obj):

@@ -1,5 +1,4 @@
 from .splice import Splice
-import sys
 from functools import partial
 from struct import unpack
 
@@ -9,9 +8,12 @@ class Stream:
     Fast parse mpegts files and streams
     for SCTE 35 packets
     
-    tsdata should be a file handle,
-    if tsdata is unset, sys.stdin.buffer is read. 
-
+    tsdata should be a _io.BufferedReader instance:
+    example:
+        import threefive
+        with open('vid.ts','rb') as tsdata:
+            threefive.Stream(tsdata)
+            
     SCTE-35 Splice null packets are ignored by default. 
     Set show_null = True to show splice null. 
 
@@ -22,11 +24,9 @@ class Stream:
         # set show_null to parse splice null packets
         if show_null:
             self.cmd_types.append(0)
-        if tsdata in [None, sys.stdin.buffer]:
-            self.tsdata = sys.stdin.buffer
-        else:
-            self.tsdata = tsdata 
+        self.tsdata = tsdata 
         self.decodenext = False
+        self.next = self.decode_until_found
 
     def decode(self):
         '''

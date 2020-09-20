@@ -13,7 +13,6 @@ class StreamPlus(Stream):
 
     def __init__(self, tsdata, show_null = False):
         self.PTS = False
-        self.pusi_count = 0
         super().__init__(tsdata,show_null)
 
     def decode(self):
@@ -40,9 +39,6 @@ class StreamPlus(Stream):
         pid = two_bytes & 0x1fff
         pusi = two_bytes >> 14 & 0x1
         if pusi:
-            self.pusi_count +=1
-            if self.pusi_count == 10:
-                self.pusi_count = 0
                 self.parse_pusi(packet[4:20])
         self.packet_data = {'pid':pid,'pts':self.PTS}
       
