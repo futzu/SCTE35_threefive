@@ -22,7 +22,6 @@ class Stream:
         # set show_null to parse splice null packets
         if show_null:
             self.cmd_types.append(0)
-
         if tsdata in [None, sys.stdin.buffer]:
             self.tsdata = sys.stdin.buffer
         else:
@@ -73,4 +72,5 @@ class Stream:
         if packet[5] == 0xfc:
             if packet[6] == 48: 
                 if packet[8] == 0:
-                    return packet[18] in self.cmd_types
+                    if packet[15] == 255:
+                        return packet[18] in self.cmd_types

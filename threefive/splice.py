@@ -15,7 +15,7 @@ class Splice:
     # splice descriptor tags
     sd_tags = [0,1,2,3,4]
     # splice command types
-    cmd_types = [4,5,6,7,255] 
+    cmd_types = [0,4,5,6,7,255] 
 
     def __init__(self, data, packet_data=False):
         # clear any existing values.
