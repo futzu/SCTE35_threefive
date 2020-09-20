@@ -49,6 +49,7 @@ class StreamPlus(Stream):
         Mpeg-ts specification.
         '''
         a = bitbin.asint(3) << 30
+        bitbin.forward(1)          
         b = bitbin.asint(15) << 15
         bitbin.forward(1)          
         c = bitbin.asint(15)
