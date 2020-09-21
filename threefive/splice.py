@@ -80,16 +80,27 @@ class Splice:
         '''
         try:
             scte35 = {}
-            scte35['header'] = self.kvclean(vars(self.header))
-            scte35['info_section'] = self.kvclean(vars(self.info_section))
-            scte35['command'] = self.kvclean(vars(self.command))
-            scte35['descriptors'] = [self.kvclean(vars(d)) for d in self.descriptors]
+            if self.header.pid:
+                scte35['header'] = self.kvclean(vars(self.header))
+            scte35['info_section'] = self.get_info_section()
+            scte35['command'] = self.get_command()
+            if len(self.descriptors)  > 0:
+                scte35['descriptors'] = self.get_descriptors()
 
         except:
             scte35 = False
         finally:
             return scte35
 
+    def get_command(self):
+        return self.kvclean(vars(self.command))
+
+    def get_descriptors(self):
+        return [self.kvclean(vars(d)) for d in self.descriptors]
+
+    def get_info_section(self):
+        return self.kvclean(vars(self.info_section))       
+    
     def kvclean(self,obj):
         '''
         kvclean removes items from a dict if the value is None
