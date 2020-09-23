@@ -36,7 +36,7 @@
       * [JSON Pretty Print Splice Descriptors](#json-pretty-print-splice-descriptors)
       * [Return Splice Descriptors](#return-splice-descriptors)  
   *   [__Stream Class__](#stream-class)
-      * [__Stream.decode__()](#Streamdecode)
+      * [__Stream.decode__()](#Streamdecode)                                                                
          * [Parse a Local File with a Stream Instance](#parse-a-local-file-with-a-stream-instance)
          * [Pipe a Video to Stream](#pipe-a-video-to-stream)
       * [__Stream.decode_until_found()__](#Streamdecode_until_found)
@@ -298,84 +298,15 @@ pid : 1015 command: Splice Insert @ 23696.827656 Out of Network: False
    * __tsdata__ is an open file handle or sys.stdin.buffer to read 'piped' in data.
    * __show_null__ if set to True, enables showing SCTE 35 null commands.
     
-   * __threefive.StreamPlus__ adds the PID and PTS timestamp for each SCTE 35 packet.
+   * __threefive.StreamPlus__ adds PTS timestamp for each SCTE 35 packet.
 
-#### ```Parse a Local File with a StreamPlus Instance```
- 
- ```python3
- 
- import sys
- from threefive import StreamPlus
- 
- if __name__ =='__main__':
-    with open(sys.argv[1],'rb') as tsdata:
-        StreamPlus(tsdata).decode()
+#### ```StreamPlus.decode()```
+   * See [__Stream.decode__()](#Streamdecode)
 
-```
+#### ```StreamPlus.decode_until_found()```
+   * See [__Stream.decode_until_found()__](#Streamdecode_until_found)
 
-#### ```Pipe a Video to StreamPlus```
-
-```sh
-curl -s https://futzu.com/xaa.ts -o - \
-| python3 -c 'import sys;import threefive; threefive.StreamPlus(sys.stdin.buffer).decode()'
-```
 ---
 
-```python3
- 
-{
-        "SCTE35": {
-                "Info_Section": {
-                        "table_id": "0xfc",
-                        "section_syntax_indicator": false,
-                        "private": false,
-                        "reserved": "0x3",
-                        "section_length": 47,
-                        "protocol_version": 0,
-                        "encrypted_packet": false,
-                        "encryption_algorithm": 0,
-                        "pts_adjustment": 0.0,
-                        "cw_index": "0x0",
-                        "tier": "0xfff",
-                        "splice_command_length": 20,
-                        "splice_command_type": 5,
-                        "descriptor_loop_length": 10,
-                        "crc": "0x10fa4d9e"
-                },
-                "Splice_Command": {
-                        "name": "Splice Insert",
-                        "splice_event_id": 662,
-                        "splice_event_cancel_indicator": false,
-                        "out_of_network_indicator": true,
-                        "program_splice_flag": true,
-                        "duration_flag": true,
-                        "splice_immediate_flag": false,
-                        "time_specified_flag": true,
-                        "pts_time": 89742.161689,
-                        "break_auto_return": false,
-                        "break_duration": 242.0,
-                        "unique_program_id": 1,
-                        "avail_num": 0,
-                        "avail_expected": 0,
-                        "splice_command_length": 20
-                },
-                "Splice_Descriptors": [
-                        {
-                                "tag": 0,
-                                "identifier": "CUEI",
-                                "name": "Avail Descriptor",
-                                "provider_avail_id": 0,
-                                "descriptor_length": 8
-                        }
-                ],
-                "Packet_Data": {
-                        "pid": "0x135",       <--- Packet PID
-                        "pts": 89730.289522   <---- Packet PTS
-                }
-        }
-}
-
-
-```
 [🡡 top](#threefive)
 
