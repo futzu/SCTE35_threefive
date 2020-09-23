@@ -36,10 +36,10 @@
       * [JSON Pretty Print Splice Descriptors](#json-pretty-print-splice-descriptors)
       * [Return Splice Descriptors](#return-splice-descriptors)  
   *   [__Stream Class__](#stream-class)
-      * [Stream.decode()](#Stream.decode())
+      * [__Stream.decode__()](#Streamdecode)
          * [Parse a Local File with a Stream Instance](#parse-a-local-file-with-a-stream-instance)
          * [Pipe a Video to Stream](#pipe-a-video-to-stream)
-      * [Stream.decode_until_found()](#Stream.decode_until_found())
+      * [__Stream.decode_until_found()__](#Streamdecode_until_found)
       
   *  [__StreamPlus Class__](#streamplus-class)
       * [Parse a Local File with a StreamPlus Instance](#parse-a-local-file-with-a-streamplus-instance)
