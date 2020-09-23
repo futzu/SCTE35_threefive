@@ -80,7 +80,7 @@ class Splice:
         '''
         try:
             scte35 = {}
-            if self.header.pid:
+            if self.header.pid !=None:
                 scte35['header'] = self.kvclean(vars(self.header))
             scte35['info_section'] = self.get_info_section()
             scte35['command'] = self.get_command()
