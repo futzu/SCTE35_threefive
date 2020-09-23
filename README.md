@@ -77,7 +77,7 @@
 
 
 ##  ```Dependencies``` 
-*  Python 3
+*  Python 3 or pypy3
 *  [__bitn__](https://github.com/futzu/bitn)
 
 ##  ```Install``` 
@@ -108,6 +108,17 @@ Using /usr/local/lib/python3.8/dist-packages/bitn-0.0.27-py3.8.egg
 Finished processing dependencies for threefive==2.1.39
 
 ```
+#### git pypy3 install 
+```sh
+git clone https://github.com/futzu/SCTE35-threefive.git
+
+cd SCTE-threefive
+
+# you need root to install for the system
+make pypy3
+
+```
+---
 
 ##### pip3
 ```sh
@@ -124,8 +135,24 @@ Installing collected packages: bitn, threefive
 Successfully installed bitn-0.0.27 threefive-2.0.99
 
 ```
+##### pip3 and pypy3
+
+*   If you don't have pip installed, try this.
+```
+pypy3 -mensurepip install pip 
+```
+*  install threefive
+```
+```sh
+a@fuhq:~/SCTE35-threefive$ pypy3 -mpip install threefive
+Collecting threefive
+  Using cached threefive-2.1.75-py3-none-any.whl (15 kB)
+Requirement already satisfied: bitn>=0.0.27 in /home/a/.local/lib/pypy3.6/site-packages (from threefive) (0.0.27)
+Installing collected packages: threefive
+Successfully installed threefive-2.1.75
+
+```
  
-  
 [🡡 top](#threefive)
 
 
