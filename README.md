@@ -36,15 +36,15 @@
       * [JSON Pretty Print Splice Descriptors](#json-pretty-print-splice-descriptors)
       * [Return Splice Descriptors](#return-splice-descriptors)  
   *   [__Stream Class__](#stream-class)
-      * [__Stream.decode__()](#Streamdecode)                                                                
+      * [__Stream.decode()__](#Streamdecode)                                                                
          * [Parse a Local File with a Stream Instance](#parse-a-local-file-with-a-stream-instance)
          * [Pipe a Video to Stream](#pipe-a-video-to-stream)
       * [__Stream.decode_until_found()__](#Streamdecode_until_found)
          * [Custom Output](#customized-scte-35-message-handling)
          
   *  [__StreamPlus Class__](#streamplus-class)
-      * [Parse a Local File with a StreamPlus Instance](#parse-a-local-file-with-a-streamplus-instance)
-      * [Pipe a Video to StreamPlus](#pipe-a-video-to-streamplus)
+      * [__StreamPlus.decode()__](#streamplusdecode)
+      * [__StreamPus.decode_until_found()__](#Streamplusdecode_until_found)
 ---  
 ##  ```Splice Commands``` 
   *  source [command.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/command.py)
