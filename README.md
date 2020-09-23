@@ -453,8 +453,42 @@ curl -s https://futzu.com/xaa.ts -o -  \
 }
 
 ```
+#### Use the Stream.decode_until_found method instead of Stream.decode() to return Splice instances when SCTE-35 packets are found.
+```python
+import sys
+from threefive import Stream
+
+def do():
+
+   with open(sys.argv[1],'rb') as tsdata:
+         while True:
+            cue = Stream(tsdata).decode_until_found() 
+            if not cue :
+                sys.exit()
+            else:
+            # Customized output
+               print('pid :',cue.header.pid, 'command:',
+                     cue.command.name,'@',cue.command.pts_time,
+                     'Out of Network:',
+                     cue.command.out_of_network_indicator)
 
 
+if __name__ == '__main__':
+    do()
+
+```
+   *   Output:
+```python
+pid : 1055 command: Splice Insert @ 21951.133267 Out of Network: True
+pid : 1015 command: Splice Insert @ 22516.907656 Out of Network: True
+pid : 1055 command: Splice Insert @ 22026.133267 Out of Network: False
+pid : 1045 command: Splice Insert @ 22864.350067 Out of Network: True
+pid : 1015 command: Splice Insert @ 22696.907656 Out of Network: False
+pid : 1045 command: Splice Insert @ 22960.350067 Out of Network: False
+pid : 1015 command: Splice Insert @ 23516.827656 Out of Network: True
+pid : 1015 command: Splice Insert @ 23696.827656 Out of Network: False
+```
+---
  [🡡 top](#threefive)
 
 ---
