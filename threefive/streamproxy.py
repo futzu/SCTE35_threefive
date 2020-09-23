@@ -3,7 +3,7 @@ from .streamplus import StreamPlus
 from functools import partial
 from struct import unpack
 import sys
-import json
+
 
 class StreamProxy(StreamPlus):
     '''

@@ -17,7 +17,7 @@ class StreamPlus(Stream):
 
     def decode(self):
         '''
-        StreamParser.decode() reads MPEG-TS
+        StreamPlus.decode() reads MPEG-TS
         to find SCTE-35 packets.
         ''' 
         for packet in iter( partial(self.tsdata.read, self.packet_size), b''):
