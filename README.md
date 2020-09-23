@@ -45,6 +45,9 @@
   *  [__StreamPlus Class__](#streamplus-class)
       * [__StreamPlus.decode()__](#streamplusdecode)
       * [__StreamPus.decode_until_found()__](#Streamplusdecode_until_found)
+      
+  * [__StreamProxy Class__](#streamproxy-class)
+      * [__StreamProxy.decode()__](#StreamProxydecode)
 ---  
 ##  ```Splice Commands``` 
   *  source [command.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/command.py)
@@ -317,12 +320,11 @@ pid : 1015 command: Splice Insert @ 23696.827656 Out of Network: False
 ```python3
   threefive.StreamProxy(tsdata, show_null = False)
 ```
-
  * Writes scte35 data to sys.stderr
  * Writes all packets to sys.stdout
  * Parse the scte35 and pipe the MPEG-TS stream.
 
-#### ```StreamProxy.decode()
+#### ```StreamProxy.decode()```
 ```python3
 
    import threefive
@@ -336,3 +338,4 @@ pid : 1015 command: Splice Insert @ 23696.827656 Out of Network: False
 ```
 python3 proxy.py | mplayer -
 ```
+[🡡 top](#threefive)
