@@ -2,7 +2,7 @@ from .splice import Splice
 from .streamplus import StreamPlus
 from functools import partial
 import sys
-
+import json
 
 class StreamProxy(StreamPlus):
     '''
