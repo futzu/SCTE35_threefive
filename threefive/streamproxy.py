@@ -36,8 +36,7 @@ class StreamProxy(StreamPlus):
             self.parse_header(packet) 
             if self.chk_magic(packet):
                 cuep = Splice(packet,self.packet_data)
-                # Write SCTE-35 data to stderr (in green).
-                print(f'\033[92m{json.dumps(cuep.get(),indent=2)}\033[00m', file=sys.stderr)
                 if self.decodenext:
                     return cuep
-        
+                # Write SCTE-35 data to stderr (in green).
+                print(f'\033[92m{json.dumps(cuep.get(),indent=2)}\033[00m', file=sys.stderr)
