@@ -324,9 +324,15 @@ pid : 1015 command: Splice Insert @ 23696.827656 Out of Network: False
 
 #### ```StreamProxy.decode()
 ```python3
+
    import threefive
+   
+   # Name this proxy.py
    
    with open('vid.ts','rb') as tsdata:
       threefive.StreamProxy(tsdata).decode()
 ```
-
+* Pipe to mplayer
+```
+python3 proxy.py | mplayer -
+```
