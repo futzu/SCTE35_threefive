@@ -21,8 +21,8 @@ class TSScte35Parser():
                 while True:
                     try:
                         scte = threefive.StreamPlus(socket_file).decode_until_found()
-                        for scte_obj in scte:
-                            print("Found SCTE-35:", scte_obj)
+                        if scte:
+                            print("Found SCTE-35:", scte)
                             print("--------------------------------")
                     except Exception as e:
                         print("ERROR while decoding TS:", e)
