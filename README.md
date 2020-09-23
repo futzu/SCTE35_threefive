@@ -51,14 +51,14 @@
   * [__StreamProxy Class__](#streamproxy-class)
       * [StreamProxy.decode()](#StreamProxydecode)
 ---  
-##  ```Splice Commands``` 
+####  ```Splice Commands``` 
   *  source [command.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/command.py)
   *  Splice Null  
   *  Splice Schedule
   *  Splice Insert 
   *  Time Signal 
   *  Bandwidth Reservation
-##  ```Splice Descriptors```  
+####  ```Splice Descriptors```  
   *  source [descriptor.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptor.py)
   *  DTMF Descriptor 
   *  Segmentation Descriptor (all segmentation Upids) 
@@ -71,16 +71,16 @@
   [🡡 top](#threefive)
 
 
-## ```Fast Start Directions```
+### ```Fast Start Directions```
 
 *  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
 
-##  ```Dependencies``` 
+###  ```Dependencies``` 
 *  Python 3 or pypy3
 *  [__bitn__](https://github.com/futzu/bitn)
 
-##  ```Install``` 
+###  ```Install``` 
 #####  ```git```  
 ```sh
 git clone https://github.com/futzu/SCTE35-threefive.git
@@ -104,7 +104,7 @@ Using /usr/local/lib/python3.8/dist-packages/bitn-0.0.27-py3.8.egg
 Finished processing dependencies for threefive==2.1.39
 
 ```
-#### ```git pypy3 install``` 
+##### ```git pypy3 install``` 
 ```sh
 git clone https://github.com/futzu/SCTE35-threefive.git
 
@@ -148,9 +148,9 @@ Successfully installed threefive-2.1.75
 [🡡 top](#threefive)
 
 
-##  ```Easy threefive```  
+###  ```Easy threefive```  
 
-###   ```The decode Function``` 
+####   ```The decode Function``` 
  *   source [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)
  * __threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.
 
@@ -179,9 +179,9 @@ threefive.decode(hexed)
  [🡡 top](#threefive)
  
 
-## ```Advanced threefive```
+### ```Advanced threefive```
 
-###  ```Splice Class```  
+####  ```Splice Class```  
    *  source [splice.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/splice.py)
 
    *  The __threefive.Splice__ class decodes a SCTE35 binary, base64, or hex encoded string. 
@@ -196,35 +196,35 @@ b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAA
 scte35 = Splice(b64)
 
 ````
-#### ```JSON Pretty Print SCTE 35 Message```
+##### ```JSON Pretty Print SCTE 35 Message```
 ```python
 scte35.show()
 ```
-#### ```Return SCTE 35 Message```
+##### ```Return SCTE 35 Message```
 ```python
 scte35.get()
 ```
-#### ```JSON Pretty Print Splice Info Section```
+##### ```JSON Pretty Print Splice Info Section```
 ```python
 scte35.show_info_section()
 ```
-#### ```Return Splice Info Section```
+##### ```Return Splice Info Section```
 ```python
 scte35.get_info_section()
 ```        
-#### ```JSON Pretty Print Splice Command```
+##### ```JSON Pretty Print Splice Command```
 ```python
 scte35.show_command()
 ```
-#### ```Return Splice Command```
+##### ```Return Splice Command```
 ```python
 scte35.get_command()
 ``` 
-#### ```JSON Pretty Print Splice Descriptors```
+##### ```JSON Pretty Print Splice Descriptors```
 ```python
 scte35.show_descriptors()
 ```    
-#### ```Return Splice Descriptors```
+##### ```Return Splice Descriptors```
 ```python
 scte35.get_descriptors()
 ```
@@ -232,7 +232,7 @@ scte35.get_descriptors()
  [🡡 top](#threefive)
 
 ---
-###  ```Stream Class``` 
+####  ```Stream Class``` 
   * source [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
 
   * The __threefive.Stream__ class parses SCTE35 messages from a file or stream.
@@ -243,10 +243,10 @@ scte35.get_descriptors()
    * __tsdata__ is an open file handle or sys.stdin.buffer to read 'piped' in data.
    * __show_null__ if set to True, enables showing SCTE 35 null commands.
 
-#### ```Stream.decode()```
+##### ```Stream.decode()```
 * Calls Splice.show() when a SCTE-35 message is found
 
- ##### ```Parse a Local File with a Stream Instance```
+ ###### ```Parse a Local File with a Stream Instance```
  
  ```python3
  
@@ -260,7 +260,7 @@ scte35.get_descriptors()
 
 ```
 
-##### ```Pipe a Video to Stream```
+###### ```Pipe a Video to Stream```
 
 ```sh
 
@@ -269,11 +269,11 @@ curl -s https://futzu.com/xaa.ts -o -  \
 ```
 ---
 
-####  ```Stream.decode_until_found()```
+#####  ```Stream.decode_until_found()```
 * Use the Stream.decode_until_found method instead of Stream.decode().
 * Returns Splice instances when SCTE-35 packets are found.
 * Allows for customized SCTE-35 message handling.
-##### Customized SCTE-35 Message Handling
+###### Customized SCTE-35 Message Handling
 ```python
 import sys
 from threefive import Stream
@@ -312,7 +312,7 @@ pid : 1015 command: Splice Insert @ 23696.827656 Out of Network: False
  [🡡 top](#threefive)
 
 ---
-###  ```StreamPlus Class``` 
+####  ```StreamPlus Class``` 
   * source [streamplus.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/streamplus.py)
   * __threefive.StreamPlus__ is a sub class of  __threefive.Stream__
 
@@ -324,17 +324,17 @@ pid : 1015 command: Splice Insert @ 23696.827656 Out of Network: False
     
    * __threefive.StreamPlus__ adds PTS timestamp for each SCTE 35 packet.
 
-#### ```StreamPlus.decode()```
+##### ```StreamPlus.decode()```
    * See [__Stream.decode__()](#Streamdecode)
 
-#### ```StreamPlus.decode_until_found()```
+##### ```StreamPlus.decode_until_found()```
    * See [__Stream.decode_until_found()__](#Streamdecode_until_found)
 
 ---
 
 [🡡 top](#threefive)
 
-### ```StreamProxy Class```
+#### ```StreamProxy Class```
   * source [streamproxy.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/streamproxy.py)
   * __threefive.StreamProxy__ is a sub class of  __threefive.StreamPlus__
 
