@@ -40,7 +40,8 @@
          * [Parse a Local File with a Stream Instance](#parse-a-local-file-with-a-stream-instance)
          * [Pipe a Video to Stream](#pipe-a-video-to-stream)
       * [__Stream.decode_until_found()__](#Streamdecode_until_found)
-      
+         * [Custom Output]#customized-scte-35-message-handling)
+         
   *  [__StreamPlus Class__](#streamplus-class)
       * [Parse a Local File with a StreamPlus Instance](#parse-a-local-file-with-a-streamplus-instance)
       * [Pipe a Video to StreamPlus](#pipe-a-video-to-streamplus)
