@@ -141,104 +141,7 @@ threefive.decode('/path/to/mpegwithscte35.ts')
 threefive.decode('/mnt/build/file.bin')
 ```
 
-####    ```JSON Output for MpegTS and Binary Files and Streams```
-```python3
-{
-        "SCTE35": {
-                "Info_Section": {
-                        "table_id": "0xfc",
-                        "section_syntax_indicator": false,
-                        "private": false,
-                        "reserved": "0x3",
-                        "section_length": 47,
-                        "protocol_version": 0,
-                        "encrypted_packet": false,
-                        "encryption_algorithm": 0,
-                        "pts_adjustment": 0.0,
-                        "cw_index": "0x0",
-                        "tier": "0xfff",
-                        "splice_command_length": 20,
-                        "splice_command_type": 5,
-                        "descriptor_loop_length": 10,
-                        "crc": "0x10fa4d9e"
-                },
-                "Splice_Command": {
-                        "name": "Splice Insert",
-                        "splice_event_id": 662,
-                        "splice_event_cancel_indicator": false,
-                        "out_of_network_indicator": true,
-                        "program_splice_flag": true,
-                        "duration_flag": true,
-                        "splice_immediate_flag": false,
-                        "time_specified_flag": true,
-                        "pts_time": 89742.161689,
-                        "break_auto_return": false,
-                        "break_duration": 242.0,
-                        "unique_program_id": 1,
-                        "avail_num": 0,
-                        "avail_expected": 0,
-                        "splice_command_length": 20
-                },
-                "Splice_Descriptors": [
-                        {
-                                "tag": 0,
-                                "identifier": "CUEI",
-                                "name": "Avail Descriptor",
-                                "provider_avail_id": 0,
-                                "descriptor_length": 8
-                        }
-                ]
-        }
-}
 
-
-{
-        "SCTE35": {
-                "Info_Section": {
-                        "table_id": "0xfc",
-                        "section_syntax_indicator": false,
-                        "private": false,
-                        "reserved": "0x3",
-                        "section_length": 42,
-                        "protocol_version": 0,
-                        "encrypted_packet": false,
-                        "encryption_algorithm": 0,
-                        "pts_adjustment": 0.0,
-                        "cw_index": "0x0",
-                        "tier": "0xfff",
-                        "splice_command_length": 15,
-                        "splice_command_type": 5,
-                        "descriptor_loop_length": 10,
-                        "crc": "0x6e33321e"
-                },
-                "Splice_Command": {
-                        "name": "Splice Insert",
-                        "splice_event_id": 662,
-                        "splice_event_cancel_indicator": false,
-                        "out_of_network_indicator": false,
-                        "program_splice_flag": true,
-                        "duration_flag": false,
-                        "splice_immediate_flag": false,
-                        "time_specified_flag": true,
-                        "pts_time": 89984.161689,
-                        "unique_program_id": 1,
-                        "avail_num": 0,
-                        "avail_expected": 0,
-                        "splice_command_length": 15
-                },
-                "Splice_Descriptors": [
-                        {
-                                "tag": 0,
-                                "identifier": "CUEI",
-                                "name": "Avail Descriptor",
-                                "provider_avail_id": 0,
-                                "descriptor_length": 8
-                        }
-                ]
-        }
-}
-
-```
 ####  ```Base64 Encoded Strings```
 ```python
 mesg='/DBUAAAAAAAA///wBQb+AAAAAAA+AjxDVUVJAAAACn+/Dy11cm46dXVpZDphYTg1YmJiNi01YzQzLTRiNmEtYmViYi1lZTNiMTNlYjc5OTkRAAB2c6LA'
@@ -248,59 +151,6 @@ threefive.decode(mesg)
 ```python
 hexed='0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A'
 threefive.decode(hexed)
-```
-
-#### ```JSON Output for Base64 and Hex Strings```
-
-```python3
-
-{
-    "SCTE35": {
-        "Info_Section": {
-            "table_id": "0xfc",
-            "section_syntax_indicator": false,
-            "private": false,
-            "reserved": "0x3",
-            "section_length": 84,
-            "protocol_version": 0,
-            "encrypted_packet": false,
-            "encryption_algorithm": 0,
-            "pts_adjustment": 0.0,
-            "cw_index": "0xff",
-            "tier": "0xfff",
-            "splice_command_length": 5,
-            "splice_command_type": 6,
-            "descriptor_loop_length": 62,
-            "crc": "0x7673a2c0"
-        },
-        "Splice_Command": {
-            "name": "Time Signal",
-            "time_specified_flag": true,
-            "pts_time": 0.0
-        },
-        "Splice_Descriptors": [
-            {
-                "tag": 2,
-                "identifier": "CUEI",
-                "name": "Segmentation Descriptor",
-                "segmentation_event_id": "0xa",
-                "segmentation_event_cancel_indicator": false,
-                "program_segmentation_flag": true,
-                "segmentation_duration_flag": false,
-                "delivery_not_restricted_flag": true,
-                "segmentation_upid_type": 15,
-                "segmentation_upid_length": 45,
-                "segmentation_upid": "URI:urn:uuid:aa85bbb6-5c43-4b6a-bebb-ee3b13eb7999",
-                "segmentation_type_id": 17,
-                "segmentation_message": "Program End",
-                "segment_num": 0,
-                "segments_expected": 0,
-                "descriptor_length": 60
-            }
-        ]
-    }
-}
-
 ```
 
  [🡡 top](#threefive)
@@ -380,8 +230,11 @@ scte35.get_descriptors()
   ```
    * __tsdata__ is an open file handle or sys.stdin.buffer to read 'piped' in data.
    * __show_null__ if set to True, enables showing SCTE 35 null commands.
-  
- #### ```Parse a Local File with a Stream Instance```
+
+#### ```Stream.decode()```
+* Calls Splice.show() when a SCTE-35 message is found
+
+ ##### ```Parse a Local File with a Stream Instance```
  
  ```python3
  
@@ -395,7 +248,7 @@ scte35.get_descriptors()
 
 ```
 
-#### ```Pipe a Video to Stream```
+##### ```Pipe a Video to Stream```
 
 ```sh
 
@@ -403,57 +256,11 @@ curl -s https://futzu.com/xaa.ts -o -  \
   | python3 -c 'import sys;import threefive; threefive.Stream(sys.stdin.buffer).decode()' 
 ```
 ---
-```python3
-{
-        "SCTE35": {
-                "Info_Section": {
-                        "table_id": "0xfc",
-                        "section_syntax_indicator": false,
-                        "private": false,
-                        "reserved": "0x3",
-                        "section_length": 47,
-                        "protocol_version": 0,
-                        "encrypted_packet": false,
-                        "encryption_algorithm": 0,
-                        "pts_adjustment": 0.0,
-                        "cw_index": "0x0",
-                        "tier": "0xfff",
-                        "splice_command_length": 20,
-                        "splice_command_type": 5,
-                        "descriptor_loop_length": 10,
-                        "crc": "0x10fa4d9e"
-                },
-                "Splice_Command": {
-                        "name": "Splice Insert",
-                        "splice_event_id": 662,
-                        "splice_event_cancel_indicator": false,
-                        "out_of_network_indicator": true,
-                        "program_splice_flag": true,
-                        "duration_flag": true,
-                        "splice_immediate_flag": false,
-                        "time_specified_flag": true,
-                        "pts_time": 89742.161689,
-                        "break_auto_return": false,
-                        "break_duration": 242.0,
-                        "unique_program_id": 1,
-                        "avail_num": 0,
-                        "avail_expected": 0,
-                        "splice_command_length": 20
-                },
-                "Splice_Descriptors": [
-                        {
-                                "tag": 0,
-                                "identifier": "CUEI",
-                                "name": "Avail Descriptor",
-                                "provider_avail_id": 0,
-                                "descriptor_length": 8
-                        }
-                ]
-        }
-}
 
-```
-#### Use the Stream.decode_until_found method instead of Stream.decode() to return Splice instances when SCTE-35 packets are found.
+####  ```Stream.decode_until_found()```
+* Use the Stream.decode_until_found method instead of Stream.decode().
+* Returns Splice instances when SCTE-35 packets are found.
+* Allows for Customized SCTE-35 message handling.
 ```python
 import sys
 from threefive import Stream
