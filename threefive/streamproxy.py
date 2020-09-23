@@ -18,7 +18,7 @@ class StreamProxy(StreamPlus):
     import threefive
 
     with open('vid.ts','rb') as tsdata:
-        threefive.StreamProxy(tsdata)
+        threefive.StreamProxy(tsdata).decode()
     ---------------------------------
 
     python3 proxy.py | mplayer -
