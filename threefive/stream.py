@@ -1,6 +1,8 @@
 from .splice import Splice
 from functools import partial
 from struct import unpack
+import sys
+
 
 class Stream:
     '''
@@ -69,8 +71,9 @@ class Stream:
         Stream.chk_magic(packet)
         does fast SCTE-35 packet detection
         '''
-        if packet[5] == 0xfc:
-            if packet[6] == 48: 
-                if packet[8] == 0:
-                    if packet[15] == 255:
-                        return packet[18] in self.cmd_types
+        if packet[0] == 0x47:
+            if packet[5] == 0xfc:
+                if packet[6] == 48: 
+                    if packet[8] == 0:
+                        if packet[15] == 255:
+                            return packet[18] in self.cmd_types
