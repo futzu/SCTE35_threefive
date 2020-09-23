@@ -24,10 +24,7 @@
 * [__Easy threefive__](#easy-threefive)
   *   [The __decode__ Function](#the-decode-function)
       * [Parsing SCTE 35 messages from Mpeg Transport Streams and Binary files](#mpegts)
-        * [Output for MpegTS and Binary Files and Streams](#json-output-for-mpegts-and-binary-files-and-streams)
       * [Parsing SCTE 35 messages encoded in Base64, Binary, or Hex](#base64-encoded-strings)
-        * [Output for Base64 and Hex Strings](#json-output-for-base64-and-hex-strings)
-
 * [__Advanced threefive__](#advanced-threefive)
   *   [__Splice Class__](#splice-class)
       * [JSON Pretty Print SCTE 35 Message](#json-pretty-print-scte-35-message)
@@ -39,8 +36,11 @@
       * [JSON Pretty Print Splice Descriptors](#json-pretty-print-splice-descriptors)
       * [Return Splice Descriptors](#return-splice-descriptors)  
   *   [__Stream Class__](#stream-class)
-      * [Parse a Local File with a Stream Instance](#parse-a-local-file-with-a-stream-instance)
-      * [Pipe a Video to Stream](#pipe-a-video-to-stream)
+      * [Stream.decode()](#Stream.decode())
+         * [Parse a Local File with a Stream Instance](#parse-a-local-file-with-a-stream-instance)
+         * [Pipe a Video to Stream](#pipe-a-video-to-stream)
+      * [Stream.decode_until_found()](#Stream.decode_until_found())
+      
   *  [__StreamPlus Class__](#streamplus-class)
       * [Parse a Local File with a StreamPlus Instance](#parse-a-local-file-with-a-streamplus-instance)
       * [Pipe a Video to StreamPlus](#pipe-a-video-to-streamplus)
@@ -140,8 +140,6 @@ threefive.decode('/path/to/mpegwithscte35.ts')
 ```python
 threefive.decode('/mnt/build/file.bin')
 ```
-
-
 ####  ```Base64 Encoded Strings```
 ```python
 mesg='/DBUAAAAAAAA///wBQb+AAAAAAA+AjxDVUVJAAAACn+/Dy11cm46dXVpZDphYTg1YmJiNi01YzQzLTRiNmEtYmViYi1lZTNiMTNlYjc5OTkRAAB2c6LA'
@@ -177,48 +175,37 @@ scte35 = Splice(b64)
 ```python
 scte35.show()
 ```
-
 #### ```Return SCTE 35 Message```
 ```python
 scte35.get()
 ```
-
 #### ```JSON Pretty Print Splice Info Section```
 ```python
 scte35.show_info_section()
 ```
-
 #### ```Return Splice Info Section```
 ```python
 scte35.get_info_section()
-
 ```        
 #### ```JSON Pretty Print Splice Command```
 ```python
 scte35.show_command()
-
 ```
-
 #### ```Return Splice Command```
 ```python
 scte35.get_command()
-
 ``` 
-
 #### ```JSON Pretty Print Splice Descriptors```
 ```python
 scte35.show_descriptors()
-
 ```    
 #### ```Return Splice Descriptors```
 ```python
 scte35.get_descriptors()
-
 ```
 
  [🡡 top](#threefive)
- 
- 
+
 ---
 ###  ```Stream Class``` 
   * source [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
@@ -260,7 +247,8 @@ curl -s https://futzu.com/xaa.ts -o -  \
 ####  ```Stream.decode_until_found()```
 * Use the Stream.decode_until_found method instead of Stream.decode().
 * Returns Splice instances when SCTE-35 packets are found.
-* Allows for Customized SCTE-35 message handling.
+* Allows for customized SCTE-35 message handling.
+##### Customized SCTE-35 Message Handling
 ```python
 import sys
 from threefive import Stream
