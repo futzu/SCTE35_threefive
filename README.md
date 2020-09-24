@@ -82,7 +82,7 @@
 *  [__bitn__](https://github.com/futzu/bitn)
 
 ###  ```Install``` 
-#####  ```git```  
+*    ```git```  
 ```sh
 git clone https://github.com/futzu/SCTE35-threefive.git
 
@@ -90,40 +90,21 @@ cd SCTE-threefive
 
 # you need root to install for the system
 make install
-Processing threefive-2.1.39-py3.8.egg
-Copying threefive-2.1.39-py3.8.egg to /usr/local/lib/python3.8/dist-packages
-Adding threefive 2.1.39 to easy-install.pth file
-
-Installed /usr/local/lib/python3.8/dist-packages/threefive-2.1.39-py3.8.egg
-Processing dependencies for threefive==2.1.39
-Searching for bitn==0.0.27
-Best match: bitn 0.0.27
-Processing bitn-0.0.27-py3.8.egg
-bitn 0.0.27 is already the active version in easy-install.pth
-
-Using /usr/local/lib/python3.8/dist-packages/bitn-0.0.27-py3.8.egg
-Finished processing dependencies for threefive==2.1.39
 
 ```
-##### ```git pypy3 install``` 
+*    ```git +  pypy3``` 
 ```sh
-git clone https://github.com/futzu/SCTE35-threefive.git
 
-cd SCTE-threefive
-
-# you need root to install for the system
 make pypy3
 
 ```
----
-
-##### ```pip3```
+*     ```pip3```
 ```sh
 pip3 install threefive
 ```
-##### ```pip3 and pypy3```
+* ```pip3 and pypy3```
 
-*   If you don't have pip installed, try this.
+     *   If you don't have pip installed, try this.
 ```
 pypy3 -mensurepip install pip 
 ```
