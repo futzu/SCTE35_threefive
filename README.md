@@ -44,6 +44,7 @@
       * [Stream.decode_until_found()](#Streamdecode_until_found)
          * [Custom Output](#customized-scte-35-message-handling)
       * [Stream.proxy(func=None)](#Streamproxyfuncnone)
+         *  [Custom Function for SCTE-35 Cues](#streamproxy-with-custom-function)
 ---  
 ####  ```Splice Commands``` 
   *  source [command.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/command.py)
