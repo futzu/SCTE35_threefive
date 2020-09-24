@@ -43,7 +43,7 @@
          * [Pipe a Video to Stream](#pipe-a-video-to-stream)
       * [Stream.decode_until_found()](#Streamdecode_until_found)
          * [Custom Output](#customized-scte-35-message-handling)
-      * [Stream.proxy(func=None)](#Streamproxy)
+      * [Stream.proxy(func=None)](#Streamproxyfuncnone)
 ---  
 ####  ```Splice Commands``` 
   *  source [command.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/command.py)
@@ -290,6 +290,13 @@ pid : 1015 command: Splice Insert @ 23696.827656 Out of Network: False
 ---
 
 #### ```Stream.proxy(func=None)```
+*  Writes all packets to sys.stdout.
+*  Writes scte35 data to sys.stderr.
+*  The optional func arg allows a function
+   to be used for custom handling of the SCTE-35
+   cue instance.
+*  If func is not set, threefive.Cue.show() is called.
+
 ```python3
 
    import threefive
@@ -297,10 +304,40 @@ pid : 1015 command: Splice Insert @ 23696.827656 Out of Network: False
    # Name this proxy.py
    
    with open('vid.ts','rb') as tsdata:
-      threefive.StreamProxy(tsdata).decode()
+      sp = threefive.Stream(tsdata)
+      sp.proxy()
 ```
 * Pipe to mplayer
 ```
 python3 proxy.py | mplayer -
 ```
+*  the function should match the interface
+```
+    func(cuep)
+```
+* cuep is an instance of threefive.Cue
+
+#### ```Stream.Proxy with custom function```
+```python3
+import sys
+import threefive
+import json
+
+def display(cuep):
+   print(f'\033[92m{json.dumps(vars(cuep.header))}\033[00m', file=sys.stderr,end='\r')
+   print(f'\033[92m{json.dumps(cuep.get_command(),indent=2)}\033[00m', file=sys.stderr)
+
+def do():
+
+   with open(sys.argv[1],'rb') as tsdata:
+            sp = threefive.Stream(tsdata)
+            cue = sp.proxy(func = display) 
+            if not cue :
+                sys.exit()
+
+if __name__ == '__main__':
+    do()
+
+```
+
 [🡡 top](#threefive)
