@@ -28,7 +28,7 @@
       * [Parsing SCTE 35 messages from Mpeg Transport Streams and Binary files](#mpegts)
       * [Parsing SCTE 35 messages encoded in Base64, Binary, or Hex](#base64-encoded-strings)
 * [__Advanced threefive__](#advanced-threefive)
-  *   [__Splice Class__](#splice-class)
+  *   [__Cue Class__](#cue-class)
       * [JSON Pretty Print SCTE 35 Message](#json-pretty-print-scte-35-message)
       * [Return SCTE 35 Message](#return-scte-35-message)
       * [JSON Pretty Print Splice Info Section](#json-pretty-print-splice-info-section)
@@ -43,13 +43,7 @@
          * [Pipe a Video to Stream](#pipe-a-video-to-stream)
       * [Stream.decode_until_found()](#Streamdecode_until_found)
          * [Custom Output](#customized-scte-35-message-handling)
-         
-  *  [__StreamPlus Class__](#streamplus-class)
-      * [StreamPlus.decode()](#streamplusdecode)
-      * [StreamPlus.decode_until_found()](#Streamplusdecode_until_found)
-      
-  * [__StreamProxy Class__](#streamproxy-class)
-      * [StreamProxy.decode()](#StreamProxydecode)
+      * [Stream.proxy(func=None)](#Streamproxy)
 ---  
 ####  ```Splice Commands``` 
   *  source [command.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/command.py)
@@ -119,13 +113,6 @@ make pypy3
 ##### ```pip3```
 ```sh
 pip3 install threefive
-Collecting threefive
-  Downloading threefive-2.0.99-py3-none-any.whl (12 kB)
-Collecting bitn>=0.0.27
-  Downloading bitn-0.0.27-py3-none-any.whl (3.0 kB)
-Installing collected packages: bitn, threefive
-Successfully installed bitn-0.0.27 threefive-2.0.99
-
 ```
 ##### ```pip3 and pypy3```
 
@@ -137,12 +124,6 @@ pypy3 -mensurepip install pip
 
 ```sh
 a@fuhq:~/SCTE35-threefive$ pypy3 -mpip install threefive
-Collecting threefive
-  Using cached threefive-2.1.75-py3-none-any.whl (15 kB)
-Requirement already satisfied: bitn>=0.0.27 in /home/a/.local/lib/pypy3.6/site-packages (from threefive) (0.0.27)
-Installing collected packages: threefive
-Successfully installed threefive-2.1.75
-
 ```
  
 [🡡 top](#threefive)
@@ -182,7 +163,7 @@ threefive.decode(hexed)
 ### ```Advanced threefive```
 
 ####  ```Cue Class```  
-   *  source [splice.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/splice.py)
+   *  source [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/splice.py)
 
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
    *  __threefive.Cue__ provides several methods to access the parsed data.
@@ -279,7 +260,6 @@ import sys
 from threefive import Stream
 
 def do():
-
    with open(sys.argv[1],'rb') as tsdata:
          while True:
             cuep = Stream(tsdata).decode_until_found() 
@@ -291,7 +271,6 @@ def do():
                      cuep.command.name,'@',cuep.command.pts_time,
                      'Out of Network:',
                      cuep.command.out_of_network_indicator)
-
 
 if __name__ == '__main__':
     do()
@@ -309,43 +288,8 @@ pid : 1015 command: Splice Insert @ 23516.827656 Out of Network: True
 pid : 1015 command: Splice Insert @ 23696.827656 Out of Network: False
 ```
 ---
- [🡡 top](#threefive)
 
----
-####  ```StreamPlus Class``` 
-  * source [streamplus.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/streamplus.py)
-  * __threefive.StreamPlus__ is a sub class of  __threefive.Stream__
-
-```python3
-  threefive.StreamPlus(tsdata, show_null = False)
-```
-   * __tsdata__ is an open file handle or sys.stdin.buffer to read 'piped' in data.
-   * __show_null__ if set to True, enables showing SCTE 35 null commands.
-    
-   * __threefive.StreamPlus__ adds PTS timestamp for each SCTE 35 packet.
-
-##### ```StreamPlus.decode()```
-   * See [__Stream.decode__()](#Streamdecode)
-
-##### ```StreamPlus.decode_until_found()```
-   * See [__Stream.decode_until_found()__](#Streamdecode_until_found)
-
----
-
-[🡡 top](#threefive)
-
-#### ```StreamProxy Class```
-  * source [streamproxy.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/streamproxy.py)
-  * __threefive.StreamProxy__ is a sub class of  __threefive.StreamPlus__
-
-```python3
-  threefive.StreamProxy(tsdata, show_null = False)
-```
- * Writes scte35 data to sys.stderr
- * Writes all packets to sys.stdout
- * Parse the scte35 and pipe the MPEG-TS stream.
-
-#### ```StreamProxy.decode()```
+#### ```Stream.proxy(func=None)```
 ```python3
 
    import threefive
