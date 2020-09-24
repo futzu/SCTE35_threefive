@@ -82,6 +82,7 @@
 *  [__bitn__](https://github.com/futzu/bitn)
 
 ###  ```Install``` 
+
 *    ```git```  
 ```sh
 git clone https://github.com/futzu/SCTE35-threefive.git
@@ -102,13 +103,13 @@ make pypy3
 ```sh
 pip3 install threefive
 ```
-* ```pip3 and pypy3```
+*    ```pip3 and pypy3```
 
      *   If you don't have pip installed, try this.
 ```
 pypy3 -mensurepip install pip 
 ```
-*  install threefive
+*  ```install threefive```
 
 ```sh
 a@fuhq:~/SCTE35-threefive$ pypy3 -mpip install threefive
