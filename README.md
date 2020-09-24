@@ -94,12 +94,14 @@ make install
 
 ```
 *    ```git +  pypy3``` 
+
 ```sh
 
 make pypy3
 
 ```
 *     ```pip3```
+
 ```sh
 pip3 install threefive
 ```
