@@ -6,9 +6,9 @@
 * [Supported __Splice Commands__](#splice-commands)
 * [Supported __Splice Descriptors__](#splice-descriptors)
 
-#### [__Fast Start__  Directions](#fast-start-directions)
-#### [Dependencies](#dependencies)
-#### [__Install__](#install)
+*  [__Fast Start__  Directions](#fast-start-directions)
+      * [Dependencies](#dependencies)
+      * [__Install__](#install)
 
 * [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
     * [Using threefive with HLS Manifests](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
@@ -232,7 +232,7 @@ scte35.get_descriptors()
    * __show_null__ if set to True, enables showing SCTE 35 null commands.
 
 ##### ```Stream.decode()```
-* Calls Cue.show() when a SCTE-35 message is found
+* Calls __Cue.show()__ when a SCTE-35 message is found
 
  ###### ```Parse a Local File with a Stream Instance```
  
@@ -258,8 +258,8 @@ curl -s https://futzu.com/xaa.ts -o -  \
 ---
 
 #####  ```Stream.decode_until_found()```
-* Use the Stream.decode_until_found method instead of Stream.decode().
-* Returns Cue instances when SCTE-35 packets are found.
+* Use the __Stream.decode_until_found__() method instead of __Stream.decode()__.
+* Returns __Cue__ instances when SCTE-35 packets are found.
 * Allows for customized SCTE-35 message handling.
 ###### Customized SCTE-35 Message Handling
 ```python
@@ -322,7 +322,7 @@ python3 proxy.py | mplayer -
 ```
     func(cuep)
 ```
-* cuep is an instance of threefive.Cue
+* cuep is an instance of __threefive.Cue__
 
 #### ```Stream.Proxy with custom function```
 ```python3
