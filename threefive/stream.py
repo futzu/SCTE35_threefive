@@ -82,7 +82,6 @@ class Stream:
                 else:
                     func(cuep)
                     
-
     def chk_magic(self,packet):
         '''
         Stream.chk_magic(packet)
