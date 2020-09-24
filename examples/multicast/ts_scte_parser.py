@@ -20,7 +20,7 @@ class TSScte35Parser():
             with sock.makefile(mode="b") as socket_file:
                 while True:
                     try:
-                        scte = threefive.StreamPlus(socket_file).decode_until_found()
+                        scte = threefive.Stream(socket_file).decode_until_found()
                         if scte:
                             print("Found SCTE-35:", scte)
                             print("--------------------------------")
