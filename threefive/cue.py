@@ -18,9 +18,9 @@ class Header:
         return str(vars(self))
     
 
-class Splice:
+class Cue:
     '''
-    The threefive.Splice class handles parsing
+    The threefive.Cue class handles parsing
     SCTE 35 message strings.
     '''
     # splice descriptor tags
@@ -47,7 +47,7 @@ class Splice:
                 
     def mk_payload(self,data):
         '''
-        Splice.mk_payload trims the
+        Cue.mk_payload trims the
         header if data is a full SCTE-35 packet
         '''
         if data[0] == 0x47:
@@ -125,7 +125,7 @@ class Splice:
 
     def set_command(self):
         '''
-        threefive.Splice.set_command
+        threefive.Cue.set_command
         checks the command type and if valid,
         the splice command data is parsed.
         '''
@@ -139,7 +139,7 @@ class Splice:
     def set_splice_descriptor(self):
         '''
 
-        threefive.Splice.set_splice_descriptor
+        threefive.Cue.set_splice_descriptor
         is called by
         '''
         # splice_descriptor_tag 8 uimsbf

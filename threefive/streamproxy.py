@@ -24,7 +24,7 @@ class StreamProxy(StreamPlus):
     python3 proxy.py | mplayer -
 
     '''
-    def decode(self):
+    def decode(self,func = None):
         '''
         StreamProxy.decode() reads MPEG-TS
         writes all packets to sys.stdout
@@ -36,7 +36,11 @@ class StreamProxy(StreamPlus):
             self.parse_header(packet) 
             if self.chk_magic(packet):
                 cuep = Splice(packet,self.packet_data)
-                if self.decodenext:
-                    return cuep
+                if not func:
+                    cuep.show()
+                else:
+                    func(cuep)
+                    
+             
                 # Write SCTE-35 data to stderr (in green).
-                print(f'\033[92m{json.dumps(cuep.get(),indent=2)}\033[00m', file=sys.stderr)
+

@@ -1,5 +1,5 @@
 import sys
-from .splice import Splice
+from .cue import Cue
 from .stream import Stream
 
 
@@ -8,14 +8,14 @@ def read_stdin():
     try:
         scte35 = Stream(sys.stdin.buffer, show_null=False).decode()
     except BaseException:
-        scte35 = Splice(sys.stdin.buffer)
+        scte35 = Cue(sys.stdin.buffer)
         scte35.show()        
     return scte35
 
 def read_stuff(stuff):
     scte35 = None
     try:
-        scte35 = Splice(stuff)
+        scte35 = Cue(stuff)
         scte35.show()
     except BaseException:
         try:

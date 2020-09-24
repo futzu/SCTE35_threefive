@@ -44,6 +44,6 @@ def stuff(t,upid):
         ids.append(t)
         print(f'\033[92m{hex(t)}\033[0m : {upid}')
         
-[ [stuff(d.segmentation_upid_type,d.segmentation_upid) for d in threefive.Splice(m).descriptors] for m in dmesg]
+[ [stuff(d.segmentation_upid_type,d.segmentation_upid) for d in threefive.Cue(m).descriptors] for m in dmesg]
         
 

@@ -1,4 +1,4 @@
-from threefive import Splice
+from threefive import Cue
 
 '''
 14.6. Time_Signal – Program Blackout Override / Program End 
@@ -6,6 +6,6 @@ from threefive import Splice
 
 Base64='/DBIAAAAAAAA///wBQb+ky44CwAyAhdDVUVJSAAACn+fCAgAAAAALKCh4xgAAAIXQ1VFSUgAAAl/nwgIAAAAACygoYoRAAC0IX6w'
 
-three5=Splice(Base64)
+three5=Cue(Base64)
 three5.show()
 
