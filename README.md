@@ -1,7 +1,7 @@
 # threefive
 ## SCTE35 Decoder
 * [ Latest Pip Version]( https://pypi.org/project/threefive/)
----
+* [Heads Up! Changes as of 9/24/2020](#changes)
 * [Supported Splice Commands](#splice-commands)
 * [Supported Splice Descriptors](#splice-descriptors)
 
@@ -46,6 +46,11 @@
       * [Stream.proxy(func=None)](#Streamproxyfuncnone)
          *  [Custom Function for SCTE-35 Cues](#streamproxy-with-custom-function)
 ---  
+
+#### ```Changes```
+   *  Splice class has been renamed Cue. See [Cue](#cue-class)
+   *  Stream, StreamPlus, and StreamProxy classes have been consolidated. See [Stream](#stream-class)
+
 ####  ```Splice Commands``` 
   *  source [command.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/command.py)
   *  Splice Null  
