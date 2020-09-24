@@ -181,19 +181,19 @@ threefive.decode(hexed)
 
 ### ```Advanced threefive```
 
-####  ```Splice Class```  
+####  ```Cue Class```  
    *  source [splice.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/splice.py)
 
-   *  The __threefive.Splice__ class decodes a SCTE35 binary, base64, or hex encoded string. 
-   *  __threefive.Splice__ provides several methods to access the parsed data.
+   *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
+   *  __threefive.Cue__ provides several methods to access the parsed data.
 
 ```python
 
-from threefive import Splice
+from threefive import Cue
 
 b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAABl/nwgIAAAAACyk26AQAACZcuND"
 
-scte35 = Splice(b64)
+scte35 = Cue(b64)
 
 ````
 ##### ```JSON Pretty Print SCTE 35 Message```
@@ -244,7 +244,7 @@ scte35.get_descriptors()
    * __show_null__ if set to True, enables showing SCTE 35 null commands.
 
 ##### ```Stream.decode()```
-* Calls Splice.show() when a SCTE-35 message is found
+* Calls Cue.show() when a SCTE-35 message is found
 
  ###### ```Parse a Local File with a Stream Instance```
  
@@ -271,7 +271,7 @@ curl -s https://futzu.com/xaa.ts -o -  \
 
 #####  ```Stream.decode_until_found()```
 * Use the Stream.decode_until_found method instead of Stream.decode().
-* Returns Splice instances when SCTE-35 packets are found.
+* Returns Cue instances when SCTE-35 packets are found.
 * Allows for customized SCTE-35 message handling.
 ###### Customized SCTE-35 Message Handling
 ```python
@@ -282,15 +282,15 @@ def do():
 
    with open(sys.argv[1],'rb') as tsdata:
          while True:
-            cue = Stream(tsdata).decode_until_found() 
-            if not cue :
+            cuep = Stream(tsdata).decode_until_found() 
+            if not cuep :
                 sys.exit()
             else:
             # Customized output
-               print('pid :',cue.header.pid, 'command:',
-                     cue.command.name,'@',cue.command.pts_time,
+               print('pid :',cuep.header.pid, 'command:',
+                     cuep.command.name,'@',cuep.command.pts_time,
                      'Out of Network:',
-                     cue.command.out_of_network_indicator)
+                     cuep.command.out_of_network_indicator)
 
 
 if __name__ == '__main__':
