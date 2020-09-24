@@ -1,13 +1,14 @@
 # threefive
 ## SCTE35 Decoder
-* [ Latest Pip Version]( https://pypi.org/project/threefive/)
-* [Heads Up! Changes as of 9/24/2020](#changes)
-* [Supported Splice Commands](#splice-commands)
-* [Supported Splice Descriptors](#splice-descriptors)
+* [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
+* [__Heads Up!__ Changes as of 9/24/2020](#changes)
 
-* [__Fast Start Directions__](#fast-start-directions)
-* [Dependencies](#dependencies)
-* [__Install__](#install)
+* [Supported __Splice Commands__](#splice-commands)
+* [Supported __Splice Descriptors__](#splice-descriptors)
+
+#### [__Fast Start__  Directions](#fast-start-directions)
+#### [Dependencies](#dependencies)
+#### [__Install__](#install)
 
 * [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
     * [Using threefive with HLS Manifests](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
