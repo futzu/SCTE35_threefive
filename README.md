@@ -111,9 +111,9 @@ pypy3 -mpip install threefive
 
 ---
 
-### __Easy__ threefive
+# __Easy__ threefive
 
-####   The __decode__ Function
+##   The __decode__ Function
  *   source [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)
  * __threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.
 
@@ -142,9 +142,9 @@ threefive.decode(hexed)
  [🡡 top](#threefive)
  
 
-## __Advanced__ threefive
-
-###  __Cue__ Class
+#  __Advanced__ threefive
+---
+##  __Cue__ Class
    *  source [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/splice.py)
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
    *  __threefive.Cue__ provides several methods to access the parsed data.
@@ -193,7 +193,7 @@ scte35.get_descriptors()
  [🡡 top](#threefive)
 
 ---
-###  __Stream__ Class 
+##  __Stream__ Class 
   * source [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
 
   * The __threefive.Stream__ class parses SCTE35 messages from a file or stream.
@@ -204,10 +204,10 @@ scte35.get_descriptors()
    * __tsdata__ is an open file handle or sys.stdin.buffer to read 'piped' in data.
    * __show_null__ if set to True, enables showing SCTE 35 null commands.
 
-#### Stream.decode()
+### Stream.decode()
 * Calls __Cue.show()__ when a SCTE-35 message is found
 
- ##### ```Parse a Local File with a Stream Instance```
+ #### ```Parse a Local File with a Stream Instance```
  
  ```python3
  
@@ -221,7 +221,7 @@ scte35.get_descriptors()
 
 ```
 
-##### ```Pipe a Video to Stream```
+#### ```Pipe a Video to Stream```
 
 ```sh
 
@@ -230,7 +230,7 @@ curl -s https://futzu.com/xaa.ts -o -  \
 ```
 ---
 
-#####  ```Stream.decode_until_found()```
+###  Stream.decode_until_found()
 * Use the __Stream.decode_until_found__() method instead of __Stream.decode()__.
 * Returns __Cue__ instances when SCTE-35 packets are found.
 * Allows for customized SCTE-35 message handling.
@@ -269,7 +269,7 @@ pid : 1015 command: Splice Insert @ 23696.827656 Out of Network: False
 ```
 ---
 
-#### Stream.proxy(func=None)
+### Stream.proxy(func = None)
 *  Writes all packets to sys.stdout.
 *  Writes scte35 data to sys.stderr.
 *  The optional func arg allows a function
