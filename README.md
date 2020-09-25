@@ -20,28 +20,24 @@
 
 
 
-* [__Advanced threefive__](#advanced-threefive)
-
----
-
-  *   [__Cue Class__](#cue-class)
-      * [JSON Pretty Print __SCTE 35 Message__](#json-scte-35-message)
+*  [__Advanced__ threefive](#advanced-threefive)
+     *  [__Cue Class__](#cue-class)
+          * [JSON Pretty Print __SCTE 35 Message__](#json-scte-35-message)
           * [Return SCTE 35 Message](#return-scte-35-message)
-      * [JSON Pretty Print __Splice Info Section__](#json-splice-info-section)
+          * [JSON Pretty Print __Splice Info Section__](#json-splice-info-section)
           * [Return Splice Info Section](#return-splice-info-section)
-      * [JSON Pretty Print __Splice Command__](#json-splice-command)
+          * [JSON Pretty Print __Splice Command__](#json-splice-command)
           * [Return Splice Command](#return-splice-command)
-      * [JSON Pretty Print __Splice Descriptors__](#json-splice-descriptors)
+          * [JSON Pretty Print __Splice Descriptors__](#json-splice-descriptors)
           * [Return Splice Descriptors](#return-splice-descriptors)  
-
- * [__Stream Class__](#stream-class)
-     * [__Stream.decode()__](#Streamdecode)                                                                
-         * [Parse a Local File with a Stream Instance](#parse-a-local-file-with-a-stream-instance)
-         * [__Pipe__ a Video to Stream](#pipe-a-video-to-stream)
-     * [__Stream.decode_until_found()__](#Streamdecode_until_found)
-         * [Custom Output](#customized-scte-35-message-handling)
-     * [__Stream.proxy(func=None)__](#Streamproxyfuncnone)
-         *  [Custom Function for SCTE-35 Cues](#streamproxy-with-custom-function)
+     * [__Stream Class__](#stream-class)
+          * [__Stream.decode()__](#Streamdecode)                                                                
+               * [Parse a Local File with a Stream Instance](#parse-a-local-file-with-a-stream-instance)
+               * [__Pipe__ a Video to Stream](#pipe-a-video-to-stream)
+          * [__Stream.decode_until_found()__](#Streamdecode_until_found)
+               * [Custom Output](#customized-scte-35-message-handling)
+          * [__Stream.proxy(func=None)__](#Streamproxyfuncnone)
+               *  [Custom Function for SCTE-35 Cues](#streamproxy-with-custom-function)
          
 
 
