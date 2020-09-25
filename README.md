@@ -1,7 +1,9 @@
 # threefive
 ## SCTE35 Decoder
+
+*  ```[__Heads Up!__ Changes as of 9/24/2020](#changes)```
+
 * [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
-* [__Heads Up!__ Changes as of 9/24/2020](#changes)
 
 * [Supported __Splice Commands__](#splice-commands)
 * [Supported __Splice Descriptors__](#splice-descriptors)
