@@ -193,37 +193,42 @@ b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAA
 
 scte35 = Cue(b64)
 
-````
-###### JSON SCTE 35 Message
+```
+###### Print JSON 
+
+   *  __Everything__
 ```python
 scte35.show()
-
-     *    __Splice Info Section__
+```
+   *    __Splice Info Section__
 ```python
 scte35.show_info_section()
 ```
+  *     __Splice Command__
+```python
+scte35.show_command()
 ```
-###### Return SCTE 35 Message
+  *     __Splice Descriptors__
+```python
+scte35.show_descriptors()
+```    
+
+###### Return SCTE 35 Message as dict
+   *  __Everything__
 ```python
 scte35.get()
 ```
 
-###### Return Splice Info Section
+   *    __Splice Info Section__
 ```python
 scte35.get_info_section()
 ```        
-###### JSON Splice Command
-```python
-scte35.show_command()
-```
+
 ###### Return Splice Command
 ```python
 scte35.get_command()
 ``` 
-###### JSON Splice Descriptors
-```python
-scte35.show_descriptors()
-```    
+###### JSON 
 ###### Return Splice Descriptors
 ```python
 scte35.get_descriptors()
