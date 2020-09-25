@@ -1,9 +1,9 @@
 # threefive
 ## SCTE35 Decoder
-* All __2019__ SCTE-35 __Splice Commands__ and __Splice Descriptors__ are Fully Supported.
+          *     All __2019__ SCTE-35 __Splice Commands__ and __Splice Descriptors__ are Fully Supported.
 ---
 ## [__Heads Up!__ Changes as of 9/24/2020](#changes)
----
+
 * [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
 
 *  [__Fast__ Start](#fast-start-directions)
