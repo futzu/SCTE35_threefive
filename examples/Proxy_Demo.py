@@ -1,9 +1,9 @@
 import sys
-from threefive import StreamProxy
+from threefive import Stream
 
 '''
-StreamProxy class example.
-writes SCTE-35 data to stderr (in green)
+Stream.proxy example.
+writes SCTE-35 data to stderr 
 writes the MPEG-TS packets to stdout
 so you can pipe it.
 
@@ -16,7 +16,8 @@ python3 proxydemo.py video.ts | mplayer -
 
 def do():
    with open(sys.argv[1],'rb') as tsdata:
-      cue = StreamProxy(tsdata).decode() 
+      st = Stream(tsdata)
+      st.proxy() 
    
 if __name__ == '__main__':
     do()
