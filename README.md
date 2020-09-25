@@ -99,12 +99,12 @@
 
 *  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
-*  ```Dependencies``` 
+### ```Dependencies``` 
      *  Python 3 or pypy3
      *  [__bitn__](https://github.com/futzu/bitn)
-
-* ```Install``` 
-     *    ```git```  
+     
+### ```Install``` 
+     *    __git__ 
 ```sh
 git clone https://github.com/futzu/SCTE35-threefive.git
 
@@ -120,7 +120,7 @@ make pypy3
 
 ```
 
-     *  ```pip3```
+     *  __pip3__
 
 ```sh
 pip3 install threefive
@@ -137,9 +137,11 @@ pypy3 -mensurepip install pip
 
 pypy3 -mpip install threefive
 ```
+---
  
 [🡡 top](#threefive)
 
+---
 
 ###  ```Easy threefive```  
 
