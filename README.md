@@ -8,11 +8,12 @@
 * [Supported __Splice Commands__](#splice-commands)
 * [Supported __Splice Descriptors__](#splice-descriptors)
 
-*  [__Fast Start__  Directions](#fast-start-directions)
-      * [Dependencies](#dependencies)
+*  [__Fast Start__](#fast-start-directions)
+      * [__Dependencies__](#dependencies)
       * [__Install__](#install)
+      * [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
 
-* [__Easy threefive__](#easy-threefive)
+* [__Easy__ threefive](#easy-threefive)
   *   [The __decode__ Function](#the-decode-function)
       * [Parsing __SCTE 35__ messages from __Mpeg-TS Streams__](#mpegts)
       * [Parsing __SCTE 35__ messages encoded in __Base64, Binary, or Hex__](#base64-encoded-strings)
@@ -20,6 +21,8 @@
 ---
 
 * [__Advanced threefive__](#advanced-threefive)
+
+---
 
   *   [__Cue Class__](#cue-class)
       * [JSON Pretty Print __SCTE 35 Message__](#json-scte-35-message)
@@ -43,7 +46,10 @@
 ---
 
  *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
- 
+
+---
+
+
      * __HLS__
           * [Using threefive with __HLS Manifests__](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
      * __Multicast__
