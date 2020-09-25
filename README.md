@@ -37,24 +37,24 @@
      * __HLS__
           * [Using threefive with __HLS Manifests__](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
      * __Multicast__
-          * [Parsing SCTE-35 from a Multicast Source](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/ts_scte_parser.py)
+          * [Parsing SCTE-35 from a __Multicast__ Source](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/ts_scte_parser.py)
      * __Splice Insert__
-          * [Splice Insert](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert.py)
-          * [Splice Insert Too](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert_Too.py)
+          * [Splice __Insert__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert.py)
+          * [__Splice Insert__ Too](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert_Too.py)
      * __Splice_Null__
-          * [Splice Null](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Splice_Null.py)
+          * [Splice __Null__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Splice_Null.py)
      * __Time Signal__
-          * [Time Signal Blackout Override Program End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal_Blackout_Override_Program_End.py)
-          * [Time Signal Placement Opportunity Start](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Placement_Opportunity_Start.py)
-          * [Time Signal Placement Opportunity End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Placement_Opportunity_End.py)
-          * [Time Signal Program Overlap ](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Overlap.py)
-          * [Time Signal Program Start End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Start_End.py)
+          * [Time Signal __Blackout Override Program End__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal_Blackout_Override_Program_End.py)
+          * [Time Signal __Placement Opportunity Start__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Placement_Opportunity_Start.py)
+          * [Time Signal __Placement Opportunity End__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Placement_Opportunity_End.py)
+          * [Time Signal __Program Overlap__ ](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Overlap.py)
+          * [Time Signal __Program Start End__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Start_End.py)
      * __UPID__
-          * [Upids with Custom Output](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Upid_Custom_Output.py)
-          * [Multiple Segmentation Descriptors](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Multi_Upid.py)
-          * [Combination Upid Segmentation Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Combo.py)
+          * [__Upids__ with Custom Output](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Upid_Custom_Output.py)
+          * [__Multiple__ Segmentation __Descriptors__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Multi_Upid.py)
+          * [Combination __Upid__ Segmentation Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Combo.py)
           
-     * [StreamProxy Example](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Proxy_Demo.py)
+     * [__Stream.proxy__ Example](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Proxy_Demo.py)
 
 ---
 
@@ -168,12 +168,12 @@ threefive.decode(hexed)
  [🡡 top](#threefive)
  
 
-## Advanced threefive
+## __Advanced__ threefive
 
 ###  __Cue__ Class
-     *      source [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/splice.py)
-     *     The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
-     *    __threefive.Cue__ provides several methods to access the parsed data.
+   *  source [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/splice.py)
+   *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
+   *  __threefive.Cue__ provides several methods to access the parsed data.
 
 ```python
 
@@ -183,7 +183,7 @@ b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAA
 
 scte35 = Cue
 ```
-#### Print SCTE-35 as JSON 
+#### __Print__ SCTE-35 as JSON 
 
 ```python
 
@@ -199,8 +199,8 @@ scte35.show_command()
 scte35.show_descriptors()
 ```    
 
-#### Return SCTE 35 as dict
-   *  __Everything__
+#### Return SCTE 35 __as dict__
+
 ```python
 
 scte35.get()
@@ -230,10 +230,10 @@ scte35.get_descriptors()
    * __tsdata__ is an open file handle or sys.stdin.buffer to read 'piped' in data.
    * __show_null__ if set to True, enables showing SCTE 35 null commands.
 
-#####  Stream.decode()
+#### Stream.decode()
 * Calls __Cue.show()__ when a SCTE-35 message is found
 
- ###### ```Parse a Local File with a Stream Instance```
+ ##### ```Parse a Local File with a Stream Instance```
  
  ```python3
  
@@ -247,7 +247,7 @@ scte35.get_descriptors()
 
 ```
 
-###### ```Pipe a Video to Stream```
+##### ```Pipe a Video to Stream```
 
 ```sh
 
@@ -260,7 +260,7 @@ curl -s https://futzu.com/xaa.ts -o -  \
 * Use the __Stream.decode_until_found__() method instead of __Stream.decode()__.
 * Returns __Cue__ instances when SCTE-35 packets are found.
 * Allows for customized SCTE-35 message handling.
-###### Customized SCTE-35 Message Handling
+
 ```python
 import sys
 from threefive import Stream
@@ -282,7 +282,7 @@ if __name__ == '__main__':
     do()
 
 ```
-   *   Output:
+   *   __Output__
 ```python
 pid : 1055 command: Splice Insert @ 21951.133267 Out of Network: True
 pid : 1015 command: Splice Insert @ 22516.907656 Out of Network: True
@@ -295,7 +295,7 @@ pid : 1015 command: Splice Insert @ 23696.827656 Out of Network: False
 ```
 ---
 
-#### ```Stream.proxy(func=None)```
+#### Stream.proxy(func=None)
 *  Writes all packets to sys.stdout.
 *  Writes scte35 data to sys.stderr.
 *  The optional func arg allows a function
@@ -313,17 +313,13 @@ pid : 1015 command: Splice Insert @ 23696.827656 Out of Network: False
       sp = threefive.Stream(tsdata)
       sp.proxy()
 ```
-* Pipe to mplayer
-```
-python3 proxy.py | mplayer -
-```
+
 *  the function should match the interface
 ```
     func(cuep)
 ```
 * cuep is an instance of __threefive.Cue__
 
-#### ```Stream.Proxy with custom function```
 ```python3
 import sys
 import threefive
@@ -344,6 +340,11 @@ def do():
 if __name__ == '__main__':
     do()
 
+```
+
+* Pipe to mplayer
+```
+python3 proxy.py | mplayer -
 ```
 
 [🡡 top](#threefive)
