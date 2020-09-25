@@ -197,15 +197,17 @@ scte35 = Cue(b64)
 ###### JSON SCTE 35 Message
 ```python
 scte35.show()
+
+     *    __Splice Info Section__
+```python
+scte35.show_info_section()
+```
 ```
 ###### Return SCTE 35 Message
 ```python
 scte35.get()
 ```
-###### JSON Splice Info Section
-```python
-scte35.show_info_section()
-```
+
 ###### Return Splice Info Section
 ```python
 scte35.get_info_section()
