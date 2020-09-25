@@ -128,7 +128,7 @@ pip3 install threefive
 
 ```
 
-*    ```pip3 and pypy3```
+   *    __pip3 and pypy3__
 
 ```
 # If you don't have pip installed, try this.
