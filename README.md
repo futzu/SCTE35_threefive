@@ -10,20 +10,6 @@
       * [Dependencies](#dependencies)
       * [__Install__](#install)
 
-* [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
-    * [Using threefive with HLS Manifests](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
-    * [Splice Insert](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Splice_Insert.py)
-    * [Splice Insert Too](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Splice_Insert_Too.py)
-    * [Splice Null](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Splice_Null.py)
-    * [Time Signal Blackout Override Program End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal_Blackout_Override_Program_End.py)
-    * [Time Signal Placement Opportunity Start](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal-Placement_Opportunity_Start.py)
-    * [Time Signal Placement Opportunity End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal-Placement_Opportunity_End.py)
-    * [Time Signal Program Overlap ](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal-Program_Overlap.py)
-    * [Time Signal Program Start End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal-Program_Start_End.py)
-    * [Parsing SCTE-35 from a Multicast Source](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/ts_scte_parser.py)
-   * [StreamProxy Example](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Proxy_Demo.py)
-   * [Upids with Custom Output](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Upid_Custom_Output.py)
-
 * [__Easy threefive__](#easy-threefive)
   *   [The __decode__ Function](#the-decode-function)
       * [Parsing SCTE 35 messages from Mpeg Transport Streams and Binary files](#mpegts)
@@ -46,7 +32,23 @@
          * [Custom Output](#customized-scte-35-message-handling)
       * [Stream.proxy(func=None)](#Streamproxyfuncnone)
          *  [Custom Function for SCTE-35 Cues](#streamproxy-with-custom-function)
----  
+
+
+*    [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
+          * [Using threefive with HLS Manifests](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
+          * [Splice Insert](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Splice_Insert.py)
+          * [Splice Insert Too](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Splice_Insert_Too.py)
+    * [Splice Null](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Splice_Null.py)
+    * [Time Signal Blackout Override Program End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal_Blackout_Override_Program_End.py)
+    * [Time Signal Placement Opportunity Start](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal-Placement_Opportunity_Start.py)
+    * [Time Signal Placement Opportunity End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal-Placement_Opportunity_End.py)
+    * [Time Signal Program Overlap ](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal-Program_Overlap.py)
+    * [Time Signal Program Start End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal-Program_Start_End.py)
+    * [Parsing SCTE-35 from a Multicast Source](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/ts_scte_parser.py)
+   * [StreamProxy Example](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Proxy_Demo.py)
+   * [Upids with Custom Output](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Upid_Custom_Output.py)
+
+
 
 #### ```Changes```
    *  Splice class has been renamed Cue. See [Cue](#cue-class)
@@ -90,31 +92,31 @@ git clone https://github.com/futzu/SCTE35-threefive.git
 cd SCTE-threefive
 
 # you need root to install for the system
+
 make install
 
-```
-*    ```git +  pypy3``` 
-
-```sh
+# for pypy3 
 
 make pypy3
 
 ```
-*     ```pip3```
+
+*  ```pip3```
 
 ```sh
 pip3 install threefive
+
 ```
+
 *    ```pip3 and pypy3```
 
-     *   If you don't have pip installed, try this.
 ```
-pypy3 -mensurepip install pip 
-```
-*  ```install threefive```
+# If you don't have pip installed, try this.
 
-```sh
-a@fuhq:~/SCTE35-threefive$ pypy3 -mpip install threefive
+pypy3 -mensurepip install pip 
+
+
+pypy3 -mpip install threefive
 ```
  
 [🡡 top](#threefive)
