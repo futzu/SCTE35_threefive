@@ -49,19 +49,21 @@
      * __Multicast__
           * [Parsing SCTE-35 from a Multicast Source](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/ts_scte_parser.py)
      * __Splice Insert__
-          * [Splice Insert](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Splice_Insert.py)
-          * [Splice Insert Too](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Splice_Insert_Too.py)
+          * [Splice Insert](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert.py)
+          * [Splice Insert Too](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert_Too.py)
      * __Splice_Null__
           * [Splice Null](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Splice_Null.py)
      * __Time Signal__
-          * [Time Signal Blackout Override Program End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal_Blackout_Override_Program_End.py)
-          * [Time Signal Placement Opportunity Start](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal-Placement_Opportunity_Start.py)
-          * [Time Signal Placement Opportunity End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal-Placement_Opportunity_End.py)
-          * [Time Signal Program Overlap ](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal-Program_Overlap.py)
-          * [Time Signal Program Start End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Time_Signal-Program_Start_End.py)
+          * [Time Signal Blackout Override Program End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal_Blackout_Override_Program_End.py)
+          * [Time Signal Placement Opportunity Start](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Placement_Opportunity_Start.py)
+          * [Time Signal Placement Opportunity End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Placement_Opportunity_End.py)
+          * [Time Signal Program Overlap ](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Overlap.py)
+          * [Time Signal Program Start End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Start_End.py)
      * __UPID__
           * [Upids with Custom Output](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Upid_Custom_Output.py)
-
+          * [Multiple Segmentation Descriptors](#https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Multi_Upid.py)
+          * [Combination Upid Segmentation Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Combo.py)
+          
      * [StreamProxy Example](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Proxy_Demo.py)
 
 ---
