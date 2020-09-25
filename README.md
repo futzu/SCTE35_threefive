@@ -14,7 +14,9 @@
   *   [The __decode__ Function](#the-decode-function)
       * [Parsing SCTE 35 messages from Mpeg Transport Streams and Binary files](#mpegts)
       * [Parsing SCTE 35 messages encoded in Base64, Binary, or Hex](#base64-encoded-strings)
+      
 * [__Advanced threefive__](#advanced-threefive)
+
   *   [__Cue Class__](#cue-class)
       * [JSON Pretty Print SCTE 35 Message](#json-pretty-print-scte-35-message)
       * [Return SCTE 35 Message](#return-scte-35-message)
@@ -24,13 +26,17 @@
       * [Return Splice Command](#return-splice-command)
       * [JSON Pretty Print Splice Descriptors](#json-pretty-print-splice-descriptors)
       * [Return Splice Descriptors](#return-splice-descriptors)  
-  *   [__Stream Class__](#stream-class)
-      * [__Stream.decode()__](#Streamdecode)                                                                
+
+ * [__Stream Class__](#stream-class)
+     
+     * [__Stream.decode()__](#Streamdecode)                                                                
          * [Parse a Local File with a Stream Instance](#parse-a-local-file-with-a-stream-instance)
          * [Pipe a Video to Stream](#pipe-a-video-to-stream)
-      * [__Stream.decode_until_found()__](#Streamdecode_until_found)
+     
+     * [__Stream.decode_until_found()__](#Streamdecode_until_found)
          * [Custom Output](#customized-scte-35-message-handling)
-      * [__Stream.proxy(func=None)__](#Streamproxyfuncnone)
+     
+     * [__Stream.proxy(func=None)__](#Streamproxyfuncnone)
          *  [Custom Function for SCTE-35 Cues](#streamproxy-with-custom-function)
          
  *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
@@ -169,35 +175,35 @@ b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAA
 scte35 = Cue(b64)
 
 ````
-##### ```JSON Pretty Print SCTE 35 Message```
+###### JSON SCTE 35 Message
 ```python
 scte35.show()
 ```
-##### ```Return SCTE 35 Message```
+###### Return SCTE 35 Message
 ```python
 scte35.get()
 ```
-##### ```JSON Pretty Print Splice Info Section```
+###### JSON Splice Info Section
 ```python
 scte35.show_info_section()
 ```
-##### ```Return Splice Info Section```
+###### Return Splice Info Section
 ```python
 scte35.get_info_section()
 ```        
-##### ```JSON Pretty Print Splice Command```
+###### JSON Splice Command
 ```python
 scte35.show_command()
 ```
-##### ```Return Splice Command```
+###### Return Splice Command
 ```python
 scte35.get_command()
 ``` 
-##### ```JSON Pretty Print Splice Descriptors```
+###### JSON Splice Descriptors
 ```python
 scte35.show_descriptors()
 ```    
-##### ```Return Splice Descriptors```
+###### Return Splice Descriptors
 ```python
 scte35.get_descriptors()
 ```
