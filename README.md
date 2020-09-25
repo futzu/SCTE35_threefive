@@ -1,5 +1,7 @@
 # threefive
 ## SCTE35 Decoder
+* All __2019__ SCTE-35 __Splice Commands__ are __Fully Supported__
+* All __2019__ SCTE-35 __Splice Descriptors__ are __Fully Supported__
 
 ## [__Heads Up!__ Changes as of 9/24/2020](#changes)
 
@@ -14,9 +16,6 @@
   *   [The __decode__ Function](#the-decode-function)
       * [Parsing __SCTE 35__ messages from __Mpeg-TS Streams__](#mpegts)
       * [Parsing __SCTE 35__ messages encoded in __Base64, Binary, or Hex__](#base64-encoded-strings)
-
-* [Supported __Splice Commands__](#splice-commands)
-* [Supported __Splice Descriptors__](#splice-descriptors)
 
 *  [Advanced __threefive__](#advanced-threefive)
      *  [__Cue__ Class](#cue-class)
@@ -56,7 +55,7 @@
 
 ---
 
-#### ```Changes```
+## __Changes__
    *  Splice class has been renamed Cue. See [Cue](#cue-class)
    *  Stream, StreamPlus, and StreamProxy classes have been consolidated. See [Stream](#stream-class)
 
@@ -156,7 +155,7 @@ from threefive import Cue
 
 b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAABl/nwgIAAAAACyk26AQAACZcuND"
 
-scte35 = Cue
+scte35 = Cue(B64)
 ```
 #### __Print__ SCTE-35 as JSON 
 
