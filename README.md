@@ -5,20 +5,20 @@
 
 * [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
 
-* [Supported __Splice Commands__](#splice-commands)
-* [Supported __Splice Descriptors__](#splice-descriptors)
-
 *  [__Fast__ Start](#fast-start-directions)
       * [__Dependencies__](#dependencies)
       * [__Install__](#install)
       * [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
 
-* [__Easy__ threefive](#easy-threefive)
+* [Easy __threefive__](#easy-threefive)
   *   [The __decode__ Function](#the-decode-function)
       * [Parsing __SCTE 35__ messages from __Mpeg-TS Streams__](#mpegts)
       * [Parsing __SCTE 35__ messages encoded in __Base64, Binary, or Hex__](#base64-encoded-strings)
 
-*  [__Advanced__ threefive](#advanced-threefive)
+* [Supported __Splice Commands__](#splice-commands)
+* [Supported __Splice Descriptors__](#splice-descriptors)
+
+*  [Advanced __threefive__](#advanced-threefive)
      *  [__Cue__ Class](#cue-class)
           * [Print SCTE-35 as JSON](#print-scte-35-as-json)
           * [Return SCTE-35 as dict](#return-scte-35-as-dict)
@@ -26,11 +26,9 @@
      * [__Stream__ Class](#stream-class)
           * [__Stream.decode()__](#Streamdecode)                                                                
                * [__Parse__ a Local File with a __Stream__ Instance](#parse-a-local-file-with-a-stream-instance)
-               * [__Pipe__ a Video to a __Stream__ Instance](#pipe-a-video-to-stream)
-          * [__Stream.decode_until_found()__](#Streamdecode_until_found)
-               * [Custom Output](#customized-scte-35-message-handling)
-          * [__Stream.proxy(func=None)__](#Streamproxyfuncnone)
-               *  [Custom Function for SCTE-35 Cues](#streamproxy-with-custom-function)
+               * [__Pipe__ a Video to a Stream __Instance__](#pipe-a-video-to-stream)
+          * [Stream__.decode_until_found()__](#Streamdecode_until_found)
+          * [Stream__.proxy(func=None)__](#Streamproxyfuncnone)
          
  *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
 
@@ -64,30 +62,7 @@
 
 ---
 
-####  ```Splice Commands``` 
-  *  source [command.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/command.py)
-  *  Splice Null  
-  *  Splice Schedule
-  *  Splice Insert 
-  *  Time Signal 
-  *  Bandwidth Reservation
-
----
-
-####  ```Splice Descriptors```  
-  *  source [descriptor.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptor.py)
-  *  DTMF Descriptor 
-  *  Segmentation Descriptor (all segmentation Upids) 
-  *  Segmentation Types and Messages 
-  *  Time Descriptor 
-  *  Audio Descriptor
-  
-  ---
-  
-  [🡡 top](#threefive)
-
-
-### ```Fast Start```
+## Fast __Start__
 
 *  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
@@ -137,7 +112,7 @@ pypy3 -mpip install threefive
 
 ---
 
-###  ```Easy threefive```  
+### __Easy__ threefive
 
 ####   The __decode__ Function
  *   source [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)
