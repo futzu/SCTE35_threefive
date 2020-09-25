@@ -139,7 +139,7 @@ pypy3 -mpip install threefive
 
 ###  ```Easy threefive```  
 
-####   ```The decode Function``` 
+####   The __decode__ Function
  *   source [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)
  * __threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.
 
@@ -150,16 +150,16 @@ import threefive
 ```python
 threefive.decode('/path/to/mpegwithscte35.ts') 
 ```
- *  __Binary
+ *  __Binary__
 ```python
 threefive.decode('/mnt/build/file.bin')
 ```
- * __Base64 
+ * __Base64__ 
 ```python
 mesg='/DBUAAAAAAAA///wBQb+AAAAAAA+AjxDVUVJAAAACn+/Dy11cm46dXVpZDphYTg1YmJiNi01YzQzLTRiNmEtYmViYi1lZTNiMTNlYjc5OTkRAAB2c6LA'
 threefive.decode(mesg)
 ```
- * __Hex
+ * __Hex__
 ```python
 hexed='0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A'
 threefive.decode(hexed)
@@ -170,7 +170,7 @@ threefive.decode(hexed)
 
 ## Advanced threefive
 
-###  __Cue__ Class```  
+###  __Cue__ Class
      *      source [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/splice.py)
      *     The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
      *    __threefive.Cue__ provides several methods to access the parsed data.
@@ -181,43 +181,39 @@ from threefive import Cue
 
 b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAABl/nwgIAAAAACyk26AQAACZcuND"
 
-scte35 = Cue(b64)
-
+scte35 = Cue
 ```
 #### Print SCTE-35 as JSON 
 
-   *  __Everything__
 ```python
+
 scte35.show()
-```
-   *    __Splice Info Section__
-```python
+
+# Splice Info Section
 scte35.show_info_section()
-```
-  *  __Splice Command__
-  
-```python
+
+# Splice Command
 scte35.show_command()
-```
-  *   __Splice Descriptors__
-```python
+
+# Splice Descriptors
 scte35.show_descriptors()
 ```    
 
 #### Return SCTE 35 as dict
    *  __Everything__
 ```python
+
 scte35.get()
-```
 
-   *    __Splice Info Section__
-```python
+# Splice Info Section
 scte35.get_info_section()
-```        
 
-  *  __Splice Command__
-```python
+# Splice Command
 scte35.get_command()
+
+# Splice Descriptors
+scte35.get_descriptors()
+
 ````
 
  [🡡 top](#threefive)
@@ -234,7 +230,7 @@ scte35.get_command()
    * __tsdata__ is an open file handle or sys.stdin.buffer to read 'piped' in data.
    * __show_null__ if set to True, enables showing SCTE 35 null commands.
 
-##### ```Stream.decode()```
+#####  Stream.decode()
 * Calls __Cue.show()__ when a SCTE-35 message is found
 
  ###### ```Parse a Local File with a Stream Instance```
