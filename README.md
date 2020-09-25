@@ -1,19 +1,9 @@
 # threefive
 ## SCTE35 Decoder
 * All __2019__ SCTE-35 __Splice Commands__ and __Splice Descriptors__ are Fully Supported.
-
+---
 ## [__Heads Up!__ Changes as of 9/24/2020](#changes)
-ode Functionode Function
-
-    source decode.py
-    threefive.decode is an all purpose function to decode SCTE 35 messages from a file or string.
-
-
-
-    source decode.py
-    threefive.decode is an all purpose function to decode SCTE 35 messages from a file or string.
-
-
+---
 * [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
 
 *  [__Fast__ Start](#fast-start-directions)
