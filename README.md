@@ -16,7 +16,9 @@
   *   [The __decode__ Function](#the-decode-function)
       * [Parsing __SCTE 35__ messages from __Mpeg-TS Streams__](#mpegts)
       * [Parsing __SCTE 35__ messages encoded in __Base64, Binary, or Hex__](#base64-encoded-strings)
-      
+
+---
+
 * [__Advanced threefive__](#advanced-threefive)
 
   *   [__Cue Class__](#cue-class)
@@ -30,17 +32,16 @@
           * [Return Splice Descriptors](#return-splice-descriptors)  
 
  * [__Stream Class__](#stream-class)
-     
      * [__Stream.decode()__](#Streamdecode)                                                                
          * [Parse a Local File with a Stream Instance](#parse-a-local-file-with-a-stream-instance)
          * [__Pipe__ a Video to Stream](#pipe-a-video-to-stream)
-     
      * [__Stream.decode_until_found()__](#Streamdecode_until_found)
          * [Custom Output](#customized-scte-35-message-handling)
-     
      * [__Stream.proxy(func=None)__](#Streamproxyfuncnone)
          *  [Custom Function for SCTE-35 Cues](#streamproxy-with-custom-function)
          
+---
+
  *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
  
      * __HLS__
@@ -69,6 +70,8 @@
    *  Splice class has been renamed Cue. See [Cue](#cue-class)
    *  Stream, StreamPlus, and StreamProxy classes have been consolidated. See [Stream](#stream-class)
 
+---
+
 ####  ```Splice Commands``` 
   *  source [command.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/command.py)
   *  Splice Null  
@@ -76,6 +79,9 @@
   *  Splice Insert 
   *  Time Signal 
   *  Bandwidth Reservation
+
+---
+
 ####  ```Splice Descriptors```  
   *  source [descriptor.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptor.py)
   *  DTMF Descriptor 
@@ -93,14 +99,12 @@
 
 *  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
+*  ```Dependencies``` 
+     *  Python 3 or pypy3
+     *  [__bitn__](https://github.com/futzu/bitn)
 
-###  ```Dependencies``` 
-*  Python 3 or pypy3
-*  [__bitn__](https://github.com/futzu/bitn)
-
-###  ```Install``` 
-
-*    ```git```  
+* ```Install``` 
+     *    ```git```  
 ```sh
 git clone https://github.com/futzu/SCTE35-threefive.git
 
@@ -116,7 +120,7 @@ make pypy3
 
 ```
 
-*  ```pip3```
+     *  ```pip3```
 
 ```sh
 pip3 install threefive
