@@ -1,10 +1,12 @@
+import json
+
 from base64 import b64decode
 from bitn import BitBin
-import json
-from threefive.segmentation import SegmentationDescriptor
-from threefive.section import SpliceInfoSection
-from threefive.descriptor import SpliceDescriptor
 from threefive.command import SpliceCommand
+from threefive.descriptor import SpliceDescriptor
+from threefive.section import SpliceInfoSection
+from threefive.segmentation import SegmentationDescriptor
+
 
 class Header:
     def __init__(self,packet_data):
@@ -41,26 +43,16 @@ class Cue:
         self.info_section.parse(self.bitbin)
         self.set_command()
         self.info_section.descriptor_loop_length = self.bitbin.asint(16)
-        self.descriptorloop()
+        self.descriptor_loop()
         self.info_section.crc = hex(int.from_bytes(payload[0:4],
                                             byteorder = 'big'))
                 
-    def mk_payload(self,data):
-        '''
-        Cue.mk_payload trims the
-        header if data is a full SCTE-35 packet
-        '''
-        if data[0] == 0x47:
-            payload = data[5:]
-        else:
-            payload = self.mkbits(data)
-        return payload
-  
     def __repr__(self):
         return str(self.get())
     
-    def descriptorloop(self):
+    def descriptor_loop(self):
         '''
+        Cue.descriptor_loop 
         parses all splice descriptors
         '''
         dll = self.info_section.descriptor_loop_length
@@ -75,42 +67,40 @@ class Cue:
 
     def get(self):
         '''
-        Returns a dict of dicts for all three parts
-        of a SCTE 35 message.
+        Returns a dict of 
+        the SCTE 35 message data.
         '''
+        scte35 = False
         try:
             scte35 = {}
             if self.header.pid !=None:
-                scte35['header'] = self.kvclean(vars(self.header))
+                scte35['header'] = self.kv_clean(vars(self.header))
             scte35['info_section'] = self.get_info_section()
             scte35['command'] = self.get_command()
             if len(self.descriptors)  > 0:
                 scte35['descriptors'] = self.get_descriptors()
-
-        except:
-            scte35 = False
         finally:
             return scte35
 
     def get_command(self):
-        return self.kvclean(vars(self.command))
+        return self.kv_clean(vars(self.command))
 
     def get_descriptors(self):
-        return [self.kvclean(vars(d)) for d in self.descriptors]
+        return [self.kv_clean(vars(d)) for d in self.descriptors]
 
     def get_info_section(self):
-        return self.kvclean(vars(self.info_section))       
+        return self.kv_clean(vars(self.info_section))       
     
-    def kvclean(self,obj):
+    def kv_clean(self,obj):
         '''
-        kvclean removes items from a dict if the value is None
+        kv_clean removes items from a dict if the value is None
         '''
         return {k: v for k, v in obj.items() if v is not None}
 
-    def kvprint(self, obj):
+    def kv_print(self, obj):
         print(json.dumps(obj,indent = 2))
 
-    def mkbits(self, s):
+    def mk_bits(self, s):
         '''
         Convert Hex and Base64 strings into bytes.
         '''
@@ -122,7 +112,18 @@ class Cue:
             return b64decode(s)
         except:
             return s
-
+        
+    def mk_payload(self,data):
+        '''
+        Cue.mk_payload trims the packet
+        header if data is a full SCTE-35 packet
+        '''
+        if data[0] == 0x47:
+            payload = data[5:]
+        else:
+            payload = self.mk_bits(data)
+        return payload
+    
     def set_command(self):
         '''
         threefive.Cue.set_command
@@ -140,7 +141,7 @@ class Cue:
         '''
 
         threefive.Cue.set_splice_descriptor
-        is called by
+        is called by threefive.Cue.descriptorloop.
         '''
         # splice_descriptor_tag 8 uimsbf
         tag = self.bitbin.asint(8)
@@ -160,22 +161,22 @@ class Cue:
         '''
         pretty prints the SCTE 35 message
         '''
-        self.kvprint(self.get())
+        self.kv_print(self.get())
 
     def show_command(self):
         '''
         pretty prints SCTE 35 splice command
         '''
-        self.kvprint(self.get_command())
+        self.kv_print(self.get_command())
 
     def show_descriptors(self):
         '''
         pretty prints SCTE 35 splice descriptors
         '''
-        self.kvprint(self.get_descriptors())
+        self.kv_print(self.get_descriptors())
 
     def show_info_section(self):
         '''
         pretty prints SCTE 35 splice info section
         '''
-        self.kvprint(self.get_info_section())
+        self.kv_print(self.get_info_section())

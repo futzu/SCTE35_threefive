@@ -1,9 +1,11 @@
+import json
+import sys
+
 from bitn import BitBin
 from .cue import Cue
 from functools import partial
 from struct import unpack
-import json
-import sys
+
 
 class Stream:
     '''
@@ -24,8 +26,9 @@ class Stream:
     no_pts_stream_ids = [188, 190, 191, 240, 241, 242, 248]
     cmd_types = [4,5,6,7,255] # splice command types
     packet_size = 188
+    
     def __init__(self, tsdata, show_null = False):
-         # set show_null to parse splice null packets
+        # set show_null to parse splice null packets
         if show_null:
             self.cmd_types.append(0)
         self.tsdata = tsdata
@@ -109,7 +112,7 @@ class Stream:
       
     def parse_pts(self,bitbin):
         '''
-        StreamPlus.parse_pts(bitbin)
+        Stream.parse_pts(bitbin)
         This is the process described in the official
         Mpeg-ts specification.
         '''
@@ -124,7 +127,7 @@ class Stream:
     
     def parse_pusi(self, pusidata):
         '''
-        StreamPlus.parse_pusi(pusidata)
+        Stream.parse_pusi(pusidata)
         If the pusi data contains these markers,
         we can pull a PTS value..
         '''
