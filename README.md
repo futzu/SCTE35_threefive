@@ -1,7 +1,7 @@
 # threefive
 ## SCTE35 Decoder
 
-#### [__Heads Up!__ Changes as of 9/24/2020](#changes)
+## [__Heads Up!__ Changes as of 9/24/2020](#changes)
 
 * [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
 
