@@ -18,13 +18,13 @@
 * [__Advanced threefive__](#advanced-threefive)
 
   *   [__Cue Class__](#cue-class)
-      * [JSON Pretty Print SCTE 35 Message](#json-pretty-print-scte-35-message)
+      * [JSON Pretty Print SCTE 35 Message](#json-scte-35-message)
       * [Return SCTE 35 Message](#return-scte-35-message)
-      * [JSON Pretty Print Splice Info Section](#json-pretty-print-splice-info-section)
+      * [JSON Pretty Print Splice Info Section](#json-splice-info-section)
       * [Return Splice Info Section](#return-splice-info-section)
-      * [JSON Pretty Print Splice Command](#json-pretty-print-splice-command)
+      * [JSON Pretty Print Splice Command](#json-splice-command)
       * [Return Splice Command](#return-splice-command)
-      * [JSON Pretty Print Splice Descriptors](#json-pretty-print-splice-descriptors)
+      * [JSON Pretty Print Splice Descriptors](#json-splice-descriptors)
       * [Return Splice Descriptors](#return-splice-descriptors)  
 
  * [__Stream Class__](#stream-class)
