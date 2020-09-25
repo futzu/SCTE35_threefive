@@ -8,7 +8,7 @@
 * [Supported __Splice Commands__](#splice-commands)
 * [Supported __Splice Descriptors__](#splice-descriptors)
 
-*  [__Fast Start__](#fast-start-directions)
+*  [__Fast__ Start](#fast-start-directions)
       * [__Dependencies__](#dependencies)
       * [__Install__](#install)
       * [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
@@ -18,7 +18,7 @@
       * [Parsing __SCTE 35__ messages from __Mpeg-TS Streams__](#mpegts)
       * [Parsing __SCTE 35__ messages encoded in __Base64, Binary, or Hex__](#base64-encoded-strings)
 
----
+
 
 * [__Advanced threefive__](#advanced-threefive)
 
@@ -43,12 +43,9 @@
      * [__Stream.proxy(func=None)__](#Streamproxyfuncnone)
          *  [Custom Function for SCTE-35 Cues](#streamproxy-with-custom-function)
          
----
+
 
  *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
-
----
-
 
      * __HLS__
           * [Using threefive with __HLS Manifests__](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
@@ -103,7 +100,7 @@
   [🡡 top](#threefive)
 
 
-### ```Fast Start Directions```
+### ```Fast Start```
 
 *  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
