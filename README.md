@@ -22,18 +22,13 @@
 
 *  [__Advanced__ threefive](#advanced-threefive)
      *  [__Cue Class__](#cue-class)
-          * [JSON Pretty Print __SCTE 35 Message__](#json-scte-35-message)
-          * [Return SCTE 35 Message](#return-scte-35-message)
-          * [JSON Pretty Print __Splice Info Section__](#json-splice-info-section)
-          * [Return Splice Info Section](#return-splice-info-section)
-          * [JSON Pretty Print __Splice Command__](#json-splice-command)
-          * [Return Splice Command](#return-splice-command)
-          * [JSON Pretty Print __Splice Descriptors__](#json-splice-descriptors)
-          * [Return Splice Descriptors](#return-splice-descriptors)  
+          * [Print SCTE-35 as JSON](#print-scte-35-as-json)
+          * [Return SCTE-35 as dict](#return-scte-35-as-dict)
+       
      * [__Stream Class__](#stream-class)
           * [__Stream.decode()__](#Streamdecode)                                                                
-               * [Parse a Local File with a Stream Instance](#parse-a-local-file-with-a-stream-instance)
-               * [__Pipe__ a Video to Stream](#pipe-a-video-to-stream)
+               * [__Parse__ a Local File with a __Stream__ Instance](#parse-a-local-file-with-a-stream-instance)
+               * [__Pipe__ a Video to a __Stream__ Instance](#pipe-a-video-to-stream)
           * [__Stream.decode_until_found()__](#Streamdecode_until_found)
                * [Custom Output](#customized-scte-35-message-handling)
           * [__Stream.proxy(func=None)__](#Streamproxyfuncnone)
@@ -155,20 +150,20 @@ pypy3 -mpip install threefive
  ```python
 import threefive
 ```
-####    ```MpegTS```
+####  MpegTS
 ```python
 threefive.decode('/path/to/mpegwithscte35.ts') 
 ```
-####    ```Binary```
+####    Binary
 ```python
 threefive.decode('/mnt/build/file.bin')
 ```
-####  ```Base64 Encoded Strings```
+####  Base64 Encoded Strings
 ```python
 mesg='/DBUAAAAAAAA///wBQb+AAAAAAA+AjxDVUVJAAAACn+/Dy11cm46dXVpZDphYTg1YmJiNi01YzQzLTRiNmEtYmViYi1lZTNiMTNlYjc5OTkRAAB2c6LA'
 threefive.decode(mesg)
 ```
-#### ```Hex Encoded Strings```
+#### Hex Encoded Strings
 ```python
 hexed='0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A'
 threefive.decode(hexed)
@@ -177,7 +172,7 @@ threefive.decode(hexed)
  [🡡 top](#threefive)
  
 
-### ```Advanced threefive```
+### Advanced threefive
 
 ####  ```Cue Class```  
    *  source [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/splice.py)
@@ -209,7 +204,7 @@ scte35.show_info_section()
 ```python
 scte35.show_command()
 ```
-  *     __Splice Descriptors__
+  *   __Splice Descriptors__
 ```python
 scte35.show_descriptors()
 ```    
@@ -228,12 +223,7 @@ scte35.get_info_section()
   *  __Splice Command__
 ```python
 scte35.get_command()
-``` 
-
-###### Return Splice Descriptors
-```python
-scte35.get_descriptors()
-```
+````
 
  [🡡 top](#threefive)
 
