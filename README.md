@@ -18,14 +18,12 @@
       * [Parsing __SCTE 35__ messages from __Mpeg-TS Streams__](#mpegts)
       * [Parsing __SCTE 35__ messages encoded in __Base64, Binary, or Hex__](#base64-encoded-strings)
 
-
-
 *  [__Advanced__ threefive](#advanced-threefive)
-     *  [__Cue Class__](#cue-class)
+     *  [__Cue__ Class](#cue-class)
           * [Print SCTE-35 as JSON](#print-scte-35-as-json)
           * [Return SCTE-35 as dict](#return-scte-35-as-dict)
        
-     * [__Stream Class__](#stream-class)
+     * [__Stream__ Class](#stream-class)
           * [__Stream.decode()__](#Streamdecode)                                                                
                * [__Parse__ a Local File with a __Stream__ Instance](#parse-a-local-file-with-a-stream-instance)
                * [__Pipe__ a Video to a __Stream__ Instance](#pipe-a-video-to-stream)
@@ -34,8 +32,6 @@
           * [__Stream.proxy(func=None)__](#Streamproxyfuncnone)
                *  [Custom Function for SCTE-35 Cues](#streamproxy-with-custom-function)
          
-
-
  *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
 
      * __HLS__
@@ -150,20 +146,20 @@ pypy3 -mpip install threefive
  ```python
 import threefive
 ```
-####  MpegTS
+ *  __MpegTS__
 ```python
 threefive.decode('/path/to/mpegwithscte35.ts') 
 ```
-####    Binary
+ *  __Binary
 ```python
 threefive.decode('/mnt/build/file.bin')
 ```
-####  Base64 Encoded Strings
+ * __Base64 
 ```python
 mesg='/DBUAAAAAAAA///wBQb+AAAAAAA+AjxDVUVJAAAACn+/Dy11cm46dXVpZDphYTg1YmJiNi01YzQzLTRiNmEtYmViYi1lZTNiMTNlYjc5OTkRAAB2c6LA'
 threefive.decode(mesg)
 ```
-#### Hex Encoded Strings
+ * __Hex
 ```python
 hexed='0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A'
 threefive.decode(hexed)
@@ -172,13 +168,12 @@ threefive.decode(hexed)
  [🡡 top](#threefive)
  
 
-### Advanced threefive
+## Advanced threefive
 
-####  ```Cue Class```  
-   *  source [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/splice.py)
-
-   *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
-   *  __threefive.Cue__ provides several methods to access the parsed data.
+###  __Cue__ Class```  
+     *      source [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/splice.py)
+     *     The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
+     *    __threefive.Cue__ provides several methods to access the parsed data.
 
 ```python
 
@@ -228,7 +223,7 @@ scte35.get_command()
  [🡡 top](#threefive)
 
 ---
-####  ```Stream Class``` 
+###  __Stream__ Class 
   * source [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
 
   * The __threefive.Stream__ class parses SCTE35 messages from a file or stream.
