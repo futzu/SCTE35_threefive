@@ -7,8 +7,6 @@
 * [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
 
 * [ __threefive__ works best with __pypy3__](https://www.pypy.org/)
-         * __32 seconds__ for __Stream.decode()__ to parse a __3.7 GB video__ with __pypy3__
-         * 157 seconds for Stream.decode() to parse a 3.7 GB video with __python3__
 
 *  [__Fast__ Start](#fast-start-directions)
       * [__Dependencies__](#dependencies)
