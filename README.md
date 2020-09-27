@@ -1,10 +1,14 @@
 # threefive
 ## SCTE35 Decoder
-          *     All __2019__ SCTE-35 __Splice Commands__ and __Splice Descriptors__ are Fully Supported.
+  * All __2019__ SCTE-35 __Splice Commands__ and __Splice Descriptors__ are Fully Supported.
 ---
 ## [__Heads Up!__ Changes as of 9/24/2020](#changes)
 
 * [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
+
+* [ __threefive__ works best with __pypy3__](https://www.pypy.org/)
+         * __32 seconds__ for __Stream.decode()__ to parse a __3.7 GB video__ with __pypy3__
+         * 157 seconds for Stream.decode() to parse a 3.7 GB video with __python3__
 
 *  [__Fast__ Start](#fast-start-directions)
       * [__Dependencies__](#dependencies)
@@ -144,7 +148,7 @@ threefive.decode(hexed)
 #  __Advanced__ threefive
 ---
 ##  __Cue__ Class
-   *  source [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/splice.py)
+   *  source [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
    *  __threefive.Cue__ provides several methods to access the parsed data.
 
