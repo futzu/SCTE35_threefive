@@ -25,7 +25,7 @@ setuptools.setup(
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy'
     ],
-    python_requires=">=3.6, !=3.7.*, !=3.8.*, !=3.9.*",
+    python_requires=">=3.6",
     project_urls={
         'Source': 'https://github.com/futzu/SCTE35-threefive',
     },
