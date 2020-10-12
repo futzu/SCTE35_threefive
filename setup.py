@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
+
 import setuptools
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+with open("README.md", "r", "utf-8") as fh:
+    long_description = readme = fh.read()
 
 setuptools.setup(
     name="threefive",
@@ -15,9 +17,16 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=["bitn>=0.0.27",],
     classifiers=[
-        "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: Implementation :: CPython',
+        'Programming Language :: Python :: Implementation :: PyPy'
     ],
-    python_requires=">=3.6",
+    python_requires=">=3.6, !=3.7.*, !=3.8.*, !=3.9.*",
+    project_urls={
+        'Source': 'https://github.com/futzu/SCTE35-threefive',
+    },
 )
