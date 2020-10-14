@@ -4,11 +4,12 @@
 ---
 ## [__Heads Up!__ Changes as of 9/24/2020](#changes)
 
-*  Requires Python 3.6+
+* [ __threefive__ works best with __pypy3__](https://www.pypy.org/)
+
+* [__Requires Python 3.6+__](https://www.python.org/downloads/release/python-390/)
 
 * [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
 
-* [ __threefive__ works best with __pypy3__](https://www.pypy.org/)
 
 *  [__Fast__ Start](#fast-start-directions)
       * [__Dependencies__](#dependencies)
