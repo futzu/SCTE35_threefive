@@ -7,7 +7,7 @@ with open("README.md", "r", "utf-8") as fh:
 
 setuptools.setup(
     name="threefive",
-    version="2.1.79",
+    version="2.1.81",
     author="fu-corp",
     author_email="spam@futzu.com",
     description="A Fast SCTE 35 Decoder for Mpeg-TS Video, and Base64 or Hex Encoded Messages.", 
@@ -15,7 +15,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/threefive",
     packages=setuptools.find_packages(),
-    install_requires=["bitn>=0.0.27",],
+    install_requires=["bitn>=0.0.29",],
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",

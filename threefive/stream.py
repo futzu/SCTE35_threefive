@@ -1,10 +1,7 @@
-import json
 import sys
-
 from bitn import BitBin
 from .cue import Cue
 from functools import partial
-from struct import unpack
 
 
 class Stream:
@@ -81,7 +78,7 @@ class Stream:
             if self.chk_magic(packet):
                 cuep = Cue(packet,self.packet_data)
                 if not func:
-                    sys.stderr.buffer.write(json.dumps(cuep.get()))
+                    sys.stderr.buffer.write(cuep.get())
                 else:
                     func(cuep)
                     
@@ -103,11 +100,17 @@ class Stream:
         reads a MPEG-TS packet header
         for pid and/or pusi.
         '''
-        two_bytes, = unpack('>H', packet[1:3])
-        pid = two_bytes & 0x1fff
-        pusi = two_bytes >> 14 & 0x1
+        # tei = packet[1] >> 7
+        pusi = packet[1] >> 6 & 1
         if pusi:
-                self.parse_pusi(packet[4:20])
+            pusidata = packet[4:20]
+            self.parse_pusi(pusidata)
+        # ts_priority = packet[1] >>5 & 0x1
+        pid = (packet[1] & 31) << 8
+        pid += packet[2]
+        # scramble = packet[2] >>6
+        # afc = (packet[2] & 48) >> 4
+        # count = packet[2] & 15
         self.packet_data = {'pid':pid,'pts':self.PTS}
       
     def parse_pts(self,bitbin):
