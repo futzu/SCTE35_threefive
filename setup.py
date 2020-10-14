@@ -2,7 +2,7 @@
 
 import setuptools
 
-with open("README.md", "r", "utf-8") as fh:
+with open("README.md", "r") as fh:
     readme = fh.read()
 
 setuptools.setup(
