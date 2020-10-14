@@ -67,7 +67,7 @@
 *  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
 ### Dependencies 
-*  Python 3 or pypy3
+*  Python 3.6+ or pypy3
 *  [__bitn__](https://github.com/futzu/bitn)
      
 ### Install 
@@ -277,6 +277,7 @@ pid : 1015 command: Splice Insert @ 23696.827656 Out of Network: False
    to be used for custom handling of the SCTE-35
    cue instance.
 *  If func is not set, threefive.Cue.show() is called.
+
 
 ```python3
 
