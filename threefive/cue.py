@@ -8,18 +8,6 @@ from threefive.section import SpliceInfoSection
 from threefive.segmentation import SegmentationDescriptor
 
 
-class Header:
-    def __init__(self,packet_data):
-        self.pid = self.pts = None
-        if 'pid' in packet_data.keys():
-            self.pid = packet_data['pid']
-        if 'pts' in packet_data.keys():
-            self.pts = packet_data['pts']
-
-    def __repr__(self):
-        return str(vars(self))
-    
-
 class Cue:
     '''
     The threefive.Cue class handles parsing
@@ -31,14 +19,13 @@ class Cue:
     cmd_types = [0,4,5,6,7,255] 
 
     def __init__(self, data, packet_data={}):
-        # clear any existing values.
         self.info_section = self.command = False
         self.descriptors = []
         # split off headers, if any.
         payload = self.mk_payload(data)
-        # threefive.Stream passes packet_data. 
+        # threefive.Stream passes packet_data.
+        self.packet_data = packet_data
         self.bitbin = BitBin(payload)
-        self.header = Header(packet_data)
         self.info_section = SpliceInfoSection()
         self.info_section.parse(self.bitbin)
         self.set_command()
@@ -70,17 +57,13 @@ class Cue:
         Returns a dict of 
         the SCTE 35 message data.
         '''
-        scte35 = False
-        try:
-            scte35 = {}
-            if self.header.pid !=None:
-                scte35['header'] = self.kv_clean(vars(self.header))
-            scte35['info_section'] = self.get_info_section()
-            scte35['command'] = self.get_command()
-            if len(self.descriptors)  > 0:
+        scte35 = {}
+        scte35['packet_data'] = self.packet_data
+        scte35['info_section'] = self.get_info_section()
+        scte35['command'] = self.get_command()
+        if len(self.descriptors)  > 0:
                 scte35['descriptors'] = self.get_descriptors()
-        finally:
-            return scte35
+        return scte35
 
     def get_command(self):
         return self.kv_clean(vars(self.command))
