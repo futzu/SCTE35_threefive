@@ -27,6 +27,7 @@ class Stream:
         if show_null: self.cmd_types.append(0)
         self.tsdata = tsdata
         self.until_found = False
+        
     def chk_scte35(self,pkt):
         '''
         Fast SCTE-35 packet detection
