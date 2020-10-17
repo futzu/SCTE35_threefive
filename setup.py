@@ -7,13 +7,13 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="threefive",
-    version="2.1.83",
+    version="2.1.85",
     author="fu-corp",
     author_email="spam@futzu.com",
     description="A Fast SCTE 35 Decoder for Mpeg-TS Video, and Base64 or Hex Encoded Messages.", 
     long_description=readme,
     long_description_content_type="text/markdown",
-    url="https://github.com/futzu/threefive",
+    url="https://github.com/futzu/SCTE35-threefive",
     packages=setuptools.find_packages(),
     install_requires=["bitn>=0.0.29",],
     classifiers=[
@@ -26,7 +26,5 @@ setuptools.setup(
         "Programming Language :: Python :: Implementation :: PyPy"
     ],
     python_requires=">=3.6",
-    project_urls={
-        'Source': 'https://github.com/futzu/SCTE35-threefive',
-    },
+   
 )
