@@ -32,7 +32,7 @@
                * [__Pipe__ a Video to a Stream __Instance__](#pipe-a-video-to-stream)
           * [__Stream.decode_fast()__](#Streamdecode_fast)
           * [__Stream.decode_until_found()__](#Streamdecode_until_found)
-          * [Stream.proxy(func=None)__](#Streamproxyfuncnone)
+          * [__Stream.proxy(func=None)__](#Streamproxyfuncnone)
          
  *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
 
@@ -240,6 +240,7 @@ curl -s https://futzu.com/xaa.ts -o -  \
 ### Stream.decode_fast()
 * Use __Stream.decode_fast()__ instead of __Stream.decode()__ 
 if you don't need any packet data like pts or pid.
+* Calls __Cue.show()__ when a SCTE-35 message is found.
 
 ```python3
 import threefive
@@ -248,7 +249,7 @@ with open('../35.ts','rb') as tsdata:
     threefive.Stream(tsdata).decode_fast()
 ```
    *   __Output__
-```
+```js
 {
   "info_section": {
     "table_id": "0xfc",
