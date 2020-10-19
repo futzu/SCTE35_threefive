@@ -19,14 +19,15 @@ class Stream:
     Set show_null = True to show splice null. 
 
     '''
+    no_pts_stream_ids = [188, 190, 191, 240, 241, 242, 248]
     cmd_types = [4,5,6,7,255] # splice command types
     packet_size = 188
-    
     def __init__(self, tsdata, show_null = False):
         # set show_null to parse splice null packets
         if show_null: self.cmd_types.append(0)
         self.tsdata = tsdata
         self.until_found = False
+        self.PTS = False
         
     def chk_scte35(self,pkt):
         '''
@@ -36,29 +37,20 @@ class Stream:
             if pkt[6] == 48: # byte value
                 if pkt[8] == 0: # protocol version
                     if pkt[15] == 255: # cw_index
-                        return pkt[18] in self.cmd_types 
+                        return pkt[18] in self.cmd_types
 
-    def get_pid(self,byte1,byte2):
-        '''
-        Parse pid from byte[1] and byte[2]
-        of an MPEG-TS packet
-        '''
-        # read last 5 bits of byte1 and left shift 8 
-        five_bits = (byte1 & 31) << 8
-        return five_bits + byte2 # pid
-                    
     def decode(self):
         '''
         Stream.decode() reads MPEG-TS
         to find SCTE-35 packets.
         ''' 
         for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
+            packet_data = self.parse_header(pkt)
             if self.chk_scte35(pkt):
-                pid = self.get_pid(pkt[1],pkt[2])
-                cue = Cue(pkt,{'pid':pid})
+                cue = Cue(pkt,packet_data)
                 if self.until_found: return cue
                 cue.show()
-            
+
     def decode_until_found(self):
         '''
         Stream.decode_until_found() reads MPEG-TS
@@ -69,6 +61,41 @@ class Stream:
         cue = self.decode()
         if cue: return cue
 
+    def parse_header(self,pkt):
+        '''
+        Stream.parse_header parses the
+        MPEG-TS packet header data
+        '''
+        packet_data = {}
+        if (pkt[1] >> 6) & 1: self.parse_pusi(pkt[4:])
+        packet_data['pid'] = ((pkt[1] & 31) << 8) + pkt[2] 
+        packet_data['pts'] = self.PTS
+        return packet_data
+                        
+    def parse_pts(self,chunk):
+        '''
+        Parse PTS from packets   
+        '''
+        a = ((chunk[0] >> 1) & 7) << 30
+        b = ((chunk[1]<<8 )+chunk[2]) >>1
+        b = b << 15
+        c = (chunk[3]<<7)+ (chunk[4]>>1) 
+        d = (a+b+c)/90000.0
+        # self.PTS is updated when we find a pts.
+        self.PTS=round(d,6)
+      
+    def parse_pusi(self, pdata):
+        '''
+        If the pusi data contains these markers,
+        we can pull a PTS value..
+        '''
+        if pdata[2] == 1: 
+            if pdata[3] not in self.no_pts_stream_ids:  
+                if (pdata[6] >> 6) == 2: 
+                    if (pdata[7] >> 6) == 2:
+                        if (pdata[9] >> 4) == 2: 
+                            self.parse_pts(pdata[9:])
+                            
     def proxy(self,func = None):
         '''
         Stream.proxy(func = None) reads MPEG-TS
@@ -80,14 +107,12 @@ class Stream:
         the function should match the interface
             func(cue)
         Where cue is an instance of threefive.Cue
-        If func is not set, threefive.Cue.show() is called.
+        If func is not set, threefive.Cue.get() is printed to stderr.
         '''        
         for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
             sys.stdout.buffer.write(pkt)
             if self.chk_scte35(pkt):
-                pid = self.get_pid(pkt[1],pkt[2])
-                cue = Cue(pkt,{'pid':pid})
-                if not func:
-                    sys.stderr.buffer.write(cue.get())
-                else:
-                    func(cue)
+                packet_data = self.parse_header(pkt)
+                cue = Cue(pkt,packet_data)
+                if not func: sys.stderr.buffer.write(cue.get())
+                else: func(cue)

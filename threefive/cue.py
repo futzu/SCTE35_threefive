@@ -58,7 +58,8 @@ class Cue:
         the SCTE 35 message data.
         '''
         scte35 = {}
-        scte35['packet_data'] = self.packet_data
+        if len(self.packet_data.keys()) > 0:
+            scte35['packet_data'] = self.packet_data
         scte35['info_section'] = self.get_info_section()
         scte35['command'] = self.get_command()
         if len(self.descriptors)  > 0:
