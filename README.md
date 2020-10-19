@@ -221,7 +221,8 @@ scte35.get_descriptors()
  
  if __name__ =='__main__':
     with open(sys.argv[1],'rb') as tsdata:
-        Stream(tsdata).decode()
+        sp = Stream(tsdata)
+        sp.decode()
 
 ```
 
@@ -232,7 +233,94 @@ scte35.get_descriptors()
 curl -s https://futzu.com/xaa.ts -o -  \
   | python3 -c 'import sys;import threefive; threefive.Stream(sys.stdin.buffer).decode()' 
 ```
+
 ---
+
+### Stream.decode_fast()
+* Use __Stream.decode_fast()__ instead of __Stream.decode()__ 
+if you don't need any packet data like pts or pid.
+
+```python3
+import threefive
+
+with open('../35.ts','rb') as tsdata:
+    threefive.Stream(tsdata).decode_fast()
+```
+   *   __Output__
+```
+{
+  "info_section": {
+    "table_id": "0xfc",
+    "section_syntax_indicator": false,
+    "private": false,
+    "reserved": "0x3",
+    "section_length": 42,
+    "protocol_version": 0,
+    "encrypted_packet": false,
+    "encryption_algorithm": 0,
+    "pts_adjustment": 0.0,
+    "cw_index": "0x0",
+    "tier": "0xfff",
+    "splice_command_length": 4095,
+    "splice_command_type": 5,
+    "descriptor_loop_length": 10,
+    "crc": "0xfc302a00"
+  },
+  "command": {
+    "name": "Splice Insert",
+    "splice_event_id": 662,
+    "splice_event_cancel_indicator": false,
+    "out_of_network_indicator": false,
+    "program_splice_flag": true,
+    "duration_flag": false,
+    "splice_immediate_flag": false,
+    "time_specified_flag": true,
+    "pts_time": 89984.161689,
+    "unique_program_id": 1,
+    "avail_num": 0,
+    "avail_expected": 0
+  },
+  "descriptors": [
+    {
+      "tag": 0,
+      "identifier": "CUEI",
+      "name": "Avail Descriptor",
+      "provider_avail_id": 0,
+      "descriptor_length": 8
+    }
+  ]
+}
+
+
+```
+---import threefive
+
+with open('../35.ts','rb') as tsdata:
+    threefive.Stream(tsdata).decode_fast()
+import threefive
+
+with open('../35.ts','rb') as tsdata:
+    threefive.Stream(tsdata).decode_fast()
+import threefive
+
+with open('../35.ts','rb') as tsdata:
+    threefive.Stream(tsdata).decode_fast()
+import threefive
+
+with open('../35.ts','rb') as tsdata:
+    threefive.Stream(tsdata).decode_fast()
+import threefive
+
+with open('../35.ts','rb') as tsdata:
+    threefive.Stream(tsdata).decode_fast()
+import threefive
+
+with open('../35.ts','rb') as tsdata:
+    threefive.Stream(tsdata).decode_fast()
+import threefive
+
+with open('../35.ts','rb') as tsdata:
+    threefive.Stream(tsdata).decode_fast()
 
 ###  Stream.decode_until_found()
 * Use the __Stream.decode_until_found__() method instead of __Stream.decode()__.
@@ -261,9 +349,37 @@ if __name__ == '__main__':
 
 ```
    *   __Output__
-```python
+```python3
 pid : 1055 command: Splice Insert @ 21951.133267 Out of Network: True
 pid : 1015 command: Splice Insert @ 22516.907656 Out of Network: True
+import threefive
+
+with open('../35.ts','rb') as tsdata:
+    threefive.Stream(tsdata).decode_fast()
+import threefive
+
+with open('../35.ts','rb') as tsdata:
+    threefive.Stream(tsdata).decode_fast()
+import threefive
+
+with open('../35.ts','rb') as tsdata:
+    threefive.Stream(tsdata).decode_fast()
+import threefive
+
+with open('../35.ts','rb') as tsdata:
+    threefive.Stream(tsdata).decode_fast()
+import threefive
+
+with open('../35.ts','rb') as tsdata:
+    threefive.Stream(tsdata).decode_fast()
+import threefive
+
+with open('../35.ts','rb') as tsdata:
+    threefive.Stream(tsdata).decode_fast()
+import threefive
+
+with open('../35.ts','rb') as tsdata:
+    threefive.Stream(tsdata).decode_fast()
 pid : 1055 command: Splice Insert @ 22026.133267 Out of Network: False
 pid : 1045 command: Splice Insert @ 22864.350067 Out of Network: True
 pid : 1015 command: Splice Insert @ 22696.907656 Out of Network: False
