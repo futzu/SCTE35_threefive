@@ -1,3 +1,4 @@
+import json
 import sys
 from functools import partial
 from .cue import Cue
@@ -27,7 +28,7 @@ class Stream:
         if show_null: self.cmd_types.append(0)
         self.tsdata = tsdata
         self.until_found = False
-        self.PTS = False
+        self.PTS = None
         
     def chk_scte35(self,pkt):
         '''
@@ -51,6 +52,12 @@ class Stream:
                 if self.until_found: return cue
                 cue.show()
 
+    def decode_fast(self):
+        for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
+            if self.chk_scte35(pkt):
+                cue = Cue(pkt)
+                cue.show()
+
     def decode_until_found(self):
         '''
         Stream.decode_until_found() reads MPEG-TS
@@ -72,16 +79,15 @@ class Stream:
         packet_data['pts'] = self.PTS
         return packet_data
                         
-    def parse_pts(self,chunk):
+    def parse_pts(self,ptsdata):
         '''
         Parse PTS from packets   
         '''
-        a = ((chunk[0] >> 1) & 7) << 30
-        b = ((chunk[1]<<8 )+chunk[2]) >>1
+        a = ((ptsdata[0] >> 1) & 7) << 30
+        b = ((ptsdata[1] << 8 )+ ptsdata[2]) >> 1
         b = b << 15
-        c = (chunk[3]<<7)+ (chunk[4]>>1) 
+        c = (ptsdata[3] << 7)+ (ptsdata[4] >> 1) 
         d = (a+b+c)/90000.0
-        # self.PTS is updated when we find a pts.
         self.PTS=round(d,6)
       
     def parse_pusi(self, pdata):
@@ -114,5 +120,7 @@ class Stream:
             if self.chk_scte35(pkt):
                 packet_data = self.parse_header(pkt)
                 cue = Cue(pkt,packet_data)
-                if not func: sys.stderr.buffer.write(cue.get())
-                else: func(cue)
+                if not func:
+                    print(f'\033[92m{json.dumps(cue.get(),indent=2)}\033[00m', file=sys.stderr)
+                else:
+                    func(cue)
