@@ -235,6 +235,7 @@ curl -s https://futzu.com/xaa.ts -o -  \
   | python3 -c 'import sys;import threefive; threefive.Stream(sys.stdin.buffer).decode()' 
 ```
 
+[🡡 top](#threefive)
 ---
 
 ### Stream.decode_fast()
@@ -293,9 +294,11 @@ with open('../35.ts','rb') as tsdata:
   ]
 }
 
-
 ```
---
+
+[🡡 top](#threefive)
+
+---
 ###  Stream.decode_until_found()
 * Use the __Stream.decode_until_found__() method instead of __Stream.decode()__.
 * Returns __Cue__ instances when SCTE-35 packets are found.
@@ -326,34 +329,6 @@ if __name__ == '__main__':
 ```python3
 pid : 1055 command: Splice Insert @ 21951.133267 Out of Network: True
 pid : 1015 command: Splice Insert @ 22516.907656 Out of Network: True
-import threefive
-
-with open('../35.ts','rb') as tsdata:
-    threefive.Stream(tsdata).decode_fast()
-import threefive
-
-with open('../35.ts','rb') as tsdata:
-    threefive.Stream(tsdata).decode_fast()
-import threefive
-
-with open('../35.ts','rb') as tsdata:
-    threefive.Stream(tsdata).decode_fast()
-import threefive
-
-with open('../35.ts','rb') as tsdata:
-    threefive.Stream(tsdata).decode_fast()
-import threefive
-
-with open('../35.ts','rb') as tsdata:
-    threefive.Stream(tsdata).decode_fast()
-import threefive
-
-with open('../35.ts','rb') as tsdata:
-    threefive.Stream(tsdata).decode_fast()
-import threefive
-
-with open('../35.ts','rb') as tsdata:
-    threefive.Stream(tsdata).decode_fast()
 pid : 1055 command: Splice Insert @ 22026.133267 Out of Network: False
 pid : 1045 command: Splice Insert @ 22864.350067 Out of Network: True
 pid : 1015 command: Splice Insert @ 22696.907656 Out of Network: False
@@ -361,6 +336,9 @@ pid : 1045 command: Splice Insert @ 22960.350067 Out of Network: False
 pid : 1015 command: Splice Insert @ 23516.827656 Out of Network: True
 pid : 1015 command: Splice Insert @ 23696.827656 Out of Network: False
 ```
+
+[🡡 top](#threefive)
+
 ---
 
 ### Stream.proxy(func = None)
@@ -371,13 +349,10 @@ pid : 1015 command: Splice Insert @ 23696.827656 Out of Network: False
    cue instance.
 *  If func is not set, threefive.Cue.show() is called.
 
-
 ```python3
 
    import threefive
-   
-   # Name this proxy.py
-   
+      
    with open('vid.ts','rb') as tsdata:
       sp = threefive.Stream(tsdata)
       sp.proxy()
@@ -399,7 +374,6 @@ def display(cuep):
    print(f'\033[92m{json.dumps(cuep.get_command(),indent=2)}\033[00m', file=sys.stderr)
 
 def do():
-
    with open(sys.argv[1],'rb') as tsdata:
             sp = threefive.Stream(tsdata)
             cue = sp.proxy(func = display) 
