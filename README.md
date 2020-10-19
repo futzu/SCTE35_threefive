@@ -235,8 +235,6 @@ scte35.get_descriptors()
 curl -s https://futzu.com/xaa.ts -o -  \
   | python3 -c 'import sys;import threefive; threefive.Stream(sys.stdin.buffer).decode()' 
 ```
-
-[🡡 top](#threefive)
 ---
 
 ### Stream.decode_fast()
