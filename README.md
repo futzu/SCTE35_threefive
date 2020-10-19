@@ -30,8 +30,9 @@
           * [__Stream.decode()__](#Streamdecode)                                                                
                * [__Parse__ a Local File with a __Stream__ Instance](#parse-a-local-file-with-a-stream-instance)
                * [__Pipe__ a Video to a Stream __Instance__](#pipe-a-video-to-stream)
-          * [Stream__.decode_until_found()__](#Streamdecode_until_found)
-          * [Stream__.proxy(func=None)__](#Streamproxyfuncnone)
+          * [__Stream.decode_fast()__](#Streamdecode_fast)
+          * [__Stream.decode_until_found()__](#Streamdecode_until_found)
+          * [Stream.proxy(func=None)__](#Streamproxyfuncnone)
          
  *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
 
@@ -293,35 +294,7 @@ with open('../35.ts','rb') as tsdata:
 
 
 ```
----import threefive
-
-with open('../35.ts','rb') as tsdata:
-    threefive.Stream(tsdata).decode_fast()
-import threefive
-
-with open('../35.ts','rb') as tsdata:
-    threefive.Stream(tsdata).decode_fast()
-import threefive
-
-with open('../35.ts','rb') as tsdata:
-    threefive.Stream(tsdata).decode_fast()
-import threefive
-
-with open('../35.ts','rb') as tsdata:
-    threefive.Stream(tsdata).decode_fast()
-import threefive
-
-with open('../35.ts','rb') as tsdata:
-    threefive.Stream(tsdata).decode_fast()
-import threefive
-
-with open('../35.ts','rb') as tsdata:
-    threefive.Stream(tsdata).decode_fast()
-import threefive
-
-with open('../35.ts','rb') as tsdata:
-    threefive.Stream(tsdata).decode_fast()
-
+--
 ###  Stream.decode_until_found()
 * Use the __Stream.decode_until_found__() method instead of __Stream.decode()__.
 * Returns __Cue__ instances when SCTE-35 packets are found.
