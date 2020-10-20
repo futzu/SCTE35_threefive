@@ -3,6 +3,10 @@ import threefive
 import struct
 import io
 
+def foundit(cue):
+    print("Found SCTE-35:", cue.get())
+    print("--------------------------------")
+        
 class TSScte35Parser():
     # TODO: Add unicast / multicast flag or auto-detect based on IP CIDR
     def __init__(self, mcast_ip, if_ip="0.0.0.0", hostname="0.0.0.0", port=9000):
@@ -11,23 +15,16 @@ class TSScte35Parser():
         self.MCAST_IP = mcast_ip
         self.IF_IP = if_ip
 
-
     def run(self):
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP) as sock:
             self.set_socket_options(sock)
             sock.bind((self.HOST, self.PORT))
-
             with sock.makefile(mode="b") as socket_file:
-                while True:
-                    try:
-                        scte = threefive.Stream(socket_file).decode_until_found()
-                        if scte:
-                            print("Found SCTE-35:", scte)
-                            print("--------------------------------")
-                    except Exception as e:
-                        print("ERROR while decoding TS:", e)
-                        pass
-
+                try:
+                    threefive.Stream(socket_file).decode(func = foundit)
+                except Exception as e:
+                    print("ERROR while decoding TS:", e)
+                    pass
 
     def set_socket_options(self, sock):
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
