@@ -209,7 +209,7 @@ scte35.get_descriptors()
    * __tsdata__ is an open file handle or sys.stdin.buffer to read 'piped' in data.
    * __show_null__ if set to True, enables showing SCTE 35 null commands.
 
-### Stream.decode(func=show_cue)
+### Stream.decode(*func=show_cue)
 * Calls func when a SCTE-35 message is found
 *  The optional func arg allows a function
    to be used for custom handling of the SCTE-35
@@ -265,7 +265,7 @@ curl -s https://futzu.com/xaa.ts -o -  \
 ```
 ---
 
-### Stream.decode_pid(the_pid, func = None)
+### Stream.decode_pid(*the_pid, func = show_cue)
 * Use __Stream.decode_pid()__ instead of __Stream.decode()__ 
 to decode SCTE-35 from packets where pid == the_pid
 *  The optional func arg allows a function
@@ -283,7 +283,7 @@ with open('../35.ts','rb') as tsdata:
 [🡡 top](#threefive)
 ---
 
-### Stream.decode_proxy(func = show_cue)
+### Stream.decode_proxy(*func = show_cue)
 *  Writes all packets to sys.stdout.
 *  Writes scte35 data to sys.stderr.
 *  The optional func arg allows a function
