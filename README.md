@@ -24,8 +24,8 @@
 *  [Advanced __threefive__](#advanced-threefive)
      *  [__Cue__ Class](#cue-class)
           * [Print SCTE-35 as JSON](#print-scte-35-as-json)
-          * [Return SCTE-35 as dict](#return-scte-35-as-dict)
-       
+          * [Return SCTE-35 as dict](#return-scte-35-as-dict)   
+          
      * [__Stream__ Class](#stream-class)
           * [__Stream.decode(func=show_cue)__](#streamdecodefuncshow_cue)                                                                
                * [__Parse__ a Local File with a __Stream__ Instance](#parse-a-local-file-with-a-stream-instance)
@@ -62,7 +62,8 @@
 ## __Changes__
    *  Splice class has been renamed Cue. See [Cue](#cue-class)
    *  Stream, StreamPlus, and StreamProxy classes have been consolidated. See [Stream](#stream-class)
-
+   *  Stream.decode, Stream.decode_pid, and Stream.decode_proxy now all take an optional function as an arg. 
+   * 
 ---
 
 ## Fast __Start__
@@ -145,10 +146,10 @@ threefive.decode(hexed)
 
  [🡡 top](#threefive)
  
----
+
 :rocket:
 #  __Advanced__ threefive 
----
+
 ##  __Cue__ Class
    *  source [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
@@ -206,17 +207,17 @@ scte35.get_descriptors()
 ```python3
   threefive.Stream(tsdata, show_null = False)
   ```
-   * __tsdata__ is an open file handle or sys.stdin.buffer to read 'piped' in data.
-   * __show_null__ if set to True, enables showing SCTE 35 null commands.
+   * __tsdata__ is an open file handle or __sys.stdin.buffer__ to read 'piped' in data.
+   * __show_null__ if set to __True__, enables showing SCTE 35 __null commands__.
 
 ### ```Stream.decode(func=show_cue)```
-* Calls func when a SCTE-35 message is found
-*  The optional func arg allows a function
+* Calls __func__ when a SCTE-35 message is found
+*  The optional __func__ arg allows a function
    to be used for custom handling of the SCTE-35
-   cue instance.
-*  If func is not set, threefive.Cue.show() is called.
+   __cue__ instance.
+*  If __func__ is not set, __threefive.Cue.show()__ is called.
 
-*  the function should match the interface
+*  __func__ should match the interface
 ```
     func(cue)
 ```
@@ -233,10 +234,8 @@ def display(cue):
 
 def do():
    with open(sys.argv[1],'rb') as tsdata:
-            sp = threefive.Stream(tsdata)
-            cue = sp.decode(func = display) 
-            if not cue :
-                sys.exit()
+    sp = threefive.Stream(tsdata)
+    sp.decode(func = display)       
 
 if __name__ == '__main__':
     do()
@@ -263,15 +262,14 @@ if __name__ == '__main__':
 curl -s https://futzu.com/xaa.ts -o -  \
   | python3 -c 'import sys;import threefive; threefive.Stream(sys.stdin.buffer).decode()' 
 ```
----
 
 ### ```Stream.decode_pid(the_pid, func = show_cue)```
 * Use __Stream.decode_pid()__ instead of __Stream.decode()__ 
-to decode SCTE-35 from packets where pid == the_pid
-*  The optional func arg allows a function
+to decode SCTE-35 from packets where pid == __the_pid__
+*  The optional __func__ arg allows a function
    to be used for custom handling of the SCTE-35
-   cue instance.
-*  If func is not set, threefive.Cue.show() is called.
+   __cue__ instance.
+*  If __func__ is not set, __threefive.Cue.show()__ is called.
 
 ```python3
 import threefive
@@ -280,16 +278,13 @@ with open('../35.ts','rb') as tsdata:
     threefive.Stream(tsdata).decode_pid(1035)
 ```
 
-[🡡 top](#threefive)
----
-
 ### ```Stream.decode_proxy(func = show_cue)```
-*  Writes all packets to sys.stdout.
-*  Writes scte35 data to sys.stderr.
-*  The optional func arg allows a function
+*  Writes all packets to __sys.stdout__.
+*  Writes scte35 data to __sys.stderr__.
+*  The optional __func__ arg allows a function
    to be used for custom handling of the SCTE-35
-   cue instance.
-*  If func is not set, threefive.Cue.show() is called.
+   __cue__ instance.
+*  If __func__ is not set, __threefive.Cue.show()__ is called.
 
 ```python3
 
@@ -300,7 +295,7 @@ with open('../35.ts','rb') as tsdata:
       sp.proxy_decode()
 ```
 
-* Pipe to mplayer
+* Pipe to __mplayer__
 ```
 python3 proxy.py | mplayer -
 ```
