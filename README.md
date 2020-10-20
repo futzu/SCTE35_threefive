@@ -30,8 +30,9 @@
           * [__Stream.decode()__](#Streamdecode)                                                                
                * [__Parse__ a Local File with a __Stream__ Instance](#parse-a-local-file-with-a-stream-instance)
                * [__Pipe__ a Video to a Stream __Instance__](#pipe-a-video-to-stream)
-          * [Stream__.decode_until_found()__](#Streamdecode_until_found)
-          * [Stream__.proxy(func=None)__](#Streamproxyfuncnone)
+          * [__Stream.decode_fast()__](#Streamdecode_fast)
+          * [__Stream.decode_until_found()__](#Streamdecode_until_found)
+          * [__Stream.proxy(func=None)__](#Streamproxyfuncnone)
          
  *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
 
@@ -145,6 +146,7 @@ threefive.decode(hexed)
 
  [🡡 top](#threefive)
  
+---
 
 #  __Advanced__ threefive
 ---
@@ -221,7 +223,8 @@ scte35.get_descriptors()
  
  if __name__ =='__main__':
     with open(sys.argv[1],'rb') as tsdata:
-        Stream(tsdata).decode()
+        sp = Stream(tsdata)
+        sp.decode()
 
 ```
 
@@ -232,6 +235,67 @@ scte35.get_descriptors()
 curl -s https://futzu.com/xaa.ts -o -  \
   | python3 -c 'import sys;import threefive; threefive.Stream(sys.stdin.buffer).decode()' 
 ```
+---
+
+### Stream.decode_fast()
+* Use __Stream.decode_fast()__ instead of __Stream.decode()__ 
+if you don't need any packet data like pts or pid.
+* Calls __Cue.show()__ when a SCTE-35 message is found.
+
+```python3
+import threefive
+
+with open('../35.ts','rb') as tsdata:
+    threefive.Stream(tsdata).decode_fast()
+```
+   *   __Output__
+```js
+{
+  "info_section": {
+    "table_id": "0xfc",
+    "section_syntax_indicator": false,
+    "private": false,
+    "reserved": "0x3",
+    "section_length": 42,
+    "protocol_version": 0,
+    "encrypted_packet": false,
+    "encryption_algorithm": 0,
+    "pts_adjustment": 0.0,
+    "cw_index": "0x0",
+    "tier": "0xfff",
+    "splice_command_length": 4095,
+    "splice_command_type": 5,
+    "descriptor_loop_length": 10,
+    "crc": "0xfc302a00"
+  },
+  "command": {
+    "name": "Splice Insert",
+    "splice_event_id": 662,
+    "splice_event_cancel_indicator": false,
+    "out_of_network_indicator": false,
+    "program_splice_flag": true,
+    "duration_flag": false,
+    "splice_immediate_flag": false,
+    "time_specified_flag": true,
+    "pts_time": 89984.161689,
+    "unique_program_id": 1,
+    "avail_num": 0,
+    "avail_expected": 0
+  },
+  "descriptors": [
+    {
+      "tag": 0,
+      "identifier": "CUEI",
+      "name": "Avail Descriptor",
+      "provider_avail_id": 0,
+      "descriptor_length": 8
+    }
+  ]
+}
+
+```
+
+[🡡 top](#threefive)
 ---
 
 ###  Stream.decode_until_found()
@@ -261,7 +325,7 @@ if __name__ == '__main__':
 
 ```
    *   __Output__
-```python
+```python3
 pid : 1055 command: Splice Insert @ 21951.133267 Out of Network: True
 pid : 1015 command: Splice Insert @ 22516.907656 Out of Network: True
 pid : 1055 command: Splice Insert @ 22026.133267 Out of Network: False
@@ -271,6 +335,9 @@ pid : 1045 command: Splice Insert @ 22960.350067 Out of Network: False
 pid : 1015 command: Splice Insert @ 23516.827656 Out of Network: True
 pid : 1015 command: Splice Insert @ 23696.827656 Out of Network: False
 ```
+
+[🡡 top](#threefive)
+
 ---
 
 ### Stream.proxy(func = None)
@@ -281,13 +348,10 @@ pid : 1015 command: Splice Insert @ 23696.827656 Out of Network: False
    cue instance.
 *  If func is not set, threefive.Cue.show() is called.
 
-
 ```python3
 
    import threefive
-   
-   # Name this proxy.py
-   
+      
    with open('vid.ts','rb') as tsdata:
       sp = threefive.Stream(tsdata)
       sp.proxy()
@@ -309,7 +373,6 @@ def display(cuep):
    print(f'\033[92m{json.dumps(cuep.get_command(),indent=2)}\033[00m', file=sys.stderr)
 
 def do():
-
    with open(sys.argv[1],'rb') as tsdata:
             sp = threefive.Stream(tsdata)
             cue = sp.proxy(func = display) 
@@ -327,3 +390,106 @@ python3 proxy.py | mplayer -
 ```
 
 [🡡 top](#threefive)
+    utput
+
+{
+  "info_section": {
+    "table_id": "0xfc",
+    "section_syntax_indicator": false,
+    "private": false,
+    "reserved": "0x3",
+    "section_length": 42,
+    "protocol_version": 0,
+    "encrypted_packet": false,
+    "encryption_algorithm": 0,
+    "pts_adjustment": 0.0,
+    "cw_index": "0x0",
+    "tier": "0xfff",
+    "splice_command_length": 4095,
+    "splice_command_type": 5,
+    "descriptor_loop_length": 10,
+    "crc": "0xfc302a00"
+  },
+  "command": {
+    "name": "Splice Insert",
+    "splice_event_id": 662,
+    "splice_event_cancel_indicator": false,
+    "out_of_network_indicator": false,
+    "program_splice_flag": true,
+    "duration_flag": false,
+    "splice_immediate_flag": false,
+    "time_specified_flag": true,
+    "pts_time": 89984.161689,
+    "unique_program_id": 1,
+    "avail_num": 0,
+    "avail_expected": 0
+  },
+  "descriptors"    utput
+
+{
+  "info_section": {
+    "table_id": "0xfc",
+    "section_syntax_indicator": false,
+    "private": false,
+    "reserved": "0x3",
+    "section_length": 42,
+    "protocol_version": 0,
+    "encrypted_packet": false,
+    "encryption_algorithm": 0,
+    "pts_adjustment": 0.0,
+    "cw_index": "0x0",
+    "tier": "0xfff",
+    "splice_command_length": 4095,
+    "splice_command_type": 5,
+    "descriptor_loop_length": 10,
+    "crc": "0xfc302a00"
+  },
+  "command": {
+    "name": "Splice Insert",
+    "splice_event_id": 662,
+    "splice_event_cancel_indicator": false,
+    "out_of_network_indicator": false,
+    "program_splice_flag": true,
+    "duration_flag": false,
+    "splice_immediate_flag": false,
+    "time_specified_flag": true,
+    "pts_time": 89984.161689,
+    "unique_program_id": 1,
+    "avail_num": 0,
+    "avail_expected": 0
+  },
+  "descriptors"    utput
+
+{
+  "info_section": {
+    "table_id": "0xfc",
+    "section_syntax_indicator": false,
+    "private": false,
+    "reserved": "0x3",
+    "section_length": 42,
+    "protocol_version": 0,
+    "encrypted_packet": false,
+    "encryption_algorithm": 0,
+    "pts_adjustment": 0.0,
+    "cw_index": "0x0",
+    "tier": "0xfff",
+    "splice_command_length": 4095,
+    "splice_command_type": 5,
+    "descriptor_loop_length": 10,
+    "crc": "0xfc302a00"
+  },
+  "command": {
+    "name": "Splice Insert",
+    "splice_event_id": 662,
+    "splice_event_cancel_indicator": false,
+    "out_of_network_indicator": false,
+    "program_splice_flag": true,
+    "duration_flag": false,
+    "splice_immediate_flag": false,
+    "time_specified_flag": true,
+    "pts_time": 89984.161689,
+    "unique_program_id": 1,
+    "avail_num": 0,
+    "avail_expected": 0
+  },
+  "descriptors"
