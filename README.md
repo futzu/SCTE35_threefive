@@ -27,11 +27,11 @@
           * [Return SCTE-35 as dict](#return-scte-35-as-dict)
        
      * [__Stream__ Class](#stream-class)
-          * [__Stream.decode()__](#Streamdecode)                                                                
+          * [__Stream.decode(func=show_cue)__](#streamdecodefuncshow_cue)                                                                
                * [__Parse__ a Local File with a __Stream__ Instance](#parse-a-local-file-with-a-stream-instance)
                * [__Pipe__ a Video to a Stream __Instance__](#pipe-a-video-to-stream)
-          * [__Stream.decode_pid()__](#Streamdecode_pid)
-          * [__Stream.decode_proxy(func=None)__](#Streamdecodeproxyfuncnone)
+          * [__Stream.decode_pid(the_pid,func=show_cue)__](#streamdecode_pidthe_pid-func--show_cue)
+          * [__Stream.decode_proxy(func=show_cue)__](#Streamdecodeproxyfuncnone)
          
  *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
 
@@ -146,8 +146,8 @@ threefive.decode(hexed)
  [🡡 top](#threefive)
  
 ---
-
-#  __Advanced__ threefive
+:rocket
+#  __Advanced__ threefive 
 ---
 ##  __Cue__ Class
    *  source [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
