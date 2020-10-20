@@ -17,8 +17,7 @@ python3 proxydemo.py video.ts | mplayer -
 def do():
    with open(sys.argv[1],'rb') as tsdata:
       st = Stream(tsdata)
-      st.proxy() 
+      st.decode_proxy() 
    
 if __name__ == '__main__':
     do()
-
