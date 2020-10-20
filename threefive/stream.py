@@ -100,7 +100,7 @@ class Stream:
         Stream.parse_pts(bites) parses pts from bites.  
         '''
         pts  =  ((bites[0] >> 1) & 7) << 30
-        pts += (((bites[1] << 7) + (bites[2] >> 1)) <<15)
+        pts += (((bites[1] << 7) + (bites[2] >> 1)) << 15)
         pts +=   (bites[3] << 7) + (bites[4] >> 1) 
         pts /= 90000.0
         self.PTS=round(pts,6)
