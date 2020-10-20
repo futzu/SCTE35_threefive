@@ -30,9 +30,8 @@
           * [__Stream.decode()__](#Streamdecode)                                                                
                * [__Parse__ a Local File with a __Stream__ Instance](#parse-a-local-file-with-a-stream-instance)
                * [__Pipe__ a Video to a Stream __Instance__](#pipe-a-video-to-stream)
-          * [__Stream.decode_fast()__](#Streamdecode_fast)
-          * [__Stream.decode_until_found()__](#Streamdecode_until_found)
-          * [__Stream.proxy(func=None)__](#Streamproxyfuncnone)
+          * [__Stream.decode_pid()__](#Streamdecode_pid)
+          * [__Stream.decode_proxy(func=None)__](#Streamdecodeproxyfuncnone)
          
  *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
 
@@ -210,9 +209,38 @@ scte35.get_descriptors()
    * __tsdata__ is an open file handle or sys.stdin.buffer to read 'piped' in data.
    * __show_null__ if set to True, enables showing SCTE 35 null commands.
 
-### Stream.decode()
-* Calls __Cue.show()__ when a SCTE-35 message is found
+### Stream.decode(func=show_cue)
+* Calls func when a SCTE-35 message is found
+*  The optional func arg allows a function
+   to be used for custom handling of the SCTE-35
+   cue instance.
+*  If func is not set, threefive.Cue.show() is called.
 
+*  the function should match the interface
+```
+    func(cue)
+```
+* cue is an instance of __threefive.Cue__
+
+```python3
+import sys
+import threefive
+import json
+
+def display(cue):
+   print(f'\033[92m{json.dumps(vars(cue.packet_data))}\033[00m')
+   print(f'\033[92m{json.dumps(cuep.get_command(),indent=2)}\033[00m')
+
+def do():
+   with open(sys.argv[1],'rb') as tsdata:
+            sp = threefive.Stream(tsdata)
+            cue = sp.decode(func = display) 
+            if not cue :
+                sys.exit()
+
+if __name__ == '__main__':
+    do()
+```
  #### ```Parse a Local File with a Stream Instance```
  
  ```python3
@@ -237,110 +265,25 @@ curl -s https://futzu.com/xaa.ts -o -  \
 ```
 ---
 
-### Stream.decode_fast()
-* Use __Stream.decode_fast()__ instead of __Stream.decode()__ 
-if you don't need any packet data like pts or pid.
-* Calls __Cue.show()__ when a SCTE-35 message is found.
+### Stream.decode_pid(the_pid, func = None)
+* Use __Stream.decode_pid()__ instead of __Stream.decode()__ 
+to decode SCTE-35 from packets where pid == the_pid
+*  The optional func arg allows a function
+   to be used for custom handling of the SCTE-35
+   cue instance.
+*  If func is not set, threefive.Cue.show() is called.
 
 ```python3
 import threefive
 
 with open('../35.ts','rb') as tsdata:
-    threefive.Stream(tsdata).decode_fast()
-```
-   *   __Output__
-```js
-{
-  "info_section": {
-    "table_id": "0xfc",
-    "section_syntax_indicator": false,
-    "private": false,
-    "reserved": "0x3",
-    "section_length": 42,
-    "protocol_version": 0,
-    "encrypted_packet": false,
-    "encryption_algorithm": 0,
-    "pts_adjustment": 0.0,
-    "cw_index": "0x0",
-    "tier": "0xfff",
-    "splice_command_length": 4095,
-    "splice_command_type": 5,
-    "descriptor_loop_length": 10,
-    "crc": "0xfc302a00"
-  },
-  "command": {
-    "name": "Splice Insert",
-    "splice_event_id": 662,
-    "splice_event_cancel_indicator": false,
-    "out_of_network_indicator": false,
-    "program_splice_flag": true,
-    "duration_flag": false,
-    "splice_immediate_flag": false,
-    "time_specified_flag": true,
-    "pts_time": 89984.161689,
-    "unique_program_id": 1,
-    "avail_num": 0,
-    "avail_expected": 0
-  },
-  "descriptors": [
-    {
-      "tag": 0,
-      "identifier": "CUEI",
-      "name": "Avail Descriptor",
-      "provider_avail_id": 0,
-      "descriptor_length": 8
-    }
-  ]
-}
-
+    threefive.Stream(tsdata).decode_pid(1035)
 ```
 
 [🡡 top](#threefive)
 ---
 
-###  Stream.decode_until_found()
-* Use the __Stream.decode_until_found__() method instead of __Stream.decode()__.
-* Returns __Cue__ instances when SCTE-35 packets are found.
-* Allows for customized SCTE-35 message handling.
-
-```python
-import sys
-from threefive import Stream
-
-def do():
-   with open(sys.argv[1],'rb') as tsdata:
-         while True:
-            cuep = Stream(tsdata).decode_until_found() 
-            if not cuep :
-                sys.exit()
-            else:
-            # Customized output
-               print('pid :',cuep.header.pid, 'command:',
-                     cuep.command.name,'@',cuep.command.pts_time,
-                     'Out of Network:',
-                     cuep.command.out_of_network_indicator)
-
-if __name__ == '__main__':
-    do()
-
-```
-   *   __Output__
-```python3
-pid : 1055 command: Splice Insert @ 21951.133267 Out of Network: True
-pid : 1015 command: Splice Insert @ 22516.907656 Out of Network: True
-pid : 1055 command: Splice Insert @ 22026.133267 Out of Network: False
-pid : 1045 command: Splice Insert @ 22864.350067 Out of Network: True
-pid : 1015 command: Splice Insert @ 22696.907656 Out of Network: False
-pid : 1045 command: Splice Insert @ 22960.350067 Out of Network: False
-pid : 1015 command: Splice Insert @ 23516.827656 Out of Network: True
-pid : 1015 command: Splice Insert @ 23696.827656 Out of Network: False
-```
-
-[🡡 top](#threefive)
-
----
-
-### Stream.proxy(func = None)
+### Stream.decode_proxy(func = show_cue)
 *  Writes all packets to sys.stdout.
 *  Writes scte35 data to sys.stderr.
 *  The optional func arg allows a function
@@ -354,34 +297,7 @@ pid : 1015 command: Splice Insert @ 23696.827656 Out of Network: False
       
    with open('vid.ts','rb') as tsdata:
       sp = threefive.Stream(tsdata)
-      sp.proxy()
-```
-
-*  the function should match the interface
-```
-    func(cuep)
-```
-* cuep is an instance of __threefive.Cue__
-
-```python3
-import sys
-import threefive
-import json
-
-def display(cuep):
-   print(f'\033[92m{json.dumps(vars(cuep.header))}\033[00m', file=sys.stderr,end='\r')
-   print(f'\033[92m{json.dumps(cuep.get_command(),indent=2)}\033[00m', file=sys.stderr)
-
-def do():
-   with open(sys.argv[1],'rb') as tsdata:
-            sp = threefive.Stream(tsdata)
-            cue = sp.proxy(func = display) 
-            if not cue :
-                sys.exit()
-
-if __name__ == '__main__':
-    do()
-
+      sp.proxy_decode()
 ```
 
 * Pipe to mplayer
@@ -390,106 +306,3 @@ python3 proxy.py | mplayer -
 ```
 
 [🡡 top](#threefive)
-    utput
-
-{
-  "info_section": {
-    "table_id": "0xfc",
-    "section_syntax_indicator": false,
-    "private": false,
-    "reserved": "0x3",
-    "section_length": 42,
-    "protocol_version": 0,
-    "encrypted_packet": false,
-    "encryption_algorithm": 0,
-    "pts_adjustment": 0.0,
-    "cw_index": "0x0",
-    "tier": "0xfff",
-    "splice_command_length": 4095,
-    "splice_command_type": 5,
-    "descriptor_loop_length": 10,
-    "crc": "0xfc302a00"
-  },
-  "command": {
-    "name": "Splice Insert",
-    "splice_event_id": 662,
-    "splice_event_cancel_indicator": false,
-    "out_of_network_indicator": false,
-    "program_splice_flag": true,
-    "duration_flag": false,
-    "splice_immediate_flag": false,
-    "time_specified_flag": true,
-    "pts_time": 89984.161689,
-    "unique_program_id": 1,
-    "avail_num": 0,
-    "avail_expected": 0
-  },
-  "descriptors"    utput
-
-{
-  "info_section": {
-    "table_id": "0xfc",
-    "section_syntax_indicator": false,
-    "private": false,
-    "reserved": "0x3",
-    "section_length": 42,
-    "protocol_version": 0,
-    "encrypted_packet": false,
-    "encryption_algorithm": 0,
-    "pts_adjustment": 0.0,
-    "cw_index": "0x0",
-    "tier": "0xfff",
-    "splice_command_length": 4095,
-    "splice_command_type": 5,
-    "descriptor_loop_length": 10,
-    "crc": "0xfc302a00"
-  },
-  "command": {
-    "name": "Splice Insert",
-    "splice_event_id": 662,
-    "splice_event_cancel_indicator": false,
-    "out_of_network_indicator": false,
-    "program_splice_flag": true,
-    "duration_flag": false,
-    "splice_immediate_flag": false,
-    "time_specified_flag": true,
-    "pts_time": 89984.161689,
-    "unique_program_id": 1,
-    "avail_num": 0,
-    "avail_expected": 0
-  },
-  "descriptors"    utput
-
-{
-  "info_section": {
-    "table_id": "0xfc",
-    "section_syntax_indicator": false,
-    "private": false,
-    "reserved": "0x3",
-    "section_length": 42,
-    "protocol_version": 0,
-    "encrypted_packet": false,
-    "encryption_algorithm": 0,
-    "pts_adjustment": 0.0,
-    "cw_index": "0x0",
-    "tier": "0xfff",
-    "splice_command_length": 4095,
-    "splice_command_type": 5,
-    "descriptor_loop_length": 10,
-    "crc": "0xfc302a00"
-  },
-  "command": {
-    "name": "Splice Insert",
-    "splice_event_id": 662,
-    "splice_event_cancel_indicator": false,
-    "out_of_network_indicator": false,
-    "program_splice_flag": true,
-    "duration_flag": false,
-    "splice_immediate_flag": false,
-    "time_specified_flag": true,
-    "pts_time": 89984.161689,
-    "unique_program_id": 1,
-    "avail_num": 0,
-    "avail_expected": 0
-  },
-  "descriptors"
