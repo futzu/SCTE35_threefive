@@ -112,7 +112,7 @@ class Stream:
         '''
         if pdata[2] == 1: 
             if pdata[3] not in self.no_pts_stream_ids:  
-                if (pdata[6] >> 6) == 2: 
-                    if (pdata[7] >> 6) == 2:
-                        if (pdata[9] >> 4) == 2: 
+                if (pdata[6] >> 6) & 2: 
+                    if (pdata[7] >> 6) & 2:
+                        if (pdata[9] >> 4) & 2: 
                             self.parse_pts(pdata[9:])
