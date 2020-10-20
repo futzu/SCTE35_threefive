@@ -1,4 +1,5 @@
 import json
+import sys
 
 from base64 import b64decode
 from bitn import BitBin
@@ -82,7 +83,7 @@ class Cue:
         return {k: v for k, v in obj.items() if v is not None}
 
     def kv_print(self, obj):
-        print(json.dumps(obj,indent = 2))
+        print(json.dumps(obj,indent = 2), file=sys.stderr)
 
     def mk_bits(self, s):
         '''
