@@ -146,7 +146,7 @@ threefive.decode(hexed)
  [🡡 top](#threefive)
  
 ---
-:rocket
+:rocket:
 #  __Advanced__ threefive 
 ---
 ##  __Cue__ Class
