@@ -173,12 +173,12 @@ cue.show()
 
   * The __threefive.Stream__ class parses SCTE35 messages from a file or stream.
   * __init__
-```python3
+ ```python3
   threefive.Stream(tsdata, show_null = False)
   ```
-   *  *__tsdata__ is an open file handle or __sys.stdin.buffer__ to read 'piped' in data.
+     *  __tsdata__ is an open file handle or __sys.stdin.buffer__ to read 'piped' in data.
    
-   *  *__show_null__ if set to __True__, enables showing SCTE 35 __null commands__.
+     *  __show_null__ if set to __True__, enables showing SCTE 35 __null commands__.
    
    * __Methods__
    
@@ -218,7 +218,7 @@ curl -s https://futzu.com/xaa.ts -o -  \
 
 ######  Pass in custom function 
 
-    *  __func__ should match the interface
+   *  __func__ should match the interface
 ```
     func(cue)
 ```
