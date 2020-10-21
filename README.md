@@ -24,9 +24,9 @@
 
 *  [Advanced __threefive__](#advanced-threefive)
      *  [__Cue__ Class](#cue-class)
-          * [Return cue as dict](#return-cue-as-dict)   
-          * [Return cue as JSON](#return-cue-as-json)   
-          * [Print cue as JSON](#print-cue-as-json)   
+          * [Return __Cue__ instance as __dict__](#return-cue-as-dict)   
+          * [Return __Cue__ instance as __JSON__](#return-cue-as-json)   
+          * [Print __Cue__ instance as __JSON__](#print-cue-as-json)   
 
      * [__Stream__ Class](#stream-class)
           * [__Stream.decode(func=show_cue)__](#streamdecodefuncshow_cue)                                                                
@@ -34,8 +34,7 @@
                * [__Pipe__ a Video to a Stream __Instance__](#pipe-a-video-to-stream-instance)
           * [Stream.__decode_next()__](#streamdecode_next)
           * [Stream.__decode_pid(the_pid,func=show_cue)__](#streamdecode_pidthe_pid-func--show_cue)
-          * [Stream.__decode_proxy(func=show_cue)__](#Streamdecodeproxyfuncnone)
-          
+          * [Stream.__decode_proxy(func=show_cue)__](#Streamdecodeproxyfuncnone)    
          
  *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
 
@@ -70,14 +69,11 @@
    *  Stream.decode_until_found() is now [__Stream.decode_next()__](#streamdecode_next)
 ---
 
-## Fast __Start__
-
+## Fast __Start_
 *  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
-
 ### Dependencies 
 *  Python 3.6+ or pypy3
 *  [__bitn__](https://github.com/futzu/bitn)
-     
 ### Install 
 *    __git__ 
 ```sh
@@ -95,20 +91,14 @@ make pypy3
 
 ```
 
-*  __pip3__
+*  __pip__
 
 ```sh
 pip3 install threefive
 
-```
-
-   *    __pip3 and pypy3__
-
-```
 # If you don't have pip installed, try this.
 
 pypy3 -mensurepip install pip 
-
 
 pypy3 -mpip install threefive
 ```
@@ -199,7 +189,7 @@ cue.show()
  [🡡 top](#threefive)
 
 ---
-##  __Stream__ Class 
+##  __Stream__ Class :+1: 
   * source [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
 
   * The __threefive.Stream__ class parses SCTE35 messages from a file or stream.
