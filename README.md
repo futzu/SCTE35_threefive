@@ -181,7 +181,9 @@ cue.show()
    * __show_null__ if set to __True__, enables showing SCTE 35 __null commands__.
    
    * __Methods__
-method                              | Description
+   
+   
+Method                              | Description
 ------------------------------------| -------------------------------------
 Stream.__decode__(*func = show_cue*)             | Prints SCTE-35 cues for SCTE-35 packets. 
 Stream.__decode_next()__                       | Returns a Cue instance for a SCTE-35 packet
@@ -189,9 +191,9 @@ Stream.__decode_pid__(*the_pid,func = show_cue*) | Prints SCTE-35 cues for packe
 Stream.__decode_proxy__(*func = show_cue*)       | Prints SCTE-35 cues to stderr and raw packets are written to stdout
 
 
-##### Stream.decode(func=show_cue)
+#### Stream.decode(func=show_cue)
 
-###### ```Parse a Local File with a Stream Instance```
+###### Parse a Local File with a Stream Instance
  
  ```python3
  
@@ -206,7 +208,7 @@ Stream.__decode_proxy__(*func = show_cue*)       | Prints SCTE-35 cues to stderr
 
 ```
 
-###### ```Pipe a Video to Stream```
+###### Pipe a Video to Stream
 
 ```sh
 
@@ -216,17 +218,13 @@ curl -s https://futzu.com/xaa.ts -o -  \
 
 * Calls __func__ when a SCTE-35 message is found
 
-*  The optional __func__ arg allows a function
-   to be used for custom handling of the SCTE-35
-   __cue__ instance.
+*   *   If __func__ is not set, __threefive.Cue.show()__ is called.
 
-*  If __func__ is not set, __threefive.Cue.show()__ is called.
-
-*  __func__ should match the interface
+*   *  __func__ should match the interface
 ```
     func(cue)
 ```
-* cue is an instance of __threefive.Cue__
+*  *  cue is an instance of __threefive.Cue__
 
 ```python3
 import sys
@@ -247,7 +245,7 @@ if __name__ == '__main__':
 ```
 
 
-### ```Stream.decode_next()```
+#### Stream.decode_next()
 
 * Returns a threefive.Cue instance when a SCTE-35 packet is found.
 ```python3
@@ -273,14 +271,11 @@ if __name__ == '__main__':
 ```
 * [Stream.__decode_next()__ multicast __example__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/ts_scte_parser.py)
 
-### ```Stream.decode_pid(the_pid, func = show_cue)```
+
+#### Stream.decode_pid(the_pid, func = show_cue)
 
 * Use Stream.__decode_pid()__ instead of Stream.__decode()__ 
 to decode SCTE-35 from packets where pid == __the_pid__
-
-*  The optional __func__ arg allows a function
-   to be used for custom handling of the SCTE-35
-   __cue__ instance.
 
 ```python3
 import threefive
@@ -295,10 +290,6 @@ with open('../35.ts','rb') as tsdata:
 
 *  Writes scte35 data to __sys.stderr__.
 
-*  The optional __func__ arg allows a function
-   to be used for custom handling of the SCTE-35
-   __cue__ instance.
-   
 ```python3
 
    import threefive
