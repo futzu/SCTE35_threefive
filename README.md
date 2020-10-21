@@ -163,40 +163,37 @@ from threefive import Cue
 
 b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAABl/nwgIAAAAACyk26AQAACZcuND"
 
-scte35 = Cue(B64)
+cue = Cue(B64)
 ```
-#### __Print__ SCTE-35 as JSON 
+#### Return cue __as dict__
 
 ```python
 
-scte35.show()
+cue.get()
 
 # Splice Info Section
-scte35.show_info_section()
+cue.get_info_section()
 
 # Splice Command
-scte35.show_command()
+cue.get_command()
 
 # Splice Descriptors
-scte35.show_descriptors()
-```    
-
-#### Return SCTE 35 __as dict__
-
-```python
-
-scte35.get()
-
-# Splice Info Section
-scte35.get_info_section()
-
-# Splice Command
-scte35.get_command()
-
-# Splice Descriptors
-scte35.get_descriptors()
+cue.get_descriptors()
 
 ````
+#### Return cue as JSON
+```
+jason = cue.get_json()
+
+```
+
+#### Print cue as JSON 
+
+```python
+
+cue.show()
+
+```    
 
  [🡡 top](#threefive)
 
