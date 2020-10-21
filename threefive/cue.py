@@ -40,7 +40,7 @@ class Cue:
     
     def descriptor_loop(self):
         '''
-        Cue.descriptor_loop 
+        Cue.descriptor_loop()
         parses all splice descriptors
         '''
         dll = self.info_section.descriptor_loop_length
@@ -55,35 +55,37 @@ class Cue:
 
     def get(self):
         '''
-        Returns a dict of 
-        the SCTE 35 message data.
+        Cue.get()
+        returns a clean dict of the SCTE 35 message data.
         '''
         scte35 = {}
-        if len(self.packet_data.keys()) > 0:
-            scte35['packet_data'] = self.kv_clean(self.packet_data)
+        scte35['packet_data'] = self.get_packet_data()
         scte35['info_section'] = self.get_info_section()
         scte35['command'] = self.get_command()
-        if len(self.descriptors)  > 0:
-                scte35['descriptors'] = self.get_descriptors()
-        return scte35
+        scte35['descriptors'] = self.get_descriptors()
+        return self.clean(scte35)
 
     def get_command(self):
-        return self.kv_clean(vars(self.command))
+        '''
+        Cue.get_command() 
+        returns a clean dict of Cue.command
+        '''
+        return self.clean(vars(self.command))
 
     def get_descriptors(self):
-        return [self.kv_clean(vars(d)) for d in self.descriptors]
-
+        return [self.clean(vars(d)) for d in self.descriptors]
+  
     def get_info_section(self):
-        return self.kv_clean(vars(self.info_section))       
+        return self.clean(vars(self.info_section))       
+
+    def get_packet_data(self):
+        return self.clean(self.packet_data)
     
-    def kv_clean(self,obj):
+    def clean(self,obj):
         '''
-        kv_clean removes items from a dict if the value is None
+        clean removes items from a dict if the value is None
         '''
         return {k: v for k, v in obj.items() if v is not None}
-
-    def kv_print(self, obj):
-        print(json.dumps(obj,indent = 2), file=sys.stderr)
 
     def mk_bits(self, s):
         '''
@@ -146,22 +148,4 @@ class Cue:
         '''
         pretty prints the SCTE 35 message
         '''
-        self.kv_print(self.get())
-
-    def show_command(self):
-        '''
-        pretty prints SCTE 35 splice command
-        '''
-        self.kv_print(self.get_command())
-
-    def show_descriptors(self):
-        '''
-        pretty prints SCTE 35 splice descriptors
-        '''
-        self.kv_print(self.get_descriptors())
-
-    def show_info_section(self):
-        '''
-        pretty prints SCTE 35 splice info section
-        '''
-        self.kv_print(self.get_info_section())
+        print(json.dumps(self.get(),indent = 2), file = sys.stderr)
