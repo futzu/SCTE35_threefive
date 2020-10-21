@@ -1,3 +1,4 @@
+
 # threefive
 ## SCTE35 Decoder
   * All __2019__ SCTE-35 __Splice Commands__ and __Splice Descriptors__ are Fully Supported.
@@ -32,6 +33,7 @@
                * [__Pipe__ a Video to a Stream __Instance__](#pipe-a-video-to-stream)
           * [__Stream.decode_pid(the_pid,func=show_cue)__](#streamdecode_pidthe_pid-func--show_cue)
           * [__Stream.decode_proxy(func=show_cue)__](#Streamdecodeproxyfuncnone)
+          
          
  *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
 
@@ -209,6 +211,15 @@ scte35.get_descriptors()
   ```
    * __tsdata__ is an open file handle or __sys.stdin.buffer__ to read 'piped' in data.
    * __show_null__ if set to __True__, enables showing SCTE 35 __null commands__.
+
+method                              | Description
+------------------------------------| -------------------------------------
+__Stream.decode__(*func = show_cue*)             | Prints SCTE-35 cues for SCTE-35 packets. 
+__Stream.decode_next()__                       | Returns a Cue instance for a SCTE-35 packet
+__Stream.decode_pid__(*the_pid,func = show_cue*) | Prints SCTE-35 cues for packets where pid == __the_pid__
+__Stream.decode_proxy__(*func = show_cue*)       | Prints SCTE-35 cues to stderr and raw packets are written to stdout
+
+
 
 ### ```Stream.decode(func=show_cue)```
 * Calls __func__ when a SCTE-35 message is found
