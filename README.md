@@ -37,7 +37,6 @@
           * [Stream.__decode_proxy(func=show_cue)__](#Streamdecodeproxyfuncnone)    
          
  *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
-
      * __HLS__
           * [Using threefive with __HLS Manifests__](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
      * __Multicast__
@@ -56,16 +55,14 @@
      * __UPID__
           * [__Upids__ with Custom Output](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Custom_Output.py)
           * [__Multiple__ Segmentation __Descriptors__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Multi_Upid.py)
-          * [Combination __Upid__ Segmentation Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Combo.py)
-          
+          * [Combination __Upid__ Segmentation Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Combo.py)        
      * [__Stream.proxy__ Example](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Proxy_Demo.py)
-
 ---
 
-## __Changes__
-   *  Splice class has been renamed Cue. See [Cue](#cue-class)
-   *  Stream, StreamPlus, and StreamProxy classes have been consolidated. See [Stream](#stream-class)
-   *  Stream.decode, Stream.decode_pid, and Stream.decode_proxy now all take an optional function as an arg. See [Stream](#stream-class)
+#### __Changes__
+   *  Splice class has been renamed Cue. See [__Cue__](#cue-class)
+   *  Stream, StreamPlus, and StreamProxy classes have been consolidated. See [__Stream__](#stream-class)
+   *  Stream.decode, Stream.decode_pid, and Stream.decode_proxy now all take an optional function as an arg. See [__Stream__](#stream-class)
    *  Stream.decode_until_found() is now [__Stream.decode_next()__](#streamdecode_next)
 ---
 
@@ -96,11 +93,14 @@ make pypy3
 ```sh
 pip3 install threefive
 
-# If you don't have pip installed, try this.
+# for pypy3
+
+pypy3 -mpip install threefive
+
+#If you don't have pip installed, try this.
 
 pypy3 -mensurepip install pip 
 
-pypy3 -mpip install threefive
 ```
 ---
  
@@ -141,8 +141,8 @@ threefive.decode(hexed)
  [🡡 top](#threefive)
  
 
-:rocket:
-#  __Advanced__ threefive 
+
+#  __Advanced__ threefive :rocket::+1: 
 
 ##  __Cue__ Class
    *  source [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
@@ -157,7 +157,7 @@ b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAA
 
 cue = Cue(B64)
 ```
-#### Return cue __as dict__
+###### Return cue __as dict__
 
 ```python
 
@@ -173,12 +173,12 @@ cue.get_command()
 cue.get_descriptors()
 
 ````
-#### Return cue as JSON
+###### Return cue as JSON
 ```python
 jason = cue.get_json()
 
 ```
-#### Print cue as JSON 
+###### Print cue as JSON 
 
 ```python
 
@@ -188,7 +188,7 @@ cue.show()
 
  [🡡 top](#threefive)
 
----
+
 ##  __Stream__ Class :+1: 
   * source [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
 
@@ -200,6 +200,7 @@ cue.show()
    * __tsdata__ is an open file handle or __sys.stdin.buffer__ to read 'piped' in data.
    * __show_null__ if set to __True__, enables showing SCTE 35 __null commands__.
 
+#### Methods
 method                              | Description
 ------------------------------------| -------------------------------------
 Stream.__decode__(*func = show_cue*)             | Prints SCTE-35 cues for SCTE-35 packets. 
@@ -208,7 +209,30 @@ Stream.__decode_pid__(*the_pid,func = show_cue*) | Prints SCTE-35 cues for packe
 Stream.__decode_proxy__(*func = show_cue*)       | Prints SCTE-35 cues to stderr and raw packets are written to stdout
 
 
-### ```Stream.decode(func=show_cue)```
+##### ```Stream.decode(func=show_cue)```
+####### ```Parse a Local File with a Stream Instance```
+ 
+ ```python3
+ 
+ import sys
+ from threefive import Stream
+ '''
+ 
+ if __name__ =='__main__':
+    with open(sys.argv[1],'rb') as tsdata:
+        sp = Stream(tsdata)
+        sp.decode()
+
+```
+
+####### ```Pipe a Video to Stream```
+
+```sh
+
+curl -s https://futzu.com/xaa.ts -o -  \
+  | python3 -c 'import sys;import threefive; threefive.Stream(sys.stdin.buffer).decode()' 
+```
+
 * Calls __func__ when a SCTE-35 message is found
 *  The optional __func__ arg allows a function
    to be used for custom handling of the SCTE-35
@@ -238,28 +262,7 @@ def do():
 if __name__ == '__main__':
     do()
 ```
- #### ```Parse a Local File with a Stream Instance```
- 
- ```python3
- 
- import sys
- from threefive import Stream
- '''
- 
- if __name__ =='__main__':
-    with open(sys.argv[1],'rb') as tsdata:
-        sp = Stream(tsdata)
-        sp.decode()
 
-```
-
-#### ```Pipe a Video to Stream```
-
-```sh
-
-curl -s https://futzu.com/xaa.ts -o -  \
-  | python3 -c 'import sys;import threefive; threefive.Stream(sys.stdin.buffer).decode()' 
-```
 
 ### ```Stream.decode_next()```
 * Returns a threefive.Cue instance when a SCTE-35 packet is found.
