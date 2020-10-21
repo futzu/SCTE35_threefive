@@ -66,8 +66,8 @@
 ## __Changes__
    *  Splice class has been renamed Cue. See [Cue](#cue-class)
    *  Stream, StreamPlus, and StreamProxy classes have been consolidated. See [Stream](#stream-class)
-   *  Stream.decode, Stream.decode_pid, and Stream.decode_proxy now all take an optional function as an arg. 
-   * 
+   *  Stream.decode, Stream.decode_pid, and Stream.decode_proxy now all take an optional function as an arg. See [Stream](#stream-class)
+   *  Stream.decode_until_found() is now [__Stream.decode_next()__](#streamdecode_next)
 ---
 
 ## Fast __Start__
