@@ -31,8 +31,8 @@
      * [__Stream__ Class](#stream-class)
           * [__Stream.decode(func=show_cue)__](#streamdecodefuncshow_cue)                                                                
                * [__Parse__ a Local File with a __Stream__ Instance](#parse-a-local-file-with-a-stream-instance)
-               * [__Pipe__ a Video to a Stream __Instance__](#pipe-a-video-to-strea
-          * [Stream.__decode_next()__]
+               * [__Pipe__ a Video to a Stream __Instance__](#pipe-a-video-to-stream-instance)
+          * [Stream.__decode_next()__](#streamdecode_next)
           * [Stream.__decode_pid(the_pid,func=show_cue)__](#streamdecode_pidthe_pid-func--show_cue)
           * [Stream.__decode_proxy(func=show_cue)__](#Streamdecodeproxyfuncnone)
           
