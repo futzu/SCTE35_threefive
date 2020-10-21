@@ -37,6 +37,12 @@ class Cue:
                 
     def __repr__(self):
         return str(self.get())
+
+    def clean(self,obj):
+        '''
+        clean removes items from a dict if the value is None
+        '''
+        return {k: v for k, v in obj.items() if v is not None}
     
     def descriptor_loop(self):
         '''
@@ -78,15 +84,16 @@ class Cue:
     def get_info_section(self):
         return self.clean(vars(self.info_section))       
 
+    def get_json(self):
+        '''
+        Cue.get_json()
+        returns Cue.get() as json.
+        '''
+        return json.dumps(self.get(),indent = 2)
+
     def get_packet_data(self):
         return self.clean(self.packet_data)
     
-    def clean(self,obj):
-        '''
-        clean removes items from a dict if the value is None
-        '''
-        return {k: v for k, v in obj.items() if v is not None}
-
     def mk_bits(self, s):
         '''
         Convert Hex and Base64 strings into bytes.
@@ -148,4 +155,4 @@ class Cue:
         '''
         pretty prints the SCTE 35 message
         '''
-        print(json.dumps(self.get(),indent = 2), file = sys.stderr)
+        print(self.get_json(), file = sys.stderr)
