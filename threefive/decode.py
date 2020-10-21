@@ -1,49 +1,47 @@
 import sys
+
 from .cue import Cue
 from .stream import Stream
 
 
 def read_stdin():
-    scte35 = None
-    try:
-        scte35 = Stream(sys.stdin.buffer, show_null=False).decode()
-    except BaseException:
-        scte35 = Cue(sys.stdin.buffer)
-        scte35.show()        
-    return scte35
+    ssb = sys.stdin.buffer.read(1)
+    if ssb == b'G':
+        sys.stdin.buffer.seek(0)   
+        Stream(sys.stdin.buffer).decode()
+    else:
+        try:
+            stuff = ssb+sys.stdin.buffer.read()
+            Cue(stuff).show()
+        except Exception:
+            pass
 
 def read_stuff(stuff):
-    scte35 = None
     try:
-        scte35 = Cue(stuff)
-        scte35.show()
-    except BaseException:
+        Cue(stuff).show()
+    except Exception:
         try:
             with open(stuff, 'rb') as tsdata:
-                scte35 = Stream(tsdata,show_null=False).decode()
-        except BaseException:
+                Stream(tsdata).decode()
+        except Exception:
             pass        
-    return scte35
 
 def decode(stuff=None):
-    """
+    '''
     All purpose SCTE 35 decoder function
-    
-    usage:
 
     # for a mpegts video
 
-    import threefive
-    threefive.decode('/path/to/mpegts')
+        import threefive
+        threefive.decode('/path/to/mpegts')
 
     # for a base64 encoded string
 
-    import threefive
-    Bee64='/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
-    threefive.decode(Bee64)  
-    """
-
+        import threefive
+        Bee64='/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
+        threefive.decode(Bee64)  
+    '''
     if stuff in [None, sys.stdin.buffer]:
-        return read_stdin()
+        read_stdin()
     else:
-        return read_stuff(stuff)
+        read_stuff(stuff)
