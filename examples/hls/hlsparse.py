@@ -5,8 +5,7 @@ import threefive
 def do(mesg):
     print( f'cue: {mesg}')
     tf=threefive.Cue(mesg)
-    tf.show_command()
-    tf.show_descriptors()
+    tf.show()
       
 with open(sys.argv[1],'r') as manifest:
     hls_time =  duration = cue_out = cue_in = 0
