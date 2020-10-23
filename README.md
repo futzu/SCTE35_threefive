@@ -3,7 +3,7 @@
 ## SCTE35 Decoder
   * All __2019__ SCTE-35 __Splice Commands__ and __Splice Descriptors__ are Fully Supported.
 ---
-#### [__Heads Up!__ Changes as of 9/24/2020](#changes)
+#### [__Heads Up!__ Changes as of 10/23/2020](#changes)
 * [ __threefive__ works best with __pypy3__](https://www.pypy.org/)
 * [__Requires Python 3.6+__](https://www.python.org/downloads/release/python-390/)
 * [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
@@ -51,8 +51,14 @@
 ---
 
 #### __Changes__
-   *  Splice class has been renamed Cue. See [__Cue__](#cue-class)
-   *  Stream, StreamPlus, and StreamProxy classes have been consolidated. See [__Stream__](#stream-class)
+   *  As of version 2.1.95, threefive.version returns a string for the current version. 
+   ```python
+   
+>>> import threefive
+>>> threefive.version
+'2.1.95'
+``` 
+
    *  Stream.decode, Stream.decode_pid, and Stream.decode_proxy now all take an optional function as an arg. See [__Stream__](#stream-class)
    *  Stream.decode_until_found() is now [__Stream.decode_next()__](#streamdecode_next)
 ---
