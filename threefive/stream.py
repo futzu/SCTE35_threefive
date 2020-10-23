@@ -2,7 +2,7 @@ import sys
 
 from functools import partial
 from .cue import Cue
-import binascii
+
 
 def show_cue(cue):
     cue.show()
@@ -48,8 +48,7 @@ class Stream:
         ''' 
         for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
             packet_data = self.parse_header(pkt)
-            if self.chk_scte35(pkt):
-                func(Cue(pkt,packet_data))
+            if self.chk_scte35(pkt): func(Cue(pkt,packet_data))
             
     def decode_pid(self,the_pid, func = show_cue):
         '''
