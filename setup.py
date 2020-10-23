@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
 import setuptools
-
+import threefive
 with open("README.md", "r") as fh:
     readme = fh.read()
 
 setuptools.setup(
     name="threefive",
-    version="2.1.93",
+    version=threefive.version ,
     author="fu-corp",
     author_email="spam@futzu.com",
     description="A Fast SCTE 35 Decoder for Mpeg-TS Video, and Base64 or Hex Encoded Messages.", 
