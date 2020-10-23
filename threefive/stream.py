@@ -2,10 +2,11 @@ import sys
 
 from functools import partial
 from .cue import Cue
-
+import binascii
 
 def show_cue(cue):
     cue.show()
+
 
 class Stream:
     '''
@@ -39,7 +40,7 @@ class Stream:
                 if pkt[8] == 0: # protocol version
                     if pkt[15] == 255: # cw_index
                         return pkt[18] in self.cmd_types
-
+  
     def decode(self,func = show_cue):
         '''
         Stream.decode() reads MPEG-TS
@@ -47,7 +48,9 @@ class Stream:
         ''' 
         for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
             packet_data = self.parse_header(pkt)
-            if self.chk_scte35(pkt): func(Cue(pkt,packet_data))
+            if self.chk_scte35(pkt):
+                print(binascii.hexlify(pkt, ' '))
+                func(Cue(pkt,packet_data))
             
     def decode_pid(self,the_pid, func = show_cue):
         '''
