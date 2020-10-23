@@ -3,7 +3,7 @@
 ## SCTE35 Decoder
   * All __2019__ SCTE-35 __Splice Commands__ and __Splice Descriptors__ are Fully Supported.
 ---
-#### [__Heads Up!__ Changes as of 9/24/2020](#changes)
+#### [__Heads Up!__ Changes as of 10/23/2020](#changes)
 * [ __threefive__ works best with __pypy3__](https://www.pypy.org/)
 * [__Requires Python 3.6+__](https://www.python.org/downloads/release/python-390/)
 * [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
@@ -21,12 +21,12 @@
           * [Return __Cue__ instance as __JSON__](#return-cue-as-json)   
           * [Print __Cue__ instance as __JSON__](#print-cue-as-json)   
      * [__Stream__ Class](#stream-class)
-          * [__Stream.decode(func=show_cue)__](#streamdecodefuncshow_cue)                                                                
+          * [__Stream.decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                
                * [__Parse__ a Local File with a __Stream__ Instance](#parse-a-local-file-with-a-stream-instance)
                * [__Pipe__ a Video to a Stream __Instance__](#pipe-a-video-to-stream-instance)
-          * [Stream.__decode_next()__](#streamdecode_next)
-          * [Stream.__decode_pid(the_pid,func=show_cue)__](#streamdecode_pidthe_pid-func--show_cue)
-          * [Stream.__decode_proxy(func=show_cue)__](#Streamdecodeproxyfuncnone)    
+          * [Stream.__decode_next__()](#streamdecode_next)
+          * [Stream.__decode_pid__(the_pid,func=show_cue)](#streamdecode_pidthe_pid-func--show_cue)
+          * [Stream.__decode_proxy__(func=show_cue)](#Streamdecodeproxyfuncnone)    
  *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
      * __HLS__
           * [Using threefive with __HLS Manifests__](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
@@ -47,12 +47,18 @@
           * [__Upids__ with Custom Output](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Custom_Output.py)
           * [__Multiple__ Segmentation __Descriptors__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Multi_Upid.py)
           * [Combination __Upid__ Segmentation Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Combo.py)        
-     * [__Stream.proxy__ Example](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Proxy_Demo.py)
+     * [__Stream.decode_proxy()__ Example](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Proxy_Demo.py)
 ---
 
 #### __Changes__
-   *  Splice class has been renamed Cue. See [__Cue__](#cue-class)
-   *  Stream, StreamPlus, and StreamProxy classes have been consolidated. See [__Stream__](#stream-class)
+   *  As of version __2.1.95__, __threefive.version__ returns a string for the current __version__. 
+   ```python
+   
+     >>> import threefive
+     >>> threefive.version
+    '2.1.95'
+``` 
+
    *  Stream.decode, Stream.decode_pid, and Stream.decode_proxy now all take an optional function as an arg. See [__Stream__](#stream-class)
    *  Stream.decode_until_found() is now [__Stream.decode_next()__](#streamdecode_next)
 ---
@@ -171,7 +177,7 @@ cue.show()
 ##  __Stream__ Class
   * source [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
 
-  * The __threefive.Stream__ class parses SCTE35 messages from a file or stream.
+  * The threefive.__Stream__ class parses SCTE35 messages from a file or stream.
   * __init__
        *  __tsdata__ is an open file handle or __sys.stdin.buffer__ to read 'piped' in data.
    
@@ -186,10 +192,10 @@ cue.show()
    
 Method                              | Description
 ------------------------------------| -------------------------------------
-Stream.__decode__(*func = show_cue*)             | Prints SCTE-35 cues for SCTE-35 packets. 
-Stream.__decode_next()__                       | Returns a Cue instance for a SCTE-35 packet
-Stream.__decode_pid__(*the_pid,func = show_cue*) | Prints SCTE-35 cues for packets where pid == __the_pid__
-Stream.__decode_proxy__(*func = show_cue*)       | Prints SCTE-35 cues to stderr and raw packets are written to stdout
+Stream.__decode__(*func = show_cue*)             | __Prints__ SCTE-35 __cues__ for SCTE-35 packets. Accepts an optional function, func, as arg. 
+Stream.__decode_next()__                       | __Returns__ a __Cue__ instance for a SCTE-35 packet.
+Stream.__decode_pid__(*the_pid,func = show_cue*) |Same as Stream.__decode__ except only packets where pid == __the_pid__
+Stream.__decode_proxy__(*func = show_cue*)       |Same as Stream.__decode__ except raw packets are written to stdout for piping to another program.
 
 
 ### ```Stream.decode(func=show_cue)```
