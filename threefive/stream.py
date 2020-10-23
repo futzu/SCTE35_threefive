@@ -49,7 +49,6 @@ class Stream:
         for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
             packet_data = self.parse_header(pkt)
             if self.chk_scte35(pkt):
-                print(binascii.hexlify(pkt, ' '))
                 func(Cue(pkt,packet_data))
             
     def decode_pid(self,the_pid, func = show_cue):
