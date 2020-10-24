@@ -1,7 +1,8 @@
-from bitn import BitBin
 import sys
-from functools import partial
+
+from bitn import BitBin
 from .cue import Cue
+from functools import partial
 
  
 class StreamB:
@@ -104,7 +105,6 @@ class StreamB:
                 if (pdata[7] >> 6) & 2:
                     if (pdata[9] >> 4) &2:
                         self.parse_pts(pdata,pid)
-
 
     def parser(self,pkt):
         pid = (pkt[1] & 31) << 8
