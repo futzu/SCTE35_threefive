@@ -7,7 +7,6 @@ from .cue import Cue
 def show_cue(cue):
     cue.show()
 
-
 class Stream:
     '''
     threefive.Stream(tsdata, show_null = False)
@@ -29,6 +28,7 @@ class Stream:
         if show_null: self.cmd_types.append(0)
         self.tsdata = tsdata
         self.PTS = None
+        self.packet_data = {}
         
     def chk_scte35(self,pkt):
         '''
@@ -47,8 +47,9 @@ class Stream:
         to find SCTE-35 packets.
         ''' 
         for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
-            packet_data = self.parse_header(pkt)
-            if self.chk_scte35(pkt): func(Cue(pkt,packet_data))
+            self.parse_header(pkt)
+            if self.chk_scte35(pkt):
+                func(Cue(pkt,self.packet_data))
             
     def decode_pid(self,the_pid, func = show_cue):
         '''
@@ -56,9 +57,9 @@ class Stream:
         to find SCTE-35 packets by the_pid.
         '''
         for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
-            if self.parse_pid(pkt[1],pkt[2]) == the_pid:
-                packet_data = {'pid':the_pid}
-                if self.chk_scte35(pkt): func(Cue(pkt,packet_data))
+            self.parse_header(pkt)
+            if self.packet_data['pid'] == the_pid:
+                func(Cue(pkt,packet_data))
 
     def decode_proxy(self,func = show_cue):
         '''
@@ -68,8 +69,9 @@ class Stream:
         '''        
         for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
             sys.stdout.buffer.write(pkt)
-            packet_data = self.parse_header(pkt)
-            if self.chk_scte35(pkt): func(Cue(pkt,packet_data))
+            self.parse_header(pkt)
+            if self.chk_scte35(pkt):
+                func(Cue(pkt,self.packet_data))
 
     def decode_next(self):
         '''
@@ -77,18 +79,19 @@ class Stream:
         when a SCTE-35 packet is found
         '''
         for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
-            packet_data = self.parse_header(pkt)
-            if self.chk_scte35(pkt): return Cue(pkt,packet_data)
+            self.parse_header(pkt)
+            if self.chk_scte35(pkt):
+                return Cue(pkt,self.packet_data)
     
     def parse_header(self,pkt):
         '''
         Stream.parse_header(pkt) parses the MPEG-TS packet header.
         '''
-        packet_data = {}
-        if (pkt[1] >> 6) & 1 :self.parse_pusi(pkt[4:18])
-        packet_data['pts'] = self.PTS
-        packet_data['pid'] = self.parse_pid(pkt[1],pkt[2]) 
-        return packet_data
+        self.packet_data = {}
+        self.parse_pid(pkt[1],pkt[2])
+        if (pkt[1] >> 6) & 1 :
+            self.parse_pusi(pkt[4:18])
+        self.packet_data['pts'] = self.PTS
 
     def parse_pid(self,byte1,byte2):
         '''
@@ -96,7 +99,7 @@ class Stream:
         uses byte1 and byte2 to determine
         the pid of the packet.
         '''
-        return ((byte1 & 31) << 8) + byte2 
+        self.packet_data['pid'] = ((byte1 & 31) << 8) + byte2 
 
     def parse_pts(self,pdata):
         '''
@@ -107,15 +110,14 @@ class Stream:
         pts += (pdata[12] << 7) + (pdata[13] >> 1)
         pts /= 90000.0 
         self.PTS=round(pts,6)
-      
+        
     def parse_pusi(self, pdata):
         '''
         Stream.parse_pusi(pdata) is used to determine
         if pts data is available.
         '''
         if pdata[2] & 1: 
-            if pdata[3] not in self.no_pts_stream_ids:  
-                if (pdata[6] >> 6) & 2: 
-                    if (pdata[7] >> 6) & 2:
-                        if (pdata[9] >> 4) &2:
-                            self.parse_pts(pdata)
+            if (pdata[6] >> 6) & 2: 
+                if (pdata[7] >> 6) & 2:
+                    if (pdata[9] >> 4) &2:
+                        self.parse_pts(pdata)

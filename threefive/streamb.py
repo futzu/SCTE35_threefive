@@ -30,6 +30,7 @@ class StreamB:
     def decode(self):
         for pkt in iter( partial(self.tsdata.read, 188), b''):
             self.parser(pkt)
+        print(self.pid_prog)
             
     def pms(self,bitbin,pid):
         bitbin.forward(9)
@@ -40,7 +41,7 @@ class StreamB:
         bitbin.forward(44)
         program_info_length = bitbin.asint(12)
         N = (program_info_length << 3)
-        while N > 40:
+        while N > 32:
             descriptor_tag = bitbin.asint(8)
             N -= 8 
             if descriptor_tag == 5:
@@ -49,7 +50,7 @@ class StreamB:
                 # identifier =bitbin.asint(descriptor_length*8)
                 bitbin.forward(descriptor_length << 3)
                 N -= (descriptor_length << 3)
-                i = 10
+                i = 4
                 while i:
                     i -= 1
                     try:
@@ -78,7 +79,7 @@ class StreamB:
         sl = (section_length << 3) 
         bitbin.forward(40)
         sl -= 40
-        while sl> 32:
+        while sl> 40:
             program_number = bitbin.asint(16)
             bitbin.forward(3)
             if program_number == 0:
@@ -87,7 +88,8 @@ class StreamB:
                 pmap_pid = bitbin.asint(13)
                 self.pmt_pids.add(pmap_pid)
             sl -= 32
-
+        bitbin.forward(32)
+        
     def parse_pts(self,pdata,pid):
         pts  = ((pdata[9] >> 1) & 7) << 30
         pts += (((pdata[10] << 7) + (pdata[11] >> 1)) << 15)
@@ -130,3 +132,4 @@ class StreamB:
             packet_data['pts']= self.PTS[self.pid_prog[pid]]
             cue = Cue(pkt,packet_data)
             cue.show()
+        
