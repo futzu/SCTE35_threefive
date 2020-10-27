@@ -41,7 +41,8 @@ class Stream:
                     if pkt[15] == 255: # cw_index
                         return pkt[18] in self.cmd_types
 
-    def find_start(self):
+    def find_start(self,pkt):
+        if pkt[0] == 71: return pkt
         start=False
         sync_byte = b'G'
         while start != sync_byte:
@@ -49,8 +50,8 @@ class Stream:
             if n == sync_byte:
                 self.tsdata.read(187)
                 if self.tsdata.read(1) == sync_byte:
-                    self.tsdata.read(187)
-                    return
+                    return sync_byte +self.tsdata.read(187)
+                    
 
     def decode(self,func = show_cue):
         '''
@@ -58,12 +59,10 @@ class Stream:
         to find SCTE-35 packets.
         '''
         for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
-            if pkt[0] != 71:
-                self.find_start()
-            else:
-                self.parse_header(pkt)
-                if self.chk_scte35(pkt):
-                    func(Cue(pkt,self.packet_data))
+            pkt = self.find_start(pkt)
+            self.parse_header(pkt)
+            if self.chk_scte35(pkt):
+                func(Cue(pkt,self.packet_data))
 
     def decode_pid(self,the_pid, func = show_cue):
         '''
@@ -71,13 +70,12 @@ class Stream:
         to find SCTE-35 packets by the_pid.
         '''
         for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
-            if pkt[0] != 71:
-                self.find_start()
-            else:
-                self.parse_header(pkt)
-                if self.packet_data['pid'] == the_pid:
+            pkt = self.find_start(pkt)
+            self.parse_header(pkt)
+            if self.packet_data['pid'] == the_pid:
+                if self.chk_scte35(pkt):
                     func(Cue(pkt,packet_data))
-
+    
     def decode_proxy(self,func = show_cue):
         '''
         Stream.decode_proxy() reads an MPEG-TS stream
@@ -85,13 +83,11 @@ class Stream:
         and SCTE-35 data to stderr.
         '''
         for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
-            if pkt[0] != 71:
-                self.find_start()
-            else:
-                sys.stdout.buffer.write(pkt)
-                self.parse_header(pkt)
-                if self.chk_scte35(pkt):
-                    func(Cue(pkt,self.packet_data))
+            pkt = self.find_start(pkt)
+            sys.stdout.buffer.write(pkt)
+            self.parse_header(pkt)
+            if self.chk_scte35(pkt):
+                func(Cue(pkt,self.packet_data))
 
     def decode_next(self):
         '''
@@ -99,12 +95,10 @@ class Stream:
         when a SCTE-35 packet is found
         '''
         for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
-            if pkt[0] != 71:
-                self.find_start()
-            else:
-                self.parse_header(pkt)
-                if self.chk_scte35(pkt):
-                    return Cue(pkt,self.packet_data)
+            pkt = self.find_start(pkt)
+            self.parse_header(pkt)
+            if self.chk_scte35(pkt):
+                return Cue(pkt,self.packet_data)
 
     def parse_header(self,pkt):
         '''

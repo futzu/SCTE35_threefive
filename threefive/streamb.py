@@ -34,11 +34,23 @@ class StreamB:
         self.info =False
         self.pids=set()
 
-    def decode(self, func = show_cue):
+    def find_start(self,pkt):
+        if pkt[0] == 71: return pkt
+        start=False
+        sync_byte = b'G'
+        while start != sync_byte:
+            n = self.tsdata.read(1)
+            if n == sync_byte:
+                self.tsdata.read(187)
+                if self.tsdata.read(1) == sync_byte:
+                    return sync_byte +self.tsdata.read(187)
+                    
+    def decode(self,func = show_cue):
         '''
         reads MPEG-TS to find SCTE-35 packets
         '''
         for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
+            pkt = self.find_start(pkt)
             cue = self.parser(pkt)
             if cue : func(cue)
 
@@ -48,6 +60,7 @@ class StreamB:
         when a SCTE-35 packet is found
         '''
         for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
+            pkt = self.find_start(pkt)
             cue = self.parser(pkt)
             if cue : return cue
 
@@ -58,6 +71,7 @@ class StreamB:
         and SCTE-35 data to stderr
         '''
         for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
+            pkt = self.find_start(pkt)
             sys.stdout.buffer.write(pkt)
             cue = self.parser(pkt)
             if cue : func(cue)
@@ -98,28 +112,31 @@ class StreamB:
         bitbin.forward(32)
 
     def parser(self,pkt):
+        '''
+        parse pid from pkt and
+        route it appropriately
+        '''
         pid = ((pkt[1] & 31) << 8 | pkt[2])
         self.pids.add(pid)
         if pid == 0:
             bitbin = BitBin(pkt[5:])
             self.pas(bitbin)
-
         if pid in self.pmt_pids:
             bitbin = BitBin(pkt[5:])
             self.pms(bitbin)
-
         if self.info:
             return False
-
         if pid in self.pid_prog.keys():
             if (pkt[1] >> 6) & 1 :
                 self.parse_pusi(pkt[4:18],pid)
-
         if pid in self.scte35_pids:
             packet_data = self.mk_packet_data(pid)
             return Cue(pkt,packet_data)
 
     def parse_pts(self,pdata,pid):
+        '''
+        parse pts
+        '''
         pts  = ((pdata[9]  >> 1) & 7) << 30
         pts |= (((pdata[10] << 7) | (pdata[11] >> 1)) << 15)
         pts |=  ((pdata[12] << 7) | (pdata[13] >> 1))
@@ -138,6 +155,9 @@ class StreamB:
                         self.parse_pts(pdata,pid)
 
     def parse_stream_type(self,bitbin,program_number):
+        '''
+        extract stream pid and type
+        '''
         stream_type = bitbin.ashex(8) # 8
         bitbin.forward(3) # 11
         el_PID = bitbin.asint(13) # 24
@@ -148,6 +168,10 @@ class StreamB:
         return minus,[stream_type,el_PID]
 
     def parse_program_streams(self,slib,bitbin,program_number,pcr_pid):
+        '''
+        parse the elementary streams
+        from a program
+        '''
         pstreams=[]
         while slib > 32:
             minus,pstream = self.parse_stream_type(bitbin,program_number)
