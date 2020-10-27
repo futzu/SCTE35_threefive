@@ -22,5 +22,5 @@ stream_type_map = {
  "0x13" : "ISO/IEC 14496-1 SL-packetized stream or FlexMux in ISO/IEC14496 sections",
  "0x14" : "ISO/IEC 13818-6 Synchronized Download Protocol",
  "0x1b" : "Video",
- "0x86" : "SCTE 35"
+ "0x86" : "\033[92mSCTE 35\033[00m"
  }

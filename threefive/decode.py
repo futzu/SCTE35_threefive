@@ -4,14 +4,12 @@ from .cue import Cue
 from .stream import Stream
 
 
-def read_stdin():
-    ssb = sys.stdin.buffer.read(1)
-    if ssb == b'G':
-        sys.stdin.buffer.seek(0)   
+def read_stdin():  
+    try:
         Stream(sys.stdin.buffer).decode()
-    else:
+    except:
         try:
-            stuff = ssb+sys.stdin.buffer.read()
+            stuff = sys.stdin.buffer.read()
             Cue(stuff).show()
         except Exception:
             pass

@@ -147,7 +147,7 @@ class StreamB:
         minus = 40 + eilib
         return minus,[stream_type,el_PID]
 
-    def parse_program_streams(self,slib,bitbin,program_number):
+    def parse_program_streams(self,slib,bitbin,program_number,pcr_pid):
         pstreams=[]
         while slib > 32:
             minus,pstream = self.parse_stream_type(bitbin,program_number)
@@ -156,7 +156,7 @@ class StreamB:
         if program_number not in self.programs:
             self.programs.add(program_number)
             if self.info:
-                print(f'\nProgram: {program_number}')
+                print(f'\nProgram: {program_number} (pcr pid: {pcr_pid})')
             for s in pstreams:
                 self.pid_prog[s[1]]=program_number
                 if s[0] == '0x86':
@@ -166,6 +166,9 @@ class StreamB:
                     if s[0] in stream_type_map.keys():
                         st =f'[{s[0]}] {stream_type_map[s[0]]}'
                     print(f'\t   {s[1]}: {st}')
+        else:
+            if self.info:
+                sys.exit()
 
     def pms(self,bitbin):
         bitbin.forward(9)
@@ -174,9 +177,11 @@ class StreamB:
         bitbin.forward(2)
         slib = bitbin.asint(12) << 3
         program_number = bitbin.asint(16) # 16
-        bitbin.forward(44) # 60
+        bitbin.forward(27) # 60
+        pcr_pid = bitbin.asint(13)
+        bitbin.forward(4)
         pilib = (bitbin.asint(12) << 3) # 72
         slib -= 72
         slib -= pilib # Skip descriptors
         bitbin.forward(pilib) # Skip descriptors
-        self.parse_program_streams(slib,bitbin,program_number)
+        self.parse_program_streams(slib,bitbin,program_number,pcr_pid)

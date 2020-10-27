@@ -11,7 +11,7 @@ class Stream:
     '''
     threefive.Stream(tsdata, show_null = False)
     fast mpegts stream parsing for SCTE 35 packets.
-    
+
     tsdata should be a _io.BufferedReader instance.
     show_null = True to parse splice null packets
 
@@ -29,7 +29,7 @@ class Stream:
         self.tsdata = tsdata
         self.PTS = None
         self.packet_data = {}
-        
+
     def chk_scte35(self,pkt):
         '''
         Stream.chk_scte35(pkt) is
@@ -40,38 +40,58 @@ class Stream:
                 if pkt[8] == 0: # protocol version
                     if pkt[15] == 255: # cw_index
                         return pkt[18] in self.cmd_types
-  
+
+    def find_start(self):
+        start=False
+        sync_byte = b'G'
+        while start != sync_byte:
+            n = self.tsdata.read(1)
+            if n == sync_byte:
+                self.tsdata.read(187)
+                if self.tsdata.read(1) == sync_byte:
+                    self.tsdata.read(187)
+                    return
+
     def decode(self,func = show_cue):
         '''
         Stream.decode() reads MPEG-TS
         to find SCTE-35 packets.
-        ''' 
+        '''
         for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
-            self.parse_header(pkt)
-            if self.chk_scte35(pkt):
-                func(Cue(pkt,self.packet_data))
-            
+            if pkt[0] != 71:
+                self.find_start()
+            else:
+                self.parse_header(pkt)
+                if self.chk_scte35(pkt):
+                    func(Cue(pkt,self.packet_data))
+
     def decode_pid(self,the_pid, func = show_cue):
         '''
         Stream.decode_pid() reads MPEG_TS
         to find SCTE-35 packets by the_pid.
         '''
         for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
-            self.parse_header(pkt)
-            if self.packet_data['pid'] == the_pid:
-                func(Cue(pkt,packet_data))
+            if pkt[0] != 71:
+                self.find_start()
+            else:
+                self.parse_header(pkt)
+                if self.packet_data['pid'] == the_pid:
+                    func(Cue(pkt,packet_data))
 
     def decode_proxy(self,func = show_cue):
         '''
         Stream.decode_proxy() reads an MPEG-TS stream
         and writes all ts packets to stdout
-        and SCTE-35 data to stderr. 
-        '''        
+        and SCTE-35 data to stderr.
+        '''
         for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
-            sys.stdout.buffer.write(pkt)
-            self.parse_header(pkt)
-            if self.chk_scte35(pkt):
-                func(Cue(pkt,self.packet_data))
+            if pkt[0] != 71:
+                self.find_start()
+            else:
+                sys.stdout.buffer.write(pkt)
+                self.parse_header(pkt)
+                if self.chk_scte35(pkt):
+                    func(Cue(pkt,self.packet_data))
 
     def decode_next(self):
         '''
@@ -79,10 +99,13 @@ class Stream:
         when a SCTE-35 packet is found
         '''
         for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
-            self.parse_header(pkt)
-            if self.chk_scte35(pkt):
-                return Cue(pkt,self.packet_data)
-    
+            if pkt[0] != 71:
+                self.find_start()
+            else:
+                self.parse_header(pkt)
+                if self.chk_scte35(pkt):
+                    return Cue(pkt,self.packet_data)
+
     def parse_header(self,pkt):
         '''
         Stream.parse_header(pkt) parses the MPEG-TS packet header.
@@ -99,25 +122,25 @@ class Stream:
         uses byte1 and byte2 to determine
         the pid of the packet.
         '''
-        self.packet_data['pid'] = ((byte1 & 31) << 8) + byte2 
+        self.packet_data['pid'] = ((byte1 & 31) << 8) + byte2
 
     def parse_pts(self,pdata):
         '''
-        Stream.parse_pts(pdata) parses pts from pdata.  
+        Stream.parse_pts(pdata) parses pts from pdata.
         '''
         pts  = ((pdata[9] >> 1) & 7) << 30
         pts += (((pdata[10] << 7) + (pdata[11] >> 1)) << 15)
         pts += (pdata[12] << 7) + (pdata[13] >> 1)
-        pts /= 90000.0 
+        pts /= 90000.0
         self.PTS=round(pts,6)
-        
+
     def parse_pusi(self, pdata):
         '''
         Stream.parse_pusi(pdata) is used to determine
         if pts data is available.
         '''
-        if pdata[2] & 1: 
-            if (pdata[6] >> 6) & 2: 
+        if pdata[2] & 1:
+            if (pdata[6] >> 6) & 2:
                 if (pdata[7] >> 6) & 2:
                     if (pdata[9] >> 4) &2:
                         self.parse_pts(pdata)
