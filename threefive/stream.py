@@ -51,7 +51,7 @@ class Stream:
         reads MPEG-TS to find SCTE-35 packets
         '''
         for pkt in iter(partial(self.tsdata.read, self.packet_size), b''):
-           # pkt = self.find_start(pkt)
+            pkt = self.find_start(pkt)
             cue = self.parser(pkt)
             if cue : func(cue)
 
