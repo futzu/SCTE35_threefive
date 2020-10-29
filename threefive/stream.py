@@ -10,10 +10,8 @@ def show_cue(cue):
     cue.show()
 
 
-class StreamB:
+class Stream:
     '''
-    streamb.StreamB(tsdata)
-
     A Stream class
     With MPEG-TS program awareness.
     Accurate pts for streams with
@@ -146,6 +144,7 @@ class StreamB:
             packet_data = self.mk_packet_data(pid)
             # handle older scte-35 packets
             pkt = pkt[:5]+b'\xfc0' +pkt.split(b'\x00\xfc0')[1]
+            # check splice command type
             if pkt[18] in self.cmd_types:     
                 return Cue(pkt,packet_data)
 
