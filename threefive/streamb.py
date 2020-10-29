@@ -38,8 +38,10 @@ class StreamB:
         if pkt[0] == 71: return pkt
         start=False
         sync_byte = b'G'
-        while start != sync_byte:
+        while self.tsdata:
             n = self.tsdata.read(1)
+            if not n:
+                    sys.exit()
             if n == sync_byte:
                 self.tsdata.read(187)
                 if self.tsdata.read(1) == sync_byte:
