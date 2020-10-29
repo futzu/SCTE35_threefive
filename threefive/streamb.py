@@ -73,10 +73,7 @@ class StreamB:
         when a SCTE-35 packet is found
         '''
         self.the_program = the_program
-        for pkt in iter(partial(self.tsdata.read, self.packet_size), b''):
-            pkt = self.find_start(pkt)
-            cue = self.parser(pkt)
-            if cue : func(cue)
+        self.decode(func)
             
     def decode_proxy(self,func = show_cue):
         '''
