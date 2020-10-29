@@ -10,8 +10,10 @@ def show_cue(cue):
     cue.show()
 
 
-class Stream:
+class StreamB:
     '''
+    streamb.StreamB(tsdata)
+
     A Stream class
     With MPEG-TS program awareness.
     Accurate pts for streams with
@@ -51,7 +53,7 @@ class Stream:
         reads MPEG-TS to find SCTE-35 packets
         '''
         for pkt in iter(partial(self.tsdata.read, self.packet_size), b''):
-            pkt = self.find_start(pkt)
+           # pkt = self.find_start(pkt)
             cue = self.parser(pkt)
             if cue : func(cue)
 
@@ -142,7 +144,10 @@ class Stream:
             if self.the_program and self.pid_prog[pid] != self.the_program:
                 return
             packet_data = self.mk_packet_data(pid)
-            return Cue(pkt,packet_data)
+            # handle older scte-35 packets
+            pkt = pkt[:5]+b'\xfc0' +pkt.split(b'\x00\xfc0')[1]
+            if pkt[18] in self.cmd_types:     
+                return Cue(pkt,packet_data)
 
     def parse_pts(self,pdata,pid):
         '''
