@@ -33,6 +33,7 @@ class StreamB:
         self.PTS = {}
         self.info =False
         self.pids=set()
+        self.the_program = False
 
     def find_start(self,pkt):
         if pkt[0] == 71: return pkt
@@ -41,7 +42,7 @@ class StreamB:
         while self.tsdata:
             n = self.tsdata.read(1)
             if not n:
-                    sys.exit()
+                sys.exit()
             if n == sync_byte:
                 self.tsdata.read(187)
                 if self.tsdata.read(1) == sync_byte:
@@ -51,7 +52,7 @@ class StreamB:
         '''
         reads MPEG-TS to find SCTE-35 packets
         '''
-        for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
+        for pkt in iter(partial(self.tsdata.read, self.packet_size), b''):
             pkt = self.find_start(pkt)
             cue = self.parser(pkt)
             if cue : func(cue)
@@ -61,18 +62,29 @@ class StreamB:
         returns a threefive.Cue instance
         when a SCTE-35 packet is found
         '''
-        for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
+        for pkt in iter(partial(self.tsdata.read, self.packet_size), b''):
             pkt = self.find_start(pkt)
             cue = self.parser(pkt)
             if cue : return cue
 
+    def decode_program(self,the_program,func = show_cue):
+        '''
+        returns a threefive.Cue instance
+        when a SCTE-35 packet is found
+        '''
+        self.the_program = the_program
+        for pkt in iter(partial(self.tsdata.read, self.packet_size), b''):
+            pkt = self.find_start(pkt)
+            cue = self.parser(pkt)
+            if cue : func(cue)
+            
     def decode_proxy(self,func = show_cue):
         '''
         reads an MPEG-TS stream
         and writes all ts packets to stdout
         and SCTE-35 data to stderr
         '''
-        for pkt in iter( partial(self.tsdata.read, self.packet_size), b''):
+        for pkt in iter(partial(self.tsdata.read, self.packet_size), b''):
             pkt = self.find_start(pkt)
             sys.stdout.buffer.write(pkt)
             cue = self.parser(pkt)
@@ -132,6 +144,8 @@ class StreamB:
             if (pkt[1] >> 6) & 1 :
                 self.parse_pusi(pkt[4:18],pid)
         if pid in self.scte35_pids:
+            if self.the_program and self.pid_prog[pid] != self.the_program:
+                return
             packet_data = self.mk_packet_data(pid)
             return Cue(pkt,packet_data)
 
