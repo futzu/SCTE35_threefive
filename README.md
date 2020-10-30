@@ -25,7 +25,7 @@
                * [__Parse__ a Local File with a __Stream__ Instance](#parse-a-local-file-with-a-stream-instance)
                * [__Pipe__ a Video to a Stream __Instance__](#pipe-a-video-to-stream-instance)
           * [Stream.__decode_next__()](#streamdecode_next)
-          * [Stream.__decode_pid__(the_pid,func=show_cue)](#streamdecode_pidthe_pid-func--show_cue)
+          * [Stream.__decode_program__(the_program,func=show_cue)](#streamdecode_pidthe_pid-func--show_cue)
           * [Stream.__decode_proxy__(func=show_cue)](#Streamdecodeproxyfuncnone)    
  *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
      * __HLS__
@@ -306,7 +306,7 @@ if __name__ == '__main__':
 ### ```Stream.decode_program(the_program, func = show_cue)```
 
 * Use Stream.__decode_program()__ instead of Stream.__decode()__ 
-to decode SCTE-35 from packets where pid == __the_program__
+to decode SCTE-35 from packets where program == __the_program__
 
 ```python3
 import threefive
