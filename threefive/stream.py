@@ -30,21 +30,22 @@ class Stream:
         self.programs = set()
         self.PTS = {}
         self.info =False
-        self.pids=set()
         self.the_program = False
 
     def find_start(self,pkt):
+        '''
+        handles partial packets
+        '''
         if pkt[0] == 71: return pkt
-        start=False
         sync_byte = b'G'
         while self.tsdata:
             n = self.tsdata.read(1)
             if not n:
                 sys.exit()
             if n == sync_byte:
-                self.tsdata.read(187)
+                self.tsdata.read(self.packet_size -1)
                 if self.tsdata.read(1) == sync_byte:
-                    return sync_byte +self.tsdata.read(187)
+                    return sync_byte +self.tsdata.read(self.packet_size -1)
                     
     def decode(self,func = show_cue):
         '''
@@ -103,7 +104,8 @@ class Stream:
         packet_data['pts']= self.PTS[self.pid_prog[pid]]
         return packet_data
 
-    def pas(self,bitbin):
+    def pas(self,pkt):
+        bitbin = BitBin(pkt[5:])
         bitbin.forward(12)
         section_length = bitbin.asint(12)
         slib = (section_length << 3)
@@ -125,48 +127,46 @@ class Stream:
         parse pid from pkt and
         route it appropriately
         '''
-        pid = ((pkt[1] & 31) << 8 | pkt[2])
-        self.pids.add(pid)
-        if pid == 0:
-            bitbin = BitBin(pkt[5:])
-            self.pas(bitbin)
-        if pid in self.pmt_pids:
-            bitbin = BitBin(pkt[5:])
-            self.pms(bitbin)
-        if self.info:
-            return False
-        if pid in self.pid_prog.keys():
-            if (pkt[1] >> 6) & 1 :
-                self.parse_pusi(pkt[4:18],pid)
-        if pid in self.scte35_pids:
-            packet_data = self.mk_packet_data(pid)
-            # handle older scte-35 packets
-            pkt = pkt[:5]+b'\xfc0' +pkt.split(b'\x00\xfc0')[1]
-            # check splice command type
-            if pkt[18] in self.cmd_types:     
-                return Cue(pkt,packet_data)
+        pid = self.parse_pid(pkt[1],pkt[2])
+        if pid == 0: self.pas(pkt)
+        if pid in self.pmt_pids: self.pms(pkt)
+        if self.info: return False
+        if pid in self.pid_prog.keys(): self.parse_pusi(pkt,pid)
+        if pid in self.scte35_pids: return self.parse_scte35(pkt,pid)
 
-    def parse_pts(self,pdata,pid):
+    def parse_pid(self,one,two):
+         return ((one & 31) << 8 | two)
+
+    def parse_pts(self,pkt,pid):
         '''
         parse pts
         '''
-        pts  = ((pdata[9]  >> 1) & 7) << 30
-        pts |= (((pdata[10] << 7) | (pdata[11] >> 1)) << 15)
-        pts |=  ((pdata[12] << 7) | (pdata[13] >> 1))
+        pts  = ((pkt[13]  >> 1) & 7) << 30
+        pts |= (((pkt[14] << 7) | (pkt[15] >> 1)) << 15)
+        pts |=  ((pkt[16] << 7) | (pkt[17] >> 1))
         pts /= 90000.0
         ppp = self.pid_prog[pid]
         self.PTS[ppp]=round(pts,6)
 
-    def parse_pusi(self,pdata,pid):
+    def parse_pusi(self,pkt,pid):
         '''
         used to determine if pts data is available.
         '''
-        if pdata[2] & 1:
-            if (pdata[6] >> 6) & 2:
-                if (pdata[7] >> 6) & 2:
-                    if (pdata[9] >> 4) &2:
-                        self.parse_pts(pdata,pid)
+        if (pkt[1] >> 6) & 1 :
+            if pkt[6] & 1:
+                if (pkt[10] >> 6) & 2:
+                    if (pkt[11] >> 6) & 2:
+                        if (pkt[13] >> 4) &2:
+                            self.parse_pts(pkt,pid)
 
+    def parse_scte35(self,pkt,pid):
+        packet_data = self.mk_packet_data(pid)
+        # handle older scte-35 packets
+        pkt = pkt[:5]+b'\xfc0' +pkt.split(b'\x00\xfc0')[1]
+        # check splice command type
+        if pkt[18] in self.cmd_types:     
+            return Cue(pkt,packet_data)
+        
     def parse_stream_type(self,bitbin,program_number):
         '''
         extract stream pid and type
@@ -180,7 +180,7 @@ class Stream:
         minus = 40 + eilib
         return minus,[stream_type,el_PID]
 
-    def parse_program_streams(self,slib,bitbin,program_number,pcr_pid):
+    def parse_program_streams(self,slib,bitbin,program_number):
         '''
         parse the elementary streams
         from a program
@@ -193,34 +193,37 @@ class Stream:
         if program_number not in self.programs:
             self.programs.add(program_number)
             if self.info:
-                print(f'\nProgram: {program_number} (pcr pid: {pcr_pid})')
+                self.show_program_streams(program_number,pstreams)       
             for s in pstreams:
                 self.pid_prog[s[1]]=program_number
                 if s[0] == '0x86':
                     self.scte35_pids.add(s[1])
-                if self.info:
-                    st = f'[{s[0]}] Reserved or Private'
-                    if s[0] in stream_type_map.keys():
-                        st =f'[{s[0]}] {stream_type_map[s[0]]}'
-                    print(f'\t   {s[1]}: {st}')
         else:
             if self.info:
                 sys.exit()
 
-    def pms(self,bitbin):
+    def show_program_streams(self,program_number,pstreams):
+        print(f'\nProgram: {program_number}')
+        for s in pstreams:
+            st = f'[{s[0]}] Reserved or Private'
+            if s[0] in stream_type_map.keys():
+                st =f'[{s[0]}] {stream_type_map[s[0]]}'
+            print(f'\t   {s[1]}: {st}')
+
+    def pms(self,pkt):
+        bitbin = BitBin(pkt[5:])
         bitbin.forward(9)
         if bitbin.asflag(1):
             return
         bitbin.forward(2)
         slib = bitbin.asint(12) << 3
-        program_number = bitbin.asint(16) # 16
+        program_number = bitbin.asint(16)
         if self.the_program and (program_number != self.the_program):
             return
-        bitbin.forward(27) # 60
-        pcr_pid = bitbin.asint(13)
-        bitbin.forward(4)
-        pilib = (bitbin.asint(12) << 3) # 72
+        #pcr_pid = bitbin.asint(13)
+        bitbin.forward(44)
+        pilib = (bitbin.asint(12) << 3)
         slib -= 72
         slib -= pilib # Skip descriptors
         bitbin.forward(pilib) # Skip descriptors
-        self.parse_program_streams(slib,bitbin,program_number,pcr_pid)
+        self.parse_program_streams(slib,bitbin,program_number)
