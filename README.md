@@ -192,10 +192,53 @@ cue.show()
    
 Method                              | Description
 ------------------------------------| -------------------------------------
+Stream.__show__()                   |__Prints__ all recognized Programs and streams by pid and type. 
 Stream.__decode__(*func = show_cue*)             | __Prints__ SCTE-35 __cues__ for SCTE-35 packets. Accepts an optional function, func, as arg. 
 Stream.__decode_next()__                       | __Returns__ a __Cue__ instance for a SCTE-35 packet.
-Stream.__decode_pid__(*the_pid,func = show_cue*) |Same as Stream.__decode__ except only packets where pid == __the_pid__
+Stream.__decode_program__(*the_program,func = show_cue*) |Same as Stream.__decode__ except only packets where program == __the_program__
 Stream.__decode_proxy__(*func = show_cue*)       |Same as Stream.__decode__ except raw packets are written to stdout for piping to another program.
+
+### ```Stream.show()```
+
+#### List programs and streams for a video.
+
+```python3
+# pypy3
+>>>> from threefive import Stream, version
+>>>> version
+'2.2.09'
+>>>> with open('video.ts','rb') as tsdata:
+....     st = Stream(tsdata)
+....     st.show()
+....     
+
+Program: 1030 (pcr pid: 1031)
+	   1031: [0x1b] Video
+	   1032: [0x3] ISO/IEC 11172 Audio
+	   1034: [0x6] ITU-T Rec. H.222.0 | ISO/IEC 13818-1 PES packets with private data
+	   1035: [0x86] SCTE 35
+
+Program: 1100 (pcr pid: 1101)
+	   1101: [0x1b] Video
+	   1102: [0x3] ISO/IEC 11172 Audio
+	   1104: [0x6] ITU-T Rec. H.222.0 | ISO/IEC 13818-1 PES packets with private data
+	   1105: [0x86] SCTE 35
+
+Program: 1080 (pcr pid: 1081)
+	   1081: [0x1b] Video
+	   1082: [0x3] ISO/IEC 11172 Audio
+	   1084: [0x6] ITU-T Rec. H.222.0 | ISO/IEC 13818-1 PES packets with private data
+
+Program: 1010 (pcr pid: 1011)
+	   1011: [0x1b] Video
+	   1012: [0x3] ISO/IEC 11172 Audio
+	   1014: [0x6] ITU-T Rec. H.222.0 | ISO/IEC 13818-1 PES packets with private data
+	   1015: [0x86] SCTE 35
+
+Program: 1120 (pcr pid: 1122)
+	   1122: [0x3] ISO/IEC 11172 Audio
+
+    ```
 
 
 ### ```Stream.decode(func=show_cue)```
