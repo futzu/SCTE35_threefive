@@ -139,8 +139,6 @@ class Stream:
             if (pkt[1] >> 6) & 1 :
                 self.parse_pusi(pkt[4:18],pid)
         if pid in self.scte35_pids:
-            if self.the_program and self.pid_prog[pid] != self.the_program:
-                return
             packet_data = self.mk_packet_data(pid)
             # handle older scte-35 packets
             pkt = pkt[:5]+b'\xfc0' +pkt.split(b'\x00\xfc0')[1]
@@ -216,6 +214,8 @@ class Stream:
         bitbin.forward(2)
         slib = bitbin.asint(12) << 3
         program_number = bitbin.asint(16) # 16
+        if self.the_program and (program_number != self.the_program):
+            return
         bitbin.forward(27) # 60
         pcr_pid = bitbin.asint(13)
         bitbin.forward(4)
