@@ -22,10 +22,8 @@
           * [Print __Cue__ instance as __JSON__](#print-cue-as-json)   
      * [__Stream__ Class](#stream-class)
           * [__Stream.decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                
-               * [__Parse__ a Local File with a __Stream__ Instance](#parse-a-local-file-with-a-stream-instance)
-               * [__Pipe__ a Video to a Stream __Instance__](#pipe-a-video-to-stream-instance)
           * [Stream.__decode_next__()](#streamdecode_next)
-          * [Stream.__decode_program__(the_program,func=show_cue)](#streamdecode_pidthe_pid-func--show_cue)
+          * [Stream.__decode_program__(the_program,func=show_cue)](#streamdecode_programthe_program-func--show_cue)
           * [Stream.__decode_proxy__(func=show_cue)](#Streamdecodeproxyfuncnone)    
  *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
      * __HLS__
@@ -227,8 +225,6 @@ Program: 1080 (pcr pid: 1081)
 
 
 ### ```Stream.decode(func=show_cue)```
-
-##### Parse a Local File with a Stream Instance
  
  ```python3
  
@@ -241,14 +237,6 @@ Program: 1080 (pcr pid: 1081)
         sp = Stream(tsdata)
         sp.decode()
 
-```
-
-##### Pipe a Video to Stream
-
-```sh
-
-curl -s https://futzu.com/xaa.ts -o -  \
-  | python3 -c 'import sys;import threefive; threefive.Stream(sys.stdin.buffer).decode()' 
 ```
 
 #####  Pass in custom function 
