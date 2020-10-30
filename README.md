@@ -237,8 +237,7 @@ Program: 1010 (pcr pid: 1011)
 
 Program: 1120 (pcr pid: 1122)
 	   1122: [0x3] ISO/IEC 11172 Audio
-
-    ```
+```
 
 
 ### ```Stream.decode(func=show_cue)```
