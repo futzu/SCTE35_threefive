@@ -115,10 +115,6 @@ import threefive
 ```python
 threefive.decode('/path/to/mpegwithscte35.ts') 
 ```
- *  __Binary__
-```python
-threefive.decode('/mnt/build/file.bin')
-```
  * __Base64__ 
 ```python
 mesg='/DBUAAAAAAAA///wBQb+AAAAAAA+AjxDVUVJAAAACn+/Dy11cm46dXVpZDphYTg1YmJiNi01YzQzLTRiNmEtYmViYi1lZTNiMTNlYjc5OTkRAAB2c6LA'
@@ -175,6 +171,11 @@ cue.show()
 
 
 ##  __Stream__ Class
+
+ ```python3
+  threefive.Stream(tsdata, show_null = False)
+  ```
+
   * source [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
 
   * The threefive.__Stream__ class parses SCTE35 messages from a file or stream.
@@ -183,13 +184,7 @@ cue.show()
    
        *  __show_null__ if set to __True__, enables showing SCTE 35 __null commands__.
    
- ```python3
-  threefive.Stream(tsdata, show_null = False)
-  ```
 
-   * __Methods__
-   
-   
 Method                              | Description
 ------------------------------------| -------------------------------------
 Stream.__show__()                   |__Prints__ all recognized Programs and streams by pid and type. 
@@ -228,15 +223,6 @@ Program: 1080 (pcr pid: 1081)
 	   1081: [0x1b] Video
 	   1082: [0x3] ISO/IEC 11172 Audio
 	   1084: [0x6] ITU-T Rec. H.222.0 | ISO/IEC 13818-1 PES packets with private data
-
-Program: 1010 (pcr pid: 1011)
-	   1011: [0x1b] Video
-	   1012: [0x3] ISO/IEC 11172 Audio
-	   1014: [0x6] ITU-T Rec. H.222.0 | ISO/IEC 13818-1 PES packets with private data
-	   1015: [0x86] SCTE 35
-
-Program: 1120 (pcr pid: 1122)
-	   1122: [0x3] ISO/IEC 11172 Audio
 ```
 
 
@@ -317,16 +303,16 @@ if __name__ == '__main__':
 * [Stream.__decode_next()__ multicast __example__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/ts_scte_parser.py)
 
 
-### ```Stream.decode_pid(the_pid, func = show_cue)```
+### ```Stream.decode_program(the_program, func = show_cue)```
 
-* Use Stream.__decode_pid()__ instead of Stream.__decode()__ 
-to decode SCTE-35 from packets where pid == __the_pid__
+* Use Stream.__decode_program()__ instead of Stream.__decode()__ 
+to decode SCTE-35 from packets where pid == __the_program__
 
 ```python3
 import threefive
 
 with open('../35.ts','rb') as tsdata:
-    threefive.Stream(tsdata).decode_pid(1035)
+    threefive.Stream(tsdata).decode_program(1)
 ```
 
 ### ```Stream.decode_proxy(func = show_cue)```
