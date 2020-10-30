@@ -177,8 +177,8 @@ cue.show()
   * source [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
 
   * The threefive.__Stream__ class parses SCTE35 messages from a file or stream.
-  * __init__
-       *  __tsdata__ is an open file handle or __sys.stdin.buffer__ to read 'piped' in data.
+
+       *  __tsdata__ is an open file handle.
    
        *  __show_null__ if set to __True__, enables showing SCTE 35 __null commands__.
    
@@ -238,14 +238,10 @@ Program: 1080 (pcr pid: 1081)
         sp.decode()
 
 ```
+  *   Pass in custom function 
 
-#####  Pass in custom function 
+   	*  __func__ should match the interface ``` func(cue)```
 
-   *  __func__ should match the interface
-```
-    func(cue)
-```
-   * __example__
 ```python3
 import sys
 import threefive
