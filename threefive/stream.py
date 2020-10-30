@@ -4,7 +4,7 @@ from bitn import BitBin
 from .cue import Cue
 from functools import partial
 from .streamtype import stream_type_map
-
+from operator import setitem
 
 def show_cue(cue):
     cue.show()
@@ -12,12 +12,11 @@ def show_cue(cue):
 
 class Stream:
     '''
-    A Stream class
+    Stream class
     With MPEG-TS program awareness.
     Accurate pts for streams with
     more than one program containing
     SCTE-35 streams.
-
     '''
     cmd_types = [4,5,6,7,255] # splice command types
     packet_size = 188
@@ -99,9 +98,9 @@ class Stream:
         to pass to a threefive.Cue instance
         '''
         packet_data = {}
-        packet_data['pid'] = pid
-        packet_data['program'] = self.pid_prog[pid]
-        packet_data['pts']= self.PTS[self.pid_prog[pid]]
+        setitem(packet_data,'pid', pid)
+        setitem(packet_data,'program',self.pid_prog[pid])
+        setitem(packet_data,'pts',self.PTS[self.pid_prog[pid]])
         return packet_data
 
     def pas(self,pkt):
@@ -117,8 +116,7 @@ class Stream:
             if program_number == 0:
                 bitbin.forward(13)
             else:
-                pmap_pid = bitbin.asint(13)
-                self.pmt_pids.add(pmap_pid)
+                self.pmt_pids.add(bitbin.asint(13))
             slib -= 32
         bitbin.forward(32)
 
@@ -127,15 +125,11 @@ class Stream:
         parse pid from pkt and
         route it appropriately
         '''
-        pid = self.parse_pid(pkt[1],pkt[2])
+        pid = ((pkt[1]& 31)<<8) | pkt[2]
         if pid == 0: self.pas(pkt)
         if pid in self.pmt_pids: self.pms(pkt)
-        if self.info: return False
         if pid in self.pid_prog.keys(): self.parse_pusi(pkt,pid)
         if pid in self.scte35_pids: return self.parse_scte35(pkt,pid)
-
-    def parse_pid(self,one,two):
-         return ((one & 31) << 8 | two)
 
     def parse_pts(self,pkt,pid):
         '''
@@ -152,12 +146,9 @@ class Stream:
         '''
         used to determine if pts data is available.
         '''
-        if (pkt[1] >> 6) & 1 :
-            if pkt[6] & 1:
-                if (pkt[10] >> 6) & 2:
-                    if (pkt[11] >> 6) & 2:
-                        if (pkt[13] >> 4) &2:
-                            self.parse_pts(pkt,pid)
+        if (pkt[1] >> 6) & pkt[6]:
+            if (pkt[10] >> 6) & (pkt[11] >> 6):
+                if (pkt[13] >> 4) & 2: self.parse_pts(pkt,pid)
 
     def parse_scte35(self,pkt,pid):
         packet_data = self.mk_packet_data(pid)
@@ -193,22 +184,24 @@ class Stream:
         if program_number not in self.programs:
             self.programs.add(program_number)
             if self.info:
-                self.show_program_streams(program_number,pstreams)       
+                print(f'\nProgram: {program_number}')     
             for s in pstreams:
-                self.pid_prog[s[1]]=program_number
-                if s[0] == '0x86':
-                    self.scte35_pids.add(s[1])
+                stream_type = s[0]
+                pid = s[1]
+                if self.info:
+                    self.show_program_stream(pid,stream_type)  
+                self.pid_prog[pid]=program_number
+                if stream_type == '0x86': self.scte35_pids.add(pid)
+    
         else:
             if self.info:
                 sys.exit()
 
-    def show_program_streams(self,program_number,pstreams):
-        print(f'\nProgram: {program_number}')
-        for s in pstreams:
-            st = f'[{s[0]}] Reserved or Private'
-            if s[0] in stream_type_map.keys():
-                st =f'[{s[0]}] {stream_type_map[s[0]]}'
-            print(f'\t   {s[1]}: {st}')
+    def show_program_stream(self,pid,stream_type):
+        streaminfo = f'[{stream_type}] Reserved or Private'
+        if stream_type in stream_type_map.keys():
+            streaminfo =f'[{stream_type}] {stream_type_map[stream_type]}'
+        print(f'\t   {pid}: {streaminfo}')
 
     def pms(self,pkt):
         bitbin = BitBin(pkt[5:])
