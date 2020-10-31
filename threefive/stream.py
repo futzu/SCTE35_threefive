@@ -4,7 +4,7 @@ from bitn import BitBin
 from .cue import Cue
 from functools import partial
 from .streamtype import stream_type_map
-from operator import setitem
+from operator import setitem,lshift,rshift
 
 def show_cue(cue):
     cue.show()
@@ -31,10 +31,11 @@ class Stream:
         self.info =False
         self.the_program = False
 
-    def find_start(self):
+    def find_start(self,pkt):
         '''
         handles partial packets
         '''
+        if pkt[0] == 71: return pkt
         sync_byte = b'G'
         while self.tsdata:
             n = self.tsdata.read(1)
@@ -42,17 +43,15 @@ class Stream:
             if n == sync_byte:
                 self.tsdata.read(self.packet_size -1)
                 if self.tsdata.read(1) == sync_byte:
-                    self.tsdata.read(self.packet_size -1)
-                    return True
-                
+                    return sync_byte +self.tsdata.read(self.packet_size -1)
+                    
     def decode(self,func = show_cue):
         '''
         reads MPEG-TS to find SCTE-35 packets
         '''
-        if not self.find_start(): return
         for pkt in iter(partial(self.tsdata.read, self.packet_size), b''):
-            cue = self.parser(pkt)
-            if cue : func(cue)
+             cue = self.parser(self.find_start(pkt))
+             if cue : func(cue)
             
 
     def decode_next(self):
@@ -106,9 +105,8 @@ class Stream:
         bitbin = BitBin(pkt[5:9])
         bitbin.forward(12)
         section_length = bitbin.asint(12)
-       # print("sl ", section_length)
         bitbin = BitBin(pkt[8:section_length+9])
-        slib = (section_length << 3)
+        slib = lshift(section_length,3)
         bitbin.forward(40)
         slib -= 40
         while slib> 40:
@@ -126,7 +124,7 @@ class Stream:
         parse pid from pkt and
         route it appropriately
         '''
-        pid = ((pkt[1]& 31)<<8) | pkt[2]
+        pid = lshift((pkt[1]& 31),8) | pkt[2]
         if pid == 0:
             self.pas(pkt)
             return
@@ -157,15 +155,15 @@ class Stream:
         '''
         used to determine if pts data is available.
         '''
-        if (pkt[1] >> 6) & pkt[6]:
-            if (pkt[10] >> 6) & (pkt[11] >> 6):
-                if (pkt[13] >> 4) & 2:
+        if rshift(pkt[1], 6) & pkt[6]:
+            if rshift(pkt[10], 6) & rshift(pkt[11], 6):
+                if rshift(pkt[13], 4) & 2:
                     self.parse_pts(pkt,pid)
 
     def parse_scte35(self,pkt,pid):
         packet_data = self.mk_packet_data(pid)
         # handle older scte-35 packets
-        #pkt = pkt[:5]+b'\xfc0' +pkt.split(b'\x00\xfc0')[1]
+        pkt = pkt[:5]+b'\xfc0' +pkt.split(b'\x00\xfc0')[1]
         # check splice command type
         if pkt[18] in self.cmd_types:     
             return Cue(pkt,packet_data)
