@@ -124,7 +124,7 @@ class Stream:
         parse pid from pkt and
         route it appropriately
         '''
-        pid = lshift((pkt[1]& 31),8) | pkt[2]
+        pid =(pkt[1]& 31) << 8 | pkt[2]
         if pid == 0:
             self.pas(pkt)
             return
@@ -155,9 +155,9 @@ class Stream:
         '''
         used to determine if pts data is available.
         '''
-        if rshift(pkt[1], 6) & pkt[6]:
-            if rshift(pkt[10], 6) & rshift(pkt[11], 6):
-                if rshift(pkt[13], 4) & 2:
+        if (pkt[1] >>6) & pkt[6]:
+            if (pkt[10] >> 6) & (pkt[11] >> 6):
+                if (pkt[13] >> 4) & 2:
                     self.parse_pts(pkt,pid)
 
     def parse_scte35(self,pkt,pid):
