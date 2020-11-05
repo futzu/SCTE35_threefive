@@ -31,11 +31,12 @@ class Stream:
         self.info =False
         self.the_program = False
 
-    def find_start(self,pkt):
+    def find_start(self):
         '''
         handles partial packets
         '''
-        if pkt[0] == 71: return pkt
+        pkt= self.tsdata.read(self.packet_size)
+        if pkt[0] == 71: return
         sync_byte = b'G'
         while self.tsdata:
             n = self.tsdata.read(1)
@@ -43,14 +44,16 @@ class Stream:
             if n == sync_byte:
                 self.tsdata.read(self.packet_size -1)
                 if self.tsdata.read(1) == sync_byte:
-                    return sync_byte +self.tsdata.read(self.packet_size -1)
-                    
+                    self.tsdata.read(self.packet_size -1)
+                    return
+                
     def decode(self,func = show_cue):
         '''
         reads MPEG-TS to find SCTE-35 packets
         '''
+        self.find_start()
         for pkt in iter(partial(self.tsdata.read, self.packet_size), b''):
-             cue = self.parser(self.find_start(pkt))
+             cue = self.parser(pkt)
              if cue : func(cue)
             
 
@@ -59,8 +62,9 @@ class Stream:
         returns a threefive.Cue instance
         when a SCTE-35 packet is found
         '''
+        self.find_start()
         for pkt in iter(partial(self.tsdata.read, self.packet_size), b''):
-            cue = self.parser(self.find_start(pkt))
+            cue = self.parser(pkt)
             if cue : return cue
 
     def decode_program(self,the_program,func = show_cue):
@@ -77,8 +81,8 @@ class Stream:
         and writes all ts packets to stdout
         and SCTE-35 data to stderr
         '''
+        self.find_start()
         for pkt in iter(partial(self.tsdata.read, self.packet_size), b''):
-            pkt = self.find_start(pkt)
             sys.stdout.buffer.write(pkt)
             cue = self.parser(pkt)
             if cue : func(cue)
@@ -106,9 +110,9 @@ class Stream:
         bitbin = BitBin(pkt[5:9])
         bitbin.forward(12)
         section_length = bitbin.asint(12)
-        bitbin = BitBin(pkt[8:section_length+9])
+        bitbin = BitBin(pkt[13:section_length+9])
         slib = section_length <<3
-        bitbin.forward(40)
+        #bitbin.forward(40)
         slib -= 40
         while slib> 40:
             program_number = bitbin.asint(16)
@@ -126,40 +130,46 @@ class Stream:
         route it appropriately
         '''
         pid =(pkt[1]& 31) << 8 | pkt[2]
-        if pid == 0:
-            self.pas(pkt)
-            return
         if pid in self.pmt_pids:
             self.pms(pkt)
             return
+        if pid == 0:
+            self.pas(pkt)
+            return
         if self.info:
             return
-        if pid in self.pid_prog.keys():
-            self.parse_pusi(pkt,pid)
-            
         if pid in self.scte35_pids:
             return self.parse_scte35(pkt,pid)
+        
+        if pid in self.pid_prog.keys():
+            if (pkt[1] >> 6) & 1 :
+                chunk = pkt[0:18]
+                self.parse_pusi(chunk,pid)
+                return
     
-    def parse_pts(self,pkt,pid):
+        return
+        
+    def parse_pts(self,chunk,pid):
         '''
         parse pts
         '''
 
-        pts  = ((pkt[13]  >> 1) & 7) << 30
-        pts |= (((pkt[14] << 7) | (pkt[15] >> 1)) << 15)
-        pts |=  ((pkt[16] << 7) | (pkt[17] >> 1))
+        pts  = ((chunk[13]  >> 1) & 7) << 30
+        pts |= (((chunk[14] << 7) | (chunk[15] >> 1)) << 15)
+        pts |=  ((chunk[16] << 7) | (chunk[17] >> 1))
         pts /= 90000.0
         ppp = self.pid_prog[pid]
         self.PTS[ppp]=pts
 
-    def parse_pusi(self,pkt,pid):
+    def parse_pusi(self,chunk,pid):
         '''
         used to determine if pts data is available.
         '''
-        if (pkt[1] >>6) & pkt[6]:
-            if (pkt[10] >> 6) & (pkt[11] >> 6):
-                if (pkt[13] >> 4) & 2:
-                    self.parse_pts(pkt,pid)
+        if chunk[6] & 1:
+            if (chunk[10] >> 6) & 2:
+                if (chunk[11] >> 6) & 2:
+                    if (chunk[13] >> 4) & 2:
+                        self.parse_pts(chunk,pid)
 
     def parse_scte35(self,pkt,pid):
         packet_data = self.mk_packet_data(pid)
@@ -187,7 +197,6 @@ class Stream:
         parse the elementary streams
         from a program
         '''
-        #pstreams=[]
         if program_number not in self.programs:
             self.programs.add(program_number)
             if self.info:
@@ -212,21 +221,16 @@ class Stream:
         print(f'\t   {pid}: {streaminfo}')
 
     def pms(self,pkt):
-        bitbin = BitBin(pkt[5:9])
-        bitbin.forward(9)
-        if bitbin.asflag(1):
-            return
-        bitbin.forward(2)
-        slib = bitbin.asint(12)
-        bitbin =BitBin(pkt[8:slib+9])
+        #if bitbin.asflag(1):
+        #    return
+        slib =(pkt[6] & 15 << 8) |pkt[7]
         slib <<= 3
-        program_number = bitbin.asint(16)
+        program_number = (pkt[8] << 8) + pkt[9]
         if self.the_program and (program_number != self.the_program):
             return 
-        #pcr_pid = bitbin.asint(13)
-        bitbin.forward(44)
-        pilib = (bitbin.asint(12) << 3)
+        pilib = (pkt[15] & 15 << 8)+pkt[16]
+        bitbin =BitBin(pkt[17+pilib:slib+9])
+        pilib <<= 3
         slib -= 72
         slib -= pilib # Skip descriptors
-        bitbin.forward(pilib) # Skip descriptors
         self.parse_program_streams(slib,bitbin,program_number)
