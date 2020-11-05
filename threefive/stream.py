@@ -99,7 +99,7 @@ class Stream:
         packet_data['pid'] = pid
         prgm = self.pid_prog[pid]
         packet_data['program'] = prgm
-        packet_data['pts'] = self.PTS[prgm]
+        packet_data['pts'] = round(self.PTS[prgm],6)
         return packet_data
 
     def pas(self,pkt):
@@ -150,7 +150,7 @@ class Stream:
         pts |=  ((pkt[16] << 7) | (pkt[17] >> 1))
         pts /= 90000.0
         ppp = self.pid_prog[pid]
-        self.PTS[ppp]=round(pts,6)
+        self.PTS[ppp]=pts
 
     def parse_pusi(self,pkt,pid):
         '''
