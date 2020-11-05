@@ -106,15 +106,13 @@ class Stream:
         packet_data['pts'] = round(self.PTS[prgm],6)
         return packet_data
 
-    def pas(self,pkt):
-        bitbin = BitBin(pkt[5:9])
-        bitbin.forward(12)
-        section_length = bitbin.asint(12)
-        bitbin = BitBin(pkt[13:section_length+9])
-        slib = section_length <<3
-        #bitbin.forward(40)
+    def program_association_table(self,pkt):
+        sectionlen =(pkt[6] & 15 << 8) | pkt[7]
+        pkt = pkt[13:sectionlen + 5]
+        bitbin = BitBin(pkt)
+        slib = sectionlen <<3
         slib -= 40
-        while slib> 40:
+        while slib> 32:
             program_number = bitbin.asint(16)
             bitbin.forward(3)
             if program_number == 0:
@@ -130,11 +128,11 @@ class Stream:
         route it appropriately
         '''
         pid =(pkt[1]& 31) << 8 | pkt[2]
-        if pid in self.pmt_pids:
-            self.pms(pkt)
-            return
         if pid == 0:
-            self.pas(pkt)
+            self.program_association_table(pkt)
+            return
+        if pid in self.pmt_pids:
+            self.program_map_section(pkt)
             return
         if self.info:
             return
@@ -143,33 +141,33 @@ class Stream:
         
         if pid in self.pid_prog.keys():
             if (pkt[1] >> 6) & 1 :
-                chunk = pkt[0:18]
-                self.parse_pusi(chunk,pid)
+                pkt = pkt[0:18]
+                self.parse_pusi(pkt,pid)
                 return
-    
+        
         return
         
-    def parse_pts(self,chunk,pid):
+    def parse_pts(self,pkt,pid):
         '''
         parse pts
         '''
 
-        pts  = ((chunk[13]  >> 1) & 7) << 30
-        pts |= (((chunk[14] << 7) | (chunk[15] >> 1)) << 15)
-        pts |=  ((chunk[16] << 7) | (chunk[17] >> 1))
+        pts  = ((pkt[13]  >> 1) & 7) << 30
+        pts |= (((pkt[14] << 7) | (pkt[15] >> 1)) << 15)
+        pts |=  ((pkt[16] << 7) | (pkt[17] >> 1))
         pts /= 90000.0
         ppp = self.pid_prog[pid]
         self.PTS[ppp]=pts
 
-    def parse_pusi(self,chunk,pid):
+    def parse_pusi(self,pkt,pid):
         '''
         used to determine if pts data is available.
         '''
-        if chunk[6] & 1:
-            if (chunk[10] >> 6) & 2:
-                if (chunk[11] >> 6) & 2:
-                    if (chunk[13] >> 4) & 2:
-                        self.parse_pts(chunk,pid)
+        if pkt[6] & 1:
+            if (pkt[10] >> 6) & 2:
+                if (pkt[11] >> 6) & 2:
+                    if (pkt[13] >> 4) & 2:
+                        self.parse_pts(pkt,pid)
 
     def parse_scte35(self,pkt,pid):
         packet_data = self.mk_packet_data(pid)
@@ -220,17 +218,22 @@ class Stream:
             streaminfo =f'[{stream_type}] {stream_type_map[stream_type]}'
         print(f'\t   {pid}: {streaminfo}')
 
-    def pms(self,pkt):
-        #if bitbin.asflag(1):
-        #    return
-        slib =(pkt[6] & 15 << 8) |pkt[7]
-        slib <<= 3
-        program_number = (pkt[8] << 8) + pkt[9]
+    def program_map_section(self,pkt):
+        #table_id = pkt[5]
+        sectioninfolen = (pkt[6] & 15 << 8) | pkt[7]
+        slib = sectioninfolen << 3
+        program_number = (pkt[8] << 8) | pkt[9]
+        #version = pkt[10] >> 1 & 31
+        #current_next = pkt[10] & 1
         if self.the_program and (program_number != self.the_program):
-            return 
-        pilib = (pkt[15] & 15 << 8)+pkt[16]
-        bitbin =BitBin(pkt[17+pilib:slib+9])
-        pilib <<= 3
+            return
+        #section_number = pkt[11]
+        #last_section_number = pkt[12]
+        #pcr_pid = (pkt[13]& 31) << 8 | pkt[14]
+        proginfolen = (pkt[15] & 15 << 8) | pkt[16]
+        pkt = pkt[17+proginfolen:slib+9]
+        bitbin =BitBin(pkt)
+        pilib= proginfolen << 3
         slib -= 72
         slib -= pilib # Skip descriptors
         self.parse_program_streams(slib,bitbin,program_number)
