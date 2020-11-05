@@ -4,7 +4,7 @@ from bitn import BitBin
 from .cue import Cue
 from functools import partial
 from .streamtype import stream_type_map
-from operator import setitem,lshift,rshift
+
 
 def show_cue(cue):
     cue.show()
@@ -96,9 +96,10 @@ class Stream:
         to pass to a threefive.Cue instance
         '''
         packet_data = {}
-        setitem(packet_data,'pid', pid)
-        setitem(packet_data,'program',self.pid_prog[pid])
-        setitem(packet_data,'pts',self.PTS[self.pid_prog[pid]])
+        packet_data['pid'] = pid
+        prgm = self.pid_prog[pid]
+        packet_data['program'] = prgm
+        packet_data['pts'] = self.PTS[prgm]
         return packet_data
 
     def pas(self,pkt):
@@ -106,7 +107,7 @@ class Stream:
         bitbin.forward(12)
         section_length = bitbin.asint(12)
         bitbin = BitBin(pkt[8:section_length+9])
-        slib = lshift(section_length,3)
+        slib = section_length <<3
         bitbin.forward(40)
         slib -= 40
         while slib> 40:
