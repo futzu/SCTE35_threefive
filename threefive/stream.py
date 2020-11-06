@@ -130,10 +130,8 @@ class Stream:
         pid =(pkt[1]& 31) << 8 | pkt[2]
         if pid == 0:
             self.program_association_table(pkt)
-            return
         if pid in self.pmt_pids:
             self.program_map_section(pkt)
-            return
         if self.info:
             return
         if pid in self.scte35_pids:
@@ -142,10 +140,9 @@ class Stream:
         if pid in self.pid_prog.keys():
             if (pkt[1] >> 6) & 1 :
                 pkt = pkt[0:18]
-                self.parse_pusi(pkt,pid)
+                self.parse_pts(pkt,pid)
                 return
         
-        return
         
     def parse_pts(self,pkt,pid):
         '''
@@ -166,13 +163,16 @@ class Stream:
         if pkt[6] & 1:
             if (pkt[10] >> 6) & 2:
                 if (pkt[11] >> 6) & 2:
-                    if (pkt[13] >> 4) & 2:
+                    if (pkt[13] >> 4) in [2]:
                         self.parse_pts(pkt,pid)
 
     def parse_scte35(self,pkt,pid):
         packet_data = self.mk_packet_data(pid)
         # handle older scte-35 packets
-        pkt = pkt[:5]+b'\xfc0' +pkt.split(b'\x00\xfc0')[1]
+        try:
+            pkt = pkt[:5]+b'\xfc0' +pkt.split(b'\x00\xfc0')[1]
+        except:
+            print(pkt)
         # check splice command type
         if pkt[18] in self.cmd_types:     
             return Cue(pkt,packet_data)
@@ -207,7 +207,8 @@ class Stream:
                 self.pid_prog[pid] = program_number
                 if self.info:
                     self.show_program_stream(pid,stream_type)  
-                if stream_type == '0x86': self.scte35_pids.add(pid)
+                if stream_type == '0x86':
+                    self.scte35_pids.add(pid)
         else:
             if self.info:
                 sys.exit()
