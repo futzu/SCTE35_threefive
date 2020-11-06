@@ -140,7 +140,7 @@ class Stream:
         if pid in self.pid_prog.keys():
             if (pkt[1] >> 6) & 1 :
                 pkt = pkt[0:18]
-                self.parse_pts(pkt,pid)
+                self.parse_pusi(pkt,pid)
                 return
         
         
