@@ -149,7 +149,7 @@ class Cue:
         return {k: v for k, v in obj.items() if v is not None}
 
     def kvprint(self, obj):
-        print(json.dumps(obj,indent = 2))
+        print(json.dumps(obj,indent = 2),file=sys.stderr)
 
     def mkbits(self, s):
         '''
@@ -170,7 +170,7 @@ class Cue:
         '''
         sct = self.info_section.splice_command_type
         if sct not in self.command_map.keys():
-            raise ValueError('Unknown Splice Command Type')
+            print('Unknown Splice Command Type',file=sys.stderr)
             return False
         self.command = self.command_map[sct]()
         self.command.decode(cmdbb)
