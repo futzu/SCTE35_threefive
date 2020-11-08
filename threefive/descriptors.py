@@ -6,7 +6,7 @@ class Splice_Descriptor:
         # identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
         self.identifier = bitbin.asdecodedhex(32)
         if self.identifier != "CUEI":
-                print('Descriptors should have an identifier of "CUEI"',file=sys.stderr,)
+                print('Descriptors should have an identifier of "CUEI"',file=sys.stderr)
         return self.identifier
 
 
