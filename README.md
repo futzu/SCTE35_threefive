@@ -59,7 +59,7 @@
 
    *  Stream.decode, Stream.decode_pid, and Stream.decode_proxy now all take an optional function as an arg. See [__Stream__](#stream-class)
    *  Stream.decode_until_found() is now [__Stream.decode_next()__](#streamdecode_next)
-   *  Stream.decode_pid() is now [__Stream.decode_program()__](#streamdecode_program)
+   *  Stream.decode_pid() is now [__Stream.decode_program()__](#streamdecode_programthe_program-func--show_cue)
 ---
 
 ## Fast __Start_
