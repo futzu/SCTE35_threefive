@@ -15,9 +15,9 @@ class Cue:
     SCTE 35 message strings.
     '''
     # splice descriptor tags
-    sd_tags = [0,1,2,3,4]
+    sd_tags = [0, 1, 2, 3, 4]
     # splice command types
-    cmd_types = [0,4,5,6,7,255] 
+    cmd_types = [0, 4, 5, 6, 7, 255]
 
     def __init__(self, data, packet_data={}):
         self.info_section = self.command = False
@@ -32,18 +32,18 @@ class Cue:
         self.set_command()
         self.info_section.descriptor_loop_length = self.bitbin.asint(16)
         self.descriptor_loop()
-        self.info_section.crc = hex(int.from_bytes(payload[0:4],
+        self.info_section.crc = hex(int.from_bytes(payload[0:4], 
                                             byteorder = 'big'))
-                
+
     def __repr__(self):
         return str(self.get())
 
-    def clean(self,obj):
+    def clean(self, obj):
         '''
         clean removes items from a dict if the value is None
         '''
         return {k: v for k, v in obj.items() if v is not None}
-    
+
     def descriptor_loop(self):
         '''
         Cue.descriptor_loop()
@@ -73,27 +73,27 @@ class Cue:
 
     def get_command(self):
         '''
-        Cue.get_command() 
+        Cue.get_command()
         returns a clean dict of Cue.command
         '''
         return self.clean(vars(self.command))
 
     def get_descriptors(self):
         return [self.clean(vars(d)) for d in self.descriptors]
-  
+
     def get_info_section(self):
-        return self.clean(vars(self.info_section))       
+        return self.clean(vars(self.info_section))
 
     def get_json(self):
         '''
         Cue.get_json()
         returns Cue.get() as json.
         '''
-        return json.dumps(self.get(),indent = 2)
+        return json.dumps(self.get(), indent = 2)
 
     def get_packet_data(self):
         return self.clean(self.packet_data)
-    
+
     def mk_bits(self, s):
         '''
         Convert Hex and Base64 strings into bytes.
@@ -106,8 +106,8 @@ class Cue:
             return b64decode(s)
         except:
             return s
-        
-    def mk_payload(self,data):
+
+    def mk_payload(self, data):
         '''
         Cue.mk_payload trims the packet
         header if data is a full SCTE-35 packet
@@ -117,7 +117,7 @@ class Cue:
         else:
             payload = self.mk_bits(data)
         return payload
-    
+
     def set_command(self):
         '''
         threefive.Cue.set_command
@@ -129,7 +129,7 @@ class Cue:
             raise ValueError('Unknown Splice Command Type')
             return False
         self.command = SpliceCommand()
-        self.command.parse(sct,self.bitbin)
+        self.command.parse(sct, self.bitbin)
 
     def set_splice_descriptor(self):
         '''
@@ -145,7 +145,7 @@ class Cue:
                 sd = SegmentationDescriptor()
             else:
                 sd = SpliceDescriptor()
-            sd.parse(self.bitbin,tag)
+            sd.parse(self.bitbin, tag)
             sd.descriptor_length = desc_len
             return sd
         else:
