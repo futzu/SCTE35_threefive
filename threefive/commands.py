@@ -1,27 +1,25 @@
-class SpliceCommand:
+class Splice_Command:
     '''
-    command.SpliceCommand handles all splice commands.
+    Base class for all splice command classes,
+    not used directly.
     '''
-    def parse(self, cmd_type, bitbin):
-        '''
-        SpliceCommand.parse calls a method
-        depending on the value of cmd_type
-        '''
-        cmd_map = {0: self.splice_null,
-            4: self.splice_schedule,
-            5: self.splice_insert,
-            6: self.time_signal,
-            7: self.bandwidth_reservation,
-            255: self.private_command }
-        cmd_map[cmd_type](bitbin)
+    def __init__(self):
+        pass
 
-    def __repr__(self):
-        return str(vars(self))
+    def decode(self, bitn):
+        pass
 
     def parse_break(self, bitbin):
         self.break_auto_return = bitbin.asflag(1)
         bitbin.forward(6)
         self.break_duration = bitbin.as90k(33)
+
+    def encode_break(self): #40bits
+        break_bytes = 0
+        if self.break_auto_return:
+            break_bytes = 1 << 39
+        break_bytes += (self.break_duration * 90000)
+        return int.to_bytes(break_bytes, 5, byteorder='big')
 
     def splice_time(self, bitbin):  # 40bits
         self.time_specified_flag = bitbin.asflag(1)
@@ -31,17 +29,28 @@ class SpliceCommand:
         else:
             bitbin.forward(7)
 
-    def splice_null(self, bitbin):
-        """
-        Table 7 - splice_null()
-        """
+    def encode_splice_time(self):
+        st_bytes = 0
+        if self.time_specified_flag:
+            st_bytes = 1 << 39
+            st_bytes += (self.pts_time * 90000)
+        return int.to_bytes(st_bytes, 5, byteorder='big')
+
+
+class Splice_Null(Splice_Command):
+    """
+    Table 7 - splice_null()
+    """
+    def decode(self, bitbin):
         self.name = "Splice Null"
         self.splice_command_length = 0
 
-    def splice_schedule(Self, bitbin):
-        """
-        Table 8 - splice_schedule()
-        """
+
+class Splice_Schedule(Splice_Command):
+    """
+    Table 8 - splice_schedule()
+    """
+    def decode(self, bitbin):
         self.name = "Splice Schedule"
         splice_count = bitbin.asint(8)
         for i in range(0, splice_count):
@@ -67,11 +76,13 @@ class SpliceCommand:
                 self.unique_program_id = bitbin.asint(16)
                 self.avail_num = bitbin.asint(8)
                 self.avails_expected = bitbin.asint(8)
+      
 
-    def splice_insert(self, bitbin):
-        """
-        Table 9 - splice_insert()
-        """
+class Splice_Insert(Splice_Command):
+    """
+    Table 9 - splice_insert()
+    """
+    def decode(self, bitbin):
         self.name = "Splice Insert"
         self.splice_event_id = bitbin.asint(32) # uint32
         self.splice_event_cancel_indicator = bitbin.asflag(1)
@@ -94,25 +105,42 @@ class SpliceCommand:
             self.unique_program_id = bitbin.asint(16)
             self.avail_num = bitbin.asint(8)
             self.avail_expected = bitbin.asint(8)
+            
 
-    def time_signal(self, bitbin):
-        """
-        Table 10 - time_signal()
-        """
+class Time_Signal(Splice_Command):
+    """
+    Table 10 - time_signal()
+    """
+    def __init__(self):
         self.time_specified_flag = None
         self.pts_time = None
+
+    def decode(self, bitbin):
         self.name = "Time Signal"
         self.splice_time(bitbin)
 
-    def bandwidth_reservation(self, bitbin):
-        """
-        Table 11 - bandwidth_reservation()
-        """
+    def encode(self):
+        command_bytes =self.encode_splice_time()
+
+
+class Bandwidth_Reservation(Splice_Command):
+    """
+    Table 11 - bandwidth_reservation()
+    """
+    def decode(self, bitbin):
         self.name = "Bandwidth Reservation"
 
-    def private_command(self, bitbin):
-        """
-        Table 12 - private_command()
-        """
+
+class Private_Command(Splice_Command):
+    """
+    Table 12 - private_command()
+    """
+    def __init__(self):
+        self.identifier = None
+
+    def decode(self, bitbin):
         self.name = "Private Command"
         self.identifier = bitbin.asint(32)
+
+    def encode(self):
+        command_bytes = int.to_bytes(self.identifier, 4, byteorder='big')
