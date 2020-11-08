@@ -240,7 +240,9 @@ Program: 1080 (pcr pid: 1081)
 ```
   *   Pass in custom function 
 
-   	*  __func__ should match the interface ``` func(cue)```
+  *  __func__ should match the interface 
+  ``` func(cue)```
+  * example
 
 ```python3
 import sys
