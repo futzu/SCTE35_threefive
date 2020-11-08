@@ -1,4 +1,5 @@
 from base64 import b64encode
+import sys
 from bitn import BitBin
 
 class SpliceInfoSection:
