@@ -2,9 +2,9 @@ class SpliceCommand:
     '''
     command.SpliceCommand handles all splice commands.
     '''
-    def parse(self,cmd_type,bitbin): 
+    def parse(self, cmd_type, bitbin):
         '''
-        SpliceCommand.parse calls a method 
+        SpliceCommand.parse calls a method
         depending on the value of cmd_type
         '''
         cmd_map = {0: self.splice_null,
@@ -17,7 +17,7 @@ class SpliceCommand:
 
     def __repr__(self):
         return str(vars(self))
-    
+
     def parse_break(self, bitbin):
         self.break_auto_return = bitbin.asflag(1)
         bitbin.forward(6)
@@ -31,14 +31,14 @@ class SpliceCommand:
         else:
             bitbin.forward(7)
 
-    def splice_null(self,bitbin):
+    def splice_null(self, bitbin):
         """
         Table 7 - splice_null()
         """
         self.name = "Splice Null"
         self.splice_command_length = 0
 
-    def splice_schedule(Self,bitbin):
+    def splice_schedule(Self, bitbin):
         """
         Table 8 - splice_schedule()
         """
@@ -67,8 +67,8 @@ class SpliceCommand:
                 self.unique_program_id = bitbin.asint(16)
                 self.avail_num = bitbin.asint(8)
                 self.avails_expected = bitbin.asint(8)
-      
-    def splice_insert(self,bitbin):
+
+    def splice_insert(self, bitbin):
         """
         Table 9 - splice_insert()
         """
@@ -94,7 +94,7 @@ class SpliceCommand:
             self.unique_program_id = bitbin.asint(16)
             self.avail_num = bitbin.asint(8)
             self.avail_expected = bitbin.asint(8)
-            
+
     def time_signal(self, bitbin):
         """
         Table 10 - time_signal()
