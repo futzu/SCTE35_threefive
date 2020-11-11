@@ -6,6 +6,28 @@ from .cue import Cue
 from .streamtype import stream_type_map
 
 
+def _parse_stream_type(bitbin):
+    '''
+    extract stream pid and type
+    '''
+    stream_type = bitbin.ashex(8) # 8
+    bitbin.forward(3) # 11
+    el_PID = bitbin.asint(13) # 24
+    bitbin.forward(4) # 28
+    eilib = bitbin.asint(12) << 3 # 40
+    bitbin.forward(eilib)
+    minus = 40 + eilib
+    return minus, [stream_type, el_PID]
+
+def _show_program_stream(pid, stream_type):
+    '''
+    print program -> stream mappings
+    '''
+    streaminfo = f'[{stream_type}] Reserved or Private'
+    if stream_type in stream_type_map.keys():
+        streaminfo = f'[{stream_type}] {stream_type_map[stream_type]}'
+    print(f'\t   {pid}: {streaminfo}')
+
 def show_cue(cue):
     '''
     default function call for
@@ -15,6 +37,7 @@ def show_cue(cue):
     when a SCTE-35 packet is found.
     '''
     cue.show()
+
 
 
 class Stream:
@@ -167,9 +190,9 @@ class Stream:
         parse pts
         '''
 
-        pts  = ((pkt[13]  >> 1) & 7) << 30
+        pts = ((pkt[13]  >> 1) & 7) << 30
         pts |= (((pkt[14] << 7) | (pkt[15] >> 1)) << 15)
-        pts |=  ((pkt[16] << 7) | (pkt[17] >> 1))
+        pts |= ((pkt[16] << 7) | (pkt[17] >> 1))
         pts /= 90000.0
         ppp = self._pid_prog[pid]
         self._PTS[ppp] = pts
@@ -200,19 +223,6 @@ class Stream:
             return Cue(pkt, packet_data)
         return None
 
-    def _parse_stream_type(self, bitbin):
-        '''
-        extract stream pid and type
-        '''
-        stream_type = bitbin.ashex(8) # 8
-        bitbin.forward(3) # 11
-        el_PID = bitbin.asint(13) # 24
-        bitbin.forward(4) # 28
-        eilib = bitbin.asint(12) << 3 # 40
-        bitbin.forward(eilib)
-        minus = 40 + eilib
-        return minus, [stream_type, el_PID]
-
     def _parse_program_streams(self, slib, bitbin, program_number):
         '''
         parse the elementary streams
@@ -223,27 +233,18 @@ class Stream:
             if self.info:
                 print(f'\nProgram: {program_number}')
             while slib > 32:
-                minus, pstream = self._parse_stream_type(bitbin)
+                minus, pstream = _parse_stream_type(bitbin)
                 slib -= minus
                 stream_type = pstream[0]
                 pid = pstream[1]
                 self._pid_prog[pid] = program_number
                 if self.info:
-                    self._show_program_stream(pid, stream_type)
+                    _show_program_stream(pid, stream_type)
                 if stream_type == '0x86':
                     self._scte35_pids.add(pid)
         else:
             if self.info:
                 sys.exit()
-
-    def _show_program_stream(self, pid, stream_type):
-        '''
-        print program -> stream mappings
-        '''
-        streaminfo = f'[{stream_type}] Reserved or Private'
-        if stream_type in stream_type_map.keys():
-            streaminfo = f'[{stream_type}] {stream_type_map[stream_type]}'
-        print(f'\t   {pid}: {streaminfo}')
 
     def _program_map_section(self, pkt):
         '''
