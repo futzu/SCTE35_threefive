@@ -7,6 +7,13 @@ from .streamtype import stream_type_map
 
 
 def show_cue(cue):
+    '''
+    default function call for
+    Stream.decode,
+    Stream.decode_program,
+    and Stream.decode_proxy
+    when a SCTE-35 packet is found.
+    '''
     cue.show()
 
 
@@ -178,6 +185,9 @@ class Stream:
                         self._parse_pts(pkt, pid)
 
     def _parse_scte35(self, pkt, pid):
+        '''
+        parse a SCTE-35 packet
+        '''
         packet_data = self._mk_packet_data(pid)
         # strip pre-padding on older scte-35 packets
         try:
@@ -227,12 +237,18 @@ class Stream:
                 sys.exit()
 
     def _show_program_stream(self, pid, stream_type):
+        '''
+        print program -> stream mappings
+        '''
         streaminfo = f'[{stream_type}] Reserved or Private'
         if stream_type in stream_type_map.keys():
             streaminfo = f'[{stream_type}] {stream_type_map[stream_type]}'
         print(f'\t   {pid}: {streaminfo}')
 
     def _program_map_section(self, pkt):
+        '''
+        parse program maps for streams
+        '''
         #table_id = pkt[5]
         sectioninfolen = (pkt[6] & 15 << 8) | pkt[7]
         slib = sectioninfolen << 3
