@@ -20,16 +20,16 @@ from threefive.commands import (
     )
 
 
-def kvclean(obj):
+def _kvclean(obj):
     '''
-    kvclean removes items from a dict if the value is None
+    _kvclean removes items from a dict if the value is None
     '''
     return {k: v for k, v in obj.items() if v is not None}
 
-def kvprint(obj):
+def _kvprint(obj):
     print(json.dumps(obj, indent=2), file=sys.stderr)
 
-def mkbits(s):
+def _mkbits(s):
     '''
     Convert Hex and Base64 strings into bytes.
     '''
@@ -42,7 +42,7 @@ def mkbits(s):
     except Exception:
         return s
 
-def mkpayload(data):
+def _mkpayload(data):
     '''
     mkpayload strips off packet headers
     when present
@@ -50,7 +50,7 @@ def mkpayload(data):
     if data[0] == 0x47:
         payload = data[5:]
     else:
-        payload = mkbits(data)
+        payload = _mkbits(data)
     return payload
 
 
@@ -78,11 +78,11 @@ class Cue:
         self.info_section = None
         self.command = None
         self.descriptors = []
-        payload = mkpayload(data)
+        payload = _mkpayload(data)
         self.packet_data = packet_data
-        self.parse(payload)
+        self._parse(payload)
 
-    def parse(self, payload):
+    def _parse(self, payload):
         payload = self._mk_info_section(payload)
         payload = self._mk_command(payload)
         payload = self._mk_descriptors(payload)
@@ -107,6 +107,10 @@ class Cue:
         return payload[cmdl:]
 
     def _mk_descriptors(self, payload):
+        '''
+        parse descriptor loop length,
+        then call Cue._descriptorloop
+        '''
         dll = int.from_bytes(payload[0:2], byteorder='big')
         self.info_section.descriptor_loop_length = dll
         payload = payload[2:]
@@ -149,21 +153,21 @@ class Cue:
         returns the SCTE 35
         splice command data as a dict.
         '''
-        return kvclean(vars(self.command))
+        return _kvclean(vars(self.command))
 
     def get_descriptors(self):
         '''
         Returns a list of SCTE 35
         splice descriptors as dicts.
         '''
-        return [kvclean(vars(d)) for d in self.descriptors]
+        return [_kvclean(vars(d)) for d in self.descriptors]
 
     def get_info_section(self):
         '''
         Returns SCTE 35
         splice info section as a dict
         '''
-        return kvclean(vars(self.info_section))
+        return _kvclean(vars(self.info_section))
 
     def get_json(self):
         '''
@@ -173,7 +177,10 @@ class Cue:
         return json.dumps(self.get(), indent=2)
 
     def get_packet_data(self):
-        return kvclean(self.packet_data)
+        '''
+        returns cleaned Cue.packet_data
+        '''
+        return _kvclean(self.packet_data)
 
     def _set_splice_command(self, cmdbb):
         '''
@@ -206,4 +213,4 @@ class Cue:
         '''
         pretty prints the SCTE 35 message
         '''
-        kvprint(self.get())
+        _kvprint(self.get())
