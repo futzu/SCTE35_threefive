@@ -60,19 +60,19 @@ class Cue:
     SCTE 35 message strings.
     '''
     # map of known descriptors and associated classes
-    descriptor_map = {0: AvailDescriptor,
-                      1: DtmfDescriptor,
-                      2: SegmentationDescriptor,
-                      3: TimeDescriptor,
-                      4: AudioDescriptor}
+    _descriptor_map = {0: AvailDescriptor,
+                       1: DtmfDescriptor,
+                       2: SegmentationDescriptor,
+                       3: TimeDescriptor,
+                       4: AudioDescriptor}
 
     # map of known splice commands and associated classes
-    command_map = {0: SpliceNull,
-                   4: SpliceSchedule,
-                   5: SpliceInsert,
-                   6: TimeSignal,
-                   7: BandwidthReservation,
-                   255: PrivateCommand}
+    _command_map = {0: SpliceNull,
+                    4: SpliceSchedule,
+                    5: SpliceInsert,
+                    6: TimeSignal,
+                    7: BandwidthReservation,
+                    255: PrivateCommand}
 
     def __init__(self, data, packet_data=None):
         self.info_section = None
@@ -83,46 +83,46 @@ class Cue:
         self.parse(payload)
 
     def parse(self, payload):
-        payload = self.mk_info_section(payload)
-        payload = self.mk_command(payload)
-        payload = self.mk_descriptors(payload)
+        payload = self._mk_info_section(payload)
+        payload = self._mk_command(payload)
+        payload = self._mk_descriptors(payload)
         self.info_section.crc = hex(int.from_bytes(payload[0:4],
                                                    byteorder='big'))
 
-    def mk_info_section(self, payload):
+    def _mk_info_section(self, payload):
         info_size = 14
         info_payload = payload[:info_size]
         self.info_section = SpliceInfoSection()
         self.info_section.decode(info_payload)
         return payload[info_size:]
 
-    def mk_command(self, payload):
+    def _mk_command(self, payload):
         cmdbb = BitBin(payload)
         bit_start = cmdbb.idx
-        self.set_splice_command(cmdbb)
+        self._set_splice_command(cmdbb)
         bit_end = cmdbb.idx
         cmdl = int((bit_start - bit_end) >>3)
         self.command.splice_command_length = cmdl
         self.info_section.splice_command_length = cmdl
         return payload[cmdl:]
 
-    def mk_descriptors(self, payload):
+    def _mk_descriptors(self, payload):
         dll = int.from_bytes(payload[0:2], byteorder='big')
         self.info_section.descriptor_loop_length = dll
         payload = payload[2:]
-        self.descriptorloop(payload, dll)
+        self._descriptorloop(payload, dll)
         return payload[dll:]
 
     def __repr__(self):
         return str(self.get())
 
-    def descriptorloop(self, payload, dll):
+    def _descriptorloop(self, payload, dll):
         '''
         parses all splice descriptors
         '''
         while dll > 0:
             try:
-                sd = self.set_splice_descriptor(payload)
+                sd = self._set_splice_descriptor(payload)
                 sdl = sd.descriptor_length
                 bump = sdl + 2
                 dll -= bump
@@ -175,20 +175,20 @@ class Cue:
     def get_packet_data(self):
         return kvclean(self.packet_data)
 
-    def set_splice_command(self, cmdbb):
+    def _set_splice_command(self, cmdbb):
         '''
-        Splice Commands looked up in self.command_map
+        Splice Commands looked up in self._command_map
         '''
         sct = self.info_section.splice_command_type
-        if sct not in self.command_map.keys():
+        if sct not in self._command_map.keys():
             print('Unknown Splice Command Type', file=sys.stderr)
             return False
-        self.command = self.command_map[sct]()
+        self.command = self._command_map[sct]()
         self.command.decode(cmdbb)
 
-    def set_splice_descriptor(self, payload):
+    def _set_splice_descriptor(self, payload):
         '''
-        Splice Descriptors looked up in self.descriptor_map
+        Splice Descriptors looked up in self._descriptor_map
         '''
         # splice_descriptor_tag 8 uimsbf
         tag = payload[0]
@@ -196,8 +196,8 @@ class Cue:
         payload = payload[2:]
         bitbin = BitBin(payload[:desc_len])
         payload = payload[desc_len:]
-        if tag in self.descriptor_map.keys():
-            sd = self.descriptor_map[tag](bitbin, tag)
+        if tag in self._descriptor_map.keys():
+            sd = self._descriptor_map[tag](bitbin, tag)
             sd.descriptor_length = desc_len
             return sd
         return False
