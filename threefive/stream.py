@@ -113,6 +113,10 @@ class Stream:
         return packet_data
 
     def _program_association_table(self, pkt):
+        '''
+        parse program association table ( pid 0 )
+        to program to program table pid mappings.
+        '''
         sectionlen = (pkt[6] & 15 << 8) | pkt[7]
         pkt = pkt[13:(sectionlen + 5)]
         bitbin = BitBin(pkt)
@@ -175,11 +179,10 @@ class Stream:
 
     def _parse_scte35(self, pkt, pid):
         packet_data = self._mk_packet_data(pid)
-        # handle older scte-35 packets
+        # strip pre-padding on older scte-35 packets
         try:
-            pkt = (pkt[:5]
-                   + b'\xfc0'
-                   + pkt.split(b'\x00\xfc0')[1])
+            chunks = [pkt[:5], b'\xfc0', pkt.split(b'\x00\xfc0')[1]]
+            pkt = ''.join(chunks)
         except:
             print(pkt)
         # check splice command type

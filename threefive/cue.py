@@ -2,21 +2,21 @@ from base64 import b64decode
 import json
 import sys
 from bitn import BitBin
-from threefive.segmentation import Segmentation_Descriptor
+from threefive.segmentation import SegmentationDescriptor
 from threefive.section import SpliceInfoSection
 from threefive.descriptors import (
-    Avail_Descriptor,
-    Dtmf_Descriptor,
-    Time_Descriptor,
-    Audio_Descriptor
+    AvailDescriptor,
+    DtmfDescriptor,
+    TimeDescriptor,
+    AudioDescriptor
     )
 from threefive.commands import (
-    Splice_Null,
-    Splice_Schedule,
-    Splice_Insert,
-    Time_Signal,
-    Bandwidth_Reservation,
-    Private_Command
+    SpliceNull,
+    SpliceSchedule,
+    SpliceInsert,
+    TimeSignal,
+    BandwidthReservation,
+    PrivateCommand
     )
 
 
@@ -60,19 +60,19 @@ class Cue:
     SCTE 35 message strings.
     '''
     # map of known descriptors and associated classes
-    descriptor_map = {0: Avail_Descriptor,
-                      1: Dtmf_Descriptor,
-                      2: Segmentation_Descriptor,
-                      3: Time_Descriptor,
-                      4: Audio_Descriptor}
+    descriptor_map = {0: AvailDescriptor,
+                      1: DtmfDescriptor,
+                      2: SegmentationDescriptor,
+                      3: TimeDescriptor,
+                      4: AudioDescriptor}
 
     # map of known splice commands and associated classes
-    command_map = {0: Splice_Null,
-                   4: Splice_Schedule,
-                   5: Splice_Insert,
-                   6: Time_Signal,
-                   7: Bandwidth_Reservation,
-                   255: Private_Command}
+    command_map = {0: SpliceNull,
+                   4: SpliceSchedule,
+                   5: SpliceInsert,
+                   6: TimeSignal,
+                   7: BandwidthReservation,
+                   255: PrivateCommand}
 
     def __init__(self, data, packet_data=None):
         self.info_section = None

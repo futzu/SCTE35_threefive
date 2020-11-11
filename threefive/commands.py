@@ -1,4 +1,4 @@
-class Splice_Command:
+class SpliceCommand:
     '''
     Base class for all splice command classes,
     not used directly.
@@ -37,7 +37,7 @@ class Splice_Command:
         return int.to_bytes(st_bytes, 5, byteorder='big')
 
 
-class Splice_Null(Splice_Command):
+class SpliceNull(SpliceCommand):
     """
     Table 7 - splice_null()
     """
@@ -46,7 +46,7 @@ class Splice_Null(Splice_Command):
         self.splice_command_length = 0
 
 
-class Splice_Schedule(Splice_Command):
+class SpliceSchedule(SpliceCommand):
     """
     Table 8 - splice_schedule()
     """
@@ -76,7 +76,7 @@ class Splice_Schedule(Splice_Command):
                 self.avails_expected = bitbin.asint(8)
 
 
-class Splice_Insert(Splice_Command):
+class SpliceInsert(SpliceCommand):
     """
     Table 9 - splice_insert()
     """
@@ -106,7 +106,7 @@ class Splice_Insert(Splice_Command):
             self.avail_expected = bitbin.asint(8)
 
 
-class Time_Signal(Splice_Command):
+class TimeSignal(SpliceCommand):
     """
     Table 10 - time_signal()
     """
@@ -122,7 +122,7 @@ class Time_Signal(Splice_Command):
         command_bytes =self.encode_splice_time()
 
 
-class Bandwidth_Reservation(Splice_Command):
+class BandwidthReservation(SpliceCommand):
     """
     Table 11 - bandwidth_reservation()
     """
@@ -130,7 +130,7 @@ class Bandwidth_Reservation(Splice_Command):
         self.name = "Bandwidth Reservation"
 
 
-class Private_Command(Splice_Command):
+class PrivateCommand(SpliceCommand):
     """
     Table 12 - private_command()
     """

@@ -1,16 +1,15 @@
 import sys
 
-class Splice_Descriptor:
+class SpliceDescriptor:
     def __init__(self, bitbin, tag):
         self.tag = tag
         # identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
         self.identifier = bitbin.asdecodedhex(32)
         if self.identifier != "CUEI":
                 print('Descriptors should have an identifier of "CUEI"',file=sys.stderr)
-        return self.identifier
+                
 
-
-class Avail_Descriptor(Splice_Descriptor):
+class AvailDescriptor(SpliceDescriptor):
     """
     Table 17 -  avail_descriptor()
     """
@@ -20,7 +19,7 @@ class Avail_Descriptor(Splice_Descriptor):
         self.provider_avail_id = bitbin.asint(32)
 
 
-class Dtmf_Descriptor(Splice_Descriptor):
+class DtmfDescriptor(SpliceDescriptor):
     """
     Table 18 -  DTMF_descriptor()
     """
@@ -35,7 +34,7 @@ class Dtmf_Descriptor(Splice_Descriptor):
             self.dtmf_chars[i] =bitbin.asint(8)
 
 
-class Time_Descriptor(Splice_Descriptor):
+class TimeDescriptor(SpliceDescriptor):
     """
     Table 25 - time_descriptor()
     """
@@ -47,7 +46,7 @@ class Time_Descriptor(Splice_Descriptor):
         self.UTC_offset = bitbin.asint(16)
 
 
-class Audio_Descriptor(Splice_Descriptor):
+class AudioDescriptor(SpliceDescriptor):
     """
     Table 26 - audio_descriptor()
     """

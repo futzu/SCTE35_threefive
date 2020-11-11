@@ -1,4 +1,4 @@
-from .descriptors import Splice_Descriptor
+from .descriptors import SpliceDescriptor
 
 
 """
@@ -61,7 +61,7 @@ table22 = {0x00: "Not Indicated",
            0x51: "Network End"}
 
 
-class Segmentation_Descriptor(Splice_Descriptor):
+class SegmentationDescriptor(SpliceDescriptor):
     """
     Table 19 - segmentation_descriptor()
     """
