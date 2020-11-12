@@ -3,7 +3,10 @@ import sys
 from bitn import BitBin
 
 class SpliceInfoSection:
-
+    '''
+    The SCTE-35 splice info section
+    data.
+    '''
     def __init__(self):
         self.table_id = None
         self.section_syntax_indicator = None
@@ -62,7 +65,7 @@ class SpliceInfoSection:
             two_bytes = (1 << 15)
         if self.private:
             two_bytes += (self.private << 14)
-        two_bytes += (int(self.reserved,  16) << 12)
+        two_bytes += (int(self.reserved, 16) << 12)
         two_bytes += self.section_length
         bencoded += int.to_bytes(two_bytes, 2, byteorder='big')
         '''
