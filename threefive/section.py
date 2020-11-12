@@ -5,22 +5,35 @@ from bitn import BitBin
 class SpliceInfoSection:
 
     def __init__(self):
-        pass
+        self.table_id = None
+        self.section_syntax_indicator = None
+        self.private = None
+        self.reserved = None
+        self.section_length = None
+        self.protocol_version = None
+        self.encrypted_packet = None
+        self.encryption_algorithm = None
+        self.pts_adjustment = None
+        self.cw_index = None
+        self.tier = None
+        self.splice_command_length = None
+        self.splice_command_type = None
+        self.descriptor_loop_length = None
 
     def decode(self, bites):
         bitbin = BitBin(bites)
         self.table_id = bitbin.ashex(8)
         if self.table_id != '0xfc':
-            print('splice info section table id should be 0xfc',file=sys.stderr)
+            print('splice info section table id should be 0xfc', file=sys.stderr)
         self.section_syntax_indicator = bitbin.asflag(1)
         self.private = bitbin.asflag(1)
         self.reserved = bitbin.ashex(2)
         if self.reserved != '0x3':
-            print('splice info section reserved should be 0x3',file=sys.stderr)
+            print('splice info section reserved should be 0x3', file=sys.stderr)
         self.section_length = bitbin.asint(12)
         self.protocol_version = bitbin.asint(8)
         if self.protocol_version != 0:
-            print('splice info section protocol version should be 0',file=sys.stderr)
+            print('splice info section protocol version should be 0', file=sys.stderr)
         self.encrypted_packet = bitbin.asflag(1)
         self.encryption_algorithm = bitbin.asint(6)
         self.pts_adjustment = bitbin.as90k(33)
@@ -35,7 +48,7 @@ class SpliceInfoSection:
         first byte is:
             table_id
         '''
-        first_byte = int(self.table_id,16)
+        first_byte = int(self.table_id, 16)
         bencoded = int.to_bytes(first_byte, 1, byteorder='big')
         '''
         two_bytes is:
@@ -47,8 +60,9 @@ class SpliceInfoSection:
         two_bytes = 0
         if self.section_syntax_indicator:
             two_bytes = (1 << 15)
-        if self.private: two_bytes += (self.private << 14)
-        two_bytes += (int(self.reserved,16) << 12)
+        if self.private:
+            two_bytes += (self.private << 14)
+        two_bytes += (int(self.reserved,  16) << 12)
         two_bytes += self.section_length
         bencoded += int.to_bytes(two_bytes, 2, byteorder='big')
         '''

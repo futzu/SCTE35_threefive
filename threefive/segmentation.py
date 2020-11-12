@@ -60,10 +60,33 @@ class SegmentationDescriptor(SpliceDescriptor):
     """
     Table 19 - segmentation_descriptor()
     """
-    def __init__(self, bitbin, tag):
-        super().__init__(bitbin, tag)
-        bitbin = bitbin
+    def __init__(self, tag):
+        super().__init__(tag)
         self.name = "Segmentation Descriptor"
+        self.segmentation_event_id = None
+        self.segmentation_event_cancel_indicator = None
+        self.component_count = None
+        self.components = []
+        self.program_segmentation_flag = None
+        self.segmentation_duration_flag = None
+        self.delivery_not_restricted_flag = None
+        self.web_delivery_allowed_flag = None
+        self.no_regional_blackout_flag = None
+        self.archive_allowed_flag = None
+        self.device_restrictions = None
+        self.segmentation_duration = None
+        self.segmentation_message = None
+        self.segmentation_upid_type = None
+        self.segmentation_upid_length = None
+        self.segmentation_upid = None
+        self.segmentation_type_id = None
+        self.segment_num = None
+        self.segments_expected = None
+        self.sub_segment_num = None
+        self.sub_segments_expected = None
+
+    def decode(self, bitbin):
+        self.parse_id(bitbin)
         self.segmentation_event_id = bitbin.ashex(32) # 4 bytes
         self.segmentation_event_cancel_indicator = bitbin.asflag(1)
         bitbin.forward(7) # 1 byte
@@ -75,7 +98,6 @@ class SegmentationDescriptor(SpliceDescriptor):
 
     def _set_components(self, bitbin):
         self.component_count = bitbin.asint(8)# 1 byte
-        self.components = []
         for i in range(0, self.component_count): # 6 bytes each
             comp = {}
             comp["component_tag"] = bitbin.asint(8)
@@ -102,7 +124,8 @@ class SegmentationDescriptor(SpliceDescriptor):
         self.segmentation_upid_type = bitbin.asint(8) # 1 byte
         self.segmentation_upid_length = bitbin.asint(8) # 1 byte
         self.segmentation_upid = self._set_segmentation_upid(bitbin,
-            self.segmentation_upid_type, self.segmentation_upid_length)
+                                                             self.segmentation_upid_type,
+                                                             self.segmentation_upid_length)
         self.segmentation_type_id = bitbin.asint(8) # 1 byte
         if self.segmentation_type_id in table22.keys():
             self.segmentation_message = table22[self.segmentation_type_id]
@@ -201,5 +224,6 @@ class SegmentationDescriptor(SpliceDescriptor):
         return '.'.join([pre[i:i+n] for i in range(0, len(pre), n)])
 
     def URI(self, bitbin, upid_length):
-        if upid_length > 0: return bitbin.asdecodedhex(upid_length << 3)
+        if upid_length > 0:
+            return bitbin.asdecodedhex(upid_length << 3)
         return None

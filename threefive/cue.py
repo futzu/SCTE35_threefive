@@ -204,7 +204,8 @@ class Cue:
         bitbin = BitBin(payload[:desc_len])
         payload = payload[desc_len:]
         if tag in self._descriptor_map.keys():
-            sd = self._descriptor_map[tag](bitbin, tag)
+            sd = self._descriptor_map[tag](tag)
+            sd.decode(bitbin)
             sd.descriptor_length = desc_len
             return sd
         return False
