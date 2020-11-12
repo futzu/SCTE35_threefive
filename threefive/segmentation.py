@@ -70,7 +70,7 @@ class SegmentationDescriptor(SpliceDescriptor):
         if not self.segmentation_event_cancel_indicator:
             self._set_flags(bitbin) # 1 byte
             if not self.program_segmentation_flag:
-                self._set_components(self,bitbin)
+                self._set_components(self, bitbin)
             self._set_segmentation(bitbin)
 
     def _set_components(self, bitbin):
@@ -110,24 +110,24 @@ class SegmentationDescriptor(SpliceDescriptor):
         bitbin = None
 
     def _set_segmentation_upid(self, bitbin, upid_type, upid_length):
-        upid_map={0x02: ['Deprecated', self.AdID],
-                  0x03: ['Ad ID', self.AdID],
-                  0x04: ['UMID', self.UMID],
-                  0x05: ['ISAN', self.ISAN],
-                  0x06: ['ISAN', self.ISAN],
-                  0x07: ['TID', self.TID],
-                  0x08: ['AiringID', self.AirID],
-                  0x09: ['ADI', self.ADI],
-                  0x0a: ['EIDR', self.EIDR],
-                  0x0b: ['ATSC', self.ATSC],
-                  0x0c: ['MPU', self.MPU],
-                  0x0d: ['MID', self.MID],
-                  0x0e: ['ADS Info', self.ADS],
-                  0x0f: ['URI', self.URI]}
-        upid_id=""
+        upid_map = {0x02: ['Deprecated', self.AdID],
+                    0x03: ['Ad ID', self.AdID],
+                    0x04: ['UMID', self.UMID],
+                    0x05: ['ISAN', self.ISAN],
+                    0x06: ['ISAN', self.ISAN],
+                    0x07: ['TID', self.TID],
+                    0x08: ['AiringID', self.AirID],
+                    0x09: ['ADI', self.ADI],
+                    0x0a: ['EIDR', self.EIDR],
+                    0x0b: ['ATSC', self.ATSC],
+                    0x0c: ['MPU', self.MPU],
+                    0x0d: ['MID', self.MID],
+                    0x0e: ['ADS Info', self.ADS],
+                    0x0f: ['URI', self.URI]}
+        upid_id = ""
         if upid_type in upid_map.keys():
-            upid_id= upid_map[upid_type][1](bitbin, upid_length)
-            if upid_type != 0x09 :
+            upid_id = upid_map[upid_type][1](bitbin, upid_length)
+            if upid_type != 0x09:
                 return f'{upid_map[upid_type][0]}:{upid_id}'
         return upid_id
 
