@@ -126,12 +126,12 @@ class Cue:
         '''
         while dll > 0:
             try:
-                sd = self._set_splice_descriptor(payload)
-                sdl = sd.descriptor_length
+                spliced = self._set_splice_descriptor(payload)
+                sdl = spliced.descriptor_length
                 bump = sdl + 2
                 dll -= bump
                 payload = payload[bump:]
-                self.descriptors.append(sd)
+                self.descriptors.append(spliced)
             except:
                 dll = -1
 

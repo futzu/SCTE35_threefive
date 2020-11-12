@@ -12,12 +12,12 @@ def _parse_stream_type(bitbin):
     '''
     stream_type = bitbin.ashex(8) # 8
     bitbin.forward(3) # 11
-    el_PID = bitbin.asint(13) # 24
+    el_pid = bitbin.asint(13) # 24
     bitbin.forward(4) # 28
     eilib = bitbin.asint(12) << 3 # 40
     bitbin.forward(eilib)
     minus = 40 + eilib
-    return minus, [stream_type, el_PID]
+    return minus, [stream_type, el_pid]
 
 def _show_program_stream(pid, stream_type):
     '''
@@ -58,7 +58,7 @@ class Stream:
         self._pid_prog = {}
         self._pmt_pids = set()
         self._programs = set()
-        self._PTS = {}
+        self._prog_pts = {}
         self.info = False
         self.the_program = False
 
@@ -139,7 +139,7 @@ class Stream:
         packet_data['pid'] = pid
         prgm = self._pid_prog[pid]
         packet_data['program'] = prgm
-        packet_data['pts'] = round(self._PTS[prgm], 6)
+        packet_data['pts'] = round(self._prog_pts[prgm], 6)
         return packet_data
 
     def _program_association_table(self, pkt):
@@ -195,7 +195,7 @@ class Stream:
         pts |= ((pkt[16] << 7) | (pkt[17] >> 1))
         pts /= 90000.0
         ppp = self._pid_prog[pid]
-        self._PTS[ppp] = pts
+        self._prog_pts[ppp] = pts
 
     def _parse_pusi(self, pkt, pid):
         '''
