@@ -4,7 +4,7 @@ from .cue import Cue
 from .stream import Stream
 
 
-def read_stdin():  
+def read_stdin():
     try:
         Stream(sys.stdin.buffer).decode()
     except:
@@ -22,7 +22,7 @@ def read_stuff(stuff):
             with open(stuff, 'rb') as tsdata:
                 Stream(tsdata).decode()
         except Exception:
-            pass        
+            pass
 
 def decode(stuff=None):
     '''
@@ -37,7 +37,7 @@ def decode(stuff=None):
 
         import threefive
         Bee64='/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
-        threefive.decode(Bee64)  
+        threefive.decode(Bee64)
     '''
     if stuff in [None, sys.stdin.buffer]:
         read_stdin()
