@@ -7,7 +7,7 @@ class SpliceDescriptor:
         self.identifier = bitbin.asdecodedhex(32)
         if self.identifier != "CUEI":
             print('Descriptors should have an identifier of "CUEI"', file=sys.stderr)
-                
+
 
 class AvailDescriptor(SpliceDescriptor):
     """
@@ -31,7 +31,7 @@ class DtmfDescriptor(SpliceDescriptor):
         bitbin.forward(5)
         self.dtmf_chars = []
         for i in range(0, self.dtmf_count):
-            self.dtmf_chars[i] =bitbin.asint(8)
+            self.dtmf_chars[i] = bitbin.asint(8)
 
 
 class TimeDescriptor(SpliceDescriptor):

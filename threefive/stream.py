@@ -217,7 +217,7 @@ class Stream:
             chunks = [pkt[:5], b'\xfc0', pkt.split(b'\x00\xfc0')[1]]
             pkt = ''.join(chunks)
         except:
-            print(pkt)
+            pass
         # check splice command type
         if pkt[18] in self._CMD_TYPES:
             return Cue(pkt, packet_data)
