@@ -214,8 +214,7 @@ class Stream:
         packet_data = self._mk_packet_data(pid)
         # strip pre-padding on older scte-35 packets
         try:
-            chunks = [pkt[:5], b'\xfc0', pkt.split(b'\x00\xfc0')[1]]
-            pkt = ''.join(chunks)
+            pkt = pkt[:5]+b'\xfc0' +pkt.split(b'\x00\xfc0')[1]
         except:
             pass
         # check splice command type
