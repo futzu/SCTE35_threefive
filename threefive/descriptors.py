@@ -1,40 +1,44 @@
 import sys
 
+
 class SpliceDescriptor:
-    '''
+    """
     SpliceDescriptor is the
     base class for all splice descriptors.
     It should not be used directly
-    '''
+    """
+
     def __init__(self, tag):
         self.tag = tag
         # identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
         self.identifier = None
 
     def decode(self, bitbin):
-        '''
+        """
         SpliceDescriptor subclasses
         must implement a decode method.
-        '''
+        """
 
     def encode(self):
-        '''
+        """
         SpliceDescriptor subclasses
         will soon implement a encode method.
-        '''
+        """
 
     def parse_id(self, bitbin):
-        '''
+        """
         parse splice descriptor identifier
-        '''
+        """
         self.identifier = bitbin.asdecodedhex(32)
         if self.identifier != "CUEI":
             print('Descriptors should have an identifier of "CUEI"', file=sys.stderr)
+
 
 class AvailDescriptor(SpliceDescriptor):
     """
     Table 17 -  avail_descriptor()
     """
+
     def __init__(self, tag):
         super().__init__(tag)
         self.name = "Avail Descriptor"
@@ -45,11 +49,11 @@ class AvailDescriptor(SpliceDescriptor):
         self.provider_avail_id = bitbin.asint(32)
 
 
-
 class DtmfDescriptor(SpliceDescriptor):
     """
     Table 18 -  DTMF_descriptor()
     """
+
     def __init__(self, tag):
         super().__init__(tag)
         self.name = "DTMF Descriptor"
@@ -70,6 +74,7 @@ class TimeDescriptor(SpliceDescriptor):
     """
     Table 25 - time_descriptor()
     """
+
     def __init__(self, tag):
         super().__init__(tag)
         self.name = "Time Descriptor"
@@ -83,10 +88,12 @@ class TimeDescriptor(SpliceDescriptor):
         self.tai_ns = bitbin.asint(32)
         self.utc_offset = bitbin.asint(16)
 
+
 class AudioDescriptor(SpliceDescriptor):
     """
     Table 26 - audio_descriptor()
     """
+
     def __init__(self, tag):
         super().__init__(tag)
         self.name = "Audio Descriptor"
