@@ -31,18 +31,18 @@ def _kvprint(obj):
     print(json.dumps(obj, indent=2), file=sys.stderr)
 
 
-def _mkbits(s):
+def _mkbits(stuff):
     """
     Convert Hex and Base64 strings into bytes.
     """
-    if s[:2].lower() == "0x":
-        s = s[2:]
-    if s[:2].lower() == "fc":
-        return bytes.fromhex(s)
+    if stuff[:2].lower() == "0x":
+        stuff = stuff[2:]
+    if stuff[:2].lower() == "fc":
+        return bytes.fromhex(stuff)
     try:
-        return b64decode(s)
+        return b64decode(stuff)
     except Exception:
-        return s
+        return stuff
 
 
 def _mkpayload(data):
@@ -132,15 +132,15 @@ class Cue:
         parses all splice descriptors
         """
         while dll > 0:
-            try:
-                spliced = self._set_splice_descriptor(payload)
-                sdl = spliced.descriptor_length
-                bump = sdl + 2
-                dll -= bump
-                payload = payload[bump:]
-                self.descriptors.append(spliced)
-            except:
-                dll = -1
+            #try:
+            spliced = self._set_splice_descriptor(payload)
+            sdl = spliced.descriptor_length
+            bump = sdl + 2
+            dll -= bump
+            payload = payload[bump:]
+            self.descriptors.append(spliced)
+            #except:
+             #   dll = -1
 
     def get(self):
         """
@@ -152,7 +152,6 @@ class Cue:
             "command": self.get_command(),
             "descriptors": self.get_descriptors(),
         }
-
         if self.packet_data:
             scte35.update(self.get_packet_data())
         return scte35
@@ -213,10 +212,10 @@ class Cue:
         bitbin = BitBin(payload[:desc_len])
         payload = payload[desc_len:]
         if tag in self._descriptor_map.keys():
-            sd = self._descriptor_map[tag](tag)
-            sd.decode(bitbin)
-            sd.descriptor_length = desc_len
-            return sd
+            spliced = self._descriptor_map[tag](tag)
+            spliced.decode(bitbin)
+            spliced.descriptor_length = desc_len
+            return spliced
         return False
 
     def show(self):
