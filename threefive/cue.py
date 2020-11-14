@@ -132,15 +132,12 @@ class Cue:
         parses all splice descriptors
         """
         while dll > 0:
-            #try:
             spliced = self._set_splice_descriptor(payload)
             sdl = spliced.descriptor_length
             bump = sdl + 2
             dll -= bump
             payload = payload[bump:]
             self.descriptors.append(spliced)
-            #except:
-             #   dll = -1
 
     def get(self):
         """

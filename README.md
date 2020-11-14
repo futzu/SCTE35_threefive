@@ -1,29 +1,41 @@
 
 # :rocket: threefive
-## SCTE35 Decoder
-  * All __2019__ SCTE-35 __Splice Commands__ and __Splice Descriptors__ are Fully Supported.
+## threefive is a SCTE35 Parser library in Python3.
+   
+*  All __2019 SCTE-35 Splice Commands__ and __Splice Descriptors__ are __fully__ Supported.
+
+*   __threefive__ is __simple__ and __easy__ to use. 
+* *  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+
+* * __SCTE-35__ can be parsed from strings or video with __one function__  [__threefive.decode()__](#the-decode-function).
+* * __No__ configurtation __required__.
+* *  threefive __automatically identifies__ and parses __Base64, Hexidecimal__, or __Binary__ .  
+* *   __Multiple programs__ and __multiple SCTE-35 streams__ are __well__ supported.
+
+
+
 ---
 #### [__Heads Up!__ Changes as of 10/23/2020](#changes)
-* [ __threefive__ works best with __pypy3__](https://www.pypy.org/)
-* [__Requires Python 3.6+__](https://www.python.org/downloads/release/python-390/)
+* [ __threefive__ runs __three times faster__ with __pypy3__](https://www.pypy.org/)
+* [__Requires__ Python __3.6 +__](https://www.python.org/downloads/release/python-390/)
 * [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
 *  [__Fast__ Start](#fast-start-directions)
       * [__Dependencies__](#dependencies)
       * [__Install__](#install)
       * [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
-* [Easy __threefive__](#easy-threefive)
+* [__Easy__ threefive](#easy-threefive)
   *   [The __decode__ Function](#the-decode-function)
       * [Parsing __SCTE 35__ messages from __Mpeg-TS Streams__](#mpegts)
-      * [Parsing __SCTE 35__ messages encoded in __Base64, Binary, or Hex__](#base64-encoded-strings)
-*  [Advanced __threefive__](#advanced-threefive)
+      * [Parsing __SCTE 35__ messages encoded in __Base64__, __Binary__, or __Hex__](#base64-encoded-strings)
+*  [__Advanced__ threefive__](#advanced-threefive)
      *  [__Cue__ Class](#cue-class)
           * [Return __Cue__ instance as __dict__](#return-cue-as-dict)   
           * [Return __Cue__ instance as __JSON__](#return-cue-as-json)   
           * [Print __Cue__ instance as __JSON__](#print-cue-as-json)   
      * [__Stream__ Class](#stream-class)
-          * [__Stream.decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                
+          * [Stream.__decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                
           * [Stream.__decode_next__()](#streamdecode_next)
-          * [Stream.__decode_program__(the_program,func=show_cue)](#streamdecode_programthe_program-func--show_cue)
+          * [Stream.__decode_program__(the_program=None, func=show_cue)](#streamdecode_programthe_program-func--show_cue)
           * [Stream.__decode_proxy__(func=show_cue)](#Streamdecodeproxyfuncnone)    
  *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
      * __HLS__
@@ -32,7 +44,7 @@
           * [Parsing SCTE-35 from a __Multicast__ Source](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/ts_scte_parser.py)
      * __Splice Insert__
           * [Splice __Insert__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert.py)
-          * [__Splice Insert__ Too](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert_Too.py)
+          * [Splice __Insert__ Too](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert_Too.py)
      * __Splice_Null__
           * [Splice __Null__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Splice_Null.py)
      * __Time Signal__
