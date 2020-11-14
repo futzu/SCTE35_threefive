@@ -5,12 +5,12 @@
 *  All __2019 SCTE-35 Splice Commands__ and __Splice Descriptors__ are __fully__ Supported.
 
 *   __threefive__ is __simple__ and __easy__ to use. 
-* *  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+  *  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
-* * __SCTE-35__ can be parsed from strings or video with __one function__  [__threefive.decode()__](#the-decode-function).
-* * __No__ configurtation __required__.
-* *  threefive __automatically identifies__ and parses __Base64, Hexidecimal__, or __Binary__ .  
-* *   __Multiple programs__ and __multiple SCTE-35 streams__ are __well__ supported.
+  * __SCTE-35__ can be parsed from strings or video with __one function__  [__threefive.decode()__](#the-decode-function).
+  * __No__ configurtation __required__.
+  *  threefive __automatically identifies__ and parses __Base64, Hexidecimal__, or __Binary__ .  
+  *   __Multiple programs__ and __multiple SCTE-35 streams__ are __well__ supported.
 
 
 
