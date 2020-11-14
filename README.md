@@ -8,7 +8,6 @@
  	*  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
   	* __SCTE-35__ can be parsed from strings or video with __one function__  [__threefive.decode()__](#the-decode-function).
-  	* __No__ configurtation __required__.
   	*  threefive __automatically identifies__ and parses __Base64, Hexidecimal__, or __Binary__ .  
   	*   __Multiple programs__ and __multiple SCTE-35 streams__ are __well__ supported.
 
