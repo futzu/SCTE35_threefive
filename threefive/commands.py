@@ -1,5 +1,6 @@
 from .tools import i2b
 
+
 class SpliceCommand:
     """
     Base class for all splice command classes,

@@ -6,10 +6,11 @@ from .cue import Cue
 from .streamtype import stream_type_map
 from .tools import CMD_TYPES, parse_pid, to_stderr
 
+
 def _parse_stream_type(bitbin):
-    '''
+    """
     extract stream pid and type
-    '''
+    """
     stream_type = bitbin.ashex(8)  # 8
     bitbin.forward(3)  # 11
     el_pid = bitbin.asint(13)  # 24
@@ -21,9 +22,9 @@ def _parse_stream_type(bitbin):
 
 
 def _show_program_stream(pid, stream_type):
-    '''
+    """
     print program -> stream mappings
-    '''
+    """
     streaminfo = f"[{stream_type}] Reserved or Private"
     if stream_type in stream_type_map.keys():
         streaminfo = f"[{stream_type}] {stream_type_map[stream_type]}"
@@ -31,24 +32,24 @@ def _show_program_stream(pid, stream_type):
 
 
 def show_cue(cue):
-    '''
+    """
     default function call for
     Stream.decode,
     Stream.decode_program,
     and Stream.decode_proxy
     when a SCTE-35 packet is found.
-    '''
+    """
     cue.show()
 
 
 class Stream:
-    '''
+    """
     Stream class
     With MPEG-TS program awareness.
     Accurate pts for streams with
     more than one program containing
     SCTE-35 streams.
-    '''
+    """
 
     _CMD_TYPES = CMD_TYPES
     _PACKET_SIZE = 188
@@ -66,9 +67,9 @@ class Stream:
         self.the_program = False
 
     def _find_start(self):
-        '''
+        """
         handles partial packets
-        '''
+        """
         pkt = self._tsdata.read(self._PACKET_SIZE)
         if pkt[0] == 71:
             return
@@ -84,9 +85,9 @@ class Stream:
                     return
 
     def decode(self, func=show_cue):
-        '''
+        """
         reads MPEG-TS to find SCTE-35 packets
-        '''
+        """
         self._find_start()
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
             cue = self._parser(pkt)
@@ -95,10 +96,10 @@ class Stream:
             pkt = None
 
     def decode_next(self):
-        '''
+        """
         returns a threefive.Cue instance
         when a SCTE-35 packet is found
-        '''
+        """
         self._find_start()
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
             cue = self._parser(pkt)
@@ -107,39 +108,38 @@ class Stream:
             pkt = None
 
     def decode_program(self, the_program, func=show_cue):
-        '''
+        """
         returns a threefive.Cue instance
         when a SCTE-35 packet is found
-        '''
+        """
         self.the_program = the_program
         self.decode(func)
 
     def decode_proxy(self, func=show_cue):
-        '''
+        """
         reads an MPEG-TS stream
         and writes all ts packets to stdout
         and SCTE-35 data to stderr
-        '''
+        """
         self._find_start()
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
             sys.stdout.buffer.write(pkt)
             cue = self._parser(pkt)
             if cue:
-
                 func(cue)
 
     def show(self):
-        '''
+        """
         displays program stream mappings
-        '''
+        """
         self.info = True
         self.decode()
 
     def _mk_packet_data(self, pid):
-        '''
+        """
         creates packet_data dict
         to pass to a threefive.Cue instance
-        '''
+        """
         packet_data = {}
         packet_data["pid"] = pid
         prgm = self._pid_prog[pid]
@@ -148,10 +148,10 @@ class Stream:
         return packet_data
 
     def _program_association_table(self, pkt):
-        '''
+        """
         parse program association table ( pid 0 )
         to program to program table pid mappings.
-        '''
+        """
         sectionlen = (pkt[6] & 15 << 8) | pkt[7]
         pkt = pkt[13 : (sectionlen + 5)]
         bitbin = BitBin(pkt)
@@ -165,15 +165,15 @@ class Stream:
             else:
                 self._pmt_pids.add(bitbin.asint(13))
             slib -= 32
-        #bitbin.forward(32)
+        # bitbin.forward(32)
         bitbin = None
 
     def _parser(self, pkt):
-        '''
+        """
         parse pid from pkt and
         route it appropriately
-        '''
-        pid = parse_pid(pkt[1],pkt[2])
+        """
+        pid = parse_pid(pkt[1], pkt[2])
         if pid == 0:
             self._program_association_table(pkt)
             return
@@ -192,9 +192,9 @@ class Stream:
         return
 
     def _parse_pts(self, pkt, pid):
-        '''
+        """
         parse pts
-        '''
+        """
         pts = ((pkt[13] >> 1) & 7) << 30
         pts |= ((pkt[14] << 7) | (pkt[15] >> 1)) << 15
         pts |= (pkt[16] << 7) | (pkt[17] >> 1)
@@ -203,9 +203,9 @@ class Stream:
         self._prog_pts[ppp] = pts
 
     def _parse_pusi(self, pkt, pid):
-        '''
+        """
         used to determine if pts data is available.
-        '''
+        """
         if pkt[6] & 1:
             if (pkt[10] >> 6) & 2:
                 if (pkt[11] >> 6) & 2:
@@ -213,25 +213,25 @@ class Stream:
                         self._parse_pts(pkt, pid)
 
     def _parse_scte35(self, pkt, pid):
-        '''
+        """
         parse a SCTE-35 packet
-        '''
+        """
         packet_data = self._mk_packet_data(pid)
         # strip pre-padding on older scte-35 packets
         try:
             pkt = pkt[:5] + b"\xfc0" + pkt.split(b"\x00\xfc0")[1]
         except Exception:
-            to_stderr('pre-strip failed')
+            to_stderr("pre-strip failed")
         # check splice command type
         if pkt[18] in self._CMD_TYPES:
             return Cue(pkt, packet_data)
         return None
 
     def _parse_program_streams(self, slib, bitbin, program_number):
-        '''
+        """
         parse the elementary streams
         from a program
-        '''
+        """
         if program_number not in self._programs:
             self._programs.add(program_number)
             if self.info:
@@ -251,9 +251,9 @@ class Stream:
                 sys.exit()
 
     def _program_map_section(self, pkt):
-        '''
+        """
         parse program maps for streams
-        '''
+        """
         # table_id = pkt[5]
         sectioninfolen = (pkt[6] & 15 << 8) | pkt[7]
         slib = sectioninfolen << 3

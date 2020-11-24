@@ -3,6 +3,7 @@ import sys
 from bitn import BitBin
 from threefive.tools import i2b, to_stderr
 
+
 class SpliceInfoSection:
     """
     The SCTE-35 splice info section

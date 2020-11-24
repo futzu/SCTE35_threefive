@@ -8,22 +8,25 @@ CMD_TYPES = [4, 5, 6, 7, 255]
 
 
 def i2b(i, wide):
-    '''
+    """
     i2b is a wrapper for int.to_bytes
-    '''
+    """
     return int.to_bytes(i, wide, byteorder="big")
 
+
 def ifb(bites):
-    '''
+    """
     ifb is a wrapper for int.from_bytes
-    '''
+    """
     return int.from_bytes(bites, byteorder="big")
 
-def parse_pid(byte1,byte2):
-    '''
+
+def parse_pid(byte1, byte2):
+    """
     parse pid from packet
-    '''
+    """
     return (byte1 & 31) << 8 | byte2
+
 
 def kv_clean(obj):
     """
@@ -31,12 +34,14 @@ def kv_clean(obj):
     """
     return {k: v for k, v in obj.items() if v is not None}
 
+
 def kv_print(obj):
-    '''
+    """
     kv_print is a wrapper for printing
     a json dump of obj to sys.stderr
-    '''
+    """
     to_stderr(json.dumps(obj, indent=2))
+
 
 def mk_bits(stuff):
     """
@@ -51,6 +56,7 @@ def mk_bits(stuff):
     except Exception:
         return stuff
 
+
 def mk_payload(data):
     """
     mkpayload strips off packet headers
@@ -62,6 +68,7 @@ def mk_payload(data):
         payload = mk_bits(data)
     return payload
 
+
 def get_json(obj):
     """
     get_json()
@@ -69,8 +76,9 @@ def get_json(obj):
     """
     return json.dumps(obj, indent=2)
 
+
 def to_stderr(stuff):
-    '''
+    """
     Wrapper for printing to sys.stderr
-    '''
+    """
     print(stuff, file=sys.stderr)

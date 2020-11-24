@@ -1,6 +1,7 @@
 import sys
 from .tools import to_stderr
 
+
 class SpliceDescriptor:
     """
     SpliceDescriptor is the
