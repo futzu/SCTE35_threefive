@@ -13,4 +13,4 @@ def version():
     version is set in the version_tuple
     to make it immutable.
     """
-    return version_tuple
+    return version_tuple[0]
