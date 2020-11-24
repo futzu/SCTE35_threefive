@@ -5,7 +5,7 @@ Used to set version in setup.py
 and as an easy way to check which
 version you have installed.
 """
-version_tuple = ("2.2.25",)
+version_tuple = ("2.2.27","Nobody puts baby in the corner.".)
 
 
 def version():

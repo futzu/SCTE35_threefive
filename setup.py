@@ -10,7 +10,7 @@ setuptools.setup(
     version=threefive.version() ,
     author="fu-corp",
     author_email="spam@futzu.com",
-    description="A Fast SCTE 35 Decoder for Mpeg-TS Video, and Base64 or Hex Encoded Messages.", 
+    description="threefive is The Leading SCTE-35 Parsing Lib for Mpeg-TS Video Streams, and Base64 or Hex Encoded Messages. threefive is Used in Production By Three of The Largest Broadcast Networks in The World..", 
     long_description=readme,
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/SCTE35-threefive",
