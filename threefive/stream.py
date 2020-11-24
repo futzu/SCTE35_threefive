@@ -4,13 +4,7 @@ from functools import partial
 from bitn import BitBin
 from .cue import Cue
 from .streamtype import stream_type_map
-
-
-def _parse_pid(byte1,byte2):
-    '''
-    parse pid from packet
-    '''
-    return (byte1 & 31) << 8 | byte2
+from .tools import CMD_TYPES, parse_pid, to_stderr
 
 def _parse_stream_type(bitbin):
     '''
@@ -33,7 +27,7 @@ def _show_program_stream(pid, stream_type):
     streaminfo = f"[{stream_type}] Reserved or Private"
     if stream_type in stream_type_map.keys():
         streaminfo = f"[{stream_type}] {stream_type_map[stream_type]}"
-    print(f"\t   {pid}: {streaminfo}")
+    to_stderr(f"\t   {pid}: {streaminfo}")
 
 
 def show_cue(cue):
@@ -56,7 +50,7 @@ class Stream:
     SCTE-35 streams.
     '''
 
-    _CMD_TYPES = [4, 5, 6, 7, 255]  # splice command types
+    _CMD_TYPES = CMD_TYPES
     _PACKET_SIZE = 188
 
     def __init__(self, tsdata, show_null=False):
@@ -77,7 +71,7 @@ class Stream:
         '''
         pkt = self._tsdata.read(self._PACKET_SIZE)
         if pkt[0] == 71:
-            return None
+            return
         sync_byte = b"G"
         while self._tsdata:
             one_byte = self._tsdata.read(1)
@@ -87,7 +81,7 @@ class Stream:
                 self._tsdata.read(self._PACKET_SIZE - 1)
                 if self._tsdata.read(1) is sync_byte:
                     self._tsdata.read(self._PACKET_SIZE - 1)
-                    return None
+                    return
 
     def decode(self, func=show_cue):
         '''
@@ -98,6 +92,7 @@ class Stream:
             cue = self._parser(pkt)
             if cue:
                 func(cue)
+            pkt = None
 
     def decode_next(self):
         '''
@@ -109,6 +104,7 @@ class Stream:
             cue = self._parser(pkt)
             if cue:
                 return cue
+            pkt = None
 
     def decode_program(self, the_program, func=show_cue):
         '''
@@ -129,6 +125,7 @@ class Stream:
             sys.stdout.buffer.write(pkt)
             cue = self._parser(pkt)
             if cue:
+
                 func(cue)
 
     def show(self):
@@ -168,27 +165,31 @@ class Stream:
             else:
                 self._pmt_pids.add(bitbin.asint(13))
             slib -= 32
-        bitbin.forward(32)
+        #bitbin.forward(32)
+        bitbin = None
 
     def _parser(self, pkt):
         '''
         parse pid from pkt and
         route it appropriately
         '''
-        pid = _parse_pid(pkt[1],pkt[2])
+        pid = parse_pid(pkt[1],pkt[2])
         if pid == 0:
-            return self._program_association_table(pkt)
+            self._program_association_table(pkt)
+            return
         if pid in self._pmt_pids:
-            return self._program_map_section(pkt)
+            self._program_map_section(pkt)
+            return
         if self.info:
-            return None
+            return
         if pid in self._scte35_pids:
             return self._parse_scte35(pkt, pid)
         if pid in self._pid_prog.keys():
             if (pkt[1] >> 6) & 1:
                 pkt = pkt[0:18]
-                return self._parse_pusi(pkt, pid)
-        return None
+                self._parse_pusi(pkt, pid)
+                return
+        return
 
     def _parse_pts(self, pkt, pid):
         '''
@@ -220,7 +221,7 @@ class Stream:
         try:
             pkt = pkt[:5] + b"\xfc0" + pkt.split(b"\x00\xfc0")[1]
         except Exception:
-            print('pre-strip failed')
+            to_stderr('pre-strip failed')
         # check splice command type
         if pkt[18] in self._CMD_TYPES:
             return Cue(pkt, packet_data)
@@ -234,7 +235,7 @@ class Stream:
         if program_number not in self._programs:
             self._programs.add(program_number)
             if self.info:
-                print(f"\nProgram: {program_number}")
+                to_stderr(f"\nProgram: {program_number}")
             while slib > 32:
                 minus, pstream = _parse_stream_type(bitbin)
                 slib -= minus
@@ -271,4 +272,5 @@ class Stream:
         slib -= 72
         slib -= pilib  # Skip descriptors
         self._parse_program_streams(slib, bitbin, program_number)
-        return None
+        bitbin = None
+        return bitbin

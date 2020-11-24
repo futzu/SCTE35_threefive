@@ -1,3 +1,5 @@
+from .tools import i2b
+
 class SpliceCommand:
     """
     Base class for all splice command classes,
@@ -23,7 +25,7 @@ class SpliceCommand:
         if self.break_auto_return:
             break_bytes = 1 << 39
         break_bytes += self.break_duration * 90000
-        return int.to_bytes(break_bytes, 5, byteorder="big")
+        return i2b(break_bytes, 5)
 
     def splice_time(self, bitbin):  # 40bits
         self.time_specified_flag = bitbin.asflag(1)
@@ -38,7 +40,7 @@ class SpliceCommand:
         if self.time_specified_flag:
             st_bytes = 1 << 39
             st_bytes += self.pts_time * 90000
-        return int.to_bytes(st_bytes, 5, byteorder="big")
+        return i2b(st_bytes, 5)
 
 
 class SpliceNull(SpliceCommand):
@@ -171,5 +173,5 @@ class PrivateCommand(SpliceCommand):
         self.identifier = bitbin.asint(32)
 
     def encode(self):
-        command_bytes = int.to_bytes(self.identifier, 4, byteorder="big")
+        command_bytes = i2b(self.identifier, 4)
         return command_bytes

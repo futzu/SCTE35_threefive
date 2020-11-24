@@ -1,7 +1,7 @@
 from base64 import b64encode
 import sys
 from bitn import BitBin
-
+from threefive.tools import i2b, to_stderr
 
 class SpliceInfoSection:
     """
@@ -29,16 +29,16 @@ class SpliceInfoSection:
         bitbin = BitBin(bites)
         self.table_id = bitbin.ashex(8)
         if self.table_id != "0xfc":
-            print("splice info section table id should be 0xfc", file=sys.stderr)
+            to_stderr("splice info section table id should be 0xfc")
         self.section_syntax_indicator = bitbin.asflag(1)
         self.private = bitbin.asflag(1)
         self.reserved = bitbin.ashex(2)
         if self.reserved != "0x3":
-            print("splice info section reserved should be 0x3", file=sys.stderr)
+            to_stderr("splice info section reserved should be 0x3")
         self.section_length = bitbin.asint(12)
         self.protocol_version = bitbin.asint(8)
         if self.protocol_version != 0:
-            print("splice info section protocol version should be 0", file=sys.stderr)
+            to_stderr("splice info section protocol version should be 0")
         self.encrypted_packet = bitbin.asflag(1)
         self.encryption_algorithm = bitbin.asint(6)
         self.pts_adjustment = bitbin.as90k(33)
@@ -54,7 +54,7 @@ class SpliceInfoSection:
             table_id
         """
         first_byte = int(self.table_id, 16)
-        bencoded = int.to_bytes(first_byte, 1, byteorder="big")
+        bencoded = i2b(first_byte, 1)
         """
         two_bytes is:
             section_syntax_indicator
@@ -69,13 +69,13 @@ class SpliceInfoSection:
             two_bytes += self.private << 14
         two_bytes += int(self.reserved, 16) << 12
         two_bytes += self.section_length
-        bencoded += int.to_bytes(two_bytes, 2, byteorder="big")
+        bencoded += i2b(two_bytes, 2)
         """
         proto_byte is:
             protocol_version
         """
         proto_byte = self.protocol_version
-        bencoded += int.to_bytes(proto_byte, 1, byteorder="big")
+        bencoded += i2b(proto_byte, 1)
         """
         five_bytes is:
             encrypted_packet
@@ -87,13 +87,13 @@ class SpliceInfoSection:
             five_bytes = 1 << 39
         five_bytes += self.encryption_algorithm << 33
         five_bytes += int(self.pts_adjustment * 90000)
-        bencoded += int.to_bytes(five_bytes, 5, byteorder="big")
+        bencoded += i2b(five_bytes, 5)
         """
         cw_byte is:
             cw_index
         """
         cw_byte = int(self.cw_index, 16)
-        bencoded += int.to_bytes(cw_byte, 1, byteorder="big")
+        bencoded += i2b(cw_byte, 1)
         """
         three_bytes is:
             tier
@@ -101,12 +101,12 @@ class SpliceInfoSection:
         """
         three_bytes = int(self.tier, 16) << 12
         three_bytes += self.splice_command_length
-        bencoded += int.to_bytes(three_bytes, 3, byteorder="big")
+        bencoded += i2b(three_bytes, 3)
         """
         cmd_byte is:
             splice_command_type
         """
         cmd_byte = self.splice_command_type
-        bencoded += int.to_bytes(cmd_byte, 1, byteorder="big")
-        print(bencoded)
-        print(b64encode(bencoded))
+        bencoded += i2b(cmd_byte, 1)
+        to_stderr(bencoded)
+        to_stderr(b64encode(bencoded))

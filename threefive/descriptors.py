@@ -1,5 +1,5 @@
 import sys
-
+from .tools import to_stderr
 
 class SpliceDescriptor:
     """
@@ -31,7 +31,7 @@ class SpliceDescriptor:
         """
         self.identifier = bitbin.asdecodedhex(32)
         if self.identifier != "CUEI":
-            print('Descriptors should have an identifier of "CUEI"', file=sys.stderr)
+            to_stderr('Descriptors should have an identifier of "CUEI"')
 
 
 class AvailDescriptor(SpliceDescriptor):

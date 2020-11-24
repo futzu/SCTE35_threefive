@@ -1,16 +1,13 @@
-from base64 import b64decode
-import json
-import sys
 from bitn import BitBin
-from threefive.segmentation import SegmentationDescriptor
-from threefive.section import SpliceInfoSection
-from threefive.descriptors import (
+from .segmentation import SegmentationDescriptor
+from .section import SpliceInfoSection
+from .descriptors import (
     AvailDescriptor,
     DtmfDescriptor,
     TimeDescriptor,
     AudioDescriptor,
 )
-from threefive.commands import (
+from .commands import (
     SpliceNull,
     SpliceSchedule,
     SpliceInsert,
@@ -18,43 +15,7 @@ from threefive.commands import (
     BandwidthReservation,
     PrivateCommand,
 )
-
-
-def _kvclean(obj):
-    """
-    _kvclean removes items from a dict if the value is None
-    """
-    return {k: v for k, v in obj.items() if v is not None}
-
-
-def _kvprint(obj):
-    print(json.dumps(obj, indent=2), file=sys.stderr)
-
-
-def _mkbits(stuff):
-    """
-    Convert Hex and Base64 strings into bytes.
-    """
-    if stuff[:2].lower() == "0x":
-        stuff = stuff[2:]
-    if stuff[:2].lower() == "fc":
-        return bytes.fromhex(stuff)
-    try:
-        return b64decode(stuff)
-    except Exception:
-        return stuff
-
-
-def _mkpayload(data):
-    """
-    mkpayload strips off packet headers
-    when present
-    """
-    if data[0] == 0x47:
-        payload = data[5:]
-    else:
-        payload = _mkbits(data)
-    return payload
+from .tools import ifb, kv_clean, kv_print, mk_payload, to_stderr
 
 
 class Cue:
@@ -86,7 +47,7 @@ class Cue:
         self.info_section = None
         self.command = None
         self.descriptors = []
-        payload = _mkpayload(data)
+        payload = mk_payload(data)
         self.packet_data = packet_data
         self._parse(payload)
 
@@ -94,7 +55,7 @@ class Cue:
         payload = self._mk_info_section(payload)
         payload = self._mk_command(payload)
         payload = self._mk_descriptors(payload)
-        self.info_section.crc = hex(int.from_bytes(payload[0:4], byteorder="big"))
+        self.info_section.crc = hex(ifb(payload[0:4]))
 
     def _mk_info_section(self, payload):
         info_size = 14
@@ -118,7 +79,7 @@ class Cue:
         parse descriptor loop length,
         then call Cue._descriptorloop
         """
-        dll = int.from_bytes(payload[0:2], byteorder="big")
+        dll = ifb(payload[0:2])
         self.info_section.descriptor_loop_length = dll
         payload = payload[2:]
         self._descriptorloop(payload, dll)
@@ -158,34 +119,27 @@ class Cue:
         returns the SCTE 35
         splice command data as a dict.
         """
-        return _kvclean(vars(self.command))
+        return kv_clean(vars(self.command))
 
     def get_descriptors(self):
         """
         Returns a list of SCTE 35
         splice descriptors as dicts.
         """
-        return [_kvclean(vars(d)) for d in self.descriptors]
+        return [kv_clean(vars(d)) for d in self.descriptors]
 
     def get_info_section(self):
         """
         Returns SCTE 35
         splice info section as a dict
         """
-        return _kvclean(vars(self.info_section))
-
-    def get_json(self):
-        """
-        Cue.get_json()
-        returns Cue.get() as json.
-        """
-        return json.dumps(self.get(), indent=2)
+        return kv_clean(vars(self.info_section))
 
     def get_packet_data(self):
         """
         returns cleaned Cue.packet_data
         """
-        return _kvclean(self.packet_data)
+        return kv_clean(self.packet_data)
 
     def _set_splice_command(self, cmdbb):
         """
@@ -193,7 +147,7 @@ class Cue:
         """
         sct = self.info_section.splice_command_type
         if sct not in self._command_map.keys():
-            print("Unknown Splice Command Type", file=sys.stderr)
+            to_stderr("Unknown Splice Command Type")
             return False
         self.command = self._command_map[sct]()
         self.command.decode(cmdbb)
@@ -219,4 +173,4 @@ class Cue:
         """
         pretty prints the SCTE 35 message
         """
-        _kvprint(self.get())
+        kv_print(self.get())
