@@ -165,8 +165,7 @@ class Stream:
             else:
                 self._pmt_pids.add(bitbin.asint(13))
             slib -= 32
-        # bitbin.forward(32)
-        bitbin = None
+        bitbin.forward(32)
 
     def _parser(self, pkt):
         """
