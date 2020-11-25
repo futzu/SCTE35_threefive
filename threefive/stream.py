@@ -176,20 +176,20 @@ class Stream:
         pid = parse_pid(pkt[1], pkt[2])
         if pid == 0:
             self._program_association_table(pkt)
-            return
+            return None
         if pid in self._pmt_pids:
             self._program_map_section(pkt)
-            return
+            return None
         if self.info:
-            return
+            return None
         if pid in self._scte35_pids:
             return self._parse_scte35(pkt, pid)
         if pid in self._pid_prog.keys():
             if (pkt[1] >> 6) & 1:
                 pkt = pkt[0:18]
                 self._parse_pusi(pkt, pid)
-                return
-        return
+                return None
+        return None
 
     def _parse_pts(self, pkt, pid):
         """
