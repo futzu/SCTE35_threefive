@@ -10,8 +10,12 @@
   	* __SCTE-35__ can be parsed from strings or video with __one function__  [__threefive.decode()__](#the-decode-function).
   	*  threefive __automatically identifies__ and parses __Base64, Hexidecimal__, or __Binary__ .  
   	*   __Multiple programs__ and __multiple SCTE-35 streams__ are __well__ supported.
+___
 
-
+## Why __so many releases__?
+ *  I generate __a lot releases__, however __the interface to classes and functions rarely changes__.
+ *  Releases are made for __incremental improvements__. This __keeps pip and the git repo in sync__.
+ *  Having several relases makes it much __easier to resolve issues__.
 
 ---
 #### [__Heads Up!__ Changes as of 10/23/2020](#changes)
