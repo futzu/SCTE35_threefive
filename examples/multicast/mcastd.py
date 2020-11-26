@@ -11,7 +11,7 @@ Start multicast stream:
 
 Start the client(in a new terminal):
 
-    python3 mcast-fu.py
+    python3 mcastc.py
     
 '''
 
