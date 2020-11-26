@@ -7,6 +7,14 @@ import sys
 CMD_TYPES = [4, 5, 6, 7, 255]
 
 
+def as_json(obj):
+    """
+    get_json()
+    returns obj as json.
+    """
+    return json.dumps(obj, indent=2)
+
+
 def i2b(i, wide):
     """
     i2b is a wrapper for int.to_bytes
@@ -40,7 +48,7 @@ def kv_print(obj):
     kv_print is a wrapper for printing
     a json dump of obj to sys.stderr
     """
-    to_stderr(json.dumps(obj, indent=2))
+    to_stderr(as_json(obj))
 
 
 def mk_bits(stuff):
@@ -67,15 +75,6 @@ def mk_payload(data):
     else:
         payload = mk_bits(data)
     return payload
-
-
-def get_json(obj):
-    """
-    get_json()
-    returns obj as json.
-    """
-    return json.dumps(obj, indent=2)
-
 
 def to_stderr(stuff):
     """

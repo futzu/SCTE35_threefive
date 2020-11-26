@@ -15,7 +15,14 @@ from .commands import (
     BandwidthReservation,
     PrivateCommand,
 )
-from .tools import ifb, kv_clean, kv_print, mk_payload, to_stderr
+from .tools import (
+    as_json,
+    ifb,
+    kv_clean,
+    kv_print,
+    mk_payload,
+    to_stderr,
+)
 
 
 class Cue:
@@ -135,6 +142,13 @@ class Cue:
         """
         return kv_clean(vars(self.info_section))
 
+    def get_json(self):
+        '''
+        get_json returns the Cue instance
+        data in json.
+        '''
+        return as_json(self.get())
+
     def get_packet_data(self):
         """
         returns cleaned Cue.packet_data
@@ -146,7 +160,7 @@ class Cue:
         Splice Commands looked up in self._command_map
         """
         sct = self.info_section.splice_command_type
-        if sct not in self._command_map.keys():
+        if sct not in self._command_map:
             to_stderr("Unknown Splice Command Type")
             return False
         self.command = self._command_map[sct]()
@@ -162,7 +176,7 @@ class Cue:
         payload = payload[2:]
         bitbin = BitBin(payload[:desc_len])
         payload = payload[desc_len:]
-        if tag in self._descriptor_map.keys():
+        if tag in self._descriptor_map:
             spliced = self._descriptor_map[tag](tag)
             spliced.decode(bitbin)
             spliced.descriptor_length = desc_len

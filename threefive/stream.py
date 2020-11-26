@@ -93,7 +93,6 @@ class Stream:
             cue = self._parser(pkt)
             if cue:
                 func(cue)
-            pkt = None
 
     def decode_next(self):
         """
@@ -105,7 +104,6 @@ class Stream:
             cue = self._parser(pkt)
             if cue:
                 return cue
-            pkt = None
 
     def decode_program(self, the_program, func=show_cue):
         """
@@ -176,19 +174,18 @@ class Stream:
         pid = parse_pid(pkt[1], pkt[2])
         if pid == 0:
             self._program_association_table(pkt)
-            return None
+            return False
         if pid in self._pmt_pids:
             self._program_map_section(pkt)
-            return None
+        # This return makes Stream.show() fast 
         if self.info:
-            return None
+            return False 
         if pid in self._scte35_pids:
             return self._parse_scte35(pkt, pid)
-        if pid in self._pid_prog.keys():
+        elif pid in self._pid_prog.keys():
             if (pkt[1] >> 6) & 1:
                 pkt = pkt[0:18]
                 self._parse_pusi(pkt, pid)
-                return None
         return None
 
     def _parse_pts(self, pkt, pid):
@@ -217,11 +214,7 @@ class Stream:
         parse a SCTE-35 packet
         """
         packet_data = self._mk_packet_data(pid)
-        # strip pre-padding on older scte-35 packets
-        try:
-            pkt = pkt[:5] + b"\xfc0" + pkt.split(b"\x00\xfc0")[1]
-        except Exception:
-            to_stderr("pre-strip failed")
+        pkt = pkt[:5] + b"\xfc0" + pkt.split(b"\x00\xfc0")[1]
         # check splice command type
         if pkt[18] in self._CMD_TYPES:
             return Cue(pkt, packet_data)
@@ -272,5 +265,3 @@ class Stream:
         slib -= 72
         slib -= pilib  # Skip descriptors
         self._parse_program_streams(slib, bitbin, program_number)
-        bitbin = None
-        return bitbin
