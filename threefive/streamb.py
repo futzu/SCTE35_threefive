@@ -29,7 +29,7 @@ class StreamB:
         # set show_null to parse splice null packets
         if show_null:
             self.cmd_types.append(0)
-        self.tsdata = tsdata
+        self._tsdata = tsdata
         self.packet_data = {}
         self.get_next = False
 
@@ -39,7 +39,7 @@ class StreamB:
         to find SCTE-35 packets.
         '''
         self._find_start()
-        for packet in iter( partial(self.tsdata.read, self._PACKET_SIZE), b''):
+        for packet in iter( partial(self._tsdata.read, self._PACKET_SIZE), b''):
             try:
                 packet = packet[:5] + b"\xfc0" + packet.split(b"\x00\xfc0")[1]
             except:
