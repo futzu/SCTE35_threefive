@@ -144,7 +144,8 @@ class Stream:
         packet_data["pid"] = pid
         prgm = self._pid_prog[pid]
         packet_data["program"] = prgm
-        packet_data["pts"] = round(self._prog_pts[prgm], 6)
+        if prgm in self._prog_pts:
+            packet_data["pts"] = round(self._prog_pts[prgm], 6)
         return packet_data
 
     def _program_association_table(self, pkt):
