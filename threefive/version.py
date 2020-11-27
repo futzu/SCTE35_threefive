@@ -5,7 +5,10 @@ Used to set version in setup.py
 and as an easy way to check which
 version you have installed.
 """
-version_tuple = ("2.2.33", "sed -i s/self.tsdata/self._tsdata/g threefive/streamb.py ")
+version_tuple = (
+    "2.2.35",
+    "Made with a renewed enthusiasm and vigor, never seen here before, but very here now.",
+)
 
 
 def version():

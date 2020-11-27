@@ -2,14 +2,18 @@
 
 import sys
 import threefive
- 
+
+
 def do():
-    try: 
+    try:
         threefive.decode(sys.argv[1])
-    except: 
+    except:
         # Handles piped in data
-        try: threefive.decode()
-        except: pass
-        
-if __name__ == '__main__':
-    do()   
+        try:
+            threefive.decode()
+        except:
+            pass
+
+
+if __name__ == "__main__":
+    do()

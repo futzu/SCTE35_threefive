@@ -10,4 +10,3 @@ from threefive import decode
 Base64 = "/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g="
 
 decode(Base64)
-
