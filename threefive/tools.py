@@ -76,6 +76,7 @@ def mk_payload(data):
         payload = mk_bits(data)
     return payload
 
+
 def to_stderr(stuff):
     """
     Wrapper for printing to sys.stderr

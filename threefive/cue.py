@@ -143,10 +143,10 @@ class Cue:
         return kv_clean(vars(self.info_section))
 
     def get_json(self):
-        '''
+        """
         get_json returns the Cue instance
         data in json.
-        '''
+        """
         return as_json(self.get())
 
     def get_packet_data(self):

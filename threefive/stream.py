@@ -70,15 +70,14 @@ class Stream:
         """
         handles partial packets
         """
-        pkt = self._tsdata.read(self._PACKET_SIZE)
-        if pkt[0] == 71:
+        if self._tsdata.read(self._PACKET_SIZE)[0] == 71:
             return
         sync_byte = b"G"
         while self._tsdata:
             one_byte = self._tsdata.read(1)
             if not one_byte:
                 sys.exit()
-            if one_byte == sync_byte:
+            if one_byte is sync_byte:
                 self._tsdata.read(self._PACKET_SIZE - 1)
                 if self._tsdata.read(1) is sync_byte:
                     self._tsdata.read(self._PACKET_SIZE - 1)
@@ -177,16 +176,15 @@ class Stream:
             return False
         if pid in self._pmt_pids:
             self._program_map_section(pkt)
-        # This return makes Stream.show() fast 
+        # This return makes Stream.show() fast
         if self.info:
-            return False 
+            return False
         if pid in self._scte35_pids:
             return self._parse_scte35(pkt, pid)
-        elif pid in self._pid_prog.keys():
+        if pid in self._pid_prog.keys():
             if (pkt[1] >> 6) & 1:
                 pkt = pkt[0:18]
                 self._parse_pusi(pkt, pid)
-        return None
 
     def _parse_pts(self, pkt, pid):
         """
@@ -218,7 +216,7 @@ class Stream:
         # check splice command type
         if pkt[18] in self._CMD_TYPES:
             return Cue(pkt, packet_data)
-        return None
+        return False
 
     def _parse_program_streams(self, slib, bitbin, program_number):
         """
