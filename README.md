@@ -18,7 +18,7 @@ ___
  *  Having several relases makes it much __easier to resolve issues__.
  
 ---
-#### [__Heads Up!__ Changes as of 10/23/2020](#changes)
+#### [__Heads Up!__ Changes as of 11/27/2020](#changes)
 * [ __threefive__ runs __three times faster__ with __pypy3__](https://www.pypy.org/)
 * [__Requires__ Python __3.6 +__](https://www.python.org/downloads/release/python-390/)
 * [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
@@ -63,8 +63,12 @@ ___
 ---
 
 #### __Changes__
+   *   I __hate__ Markdown.
    
-   *   __Stream.decode_next()__ will be removed in 2.2.37. The decode_next() method has proven to be problematic since it requires a new Stream instance for each SCTE-35 packet found. Use __Stream.decode(func=myfunc)__ instead. __It works just like a callback function__. See       [Stream.__decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                
+   *  * __Stream.decode_next()__ will be __removed in 2.2.37__. 
+   *  *  The decode_next() method has proven to be problematic since it requires a new Stream instance for each SCTE-35 packet found. 
+   *  *   Use __Stream.decode(func=myfunc)__ instead. __It works just like a callback function__. 
+   *  *     See [Stream.__decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                
   
 
    *   As of version __2.1.95__, __threefive.version__ returns a string for the current __version__. 
