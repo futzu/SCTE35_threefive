@@ -65,10 +65,10 @@ ___
 #### __Changes__
    *   I __hate__ Markdown.
    
-   *  * __Stream.decode_next()__ will be __removed in 2.2.37__. 
+   *   __Stream.decode_next()__ will be __removed in 2.2.37__. 
    *  *  The decode_next() method has proven to be problematic since it requires a new Stream instance for each SCTE-35 packet found. 
    *  *   Use __Stream.decode(func=myfunc)__ instead. __It works just like a callback function__. 
-   *  *     See [Stream.__decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                
+   *  *   See [Stream.__decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                
   
 
    *   As of version __2.1.95__, __threefive.version__ returns a string for the current __version__. 
