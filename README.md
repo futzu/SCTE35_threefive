@@ -17,6 +17,15 @@ ___
  *  Releases are made for __incremental improvements__. This __keeps pip and the git repo in sync__.
  *  Having several relases makes it much __easier to resolve issues__.
 
+### Issues and how to resolve them.
+ * Open an issue __if__ you can __meet these terms__ 
+ 	*  __We're cool__, __you be__ cool __too__.
+ 	*  We will __only__ resolve __threefive__ specific issues. 
+ 	*  We __require__ the __video__ to __resolve__ video issues.
+ 	*  We __require__ your __code__ to resolve code __issues__. 
+ * __We resolve__ issues very __quickly__. 
+ 
+ 
 ---
 #### [__Heads Up!__ Changes as of 10/23/2020](#changes)
 * [ __threefive__ runs __three times faster__ with __pypy3__](https://www.pypy.org/)
@@ -37,14 +46,13 @@ ___
           * [Print __Cue__ instance as __JSON__](#print-cue-as-json)   
      * [__Stream__ Class](#stream-class)
           * [Stream.__decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                
-          * [Stream.__decode_next__()](#streamdecode_next)
           * [Stream.__decode_program__(the_program=None, func=show_cue)](#streamdecode_programthe_program-func--show_cue)
           * [Stream.__decode_proxy__(func=show_cue)](#Streamdecodeproxyfuncnone)    
  *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
      * __HLS__
           * [Using threefive with __HLS Manifests__](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
      * __Multicast__
-          * [Parsing SCTE-35 from a __Multicast__ Source](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/ts_scte_parser.py)
+          * [Parsing SCTE-35 from a __Multicast__ Source](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/README.txt)
      * __Splice Insert__
           * [Splice __Insert__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert.py)
           * [Splice __Insert__ Too](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert_Too.py)
@@ -73,7 +81,6 @@ ___
 ``` 
 
    *  Stream.decode, Stream.decode_pid, and Stream.decode_proxy now all take an optional function as an arg. See [__Stream__](#stream-class)
-   *  Stream.decode_until_found() is now [__Stream.decode_next()__](#streamdecode_next)
    *  Stream.decode_pid() is now [__Stream.decode_program()__](#streamdecode_programthe_program-func--show_cue)
 ---
 
@@ -203,7 +210,6 @@ Method                              | Description
 ------------------------------------| -------------------------------------
 Stream.__show__()                   |__Prints__ all recognized Programs and streams by pid and type. 
 Stream.__decode__(*func = show_cue*)             | __Prints__ SCTE-35 __cues__ for SCTE-35 packets. Accepts an optional function, func, as arg. 
-Stream.__decode_next()__                       | __Returns__ a __Cue__ instance for a SCTE-35 packet.
 Stream.__decode_program__(*the_program,func = show_cue*) |Same as Stream.__decode__ except only packets where program == __the_program__
 Stream.__decode_proxy__(*func = show_cue*)       |Same as Stream.__decode__ except raw packets are written to stdout for piping to another program.
 
@@ -276,34 +282,6 @@ def do():
 if __name__ == '__main__':
     do()
 ```
-
-
-### ```Stream.decode_next()```
-
-* Returns a threefive.Cue instance when a SCTE-35 packet is found.
-```python3
-import sys
-from threefive import Stream
-
-def display(cue):
-   print(f'\033[92m{cue.command.name}\033[00m')
-   print(f'{cue.packet_data}')
-
-def do():
-   with open(sys.argv[1],'rb') as tsdata:
-      sp = Stream(tsdata)
-      while tsdata:
-         cue = sp.decode_next()
-         if not cue :
-            sys.exit()
-         display(cue)
-
-if __name__ == '__main__':
-   do()
-
-```
-* [Stream.__decode_next()__ multicast __example__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/ts_scte_parser.py)
-
 
 ### ```Stream.decode_program(the_program, func = show_cue)```
 
