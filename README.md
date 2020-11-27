@@ -16,15 +16,6 @@ ___
  *  I generate __a lot releases__, however __the interface to classes and functions rarely changes__.
  *  Releases are made for __incremental improvements__. This __keeps pip and the git repo in sync__.
  *  Having several relases makes it much __easier to resolve issues__.
-
-### Issues and how to resolve them.
- * Open an issue __if__ you can __meet these terms__ 
- 	*  __We're cool__, __you be__ cool __too__.
- 	*  We will __only__ resolve __threefive__ specific issues. 
- 	*  We __require__ the __video__ to __resolve__ video issues.
- 	*  We __require__ your __code__ to resolve code __issues__. 
- * __We resolve__ issues very __quickly__. 
- 
  
 ---
 #### [__Heads Up!__ Changes as of 10/23/2020](#changes)
@@ -72,7 +63,11 @@ ___
 ---
 
 #### __Changes__
-   *  As of version __2.1.95__, __threefive.version__ returns a string for the current __version__. 
+   
+   *   __Stream.decode_next()__ will be removed in 2.2.37. The decode_next() method has proven to be problematic since it requires a new Stream instance for each SCTE-35 packet found. Use __Stream.decode(func=myfunc)__ instead. __It works just like a callback function__. See       [Stream.__decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                
+  
+
+   *   As of version __2.1.95__, __threefive.version__ returns a string for the current __version__. 
    ```python
    
      >>> import threefive
