@@ -43,7 +43,7 @@ class StreamFu(Stream):
         """
         parse pts with output
         """
-        super()._parse_pts(pkt,pid)
+        super()._parse_pts(pkt, pid)
         ppp = self._pid_prog[pid]
         pts = self._prog_pts[ppp]
         print(f"\033[92m{round(pts,6)}\033[0m", end="\r")
