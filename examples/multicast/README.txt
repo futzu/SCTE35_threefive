@@ -9,7 +9,7 @@ mcastc.py is an example multicast client for threefive.
 mcastd.py is an example multicast local server.
 
 The current mcast ip settings are optimized to run 
-both the client and the server on the host. 
+both the client and the server on one host. 
 
 Usage:
 
@@ -17,17 +17,12 @@ start server:
 
   python3 mcastd.py video.ts
     
-start client (in a new terminal):
-  
-  python3 mcastc.py 
-  
+start client (in a new terminal). 
 
+  python3 mcastc.py
 
------------------------------------------------
-If you need help with multicast, or networking, 
-or streaming and the like,
-consulting is what we do for a living.
------------------------------------------------
-
-  
+ 
+(The pts of the video is written,
+  in green to sys.stderr,
+  to indicate the stream is being parsed):
   
