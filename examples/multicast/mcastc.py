@@ -4,7 +4,7 @@ from threefive.tools import to_stderr
 
 """
 mcastc.py is an example multicast client for threefive.
-mcastd.py is an example multicast loopback server.
+mcastd.py is an example multicast local server.
 
 The current mcast ip settings are optimized for 
 the loopback interface. 
@@ -43,13 +43,10 @@ class StreamFu(Stream):
         """
         parse pts with output
         """
-        pts = ((pkt[13] >> 1) & 7) << 30
-        pts |= ((pkt[14] << 7) | (pkt[15] >> 1)) << 15
-        pts |= (pkt[16] << 7) | (pkt[17] >> 1)
-        pts /= 90000.0
+        super()._parse_pts(pkt,pid)
         ppp = self._pid_prog[pid]
-        self._prog_pts[ppp] = pts
-        print(f"\033[92m{round(pts,6)}\033[0m", end="\r\r\r")
+        pts = self._prog_pts[ppp]
+        print(f"\033[92m{round(pts,6)}\033[0m", end="\r")
 
 
 def read_stream(sock):
