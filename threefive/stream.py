@@ -93,17 +93,6 @@ class Stream:
             if cue:
                 func(cue)
 
-    def decode_next(self):
-        """
-        returns a threefive.Cue instance
-        when a SCTE-35 packet is found
-        """
-        self._find_start()
-        for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
-            cue = self._parser(pkt)
-            if cue:
-                return cue
-
     def decode_program(self, the_program, func=show_cue):
         """
         returns a threefive.Cue instance
@@ -176,7 +165,8 @@ class Stream:
             return False
         if pid in self._pmt_pids:
             self._program_map_section(pkt)
-        # This return makes Stream.show() fast
+            return False
+            # This return makes Stream.show() fast
         if self.info:
             return False
         if pid in self._scte35_pids:

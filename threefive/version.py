@@ -6,7 +6,7 @@ and as an easy way to check which
 version you have installed.
 """
 version_tuple = (
-    "2.2.35",
+    "2.2.37",
     "Made with a renewed enthusiasm and vigor, never seen here before, but very here now.",
 )
 
@@ -17,3 +17,8 @@ def version():
     to make it immutable.
     """
     return version_tuple[0]
+
+
+
+def full_version():
+    return version_tuple

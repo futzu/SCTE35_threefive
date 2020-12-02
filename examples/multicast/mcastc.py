@@ -1,27 +1,12 @@
+from functools import partial
 import socket
+import sys
 from threefive import Stream
 from threefive.tools import to_stderr
 
 """
-mcastc.py is an example multicast client for threefive.
-mcastd.py is an example multicast local server.
-
-the multicast addresses are set for both to be run on the same computer.
-
-
-
-Usage:
-
-start server:
-
-    python3 mcastd.py video.ts
-    
-start client (in a new terminal):
-
-    python3 mcastc.py 
-    
+See README.txt
 """
-
 
 def foundit(cue):
     """
@@ -39,45 +24,43 @@ class StreamFu(Stream):
     StreamFu is a subclass of threefive.Stream.
     It prints the pts from the stream to show progress.
     """
-
-    def _parse_pts(self, pkt, pid):
+    def decode(self, func=foundit):
         """
-        parse pts with output
+        reads MPEG-TS to find SCTE-35 packets
         """
-        super()._parse_pts(pkt, pid)
-        ppp = self._pid_prog[pid]
-        pts = self._prog_pts[ppp]
-        print(f"\033[92m{round(pts,6)}\033[0m", end="\r")
+        cue_count=0
+        for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
+            cue = self._parser(pkt)
+            if cue:
+                cue_count +=1
+                func(cue)
+                print(f"\033[92m{cue_count} SCTE-35 cues found.\033[0m",file =sys.stderr, end="\r")
+                print('\n')
 
 
 def read_stream(sock):
     with sock.makefile(mode="rb") as socket_file:
-        ts = StreamFu(socket_file)
-        ts.decode()  # without a function being passed in.
-        # ts.decode(func=foundit)   # with a function passed in.
-        # ts.show()   # will display stream types by program.
-
+        ts = StreamFu(socket_file,show_null=True)
+        ts.decode()
+        #ts.show()   # will display stream types by program.
 
 def mk_sock(mcast_host, mcast_ip, mcast_port):
     """
-    multicast socket setup    
+    multicast socket setup
     """
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+    sock.bind((mcast_host, mcast_port))
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.setsockopt(
         socket.IPPROTO_IP,
         socket.IP_ADD_MEMBERSHIP,
         socket.inet_aton(mcast_ip) + socket.inet_aton(mcast_host),
     )
-    sock.bind((mcast_host, mcast_port))
     return sock
 
-
 if __name__ == "__main__":
-
     mcast_host = "0.0.0.0"
-    mcast_ip = "224.255.0.1"
+    mcast_ip = "225.255.0.35"
     mcast_port = 35555
-
     mcast_sock = mk_sock(mcast_host, mcast_ip, mcast_port)
     read_stream(mcast_sock)

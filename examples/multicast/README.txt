@@ -13,15 +13,34 @@ both the client and the server on one host.
 
 Usage:
 
-start server:
+start client first. 
+  python3 mcastc.py
+
+start server in a new terminal.
 
   python3 mcastd.py video.ts
     
-start client (in a new terminal). 
-
-  python3 mcastc.py
-
  
-(The pts of the video is written,in green to sys.stderr,
-  to indicate the stream is being parsed)
-  
+The SCTE-35 cue count is printed in green to sys.stderr, to indicate the stream is being parsed. 
+Nothing will be printed if the stream is not being parsed.
+
+
+On UNIX/Linux speed it up by routing multicast on the loopback,
+tcpdump will not be able to see the traffic.
+
+
+	ifconfig lo multicast
+
+	route add -net 224.0.0.0 netmask 240.0.0.0 dev lo 
+
+Or add the route to your network device if you want to see traffic with tcpdump
+
+	ifconfig wlp2s0 multicast
+
+	route add -net 224.0.0.0 netmask 240.0.0.0 dev wlp2s0
+
+Then you can monitor traffic with
+
+	tcpdump -i wlp2s0  multicast
+
+I'm really not sure how it works on Windows. 
