@@ -63,24 +63,19 @@ ___
 ---
 
 #### __Changes__
-   *   I __hate__ Markdown.
-   
    *   __Stream.decode_next()__ will be __removed in 2.2.37__. 
-   *  *  The decode_next() method has proven to be problematic since it requires a new Stream instance for each SCTE-35 packet found. 
+   *  *  The __decode_next()__ method has proven to be __problematic__ since the __switch__ to __parsing MPEG-TS tables__ directly. 
    *  *   Use __Stream.decode(func=myfunc)__ instead. __It works just like a callback function__. 
    *  *   See [Stream.__decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                
-  
-
+   
    *   As of version __2.1.95__, __threefive.version__ returns a string for the current __version__. 
    ```python
    
      >>> import threefive
-     >>> threefive.version
-    '2.1.95'
+     >>> threefive.version()
+    '2.2.35'
 ``` 
 
-   *  Stream.decode, Stream.decode_pid, and Stream.decode_proxy now all take an optional function as an arg. See [__Stream__](#stream-class)
-   *  Stream.decode_pid() is now [__Stream.decode_program()__](#streamdecode_programthe_program-func--show_cue)
 ---
 
 ## Fast __Start_
