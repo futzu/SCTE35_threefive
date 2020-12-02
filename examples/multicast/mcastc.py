@@ -6,8 +6,9 @@ from threefive.tools import to_stderr
 mcastc.py is an example multicast client for threefive.
 mcastd.py is an example multicast local server.
 
-The current mcast ip settings are optimized for 
-the loopback interface. 
+the multicast addresses are set for both to be run on the same computer.
+
+
 
 Usage:
 
