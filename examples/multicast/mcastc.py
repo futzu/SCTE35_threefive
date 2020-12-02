@@ -8,6 +8,7 @@ from threefive.tools import to_stderr
 See README.txt
 """
 
+
 def foundit(cue):
     """
     for custom SCTE-35 cue data handling
@@ -24,25 +25,31 @@ class StreamFu(Stream):
     StreamFu is a subclass of threefive.Stream.
     It prints the pts from the stream to show progress.
     """
+
     def decode(self, func=foundit):
         """
         reads MPEG-TS to find SCTE-35 packets
         """
-        cue_count=0
+        cue_count = 0
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
             cue = self._parser(pkt)
             if cue:
-                cue_count +=1
+                cue_count += 1
                 func(cue)
-                print(f"\033[92m{cue_count} SCTE-35 cues found.\033[0m",file =sys.stderr, end="\r")
-                print('\n')
+                print(
+                    f"\033[92m{cue_count} SCTE-35 cues found.\033[0m",
+                    file=sys.stderr,
+                    end="\r",
+                )
+                print("\n")
 
 
 def read_stream(sock):
     with sock.makefile(mode="rb") as socket_file:
-        ts = StreamFu(socket_file,show_null=True)
+        ts = StreamFu(socket_file, show_null=True)
         ts.decode()
-        #ts.show()   # will display stream types by program.
+        # ts.show()   # will display stream types by program.
+
 
 def mk_sock(mcast_host, mcast_ip, mcast_port):
     """
@@ -57,6 +64,7 @@ def mk_sock(mcast_host, mcast_ip, mcast_port):
         socket.inet_aton(mcast_ip) + socket.inet_aton(mcast_host),
     )
     return sock
+
 
 if __name__ == "__main__":
     mcast_host = "0.0.0.0"
