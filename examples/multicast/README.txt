@@ -1,8 +1,8 @@
-threefive is a SCTE-35 parser library, it does not support any network protocols. 
----------------------------------------------------------------------------------
-
-This is an example of how threefive can be used to parse a multicast stream.
-this is not a part of threefive, it's just an example. 
+threefive is a SCTE-35 parser library, 
+it does not directly support any network protocols. 
+----------------------------------------------------
+This is an example of how threefive can be used 
+to parse a multicast stream.
 
 mcastc.py is an example multicast client for threefive.
 
@@ -22,7 +22,6 @@ start client (in a new terminal).
   python3 mcastc.py
 
  
-(The pts of the video is written,
-  in green to sys.stderr,
-  to indicate the stream is being parsed):
+(The pts of the video is written,in green to sys.stderr,
+  to indicate the stream is being parsed)
   
