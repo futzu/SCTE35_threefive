@@ -6,7 +6,7 @@ to parse a multicast stream.
 
 mcastc.py is an example multicast client for threefive.
 
-mcastd.py is an example multicast local server.
+mcastd.py is an example multicast sender
 
 The current mcast ip settings are optimized to run 
 both the client and the server on one host. 
@@ -33,11 +33,18 @@ tcpdump will not be able to see the traffic.
 
 	route add -net 224.0.0.0 netmask 240.0.0.0 dev lo 
 
+If you want to use more than one host I suggest
+
 Or add the route to your network device if you want to see traffic with tcpdump
 
-	ifconfig wlp2s0 multicast
+	ifconfig wlp2s0 multicast allmulti
 
 	route add -net 224.0.0.0 netmask 240.0.0.0 dev wlp2s0
+
+OpenBSD uses slightly different syntax:
+
+	route add -inet 224.0.0.0/4 224.0.0.1
+	
 
 Then you can monitor traffic with
 
