@@ -15,6 +15,22 @@ def as_json(obj):
     return json.dumps(obj, indent=2)
 
 
+def f2i(flag, shift):
+    """
+    takes a boolean flag
+    and an int for left shift value
+
+    a = True
+    f2i(a,7) 
+
+    128
+
+    """
+    if flag:
+        return 1 << shift
+    return 0
+
+
 def i2b(i, wide):
     """
     i2b is a wrapper for int.to_bytes

@@ -1,4 +1,4 @@
-from .tools import i2b
+from .tools import f2i, i2b
 
 
 class SpliceCommand:
@@ -133,6 +133,34 @@ class SpliceInsert(SpliceCommand):
             self.unique_program_id = bitbin.asint(16)
             self.avail_num = bitbin.asint(8)
             self.avail_expected = bitbin.asint(8)
+
+    def encode(self):
+        bencoded = i2b(self.splice_event_id, 4)
+        if self.splice_event_cancel_indicator:
+            bencoded += i2b((1 << 7), 1)
+        else:
+            bencoded += i2b(0, 1)
+            four_flags = f2i(self.out_of_network_indicator, 7)
+            four_flags += f2i(self.program_splice_flag, 6)
+            four_flags += f2i(self.duration_flag, 5)
+            four_flags += f2i(self.splice_immediate_flag, 4)
+            bencoded += i2b(four_flags, 1)
+            """
+            if self.program_splice_flag and not self.splice_immediate_flag:
+                self.splice_time(bitbin)  # uint8 + uint32
+            if not self.program_splice_flag:
+                self.component_count = bitbin.asint(8)  # uint 8
+                self.components = []
+                for i in range(0, self.component_count):
+                    self.components[i] = bitbin.asint(8)
+                if not self.splice_immediate_flag:
+                    self.splice_time(bitbin)
+            if self.duration_flag:
+                self.parse_break(bitbin)
+            self.unique_program_id = bitbin.asint(16)
+            self.avail_num = bitbin.asint(8)
+            self.avail_expected = bitbin.asint(8)
+            """
 
 
 class TimeSignal(SpliceCommand):
