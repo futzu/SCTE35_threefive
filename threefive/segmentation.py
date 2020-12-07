@@ -182,10 +182,12 @@ class SegmentationDescriptor(SpliceDescriptor):
     def ADS(self, bitbin, upid_length):
         return self.URI(bitbin, upid_length)
 
-    def AirID(self, bitbin, upid_length):
+    @staticmethod
+    def AirID(bitbin, upid_length):
         return bitbin.ashex(upid_length << 3)
 
-    def ATSC(self, bitbin, upid_length):
+    @staticmethod
+    def ATSC(bitbin, upid_length):
         return {
             "TSID": bitbin.asint(16),
             "reserved": bitbin.asint(2),
@@ -194,7 +196,8 @@ class SegmentationDescriptor(SpliceDescriptor):
             "content_id": bitbin.asdecodedhex((upid_length - 4) << 3),
         }
 
-    def ISAN(self, bitbin, upid_length):
+    @staticmethod
+    def ISAN(bitbin, upid_length):
         pre = "0000-0000-"
         middle = bitbin.ashex(upid_length << 3)
         post = "-0000-Z-0000-0000-6"
@@ -215,14 +218,16 @@ class SegmentationDescriptor(SpliceDescriptor):
             upids.append(segmentation_upid)
         return upids
 
-    def MPU(self, bitbin, upid_length):
+    @staticmethod
+    def MPU(bitbin, upid_length):
         bitcount = upid_length << 3
         return {
             "format identifier": bitbin.asint(32),
             "private data": bitbin.asint(bitcount - 32),
         }
 
-    def EIDR(self, bitbin, upid_length):
+    @staticmethod
+    def EIDR(bitbin, upid_length):
         pre = bitbin.asint(16)
         post = bitbin.ashex(80)
         return f"10.{pre}/{post[2:6]}-{post[6:10]}-{post[10:14]}-{post[14:18]}-T"
@@ -235,7 +240,8 @@ class SegmentationDescriptor(SpliceDescriptor):
         pre = "".join(self.AirID(bitbin, upid_length).split("x", 1))
         return ".".join([pre[i : i + n] for i in range(0, len(pre), n)])
 
-    def URI(self, bitbin, upid_length):
+    @staticmethod
+    def URI(bitbin, upid_length):
         if upid_length > 0:
             return bitbin.asdecodedhex(upid_length << 3)
         return None
