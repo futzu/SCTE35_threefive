@@ -1,4 +1,3 @@
-import sys
 from .tools import to_stderr
 
 
