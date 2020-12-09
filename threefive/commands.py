@@ -1,4 +1,5 @@
-from .tools import f2i, i2b
+from base64 import b64encode
+from .tools import f2i, i2b, to_stderr
 
 
 class SpliceCommand:
@@ -22,10 +23,9 @@ class SpliceCommand:
         self.break_duration = bitbin.as90k(33)
 
     def encode_break(self):  # 40bits
-        break_bytes = 0
-        if self.break_auto_return:
-            break_bytes = 1 << 39
-        break_bytes += self.break_duration * 90000
+        break_bytes = f2i(self.break_auto_return, 39)
+        break_bytes += 63 << 33  # forward 6
+        break_bytes += int(self.break_duration * 90000)
         return i2b(break_bytes, 5)
 
     def splice_time(self, bitbin):  # 40bits
@@ -37,11 +37,13 @@ class SpliceCommand:
             bitbin.forward(7)
 
     def encode_splice_time(self):
-        st_bytes = 0
         if self.time_specified_flag:
-            st_bytes = 1 << 39
-            st_bytes += self.pts_time * 90000
-        return i2b(st_bytes, 5)
+            st_bytes = 127 << 33  # self.time_specified + forward six bits
+            st_bytes += int(self.pts_time * 90000)
+            return i2b(st_bytes, 5)
+
+        else:
+            return i2b(0b01111111, 1)
 
 
 class SpliceNull(SpliceCommand):
@@ -136,31 +138,27 @@ class SpliceInsert(SpliceCommand):
 
     def encode(self):
         bencoded = i2b(self.splice_event_id, 4)
-        if self.splice_event_cancel_indicator:
-            bencoded += i2b((1 << 7), 1)
-        else:
-            bencoded += i2b(0, 1)
+        bencoded += i2b(f2i(self.splice_event_cancel_indicator, 7) + 127, 1)
+        if not self.splice_event_cancel_indicator:
             four_flags = f2i(self.out_of_network_indicator, 7)
             four_flags += f2i(self.program_splice_flag, 6)
             four_flags += f2i(self.duration_flag, 5)
             four_flags += f2i(self.splice_immediate_flag, 4)
-            bencoded += i2b(four_flags, 1)
-            """
+            bencoded += i2b(four_flags + 15, 1)
             if self.program_splice_flag and not self.splice_immediate_flag:
-                self.splice_time(bitbin)  # uint8 + uint32
+                bencoded += self.encode_splice_time()
             if not self.program_splice_flag:
-                self.component_count = bitbin.asint(8)  # uint 8
-                self.components = []
+                bencoded += i2b(self.component_count, 1)
                 for i in range(0, self.component_count):
-                    self.components[i] = bitbin.asint(8)
+                    bencoded += i2b(self.components[i], 1)
                 if not self.splice_immediate_flag:
-                    self.splice_time(bitbin)
+                    bencoded += self.encode_splice_time()
             if self.duration_flag:
-                self.parse_break(bitbin)
-            self.unique_program_id = bitbin.asint(16)
-            self.avail_num = bitbin.asint(8)
-            self.avail_expected = bitbin.asint(8)
-            """
+                bencoded += self.encode_break()
+            bencoded += i2b(self.unique_program_id, 2)
+            bencoded += i2b(self.avail_num, 1)
+            bencoded += i2b(self.avail_expected, 1)
+            to_stderr(bencoded)
 
 
 class TimeSignal(SpliceCommand):
