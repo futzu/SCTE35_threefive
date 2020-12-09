@@ -7,4 +7,5 @@ from threefive import Cue
 Base64 = "/DBIAAAAAAAA///wBQb+ky44CwAyAhdDVUVJSAAACn+fCAgAAAAALKCh4xgAAAIXQ1VFSUgAAAl/nwgIAAAAACygoYoRAAC0IX6w"
 
 three5 = Cue(Base64)
+three5.decode()
 three5.show()

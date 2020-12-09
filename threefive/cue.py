@@ -54,9 +54,11 @@ class Cue:
         self.info_section = None
         self.command = None
         self.descriptors = []
-        payload = mk_payload(data)
+        self.payload = mk_payload(data)
         self.packet_data = packet_data
-        self._parse(payload)
+
+    def decode(self):
+        self._parse(self.payload)
 
     def _parse(self, payload):
         payload = self._mk_info_section(payload)

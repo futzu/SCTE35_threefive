@@ -26,6 +26,10 @@ class SpliceInfoSection:
         self.splice_command_type = None
         self.descriptor_loop_length = None
 
+    def __repr__(self):
+        return str(vars(self))
+
+
     def decode(self, bites):
         bitbin = BitBin(bites)
         self.table_id = bitbin.ashex(8)

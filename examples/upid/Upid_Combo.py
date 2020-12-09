@@ -11,4 +11,5 @@ Combination Segmentation Upid Example
 combo = "/DA9AAAAAAAAAACABQb+0fha8wAnAiVDVUVJSAAAv3/PAAD4+mMNEQ4FTEEzMDkICAAAAAAuU4SBNAAAPIaCPw=="
 
 cuep = threefive.Cue(combo)
+cuep.decode()
 cuep.show()

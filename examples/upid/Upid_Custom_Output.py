@@ -54,10 +54,8 @@ def stuff(t, upid):
         print(f"\033[92m{hex(t)}\033[0m : {upid}")
 
 
-[
-    [
-        stuff(d.segmentation_upid_type, d.segmentation_upid)
-        for d in threefive.Cue(m).descriptors
-    ]
-    for m in dmesg
-]
+for m in dmesg:
+    tf = threefive.Cue(m)
+    tf.decode()
+    [stuff(d.segmentation_upid_type, d.segmentation_upid) for d in tf.descriptors]
+  

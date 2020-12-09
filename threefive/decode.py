@@ -10,14 +10,18 @@ def read_stdin():
     except:
         try:
             stuff = sys.stdin.buffer.read()
-            Cue(stuff).show()
+            cue = Cue(stuff)
+            cue.decode()
+            cue.show()
         except Exception:
             pass
 
 
 def read_stuff(stuff):
     try:
-        Cue(stuff).show()
+        cue = Cue(stuff)
+        cue.decode()
+        cue.show()
     except Exception:
         try:
             with open(stuff, "rb") as tsdata:

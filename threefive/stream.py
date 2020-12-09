@@ -65,6 +65,7 @@ class Stream:
         self._prog_pts = {}
         self.info = False
         self.the_program = False
+        self.cue = None
 
     def _find_start(self):
         """
@@ -170,7 +171,10 @@ class Stream:
         if self.info:
             return False
         if pid in self._scte35_pids:
-            return self._parse_scte35(pkt, pid)
+            scte35 = self._parse_scte35(pkt, pid)
+            if scte35:
+                return scte35
+            
         if pid in self._pid_prog.keys():
             if (pkt[1] >> 6) & 1:
                 pkt = pkt[0:18]
@@ -198,16 +202,26 @@ class Stream:
                         self._parse_pts(pkt, pid)
 
     def _parse_scte35(self, pkt, pid):
-        """
-        parse a SCTE-35 packet
-        """
-        packet_data = self._mk_packet_data(pid)
-        pkt = pkt[:5] + b"\xfc0" + pkt.split(b"\x00\xfc0")[1]
-        # check splice command type
-        if pkt[18] in self._CMD_TYPES:
-            return Cue(pkt, packet_data)
-        return False
-
+        '''
+        parse a scte35 cue from one or more packets
+        '''
+        if not self.cue:
+            packet_data = self._mk_packet_data(pid)
+            if pkt[18] in self._CMD_TYPES:
+                self.cue = Cue(pkt, packet_data)
+                self.cue._mk_info_section(pkt[5:19])
+            else:
+                return False
+        else:
+            self.cue.payload += pkt[5:]
+        if (self.cue.info_section.section_length + 3) <= len(self.cue.payload):
+            self.cue.decode()
+            cue = self.cue
+            self.cue = None
+            return cue
+        else:
+            return False
+        
     def _parse_program_streams(self, slib, bitbin, program_number):
         """
         parse the elementary streams

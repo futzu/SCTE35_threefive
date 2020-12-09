@@ -12,12 +12,10 @@ Base64 = "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
 """
 Using Hex
 """
-htf = threefive.decode(Hex)
-htf.show()
+threefive.decode(Hex)
 
 """
 Using Base64 auto
 (output should be the same as above)
 """
-btf = threefive.decode(Base64)
-btf.show()
+threefive.decode(Base64)
