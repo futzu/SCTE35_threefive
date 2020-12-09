@@ -174,7 +174,7 @@ class Stream:
             scte35 = self._parse_scte35(pkt, pid)
             if scte35:
                 return scte35
-            
+
         if pid in self._pid_prog.keys():
             if (pkt[1] >> 6) & 1:
                 pkt = pkt[0:18]
@@ -202,9 +202,9 @@ class Stream:
                         self._parse_pts(pkt, pid)
 
     def _parse_scte35(self, pkt, pid):
-        '''
+        """
         parse a scte35 cue from one or more packets
-        '''
+        """
         if not self.cue:
             packet_data = self._mk_packet_data(pid)
             if pkt[18] in self._CMD_TYPES:
@@ -221,7 +221,7 @@ class Stream:
             return cue
         else:
             return False
-        
+
     def _parse_program_streams(self, slib, bitbin, program_number):
         """
         parse the elementary streams

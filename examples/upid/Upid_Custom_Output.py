@@ -58,4 +58,3 @@ for m in dmesg:
     tf = threefive.Cue(m)
     tf.decode()
     [stuff(d.segmentation_upid_type, d.segmentation_upid) for d in tf.descriptors]
-  

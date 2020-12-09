@@ -29,7 +29,6 @@ class SpliceInfoSection:
     def __repr__(self):
         return str(vars(self))
 
-
     def decode(self, bites):
         bitbin = BitBin(bites)
         self.table_id = bitbin.ashex(8)
