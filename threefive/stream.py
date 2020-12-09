@@ -213,7 +213,7 @@ class Stream:
             else:
                 return False
         else:
-            self.cue.payload += pkt[5:]
+            self.cue.payload += pkt[4:]
         if (self.cue.info_section.section_length + 3) <= len(self.cue.payload):
             self.cue.decode()
             cue = self.cue
