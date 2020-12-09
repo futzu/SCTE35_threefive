@@ -174,8 +174,8 @@ class Stream:
             return self._parse_scte35(pkt, pid)
         if pid in self._pid_prog.keys():
             if (pkt[1] >> 6) & 1:
-                pkt = pkt[0:18]
-                self._parse_pusi(pkt, pid)
+                part_pkt = pkt[0:18]
+                self._parse_pusi(part_pkt, pid)
 
     def _parse_pts(self, pkt, pid):
         """
@@ -205,8 +205,9 @@ class Stream:
         if not self.cue:
             packet_data = self._mk_packet_data(pid)
             if pkt[18] in self._CMD_TYPES:
-                self.cue = Cue(pkt, packet_data)
+                self.cue = Cue(pkt[:19], packet_data)
                 self.cue._mk_info_section(pkt[5:19])
+                self.cue.payload += pkt[19:]
             else:
                 return False
         else:
