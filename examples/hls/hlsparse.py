@@ -5,6 +5,7 @@ import threefive
 def do(mesg):
     print(f"cue: {mesg}")
     tf = threefive.Cue(mesg)
+    tf.decode()
     tf.show()
 
 
@@ -40,4 +41,6 @@ with open(sys.argv[1], "r") as manifest:
             for chunk in line.split(","):
                 k, v = chunk.split("=")
                 if k.startswith("SCTE35"):
-                    v = threefive.Cue(v).show()
+                    cue = threefive.Cue(v)
+                    cue.decode()
+                    cue.show()
