@@ -30,18 +30,10 @@ class StreamFu(Stream):
         """
         reads MPEG-TS to find SCTE-35 packets
         """
-        cue_count = 0
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
             cue = self._parser(pkt)
             if cue:
-                cue_count += 1
                 func(cue)
-                print(
-                    f"\033[92m{cue_count} SCTE-35 cues found.\033[0m",
-                    file=sys.stderr,
-                    end="\r",
-                )
-                print("\n")
 
 
 def read_stream(sock):
