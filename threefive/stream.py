@@ -171,10 +171,7 @@ class Stream:
         if self.info:
             return False
         if pid in self._scte35_pids:
-            scte35 = self._parse_scte35(pkt, pid)
-            if scte35:
-                return scte35
-
+            return self._parse_scte35(pkt, pid)
         if pid in self._pid_prog.keys():
             if (pkt[1] >> 6) & 1:
                 pkt = pkt[0:18]
