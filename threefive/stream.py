@@ -78,9 +78,9 @@ class Stream:
             one_byte = self._tsdata.read(1)
             if not one_byte:
                 sys.exit()
-            if one_byte is sync_byte:
+            if one_byte == sync_byte:
                 self._tsdata.read(self._PACKET_SIZE - 1)
-                if self._tsdata.read(1) is sync_byte:
+                if self._tsdata.read(1) == sync_byte:
                     self._tsdata.read(self._PACKET_SIZE - 1)
                     return
 

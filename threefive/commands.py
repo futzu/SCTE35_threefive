@@ -1,5 +1,5 @@
 from base64 import b64encode
-from .tools import f2i, i2b, to_stderr
+from .tools import i2b, reserve, to_stderr
 
 
 class SpliceCommand:
@@ -23,8 +23,8 @@ class SpliceCommand:
         self.break_duration = bitbin.as90k(33)
 
     def encode_break(self):  # 40bits
-        break_bytes = f2i(self.break_auto_return, 39)
-        break_bytes += 63 << 33  # forward 6
+        break_bytes = self.break_auto_return << 39
+        break_bytes += reserve(6)<< 33  # forward 6
         break_bytes += int(self.break_duration * 90000)
         return i2b(break_bytes, 5)
 
@@ -38,13 +38,14 @@ class SpliceCommand:
 
     def encode_splice_time(self):
         if self.time_specified_flag:
-            st_bytes = 127 << 33  # self.time_specified + forward six bits
+            st_bytes = self.time_specified_flag << 39  
+            st_bytes += reserve(6) << 33  #forward six bits
             st_bytes += int(self.pts_time * 90000)
             return i2b(st_bytes, 5)
 
         else:
-            return i2b(0b01111111, 1)
-
+            
+            return i2b(reserve(7), 1)
 
 class SpliceNull(SpliceCommand):
     """
@@ -138,13 +139,14 @@ class SpliceInsert(SpliceCommand):
 
     def encode(self):
         bencoded = i2b(self.splice_event_id, 4)
-        bencoded += i2b(f2i(self.splice_event_cancel_indicator, 7) + 127, 1)
+        bencoded += i2b((self.splice_event_cancel_indicator << 7) + reserve(7), 1)
         if not self.splice_event_cancel_indicator:
-            four_flags = f2i(self.out_of_network_indicator, 7)
-            four_flags += f2i(self.program_splice_flag, 6)
-            four_flags += f2i(self.duration_flag, 5)
-            four_flags += f2i(self.splice_immediate_flag, 4)
-            bencoded += i2b(four_flags + 15, 1)
+            four_flags = self.out_of_network_indicator << 7
+            four_flags += self.program_splice_flag << 6
+            four_flags += self.duration_flag << 5
+            four_flags += self.splice_immediate_flag << 4
+            four_flags += reserve(4)
+            bencoded += i2b(four_flags, 1)
             if self.program_splice_flag and not self.splice_immediate_flag:
                 bencoded += self.encode_splice_time()
             if not self.program_splice_flag:
