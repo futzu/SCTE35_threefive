@@ -63,16 +63,18 @@ ___
 ---
 
 #### __Changes__
-   *  As of __threefive v.2.2.39__ 
-   *	*   __threefive.Cue__ will require __Cue.decode()__ to be called to parse data.
+   *  As of threefive __v.2.2.39__  threefive.__Cue__ will require __Cue.decode()__ to be called to parse data.
+   
      
-   ` ``python3
+ ```python3
   from threefive import Cue
   Base64 = "/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g="
   cue = Cue(Base64)
   cue.decode()   # Now required
   cue.show()
 ```
+
+
    *   __Stream.decode_next()__ will be __removed in 2.2.37__. 
    *  *  The __decode_next()__ method has proven to be __problematic__ since the __switch__ to __parsing MPEG-TS tables__ directly. 
    *  *   Use __Stream.decode(func=myfunc)__ instead. __It works just like a callback function__. 
