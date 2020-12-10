@@ -10,6 +10,7 @@
   	* __SCTE-35__ can be parsed from strings or video with __one function__  [__threefive.decode()__](#the-decode-function).
   	*  threefive __automatically identifies__ and parses __Base64, Hexidecimal__, or __Binary__ .  
   	*   __Multiple programs__ and __multiple SCTE-35 streams__ are __well__ supported.
+	*  __SCTE35 cues__ up to __4096 bytes__ long can be __parsed from video__ streams or __encoded__ strings. 
 ___
 
 ## Why __so many releases__?
