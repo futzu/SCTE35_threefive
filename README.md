@@ -63,9 +63,10 @@ ___
 ---
 
 #### __Changes__
-   *  in __2.2.39__ __threefive.Cue__ will require __Cue.decode()__ to be called to parse data.
+   *  As of __threefive v.2.2.39__ 
+   *	*   __threefive.Cue__ will require __Cue.decode()__ to be called to parse data.
      
-   ```python3
+   ` ``python3
   from threefive import Cue
   Base64 = "/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g="
   cue = Cue(Base64)
