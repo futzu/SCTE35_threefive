@@ -14,9 +14,9 @@
 ___
 
 ## Why __so many releases__?
- *  I generate __a lot releases__, however __the interface to classes and functions rarely changes__.
+ *  I generate __a lot releases__, however __the interface to classes and functions rarely [__changes__](#changes)
  *  Releases are made for __incremental improvements__. This __keeps pip and the git repo in sync__.
- *  Having several relases makes it much __easier to resolve issues__.
+ *  Having several relases makes it much __easier to resolve__ [issues](https://github.com/futzu/SCTE35-threefive/issues)
  
 ---
 #### [__Heads Up!__ Changes as of 11/27/2020](#changes)
