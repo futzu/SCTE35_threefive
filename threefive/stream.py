@@ -58,30 +58,58 @@ class Stream:
         self._tsdata = tsdata
         if show_null:
             self._CMD_TYPES.append(0)
+        """
+        self.scte35_pids is a set to hold SCTE35 pids
+        """
         self._scte35_pids = set()
+        """
+        self.pid_prog is a map of
+        pids to the program that holds them.
+        """
         self._pid_prog = {}
+        """
+        self.pmt_pids is a set of pids
+        that hold program map tables.
+        """
         self._pmt_pids = set()
+        """
+        self.programs is a set of programs
+        in the mpegts stream
+        """
         self._programs = set()
+        """
+        self.prog_pts is a map of
+        programs to the current pts
+        """
         self._prog_pts = {}
+        """
+        self.info is a flag to trigger
+        displaying the programs and streams
+        contained in the video and then exit.
+        """
         self.info = False
+        """
+        self.the_program used by
+        self.decode_program so that
+        only pids assigned to that program
+        are parsed.
+        """
+
         self.the_program = False
+        """
+        self.cue is used to assemble
+        multi-packet SCTE35 cues
+        """
         self.cue = None
 
     def _find_start(self):
         """
         handles partial packets
         """
-        if self._tsdata.read(self._PACKET_SIZE)[0] == 71:
-            return
         sync_byte = b"G"
         while self._tsdata:
-            one_byte = self._tsdata.read(1)
-            if not one_byte:
-                sys.exit()
-            if one_byte == sync_byte:
-                self._tsdata.read(self._PACKET_SIZE - 1)
-                if self._tsdata.read(1) == sync_byte:
-                    self._tsdata.read(self._PACKET_SIZE - 1)
+            if self._tsdata.read(1) == sync_byte:
+                if self._tsdata.read(self._PACKET_SIZE - 1):
                     return
 
     def decode(self, func=show_cue):
@@ -206,7 +234,7 @@ class Stream:
             packet_data = self._mk_packet_data(pid)
             if pkt[18] in self._CMD_TYPES:
                 self.cue = Cue(pkt[:19], packet_data)
-                self.cue._mk_info_section(pkt[5:19])
+                self.cue.mk_info_section(pkt[5:19])
                 self.cue.payload += pkt[19:]
             else:
                 return False
@@ -217,8 +245,7 @@ class Stream:
             cue = self.cue
             self.cue = None
             return cue
-        else:
-            return False
+        return False
 
     def _parse_program_streams(self, slib, bitbin, program_number):
         """

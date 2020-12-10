@@ -61,12 +61,12 @@ class Cue:
         self._parse(self.payload)
 
     def _parse(self, payload):
-        payload = self._mk_info_section(payload)
+        payload = self.mk_info_section(payload)
         payload = self._mk_command(payload)
         payload = self._mk_descriptors(payload)
         self.info_section.crc = hex(ifb(payload[0:4]))
 
-    def _mk_info_section(self, payload):
+    def mk_info_section(self, payload):
         info_size = 14
         info_payload = payload[:info_size]
         self.info_section = SpliceInfoSection()
