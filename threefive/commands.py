@@ -24,7 +24,7 @@ class SpliceCommand:
 
     def encode_break(self):  # 40bits
         break_bytes = self.break_auto_return << 39
-        break_bytes += reserve(6)<< 33  # forward 6
+        break_bytes += reserve(6) << 33  # forward 6
         break_bytes += int(self.break_duration * 90000)
         return i2b(break_bytes, 5)
 
@@ -38,14 +38,15 @@ class SpliceCommand:
 
     def encode_splice_time(self):
         if self.time_specified_flag:
-            st_bytes = self.time_specified_flag << 39  
-            st_bytes += reserve(6) << 33  #forward six bits
+            st_bytes = self.time_specified_flag << 39
+            st_bytes += reserve(6) << 33  # forward six bits
             st_bytes += int(self.pts_time * 90000)
             return i2b(st_bytes, 5)
 
         else:
-            
+
             return i2b(reserve(7), 1)
+
 
 class SpliceNull(SpliceCommand):
     """

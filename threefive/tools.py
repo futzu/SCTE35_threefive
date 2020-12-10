@@ -76,11 +76,13 @@ def mk_payload(data):
         payload = mk_bits(data)
     return payload
 
+
 def reserve(num):
-    head = b'0b'
-    one = b'1'
+    head = b"0b"
+    one = b"1"
     bits = head + (one * num)
-    return int(bits,2)
+    return int(bits, 2)
+
 
 def to_stderr(stuff):
     """
