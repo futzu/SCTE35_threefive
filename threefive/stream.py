@@ -230,7 +230,6 @@ class Stream:
         """
         parse a scte35 cue from one or more packets
         """
-        print(f"\033[92m{pkt}\033[00m")
         if not self.cue:
             packet_data = self._mk_packet_data(pid)
             if pkt[18] in self._CMD_TYPES:
