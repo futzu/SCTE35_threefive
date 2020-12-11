@@ -9,7 +9,7 @@ from .descriptors import (
 )
 from .commands import (
     SpliceNull,
-    SpliceSchedule,
+    #  SpliceSchedule,
     SpliceInsert,
     TimeSignal,
     BandwidthReservation,
@@ -43,7 +43,7 @@ class Cue:
     # map of known splice commands and associated classes
     _command_map = {
         0: SpliceNull,
-        4: SpliceSchedule,
+        #  4: SpliceSchedule,
         5: SpliceInsert,
         6: TimeSignal,
         7: BandwidthReservation,

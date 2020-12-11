@@ -1,4 +1,3 @@
-from base64 import b64encode
 from .tools import i2b, reserve, to_stderr
 
 
@@ -58,6 +57,17 @@ class SpliceNull(SpliceCommand):
         self.splice_command_length = 0
 
 
+'''
+    [ Heads Up! ]
+            
+    |  The SpliceSchedule class will be phased out |
+    |  Unless Someone says they use it or need it. |
+    |  I've never seen a Splice Schedule Command.  |
+    |  If the class is not being used, I'm going   |
+    |  to remove it.                               |
+
+      
+
 class SpliceSchedule(SpliceCommand):
     """
     Table 8 - splice_schedule()
@@ -92,6 +102,7 @@ class SpliceSchedule(SpliceCommand):
                 self.unique_program_id = bitbin.asint(16)
                 self.avail_num = bitbin.asint(8)
                 self.avails_expected = bitbin.asint(8)
+'''
 
 
 class SpliceInsert(SpliceCommand):

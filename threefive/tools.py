@@ -4,7 +4,7 @@ import sys
 
 
 # splice command types
-CMD_TYPES = [4, 5, 6, 7, 255]
+CMD_TYPES = [5, 6, 7, 255]
 
 
 def as_json(obj):
