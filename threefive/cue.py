@@ -1,4 +1,6 @@
+from base64 import b64decode
 from bitn import BitBin
+import json
 from .segmentation import SegmentationDescriptor
 from .section import SpliceInfoSection
 from .descriptors import (
@@ -16,11 +18,7 @@ from .commands import (
     PrivateCommand,
 )
 from .tools import (
-    as_json,
     ifb,
-    kv_clean,
-    kv_print,
-    mk_payload,
     to_stderr,
 )
 
@@ -39,11 +37,10 @@ class Cue:
         3: TimeDescriptor,
         4: AudioDescriptor,
     }
-
     # map of known splice commands and associated classes
     _command_map = {
         0: SpliceNull,
-        #  4: SpliceSchedule,
+        # 4: SpliceSchedule,
         5: SpliceInsert,
         6: TimeSignal,
         7: BandwidthReservation,
@@ -54,48 +51,18 @@ class Cue:
         self.info_section = None
         self.command = None
         self.descriptors = []
-        self.payload = mk_payload(data)
+        data = self._strip_header(data)
+        self.payload = self._mk_bits(data)
         self.packet_data = packet_data
-
-    def decode(self):
-        self._parse(self.payload)
-
-    def _parse(self, payload):
-        payload = self.mk_info_section(payload)
-        payload = self._mk_command(payload)
-        payload = self._mk_descriptors(payload)
-        self.info_section.crc = hex(ifb(payload[0:4]))
-
-    def mk_info_section(self, payload):
-        info_size = 14
-        info_payload = payload[:info_size]
-        self.info_section = SpliceInfoSection()
-        self.info_section.decode(info_payload)
-        return payload[info_size:]
-
-    def _mk_command(self, payload):
-        cmdbb = BitBin(payload)
-        bit_start = cmdbb.idx
-        self._set_splice_command(cmdbb)
-        bit_end = cmdbb.idx
-        cmdl = int((bit_start - bit_end) >> 3)
-        self.command.splice_command_length = cmdl
-        self.info_section.splice_command_length = cmdl
-        return payload[cmdl:]
-
-    def _mk_descriptors(self, payload):
-        """
-        parse descriptor loop length,
-        then call Cue._descriptorloop
-        """
-        dll = ifb(payload[0:2])
-        self.info_section.descriptor_loop_length = dll
-        payload = payload[2:]
-        self._descriptorloop(payload, dll)
-        return payload[dll:]
 
     def __repr__(self):
         return str(self.get())
+
+    def decode(self):
+        payload = self.mk_info_section(self.payload)
+        payload = self._mk_command(payload)
+        payload = self._mk_descriptors(payload)
+        self.info_section.crc = hex(ifb(payload[0:4]))
 
     def _descriptorloop(self, payload, dll):
         """
@@ -128,34 +95,83 @@ class Cue:
         returns the SCTE 35
         splice command data as a dict.
         """
-        return kv_clean(vars(self.command))
+        return self._kv_clean(vars(self.command))
 
     def get_descriptors(self):
         """
         Returns a list of SCTE 35
         splice descriptors as dicts.
         """
-        return [kv_clean(vars(d)) for d in self.descriptors]
+        return [self._kv_clean(vars(d)) for d in self.descriptors]
 
     def get_info_section(self):
         """
         Returns SCTE 35
         splice info section as a dict
         """
-        return kv_clean(vars(self.info_section))
+        return self._kv_clean(vars(self.info_section))
 
     def get_json(self):
         """
         get_json returns the Cue instance
         data in json.
         """
-        return as_json(self.get())
+        return json.dumps(self.get(), indent=2)
 
     def get_packet_data(self):
         """
         returns cleaned Cue.packet_data
         """
-        return kv_clean(self.packet_data)
+        return self._kv_clean(self.packet_data)
+
+    @staticmethod
+    def _kv_clean(obj):
+        """
+        kv_clean removes items from a dict if the value is None
+        """
+        return {k: v for k, v in obj.items() if v is not None}
+
+    @staticmethod
+    def _mk_bits(data):
+        """
+        Convert Hex and Base64 strings into bytes.
+        """
+        if data[:2].lower() == "0x":
+            data = data[2:]
+        if data[:2].lower() == "fc":
+            return bytes.fromhex(data)
+        try:
+            return b64decode(data)
+        except Exception:
+            return data
+
+    def _mk_command(self, payload):
+        cmdbb = BitBin(payload)
+        bit_start = cmdbb.idx
+        self._set_splice_command(cmdbb)
+        bit_end = cmdbb.idx
+        cmdl = int((bit_start - bit_end) >> 3)
+        self.command.splice_command_length = cmdl
+        self.info_section.splice_command_length = cmdl
+        return payload[cmdl:]
+
+    def _mk_descriptors(self, payload):
+        """
+        parse descriptor loop length,
+        then call Cue._descriptorloop
+        """
+        dll = ifb(payload[0:2])
+        self.info_section.descriptor_loop_length = dll
+        payload = payload[2:]
+        self._descriptorloop(payload, dll)
+        return payload[dll:]
+
+    def mk_info_section(self, payload):
+        info_size = 14
+        info_payload = payload[:info_size]
+        self.info_section = SpliceInfoSection()
+        self.info_section.decode(info_payload)
+        return payload[info_size:]
 
     def _set_splice_command(self, cmdbb):
         """
@@ -189,4 +205,14 @@ class Cue:
         """
         pretty prints the SCTE 35 message
         """
-        kv_print(self.get())
+        to_stderr(self.get_json())
+
+    @staticmethod
+    def _strip_header(data):
+        """
+        _strip_header strips off packet headers
+        when present
+        """
+        if data[0] == 0x47:
+            return data[5:]
+        return data

@@ -14,6 +14,11 @@ class SpliceCommand:
         self.pts_time = None
 
     def decode(self, bitbin):
+        """
+        SpliceCommand.decode defines
+        a standard interface for
+        SpliceCommand subclasses.
+        """
         return None
 
     def parse_break(self, bitbin):
@@ -59,14 +64,14 @@ class SpliceNull(SpliceCommand):
 
 '''
     [ Heads Up! ]
-            
+
     |  The SpliceSchedule class will be phased out |
     |  Unless Someone says they use it or need it. |
     |  I've never seen a Splice Schedule Command.  |
     |  If the class is not being used, I'm going   |
     |  to remove it.                               |
 
-      
+
 
 class SpliceSchedule(SpliceCommand):
     """

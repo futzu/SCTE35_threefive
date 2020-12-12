@@ -1,34 +1,9 @@
 import sys
 from functools import partial
-
 from bitn import BitBin
 from .cue import Cue
 from .streamtype import stream_type_map
-from .tools import CMD_TYPES, parse_pid, to_stderr
-
-
-def _parse_stream_type(bitbin):
-    """
-    extract stream pid and type
-    """
-    stream_type = bitbin.ashex(8)  # 8
-    bitbin.forward(3)  # 11
-    el_pid = bitbin.asint(13)  # 24
-    bitbin.forward(4)  # 28
-    eilib = bitbin.asint(12) << 3  # 40
-    bitbin.forward(eilib)
-    minus = 40 + eilib
-    return minus, [stream_type, el_pid]
-
-
-def _show_program_stream(pid, stream_type):
-    """
-    print program -> stream mappings
-    """
-    streaminfo = f"[{stream_type}] Reserved or Private"
-    if stream_type in stream_type_map.keys():
-        streaminfo = f"[{stream_type}] {stream_type_map[stream_type]}"
-    to_stderr(f"\t   {pid}: {streaminfo}")
+from .tools import CMD_TYPES, to_stderr
 
 
 def show_cue(cue):
@@ -94,23 +69,12 @@ class Stream:
         only pids assigned to that program
         are parsed.
         """
-
         self.the_program = False
         """
         self.cue is used to assemble
         multi-packet SCTE35 cues
         """
         self.cue = None
-
-    def _find_start(self):
-        """
-        handles partial packets
-        """
-        sync_byte = b"G"
-        while self._tsdata:
-            if self._tsdata.read(1) == sync_byte:
-                if self._tsdata.read(self._PACKET_SIZE - 1):
-                    return
 
     def decode(self, func=show_cue):
         """
@@ -176,6 +140,16 @@ class Stream:
         self.info = True
         self.decode()
 
+    def _find_start(self):
+        """
+        handles partial packets
+        """
+        sync_byte = b"G"
+        while self._tsdata:
+            if self._tsdata.read(1) == sync_byte:
+                if self._tsdata.read(self._PACKET_SIZE - 1):
+                    return
+
     def _mk_packet_data(self, pid):
         """
         creates packet_data dict
@@ -189,32 +163,12 @@ class Stream:
             packet_data["pts"] = round(self._prog_pts[prgm], 6)
         return packet_data
 
-    def _program_association_table(self, pkt):
-        """
-        parse program association table ( pid 0 )
-        to program to program table pid mappings.
-        """
-        sectionlen = (pkt[6] & 15 << 8) | pkt[7]
-        pkt = pkt[13 : (sectionlen + 5)]
-        bitbin = BitBin(pkt)
-        slib = sectionlen << 3
-        slib -= 40
-        while slib > 32:
-            program_number = bitbin.asint(16)
-            bitbin.forward(3)
-            if program_number == 0:
-                bitbin.forward(13)
-            else:
-                self._pmt_pids.add(bitbin.asint(13))
-            slib -= 32
-        bitbin.forward(32)
-
     def _parser(self, pkt):
         """
         parse pid from pkt and
         route it appropriately
         """
-        pid = parse_pid(pkt[1], pkt[2])
+        pid = self._parse_pid(pkt[1], pkt[2])
         if pid == 0:
             self._program_association_table(pkt)
             return None
@@ -230,6 +184,36 @@ class Stream:
             if (pkt[1] >> 6) & 1:
                 part_pkt = pkt[0:18]
                 self._parse_pusi(part_pkt, pid)
+
+    @staticmethod
+    def _parse_pid(byte1, byte2):
+        """
+        parse pid from packet
+        """
+        return (byte1 & 31) << 8 | byte2
+
+    def _parse_program_streams(self, slib, bitbin, program_number):
+        """
+        parse the elementary streams
+        from a program
+        """
+        if program_number not in self._programs:
+            self._programs.add(program_number)
+            if self.info:
+                to_stderr(f"\nProgram: {program_number}")
+            while slib > 32:
+                minus, pstream = self._parse_stream_type(bitbin)
+                slib -= minus
+                stream_type = pstream[0]
+                pid = pstream[1]
+                self._pid_prog[pid] = program_number
+                if self.info:
+                    self._show_program_stream(pid, stream_type)
+                if stream_type == "0x86":
+                    self._scte35_pids.add(pid)
+        else:
+            if self.info:
+                sys.exit()
 
     def _parse_pts(self, pkt, pid):
         """
@@ -274,28 +258,39 @@ class Stream:
             return cue
         return None
 
-    def _parse_program_streams(self, slib, bitbin, program_number):
+    @staticmethod
+    def _parse_stream_type(bitbin):
         """
-        parse the elementary streams
-        from a program
+        extract stream pid and type
         """
-        if program_number not in self._programs:
-            self._programs.add(program_number)
-            if self.info:
-                to_stderr(f"\nProgram: {program_number}")
-            while slib > 32:
-                minus, pstream = _parse_stream_type(bitbin)
-                slib -= minus
-                stream_type = pstream[0]
-                pid = pstream[1]
-                self._pid_prog[pid] = program_number
-                if self.info:
-                    _show_program_stream(pid, stream_type)
-                if stream_type == "0x86":
-                    self._scte35_pids.add(pid)
-        else:
-            if self.info:
-                sys.exit()
+        stream_type = bitbin.ashex(8)  # 8
+        bitbin.forward(3)  # 11
+        el_pid = bitbin.asint(13)  # 24
+        bitbin.forward(4)  # 28
+        eilib = bitbin.asint(12) << 3  # 40
+        bitbin.forward(eilib)
+        minus = 40 + eilib
+        return minus, [stream_type, el_pid]
+
+    def _program_association_table(self, pkt):
+        """
+        parse program association table ( pid 0 )
+        to program to program table pid mappings.
+        """
+        sectionlen = (pkt[6] & 15 << 8) | pkt[7]
+        pkt = pkt[13 : (sectionlen + 5)]
+        bitbin = BitBin(pkt)
+        slib = sectionlen << 3
+        slib -= 40
+        while slib > 32:
+            program_number = bitbin.asint(16)
+            bitbin.forward(3)
+            if program_number == 0:
+                bitbin.forward(13)
+            else:
+                self._pmt_pids.add(bitbin.asint(13))
+            slib -= 32
+        bitbin.forward(32)
 
     def _program_map_section(self, pkt):
         """
@@ -319,3 +314,13 @@ class Stream:
         slib -= 72
         slib -= pilib  # Skip descriptors
         self._parse_program_streams(slib, bitbin, program_number)
+
+    @staticmethod
+    def _show_program_stream(pid, stream_type):
+        """
+        print program -> stream mappings
+        """
+        streaminfo = f"[{stream_type}] Reserved or Private"
+        if stream_type in stream_type_map.keys():
+            streaminfo = f"[{stream_type}] {stream_type_map[stream_type]}"
+        to_stderr(f"\t   {pid}: {streaminfo}")
