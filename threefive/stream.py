@@ -114,7 +114,24 @@ class Stream:
 
     def decode(self, func=show_cue):
         """
-        reads MPEG-TS to find SCTE-35 packets
+        Stream.decode reads self.tsdata to find SCTE35 packets.
+
+        func is the function called to handle each
+        SCTE35 Cue found in the MPEGTS data.
+
+        func is set to show_cue by default.
+        All SCTE-35 data is written to sys.stderr.
+
+        func can be set to a custom function that accepts
+        a threefive.Cue instance as it's only argument.
+
+        example:
+
+            def myfunc(cue):
+                print(f'Splice Info Section Table Id: ')
+                # access cue data using dot notation
+                print(f'Table Id: {cue.info_section.table_id}')
+
         """
         self._find_start()
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
@@ -124,17 +141,18 @@ class Stream:
 
     def decode_program(self, the_program, func=show_cue):
         """
-        returns a threefive.Cue instance
-        when a SCTE-35 packet is found
+        Stream.decode_program works just like Stream.decode
+        except the argument, the_program limits SCTE35 parsing
+        to that MPEGTS program.
         """
         self.the_program = the_program
         self.decode(func)
 
     def decode_proxy(self, func=show_cue):
         """
-        reads an MPEG-TS stream
-        and writes all ts packets to stdout
-        and SCTE-35 data to stderr
+        Stream.decode_proxy works just like Stream.decode
+        except that all ts packets are written to stdout
+        for piping into another program like mplayer.
         """
         self._find_start()
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
@@ -145,7 +163,15 @@ class Stream:
 
     def show(self):
         """
-        displays program stream mappings
+        displays all programs and stream mappings
+
+
+        Program: 1030
+           1031: [0x1b] Video
+           1032: [0x3] ISO/IEC 11172 Audio
+           1034: [0x6] ITU-T Rec. H.222.0
+           1035: [0x86] SCTE 35
+
         """
         self.info = True
         self.decode()
@@ -191,13 +217,13 @@ class Stream:
         pid = parse_pid(pkt[1], pkt[2])
         if pid == 0:
             self._program_association_table(pkt)
-            return False
+            return None
         if pid in self._pmt_pids:
             self._program_map_section(pkt)
-            return False
+            return None
             # This return makes Stream.show() fast
         if self.info:
-            return False
+            return None
         if pid in self._scte35_pids:
             return self._parse_scte35(pkt, pid)
         if pid in self._pid_prog.keys():
@@ -207,7 +233,8 @@ class Stream:
 
     def _parse_pts(self, pkt, pid):
         """
-        parse pts
+        parse pts and store by program key
+        in the dict Stream._prog_pts
         """
         pts = ((pkt[13] >> 1) & 7) << 30
         pts |= ((pkt[14] << 7) | (pkt[15] >> 1)) << 15
@@ -237,7 +264,7 @@ class Stream:
                 self.cue.mk_info_section(pkt[5:19])
                 self.cue.payload += pkt[19:]
             else:
-                return False
+                return None
         else:
             self.cue.payload += pkt[4:]
         if (self.cue.info_section.section_length + 3) <= len(self.cue.payload):
@@ -245,7 +272,7 @@ class Stream:
             cue = self.cue
             self.cue = None
             return cue
-        return False
+        return None
 
     def _parse_program_streams(self, slib, bitbin, program_number):
         """
