@@ -13,7 +13,7 @@ class SpliceCommand:
         self.time_specified_flag = None
         self.pts_time = None
 
-    def decode(bitbin):
+    def decode(self,bitbin):
       """
         SpliceCommand.decode defines
         a standard interface for
