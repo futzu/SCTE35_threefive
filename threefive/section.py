@@ -1,5 +1,4 @@
 from base64 import b64encode
-import sys
 from bitn import BitBin
 from threefive.tools import i2b, to_stderr
 
