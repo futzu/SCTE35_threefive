@@ -138,20 +138,20 @@ class SegmentationDescriptor(SpliceDescriptor):
 
     def _set_segmentation_upid(self, bitbin, upid_type, upid_length):
         upid_map = {
-            0x02: ["Deprecated", self.AdID],
-            0x03: ["Ad ID", self.AdID],
-            0x04: ["UMID", self.UMID],
-            0x05: ["ISAN", self.ISAN],
-            0x06: ["ISAN", self.ISAN],
-            0x07: ["TID", self.TID],
-            0x08: ["AiringID", self.AirID],
-            0x09: ["ADI", self.ADI],
-            0x0A: ["EIDR", self.EIDR],
-            0x0B: ["ATSC", self.ATSC],
-            0x0C: ["MPU", self.MPU],
-            0x0D: ["MID", self.MID],
-            0x0E: ["ADS Info", self.ADS],
-            0x0F: ["URI", self.URI],
+            0x02: ["Deprecated", self._URI],
+            0x03: ["Ad ID", self._URI],
+            0x04: ["UMID", self._UMID],
+            0x05: ["ISAN", self._ISAN],
+            0x06: ["ISAN", self._ISAN],
+            0x07: ["TID", self._URI],
+            0x08: ["AiringID", self._AirID],
+            0x09: ["ADI", self._URI],
+            0x0A: ["EIDR", self._EIDR],
+            0x0B: ["ATSC", self._ATSC],
+            0x0C: ["MPU", self._MPU],
+            0x0D: ["MID", self._MID],
+            0x0E: ["ADS Info", self._URI],
+            0x0F: ["URI", self._URI],
         }
         upid_id = ""
         if upid_type in upid_map.keys():
@@ -173,21 +173,12 @@ class SegmentationDescriptor(SpliceDescriptor):
             else:
                 self.sub_segment_num = self.sub_segments_expected = 0
 
-    def ADI(self, bitbin, upid_length):
-        return self.URI(bitbin, upid_length)
-
-    def AdID(self, bitbin, upid_length):
-        return self.URI(bitbin, upid_length)
-
-    def ADS(self, bitbin, upid_length):
-        return self.URI(bitbin, upid_length)
-
     @staticmethod
-    def AirID(bitbin, upid_length):
+    def _AirID(bitbin, upid_length):
         return bitbin.ashex(upid_length << 3)
 
     @staticmethod
-    def ATSC(bitbin, upid_length):
+    def _ATSC(bitbin, upid_length):
         return {
             "TSID": bitbin.asint(16),
             "reserved": bitbin.asint(2),
@@ -197,13 +188,13 @@ class SegmentationDescriptor(SpliceDescriptor):
         }
 
     @staticmethod
-    def ISAN(bitbin, upid_length):
+    def _ISAN(bitbin, upid_length):
         pre = "0000-0000-"
         middle = bitbin.ashex(upid_length << 3)
         post = "-0000-Z-0000-0000-6"
         return f"{pre}{middle[2:6]}{post}"
 
-    def MID(self, bitbin, upid_length):
+    def _MID(self, bitbin, upid_length):
         upids = []
         bitcount = upid_length << 3
         while bitcount > 0:
@@ -219,7 +210,7 @@ class SegmentationDescriptor(SpliceDescriptor):
         return upids
 
     @staticmethod
-    def MPU(bitbin, upid_length):
+    def _MPU(bitbin, upid_length):
         bitcount = upid_length << 3
         return {
             "format identifier": bitbin.asint(32),
@@ -227,21 +218,19 @@ class SegmentationDescriptor(SpliceDescriptor):
         }
 
     @staticmethod
-    def EIDR(bitbin, upid_length):
+    def _EIDR(bitbin, upid_length):
         pre = bitbin.asint(16)
         post = bitbin.ashex(80)
         return f"10.{pre}/{post[2:6]}-{post[6:10]}-{post[10:14]}-{post[14:18]}-T"
 
-    def TID(self, bitbin, upid_length):
-        return self.URI(bitbin, upid_length)
-
-    def UMID(self, bitbin, upid_length):
+    @staticmethod
+    def _UMID(bitbin, upid_length):
         n = 8
-        pre = "".join(self.AirID(bitbin, upid_length).split("x", 1))
+        pre = "".join(bitbin.ashex(upid_length << 3).split("x", 1))
         return ".".join([pre[i : i + n] for i in range(0, len(pre), n)])
 
     @staticmethod
-    def URI(bitbin, upid_length):
+    def _URI(bitbin, upid_length):
         if upid_length > 0:
             return bitbin.asdecodedhex(upid_length << 3)
         return None
