@@ -3,52 +3,15 @@ from .tools import i2b, reserve, to_stderr
 
 class SpliceCommand:
     """
-    Base class for all splice command classes,
-    not used directly.
+    Base class, not used directly.
     """
 
-    def __init__(self):
-        self.break_auto_return = None
-        self.break_duration = None
-        self.time_specified_flag = None
-        self.pts_time = None
-
-    def decode(self,bitbin):
-      """
+    def decode(self, bitbin):
+        """
         SpliceCommand.decode defines
         a standard interface for
         SpliceCommand subclasses.
         """
-
-    def parse_break(self, bitbin):
-        self.break_auto_return = bitbin.asflag(1)
-        bitbin.forward(6)
-        self.break_duration = bitbin.as90k(33)
-
-    def encode_break(self):  # 40bits
-        break_bytes = self.break_auto_return << 39
-        break_bytes += reserve(6) << 33  # forward 6
-        break_bytes += int(self.break_duration * 90000)
-        return i2b(break_bytes, 5)
-
-    def splice_time(self, bitbin):  # 40bits
-        self.time_specified_flag = bitbin.asflag(1)
-        if self.time_specified_flag:
-            bitbin.forward(6)
-            self.pts_time = bitbin.as90k(33)
-        else:
-            bitbin.forward(7)
-
-    def encode_splice_time(self):
-        if self.time_specified_flag:
-            st_bytes = self.time_specified_flag << 39
-            st_bytes += reserve(6) << 33  # forward six bits
-            st_bytes += int(self.pts_time * 90000)
-            return i2b(st_bytes, 5)
-
-        else:
-
-            return i2b(reserve(7), 1)
 
 
 class SpliceNull(SpliceCommand):
@@ -109,7 +72,42 @@ class SpliceSchedule(SpliceCommand):
 '''
 
 
-class SpliceInsert(SpliceCommand):
+class TimeSignal:
+    """
+    Table 10 - time_signal()
+    """
+
+    def __init__(self):
+        self.name = "Time Signal"
+        self.time_specified_flag = None
+        self.pts_time = None
+
+    def decode(self, bitbin):
+        self.splice_time(bitbin)
+
+    def encode(self):
+        command_bytes = self.encode_splice_time()
+        return command_bytes
+
+    def splice_time(self, bitbin):  # 40bits
+        self.time_specified_flag = bitbin.asflag(1)
+        if self.time_specified_flag:
+            bitbin.forward(6)
+            self.pts_time = bitbin.as90k(33)
+        else:
+            bitbin.forward(7)
+
+    def encode_splice_time(self):
+        if self.time_specified_flag:
+            st_bytes = self.time_specified_flag << 39
+            st_bytes += reserve(6) << 33  # forward six bits
+            st_bytes += int(self.pts_time * 90000)
+            return i2b(st_bytes, 5)
+        else:
+            return i2b(reserve(7), 1)
+
+
+class SpliceInsert(TimeSignal):
     """
     Table 9 - splice_insert()
     """
@@ -117,6 +115,8 @@ class SpliceInsert(SpliceCommand):
     def __init__(self):
         super().__init__()
         self.name = "Splice Insert"
+        self.break_auto_return = None
+        self.break_duration = None
         self.splice_event_id = None
         self.splice_event_cancel_indicator = None
         self.out_of_network_indicator = None
@@ -127,6 +127,17 @@ class SpliceInsert(SpliceCommand):
         self.unique_program_id = None
         self.avail_num = None
         self.avail_expected = None
+
+    def parse_break(self, bitbin):
+        self.break_auto_return = bitbin.asflag(1)
+        bitbin.forward(6)
+        self.break_duration = bitbin.as90k(33)
+
+    def encode_break(self):  # 40bits
+        break_bytes = self.break_auto_return << 39
+        break_bytes += reserve(6) << 33  # forward 6
+        break_bytes += int(self.break_duration * 90000)
+        return i2b(break_bytes, 5)
 
     def decode(self, bitbin):
         self.splice_event_id = bitbin.asint(32)  # uint32
@@ -179,23 +190,6 @@ class SpliceInsert(SpliceCommand):
             to_stderr(bencoded)
 
 
-class TimeSignal(SpliceCommand):
-    """
-    Table 10 - time_signal()
-    """
-
-    def __init__(self):
-        super().__init__()
-        self.name = "Time Signal"
-
-    def decode(self, bitbin):
-        self.splice_time(bitbin)
-
-    def encode(self):
-        command_bytes = self.encode_splice_time()
-        return command_bytes
-
-
 class BandwidthReservation(SpliceCommand):
     """
     Table 11 - bandwidth_reservation()
@@ -205,7 +199,7 @@ class BandwidthReservation(SpliceCommand):
         self.name = "Bandwidth Reservation"
 
 
-class PrivateCommand(SpliceCommand):
+class PrivateCommand:
     """
     Table 12 - private_command()
     """
