@@ -1,3 +1,8 @@
+"""
+SpliceDescriptor, AvailDescriptor,DtmfDescriptor,
+TimeDescriptor,and AudioDescriptor classes.
+"""
+
 from .tools import to_stderr
 
 
@@ -24,7 +29,6 @@ class SpliceDescriptor:
         SpliceDescriptor subclasses
         will soon implement a encode method.
         """
-
 
     def parse_id(self, bitbin):
         """
@@ -63,6 +67,9 @@ class DtmfDescriptor(SpliceDescriptor):
         self.dtmf_chars = []
 
     def decode(self, bitbin):
+        """
+        decode DtmfDescriptor
+        """
         self.parse_id(bitbin)
         self.preroll = bitbin.asint(8)
         self.dtmf_count = bitbin.asint(3)
@@ -84,6 +91,9 @@ class TimeDescriptor(SpliceDescriptor):
         self.utc_offset = None
 
     def decode(self, bitbin):
+        """
+        decode TimeDescriptor
+        """
         self.parse_id(bitbin)
         self.tai_seconds = bitbin.asint(48)
         self.tai_ns = bitbin.asint(32)
@@ -102,6 +112,9 @@ class AudioDescriptor(SpliceDescriptor):
         self.audio_count = None
 
     def decode(self, bitbin):
+        """
+        Decode AudioDescriptor
+        """
         self.parse_id(bitbin)
         self.audio_count = bitbin.asint(4)
         bitbin.forward(4)

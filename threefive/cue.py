@@ -1,3 +1,7 @@
+"""
+threefive.Cue Class
+"""
+
 import json
 from base64 import b64decode
 from bitn import BitBin
@@ -26,6 +30,15 @@ class Cue:
     """
     The threefive.Splice class handles parsing
     SCTE 35 message strings.
+    Example usage:
+
+    from threefive import Cue
+
+    Base64 = "/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g="
+    scte35 = Cue(Base64)
+    scte35.decode()
+    scte35.show()
+
     """
 
     # map of known descriptors and associated classes
@@ -46,6 +59,10 @@ class Cue:
     }
 
     def __init__(self, data, packet_data=None):
+        """
+        data may be packet payload or encoded string
+        packet_data is a dict passed from a Stream instance
+        """
         self.info_section = None
         self.command = None
         self.descriptors = []
@@ -57,6 +74,9 @@ class Cue:
         return str(self.get())
 
     def decode(self):
+        """
+        Cue.decode() parses for SCTE35 data
+        """
         payload = self.mk_info_section(self.payload)
         payload = self._mk_command(payload)
         payload = self._mk_descriptors(payload)
@@ -64,7 +84,7 @@ class Cue:
 
     def _descriptorloop(self, payload, dll):
         """
-        parses all splice descriptors
+        parse all splice descriptors
         """
         while dll > 0:
             spliced = self._set_splice_descriptor(payload)
@@ -144,6 +164,10 @@ class Cue:
             return data
 
     def _mk_command(self, payload):
+        """
+        parses the command section
+        of a SCTE35 cue.
+        """
         cmdbb = BitBin(payload)
         bit_start = cmdbb.idx
         self._set_splice_command(cmdbb)
@@ -165,6 +189,10 @@ class Cue:
         return payload[dll:]
 
     def mk_info_section(self, payload):
+        """
+        parses the Splice Info Section
+        of a SCTE35 cue.
+        """
         info_size = 14
         info_payload = payload[:info_size]
         self.info_section = SpliceInfoSection()
@@ -174,6 +202,7 @@ class Cue:
     def _set_splice_command(self, cmdbb):
         """
         Splice Commands looked up in self._command_map
+        and decoded.
         """
         sct = self.info_section.splice_command_type
         if sct not in self._command_map:
@@ -184,7 +213,8 @@ class Cue:
 
     def _set_splice_descriptor(self, payload):
         """
-        Splice Descriptors looked up in self._descriptor_map
+        Splice Descriptor looked up in self._descriptor_map
+        and decoded.
         """
         # splice_descriptor_tag 8 uimsbf
         tag = payload[0]

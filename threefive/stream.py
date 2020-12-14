@@ -1,3 +1,7 @@
+"""
+Mpeg-TS Stream parsing class Stream
+"""
+
 import sys
 from functools import partial
 from bitn import BitBin
@@ -127,10 +131,11 @@ class Stream:
         """
         packet_data = {}
         packet_data["pid"] = pid
-        prgm = self._pid_prog[pid]
-        packet_data["program"] = prgm
-        if prgm in self._prog_pts:
-            packet_data["pts"] = round(self._prog_pts[prgm], 6)
+        if pid in self._pid_prog:
+            prgm = self._pid_prog[pid]
+            packet_data["program"] = prgm
+            if prgm in self._prog_pts:
+                packet_data["pts"] = round(self._prog_pts[prgm], 6)
         return packet_data
 
     def _parser(self, pkt):
