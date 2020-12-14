@@ -13,15 +13,12 @@ class SpliceCommand:
         self.time_specified_flag = None
         self.pts_time = None
 
-    @staticmethod
     def decode(bitbin):
       """
         SpliceCommand.decode defines
         a standard interface for
         SpliceCommand subclasses.
         """
-
-        return None
 
     def parse_break(self, bitbin):
         self.break_auto_return = bitbin.asflag(1)
