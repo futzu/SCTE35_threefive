@@ -1,6 +1,6 @@
+import json
 from base64 import b64decode
 from bitn import BitBin
-import json
 from .segmentation import SegmentationDescriptor
 from .section import SpliceInfoSection
 from .descriptors import (
@@ -10,12 +10,11 @@ from .descriptors import (
     AudioDescriptor,
 )
 from .commands import (
-    SpliceNull,
-    #  SpliceSchedule,
-    SpliceInsert,
-    TimeSignal,
     BandwidthReservation,
     PrivateCommand,
+    SpliceNull,
+    SpliceInsert,
+    TimeSignal,
 )
 from .tools import (
     ifb,
@@ -40,7 +39,6 @@ class Cue:
     # map of known splice commands and associated classes
     _command_map = {
         0: SpliceNull,
-        # 4: SpliceSchedule,
         5: SpliceInsert,
         6: TimeSignal,
         7: BandwidthReservation,

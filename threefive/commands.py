@@ -13,6 +13,22 @@ class SpliceCommand:
         SpliceCommand subclasses.
         """
 
+    def encode(self):
+        """
+        SpliceCommand.encode defines
+        a standard interface for
+        SpliceCommand subclasses.
+        """
+
+
+class BandwidthReservation(SpliceCommand):
+    """
+    Table 11 - bandwidth_reservation()
+    """
+
+    def __init__(self):
+        self.name = "Bandwidth Reservation"
+
 
 class SpliceNull(SpliceCommand):
     """
@@ -24,52 +40,21 @@ class SpliceNull(SpliceCommand):
         self.splice_command_length = 0
 
 
-'''
-    [ Heads Up! ]
-
-    |  The SpliceSchedule class will be phased out |
-    |  Unless Someone says they use it or need it. |
-    |  I've never seen a Splice Schedule Command.  |
-    |  If the class is not being used, I'm going   |
-    |  to remove it.                               |
-
-
-
-class SpliceSchedule(SpliceCommand):
+class PrivateCommand:
     """
-    Table 8 - splice_schedule()
+    Table 12 - private_command
     """
 
     def __init__(self):
-        self.name = "Splice Schedule"
+        self.name = "Private Command"
+        self.identifier = None
 
     def decode(self, bitbin):
-        splice_count = bitbin.asint(8)
-        for i in range(0, splice_count):
-            self.splice_event_id = bitbin.asint(32)
-            self.splice_event_cancel_indicator = bitbin.asflag(1)
-            bitbin.forward(7)
-            if not self.splice_event_cancel_indicator:
-                self.out_of_network_indicator = bitbin.asflag(1)
-                self.program_splice_flag = bitbin.asflag(1)
-                self.duration_flag = bitbin.asflag(1)
-                bitbin.forward(5)
-                if self.program_splice_flag:
-                    self.utc_splice_time = bitbin.asint(32)
-                else:
-                    self.component_count = bitbin.asint(8)
-                    self.components = []
-                    for j in range(0, self.component_count):
-                        self.components[j] = {
-                            "component_tag": bitbin.asint(8),
-                            "utc_splice_time": bitbin.asint(32),
-                        }
-                if self.duration_flag:
-                    self.break_duration(bitbin)
-                self.unique_program_id = bitbin.asint(16)
-                self.avail_num = bitbin.asint(8)
-                self.avails_expected = bitbin.asint(8)
-'''
+        self.identifier = bitbin.asint(32)
+
+    def encode(self):
+        command_bytes = i2b(self.identifier, 4)
+        return command_bytes
 
 
 class TimeSignal:
@@ -82,14 +67,7 @@ class TimeSignal:
         self.time_specified_flag = None
         self.pts_time = None
 
-    def decode(self, bitbin):
-        self.splice_time(bitbin)
-
-    def encode(self):
-        command_bytes = self.encode_splice_time()
-        return command_bytes
-
-    def splice_time(self, bitbin):  # 40bits
+    def decode(self, bitbin):  # 40bits
         self.time_specified_flag = bitbin.asflag(1)
         if self.time_specified_flag:
             bitbin.forward(6)
@@ -97,14 +75,13 @@ class TimeSignal:
         else:
             bitbin.forward(7)
 
-    def encode_splice_time(self):
+    def encode(self):
         if self.time_specified_flag:
             st_bytes = self.time_specified_flag << 39
             st_bytes += reserve(6) << 33  # forward six bits
             st_bytes += int(self.pts_time * 90000)
             return i2b(st_bytes, 5)
-        else:
-            return i2b(reserve(7), 1)
+        return i2b(reserve(7), 1)
 
 
 class SpliceInsert(TimeSignal):
@@ -123,6 +100,7 @@ class SpliceInsert(TimeSignal):
         self.program_splice_flag = None
         self.duration_flag = None
         self.splice_immediate_flag = None
+        self.components = None
         self.component_count = None
         self.unique_program_id = None
         self.avail_num = None
@@ -150,14 +128,14 @@ class SpliceInsert(TimeSignal):
             self.splice_immediate_flag = bitbin.asflag(1)
             bitbin.forward(4)  # uint8
             if self.program_splice_flag and not self.splice_immediate_flag:
-                self.splice_time(bitbin)  # uint8 + uint32
+                super().decode(bitbin)  # uint8 + uint32
             if not self.program_splice_flag:
                 self.component_count = bitbin.asint(8)  # uint 8
                 self.components = []
                 for i in range(0, self.component_count):
                     self.components[i] = bitbin.asint(8)
                 if not self.splice_immediate_flag:
-                    self.splice_time(bitbin)
+                    super().decode(bitbin)
             if self.duration_flag:
                 self.parse_break(bitbin)
             self.unique_program_id = bitbin.asint(16)
@@ -175,42 +153,16 @@ class SpliceInsert(TimeSignal):
             four_flags += reserve(4)
             bencoded += i2b(four_flags, 1)
             if self.program_splice_flag and not self.splice_immediate_flag:
-                bencoded += self.encode_splice_time()
+                bencoded += super().encode()
             if not self.program_splice_flag:
                 bencoded += i2b(self.component_count, 1)
                 for i in range(0, self.component_count):
                     bencoded += i2b(self.components[i], 1)
                 if not self.splice_immediate_flag:
-                    bencoded += self.encode_splice_time()
+                    bencoded += super().encode()
             if self.duration_flag:
                 bencoded += self.encode_break()
             bencoded += i2b(self.unique_program_id, 2)
             bencoded += i2b(self.avail_num, 1)
             bencoded += i2b(self.avail_expected, 1)
             to_stderr(bencoded)
-
-
-class BandwidthReservation(SpliceCommand):
-    """
-    Table 11 - bandwidth_reservation()
-    """
-
-    def __init__(self):
-        self.name = "Bandwidth Reservation"
-
-
-class PrivateCommand:
-    """
-    Table 12 - private_command()
-    """
-
-    def __init__(self):
-        self.name = "Private Command"
-        self.identifier = None
-
-    def decode(self, bitbin):
-        self.identifier = bitbin.asint(32)
-
-    def encode(self):
-        command_bytes = i2b(self.identifier, 4)
-        return command_bytes
