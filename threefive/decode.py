@@ -41,14 +41,14 @@ def read_stuff(stuff):
     reads filename or a string
     """
     try:
-        cue = Cue(stuff)
-        cue.decode()
-        cue.show()
+        with open(stuff, "rb") as tsdata:
+            Stream(tsdata).decode()
     except Exception:
         try:
-            with open(stuff, "rb") as tsdata:
-                Stream(tsdata).decode()
-        except Exception:
+            cue = Cue(stuff)
+            cue.decode()
+            cue.show()
+        except:
             pass
 
 

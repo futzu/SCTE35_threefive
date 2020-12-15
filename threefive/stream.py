@@ -158,6 +158,7 @@ class Stream:
             if (pkt[1] >> 6) & 1:
                 part_pkt = pkt[0:18]
                 self._parse_pusi(part_pkt, pid)
+            return None
 
     @staticmethod
     def _parse_pid(byte1, byte2):
@@ -165,6 +166,10 @@ class Stream:
         parse pid from packet
         """
         return (byte1 & 31) << 8 | byte2
+
+    def _chk_pid_stream_type(self, pid, stream_type):
+        if stream_type == "0x86":
+            self._scte35_pids.add(pid)
 
     def _parse_program_streams(self, slib, bitbin, program_number):
         """
@@ -183,8 +188,7 @@ class Stream:
                 self._pid_prog[pid] = program_number
                 if self.info:
                     self._show_program_stream(pid, stream_type)
-                if stream_type == "0x86":
-                    self._scte35_pids.add(pid)
+                self._chk_pid_stream_type(pid, stream_type)
         else:
             if self.info:
                 sys.exit()
