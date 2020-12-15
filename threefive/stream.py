@@ -252,7 +252,7 @@ class Stream:
         to program to program table pid mappings.
         """
         sectionlen = (pkt[6] & 15 << 8) | pkt[7]
-        pkt = pkt[13 : (sectionlen + 5)]
+        pkt = pkt[13:]
         bitbin = BitBin(pkt)
         slib = sectionlen << 3
         slib -= 40
