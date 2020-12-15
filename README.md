@@ -2,7 +2,7 @@
 # :rocket: threefive
 ## threefive is a SCTE35 Parser library in Python3.
    
-*  All __2019 SCTE-35 Splice Commands__ and __Splice Descriptors__ are __fully__ Supported.
+*  __2019 SCTE-35 in about 900 lines of code.
 
 *   __threefive__ is __simple__ and __easy__ to use. 
  	*  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
