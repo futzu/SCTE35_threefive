@@ -1,4 +1,4 @@
-'''
+"""
 commands.py
 classes:
     SpliceCommand,
@@ -7,7 +7,7 @@ classes:
     PrivateCommand,
     TimeSignal,
     SpliceInsert
-'''
+"""
 
 from .tools import i2b, reserve, to_stderr
 
@@ -47,9 +47,9 @@ class SpliceNull(SpliceCommand):
     """
 
     def __init__(self):
-        '''
+        """
          init splice null command
-        '''
+        """
         self.name = "Splice Null"
         self.splice_command_length = 0
 
@@ -60,22 +60,22 @@ class PrivateCommand:
     """
 
     def __init__(self):
-        '''
+        """
         init private command
-        '''
+        """
         self.name = "Private Command"
         self.identifier = None
 
     def decode(self, bitbin):
-        '''
+        """
         decode private command
-        '''
+        """
         self.identifier = bitbin.asint(32)
 
     def encode(self):
-        '''
+        """
         encode private command
-        '''
+        """
         command_bytes = i2b(self.identifier, 4)
         return command_bytes
 
@@ -91,9 +91,9 @@ class TimeSignal:
         self.pts_time = None
 
     def decode(self, bitbin):  # 40bits
-        '''
+        """
         decode pts
-        '''
+        """
         self.time_specified_flag = bitbin.asflag(1)
         if self.time_specified_flag:
             bitbin.forward(6)
@@ -102,9 +102,9 @@ class TimeSignal:
             bitbin.forward(7)
 
     def encode(self):
-        '''
+        """
         encode pts
-        '''
+        """
         if self.time_specified_flag:
             st_bytes = self.time_specified_flag << 39
             st_bytes += reserve(6) << 33  # forward six bits
@@ -117,6 +117,7 @@ class SpliceInsert(TimeSignal):
     """
     Table 9 - splice_insert()
     """
+
     def __init__(self):
         super().__init__()
         self.name = "Splice Insert"
@@ -135,19 +136,19 @@ class SpliceInsert(TimeSignal):
         self.avail_expected = None
 
     def parse_break(self, bitbin):
-        '''
+        """
         SpliceInsert.parse_break(bitbin) is called
         if SpliceInsert.duration_flag is set
-        '''
+        """
         self.break_auto_return = bitbin.asflag(1)
         bitbin.forward(6)
         self.break_duration = bitbin.as90k(33)
 
     def encode_break(self):  # 40bits
-        '''
+        """
         encodes SpliceInsert.break_auto_return
         and SpliceInsert.break_duration
-        '''
+        """
         break_bytes = self.break_auto_return << 39
         break_bytes += reserve(6) << 33  # forward 6
         break_bytes += int(self.break_duration * 90000)
