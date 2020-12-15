@@ -88,6 +88,8 @@ class Cue:
         """
         while dll > 0:
             spliced = self._set_splice_descriptor(payload)
+            if not spliced:
+                return
             sdl = spliced.descriptor_length
             bump = sdl + 2
             dll -= bump

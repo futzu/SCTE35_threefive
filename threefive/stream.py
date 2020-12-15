@@ -50,7 +50,6 @@ class Stream:
         self._tsdata = tsdata
         if show_null:
             self._CMD_TYPES.append(0)
-
         self._scte35_pids = set()
         self._pid_prog = {}
         self._pmt_pids = set()
@@ -59,6 +58,7 @@ class Stream:
         self.info = None
         self.the_program = None
         self.cue = None
+        self.pat = None
 
     def decode(self, func=show_cue):
         """
@@ -251,10 +251,16 @@ class Stream:
         parse program association table ( pid 0 )
         to program to program table pid mappings.
         """
-        sectionlen = (pkt[6] & 15 << 8) | pkt[7]
-        pkt = pkt[13:]
-        bitbin = BitBin(pkt)
-        slib = sectionlen << 3
+        if not self.pat:
+            self.pat = {}
+            self.pat["sectionlen"] = (pkt[6] & 15 << 8) | pkt[7]
+            self.pat["data"] = pkt[13:]
+        else:
+            self.pat["data"] += pkt[4:]
+        if len(self.pat["data"]) < self.pat["sectionlen"]:
+            return
+        bitbin = BitBin(self.pat["data"])
+        slib = self.pat["sectionlen"] << 3
         slib -= 40
         while slib > 32:
             program_number = bitbin.asint(16)
@@ -265,6 +271,7 @@ class Stream:
                 self._pmt_pids.add(bitbin.asint(13))
             slib -= 32
         bitbin.forward(32)
+        self.pat = None
 
     def _program_map_section(self, pkt):
         """
