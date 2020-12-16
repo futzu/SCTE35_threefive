@@ -3,7 +3,7 @@ SpliceDescriptor, AvailDescriptor,DtmfDescriptor,
 TimeDescriptor,and AudioDescriptor classes.
 """
 
-from .tools import to_stderr
+from .tools import i2b, to_stderr
 
 
 class SpliceDescriptor:
@@ -72,10 +72,11 @@ class DtmfDescriptor(SpliceDescriptor):
         """
         self.parse_id(bitbin)
         self.preroll = bitbin.asint(8)
-        self.dtmf_count = bitbin.asint(3)
+        self.dtmf_count = d_c = bitbin.asint(3)
         bitbin.forward(5)
-        for i in range(0, self.dtmf_count):
-            self.dtmf_chars[i] = bitbin.asint(8)
+        while d_c:
+            d_c -= 1
+            self.dtmf_chars.append(i2b(bitbin.asint(8), 1).decode("utf-8"))
 
 
 class TimeDescriptor(SpliceDescriptor):
@@ -116,13 +117,14 @@ class AudioDescriptor(SpliceDescriptor):
         Decode AudioDescriptor
         """
         self.parse_id(bitbin)
-        self.audio_count = bitbin.asint(4)
+        self.audio_count = a_c = bitbin.asint(4)
         bitbin.forward(4)
-        for i in range(0, self.audio_count):
+        while a_c:
+            a_c -= 1
             comp = {}
             comp["component_tag"] = bitbin.asint(8)
             comp["ISO_code="] = bitbin.asint(24)
             comp["bit_stream_mode"] = bitbin.asint(3)
             comp["num_channels"] = bitbin.asint(4)
             comp["full_srvc_audio"] = bitbin.asflag(1)
-            self.components[i] = comp
+            self.components.append(comp)

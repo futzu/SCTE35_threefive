@@ -119,7 +119,6 @@ class Stream:
         """
         handles partial packets
         """
-        bite_count = 0
         sync_byte = b"G"
         while self._tsdata:
             if self._tsdata.read(1) == sync_byte:

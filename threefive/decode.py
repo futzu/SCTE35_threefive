@@ -1,19 +1,3 @@
-"""
-All purpose SCTE 35 decoder function
-
-# for a mpegts video
-
-    import threefive
-    threefive.decode('/path/to/mpegts')
-
-# for a base64 encoded string
-
-    import threefive
-    Bee64='/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
-    threefive.decode(Bee64)
-"""
-
-
 import sys
 
 from .cue import Cue
@@ -53,7 +37,21 @@ def read_stuff(stuff):
 
 
 def decode(stuff=None):
+
     """
+    All purpose SCTE 35 decoder function
+
+    # for a mpegts video
+
+        import threefive
+        threefive.decode('/path/to/mpegts')
+
+    # for a base64 encoded string
+
+        import threefive
+        Bee64='/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
+        threefive.decode(Bee64)
+
     stuff can be a filename or encoded string.
     if stuff is not set, reads from stdin.
     """

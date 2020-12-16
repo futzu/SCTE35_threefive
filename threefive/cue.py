@@ -86,7 +86,7 @@ class Cue:
         """
         parse all splice descriptors
         """
-        while dll > 0:
+        while dll:
             spliced = self._set_splice_descriptor(payload)
             if not spliced:
                 return
