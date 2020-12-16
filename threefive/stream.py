@@ -51,6 +51,7 @@ class Stream:
         if show_null:
             self._CMD_TYPES.append(0)
         self._scte35_pids = set()
+        self._data_pids = set()
         self._pid_prog = {}
         self._pmt_pids = set()
         self._programs = set()
@@ -118,6 +119,7 @@ class Stream:
         """
         handles partial packets
         """
+        bite_count = 0
         sync_byte = b"G"
         while self._tsdata:
             if self._tsdata.read(1) == sync_byte:
@@ -135,7 +137,8 @@ class Stream:
             prgm = self._pid_prog[pid]
             packet_data["program"] = prgm
             if prgm in self._prog_pts:
-                packet_data["pts"] = round(self._prog_pts[prgm], 6)
+                if pid not in self._data_pids:
+                    packet_data["pts"] = round(self._prog_pts[prgm], 6)
         return packet_data
 
     def _parser(self, pkt):
@@ -152,13 +155,13 @@ class Stream:
             return None
         if self.info:
             return None
-        if pid in self._scte35_pids:
-            return self._parse_scte35(pkt, pid)
         if pid in self._pid_prog.keys():
             if (pkt[1] >> 6) & 1:
                 part_pkt = pkt[0:18]
                 self._parse_pusi(part_pkt, pid)
-            return None
+        if pid in self._scte35_pids:
+            return self._parse_scte35(pkt, pid)
+        return None
 
     @staticmethod
     def _parse_pid(byte1, byte2):
@@ -168,8 +171,10 @@ class Stream:
         return (byte1 & 31) << 8 | byte2
 
     def _chk_pid_stream_type(self, pid, stream_type):
-        if stream_type == "0x86":
+        if stream_type in ["0x6", "0x86"]:
             self._scte35_pids.add(pid)
+        if stream_type == "0x6":
+            self._data_pids.add(pid)
 
     def _parse_program_streams(self, slib, bitbin, program_number):
         """
@@ -220,6 +225,10 @@ class Stream:
         parse a scte35 cue from one or more packets
         """
         if not self.cue:
+            try:
+                pkt = pkt[:5] + b"\xfc0" + pkt.split(b"\xfc0", 1)[1]
+            except:
+                return None
             packet_data = self._mk_packet_data(pid)
             if pkt[18] in self._CMD_TYPES:
                 self.cue = Cue(pkt[:19], packet_data)
@@ -306,6 +315,6 @@ class Stream:
         print program -> stream mappings
         """
         streaminfo = f"[{stream_type}] Reserved or Private"
-        if stream_type in stream_type_map.keys():
+        if stream_type in stream_type_map:
             streaminfo = f"[{stream_type}] {stream_type_map[stream_type]}"
         to_stderr(f"\t   {pid}: {streaminfo}")
