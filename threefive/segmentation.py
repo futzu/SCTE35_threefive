@@ -102,13 +102,14 @@ class SegmentationDescriptor(SpliceDescriptor):
             self._set_segmentation(bitbin)
 
     def _set_components(self, bitbin):
-        self.component_count = bitbin.asint(8)  # 1 byte
-        for i in range(0, self.component_count):  # 6 bytes each
+        self.component_count = c_c = bitbin.asint(8)  # 1 byte
+        while c_c:  # 6 bytes each
+            c_c -= 1
             comp = {}
             comp["component_tag"] = bitbin.asint(8)
             bitbin.forward(7)
             comp["pts_offset"] = bitbin.as90k(33)
-            self.components[i] = comp
+            self.components.append(comp)
 
     def _set_flags(self, bitbin):  # 1 byte for set flags
         self.program_segmentation_flag = bitbin.asflag(1)
@@ -196,25 +197,25 @@ class SegmentationDescriptor(SpliceDescriptor):
 
     def _mid(self, bitbin, upid_length):
         upids = []
-        bitcount = upid_length << 3
-        while bitcount > 0:
+        b_c = upid_length << 3
+        while b_c:
             upid_type = bitbin.asint(8)  # 1 byte
-            bitcount -= 8
+            b_c -= 8
             upid_length = bitbin.asint(8)
-            bitcount -= 8
+            b_c -= 8
             segmentation_upid = self._set_segmentation_upid(
                 bitbin, upid_type, upid_length
             )
-            bitcount -= upid_length << 3
+            b_c -= upid_length << 3
             upids.append(segmentation_upid)
         return upids
 
     @staticmethod
     def _mpu(bitbin, upid_length):
-        bitcount = upid_length << 3
+        b_c = upid_length << 3
         return {
             "format identifier": bitbin.asint(32),
-            "private data": bitbin.asint(bitcount - 32),
+            "private data": bitbin.asint(b_c - 32),
         }
 
     @staticmethod
@@ -225,9 +226,9 @@ class SegmentationDescriptor(SpliceDescriptor):
 
     @staticmethod
     def _umid(bitbin, upid_length):
-        n = 8
+        n_u = 8
         pre = "".join(bitbin.ashex(upid_length << 3).split("x", 1))
-        return ".".join([pre[i : i + n] for i in range(0, len(pre), n)])
+        return ".".join([pre[i : i + n_u] for i in range(0, len(pre), n_u)])
 
     @staticmethod
     def _uri(bitbin, upid_length):

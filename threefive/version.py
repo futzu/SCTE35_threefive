@@ -6,8 +6,8 @@ and as an easy way to check which
 version you have installed.
 """
 version_tuple = (
-    "2.2.43",
-    "Two Two forty-three",
+    "2.2.45",
+    "Two Two forty-five",
 )
 
 
@@ -20,4 +20,7 @@ def version():
 
 
 def full_version():
+    """
+    returns full version tuple
+    """
     return version_tuple
