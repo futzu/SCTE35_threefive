@@ -195,7 +195,7 @@ class Stream:
         """
         if not self.cue:
             try:
-                pkt = b"\xfc0".join([pkt[:5] , pkt.split(b"\xfc0", 1)[1]])
+                pkt = b"\xfc0".join([pkt[:5], pkt.split(b"\xfc0", 1)[1]])
             except:
                 self._scte35_pids.discard(pid)
                 return None
@@ -229,16 +229,16 @@ class Stream:
         if len(self.pat["data"]) < self.pat["sectionlen"]:
             return
         pat_data = self.pat["data"]
-        idx = 0
         sec_len = self.pat["sectionlen"]
         sec_len -= 5
-        while sec_len > 4:
-            program_number = pat_data[idx] << 8| pat_data[idx+1]
+        chunk_size = 4
+        while sec_len > 0:
+            chunk, pat_data = pat_data[:chunk_size], pat_data[chunk_size:]
+            program_number = chunk[0] << 8 | chunk[1]
             if program_number != 0:
-                pmt_pid = self._parse_pid(pat_data[idx+2] , pat_data[idx+3])
+                pmt_pid = self._parse_pid(chunk[2], chunk[3])
                 self._pmt_pids.add(pmt_pid)
-            idx +=4
-            sec_len -= 4
+            sec_len -= chunk_size
         self.pat = None
 
     def _program_map_section(self, pkt):
@@ -260,9 +260,9 @@ class Stream:
         idx += proginfolen
         si_len = sectioninfolen - 9
         si_len -= proginfolen  # Skip descriptors
-        self._parse_program_streams(si_len, pkt, program_number,idx)
+        self._parse_program_streams(si_len, pkt[idx:], program_number)
 
-    def _parse_program_streams(self, si_len, pkt, program_number,idx):
+    def _parse_program_streams(self, si_len, pkt, program_number):
         """
         parse the elementary streams
         from a program
@@ -271,12 +271,13 @@ class Stream:
             self._programs.add(program_number)
             if self.info:
                 to_stderr(f"\nProgram: {program_number}")
-            while si_len > 4:
-                minus, pstream = self._parse_stream_type(pkt,idx)
-                si_len -= minus
-                stream_type = pstream[0]
-                pid = pstream[1]
-                idx = pstream[2]
+            chunk_size = 5  # 5 bytes for stream_type info
+            while si_len > 0:
+                chunk, pkt = pkt[:chunk_size], pkt[chunk_size:]
+                si_len -= chunk_size
+                stream_type, pid, ei_len = self._parse_stream_type(chunk)
+                ei, pkt = pkt[:ei_len], pkt[ei_len:]
+                si_len -= ei_len
                 self._pid_prog[pid] = program_number
                 if self.info:
                     self._show_program_stream(pid, stream_type)
@@ -285,16 +286,14 @@ class Stream:
             if self.info:
                 sys.exit()
 
-    def _parse_stream_type(self, pkt, idx):
+    def _parse_stream_type(self, chunk):
         """
         extract stream pid and type
         """
-        stream_type = hex(pkt[idx])
-        el_pid = self._parse_pid(pkt[idx+1], pkt[idx+2])
-        ei_len = (pkt[idx+3] & 15 ) << 8 | pkt[idx+4]
-        idx += 5 +ei_len
-        minus = 5 + ei_len
-        return minus, [stream_type, el_pid, idx]
+        stream_type = hex(chunk[0])  # 1 byte
+        el_pid = self._parse_pid(chunk[1], chunk[2])  # 2 bytes
+        ei_len = (chunk[3] & 15) << 8 | chunk[4]  # 2 bytes
+        return stream_type, el_pid, ei_len
 
     @staticmethod
     def _show_program_stream(pid, stream_type):
