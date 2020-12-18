@@ -63,12 +63,7 @@ class Stream:
         """
         Stream.decode reads self.tsdata to find SCTE35 packets.
 
-        func is the function called to handle each
-        SCTE35 Cue found in the MPEGTS data.
-
-        func is set to show_cue by default.
-        All SCTE-35 data is written to sys.stderr.
-
+        func is the function called when a SCTE35 Cue is found.
         func can be set to a custom function that accepts
         a threefive.Cue instance as it's only argument.
 
@@ -115,7 +110,7 @@ class Stream:
 
     def _find_start(self):
         """
-        handles partial packets
+        handles partial packets at beginning of a stream.
         """
         sync_byte = b"G"
         while self._tsdata:
@@ -140,7 +135,7 @@ class Stream:
     def _parser(self, pkt):
         """
         parse pid from pkt and
-        route it appropriately
+        route it appropriately.
         """
         pid = self._parse_pid(pkt[1], pkt[2])
 
@@ -231,8 +226,8 @@ class Stream:
         pat_data = self.pat["data"]
         sec_len = self.pat["sectionlen"]
         sec_len -= 5
-        chunk_size = 4
-        while sec_len > 0:
+        chunk_size = 4  # 4 bytes per program -> pid mapping
+        while sec_len > chunk_size:
             chunk, pat_data = pat_data[:chunk_size], pat_data[chunk_size:]
             program_number = chunk[0] << 8 | chunk[1]
             if program_number != 0:
@@ -272,15 +267,17 @@ class Stream:
             if self.info:
                 to_stderr(f"\nProgram: {program_number}")
             chunk_size = 5  # 5 bytes for stream_type info
-            while si_len > 0:
+            while si_len >= chunk_size:
                 chunk, pkt = pkt[:chunk_size], pkt[chunk_size:]
                 si_len -= chunk_size
                 stream_type, pid, ei_len = self._parse_stream_type(chunk)
-                ei, pkt = pkt[:ei_len], pkt[ei_len:]
+                e_i, pkt = pkt[:ei_len], pkt[ei_len:]
                 si_len -= ei_len
                 self._pid_prog[pid] = program_number
                 if self.info:
                     self._show_program_stream(pid, stream_type)
+                    if e_i:
+                        to_stderr(f"\t\t\tExtended Info: {e_i}")
                 self._chk_pid_stream_type(pid, stream_type)
         else:
             if self.info:

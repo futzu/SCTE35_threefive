@@ -1,6 +1,5 @@
 """
-SpliceDescriptor, AvailDescriptor,DtmfDescriptor,
-TimeDescriptor,and AudioDescriptor classes.
+SCTE35 Splice Descriptors
 """
 
 from .tools import i2b, to_stderr
@@ -50,6 +49,9 @@ class AvailDescriptor(SpliceDescriptor):
         self.provider_avail_id = None
 
     def decode(self, bitbin):
+        """
+        decode SCTE35 Avail Descriptor
+        """
         self.parse_id(bitbin)
         self.provider_avail_id = bitbin.asint(32)
 
@@ -68,7 +70,7 @@ class DtmfDescriptor(SpliceDescriptor):
 
     def decode(self, bitbin):
         """
-        decode DtmfDescriptor
+        decode SCTE35 Dtmf Descriptor
         """
         self.parse_id(bitbin)
         self.preroll = bitbin.asint(8)
@@ -93,7 +95,7 @@ class TimeDescriptor(SpliceDescriptor):
 
     def decode(self, bitbin):
         """
-        decode TimeDescriptor
+        decode SCTE35 Time Descriptor
         """
         self.parse_id(bitbin)
         self.tai_seconds = bitbin.asint(48)
@@ -114,7 +116,7 @@ class AudioDescriptor(SpliceDescriptor):
 
     def decode(self, bitbin):
         """
-        Decode AudioDescriptor
+        Decode SCTE35 Audio Descriptor
         """
         self.parse_id(bitbin)
         self.audio_count = a_c = bitbin.asint(4)

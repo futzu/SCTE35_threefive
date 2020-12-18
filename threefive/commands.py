@@ -1,12 +1,5 @@
 """
-commands.py
-classes:
-    SpliceCommand,
-    BandwidthReservation,
-    SpliceNull,
-    PrivateCommand,
-    TimeSignal,
-    SpliceInsert
+SCTE35 Splice Commands
 """
 
 from .tools import i2b, reserve, to_stderr

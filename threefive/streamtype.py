@@ -5,7 +5,7 @@ stream_type_map = {
     "0x3": "ISO/IEC 11172 Audio",
     "0x4": "ISO/IEC 13818-3 Audio",
     "0x5": "ITU-T Rec. H.222.0 | ISO/IEC 13818-1 private sections",
-    "0x6": "ITU-T Rec. H.222.0 | ISO/IEC 13818-1 PES packets- private data",
+    "0x6": "ISO/IEC 13818-1 PES packets- private data",
     "0x7": "ISO/IEC 13522 MHEG",
     "0x8": "ITU-T Rec. H.222.0 | ISO/IEC 13818-1 Annex A DSM-CC",
     "0x9": "ITU-T Rec. H.222.1",
@@ -21,5 +21,5 @@ stream_type_map = {
     "0x13": "ISO/IEC 14496-1 or FlexMux in ISO/IEC14496 sections",
     "0x14": "ISO/IEC 13818-6 Synchronized Download Protocol",
     "0x1b": "Video",
-    "0x86": "\033[92mSCTE 35\033[00m",
+    "0x86": "\033[1;30;47mSCTE 35\033[00m",
 }
