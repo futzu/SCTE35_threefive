@@ -4,7 +4,6 @@ Mpeg-TS Stream parsing class Stream
 
 import sys
 from functools import partial
-from bitn import BitBin
 from .cue import Cue
 from .streamtype import stream_type_map
 from .tools import CMD_TYPES, to_stderr
@@ -51,7 +50,6 @@ class Stream:
         if show_null:
             self._CMD_TYPES.append(0)
         self._scte35_pids = set()
-        self._data_pids = set()
         self._pid_prog = {}
         self._pmt_pids = set()
         self._programs = set()
@@ -136,8 +134,7 @@ class Stream:
             prgm = self._pid_prog[pid]
             packet_data["program"] = prgm
             if prgm in self._prog_pts:
-                if pid not in self._data_pids:
-                    packet_data["pts"] = round(self._prog_pts[prgm], 6)
+                packet_data["pts"] = round(self._prog_pts[prgm], 6)
         return packet_data
 
     def _parser(self, pkt):
@@ -146,6 +143,7 @@ class Stream:
         route it appropriately
         """
         pid = self._parse_pid(pkt[1], pkt[2])
+
         if pid == 0:
             self._program_association_table(pkt)
             return None
@@ -154,12 +152,12 @@ class Stream:
             return None
         if self.info:
             return None
-        if pid in self._pid_prog.keys():
+        if pid in self._scte35_pids:
+            return self._parse_scte35(pkt, pid)
+        if pid in self._pid_prog:
             if (pkt[1] >> 6) & 1:
                 part_pkt = pkt[0:18]
                 self._parse_pusi(part_pkt, pid)
-        if pid in self._scte35_pids:
-            return self._parse_scte35(pkt, pid)
         return None
 
     @staticmethod
@@ -168,34 +166,6 @@ class Stream:
         parse pid from packet
         """
         return (byte1 & 31) << 8 | byte2
-
-    def _chk_pid_stream_type(self, pid, stream_type):
-        if stream_type in ["0x6", "0x86"]:
-            self._scte35_pids.add(pid)
-        if stream_type == "0x6":
-            self._data_pids.add(pid)
-
-    def _parse_program_streams(self, slib, bitbin, program_number):
-        """
-        parse the elementary streams
-        from a program
-        """
-        if program_number not in self._programs:
-            self._programs.add(program_number)
-            if self.info:
-                to_stderr(f"\nProgram: {program_number}")
-            while slib > 32:
-                minus, pstream = self._parse_stream_type(bitbin)
-                slib -= minus
-                stream_type = pstream[0]
-                pid = pstream[1]
-                self._pid_prog[pid] = program_number
-                if self.info:
-                    self._show_program_stream(pid, stream_type)
-                self._chk_pid_stream_type(pid, stream_type)
-        else:
-            if self.info:
-                sys.exit()
 
     def _parse_pts(self, pkt, pid):
         """
@@ -225,8 +195,9 @@ class Stream:
         """
         if not self.cue:
             try:
-                pkt = pkt[:5] + b"\xfc0" + pkt.split(b"\xfc0", 1)[1]
+                pkt = b"\xfc0".join([pkt[:5] , pkt.split(b"\xfc0", 1)[1]])
             except:
+                self._scte35_pids.discard(pid)
                 return None
             packet_data = self._mk_packet_data(pid)
             if pkt[18] in self._CMD_TYPES:
@@ -244,20 +215,6 @@ class Stream:
             return cue
         return None
 
-    @staticmethod
-    def _parse_stream_type(bitbin):
-        """
-        extract stream pid and type
-        """
-        stream_type = bitbin.ashex(8)  # 8
-        bitbin.forward(3)  # 11
-        el_pid = bitbin.asint(13)  # 24
-        bitbin.forward(4)  # 28
-        eilib = bitbin.asint(12) << 3  # 40
-        bitbin.forward(eilib)
-        minus = 40 + eilib
-        return minus, [stream_type, el_pid]
-
     def _program_association_table(self, pkt):
         """
         parse program association table ( pid 0 )
@@ -271,18 +228,17 @@ class Stream:
             self.pat["data"] += pkt[4:]
         if len(self.pat["data"]) < self.pat["sectionlen"]:
             return
-        bitbin = BitBin(self.pat["data"])
-        slib = self.pat["sectionlen"] << 3
-        slib -= 40
-        while slib > 32:
-            program_number = bitbin.asint(16)
-            bitbin.forward(3)
-            if program_number == 0:
-                bitbin.forward(13)
-            else:
-                self._pmt_pids.add(bitbin.asint(13))
-            slib -= 32
-        bitbin.forward(32)
+        pat_data = self.pat["data"]
+        idx = 0
+        sec_len = self.pat["sectionlen"]
+        sec_len -= 5
+        while sec_len > 4:
+            program_number = pat_data[idx] << 8| pat_data[idx+1]
+            if program_number != 0:
+                pmt_pid = self._parse_pid(pat_data[idx+2] , pat_data[idx+3])
+                self._pmt_pids.add(pmt_pid)
+            idx +=4
+            sec_len -= 4
         self.pat = None
 
     def _program_map_section(self, pkt):
@@ -291,7 +247,6 @@ class Stream:
         """
         # table_id = pkt[5]
         sectioninfolen = (pkt[6] & 15 << 8) | pkt[7]
-        slib = sectioninfolen << 3
         program_number = (pkt[8] << 8) | pkt[9]
         # version = pkt[10] >> 1 & 31
         # current_next = pkt[10] & 1
@@ -301,12 +256,45 @@ class Stream:
         # last_section_number = pkt[12]
         # pcr_pid = (pkt[13]& 31) << 8 | pkt[14]
         proginfolen = (pkt[15] & 15 << 8) | pkt[16]
-        pkt = pkt[(17 + proginfolen) : (slib + 9)]
-        bitbin = BitBin(pkt)
-        pilib = proginfolen << 3
-        slib -= 72
-        slib -= pilib  # Skip descriptors
-        self._parse_program_streams(slib, bitbin, program_number)
+        idx = 17
+        idx += proginfolen
+        si_len = sectioninfolen - 9
+        si_len -= proginfolen  # Skip descriptors
+        self._parse_program_streams(si_len, pkt, program_number,idx)
+
+    def _parse_program_streams(self, si_len, pkt, program_number,idx):
+        """
+        parse the elementary streams
+        from a program
+        """
+        if program_number not in self._programs:
+            self._programs.add(program_number)
+            if self.info:
+                to_stderr(f"\nProgram: {program_number}")
+            while si_len > 4:
+                minus, pstream = self._parse_stream_type(pkt,idx)
+                si_len -= minus
+                stream_type = pstream[0]
+                pid = pstream[1]
+                idx = pstream[2]
+                self._pid_prog[pid] = program_number
+                if self.info:
+                    self._show_program_stream(pid, stream_type)
+                self._chk_pid_stream_type(pid, stream_type)
+        else:
+            if self.info:
+                sys.exit()
+
+    def _parse_stream_type(self, pkt, idx):
+        """
+        extract stream pid and type
+        """
+        stream_type = hex(pkt[idx])
+        el_pid = self._parse_pid(pkt[idx+1], pkt[idx+2])
+        ei_len = (pkt[idx+3] & 15 ) << 8 | pkt[idx+4]
+        idx += 5 +ei_len
+        minus = 5 + ei_len
+        return minus, [stream_type, el_pid, idx]
 
     @staticmethod
     def _show_program_stream(pid, stream_type):
@@ -317,3 +305,7 @@ class Stream:
         if stream_type in stream_type_map:
             streaminfo = f"[{stream_type}] {stream_type_map[stream_type]}"
         to_stderr(f"\t   {pid}: {streaminfo}")
+
+    def _chk_pid_stream_type(self, pid, stream_type):
+        if stream_type in ["0x6", "0x86"]:
+            self._scte35_pids.add(pid)
