@@ -1,5 +1,7 @@
+"""
+SCTE35 Splice Info Section
+"""
 from base64 import b64encode
-from bitn import BitBin
 from threefive.tools import i2b, to_stderr
 
 
@@ -28,43 +30,47 @@ class SpliceInfoSection:
     def __repr__(self):
         return str(vars(self))
 
+    @staticmethod
+    def _parse_pts_adjustment(bites):
+        """
+        parse the 33 bit pts_adjustment
+        from bites
+        """
+        pts_adjustment = bites[4] & 1 << 32
+        pts_adjustment |= bites[5] << 24
+        pts_adjustment |= bites[6] << 16
+        pts_adjustment |= bites[7] << 8
+        pts_adjustment |= bites[8]
+        pts_adjustment /= 90000.0
+        return pts_adjustment
+
     def decode(self, bites):
-        bitbin = BitBin(bites)
-        self.table_id = bitbin.ashex(8)
-        if self.table_id != "0xfc":
-            to_stderr("splice info section table id should be 0xfc")
-        self.section_syntax_indicator = bitbin.asflag(1)
-        self.private = bitbin.asflag(1)
-        self.reserved = bitbin.ashex(2)
-        if self.reserved != "0x3":
-            to_stderr("splice info section reserved should be 0x3")
-        self.section_length = bitbin.asint(12)
-        self.protocol_version = bitbin.asint(8)
-        if self.protocol_version != 0:
-            to_stderr("splice info section protocol version should be 0")
-        self.encrypted_packet = bitbin.asflag(1)
-        self.encryption_algorithm = bitbin.asint(6)
-        self.pts_adjustment = bitbin.as90k(33)
-        self.cw_index = bitbin.ashex(8)
-        self.tier = bitbin.ashex(12)
-        self.splice_command_length = bitbin.asint(12)
-        self.splice_command_type = bitbin.asint(8)
+        """
+        decode the SCTE35 splice info section
+        from bites
+        """
+        self.table_id = hex(bites[0])
+        self.section_syntax_indicator = bites[1] >> 7 == 1
+        self.private = (bites[1] >> 6) & 1 == 1
+        self.reserved = hex((bites[1] >> 4) & 3)
+        self.section_length = (bites[1] & 15) << 8 | bites[2]
+        self.protocol_version = bites[3]
+        self.encrypted_packet = bites[4] >> 7 == 1
+        self.encryption_algorithm = (bites[4] >> 1) & 63
+        self.pts_adjustment = self._parse_pts_adjustment(bites)
+        self.cw_index = hex(bites[9])
+        self.tier = hex(bites[10] << 4 | (bites[11] >> 4) & 15)
+        self.splice_command_length = (bites[11] & 15) << 8 | bites[12]
+        self.splice_command_type = bites[13]
         self.descriptor_loop_length = 0
 
     def encode(self):
         """
-        first byte is:
-            table_id
+        encode the SCTE35 splice info section
         """
         first_byte = int(self.table_id, 16)
         bencoded = i2b(first_byte, 1)
-        """
-        two_bytes is:
-            section_syntax_indicator
-            private
-            reserved
-            section_length
-        """
+
         two_bytes = 0
         if self.section_syntax_indicator:
             two_bytes = 1 << 15
@@ -73,42 +79,24 @@ class SpliceInfoSection:
         two_bytes += int(self.reserved, 16) << 12
         two_bytes += self.section_length
         bencoded += i2b(two_bytes, 2)
-        """
-        proto_byte is:
-            protocol_version
-        """
+
         proto_byte = self.protocol_version
         bencoded += i2b(proto_byte, 1)
-        """
-        five_bytes is:
-            encrypted_packet
-            encryption_algorithm
-            pts_adjustment
-        """
+
         five_bytes = 0
         if self.encrypted_packet:
             five_bytes = 1 << 39
         five_bytes += self.encryption_algorithm << 33
         five_bytes += int(self.pts_adjustment * 90000)
         bencoded += i2b(five_bytes, 5)
-        """
-        cw_byte is:
-            cw_index
-        """
+
         cw_byte = int(self.cw_index, 16)
         bencoded += i2b(cw_byte, 1)
-        """
-        three_bytes is:
-            tier
-            splice_command_length
-        """
+
         three_bytes = int(self.tier, 16) << 12
         three_bytes += self.splice_command_length
         bencoded += i2b(three_bytes, 3)
-        """
-        cmd_byte is:
-            splice_command_type
-        """
+
         cmd_byte = self.splice_command_type
         bencoded += i2b(cmd_byte, 1)
         to_stderr(bencoded)
