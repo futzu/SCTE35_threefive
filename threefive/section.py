@@ -1,4 +1,6 @@
 """
+section.py
+
 SCTE35 Splice Info Section
 """
 from base64 import b64encode
@@ -30,7 +32,7 @@ class SpliceInfoSection:
     def __repr__(self):
         return str(vars(self))
 
-    def _parse_pts_adjustment(self,bites):
+    def _parse_pts_adjustment(self, bites):
         """
         parse the 33 bit pts_adjustment
         from bites
