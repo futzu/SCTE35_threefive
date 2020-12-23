@@ -30,19 +30,17 @@ class SpliceInfoSection:
     def __repr__(self):
         return str(vars(self))
 
-    @staticmethod
-    def _parse_pts_adjustment(bites):
+    def _parse_pts_adjustment(self,bites):
         """
         parse the 33 bit pts_adjustment
         from bites
         """
-        pts_adjustment = bites[4] & 1 << 32
-        pts_adjustment |= bites[5] << 24
-        pts_adjustment |= bites[6] << 16
-        pts_adjustment |= bites[7] << 8
-        pts_adjustment |= bites[8]
-        pts_adjustment /= 90000.0
-        return pts_adjustment
+        self.pts_adjustment = bites[4] & 1 << 32
+        self.pts_adjustment |= bites[5] << 24
+        self.pts_adjustment |= bites[6] << 16
+        self.pts_adjustment |= bites[7] << 8
+        self.pts_adjustment |= bites[8]
+        self.pts_adjustment /= 90000.0
 
     def decode(self, bites):
         """
@@ -57,7 +55,7 @@ class SpliceInfoSection:
         self.protocol_version = bites[3]
         self.encrypted_packet = bites[4] >> 7 == 1
         self.encryption_algorithm = (bites[4] >> 1) & 63
-        self.pts_adjustment = self._parse_pts_adjustment(bites)
+        self._parse_pts_adjustment(bites)
         self.cw_index = hex(bites[9])
         self.tier = hex(bites[10] << 4 | (bites[11] >> 4) & 15)
         self.splice_command_length = (bites[11] & 15) << 8 | bites[12]
