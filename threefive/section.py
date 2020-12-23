@@ -2,7 +2,7 @@
 SCTE35 Splice Info Section
 """
 from base64 import b64encode
-from threefive.tools import i2b, to_stderr
+from threefive.tools import i2b, ifb, to_stderr
 
 
 class SpliceInfoSection:
@@ -36,10 +36,11 @@ class SpliceInfoSection:
         from bites
         """
         self.pts_adjustment = bites[4] & 1 << 32
-        self.pts_adjustment |= bites[5] << 24
-        self.pts_adjustment |= bites[6] << 16
-        self.pts_adjustment |= bites[7] << 8
-        self.pts_adjustment |= bites[8]
+        self.pts_adjustment |= ifb(bites[5:9])
+       # self.pts_adjustment |= bites[5] << 24
+        #self.pts_adjustment |= bites[6] << 16
+        #self.pts_adjustment |= bites[7] << 8
+        #self.pts_adjustment |= bites[8]
         self.pts_adjustment /= 90000.0
 
     def decode(self, bites):
@@ -51,14 +52,16 @@ class SpliceInfoSection:
         self.section_syntax_indicator = bites[1] >> 7 == 1
         self.private = (bites[1] >> 6) & 1 == 1
         self.reserved = hex((bites[1] >> 4) & 3)
-        self.section_length = (bites[1] & 15) << 8 | bites[2]
+        #self.section_length = (bites[1] & 15) << 8 | bites[2]
+        self.section_length = ifb(bites[1:3]) & 4095
         self.protocol_version = bites[3]
         self.encrypted_packet = bites[4] >> 7 == 1
         self.encryption_algorithm = (bites[4] >> 1) & 63
         self._parse_pts_adjustment(bites)
         self.cw_index = hex(bites[9])
         self.tier = hex(bites[10] << 4 | (bites[11] >> 4) & 15)
-        self.splice_command_length = (bites[11] & 15) << 8 | bites[12]
+        #self.splice_command_length = (bites[11] & 15) << 8 | bites[12]
+        self.splice_command_length = ifb(bites[11:13]) & 4095
         self.splice_command_type = bites[13]
         self.descriptor_loop_length = 0
 
