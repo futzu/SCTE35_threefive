@@ -59,14 +59,16 @@ ___
      * __UPID__
           * [__Upids__ with Custom Output](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Custom_Output.py)
           * [__Multiple__ Segmentation __Descriptors__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Multi_Upid.py)
-          * [Combination __Upid__ Segmentation Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Combo.py)        
-     * [__Stream.decode_proxy()__ Example](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Proxy_Demo.py)
+          * [Combination __Upid__ Segmentation Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Combo.py)
+     * __DTMF__
+     	  * [DTMF __Descriptor__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Dtmf_Descriptor.py)
+     * __Stream__
+          * [Stream.__decode_proxy()__ Example](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Proxy_Demo.py)
 ---
 
 #### __Changes__
    *  As of threefive __v.2.2.39__  threefive.__Cue__ will require __Cue.decode()__ to be called to parse data.
    
-     
  ```python3
   from threefive import Cue
   Base64 = "/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g="
@@ -74,7 +76,6 @@ ___
   cue.decode()   # Now required
   cue.show()
 ```
-
 
    *   __Stream.decode_next()__ will be __removed in 2.2.37__. 
    *  *  The __decode_next()__ method has proven to be __problematic__ since the __switch__ to __parsing MPEG-TS tables__ directly. 
