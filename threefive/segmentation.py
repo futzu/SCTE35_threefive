@@ -1,3 +1,9 @@
+"""
+segmentation.py
+
+SCTE35 Segmentation Descriptors
+"""
+
 from .descriptors import SpliceDescriptor
 
 
@@ -16,9 +22,7 @@ table20 = {
 table 22 from page 62 of
 https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
 I am using the segmentation_type_id as a key.
-
 Segmentation_type_id : segmentation_message
-
 """
 table22 = {
     0x00: "Not Indicated",
@@ -91,6 +95,9 @@ class SegmentationDescriptor(SpliceDescriptor):
         self.sub_segments_expected = None
 
     def decode(self, bitbin):
+        """
+        decode a segmentation descriptor
+        """
         self.parse_id(bitbin)
         self.segmentation_event_id = bitbin.ashex(32)  # 4 bytes
         self.segmentation_event_cancel_indicator = bitbin.asflag(1)
