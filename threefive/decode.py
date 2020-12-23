@@ -1,10 +1,17 @@
+"""
+decode.py
+
+contains the all purpose
+threefive.decode() function
+"""
+
 import sys
 
 from .cue import Cue
 from .stream import Stream
 
 
-def read_stdin():
+def _read_stdin():
     """
     handles piped in data
     """
@@ -16,11 +23,11 @@ def read_stdin():
             cue = Cue(stuff)
             cue.decode()
             cue.show()
-        except Exception:
+        except:
             pass
 
 
-def read_stuff(stuff):
+def _read_stuff(stuff):
     """
     reads filename or a string
     """
@@ -56,6 +63,6 @@ def decode(stuff=None):
     if stuff is not set, reads from stdin.
     """
     if stuff in [None, sys.stdin.buffer]:
-        read_stdin()
+        _read_stdin()
     else:
-        read_stuff(stuff)
+        _read_stuff(stuff)
