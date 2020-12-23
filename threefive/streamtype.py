@@ -1,3 +1,11 @@
+"""
+streamtype.py
+
+stream_type_map is a dict
+mapping MPEG-TS stream_types to stream descriptions.
+"""
+
+
 stream_type_map = {
     "0x0": "ITU-T | ISO/IEC Reserved",
     "0x1": "ISO/IEC 11172 Video",
@@ -5,7 +13,7 @@ stream_type_map = {
     "0x3": "ISO/IEC 11172 Audio",
     "0x4": "ISO/IEC 13818-3 Audio",
     "0x5": "ITU-T Rec. H.222.0 | ISO/IEC 13818-1 private sections",
-    "0x6": "ISO/IEC 13818-1 PES packets- private data",
+    "0x6": "\033[1;30;47mISO/IEC 13818-1 PES packets- private data\033[00m",
     "0x7": "ISO/IEC 13522 MHEG",
     "0x8": "ITU-T Rec. H.222.0 | ISO/IEC 13818-1 Annex A DSM-CC",
     "0x9": "ITU-T Rec. H.222.1",
