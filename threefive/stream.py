@@ -47,6 +47,7 @@ class Stream:
 
         """
         self._tsdata = tsdata
+        self._find_start()
         if show_null:
             self._CMD_TYPES.append(0)
         self._scte35_pids = set()
@@ -66,18 +67,23 @@ class Stream:
         func is the function called when a SCTE35 Cue is found.
         func can be set to a custom function that accepts
         a threefive.Cue instance as it's only argument.
-
-        example:
-
-            def myfunc(cue):
-                # access cue data using dot notation
-                print(f'Table Id: {cue.info_section.table_id}')
         """
-        self._find_start()
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
             cue = self._parser(pkt)
             if cue:
+                if not func:
+                    return cue
                 func(cue)
+
+    def decode_next(self):
+        """
+        Stream.decode_next
+        returns the next SCTE35 cue
+        as a threefive.Cue instance.
+        """
+        cue = self.decode(func=False)
+        if cue:
+            return cue
 
     def decode_program(self, the_program, func=show_cue):
         """
@@ -94,7 +100,6 @@ class Stream:
         except that all ts packets are written to stdout
         for piping into another program like mplayer.
         """
-        self._find_start()
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
             sys.stdout.buffer.write(pkt)
             cue = self._parser(pkt)
@@ -150,8 +155,7 @@ class Stream:
             return self._parse_scte35(pkt, pid)
         if pid in self._pid_prog:
             if (pkt[1] >> 6) & 1:
-                part_pkt = pkt[0:18]
-                self._parse_pusi(part_pkt, pid)
+                self._parse_pusi(pkt, pid)
         return None
 
     @staticmethod
@@ -301,5 +305,9 @@ class Stream:
         to_stderr(f"\t   {pid}: {streaminfo}")
 
     def _chk_pid_stream_type(self, pid, stream_type):
+        """
+        Determine if the stream might have SCTE35 data
+        by the stream type.
+        """
         if stream_type in ["0x6", "0x86"]:
             self._scte35_pids.add(pid)
