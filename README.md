@@ -19,7 +19,7 @@ ___
  *  Having several relases makes it much __easier to resolve__ [issues](https://github.com/futzu/SCTE35-threefive/issues)
  
 ---
-#### [__Heads Up!__ Changes as of 11/27/2020](#changes)
+#### [__Heads Up!__ Changes as of 1/1/2021](#changes)
 * [ __threefive__ runs __three times faster__ with __pypy3__](https://www.pypy.org/)
 * [__Requires__ Python __3.6 +__](https://www.python.org/downloads/release/python-390/)
 * [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
@@ -38,6 +38,7 @@ ___
           * [Print __Cue__ instance as __JSON__](#print-cue-as-json)   
      * [__Stream__ Class](#stream-class)
           * [Stream.__decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                
+          * [Stream.__decode_next__()](#streamdecode_next)                                                                
           * [Stream.__decode_program__(the_program=None, func=show_cue)](#streamdecode_programthe_program-func--show_cue)
           * [Stream.__decode_proxy__(func=show_cue)](#Streamdecodeproxyfuncnone)    
  *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
@@ -67,6 +68,8 @@ ___
 ---
 
 #### __Changes__
+   *  Back by popular demand...   [Stream.__decode_next__()](#streamdecode_next)                                                                 
+
    *  As of threefive __v.2.2.39__  threefive.__Cue__ will require __Cue.decode()__ to be called to parse data.
    
  ```python3
@@ -218,7 +221,8 @@ cue.show()
 Method                              | Description
 ------------------------------------| -------------------------------------
 Stream.__show__()                   |__Prints__ all recognized Programs and streams by pid and type. 
-Stream.__decode__(*func = show_cue*)             | __Prints__ SCTE-35 __cues__ for SCTE-35 packets. Accepts an optional function, func, as arg. 
+Stream.__decode__(*func = show_cue*)             | __Prints__ SCTE-35 __cues__ for SCTE-35 packets. Accepts an optional function, func, as arg.
+Stream.__decode_next__()|__Returns__ the next SCTE35 cue as a threefive.Cue instance. 
 Stream.__decode_program__(*the_program,func = show_cue*) |Same as Stream.__decode__ except only packets where program == __the_program__
 Stream.__decode_proxy__(*func = show_cue*)       |Same as Stream.__decode__ except raw packets are written to stdout for piping to another program.
 
