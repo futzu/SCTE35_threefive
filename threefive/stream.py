@@ -11,10 +11,7 @@ from .tools import CMD_TYPES, to_stderr
 
 def show_cue(cue):
     """
-    default function call for
-    Stream.decode,
-    Stream.decode_program,
-    and Stream.decode_proxy
+    default function call for Stream.decode
     when a SCTE-35 packet is found.
     """
     cue.show()
@@ -22,11 +19,7 @@ def show_cue(cue):
 
 class Stream:
     """
-    Stream class
-    With MPEG-TS program awareness.
-    Accurate pts for streams with
-    more than one program containing
-    SCTE-35 streams.
+    Stream class for parsing MPEG-TS data.
     """
 
     _CMD_TYPES = CMD_TYPES
@@ -37,7 +30,7 @@ class Stream:
         tsdata is an open file handle
         set show_null=True to include Splice Nulls
 
-        example:
+        Use like...
 
         from threefive import Stream
 
@@ -63,8 +56,6 @@ class Stream:
     def decode(self, func=show_cue):
         """
         Stream.decode reads self.tsdata to find SCTE35 packets.
-
-        func is the function called when a SCTE35 Cue is found.
         func can be set to a custom function that accepts
         a threefive.Cue instance as it's only argument.
         """
@@ -77,9 +68,8 @@ class Stream:
 
     def decode_next(self):
         """
-        Stream.decode_next
-        returns the next SCTE35 cue
-        as a threefive.Cue instance.
+        Stream.decode_next returns the next
+        SCTE35 cue as a threefive.Cue instance.
         """
         cue = self.decode(func=False)
         if cue:
@@ -87,18 +77,17 @@ class Stream:
 
     def decode_program(self, the_program, func=show_cue):
         """
-        Stream.decode_program works just like Stream.decode
-        except the argument, the_program limits SCTE35 parsing
-        to that MPEGTS program.
+        Stream.decode_program limits SCTE35 parsing
+        to a specific MPEGTS program.
         """
         self.the_program = the_program
         self.decode(func)
 
     def decode_proxy(self, func=show_cue):
         """
-        Stream.decode_proxy works just like Stream.decode
-        except that all ts packets are written to stdout
+        Stream.decode_proxy writes all ts packets are written to stdout
         for piping into another program like mplayer.
+        threefive always prints messages and such to stderr.
         """
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
             sys.stdout.buffer.write(pkt)
