@@ -79,12 +79,7 @@ ___
   cue.decode()   # Now required
   cue.show()
 ```
-
-   *   __Stream.decode_next()__ will be __removed in 2.2.37__. 
-   *  *  The __decode_next()__ method has proven to be __problematic__ since the __switch__ to __parsing MPEG-TS tables__ directly. 
-   *  *   Use __Stream.decode(func=myfunc)__ instead. __It works just like a callback function__. 
-   *  *   See [Stream.__decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                
-   
+                                    
    *   As of version __2.1.95__, __threefive.version__ returns a string for the current __version__. 
    ```python
    
@@ -92,7 +87,6 @@ ___
      >>> threefive.version()
     '2.2.35'
 ``` 
-
 ---
 
 ## Fast __Start_
@@ -269,7 +263,7 @@ Program: 1080 (pcr pid: 1081)
  
  if __name__ =='__main__':
     with open(sys.argv[1],'rb') as tsdata:
-        sp = Stream(tsdata)
+        sp = Stream.decode_nextStream(tsdata)
         sp.decode()
 
 ```
@@ -293,6 +287,29 @@ def do():
     sp.decode(func = display)       
 
 if __name__ == '__main__':
+    do()
+```
+
+### ```Stream.decode_next()```
+* Stream.decode_next returns the next SCTE35 cue as a threefive.Cue instance.
+
+```python3
+import sys
+import threefive
+
+
+def do():
+    arg = sys.argv[1]
+    with open(arg,'rb') as tsdata:
+        st = threefive.Stream(tsdata)
+        while True:
+            cue = st.decode_next()
+            if not cue:
+                return False
+            if cue:
+                cue.show()
+
+if __name__ == "__main__":
     do()
 ```
 
