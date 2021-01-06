@@ -29,8 +29,10 @@ ___
       * [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
 * [__Easy__ threefive](#easy-threefive)
   *   [The __decode__ Function](#the-decode-function)
-      * [Parsing __SCTE 35__ messages from __Mpeg-TS Streams__](#the-decode-function)
-      * [Parsing __SCTE 35__ messages encoded in __Base64__, __Binary__, or __Hex__](#the-decode-function)
+      * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__](#the-decode-function)
+      * [Parsing __SCTE 35__ Cue strings encoded in __Base64__, or __Hex__](#the-decode-function)
+      * [Parsing __SCTE 35__ Cues directly from a file encoded in __Base64__, __Binary__,  or __Hex__](#the-decode-function)
+      
 *  [__Advanced__ threefive__](#advanced-threefive)
      *  [__Cue__ Class](#cue-class)
           * [Return __Cue__ instance as __dict__](#return-cue-as-dict)   
@@ -99,29 +101,23 @@ ___
 ```sh
 git clone https://github.com/futzu/SCTE35-threefive.git
 
-cd SCTE-threefive
-
+       cd SCTE-threefive
 # you need root to install for the system
-
-make install
+       make install
 
 # for pypy3 
-
-make pypy3
-
+        make pypy3
 ```
 *  __pip__
 
 ```sh
-pip3 install threefive
+        pip3 install threefive
 
 # for pypy3
-
-pypy3 -mpip install threefive
+        pypy3 -mpip install threefive
 
 #If you don't have pip installed, try this.
-
-pypy3 -mensurepip install pip 
+        pypy3 -mensurepip install pip 
 
 ```
 
@@ -133,9 +129,7 @@ pypy3 -mensurepip install pip
 ###   The __decode__ Function
  *   source [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)
  * __threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.
-
  *   __MpegTS__
-
 ```python
 threefive.decode('/path/to/mpegwithscte35.ts') 
 ```
@@ -152,14 +146,12 @@ threefive.decode(hexed)
  * __Directly from a file__ encoded in __Base64__, __Binary__ or  __Base64__
 ```sh
 cat cue.dat
-
     /DCSAAAAAAAAAP/wBQb/RgeVUgB8AhdDVUVJbs6+VX+/CAgAAAAABy0IxzELGQIXQ1VFSW7MmIh/vwgIAAABGDayFhE3AQECHENVRUluzw0If/8AABvLoAgIAAAAAActVhIwDBkCKkNVRUluzw02f78MG1JUTE4xSAEAAAAAMTM3NjkyMDI1NDQ5NUgxAAEAAGnbuXg=
 ```
 
- *  pass threefive.decode the file name and it will parse it for SCTE35.
+ *  __pass__ threefive.__decode__ the __file name__ and it will __parse__ it for __SCTE35__.
 
-
-```python3
+```js
 from threefive import decode
 
 decode('cue.dat')
@@ -269,12 +261,8 @@ decode('cue.dat')
   ]
 }
 ```
-
-
  [🡡 top](#threefive)
  
-
-
 #  __Advanced__ threefive
 
 ##  __Cue__ Class
