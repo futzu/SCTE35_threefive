@@ -134,23 +134,142 @@ pypy3 -mensurepip install pip
  *   source [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)
  * __threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.
 
- ```python
-import threefive
-```
- *  __MpegTS__
+ *   __MpegTS__
+
 ```python
 threefive.decode('/path/to/mpegwithscte35.ts') 
 ```
- * __Base64__ 
+* __Base64__ 
 ```python
 mesg='/DBUAAAAAAAA///wBQb+AAAAAAA+AjxDVUVJAAAACn+/Dy11cm46dXVpZDphYTg1YmJiNi01YzQzLTRiNmEtYmViYi1lZTNiMTNlYjc5OTkRAAB2c6LA'
 threefive.decode(mesg)
 ```
- * __Hex__
+* __Hex__
 ```python
 hexed='0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A'
 threefive.decode(hexed)
 ```
+ * __Directly from a file__ encoded in __Base64__, __Binary__ or  __Base64__
+```sh
+cat cue.dat
+
+    /DCSAAAAAAAAAP/wBQb/RgeVUgB8AhdDVUVJbs6+VX+/CAgAAAAABy0IxzELGQIXQ1VFSW7MmIh/vwgIAAABGDayFhE3AQECHENVRUluzw0If/8AABvLoAgIAAAAAActVhIwDBkCKkNVRUluzw02f78MG1JUTE4xSAEAAAAAMTM3NjkyMDI1NDQ5NUgxAAEAAGnbuXg=
+```
+
+ *  pass threefive.decode the file name and it will parse it for SCTE35.
+
+
+```python3
+from threefive import decode
+
+decode('cue.dat')
+
+{
+  "info_section": {
+    "table_id": "0xfc",
+    "section_syntax_indicator": false,
+    "private": false,
+    "reserved": "0x3",
+    "section_length": 146,
+    "protocol_version": 0,
+    "encrypted_packet": false,
+    "encryption_algorithm": 0,
+    "pts_adjustment": 0.0,
+    "cw_index": "0x0",
+    "tier": "0xfff",
+    "splice_command_length": 5,
+    "splice_command_type": 6,
+    "descriptor_loop_length": 124,
+    "crc": "0x69dbb978"
+  },
+  "command": {
+    "name": "Time Signal",
+    "time_specified_flag": true,
+    "pts_time": 60776.3266,
+    "splice_command_length": 5
+  },
+  "descriptors": [
+    {
+      "tag": 2,
+      "identifier": "CUEI",
+      "name": "Segmentation Descriptor",
+      "segmentation_event_id": "0x6ecebe55",
+      "segmentation_event_cancel_indicator": false,
+      "components": [],
+      "program_segmentation_flag": true,
+      "segmentation_duration_flag": false,
+      "delivery_not_restricted_flag": true,
+      "segmentation_message": "Provider Advertisement End",
+      "segmentation_upid_type": 8,
+      "segmentation_upid_length": 8,
+      "segmentation_upid": "AiringID:0x72d08c7",
+      "segmentation_type_id": 49,
+      "segment_num": 11,
+      "segments_expected": 25,
+      "descriptor_length": 23
+    },
+    {
+      "tag": 2,
+      "identifier": "CUEI",
+      "name": "Segmentation Descriptor",
+      "segmentation_event_id": "0x6ecc9888",
+      "segmentation_event_cancel_indicator": false,
+      "components": [],
+      "program_segmentation_flag": true,
+      "segmentation_duration_flag": false,
+      "delivery_not_restricted_flag": true,
+      "segmentation_message": "Distributor Placement Opportunity End",
+      "segmentation_upid_type": 8,
+      "segmentation_upid_length": 8,
+      "segmentation_upid": "AiringID:0x11836b21611",
+      "segmentation_type_id": 55,
+      "segment_num": 1,
+      "segments_expected": 1,
+      "descriptor_length": 23
+    },
+    {
+      "tag": 2,
+      "identifier": "CUEI",
+      "name": "Segmentation Descriptor",
+      "segmentation_event_id": "0x6ecf0d08",
+      "segmentation_event_cancel_indicator": false,
+      "components": [],
+      "program_segmentation_flag": true,
+      "segmentation_duration_flag": true,
+      "delivery_not_restricted_flag": true,
+      "segmentation_duration": 20.24,
+      "segmentation_message": "Provider Advertisement Start",
+      "segmentation_upid_type": 8,
+      "segmentation_upid_length": 8,
+      "segmentation_upid": "AiringID:0x72d5612",
+      "segmentation_type_id": 48,
+      "segment_num": 12,
+      "segments_expected": 25,
+      "descriptor_length": 28
+    },
+    {
+      "tag": 2,
+      "identifier": "CUEI",
+      "name": "Segmentation Descriptor",
+      "segmentation_event_id": "0x6ecf0d36",
+      "segmentation_event_cancel_indicator": false,
+      "components": [],
+      "program_segmentation_flag": true,
+      "segmentation_duration_flag": false,
+      "delivery_not_restricted_flag": true,
+      "segmentation_message": "Content Identification",
+      "segmentation_upid_type": 12,
+      "segmentation_upid_length": 27,
+      "segmentation_upid": "MPU:{'format identifier': 1381256270, 'private data': 4720207453582705227611785054965731163782383190579622144}",
+      "segmentation_type_id": 1,
+      "segment_num": 0,
+      "segments_expected": 0,
+      "descriptor_length": 42
+    }
+  ]
+}
+```
+
 
  [🡡 top](#threefive)
  
