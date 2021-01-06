@@ -10,6 +10,7 @@ import sys
 from .cue import Cue
 from .stream import Stream
 
+_MAX_CUE_SIZE = 4096
 
 def _read_stdin():
     """
@@ -33,14 +34,20 @@ def _read_stuff(stuff):
     """
     try:
         with open(stuff, "rb") as tsdata:
-            Stream(tsdata).decode()
+            cue = Cue(tsdata.read(_MAX_CUE_SIZE))
+            cue.decode()
+            cue.show()
     except Exception:
         try:
             cue = Cue(stuff)
             cue.decode()
             cue.show()
-        except:
-            pass
+        except Exception:
+            try:
+                with open(stuff, "rb") as tsdata:
+                    Stream(tsdata).decode()
+            except Exception:
+                pass
 
 
 def decode(stuff=None):
