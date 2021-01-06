@@ -208,7 +208,6 @@ class Cue:
         """
         sct = self.info_section.splice_command_type
         if sct not in self._command_map:
-            to_stderr("Unknown Splice Command Type")
             return False
         self.command = self._command_map[sct]()
         self.command.decode(cmdbb)
