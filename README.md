@@ -35,7 +35,7 @@ ___
       
 *  [__Advanced threefive__](#advanced-threefive)
      *  [__Cue__ Class](#cue-class)
-          * [Return __Cue__ instance as __dict__](#return-cue-as-dict)   
+          * [Return __Cue__ instance as __dict__](#return-cue-instance-as-dictt)   
           * [Return __Cue__ instance as __JSON__](#return-cue-as-json)   
           * [Print __Cue__ instance as __JSON__](#print-cue-as-json)   
      * [__Stream__ Class](#stream-class)
