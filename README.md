@@ -206,7 +206,7 @@ b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAA
 cue = Cue(B64)
 cue.decode()
 ```
-### Return cue __as dict__
+### __Return Cue instance as __dict__
 ```python
 cue.get()
 
@@ -219,11 +219,11 @@ cue.get_command()
 # Splice Descriptors
 cue.get_descriptors()
 ````
-### Return cue as JSON
+### __Return Cue__ instance as __JSON__
 ```python
 jason = cue.get_json()
 ```
-### Print cue as JSON 
+### __Print Cue__ instance as __JSON__ 
 ```python
 cue.show()
 ```    
@@ -255,7 +255,6 @@ Method                              | Description
 
 ### ```Stream.show()```
  *  List programs and streams for a video.
- * __Example__
 ```python3
 # pypy3
 >>>> from threefive import Stream, version
@@ -303,7 +302,8 @@ Program: 1080 (pcr pid: 1081)
 
   *  __func__ should match the interface 
   ``` func(cue)```
-  * __Example__
+ 
+ 
 ```python3
 import sys
 import threefive
