@@ -206,7 +206,7 @@ b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAA
 cue = Cue(B64)
 cue.decode()
 ```
-##### Return cue __as dict__
+### Return cue __as dict__
 ```python
 cue.get()
 
@@ -219,11 +219,11 @@ cue.get_command()
 # Splice Descriptors
 cue.get_descriptors()
 ````
-##### Return cue as JSON
+### Return cue as JSON
 ```python
 jason = cue.get_json()
 ```
-###### Print cue as JSON 
+### Print cue as JSON 
 ```python
 cue.show()
 ```    
