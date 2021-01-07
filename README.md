@@ -39,6 +39,7 @@ ___
           * [Return __Cue__ instance as __JSON__](#return-cue-as-json)   
           * [Print __Cue__ instance as __JSON__](#print-cue-as-json)   
      * [__Stream__ Class](#stream-class)
+     	  * [Stream.__show__()](#streamshow) 
           * [Stream.__decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                
           * [Stream.__decode_next__()](#streamdecode_next)                                                                
           * [Stream.__decode_program__(the_program=None, func=show_cue)](#streamdecode_programthe_program-func--show_cue)
@@ -321,7 +322,7 @@ cue.show()
 
 Method                              | Description
 ------------------------------------| -------------------------------------
-Stream.__show__()                   |__Prints__ all recognized Programs and streams by pid and type. 
+[Stream.__show__()](#streamshow)                 |__Prints__ all recognized Programs and streams by pid and type. 
  [Stream.__decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                             | __Prints__ SCTE-35 __cues__ for SCTE-35 packets. Accepts an optional function, func, as arg.
 [Stream.__decode_next__()](#streamdecode_next)|__Returns__ the next SCTE35 cue as a threefive.Cue instance. 
 [Stream.__decode_program__(the_program=None, func=show_cue)](#streamdecode_programthe_program-func--show_cue) |Same as Stream.__decode__ except only packets where program == __the_program__
@@ -433,6 +434,7 @@ with open('../35.ts','rb') as tsdata:
 ```
 
 ### ```Stream.decode_proxy(func = show_cue)```
+
 
 *  Writes all packets to __sys.stdout__.
 
