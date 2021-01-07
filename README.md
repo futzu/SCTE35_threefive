@@ -37,7 +37,7 @@ ___
      *  [__Cue__ Class](#cue-class)
           * [Return __Cue__ instance as __dict__](#return-cue-instance-as-dict)   
           * [Return __Cue__ instance as __JSON__](#return-cue-instance-as-json)   
-          * [Print __Cue__ instance as __JSON__](#print-cue-as-json)   
+          * [Print __Cue__ instance as __JSON__](#print-cue-instance-as-json)   
      * [__Stream__ Class](#stream-class)
      	  * [Stream.__show__()](#streamshow) 
           * [Stream.__decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                
