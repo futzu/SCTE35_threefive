@@ -322,10 +322,10 @@ cue.show()
 Method                              | Description
 ------------------------------------| -------------------------------------
 Stream.__show__()                   |__Prints__ all recognized Programs and streams by pid and type. 
-Stream.__decode__(*func = show_cue*)             | __Prints__ SCTE-35 __cues__ for SCTE-35 packets. Accepts an optional function, func, as arg.
-Stream.__decode_next__()|__Returns__ the next SCTE35 cue as a threefive.Cue instance. 
-Stream.__decode_program__(*the_program,func = show_cue*) |Same as Stream.__decode__ except only packets where program == __the_program__
-Stream.__decode_proxy__(*func = show_cue*)       |Same as Stream.__decode__ except raw packets are written to stdout for piping to another program.
+ [Stream.__decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                             | __Prints__ SCTE-35 __cues__ for SCTE-35 packets. Accepts an optional function, func, as arg.
+[Stream.__decode_next__()](#streamdecode_next)|__Returns__ the next SCTE35 cue as a threefive.Cue instance. 
+[Stream.__decode_program__(the_program=None, func=show_cue)](#streamdecode_programthe_program-func--show_cue) |Same as Stream.__decode__ except only packets where program == __the_program__
+[Stream.__decode_proxy__(func=show_cue)](#Streamdecodeproxyfuncnone)       |Same as Stream.__decode__ except raw packets are written to stdout for piping to another program.
 
 ### ```Stream.show()```
 
@@ -453,4 +453,3 @@ python3 proxy.py | mplayer -
 ```
 
 [🡡 top](#threefive)
-
