@@ -33,7 +33,7 @@ ___
       * [Parsing __SCTE 35__ Cue strings encoded in __Base64__, or __Hex__](#the-decode-function)
       * [Parsing __SCTE 35__ Cues directly from a file encoded in __Base64__, __Binary__,  or __Hex__](#the-decode-function)
       
-*  [__Advanced__ threefive__](#advanced-threefive)
+*  [__Advanced threefive__](#advanced-threefive)
      *  [__Cue__ Class](#cue-class)
           * [Return __Cue__ instance as __dict__](#return-cue-as-dict)   
           * [Return __Cue__ instance as __JSON__](#return-cue-as-json)   
@@ -206,7 +206,7 @@ b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAA
 cue = Cue(B64)
 cue.decode()
 ```
-### __Return Cue instance as __dict__
+### __Return Cue__ instance as __dict__
 ```python
 cue.get()
 
