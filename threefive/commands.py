@@ -7,9 +7,6 @@ class SpliceCommand:
     """
     Base class, not used directly.
     """
-    def __init__(self):
-        self.name = None
-
 
     def decode(self, bitbin):
         """
@@ -27,9 +24,6 @@ class BandwidthReservation(SpliceCommand):
     def __init__(self):
         self.name = "Bandwidth Reservation"
 
-    def decode(self, bitbin):
-        pass
-
 
 class SpliceNull(SpliceCommand):
     """
@@ -43,8 +37,6 @@ class SpliceNull(SpliceCommand):
         self.name = "Splice Null"
         self.splice_command_length = 0
 
-    def decode(self, bitbin):
-        pass
 
 class PrivateCommand:
     """

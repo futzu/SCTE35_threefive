@@ -223,12 +223,12 @@ class Cue:
         payload = payload[2:]
         bitbin = BitBin(payload[:desc_len])
         payload = payload[desc_len:]
-        if tag in self._descriptor_map:
-            spliced = self._descriptor_map[tag](tag)
-            spliced.decode(bitbin)
-            spliced.descriptor_length = desc_len
-            return spliced
-        return False
+        if tag not in self._descriptor_map:
+            return False
+        spliced = self._descriptor_map[tag](tag)
+        spliced.decode(bitbin)
+        spliced.descriptor_length = desc_len
+        return spliced
 
     def show(self):
         """

@@ -10,7 +10,9 @@ import sys
 from .cue import Cue
 from .stream import Stream
 
+# Maximum size for a SCTE35 cue.
 _MAX_CUE_SIZE = 4096
+
 
 def _read_stdin():
     """

@@ -46,9 +46,13 @@ class SpliceInfoSection:
         from bites
         """
         self.table_id = hex(bites[0])
+        if self.table_id != "0xfc":
+            return False
         self.section_syntax_indicator = bites[1] >> 7 == 1
         self.private = (bites[1] >> 6) & 1 == 1
         self.reserved = hex((bites[1] >> 4) & 3)
+        if self.reserved != "0x3":
+            return False
         self.section_length = (bites[1] & 15) << 8 | bites[2]
         self.protocol_version = bites[3]
         self.encrypted_packet = bites[4] >> 7 == 1

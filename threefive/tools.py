@@ -1,3 +1,10 @@
+"""
+tools.py
+
+Stuff used by various classes and methods
+throughout threefive.
+"""
+
 import sys
 
 
@@ -17,13 +24,6 @@ def ifb(bites):
     ifb is a wrapper for int.from_bytes
     """
     return int.from_bytes(bites, byteorder="big")
-
-
-def reserve(num):
-    head = b"0b"
-    one = b"1"
-    bits = head + (one * num)
-    return int(bits, 2)
 
 
 def to_stderr(stuff):
