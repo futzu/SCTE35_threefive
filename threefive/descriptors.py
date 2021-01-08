@@ -23,12 +23,6 @@ class SpliceDescriptor:
         must implement a decode method.
         """
 
-    def encode(self):
-        """
-        SpliceDescriptor subclasses
-        will soon implement a encode method.
-        """
-
     def parse_id(self, bitbin):
         """
         parse splice descriptor identifier
