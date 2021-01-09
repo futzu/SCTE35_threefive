@@ -40,7 +40,6 @@ class Stream:
 
         """
         self._tsdata = tsdata
-        self._find_start()
         if show_null:
             self._CMD_TYPES.append(0)
         self._scte35_pids = set()
@@ -110,7 +109,8 @@ class Stream:
         while self._tsdata:
             if self._tsdata.read(1) == sync_byte:
                 if self._tsdata.read(self._PACKET_SIZE - 1):
-                    return
+                    return True
+        return False
 
     def _mk_packet_data(self, pid):
         """

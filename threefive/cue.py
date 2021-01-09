@@ -156,10 +156,16 @@ class Cue:
         """
         Convert Hex and Base64 strings into bytes.
         """
-        if data[:2].lower() == "0x":
-            data = data[2:]
-        if data[:2].lower() == "fc":
-            return bytes.fromhex(data)
+        try:
+            # Handles hex byte strings
+            i = int(data,16)
+            i_l = i.bit_length() >> 3
+            return int.to_bytes(i,i_l,byteorder="big")
+        except:
+            if data[:2].lower() == "0x":
+                data = data[2:]
+            if data[:2].lower() == "fc":
+                return bytes.fromhex(data)
         try:
             return b64decode(data)
         except Exception:

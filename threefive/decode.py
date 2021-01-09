@@ -36,7 +36,8 @@ def _read_stuff(stuff):
     """
     try:
         with open(stuff, "rb") as tsdata:
-            cue = Cue(tsdata.read(_MAX_CUE_SIZE))
+            tsd = tsdata.read(_MAX_CUE_SIZE)
+            cue = Cue(tsd)
             cue.decode()
             cue.show()
     except Exception:
@@ -50,6 +51,7 @@ def _read_stuff(stuff):
                     Stream(tsdata).decode()
             except Exception:
                 pass
+    return
 
 
 def decode(stuff=None):
