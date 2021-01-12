@@ -101,17 +101,6 @@ class Stream:
         self.info = True
         self.decode()
 
-    def _find_start(self):
-        """
-        handles partial packets at beginning of a stream.
-        """
-        sync_byte = b"G"
-        while self._tsdata:
-            if self._tsdata.read(1) == sync_byte:
-                if self._tsdata.read(self._PACKET_SIZE - 1):
-                    return True
-        return False
-
     def _mk_packet_data(self, pid):
         """
         creates packet_data dict
@@ -267,8 +256,6 @@ class Stream:
                 self._pid_prog[pid] = program_number
                 if self.info:
                     self._show_program_stream(pid, stream_type)
-                    if ei_len:
-                        to_stderr(f"\t\t\tExtended Info: {pkt[idx:idx+ei_len]}")
                 self._chk_pid_stream_type(pid, stream_type)
         else:
             if self.info:
@@ -291,7 +278,7 @@ class Stream:
         streaminfo = f"[{stream_type}] Reserved or Private"
         if stream_type in stream_type_map:
             streaminfo = f"[{stream_type}] {stream_type_map[stream_type]}"
-        to_stderr(f"\t   {pid}: {streaminfo}")
+        to_stderr(f"\t{pid}: {streaminfo}")
 
     def _chk_pid_stream_type(self, pid, stream_type):
         """
