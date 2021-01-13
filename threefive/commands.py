@@ -1,6 +1,7 @@
 """
 SCTE35 Splice Commands
 """
+from .tools import ifb
 
 
 class SpliceCommand:
@@ -8,7 +9,14 @@ class SpliceCommand:
     Base class, not used directly.
     """
 
-    def decode(self, bitbin):
+    def __init__(self, payload):
+        self.idx = 0
+        self.payload = payload
+        # self._bitbin = bitbin
+        self.name = None
+        self.splice_command_length = 0
+
+    def decode(self):
         """
         SpliceCommand.decode defines
         a standard interface for
@@ -21,7 +29,7 @@ class BandwidthReservation(SpliceCommand):
     Table 11 - bandwidth_reservation()
     """
 
-    def __init__(self):
+    def decode(self):
         self.name = "Bandwidth Reservation"
 
 
@@ -30,53 +38,54 @@ class SpliceNull(SpliceCommand):
     Table 7 - splice_null()
     """
 
-    def __init__(self):
-        """
-         init splice null command
-        """
+    def decode(self):
         self.name = "Splice Null"
-        self.splice_command_length = 0
 
 
-class PrivateCommand:
+class PrivateCommand(SpliceCommand):
     """
     Table 12 - private_command
     """
 
-    def __init__(self):
-        """
-        init private command
-        """
-        self.name = "Private Command"
-        self.identifier = None
-
-    def decode(self, bitbin):
+    def decode(self):
         """
         decode private command
         """
-        self.identifier = bitbin.asint(32)
+        self.name = "Private Command"
+        self.identifier = ifb(self.payload[self.idx : self.idx + 3])
 
 
-class TimeSignal:
+class TimeSignal(SpliceCommand):
     """
     Table 10 - time_signal()
     """
 
-    def __init__(self):
+    def __init__(self, payload):
+        super().__init__(payload)
         self.name = "Time Signal"
         self.time_specified_flag = None
         self.pts_time = None
 
-    def decode(self, bitbin):  # 40bits
+    @staticmethod
+    def as90k(five_bites):
+        ttb = five_bites[0] & 1 << 32 | ifb(five_bites[1:5])
+        return ttb / 90000.0
+
+    def decode(self):  # 40bits
         """
         decode pts
         """
-        self.time_specified_flag = bitbin.asflag(1)
+        self.time_specified_flag = self.payload[self.idx] >> 7
         if self.time_specified_flag:
-            bitbin.forward(6)
-            self.pts_time = bitbin.as90k(33)
+            self.pts_time = self.payload[self.idx] & 1 << 32
+            self.pts_time |= self.payload[self.idx + 1] << 24
+            self.pts_time |= self.payload[self.idx + 2] << 16
+            self.pts_time |= self.payload[self.idx + 3] << 8
+            self.pts_time |= self.payload[self.idx + 4]
+            self.pts_time /= 90000.0
+            self.idx += 5
         else:
-            bitbin.forward(7)
+            self.idx += 1
 
 
 class SpliceInsert(TimeSignal):
@@ -84,8 +93,8 @@ class SpliceInsert(TimeSignal):
     Table 9 - splice_insert()
     """
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, payload):
+        super().__init__(payload)
         self.name = "Splice Insert"
         self.break_auto_return = None
         self.break_duration = None
@@ -101,39 +110,66 @@ class SpliceInsert(TimeSignal):
         self.avail_num = None
         self.avail_expected = None
 
-    def parse_break(self, bitbin):
+    def parse_break(self):
         """
         SpliceInsert.parse_break(bitbin) is called
         if SpliceInsert.duration_flag is set
         """
-        self.break_auto_return = bitbin.asflag(1)
-        bitbin.forward(6)
-        self.break_duration = bitbin.as90k(33)
+        self.break_auto_return = self.payload[self.idx] >> 7
+        self.break_duration = self.payload[self.idx] & 1 << 32
+        self.break_duration |= self.payload[self.idx + 1] << 24
+        self.break_duration |= self.payload[self.idx + 2] << 16
+        self.break_duration |= self.payload[self.idx + 3] << 8
+        self.break_duration |= self.payload[self.idx + 4]
+        self.break_duration /= 90000.0
+        self.idx += 4
 
-    def decode(self, bitbin):
+    def decode(self):
         """
         SpliceInsert.decode
         """
-        self.splice_event_id = bitbin.asint(32)  # uint32
-        self.splice_event_cancel_indicator = bitbin.asflag(1)
-        bitbin.forward(7)  # uint8
+        self.splice_event_id = ifb(self.payload[self.idx : self.idx + 4])
+        self.idx += 4
+        self.splice_event_cancel_indicator = self.payload[self.idx] >> 7 == 1
+        self.idx += 1
         if not self.splice_event_cancel_indicator:
-            self.out_of_network_indicator = bitbin.asflag(1)
-            self.program_splice_flag = bitbin.asflag(1)
-            self.duration_flag = bitbin.asflag(1)
-            self.splice_immediate_flag = bitbin.asflag(1)
-            bitbin.forward(4)  # uint8
+            self.out_of_network_indicator = self.payload[self.idx] >> 7 == 1
+            self.program_splice_flag = (self.payload[self.idx] >> 6) & 1 == 1
+            self.duration_flag = (self.payload[self.idx] >> 5) & 1 == 1
+            self.splice_immediate_flag = (self.payload[self.idx] >> 4) & 1 == 1
+            self.idx += 1
             if self.program_splice_flag and not self.splice_immediate_flag:
-                super().decode(bitbin)  # uint8 + uint32
+                super().decode()  # uint8 + uint32
             if not self.program_splice_flag:
-                self.component_count = bitbin.asint(8)  # uint 8
+                self.component_count = self.payload[self.idx]
+                self.idx += 1
                 self.components = []
                 for i in range(0, self.component_count):
-                    self.components[i] = bitbin.asint(8)
+                    self.components[i] = self.payload[self.idx]
+                    self.idx += 1
                 if not self.splice_immediate_flag:
-                    super().decode(bitbin)
+                    super().decode()
             if self.duration_flag:
-                self.parse_break(bitbin)
-            self.unique_program_id = bitbin.asint(16)
-            self.avail_num = bitbin.asint(8)
-            self.avail_expected = bitbin.asint(8)
+                self.parse_break()
+            self.unique_program_id = ifb(self.payload[self.idx : self.idx + 2])
+            self.idx += 2
+            self.avail_num = self.payload[self.idx]
+            self.idx += 1
+            self.avail_expected = self.payload[self.idx]
+            self.idx += 1
+
+
+command_map = {
+    0: SpliceNull,
+    5: SpliceInsert,
+    6: TimeSignal,
+    7: BandwidthReservation,
+    255: PrivateCommand,
+}
+
+
+def mk_command(sct, payload):
+    if sct in command_map:
+        cmd = command_map[sct](payload)
+        return cmd
+    return False

@@ -7,18 +7,12 @@ from base64 import b64decode
 from bitn import BitBin
 from .segmentation import SegmentationDescriptor
 from .section import SpliceInfoSection
+from .commands import mk_command
 from .descriptors import (
     AvailDescriptor,
     DtmfDescriptor,
     TimeDescriptor,
     AudioDescriptor,
-)
-from .commands import (
-    BandwidthReservation,
-    PrivateCommand,
-    SpliceNull,
-    SpliceInsert,
-    TimeSignal,
 )
 from .tools import (
     ifb,
@@ -49,14 +43,6 @@ class Cue:
         3: TimeDescriptor,
         4: AudioDescriptor,
     }
-    # map of known splice commands and associated classes
-    _command_map = {
-        0: SpliceNull,
-        5: SpliceInsert,
-        6: TimeSignal,
-        7: BandwidthReservation,
-        255: PrivateCommand,
-    }
 
     def __init__(self, data, packet_data=None):
         """
@@ -78,7 +64,7 @@ class Cue:
         Cue.decode() parses for SCTE35 data
         """
         payload = self.mk_info_section(self.payload)
-        payload = self._mk_command(payload)
+        payload = self._set_splice_command(payload)
         payload = self._mk_descriptors(payload)
         self.info_section.crc = hex(ifb(payload[0:4]))
 
@@ -171,20 +157,6 @@ class Cue:
         except Exception:
             return data
 
-    def _mk_command(self, payload):
-        """
-        parses the command section
-        of a SCTE35 cue.
-        """
-        cmdbb = BitBin(payload)
-        bit_start = cmdbb.idx
-        self._set_splice_command(cmdbb)
-        bit_end = cmdbb.idx
-        cmdl = int((bit_start - bit_end) >> 3)
-        self.command.splice_command_length = cmdl
-        self.info_section.splice_command_length = cmdl
-        return payload[cmdl:]
-
     def _mk_descriptors(self, payload):
         """
         parse descriptor loop length,
@@ -207,16 +179,18 @@ class Cue:
         self.info_section.decode(info_payload)
         return payload[info_size:]
 
-    def _set_splice_command(self, cmdbb):
+    def _set_splice_command(self, payload):
         """
-        Splice Commands looked up in self._command_map
-        and decoded.
+        parses the command section
+        of a SCTE35 cue.
         """
         sct = self.info_section.splice_command_type
-        if sct not in self._command_map:
-            return False
-        self.command = self._command_map[sct]()
-        self.command.decode(cmdbb)
+        self.command = mk_command(sct, payload)
+        if self.command:
+            self.command.decode()
+            self.command.payload = None
+            return payload[self.command.idx :]
+        return payload
 
     def _set_splice_descriptor(self, payload):
         """
