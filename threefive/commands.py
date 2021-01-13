@@ -121,6 +121,7 @@ class SpliceInsert(TimeSignal):
         self.break_duration |= self.payload[self.idx + 3] << 8
         self.break_duration |= self.payload[self.idx + 4]
         self.break_duration /= 90000.0
+        self.break_duration = round(self.break_duration, 6)
         self.idx += 4
 
     def decode(self):
