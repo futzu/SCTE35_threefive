@@ -73,7 +73,7 @@ class TimeSignal(SpliceCommand):
         """
         decode pts
         """
-        self.time_specified_flag = self.payload[self.idx] >> 7 == 1
+        self.time_specified_flag = self.payload[self.idx] >> 7 is 1
         if self.time_specified_flag:
             self.pts_time = self.payload[self.idx] & 1 << 32
             self.pts_time |= self.payload[self.idx + 1] << 24
@@ -81,6 +81,7 @@ class TimeSignal(SpliceCommand):
             self.pts_time |= self.payload[self.idx + 3] << 8
             self.pts_time |= self.payload[self.idx + 4]
             self.pts_time /= 90000.0
+            self.pts_time = round(self.pts_time, 6)
             self.idx += 5
         else:
             self.idx += 1
@@ -113,7 +114,7 @@ class SpliceInsert(TimeSignal):
         SpliceInsert.parse_break(bitbin) is called
         if SpliceInsert.duration_flag is set
         """
-        self.break_auto_return = self.payload[self.idx] >> 7 == 1
+        self.break_auto_return = self.payload[self.idx] >> 7 is 1
         self.break_duration = self.payload[self.idx] & 1 << 32
         self.break_duration |= self.payload[self.idx + 1] << 24
         self.break_duration |= self.payload[self.idx + 2] << 16
@@ -128,13 +129,13 @@ class SpliceInsert(TimeSignal):
         """
         self.splice_event_id = ifb(self.payload[self.idx : self.idx + 4])
         self.idx += 4
-        self.splice_event_cancel_indicator = self.payload[self.idx] >> 7 == 1
+        self.splice_event_cancel_indicator = self.payload[self.idx] >> 7 is 1
         self.idx += 1
         if not self.splice_event_cancel_indicator:
-            self.out_of_network_indicator = self.payload[self.idx] >> 7 == 1
-            self.program_splice_flag = (self.payload[self.idx] >> 6) & 1 == 1
-            self.duration_flag = (self.payload[self.idx] >> 5) & 1 == 1
-            self.splice_immediate_flag = (self.payload[self.idx] >> 4) & 1 == 1
+            self.out_of_network_indicator = self.payload[self.idx] >> 7 is 1
+            self.program_splice_flag = (self.payload[self.idx] >> 6) & 1 is 1
+            self.duration_flag = (self.payload[self.idx] >> 5) & 1 is 1
+            self.splice_immediate_flag = (self.payload[self.idx] >> 4) & 1 is 1
             self.idx += 1
             if self.program_splice_flag and not self.splice_immediate_flag:
                 super().decode()  # uint8 + uint32

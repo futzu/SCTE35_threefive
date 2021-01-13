@@ -189,7 +189,8 @@ class Cue:
         if self.command:
             self.command.decode()
             self.command.payload = None
-            return payload[self.command.idx :]
+            payload = payload[self.command.idx :]
+            self.command.idx = None
         return payload
 
     def _set_splice_descriptor(self, payload):
