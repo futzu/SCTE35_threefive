@@ -12,9 +12,7 @@ class SpliceCommand:
     def __init__(self, payload):
         self.idx = 0
         self.payload = payload
-        # self._bitbin = bitbin
         self.name = None
-        self.splice_command_length = 0
 
     def decode(self):
         """
@@ -75,7 +73,7 @@ class TimeSignal(SpliceCommand):
         """
         decode pts
         """
-        self.time_specified_flag = self.payload[self.idx] >> 7
+        self.time_specified_flag = self.payload[self.idx] >> 7 == 1
         if self.time_specified_flag:
             self.pts_time = self.payload[self.idx] & 1 << 32
             self.pts_time |= self.payload[self.idx + 1] << 24
@@ -115,7 +113,7 @@ class SpliceInsert(TimeSignal):
         SpliceInsert.parse_break(bitbin) is called
         if SpliceInsert.duration_flag is set
         """
-        self.break_auto_return = self.payload[self.idx] >> 7
+        self.break_auto_return = self.payload[self.idx] >> 7 == 1
         self.break_duration = self.payload[self.idx] & 1 << 32
         self.break_duration |= self.payload[self.idx + 1] << 24
         self.break_duration |= self.payload[self.idx + 2] << 16
