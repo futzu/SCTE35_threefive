@@ -3,7 +3,7 @@ SCTE35 Splice Commands
 """
 from .tools import ifb
 
-NINETY_K = 900000.0
+NINETY_K = 90000.0
 
 class SpliceCommand:
     """
