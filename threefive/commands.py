@@ -4,11 +4,6 @@ SCTE35 Splice Commands
 from .tools import ifb
 
 NINETY_K = 900000.0
-ONE_TWENTY_EIGHT = 128
-SIXTY_FOUR = 64
-THIRTY_TWO = 32
-SIX_TEEN = 16
-
 
 class SpliceCommand:
     """
@@ -71,9 +66,7 @@ class TimeSignal(SpliceCommand):
         self.pts_time = None
 
     def as90k(self):
-        ttb = self.payload[self.idx] & 1 << THIRTY_TWO | ifb(
-            self.payload[self.idx + 1 : self.idx + 5]
-        )
+        ttb = self.payload[self.idx] & 1 << 32 | ifb(self.payload[self.idx + 1 : self.idx + 5])
         self.idx += 5
         return round((ttb / NINETY_K), 6)
 
@@ -81,9 +74,7 @@ class TimeSignal(SpliceCommand):
         """
         decode pts
         """
-        self.time_specified_flag = (
-            self.payload[self.idx] & ONE_TWENTY_EIGHT
-        ).__bool__()
+        self.time_specified_flag = (self.payload[self.idx] & 128).__bool__()
         if self.time_specified_flag:
             self.pts_time = self.as90k()
         else:
@@ -117,7 +108,7 @@ class SpliceInsert(TimeSignal):
         SpliceInsert.parse_break(bitbin) is called
         if SpliceInsert.duration_flag is set
         """
-        self.break_auto_return = (self.payload[self.idx] & ONE_TWENTY_EIGHT).__bool__()
+        self.break_auto_return = (self.payload[self.idx] & 128).__bool__()
         self.break_duration = self.as90k()
 
     def decode(self):
@@ -126,17 +117,13 @@ class SpliceInsert(TimeSignal):
         """
         self.splice_event_id = ifb(self.payload[self.idx : self.idx + 4])
         self.idx += 4
-        self.splice_event_cancel_indicator = (
-            self.payload[self.idx] & ONE_TWENTY_EIGHT
-        ).__bool__()
+        self.splice_event_cancel_indicator = (self.payload[self.idx] & 128).__bool__()
         self.idx += 1
         if not self.splice_event_cancel_indicator:
-            self.out_of_network_indicator = (
-                self.payload[self.idx] & ONE_TWENTY_EIGHT
-            ).__bool__()
-            self.program_splice_flag = (self.payload[self.idx] & SIXTY_FOUR).__bool__()
-            self.duration_flag = (self.payload[self.idx] & THIRTY_TWO).__bool__()
-            self.splice_immediate_flag = (self.payload[self.idx] & SIX_TEEN).__bool__()
+            self.out_of_network_indicator = (self.payload[self.idx] & 128).__bool__()
+            self.program_splice_flag = (self.payload[self.idx] & 64).__bool__()
+            self.duration_flag = (self.payload[self.idx] & 32).__bool__()
+            self.splice_immediate_flag = (self.payload[self.idx] & 16).__bool__()
             self.idx += 1
             if self.program_splice_flag and not self.splice_immediate_flag:
                 super().decode()
