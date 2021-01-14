@@ -4,6 +4,7 @@ section.py
 SCTE35 Splice Info Section
 """
 from threefive.tools import ifb
+from .const import PTS_TICKS_PER_SECOND
 
 
 class SpliceInfoSection:
@@ -38,7 +39,7 @@ class SpliceInfoSection:
         """
         self.pts_adjustment = bites[4] & 1 << 32
         self.pts_adjustment |= ifb(bites[5:9])
-        self.pts_adjustment /= 90000.0
+        self.pts_adjustment /= PTS_TICKS_PER_SECOND
 
     def decode(self, bites):
         """

@@ -2,8 +2,8 @@
 SCTE35 Splice Commands
 """
 from .tools import ifb
+from .const import PTS_TICKS_PER_SECOND
 
-NINETY_K = 90000.0
 
 class SpliceCommand:
     """
@@ -68,7 +68,7 @@ class TimeSignal(SpliceCommand):
     def as90k(self):
         ttb = self.payload[self.idx] & 1 << 32 | ifb(self.payload[self.idx + 1 : self.idx + 5])
         self.idx += 5
-        return round((ttb / NINETY_K), 6)
+        return round((ttb / PTS_TICKS_PER_SECOND), 6)
 
     def decode(self):  # 40bits
         """
