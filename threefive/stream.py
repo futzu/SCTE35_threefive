@@ -45,9 +45,9 @@ class Stream:
             self._CMD_TYPES.append(0)
         self._scte35_pids = set()
         self._pid_prog = {}
+        self._pid_pts = {}
         self._pmt_pids = set()
         self._programs = set()
-        self._prog_pts = {}
         self.info = None
         self.the_program = None
         self.cue = None
@@ -112,8 +112,8 @@ class Stream:
         if pid in self._pid_prog:
             prgm = self._pid_prog[pid]
             packet_data["program"] = prgm
-            if prgm in self._prog_pts:
-                packet_data["pts"] = round(self._prog_pts[prgm], 6)
+            if prgm in self._pid_pts:
+                packet_data["pts"] = round(self._pid_pts[prgm], 6)
         return packet_data
 
     def _parser(self, pkt):
@@ -147,14 +147,14 @@ class Stream:
     def _parse_pts(self, pkt, pid):
         """
         parse pts and store by program key
-        in the dict Stream._prog_pts
+        in the dict Stream._pid_pts
         """
         pts = ((pkt[13] >> 1) & 7) << 30
         pts |= ((pkt[14] << 7) | (pkt[15] >> 1)) << 15
         pts |= (pkt[16] << 7) | (pkt[17] >> 1)
         pts /= PTS_TICKS_PER_SECOND
         ppp = self._pid_prog[pid]
-        self._prog_pts[ppp] = pts
+        self._pid_pts[ppp] = pts
 
     def _parse_pusi(self, pkt, pid):
         """
