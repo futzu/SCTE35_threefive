@@ -162,7 +162,7 @@ class Cue:
         parse descriptor loop length,
         then call Cue._descriptorloop
         """
-        dll = ifb(payload[0:2])
+        dll = payload[0] << 8 | payload[1]
         self.info_section.descriptor_loop_length = dll
         payload = payload[2:]
         self._descriptorloop(payload, dll)
@@ -190,7 +190,7 @@ class Cue:
             self.command.decode()
             self.command.payload = None
             payload = payload[self.command.idx :]
-            self.command.idx = None
+            # self.command.idx = None
         return payload
 
     def _set_splice_descriptor(self, payload):
