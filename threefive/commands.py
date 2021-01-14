@@ -65,10 +65,8 @@ class TimeSignal(SpliceCommand):
         self.pts_time = None
 
     def as90k(self):
-        ttb = self.payload[self.idx] & 1 << 32 | ifb(
-            self.payload[self.idx + 1 : self.idx + 5]
-        )
-        self.idx += 5
+        ttb = self.payload[self.idx] & 1 << 32 | ifb(self.payload[self.idx+1:self.idx+5])
+        self.idx +=5
         return round((ttb / 90000.0), 6)
 
     def decode(self):  # 40bits
@@ -121,10 +119,10 @@ class SpliceInsert(TimeSignal):
         self.splice_event_cancel_indicator = (self.payload[self.idx] >> 7).__bool__()
         self.idx += 1
         if not self.splice_event_cancel_indicator:
-            self.out_of_network_indicator = (self.payload[self.idx] >> 7).__bool__()
-            self.program_splice_flag = ((self.payload[self.idx] >> 6) & 1).__bool__()
-            self.duration_flag = ((self.payload[self.idx] >> 5) & 1).__bool__()
-            self.splice_immediate_flag = ((self.payload[self.idx] >> 4) & 1).__bool__()
+            self.out_of_network_indicator = (self.payload[self.idx] & 128).__bool__()
+            self.program_splice_flag = (self.payload[self.idx] & 64).__bool__()
+            self.duration_flag = (self.payload[self.idx] & 32).__bool__()
+            self.splice_immediate_flag = (self.payload[self.idx] & 16).__bool__()
             self.idx += 1
             if self.program_splice_flag and not self.splice_immediate_flag:
                 super().decode()  # uint8 + uint32
