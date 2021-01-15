@@ -47,6 +47,7 @@ class Stream:
         self._pid_prog = {}
         self._pid_pts = {}
         self._pmt_pids = set()
+        self._prog_pmt_pid = {}
         self._programs = set()
         self.info = None
         self.the_program = None
@@ -126,7 +127,7 @@ class Stream:
             self._program_association_table(pkt)
             return None
         if pid in self._pmt_pids:
-            self._program_map_section(pkt)
+            self._program_map_section(pkt, pid)
             return None
         if self.info:
             return None
@@ -216,10 +217,11 @@ class Stream:
             if program_number != 0:
                 pmt_pid = self._parse_pid(pat_data[idx + 2], pat_data[idx + 3])
                 self._pmt_pids.add(pmt_pid)
+                self._prog_pmt_pid[program_number] = pmt_pid
             idx += chunk_size
         self.pat = None
 
-    def _program_map_section(self, pkt):
+    def _program_map_section(self, pkt, pid):
         """
         parse program maps for streams
         """
@@ -229,6 +231,11 @@ class Stream:
         # version = pkt[10] >> 1 & 31
         # current_next = pkt[10] & 1
         if self.the_program and (program_number != self.the_program):
+            return None
+        if (
+            program_number not in self._prog_pmt_pid
+            or pid != self._prog_pmt_pid[program_number]
+        ):
             return None
         # section_number = pkt[11]
         # last_section_number = pkt[12]
