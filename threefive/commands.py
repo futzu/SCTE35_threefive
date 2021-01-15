@@ -69,7 +69,7 @@ class TimeSignal(SpliceCommand):
 
     def as90k(self):
         _end = self.idx + 5  # 5 bytes of 8 bits = 40 bits
-        _ttb = self.bites[self.idx] & 1 << 32  # the +1 below
+        _ttb = (self.bites[self.idx] & 1) << 32  # the +1 below
         _ttb |= ifb(self.bites[self.idx + 1 : _end])
         self.idx = _end
         return round((_ttb / PTS_TICKS_PER_SECOND), 6)
