@@ -46,14 +46,14 @@ class Cue:
 
     def __init__(self, data, packet_data=None):
         """
-        data may be packet payload or encoded string
+        data may be packet bites or encoded string
         packet_data is a dict passed from a Stream instance
         """
         self.info_section = None
         self.command = None
         self.descriptors = []
         data = self._strip_header(data)
-        self.payload = self._mk_bits(data)
+        self.bites = self._mk_bits(data)
         self.packet_data = packet_data
 
     def __repr__(self):
@@ -63,23 +63,23 @@ class Cue:
         """
         Cue.decode() parses for SCTE35 data
         """
-        payload = self.mk_info_section(self.payload)
-        payload = self._set_splice_command(payload)
-        payload = self._mk_descriptors(payload)
-        self.info_section.crc = hex(ifb(payload[0:4]))
+        bites = self.mk_info_section(self.bites)
+        bites = self._set_splice_command(bites)
+        bites = self._mk_descriptors(bites)
+        self.info_section.crc = hex(ifb(bites[0:4]))
 
-    def _descriptorloop(self, payload, dll):
+    def _descriptorloop(self, bites, dll):
         """
         parse all splice descriptors
         """
         while dll:
-            spliced = self._set_splice_descriptor(payload)
+            spliced = self._set_splice_descriptor(bites)
             if not spliced:
                 return
             sdl = spliced.descriptor_length
             bump = sdl + 2
             dll -= bump
-            payload = payload[bump:]
+            bites = bites[bump:]
             self.descriptors.append(spliced)
 
     def get(self):
@@ -157,53 +157,53 @@ class Cue:
         except Exception:
             return data
 
-    def _mk_descriptors(self, payload):
+    def _mk_descriptors(self, bites):
         """
         parse descriptor loop length,
         then call Cue._descriptorloop
         """
-        dll = payload[0] << 8 | payload[1]
+        dll = bites[0] << 8 | bites[1]
         self.info_section.descriptor_loop_length = dll
-        payload = payload[2:]
-        self._descriptorloop(payload, dll)
-        return payload[dll:]
+        bites = bites[2:]
+        self._descriptorloop(bites, dll)
+        return bites[dll:]
 
-    def mk_info_section(self, payload):
+    def mk_info_section(self, bites):
         """
         parses the Splice Info Section
         of a SCTE35 cue.
         """
         info_size = 14
-        info_payload = payload[:info_size]
+        info_bites = bites[:info_size]
         self.info_section = SpliceInfoSection()
-        self.info_section.decode(info_payload)
-        return payload[info_size:]
+        self.info_section.decode(info_bites)
+        return bites[info_size:]
 
-    def _set_splice_command(self, payload):
+    def _set_splice_command(self, bites):
         """
         parses the command section
         of a SCTE35 cue.
         """
         sct = self.info_section.splice_command_type
-        self.command = mk_command(sct, payload)
+        self.command = mk_command(sct, bites)
         if self.command:
             self.command.decode()
-            self.command.payload = None
-            payload = payload[self.command.idx :]
-            self.command.idx = None
-        return payload
+            del self.command.bites
+            bites = bites[self.command.idx :]
+            del self.command.idx
+        return bites
 
-    def _set_splice_descriptor(self, payload):
+    def _set_splice_descriptor(self, bites):
         """
         Splice Descriptor looked up in self._descriptor_map
         and decoded.
         """
         # splice_descriptor_tag 8 uimsbf
-        tag = payload[0]
-        desc_len = payload[1]
-        payload = payload[2:]
-        bitbin = BitBin(payload[:desc_len])
-        payload = payload[desc_len:]
+        tag = bites[0]
+        desc_len = bites[1]
+        bites = bites[2:]
+        bitbin = BitBin(bites[:desc_len])
+        bites = bites[desc_len:]
         if tag not in self._descriptor_map:
             return False
         spliced = self._descriptor_map[tag](tag)

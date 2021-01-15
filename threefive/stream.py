@@ -181,12 +181,12 @@ class Stream:
             if pkt[18] in self._CMD_TYPES:
                 self.cue = Cue(pkt[:19], packet_data)
                 self.cue.mk_info_section(pkt[5:19])
-                self.cue.payload += pkt[19:]
+                self.cue.bites += pkt[19:]
             else:
                 return None
         else:
-            self.cue.payload += pkt[4:]
-        if (self.cue.info_section.section_length + 3) <= len(self.cue.payload):
+            self.cue.bites += pkt[4:]
+        if (self.cue.info_section.section_length + 3) <= len(self.cue.bites):
             self.cue.decode()
             cue = self.cue
             self.cue = None
