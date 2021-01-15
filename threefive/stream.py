@@ -207,10 +207,11 @@ class Stream:
             return
         pat_data = self.pat["data"]
         sec_len = self.pat["sectionlen"]
-        sec_len -= 5
+        sec_len -= 5  # bytes not read
+        sec_len -= 4  # skip CRC at the end
         chunk_size = 4  # 4 bytes per program -> pid mapping
         idx = 0
-        while idx < sec_len:
+        while idx + 3 < sec_len:
             program_number = pat_data[idx] << 8 | pat_data[idx + 1]
             if program_number != 0:
                 pmt_pid = self._parse_pid(pat_data[idx + 2], pat_data[idx + 3])
@@ -252,6 +253,8 @@ class Stream:
             end_idx = (idx + si_len) - chunk_size
             while idx < end_idx:
                 stream_type, pid, ei_len = self._parse_stream_type(pkt, idx)
+                if stream_type == None:
+                    break
                 idx += chunk_size
                 idx += ei_len
                 self._pid_prog[pid] = program_number
@@ -266,6 +269,8 @@ class Stream:
         """
         extract stream pid and type
         """
+        if len(pkt) <= idx + 4:
+            return None, None, None
         stream_type = hex(pkt[idx])  # 1 byte
         el_pid = self._parse_pid(pkt[idx + 1], pkt[idx + 2])  # 2 bytes
         ei_len = (pkt[idx + 3] & 15) << 8 | pkt[idx + 4]  # 2 bytes
