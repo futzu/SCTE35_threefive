@@ -199,7 +199,7 @@ class Stream:
         """
         if not self.pat:
             self.pat = {}
-            self.pat["sectionlen"] = (pkt[6] & 15 << 8) | pkt[7]
+            self.pat["sectionlen"] = ((pkt[6] & 15) << 8) | pkt[7]
             self.pat["data"] = pkt[13:]
         else:
             self.pat["data"] += pkt[4:]
@@ -223,7 +223,7 @@ class Stream:
         parse program maps for streams
         """
         # table_id = pkt[5]
-        sectioninfolen = (pkt[6] & 15 << 8) | pkt[7]
+        sectioninfolen = ((pkt[6] & 15) << 8) | pkt[7]
         program_number = (pkt[8] << 8) | pkt[9]
         # version = pkt[10] >> 1 & 31
         # current_next = pkt[10] & 1
@@ -232,7 +232,7 @@ class Stream:
         # section_number = pkt[11]
         # last_section_number = pkt[12]
         # pcr_pid = (pkt[13]& 31) << 8 | pkt[14]
-        proginfolen = (pkt[15] & 15 << 8) | pkt[16]
+        proginfolen = ((pkt[15] & 15) << 8) | pkt[16]
         idx = 17
         idx += proginfolen
         si_len = sectioninfolen - 9
