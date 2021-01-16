@@ -10,17 +10,10 @@ class SpliceCommand:
     Base class, not used directly.
     """
 
-    def __init__(self, bites):
+    def __init__(self, bites=None):
         self.idx = 0
         self.bites = bites
         self.name = None
-
-    def decode(self):
-        """
-        SpliceCommand.decode defines
-        a standard interface for
-        SpliceCommand subclasses.
-        """
 
 
 class BandwidthReservation(SpliceCommand):
@@ -61,7 +54,7 @@ class TimeSignal(SpliceCommand):
     Table 10 - time_signal()
     """
 
-    def __init__(self, bites):
+    def __init__(self, bites=None):
         super().__init__(bites)
         self.name = "Time Signal"
         self.time_specified_flag = None
@@ -91,7 +84,7 @@ class SpliceInsert(TimeSignal):
     Table 9 - splice_insert()
     """
 
-    def __init__(self, bites):
+    def __init__(self, bites=None):
         super().__init__(bites)
         self.name = "Splice Insert"
         self.break_auto_return = None
@@ -117,10 +110,12 @@ class SpliceInsert(TimeSignal):
         self.break_auto_return = bool(_bar)
         self.break_duration = self.as90k()
 
-    def _parse_event(self):
+    def _parse_event_id(self):
         _end = self.idx + 4
         self.splice_event_id = ifb(self.bites[self.idx : _end])
         self.idx = _end
+
+    def _parse_event_cancel(self):
         _seci = self.bites[self.idx] & 0x80
         self.splice_event_cancel_indicator = bool(_seci)
         self.idx += 1
@@ -159,13 +154,14 @@ class SpliceInsert(TimeSignal):
         """
         SpliceInsert.decode
         """
-        self._parse_event()
+        self._parse_event_id()
+        self._parse_event_cancel()
         if not self.splice_event_cancel_indicator:
             self._parse_flags()
             if self.program_splice_flag:
                 if not self.splice_immediate_flag:
                     super().decode()
-            if not self.program_splice_flag:
+            else:
                 self._parse_components()
                 if not self.splice_immediate_flag:
                     super().decode()

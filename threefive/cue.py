@@ -146,7 +146,10 @@ class Cue:
             # Handles hex byte strings
             i = int(data, 16)
             i_l = i.bit_length() >> 3
-            return int.to_bytes(i, i_l, byteorder="big")
+            bites = int.to_bytes(i, i_l, byteorder="big")
+            print(bites)
+            return bites
+
         except:
             if data[:2].lower() == "0x":
                 data = data[2:]
