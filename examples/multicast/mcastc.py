@@ -13,7 +13,7 @@ def foundit(cue):
     """
     for custom SCTE-35 cue data handling
     pass a function in to Stream.decode.
-    
+
     example:
             Stream.decode(func=foundit)
     """
