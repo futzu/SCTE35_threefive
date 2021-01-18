@@ -6,7 +6,7 @@ import sys
 from functools import partial
 from .cue import Cue
 from .streamtype import stream_type_map
-from .tools import CMD_TYPES, to_stderr
+from .tools import to_stderr
 from .const import PTS_TICKS_PER_SECOND
 
 
@@ -22,8 +22,6 @@ class Stream:
     """
     Stream class for parsing MPEG-TS data.
     """
-
-    _CMD_TYPES = CMD_TYPES
     _PACKET_SIZE = 188
 
     def __init__(self, tsdata, show_null=False):
@@ -41,8 +39,7 @@ class Stream:
 
         """
         self._tsdata = tsdata
-        if show_null:
-            self._CMD_TYPES.append(0)
+        self.show_null = show_null
         self._scte35_pids = set()
         self._pid_prog = {}
         self._pid_pts = {}
@@ -178,12 +175,11 @@ class Stream:
                 self._scte35_pids.discard(pid)
                 return None
             packet_data = self._mk_packet_data(pid)
-            if pkt[18] in self._CMD_TYPES:
-                self.cue = Cue(pkt[:19], packet_data)
-                self.cue.mk_info_section(pkt[5:19])
-                self.cue.bites += pkt[19:]
-            else:
+            if (pkt[18]  == 0) and (not self.show_null):
                 return None
+            self.cue = Cue(pkt[:19], packet_data)
+            self.cue.mk_info_section(pkt[5:19])
+            self.cue.bites += pkt[19:]
         else:
             self.cue.bites += pkt[4:]
         if (self.cue.info_section.section_length + 3) <= len(self.cue.bites):

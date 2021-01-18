@@ -8,10 +8,6 @@ throughout threefive.
 import sys
 
 
-# splice command types
-CMD_TYPES = [5, 6, 7, 255]
-
-
 def i2b(i, wide):
     """
     i2b is a wrapper for int.to_bytes
