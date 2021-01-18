@@ -11,7 +11,6 @@ class SpliceCommand:
     """
 
     def __init__(self, bites=None):
-        self.idx = 0
         self.bites = bites
         self.name = None
 
@@ -44,9 +43,7 @@ class PrivateCommand(SpliceCommand):
         decode private command
         """
         self.name = "Private Command"
-        _end = self.idx + 3  # 3 bytes of 8 bits = 24 bits
-        self.identifier = ifb(self.bites[self.idx : _end])
-        self.idx = _end
+        self.identifier = ifb(self.bites[0:3])  # 3 bytes of 8 bits = 24 bits
 
 
 class TimeSignal(SpliceCommand):
@@ -56,27 +53,37 @@ class TimeSignal(SpliceCommand):
 
     def __init__(self, bites=None):
         super().__init__(bites)
+        self._idx = 0
         self.name = "Time Signal"
         self.time_specified_flag = None
         self.pts_time = None
 
+    def idx(self, n=None):
+        """
+         return self._idx
+         or 
+        increment self._idx  and return self._idx
+        """
+        if n:
+            self._idx += n
+        return self._idx
+
     def as90k(self):
-        _end = self.idx + 5  # 5 bytes of 8 bits = 40 bits
-        _ttb = (self.bites[self.idx] & 1) << 32  # the +1 below
-        _ttb |= ifb(self.bites[self.idx + 1 : _end])
-        self.idx = _end
+        # 5 bytes of 8 bits = 40 bits
+        _ttb = (self.bites[self.idx()] & 1) << 32
+        _ttb |= ifb(self.bites[self.idx(1) : self.idx(4)])
         return round((_ttb / PTS_TICKS_PER_SECOND), 6)
 
     def decode(self):  # 40bits
         """
         decode pts
         """
-        _tsf = self.bites[self.idx] & 0x80
+        _tsf = self.bites[self.idx()] & 0x80
         self.time_specified_flag = bool(_tsf)
         if self.time_specified_flag:
             self.pts_time = self.as90k()
         else:
-            self.idx += 1
+            self.idx(1)
 
 
 class SpliceInsert(TimeSignal):
@@ -106,49 +113,44 @@ class SpliceInsert(TimeSignal):
         SpliceInsert.parse_break(bitbin) is called
         if SpliceInsert.duration_flag is set
         """
-        _bar = self.bites[self.idx] & 0x80
+        _bar = self.bites[self.idx()] & 0x80
         self.break_auto_return = bool(_bar)
         self.break_duration = self.as90k()
 
     def _parse_event_id(self):
-        _end = self.idx + 4
-        self.splice_event_id = ifb(self.bites[self.idx : _end])
-        self.idx = _end
+        four_bytes = self.bites[self.idx() : self.idx(4)]
+        self.splice_event_id = ifb(four_bytes)
 
     def _parse_event_cancel(self):
-        _seci = self.bites[self.idx] & 0x80
+        _seci = self.bites[self.idx()] & 0x80
         self.splice_event_cancel_indicator = bool(_seci)
-        self.idx += 1
+        self.idx(1)
 
     def _parse_flags(self):
-        _ooni = self.bites[self.idx] & 0x80
-        self.out_of_network_indicator = bool(_ooni)
-        _psf = self.bites[self.idx] & 0x40
-        self.program_splice_flag = bool(_psf)
-        _df = self.bites[self.idx] & 0x20
-        self.duration_flag = bool(_df)
-        _sif = self.bites[self.idx] & 0x10
-        self.splice_immediate_flag = bool(_sif)
-        self.idx += 1
+        bite = self.bites[self.idx()]
+        mask = 0x80
+        self.out_of_network_indicator = bool(bite & mask)
+        self.program_splice_flag = bool(bite & (mask >> 1))
+        self.duration_flag = bool(bite & (mask >> 2))
+        self.splice_immediate_flag = bool(bite & (mask >> 3))
+        self.idx(1)
 
     def _parse_components(self):
-        self.component_count = self.bites[self.idx]
-        self.idx += 1
+        self.component_count = self.bites[self.idx()]
+        self.idx(1)
         self.components = []
         for i in range(0, self.component_count):
-            self.components[i] = self.bites[self.idx]
-            self.idx += 1
+            self.components[i] = self.bites[self.idx()]
+            self._idx(1)
 
     def _parse_uniq(self):
-        _end = self.idx + 2
-        self.unique_program_id = ifb(self.bites[self.idx : _end])
-        self.idx = _end
+        two_bytes = self.bites[self.idx() : self.idx(2)]
+        self.unique_program_id = ifb(two_bytes)
 
     def _parse_avail(self):
-        self.avail_num = self.bites[self.idx]
-        self.idx += 1
-        self.avail_expected = self.bites[self.idx]
-        self.idx += 1
+        self.avail_num = self.bites[self.idx()]
+        self.avail_expected = self.bites[self.idx(1)]
+        self.idx(1)
 
     def decode(self):
         """

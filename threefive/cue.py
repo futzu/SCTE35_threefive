@@ -165,7 +165,7 @@ class Cue:
         parse descriptor loop length,
         then call Cue._descriptorloop
         """
-        dll = bites[0] << 8 | bites[1]
+        dll = (bites[0] << 8) | bites[1]
         self.info_section.descriptor_loop_length = dll
         bites = bites[2:]
         self._descriptorloop(bites, dll)
@@ -192,8 +192,8 @@ class Cue:
         if self.command:
             self.command.decode()
             del self.command.bites
-            bites = bites[self.command.idx :]
-            del self.command.idx
+            bites = bites[self.command._idx :]
+            del self.command._idx
         return bites
 
     def _set_splice_descriptor(self, bites):
