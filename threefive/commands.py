@@ -110,7 +110,7 @@ class SpliceInsert(TimeSignal):
 
     def _parse_break(self):
         """
-        SpliceInsert.parse_break(bitbin) is called
+        SpliceInsert.parse_break() is called
         if SpliceInsert.duration_flag is set
         """
         _bar = self.bites[self.idx()] & 0x80

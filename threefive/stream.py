@@ -22,6 +22,7 @@ class Stream:
     """
     Stream class for parsing MPEG-TS data.
     """
+
     _PACKET_SIZE = 188
 
     def __init__(self, tsdata, show_null=False):
@@ -175,7 +176,7 @@ class Stream:
                 self._scte35_pids.discard(pid)
                 return None
             packet_data = self._mk_packet_data(pid)
-            if (pkt[18]  == 0) and (not self.show_null):
+            if (pkt[18] == 0) and (not self.show_null):
                 return None
             self.cue = Cue(pkt[:19], packet_data)
             self.cue.mk_info_section(pkt[5:19])
@@ -256,7 +257,7 @@ class Stream:
             end_idx = (idx + si_len) - chunk_size
             while idx < end_idx:
                 stream_type, pid, ei_len = self._parse_stream_type(pkt, idx)
-                if stream_type == None:
+                if not stream_type:
                     break
                 idx += chunk_size
                 idx += ei_len
