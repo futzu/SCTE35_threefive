@@ -13,12 +13,17 @@ class SpliceDescriptor:
     It should not be used directly
     """
 
-    def __init__(self):
+    def __init__(self, bites=None):
         self.tag = None
         self.descriptor_length = None
         self.identifier = None
+        self.bites = bites
+        if bites:
+            self.tag = bites[0]
+            self.descriptor_length = bites[1]
+            self.bites = bites[2:]
 
-    def decode(self, bitbin):
+    def decode(self):
         """
         SpliceDescriptor subclasses
         must implement a decode method.
@@ -39,15 +44,16 @@ class AvailDescriptor(SpliceDescriptor):
     Table 17 -  avail_descriptor()
     """
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, bites):
+        super().__init__(bites)
         self.name = "Avail Descriptor"
         self.provider_avail_id = None
 
-    def decode(self, bitbin):
+    def decode(self):
         """
         decode SCTE35 Avail Descriptor
         """
+        bitbin = BitBin(self.bites)
         self.parse_id(bitbin)
         self.provider_avail_id = bitbin.asint(32)
 
@@ -57,17 +63,18 @@ class DtmfDescriptor(SpliceDescriptor):
     Table 18 -  DTMF_descriptor()
     """
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, bites):
+        super().__init__(bites)
         self.name = "DTMF Descriptor"
         self.preroll = None
         self.dtmf_count = None
         self.dtmf_chars = []
 
-    def decode(self, bitbin):
+    def decode(self):
         """
         decode SCTE35 Dtmf Descriptor
         """
+        bitbin = BitBin(self.bites)
         self.parse_id(bitbin)
         self.preroll = bitbin.asint(8)
         self.dtmf_count = d_c = bitbin.asint(3)
@@ -82,17 +89,18 @@ class TimeDescriptor(SpliceDescriptor):
     Table 25 - time_descriptor()
     """
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, bites):
+        super().__init__(bites)
         self.name = "Time Descriptor"
         self.tai_seconds = None
         self.tai_ns = None
         self.utc_offset = None
 
-    def decode(self, bitbin):
+    def decode(self):
         """
         decode SCTE35 Time Descriptor
         """
+        bitbin = BitBin(self.bites)
         self.parse_id(bitbin)
         self.tai_seconds = bitbin.asint(48)
         self.tai_ns = bitbin.asint(32)
@@ -104,16 +112,17 @@ class AudioDescriptor(SpliceDescriptor):
     Table 26 - audio_descriptor()
     """
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, bites):
+        super().__init__(bites)
         self.name = "Audio Descriptor"
         self.components = []
         self.audio_count = None
 
-    def decode(self, bitbin):
+    def decode(self):
         """
         Decode SCTE35 Audio Descriptor
         """
+        bitbin = BitBin(self.bites)
         self.parse_id(bitbin)
         self.audio_count = a_c = bitbin.asint(4)
         bitbin.forward(4)
@@ -133,8 +142,8 @@ class SegmentationDescriptor(SpliceDescriptor):
     Table 19 - segmentation_descriptor()
     """
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, bites):
+        super().__init__(bites)
         self.name = "Segmentation Descriptor"
         self.segmentation_event_id = None
         self.segmentation_event_cancel_indicator = None
@@ -158,10 +167,11 @@ class SegmentationDescriptor(SpliceDescriptor):
         self.sub_segment_num = None
         self.sub_segments_expected = None
 
-    def decode(self, bitbin):
+    def decode(self):
         """
         decode a segmentation descriptor
         """
+        bitbin = BitBin(self.bites)
         self.parse_id(bitbin)
         self.segmentation_event_id = bitbin.ashex(32)  # 4 bytes
         self.segmentation_event_cancel_indicator = bitbin.asflag(1)
@@ -327,10 +337,6 @@ def mk_splice_descriptor(bites):
     tag = bites[0]
     if tag not in descriptor_map:
         return False
-    spliced = descriptor_map[tag]()
-    spliced.tag = tag
-    spliced.descriptor_length = bites[1]
-    bites = bites[2:]
-    bitbin = BitBin(bites)
-    spliced.decode(bitbin)
+    spliced = descriptor_map[tag](bites)
+    spliced.decode()
     return spliced

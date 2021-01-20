@@ -8,6 +8,7 @@ from .section import SpliceInfoSection
 from .commands import mk_splice_command
 from .descriptors import mk_splice_descriptor
 from .tools import (
+    i2b,
     ifb,
     to_stderr,
 )
@@ -64,6 +65,7 @@ class Cue:
             bump = sdl + 2
             dll -= bump
             bites = bites[bump:]
+            del spliced.bites
             self.descriptors.append(spliced)
 
     def get(self):
@@ -130,8 +132,7 @@ class Cue:
             # Handles hex byte strings
             i = int(data, 16)
             i_l = i.bit_length() >> 3
-            bites = int.to_bytes(i, i_l, byteorder="big")
-            print(bites)
+            bites = i2b(i, i_l)
             return bites
 
         except:
@@ -174,10 +175,8 @@ class Cue:
         sct = self.info_section.splice_command_type
         self.command = mk_splice_command(sct, bites)
         if self.command:
-            self.command.decode()
             del self.command.bites
-            bites = bites[self.command._idx :]
-            del self.command._idx
+            bites = bites[self.command.command_length :]
         return bites
 
     def show(self):
