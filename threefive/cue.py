@@ -134,7 +134,6 @@ class Cue:
             i_l = i.bit_length() >> 3
             bites = i2b(i, i_l)
             return bites
-
         except:
             if data[:2].lower() == "0x":
                 data = data[2:]

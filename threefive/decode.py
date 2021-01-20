@@ -51,7 +51,6 @@ def _read_stuff(stuff):
                     Stream(tsdata).decode()
             except Exception:
                 pass
-    return
 
 
 def decode(stuff=None):

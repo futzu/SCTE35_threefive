@@ -11,21 +11,18 @@ class SpliceCommand:
     """
 
     def __init__(self, bites=None):
-        self._idx = 0
+        self.command_length = 0
         self.bites = bites
         self.name = None
 
-    def idx(self, n=None):
+    def idx(self, incr=None):
         """
-        return self._idx
-        or
-        increment and return self._idx
+        return or  increment and return
+        the current index of self.bites while decoding
         """
-        if not self._idx:
-            self._idx = 0
-        if n:
-            self._idx += n
-        return self._idx
+        if incr:
+            self.command_length += incr
+        return self.command_length
 
 
 class BandwidthReservation(SpliceCommand):
@@ -51,6 +48,10 @@ class PrivateCommand(SpliceCommand):
     Table 12 - private_command
     """
 
+    def __init__(self, bites=None):
+        super().__init__(bites)
+        self.identifier = None
+
     def decode(self):
         """
         decode private command
@@ -72,6 +73,12 @@ class TimeSignal(SpliceCommand):
         self.time_specified_flag = None
         self.pts_time = None
 
+    def bit8(self):
+        """
+        return bit 8 of the current byte as a boolean
+        """
+        return bool(self.bites[self.idx()] & 0x80)
+
     def as90k(self):
         # 5 bytes of 8 bits = 40 bits
         ttb = (self.bites[self.idx()] & 1) << 32
@@ -82,8 +89,7 @@ class TimeSignal(SpliceCommand):
         """
         decode pts
         """
-        tsf = self.bites[self.idx()] & 0x80
-        self.time_specified_flag = bool(tsf)
+        self.time_specified_flag = self.bit8()
         if self.time_specified_flag:
             self.pts_time = self.as90k()
         else:
@@ -117,7 +123,7 @@ class SpliceInsert(TimeSignal):
         SpliceInsert.parse_break() is called
         if SpliceInsert.duration_flag is set
         """
-        self.break_auto_return = bool(self.bites[self.idx()] & 0x80)
+        self.break_auto_return = self.bit8()
         self.break_duration = self.as90k()
 
     def _parse_event_id(self):
@@ -125,7 +131,7 @@ class SpliceInsert(TimeSignal):
         self.splice_event_id = ifb(four_bytes)
 
     def _parse_event_cancel(self):
-        self.splice_event_cancel_indicator = bool(self.bites[self.idx()] & 0x80)
+        self.splice_event_cancel_indicator = self.bit8()
         self.idx(1)
 
     def _parse_flags(self):
@@ -143,7 +149,7 @@ class SpliceInsert(TimeSignal):
         self.components = []
         for i in range(0, self.component_count):
             self.components[i] = self.bites[self.idx()]
-            self._idx(1)
+            self.idx(1)
 
     def _parse_uniq(self):
         two_bytes = self.bites[self.idx() : self.idx(2)]
@@ -188,7 +194,5 @@ def mk_splice_command(sct, bites):
     if sct in command_map:
         cmd = command_map[sct](bites)
         cmd.decode()
-        cmd.command_length = cmd._idx
-        del cmd._idx
         return cmd
     return False
