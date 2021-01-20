@@ -61,7 +61,7 @@ class TimeSignal(SpliceCommand):
     def idx(self, n=None):
         """
         return self._idx
-        or 
+        or
         increment and return self._idx
         """
         if n:
