@@ -1,7 +1,8 @@
 """
 SCTE35 Splice Descriptors
 """
-
+from bitn import BitBin
+from .segmentation import SegmentationDescriptor
 from .tools import i2b, to_stderr
 
 
@@ -11,11 +12,6 @@ class SpliceDescriptor:
     base class for all splice descriptors.
     It should not be used directly
     """
-
-    def __init__(self, tag):
-        self.tag = tag
-        # identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
-        self.identifier = None
 
     def decode(self, bitbin):
         """
@@ -37,8 +33,8 @@ class AvailDescriptor(SpliceDescriptor):
     Table 17 -  avail_descriptor()
     """
 
-    def __init__(self, tag):
-        super().__init__(tag)
+    def __init__(self):
+        self.identifier = None
         self.name = "Avail Descriptor"
         self.provider_avail_id = None
 
@@ -55,8 +51,8 @@ class DtmfDescriptor(SpliceDescriptor):
     Table 18 -  DTMF_descriptor()
     """
 
-    def __init__(self, tag):
-        super().__init__(tag)
+    def __init__(self):
+        self.identifier = None
         self.name = "DTMF Descriptor"
         self.preroll = None
         self.dtmf_count = None
@@ -80,8 +76,8 @@ class TimeDescriptor(SpliceDescriptor):
     Table 25 - time_descriptor()
     """
 
-    def __init__(self, tag):
-        super().__init__(tag)
+    def __init__(self):
+        self.identifier = None
         self.name = "Time Descriptor"
         self.tai_seconds = None
         self.tai_ns = None
@@ -102,8 +98,8 @@ class AudioDescriptor(SpliceDescriptor):
     Table 26 - audio_descriptor()
     """
 
-    def __init__(self, tag):
-        super().__init__(tag)
+    def __init__(self):
+        self.identifier = None
         self.name = "Audio Descriptor"
         self.components = []
         self.audio_count = None
@@ -124,3 +120,31 @@ class AudioDescriptor(SpliceDescriptor):
             comp["num_channels"] = bitbin.asint(4)
             comp["full_srvc_audio"] = bitbin.asflag(1)
             self.components.append(comp)
+
+
+# map of known descriptors and associated classes
+descriptor_map = {
+    0: AvailDescriptor,
+    1: DtmfDescriptor,
+    2: SegmentationDescriptor,
+    3: TimeDescriptor,
+    4: AudioDescriptor,
+}
+
+
+def mk_splice_descriptor(bites):
+    """
+    Splice Descriptor looked up in self._descriptor_map
+    and decoded.
+    """
+    # splice_descriptor_tag 8 uimsbf
+    tag = bites[0]
+    if tag not in descriptor_map:
+        return False
+    spliced = descriptor_map[tag]()
+    spliced.tag = tag
+    spliced.descriptor_length = bites[1]
+    bites = bites[2:]
+    bitbin = BitBin(bites)
+    spliced.decode(bitbin)
+    return spliced

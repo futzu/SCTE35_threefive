@@ -257,8 +257,8 @@ class Stream:
             end_idx = (idx + si_len) - chunk_size
             while idx < end_idx:
                 stream_type, pid, ei_len = self._parse_stream_type(pkt, idx)
-                if not stream_type:
-                    break
+                # if not stream_type:
+                #    break
                 idx += chunk_size
                 idx += ei_len
                 self._pid_prog[pid] = program_number

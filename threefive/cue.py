@@ -4,16 +4,9 @@ threefive.Cue Class
 
 import json
 from base64 import b64decode
-from bitn import BitBin
-from .segmentation import SegmentationDescriptor
 from .section import SpliceInfoSection
-from .commands import mk_command
-from .descriptors import (
-    AvailDescriptor,
-    DtmfDescriptor,
-    TimeDescriptor,
-    AudioDescriptor,
-)
+from .commands import mk_splice_command
+from .descriptors import mk_splice_descriptor
 from .tools import (
     ifb,
     to_stderr,
@@ -34,15 +27,6 @@ class Cue:
     scte35.show()
 
     """
-
-    # map of known descriptors and associated classes
-    _descriptor_map = {
-        0: AvailDescriptor,
-        1: DtmfDescriptor,
-        2: SegmentationDescriptor,
-        3: TimeDescriptor,
-        4: AudioDescriptor,
-    }
 
     def __init__(self, data, packet_data=None):
         """
@@ -73,7 +57,7 @@ class Cue:
         parse all splice descriptors
         """
         while dll:
-            spliced = self._set_splice_descriptor(bites)
+            spliced = mk_splice_descriptor(bites)
             if not spliced:
                 return
             sdl = spliced.descriptor_length
@@ -188,31 +172,13 @@ class Cue:
         of a SCTE35 cue.
         """
         sct = self.info_section.splice_command_type
-        self.command = mk_command(sct, bites)
+        self.command = mk_splice_command(sct, bites)
         if self.command:
             self.command.decode()
             del self.command.bites
             bites = bites[self.command._idx :]
             del self.command._idx
         return bites
-
-    def _set_splice_descriptor(self, bites):
-        """
-        Splice Descriptor looked up in self._descriptor_map
-        and decoded.
-        """
-        # splice_descriptor_tag 8 uimsbf
-        tag = bites[0]
-        desc_len = bites[1]
-        bites = bites[2:]
-        bitbin = BitBin(bites[:desc_len])
-        bites = bites[desc_len:]
-        if tag not in self._descriptor_map:
-            return False
-        spliced = self._descriptor_map[tag](tag)
-        spliced.decode(bitbin)
-        spliced.descriptor_length = desc_len
-        return spliced
 
     def show(self):
         """

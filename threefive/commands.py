@@ -182,7 +182,7 @@ command_map = {
 }
 
 
-def mk_command(sct, bites):
+def mk_splice_command(sct, bites):
     if sct in command_map:
         cmd = command_map[sct](bites)
         return cmd

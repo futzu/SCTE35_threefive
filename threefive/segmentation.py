@@ -4,9 +4,6 @@ segmentation.py
 SCTE35 Segmentation Descriptors
 """
 
-from .descriptors import SpliceDescriptor
-
-
 """
 Table 20 from page 58 of
 https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
@@ -64,13 +61,14 @@ table22 = {
 }
 
 
-class SegmentationDescriptor(SpliceDescriptor):
+class SegmentationDescriptor:
     """
     Table 19 - segmentation_descriptor()
     """
 
-    def __init__(self, tag):
-        super().__init__(tag)
+    def __init__(self):
+        # identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
+        self.identifier = None
         self.name = "Segmentation Descriptor"
         self.segmentation_event_id = None
         self.segmentation_event_cancel_indicator = None
@@ -98,7 +96,7 @@ class SegmentationDescriptor(SpliceDescriptor):
         """
         decode a segmentation descriptor
         """
-        self.parse_id(bitbin)
+        self.identifier = bitbin.asdecodedhex(32)
         self.segmentation_event_id = bitbin.ashex(32)  # 4 bytes
         self.segmentation_event_cancel_indicator = bitbin.asflag(1)
         bitbin.forward(7)  # 1 byte
