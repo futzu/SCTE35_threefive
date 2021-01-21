@@ -131,7 +131,7 @@ class Cue:
         try:
             # Handles hex byte strings
             i = int(data, 16)
-            i_len= i.bit_length() >> 3
+            i_len = i.bit_length() >> 3
             bites = i2b(i, i_len)
             return bites
         except:

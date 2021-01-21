@@ -58,10 +58,9 @@ class PrivateCommand(SpliceCommand):
         decode private command
         """
         self.name = "Private Command"
-        self.identifier = ifb(
-            self.bites[0:3]
-        )  # 3 bytes of 8 bits = 24 bits
+        self.identifier = ifb(self.bites[0:3])  # 3 bytes of 8 bits = 24 bits
         self.command_length = 3
+
 
 class TimeSignal(SpliceCommand):
     """
@@ -81,10 +80,10 @@ class TimeSignal(SpliceCommand):
         bitbin = BitBin(self.bites)
         start = bitbin.idx
         self.parse_pts(bitbin)
-        self._set_len(start,bitbin.idx)
+        self._set_len(start, bitbin.idx)
 
-    def _set_len(self,start,end):
-        self.command_length = (start - end ) >> 3
+    def _set_len(self, start, end):
+        self.command_length = (start - end) >> 3
 
     def parse_pts(self, bitbin):
         """
@@ -98,6 +97,7 @@ class TimeSignal(SpliceCommand):
             self.pts_time = bitbin.as90k(33)
         else:
             bitbin.forward(7)
+
 
 class SpliceInsert(TimeSignal):
     """
@@ -130,7 +130,7 @@ class SpliceInsert(TimeSignal):
         bitbin.forward(6)
         self.break_duration = bitbin.as90k(33)
 
-    def _parse_flags(self,bitbin):
+    def _parse_flags(self, bitbin):
         """
         SpliceInsert._parse_flags set fout flags
         and is called from SpliceInsert.decode()
@@ -141,7 +141,7 @@ class SpliceInsert(TimeSignal):
         self.splice_immediate_flag = bitbin.asflag(1)
         bitbin.forward(4)
 
-    def _parse_components(self,bitbin):
+    def _parse_components(self, bitbin):
         """
         SpliceInsert._parse_components loops
         over SpliceInsert.components,
@@ -175,7 +175,7 @@ class SpliceInsert(TimeSignal):
             self.unique_program_id = bitbin.asint(16)
             self.avail_num = bitbin.asint(8)
             self.avail_expected = bitbin.asint(8)
-        self._set_len(start,bitbin.idx)
+        self._set_len(start, bitbin.idx)
 
 
 command_map = {
@@ -185,6 +185,7 @@ command_map = {
     7: BandwidthReservation,
     255: PrivateCommand,
 }
+
 
 def mk_splice_command(sct, bites):
     """
