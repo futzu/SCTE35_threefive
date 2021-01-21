@@ -131,8 +131,8 @@ class Cue:
         try:
             # Handles hex byte strings
             i = int(data, 16)
-            i_l = i.bit_length() >> 3
-            bites = i2b(i, i_l)
+            i_len= i.bit_length() >> 3
+            bites = i2b(i, i_len)
             return bites
         except:
             if data[:2].lower() == "0x":

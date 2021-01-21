@@ -1,8 +1,8 @@
 """
 SCTE35 Splice Commands
 """
+from bitn import BitBin
 from .tools import ifb
-from .const import PTS_TICKS_PER_SECOND
 
 
 class SpliceCommand:
@@ -15,14 +15,15 @@ class SpliceCommand:
         self.bites = bites
         self.name = None
 
-    def idx(self, incr=None):
+    def decode(self):
         """
-        return or  increment and return
-        the current index of self.bites while decoding
+        decode
         """
-        if incr:
-            self.command_length += incr
-        return self.command_length
+
+    def encode(self):
+        """
+        encode
+        """
 
 
 class BandwidthReservation(SpliceCommand):
@@ -58,9 +59,9 @@ class PrivateCommand(SpliceCommand):
         """
         self.name = "Private Command"
         self.identifier = ifb(
-            self.bites[0 : self.idx(3)]
+            self.bites[0:3]
         )  # 3 bytes of 8 bits = 24 bits
-
+        self.command_length = 3
 
 class TimeSignal(SpliceCommand):
     """
@@ -73,28 +74,30 @@ class TimeSignal(SpliceCommand):
         self.time_specified_flag = None
         self.pts_time = None
 
-    def bit8(self):
+    def decode(self):
         """
-        return bit 8 of the current byte as a boolean
+        decode is called only by a TimeSignal instance
         """
-        return bool(self.bites[self.idx()] & 0x80)
+        bitbin = BitBin(self.bites)
+        start = bitbin.idx
+        self.parse_pts(bitbin)
+        self._set_len(start,bitbin.idx)
 
-    def as90k(self):
-        # 5 bytes of 8 bits = 40 bits
-        ttb = (self.bites[self.idx()] & 1) << 32
-        ttb |= ifb(self.bites[self.idx(1) : self.idx(4)])
-        return round((ttb / PTS_TICKS_PER_SECOND), 6)
+    def _set_len(self,start,end):
+        self.command_length = (start - end ) >> 3
 
-    def decode(self):  # 40bits
+    def parse_pts(self, bitbin):
         """
-        decode pts
+        parse_pts is called by either a
+        TimeSignal or SpliceInsert instance
+        to decode pts.
         """
-        self.time_specified_flag = self.bit8()
+        self.time_specified_flag = bitbin.asflag(1)
         if self.time_specified_flag:
-            self.pts_time = self.as90k()
+            bitbin.forward(6)
+            self.pts_time = bitbin.as90k(33)
         else:
-            self.idx(1)
-
+            bitbin.forward(7)
 
 class SpliceInsert(TimeSignal):
     """
@@ -118,67 +121,61 @@ class SpliceInsert(TimeSignal):
         self.avail_num = None
         self.avail_expected = None
 
-    def _parse_break(self):
+    def parse_break(self, bitbin):
         """
-        SpliceInsert.parse_break() is called
+        SpliceInsert.parse_break(bitbin) is called
         if SpliceInsert.duration_flag is set
         """
-        self.break_auto_return = self.bit8()
-        self.break_duration = self.as90k()
+        self.break_auto_return = bitbin.asflag(1)
+        bitbin.forward(6)
+        self.break_duration = bitbin.as90k(33)
 
-    def _parse_event_id(self):
-        four_bytes = self.bites[self.idx() : self.idx(4)]
-        self.splice_event_id = ifb(four_bytes)
+    def _parse_flags(self,bitbin):
+        """
+        SpliceInsert._parse_flags set fout flags
+        and is called from SpliceInsert.decode()
+        """
+        self.out_of_network_indicator = bitbin.asflag(1)
+        self.program_splice_flag = bitbin.asflag(1)
+        self.duration_flag = bitbin.asflag(1)
+        self.splice_immediate_flag = bitbin.asflag(1)
+        bitbin.forward(4)
 
-    def _parse_event_cancel(self):
-        self.splice_event_cancel_indicator = self.bit8()
-        self.idx(1)
-
-    def _parse_flags(self):
-        bite = self.bites[self.idx()]
-        mask = 0x80
-        self.out_of_network_indicator = bool(bite & mask)
-        self.program_splice_flag = bool(bite & (mask >> 1))
-        self.duration_flag = bool(bite & (mask >> 2))
-        self.splice_immediate_flag = bool(bite & (mask >> 3))
-        self.idx(1)
-
-    def _parse_components(self):
-        self.component_count = self.bites[self.idx()]
-        self.idx(1)
+    def _parse_components(self,bitbin):
+        """
+        SpliceInsert._parse_components loops
+        over SpliceInsert.components,
+        and is called from SpliceInsert.decode()
+        """
+        self.component_count = bitbin.asint(8)
         self.components = []
         for i in range(0, self.component_count):
-            self.components[i] = self.bites[self.idx()]
-            self.idx(1)
-
-    def _parse_uniq(self):
-        two_bytes = self.bites[self.idx() : self.idx(2)]
-        self.unique_program_id = ifb(two_bytes)
-
-    def _parse_avail(self):
-        self.avail_num = self.bites[self.idx()]
-        self.avail_expected = self.bites[self.idx(1)]
-        self.idx(1)
+            self.components[i] = bitbin.asint(8)
 
     def decode(self):
         """
         SpliceInsert.decode
         """
-        self._parse_event_id()
-        self._parse_event_cancel()
+        bitbin = BitBin(self.bites)
+        start = bitbin.idx
+        self.splice_event_id = bitbin.asint(32)
+        self.splice_event_cancel_indicator = bitbin.asflag(1)
+        bitbin.forward(7)
         if not self.splice_event_cancel_indicator:
-            self._parse_flags()
+            self._parse_flags(bitbin)
             if self.program_splice_flag:
                 if not self.splice_immediate_flag:
-                    super().decode()
+                    self.parse_pts(bitbin)
             else:
-                self._parse_components()
+                self._parse_components(bitbin)
                 if not self.splice_immediate_flag:
-                    super().decode()
+                    self.parse_pts(bitbin)
             if self.duration_flag:
-                self._parse_break()
-            self._parse_uniq()
-            self._parse_avail()
+                self.parse_break(bitbin)
+            self.unique_program_id = bitbin.asint(16)
+            self.avail_num = bitbin.asint(8)
+            self.avail_expected = bitbin.asint(8)
+        self._set_len(start,bitbin.idx)
 
 
 command_map = {
@@ -189,8 +186,11 @@ command_map = {
     255: PrivateCommand,
 }
 
-
 def mk_splice_command(sct, bites):
+    """
+    returns an instance
+    command_map[sct]
+    """
     if sct in command_map:
         cmd = command_map[sct](bites)
         cmd.decode()

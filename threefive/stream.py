@@ -230,9 +230,9 @@ class Stream:
         if self.the_program and (program_number != self.the_program):
             return None
         if (
-            program_number not in self._prog_pmt_pid
-            or pid != self._prog_pmt_pid[program_number]
-        ):
+             program_number not in self._prog_pmt_pid
+             or pid != self._prog_pmt_pid[program_number]
+         ):
             return None
         # section_number = pkt[11]
         # last_section_number = pkt[12]
