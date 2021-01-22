@@ -1,7 +1,7 @@
 """
 SCTE35 Splice Commands
 """
-from bitn import BitBin
+from bitn import BitBin, NBin
 from .tools import ifb
 
 
@@ -61,12 +61,18 @@ class PrivateCommand(SpliceCommand):
         self.identifier = ifb(self.bites[0:3])  # 3 bytes of 8 bits = 24 bits
         self.command_length = 3
 
+    def encode(self):
+        """
+        encode private command
+        """
+        nbin= NBin()
+        nbin.add_int(self.identifier,24) # 3 bytes of 8 bits = 24 bits
+        return nbin.bites
 
 class TimeSignal(SpliceCommand):
     """
     Table 10 - time_signal()
     """
-
     def __init__(self, bites=None):
         super().__init__(bites)
         self.name = "Time Signal"
@@ -79,13 +85,22 @@ class TimeSignal(SpliceCommand):
         """
         bitbin = BitBin(self.bites)
         start = bitbin.idx
-        self.parse_pts(bitbin)
+        self._parse_pts(bitbin)
         self._set_len(start, bitbin.idx)
+
+    def encode(self):
+        """
+        encode coverts TimeSignal vars
+        to bytes
+        """
+        nbin = NBin()
+        self._encode_pts(nbin)
+        return nbin.bites
 
     def _set_len(self, start, end):
         self.command_length = (start - end) >> 3
 
-    def parse_pts(self, bitbin):
+    def _parse_pts(self, bitbin):
         """
         parse_pts is called by either a
         TimeSignal or SpliceInsert instance
@@ -98,6 +113,13 @@ class TimeSignal(SpliceCommand):
         else:
             bitbin.forward(7)
 
+    def _encode_pts(self,nbin):
+        nbin.add_flag(self.time_specified_flag)
+        if self.time_specified_flag:
+            nbin.reserve(6)
+            nbin.add_90k(self.pts_time,33)
+        else:
+            nbin.reserve(7)
 
 class SpliceInsert(TimeSignal):
     """
@@ -121,18 +143,27 @@ class SpliceInsert(TimeSignal):
         self.avail_num = None
         self.avail_expected = None
 
-    def parse_break(self, bitbin):
+    def _parse_break(self, bitbin):
         """
-        SpliceInsert.parse_break(bitbin) is called
+        SpliceInsert._parse_break(bitbin) is called
         if SpliceInsert.duration_flag is set
         """
         self.break_auto_return = bitbin.asflag(1)
         bitbin.forward(6)
         self.break_duration = bitbin.as90k(33)
 
+    def _encode_break(self, nbin):
+        """
+        SpliceInsert._encode_break(nbin) is called
+        if SpliceInsert.duration_flag is set
+        """
+        nbin.add_flag(self.break_auto_return)
+        nbin.forward(6)
+        nbin.add_90k(self.break_duration, 33)
+
     def _parse_flags(self, bitbin):
         """
-        SpliceInsert._parse_flags set fout flags
+        SpliceInsert._parse_flags set four flags
         and is called from SpliceInsert.decode()
         """
         self.out_of_network_indicator = bitbin.asflag(1)
@@ -140,6 +171,17 @@ class SpliceInsert(TimeSignal):
         self.duration_flag = bitbin.asflag(1)
         self.splice_immediate_flag = bitbin.asflag(1)
         bitbin.forward(4)
+
+    def _encode_flags(self, nbin):
+        """
+        SpliceInsert._encode_flags converts four flags
+        to bits
+        """
+        nbin.add_flag(self.out_of_network_indicator)
+        nbin.add_flag(self.program_splice_flag)
+        nbin.add_flag(self.duration_flag)
+        nbin.add_flag(self.splice_immediate_flag)
+        nbin.forward(4)
 
     def _parse_components(self, bitbin):
         """
@@ -151,6 +193,16 @@ class SpliceInsert(TimeSignal):
         self.components = []
         for i in range(0, self.component_count):
             self.components[i] = bitbin.asint(8)
+
+    def _encode_components(self, nbin):
+        """
+        SpliceInsert._encode_components loops
+        over SpliceInsert.components,
+        and is called from SpliceInsert.encode()
+        """
+        nbin.add_int(self.component_count, 8)
+        for i in range(0, self.component_count):
+            nbin.add_int(self.components[i], 8)
 
     def decode(self):
         """
@@ -165,18 +217,41 @@ class SpliceInsert(TimeSignal):
             self._parse_flags(bitbin)
             if self.program_splice_flag:
                 if not self.splice_immediate_flag:
-                    self.parse_pts(bitbin)
+                    self._parse_pts(bitbin)
             else:
                 self._parse_components(bitbin)
                 if not self.splice_immediate_flag:
-                    self.parse_pts(bitbin)
+                    self._parse_pts(bitbin)
             if self.duration_flag:
-                self.parse_break(bitbin)
+                self._parse_break(bitbin)
             self.unique_program_id = bitbin.asint(16)
             self.avail_num = bitbin.asint(8)
             self.avail_expected = bitbin.asint(8)
         self._set_len(start, bitbin.idx)
 
+    def encode(self):
+        """
+        SpliceInsert.encode
+        """
+        nbin = NBin()
+        nbin.add_int(self.splice_event_id, 32)
+        nbin.add_flag(self.splice_event_cancel_indicator)
+        nbin.forward(7)
+        if not self.splice_event_cancel_indicator:
+            self._encode_flags(nbin)
+            if self.program_splice_flag:
+                if not self.splice_immediate_flag:
+                    self._encode_pts(nbin)
+            else:
+                self._encode_components(nbin)
+                if not self.splice_immediate_flag:
+                    self._encode_pts(nbin)
+            if self.duration_flag:
+                self._encode_break(nbin)
+            nbin.add_int(self.unique_program_id, 16)
+            nbin.add_int(self.avail_num,  8)
+            nbin.add_int(self.avail_expected, 8)
+        return nbin.bites
 
 command_map = {
     0: SpliceNull,
@@ -187,8 +262,9 @@ command_map = {
 }
 
 
-def mk_splice_command(sct, bites):
+def splice_command(sct, bites):
     """
+    splice_command
     returns an instance
     command_map[sct]
     """

@@ -328,10 +328,11 @@ descriptor_map = {
 }
 
 
-def mk_splice_descriptor(bites):
+def splice_descriptor(bites):
     """
-    Splice Descriptor looked up in self._descriptor_map
-    and decoded.
+    splice_descriptor reads the
+    descriptor tag and decodes and
+    returns an instance self._descriptor_map[tag]
     """
     # splice_descriptor_tag 8 uimsbf
     tag = bites[0]

@@ -5,8 +5,8 @@ threefive.Cue Class
 import json
 from base64 import b64decode
 from .section import SpliceInfoSection
-from .commands import mk_splice_command
-from .descriptors import mk_splice_descriptor
+from .commands import splice_command
+from .descriptors import splice_descriptor
 from .tools import (
     i2b,
     ifb,
@@ -52,19 +52,31 @@ class Cue:
         bites = self._set_splice_command(bites)
         bites = self._mk_descriptors(bites)
         self.info_section.crc = hex(ifb(bites[0:4]))
+        to_stderr(f'\033[1mCue bytes before decoding\033[0m')
+        to_stderr(self.bites)
+        to_stderr(f'\033[1mCue values encoded up to splice_descriptor\033[0m\n\033[92m{self.encode()}\033[0m')
+        
+    def encode(self):
+        cue_bites = self.info_section.encode()
+        cue_bites += self.command.encode()
+        cue_bites += i2b(self.info_section.descriptor_loop_length,2)
+        return  cue_bites
+
 
     def _descriptorloop(self, bites, dll):
         """
         parse all splice descriptors
         """
+        tag_n_len_bites = 2 # 1 byte for descriptor tag,
+                                   #1 byte for descriptor length
         while dll:
-            spliced = mk_splice_descriptor(bites)
+            spliced = splice_descriptor(bites)
             if not spliced:
                 return
             sdl = spliced.descriptor_length
-            bump = sdl + 2
-            dll -= bump
-            bites = bites[bump:]
+            sd_size = tag_n_len_bites + sdl
+            dll -= sd_size
+            bites = bites[sd_size:]
             del spliced.bites
             self.descriptors.append(spliced)
 
@@ -172,7 +184,7 @@ class Cue:
         of a SCTE35 cue.
         """
         sct = self.info_section.splice_command_type
-        self.command = mk_splice_command(sct, bites)
+        self.command = splice_command(sct, bites)
         if self.command:
             del self.command.bites
             bites = bites[self.command.command_length :]

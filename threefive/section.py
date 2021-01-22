@@ -3,6 +3,7 @@ section.py
 
 SCTE35 Splice Info Section
 """
+from bitn import NBin
 from threefive.tools import ifb
 from .const import PTS_TICKS_PER_SECOND
 
@@ -64,3 +65,26 @@ class SpliceInfoSection:
         self.splice_command_length = (bites[11] & 15) << 8 | bites[12]
         self.splice_command_type = bites[13]
         self.descriptor_loop_length = 0
+        self.encode()
+
+    def encode(self):
+        """
+        SpliceInfoSection.encode
+        takes the vars from an instance and
+        encodes them as bytes\
+        """
+        nbin = NBin()
+        nbin.add_hex(self.table_id, 8)
+        nbin.add_flag(self.section_syntax_indicator)
+        nbin.add_flag(self.private)
+        nbin.reserve(2)
+        nbin.add_int(self.section_length, 12)
+        nbin.add_int(self.protocol_version, 8)
+        nbin.add_flag(self.encrypted_packet)
+        nbin.add_int(self.encryption_algorithm, 6)
+        nbin.add_90k(self.pts_adjustment, 33)
+        nbin.add_hex(self.cw_index, 8)
+        nbin.add_hex(self.tier, 12)
+        nbin.add_int(self.splice_command_length, 12)
+        nbin.add_int(self.splice_command_type, 8)
+        return nbin.bites
