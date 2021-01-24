@@ -1,7 +1,7 @@
 """
 SCTE35 Splice Descriptors
 """
-from bitn import BitBin
+from bitn import BitBin, NBin
 from .segmentation import table20, table22
 from .tools import i2b, to_stderr
 
@@ -38,13 +38,20 @@ class SpliceDescriptor:
         if self.identifier != "CUEI":
             to_stderr('Descriptors should have an identifier of "CUEI"')
 
+    def encode_id(self, nbin):
+        """
+        parse splice descriptor identifier
+        """
+        self.identifier = 0x43554549
+        nbin.add_hex(self.identifier, 32)
+
 
 class AvailDescriptor(SpliceDescriptor):
     """
     Table 17 -  avail_descriptor()
     """
 
-    def __init__(self, bites):
+    def __init__(self, bites=None):
         super().__init__(bites)
         self.name = "Avail Descriptor"
         self.provider_avail_id = None
@@ -57,13 +64,21 @@ class AvailDescriptor(SpliceDescriptor):
         self.parse_id(bitbin)
         self.provider_avail_id = bitbin.asint(32)
 
+    def encode(self):
+        """
+        encode SCTE35 Avail Descriptor
+        """
+        nbin = NBin()
+        self.encode_id(nbin)
+        nbin.add_int(self.provider_avail_id, 32)
+
 
 class DtmfDescriptor(SpliceDescriptor):
     """
     Table 18 -  DTMF_descriptor()
     """
 
-    def __init__(self, bites):
+    def __init__(self, bites=None):
         super().__init__(bites)
         self.name = "DTMF Descriptor"
         self.preroll = None
@@ -89,7 +104,7 @@ class TimeDescriptor(SpliceDescriptor):
     Table 25 - time_descriptor()
     """
 
-    def __init__(self, bites):
+    def __init__(self, bites=None):
         super().__init__(bites)
         self.name = "Time Descriptor"
         self.tai_seconds = None
@@ -106,13 +121,23 @@ class TimeDescriptor(SpliceDescriptor):
         self.tai_ns = bitbin.asint(32)
         self.utc_offset = bitbin.asint(16)
 
+    def encode(self):
+        """
+        encode SCTE35 Time Descriptor
+        """
+        nbin = NBin()
+        self.encode_id(nbin)
+        nbin.add_int(self.tai_seconds, 48)
+        nbin.add_int(self.tai_ns, 32)
+        nbin.add_int(self.utc_offset, 16)
+
 
 class AudioDescriptor(SpliceDescriptor):
     """
     Table 26 - audio_descriptor()
     """
 
-    def __init__(self, bites):
+    def __init__(self, bites=None):
         super().__init__(bites)
         self.name = "Audio Descriptor"
         self.components = []
@@ -142,7 +167,7 @@ class SegmentationDescriptor(SpliceDescriptor):
     Table 19 - segmentation_descriptor()
     """
 
-    def __init__(self, bites):
+    def __init__(self, bites=None):
         super().__init__(bites)
         self.name = "Segmentation Descriptor"
         self.segmentation_event_id = None
