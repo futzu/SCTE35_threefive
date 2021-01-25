@@ -1,6 +1,7 @@
 from bitn import BitBin
 import sys
 from functools import partial
+from streamtype import stream_type_map
 
 
 class Header:
@@ -19,15 +20,9 @@ class Header:
             af = AdaptationFields()
             af.decode(bitbin, self.pid)
         #    print(vars(af))
-        bitbin.forward(8)
-        if self.pid == 0:
-            print(vars(self))
-            if af:
-                print(vars(af))
-            p = Pas()
-            p.decode(bitbin)
-            print(vars(p))
-
+        else:
+            bitbin.forward(8)
+ 
 
 class Pas:
     def decode(self, bitbin):
@@ -39,23 +34,18 @@ class Pas:
         self.section_length = bitbin.asint(12)  # 3 bytes
         sl = self.section_length * 8
         self.transport_stream_id = bitbin.asint(16)  # 5 bytes
-        sl -= 16
         reserved = bitbin.asint(2)
-        sl -= 2
         self.version_number = bitbin.asint(5)
-        sl -= 5
         self.current_next_indicator = bitbin.asflag(1)  # 6 bytes
-        sl -= 1
         self.section_number = bitbin.asint(8)  # 7 bytes
-        sl -= 8
         self.last_section_number = bitbin.asint(8)  # 8 bytes
-        sl -= 8
+        sl -= 40
+        pmt_pids = set()
         while sl > 32:
             program_number = bitbin.asint(16)
             print("PROGRAM:", program_number)
-            sl -= 16
             bitbin.forward(3)
-            sl -= 3
+            sl -= 19
             if program_number == 0:
                 network_pid = bitbin.asint(13)
                 sl -= 13
@@ -63,20 +53,71 @@ class Pas:
             else:
                 pmap_pid = bitbin.asint(13)
                 sl -= 13
+                pmt_pids.add(pmap_pid)
                 print(f"\tProgram Map Table Pid {pmap_pid}")
         self.crc = bitbin.asint(32)
-        # print(vars(self))
+        return pmt_pids
 
 
-def parser(bitbin):
-    head = Header()
-    head.decode(bitbin)
+class Pmt:
+
+    def decode(self, bitbin):     
+        self.table_id = bitbin.asint(8)
+        self.section_syntax_indicator = bitbin.asflag(1)   
+        zero = bitbin.asflag(1)
+        reserved = bitbin.forward(2)
+        self.section_length  = bitbin.asint(12)
+        slb = self.section_length << 3
+        self.program_number  = bitbin.asint(16)
+        slb -= 16
+
+        
+        bitbin.forward(27)
+        slb -=27
+        """
+        reserved  = bitbin.asint(2) 
+        slb -=2
+        self.version_number   = bitbin.asint(5)
+        slb -= 5
+        self.current_next_indicator  = bitbin.asflag(1)
+        slb -= 1
+        self.section_number   = bitbin.asint(8)
+        slb -= 8
+        self.last_section_number  = bitbin.asint(8)                               
+        slb -= 8
+        reserved = bitbin.asint(3)                                                              
+        slb -= 3
+        """
+        self.PCR_PID  = bitbin.asint(13) # 13
+        reserved  = bitbin.forward(4)  # +4 = 17
+        self.program_info_length  = bitbin.asint(12) # + 29
+        slb -= 29
+        pil = self.program_info_length << 3
+        bitbin.forward(pil) # Skip descriptors
+        slb -= pil
+        print(f'Program {self.program_number} Streams') 
+        while slb >  40:
+            stream_type =  bitbin.ashex(8) # 8
+            reserved = bitbin.asint(3) # +3 =11
+            elementary_PID  = bitbin.asint(13) # +13 =24
+            reserved = bitbin.asint(4) # +4 = 28
+            ES_info_length  = bitbin.asint(12) # +12 =40
+            slb -= 40
+            slb -= (ES_info_length <<3)
+            bitbin.forward(ES_info_length << 3)
+            streaminfo = f"[{stream_type}] Reserved or Private"
+            if stream_type in stream_type_map:
+                streaminfo = f"[{stream_type}] {stream_type_map[stream_type]}"
+            if elementary_PID == self.PCR_PID:
+                streaminfo = f' {streaminfo} ( PCR_PID )'
+            print(f"\t{elementary_PID }: {streaminfo}")
+        self.CRC_32   = bitbin.asint( 32)
 
 
 class AdaptationFields:
     def decode(self, bitbin, pid):
         afl = self.adaptation_field_length = bitbin.asint(8)
-        # print(f'Packet Pid: {pid} Adaptation Field Length: {self.adaptation_field_length}')
+        print(f'Packet Pid: {pid} Adaptation Field Length: {self.adaptation_field_length}')
         afl >>= 3
         if self.adaptation_field_length < 1:
             return
@@ -95,13 +136,17 @@ class AdaptationFields:
             self.program_clock_reference_extension = bitbin.asint(9)  # 6 bytes
             print(f"PID: {pid} PCR {self.program_clock_reference_base}")
             afl -= 48
+
+        # AdaptationFields seems correct up to this point,
+        # the rest needs to be checked.
+        
         if self.OPCR_flag:
             self.original_program_clock_reference_base = bitbin.as90k(
                 33
             )  # start of 6 bytes
             reserved = bitbin.forward(6)
             self.original_program_clock_reference_extension = bitbin.asint(9)  # 6 bytes
-            #  print(f'PID: {pid} OPCR {self.original_program_clock_reference_base}')
+            print(f'PID: {pid} OPCR {self.original_program_clock_reference_base}')
             afl -= 48
         if self.splicing_point_flag:
             self.splice_countdown = bitbin.asint(8)  # 1 byte
@@ -139,15 +184,29 @@ class AdaptationFields:
             self.DTS_next_AU = bitbin.asint(15)  # 14-0
             marker_bit = bitbin.asflag(1)
 
-            #  for (i = 0; i < N; i++)
-            #      reserved = bitbin.asint(8)
+
+class StreamParser:
+    def __init__(self):
+        self.pmt_pids = set()
+
+    def parse(self):
+        with open(sys.argv[1], "rb") as tsdata:
+            for pkt in iter(partial(tsdata.read, 188), b""):
+                bitbin = BitBin(pkt)
+                head = Header()
+                head.decode(bitbin)
+                if head.pid == 0:
+                    p = Pas()
+                    self.pmt_pids |= p.decode(bitbin)
+                if head.pid in self.pmt_pids:
+                    pmt = Pmt()
+                    pmt.decode(bitbin)
 
 
 def do():
-    with open(sys.argv[1], "rb") as tsdata:
-        for pkt in iter(partial(tsdata.read, 188), b""):
-            bitbin = BitBin(pkt)
-            parser(bitbin)
+    sparser = StreamParser()
+    sparser.parse()
+
 
 
 if __name__ == "__main__":
