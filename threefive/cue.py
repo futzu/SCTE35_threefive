@@ -37,8 +37,8 @@ class Cue:
         self.info_section = None
         self.command = None
         self.descriptors = []
-        data = self._strip_header(data)
-        self.bites = self._mk_bits(data)
+        self.data = self._strip_header(data)
+        self.bites = self._mk_bits(self.data)
         self.packet_data = packet_data
 
     def __repr__(self):
@@ -48,13 +48,21 @@ class Cue:
         """
         Cue.decode() parses for SCTE35 data
         """
+        to_stderr(f" Cue.bites: {self.bites}")
         bites = self.mk_info_section(self.bites)
+        if not bites:
+            return False
         bites = self._set_splice_command(bites)
+        if not bites:
+            return False
         bites = self._mk_descriptors(bites)
+        if not bites:
+            return False
         self.info_section.crc = hex(ifb(bites[0:4]))
         # to_stderr(f'\033[1mCue bytes before decoding\033[0m')
         # to_stderr(self.bites)
         # to_stderr(f'\033[1mCue values encoded up to splice_descriptor\033[0m\n\033[92m{self.encode()}\033[0m')
+        return True
 
     def encode(self):
         cue_bites = self.info_section.encode()
@@ -84,14 +92,16 @@ class Cue:
         Returns a dict of dicts for all three parts
         of a SCTE 35 message.
         """
-        scte35 = {
-            "info_section": self.get_info_section(),
-            "command": self.get_command(),
-            "descriptors": self.get_descriptors(),
-        }
-        if self.packet_data:
-            scte35.update(self.get_packet_data())
-        return scte35
+        if self.command and self.info_section:
+            scte35 = {
+                "info_section": self.get_info_section(),
+                "command": self.get_command(),
+                "descriptors": self.get_descriptors(),
+            }
+            if self.packet_data:
+                scte35.update(self.get_packet_data())
+            return scte35
+        return False
 
     def get_command(self):
         """
@@ -160,7 +170,10 @@ class Cue:
         parse descriptor loop length,
         then call Cue._descriptorloop
         """
-        dll = (bites[0] << 8) | bites[1]
+        try:
+            dll = (bites[0] << 8) | bites[1]
+        except:
+            return False
         self.info_section.descriptor_loop_length = dll
         bites = bites[2:]
         self._descriptorloop(bites, dll)

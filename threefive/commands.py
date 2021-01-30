@@ -2,7 +2,7 @@
 SCTE35 Splice Commands
 """
 from bitn import BitBin, NBin
-from .tools import ifb
+from .tools import ifb, to_stderr
 
 
 class SpliceCommand:
@@ -60,6 +60,7 @@ class PrivateCommand(SpliceCommand):
         self.name = "Private Command"
         self.identifier = ifb(self.bites[0:3])  # 3 bytes of 8 bits = 24 bits
         self.command_length = 3
+        self.encode()
 
     def encode(self):
         """
@@ -67,7 +68,7 @@ class PrivateCommand(SpliceCommand):
         """
         nbin = NBin()
         nbin.add_int(self.identifier, 24)  # 3 bytes of 8 bits = 24 bits
-        return nbin.bites
+        to_stderr(f" command bytes {nbin.bites}")
 
 
 class TimeSignal(SpliceCommand):
@@ -89,6 +90,7 @@ class TimeSignal(SpliceCommand):
         start = bitbin.idx
         self._decode_pts(bitbin)
         self._set_len(start, bitbin.idx)
+        self.encode()
 
     def encode(self):
         """
@@ -97,7 +99,7 @@ class TimeSignal(SpliceCommand):
         """
         nbin = NBin()
         self._encode_pts(nbin)
-        return nbin.bites
+        to_stderr(f" command bytes {nbin.bites}")
 
     def _set_len(self, start, end):
         self.command_length = (start - end) >> 3
@@ -231,6 +233,7 @@ class SpliceInsert(TimeSignal):
             self.avail_num = bitbin.asint(8)
             self.avail_expected = bitbin.asint(8)
         self._set_len(start, bitbin.idx)
+        self.encode()
 
     def encode(self):
         """
@@ -254,7 +257,7 @@ class SpliceInsert(TimeSignal):
             nbin.add_int(self.unique_program_id, 16)
             nbin.add_int(self.avail_num, 8)
             nbin.add_int(self.avail_expected, 8)
-        return nbin.bites
+        to_stderr(f" command bytes {nbin.bites}")
 
 
 command_map = {
