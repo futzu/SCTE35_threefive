@@ -3,7 +3,7 @@ SCTE35 Splice Descriptors
 """
 from bitn import BitBin, NBin
 from .segmentation import table20, table22
-from .tools import i2b, to_stderr
+from .tools import i2b, ifb, to_stderr
 
 
 class SpliceDescriptor:
@@ -42,7 +42,7 @@ class SpliceDescriptor:
         """
         parse splice descriptor identifier
         """
-        self.identifier = 0x43554549
+        self.identifier = "0x43554549"
         nbin.add_hex(self.identifier, 32)
 
 
@@ -63,6 +63,7 @@ class AvailDescriptor(SpliceDescriptor):
         bitbin = BitBin(self.bites)
         self.parse_id(bitbin)
         self.provider_avail_id = bitbin.asint(32)
+        self.encode()
 
     def encode(self):
         """
@@ -71,6 +72,7 @@ class AvailDescriptor(SpliceDescriptor):
         nbin = NBin()
         self.encode_id(nbin)
         nbin.add_int(self.provider_avail_id, 32)
+        to_stderr(f" descriptor bytes {nbin.bites}")
 
 
 class DtmfDescriptor(SpliceDescriptor):
@@ -97,6 +99,22 @@ class DtmfDescriptor(SpliceDescriptor):
         while d_c:
             d_c -= 1
             self.dtmf_chars.append(i2b(bitbin.asint(8), 1).decode("utf-8"))
+        self.encode()
+
+    def encode(self):
+        """
+        encode SCTE35 DTMF Descriptor
+        """
+        nbin = NBin()
+        self.encode_id(nbin)
+        nbin.add_int(self.preroll, 8)
+        d_c = 0
+        nbin.add_int(self.dtmf_count, 3)
+        nbin.forward(5)
+        while d_c < self.dtmf_count:
+            nbin.add_int(ord(self.dtmf_chars[d_c]), 8)
+            d_c += 1
+        to_stderr(f" descriptor bytes {nbin.bites}")
 
 
 class TimeDescriptor(SpliceDescriptor):
@@ -130,6 +148,7 @@ class TimeDescriptor(SpliceDescriptor):
         nbin.add_int(self.tai_seconds, 48)
         nbin.add_int(self.tai_ns, 32)
         nbin.add_int(self.utc_offset, 16)
+        to_stderr(f" descriptor bytes {nbin.bites}")
 
 
 class AudioDescriptor(SpliceDescriptor):
