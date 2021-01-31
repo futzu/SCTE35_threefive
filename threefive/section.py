@@ -67,13 +67,14 @@ class SpliceInfoSection:
         self.descriptor_loop_length = 0
         self.encode()
 
-    def encode(self):
+    def encode(self, nbin=None):
         """
         SpliceInfoSection.encode
         takes the vars from an instance and
         encodes them as bytes.
         """
-        nbin = NBin()
+        if not nbin:
+            nbin = NBin()
         nbin.add_hex(self.table_id, 8)
         nbin.add_flag(self.section_syntax_indicator)
         nbin.add_flag(self.private)
@@ -87,4 +88,5 @@ class SpliceInfoSection:
         nbin.add_hex(self.tier, 12)
         nbin.add_int(self.splice_command_length, 12)
         nbin.add_int(self.splice_command_type, 8)
-        to_stderr(f"info section bytes {nbin.bites}")
+        # to_stderr(f"info section bytes {nbin.bites}")
+        return nbin

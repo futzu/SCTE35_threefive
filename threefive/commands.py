@@ -20,10 +20,13 @@ class SpliceCommand:
         decode
         """
 
-    def encode(self):
+    def encode(self, nbin=None):
         """
         encode
         """
+        if not nbin:
+            nbin = NBin()
+        return nbin
 
 
 class BandwidthReservation(SpliceCommand):
@@ -62,13 +65,14 @@ class PrivateCommand(SpliceCommand):
         self.command_length = 3
         self.encode()
 
-    def encode(self):
+    def encode(self, nbin=None):
         """
         encode private command
         """
-        nbin = NBin()
+        nbin = super().encode(nbin)
         nbin.add_int(self.identifier, 24)  # 3 bytes of 8 bits = 24 bits
-        to_stderr(f" command bytes {nbin.bites}")
+        # to_stderr(f" command bytes {nbin.bites}")
+        return nbin
 
 
 class TimeSignal(SpliceCommand):
@@ -90,16 +94,16 @@ class TimeSignal(SpliceCommand):
         start = bitbin.idx
         self._decode_pts(bitbin)
         self._set_len(start, bitbin.idx)
-        self.encode()
 
-    def encode(self):
+    def encode(self, nbin):
         """
         encode converts TimeSignal vars
         to bytes
         """
-        nbin = NBin()
+        nbin = super().encode(nbin)
         self._encode_pts(nbin)
-        to_stderr(f" command bytes {nbin.bites}")
+        #        to_stderr(f" command bytes {nbin.bites}")
+        return nbin
 
     def _set_len(self, start, end):
         self.command_length = (start - end) >> 3
@@ -233,13 +237,12 @@ class SpliceInsert(TimeSignal):
             self.avail_num = bitbin.asint(8)
             self.avail_expected = bitbin.asint(8)
         self._set_len(start, bitbin.idx)
-        self.encode()
 
-    def encode(self):
+    def encode(self, nbin=None):
         """
         SpliceInsert.encode
         """
-        nbin = NBin()
+        nbin = super().encode(nbin)
         nbin.add_int(self.splice_event_id, 32)
         nbin.add_flag(self.splice_event_cancel_indicator)
         nbin.forward(7)
@@ -257,7 +260,8 @@ class SpliceInsert(TimeSignal):
             nbin.add_int(self.unique_program_id, 16)
             nbin.add_int(self.avail_num, 8)
             nbin.add_int(self.avail_expected, 8)
-        to_stderr(f" command bytes {nbin.bites}")
+        # to_stderr(f" command bytes {nbin.bites}")
+        return nbin
 
 
 command_map = {
