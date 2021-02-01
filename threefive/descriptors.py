@@ -255,6 +255,24 @@ class SegmentationDescriptor(SpliceDescriptor):
                 self._set_components(bitbin)
             self._set_segmentation(bitbin)
 
+    def encode(self, nbin=None):
+        """
+        encode a segmentation descriptor
+        """
+
+        """
+        nbin = super().encode(nbin)
+        self.encode_id(nbin)
+        nbin.add_hex(self.segmentation_event_id, 32)  # 4 bytes
+        nbin.add_flag(self.segmentation_event_cancel_indicator)
+        nbin.forward(7)  # 1 byte
+        if not self.segmentation_event_cancel_indicator:
+            self._encode_flags(nbin)  # 1 byte
+            if not self.program_segmentation_flag:
+                self._encode_components(nbin)
+            self._encode_segmentation(nbin)
+        """
+
     def _set_components(self, bitbin):
         self.component_count = c_c = bitbin.asint(8)  # 1 byte
         while c_c:  # 6 bytes each
@@ -264,6 +282,16 @@ class SegmentationDescriptor(SpliceDescriptor):
             bitbin.forward(7)
             comp["pts_offset"] = bitbin.as90k(33)
             self.components.append(comp)
+
+    def _encode_components(self, nbin):
+        nbin.add_int(self.component_count, 8)  # 1 byte
+        c_c = 0
+        while c_c < self.component_count:  # 6 bytes each
+            comp = self.components[c_c]
+            nbin.add_int(comp["component_tag"], 8)
+            nbin.forward(7)
+            nbin.add_90k(comp["pts_offset"], 33)
+            c_c += 1
 
     def _set_flags(self, bitbin):  # 1 byte for set flags
         self.program_segmentation_flag = bitbin.asflag(1)
@@ -276,6 +304,20 @@ class SegmentationDescriptor(SpliceDescriptor):
             self.device_restrictions = table20[bitbin.asint(2)]
         else:
             bitbin.forward(5)
+
+    """
+    def _encode_flags(self, nbin):  # 1 byte for set flags
+        nbin.add_flag(self.program_segmentation_flag)
+        nbin.add_flag(self.segmentation_duration_flag)
+        nbin.add_flag(self.delivery_not_restricted_flag)
+        if not self.delivery_not_restricted_flag:
+            nbin.add_flag(self.web_delivery_allowed_flag)
+            nbin.add_flag(self.no_regional_blackout_flag)
+            nbin.add_flag(self.archive_allowed_flag)
+          >>>>  self.device_restrictions = table20[bitbin.asint(2)]
+        else:
+            nbin.forward(5)
+    """
 
     def _set_segmentation(self, bitbin):
         if self.segmentation_duration_flag:
