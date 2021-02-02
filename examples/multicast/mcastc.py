@@ -48,13 +48,13 @@ def mk_sock(mcast_host, mcast_ip, mcast_port):
     multicast socket setup
     """
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-    sock.bind((mcast_host, mcast_port))
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.setsockopt(
         socket.IPPROTO_IP,
         socket.IP_ADD_MEMBERSHIP,
         socket.inet_aton(mcast_ip) + socket.inet_aton(mcast_host),
     )
+    sock.bind((mcast_host, mcast_port))
     return sock
 
 
