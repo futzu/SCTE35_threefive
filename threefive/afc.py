@@ -1,7 +1,7 @@
 from bitn import BitBin
 import sys
 from functools import partial
-from streamtype import stream_type_map
+from threefive.streamtype import stream_type_map
 
 
 class Header:
