@@ -24,6 +24,10 @@ class SpliceCommand:
         """
         encode
         """
+        nbin = self._chk_nbin(nbin)
+        return nbin
+
+    def _chk_nbin(self, nbin):
         if not nbin:
             nbin = NBin()
         return nbin
@@ -69,7 +73,7 @@ class PrivateCommand(SpliceCommand):
         """
         encode private command
         """
-        nbin = super().encode(nbin)
+        nbin = self._chk_nbin(nbin)
         nbin.add_int(self.identifier, 24)  # 3 bytes of 8 bits = 24 bits
         # to_stderr(f" command bytes {nbin.bites}")
         return nbin
@@ -100,7 +104,7 @@ class TimeSignal(SpliceCommand):
         encode converts TimeSignal vars
         to bytes
         """
-        nbin = super().encode(nbin)
+        nbin = self._chk_nbin(nbin)
         self._encode_pts(nbin)
         #        to_stderr(f" command bytes {nbin.bites}")
         return nbin
@@ -242,7 +246,7 @@ class SpliceInsert(TimeSignal):
         """
         SpliceInsert.encode
         """
-        nbin = super().encode(nbin)
+        nbin = self._chk_nbin(nbin)
         nbin.add_int(self.splice_event_id, 32)
         nbin.add_flag(self.splice_event_cancel_indicator)
         nbin.forward(7)

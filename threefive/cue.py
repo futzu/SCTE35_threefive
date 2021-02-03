@@ -59,10 +59,6 @@ class Cue:
         if not bites:
             return False
         self.info_section.crc = hex(ifb(bites[0:4]))
-        # to_stderr(f'\033[1mCue bytes before decoding\033[0m')
-        # to_stderr(self.bites)
-        # to_stderr(f'\033[1mCue values encoded up to splice_descriptor\033[0m\n\033[92m{self.encode()}\033[0m')
-        self.encode()
         return True
 
     def encode(self):

@@ -52,12 +52,23 @@ class Stream:
         self.cue = None
         self.pat = None
 
+    def _find_start(self):
+        """
+        handles partial packets
+        """
+        sync_byte = b"G"
+        while self._tsdata:
+            if self._tsdata.read(1) == sync_byte:
+                if self._tsdata.read(self._PACKET_SIZE - 1):
+                    return
+
     def decode(self, func=show_cue):
         """
         Stream.decode reads self.tsdata to find SCTE35 packets.
         func can be set to a custom function that accepts
         a threefive.Cue instance as it's only argument.
         """
+        self._find_start()
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
             cue = self._parser(pkt)
             if cue:
@@ -70,6 +81,7 @@ class Stream:
         Stream.decode_next returns the next
         SCTE35 cue as a threefive.Cue instance.
         """
+        self._find_start()
         cue = self.decode(func=False)
         if cue:
             return cue
@@ -79,6 +91,7 @@ class Stream:
         Stream.decode_program limits SCTE35 parsing
         to a specific MPEGTS program.
         """
+        self._find_start()
         self.the_program = the_program
         self.decode(func)
 
@@ -88,6 +101,7 @@ class Stream:
         for piping into another program like mplayer.
         threefive always prints messages and such to stderr.
         """
+        self._find_start()
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
             sys.stdout.buffer.write(pkt)
             cue = self._parser(pkt)
