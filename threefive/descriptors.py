@@ -3,7 +3,7 @@ SCTE35 Splice Descriptors
 """
 from bitn import BitBin, NBin
 from .segmentation import table20, table22
-from .tools import i2b, ifb, to_stderr
+from .tools import i2b, to_stderr
 
 
 class SpliceDescriptor:
@@ -81,7 +81,6 @@ class AvailDescriptor(SpliceDescriptor):
         """
         nbin = super().encode(nbin)
         nbin.add_int(self.provider_avail_id, 32)
-        # to_stderr(f" descriptor bytes {nbin.bites}")
         return nbin
 
 
@@ -111,20 +110,19 @@ class DtmfDescriptor(SpliceDescriptor):
             self.dtmf_chars.append(i2b(bitbin.asint(8), 1).decode("utf-8"))
 
 
-def encode(self, nbin=None):
-    """
-        encode SCTE35 Dtmf Descriptor
+    def encode(self, nbin=None):
         """
-    nbin = super().encode(nbin)
-    nbin.add_int(self.preroll, 8)
-    d_c = 0
-    nbin.add_int(self.dtmf_count, 3)
-    nbin.forward(5)
-    while d_c < self.dtmf_count:
-        nbin.add_int(ord(self.dtmf_chars[d_c]), 8)
-        d_c += 1
-    # to_stderr(f" descriptor bytes {nbin.bites}")
-    return nbin
+            encode SCTE35 Dtmf Descriptor
+            """
+        nbin = super().encode(nbin)
+        nbin.add_int(self.preroll, 8)
+        d_c = 0
+        nbin.add_int(self.dtmf_count, 3)
+        nbin.forward(5)
+        while d_c < self.dtmf_count:
+            nbin.add_int(ord(self.dtmf_chars[d_c]), 8)
+            d_c += 1
+        return nbin
 
 
 class TimeDescriptor(SpliceDescriptor):
@@ -150,15 +148,15 @@ class TimeDescriptor(SpliceDescriptor):
         self.utc_offset = bitbin.asint(16)
 
 
-def encode(self, nbin=None):
-    """
-        encode SCTE35 Avail Descriptor
+    def encode(self, nbin=None):
         """
-    nbin = super().encode(nbin)
-    nbin.add_int(self.tai_seconds, 48)
-    nbin.add_int(self.tai_ns, 32)
-    nbin.add_int(self.utc_offset, 16)
-    return nbin
+            encode SCTE35 Avail Descriptor
+            """
+        nbin = super().encode(nbin)
+        nbin.add_int(self.tai_seconds, 48)
+        nbin.add_int(self.tai_ns, 32)
+        nbin.add_int(self.utc_offset, 16)
+        return nbin
 
 
 class AudioDescriptor(SpliceDescriptor):
@@ -191,22 +189,22 @@ class AudioDescriptor(SpliceDescriptor):
             self.components.append(comp)
 
 
-def encode(self, nbin=None):
-    """
-        encode SCTE35 Audio Descriptor
+    def encode(self, nbin=None):
         """
-    nbin = super().encode(nbin)
-    nbin.add_int(self.audio_count, 4)
-    nbin.forward(4)
-    a_c = 0
-    while a_c < self.audio_count:
-        comp = self.components[a_c]
-        nbin.add_int(comp["component_tag"], 8)
-        nbin.add_int(comp["ISO_code="], 24)
-        nbin.add_int(comp["bit_stream_mode"], 3)
-        nbin.add_int(comp["num_channels"], 4)
-        nbin.add_flag(comp["full_srvc_audio"])
-    return nbin
+            encode SCTE35 Audio Descriptor
+            """
+        nbin = super().encode(nbin)
+        nbin.add_int(self.audio_count, 4)
+        nbin.forward(4)
+        a_c = 0
+        while a_c < self.audio_count:
+            comp = self.components[a_c]
+            nbin.add_int(comp["component_tag"], 8)
+            nbin.add_int(comp["ISO_code="], 24)
+            nbin.add_int(comp["bit_stream_mode"], 3)
+            nbin.add_int(comp["num_channels"], 4)
+            nbin.add_flag(comp["full_srvc_audio"])
+        return nbin
 
 
 class SegmentationDescriptor(SpliceDescriptor):

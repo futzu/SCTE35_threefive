@@ -22,7 +22,7 @@ class Header:
         #    print(vars(af))
         else:
             bitbin.forward(8)
- 
+
 
 class Pas:
     def decode(self, bitbin):
@@ -60,20 +60,18 @@ class Pas:
 
 
 class Pmt:
-
-    def decode(self, bitbin):     
+    def decode(self, bitbin):
         self.table_id = bitbin.asint(8)
-        self.section_syntax_indicator = bitbin.asflag(1)   
+        self.section_syntax_indicator = bitbin.asflag(1)
         zero = bitbin.asflag(1)
         reserved = bitbin.forward(2)
-        self.section_length  = bitbin.asint(12)
+        self.section_length = bitbin.asint(12)
         slb = self.section_length << 3
-        self.program_number  = bitbin.asint(16)
+        self.program_number = bitbin.asint(16)
         slb -= 16
 
-        
         bitbin.forward(27)
-        slb -=27
+        slb -= 27
         """
         reserved  = bitbin.asint(2) 
         slb -=2
@@ -88,36 +86,38 @@ class Pmt:
         reserved = bitbin.asint(3)                                                              
         slb -= 3
         """
-        self.PCR_PID  = bitbin.asint(13) # 13
-        reserved  = bitbin.forward(4)  # +4 = 17
-        self.program_info_length  = bitbin.asint(12) # + 29
+        self.PCR_PID = bitbin.asint(13)  # 13
+        reserved = bitbin.forward(4)  # +4 = 17
+        self.program_info_length = bitbin.asint(12)  # + 29
         slb -= 29
         pil = self.program_info_length << 3
-        bitbin.forward(pil) # Skip descriptors
+        bitbin.forward(pil)  # Skip descriptors
         slb -= pil
-        print(f'Program {self.program_number} Streams') 
-        while slb >  40:
-            stream_type =  bitbin.ashex(8) # 8
-            reserved = bitbin.asint(3) # +3 =11
-            elementary_PID  = bitbin.asint(13) # +13 =24
-            reserved = bitbin.asint(4) # +4 = 28
-            ES_info_length  = bitbin.asint(12) # +12 =40
+        print(f"Program {self.program_number} Streams")
+        while slb > 40:
+            stream_type = bitbin.ashex(8)  # 8
+            reserved = bitbin.asint(3)  # +3 =11
+            elementary_PID = bitbin.asint(13)  # +13 =24
+            reserved = bitbin.asint(4)  # +4 = 28
+            ES_info_length = bitbin.asint(12)  # +12 =40
             slb -= 40
-            slb -= (ES_info_length <<3)
+            slb -= ES_info_length << 3
             bitbin.forward(ES_info_length << 3)
             streaminfo = f"[{stream_type}] Reserved or Private"
             if stream_type in stream_type_map:
                 streaminfo = f"[{stream_type}] {stream_type_map[stream_type]}"
             if elementary_PID == self.PCR_PID:
-                streaminfo = f' {streaminfo} ( PCR_PID )'
+                streaminfo = f" {streaminfo} ( PCR_PID )"
             print(f"\t{elementary_PID }: {streaminfo}")
-        self.CRC_32   = bitbin.asint( 32)
+        self.CRC_32 = bitbin.asint(32)
 
 
 class AdaptationFields:
     def decode(self, bitbin, pid):
         afl = self.adaptation_field_length = bitbin.asint(8)
-        print(f'Packet Pid: {pid} Adaptation Field Length: {self.adaptation_field_length}')
+        print(
+            f"Packet Pid: {pid} Adaptation Field Length: {self.adaptation_field_length}"
+        )
         afl >>= 3
         if self.adaptation_field_length < 1:
             return
@@ -139,14 +139,14 @@ class AdaptationFields:
 
         # AdaptationFields seems correct up to this point,
         # the rest needs to be checked.
-        
+
         if self.OPCR_flag:
             self.original_program_clock_reference_base = bitbin.as90k(
                 33
             )  # start of 6 bytes
             reserved = bitbin.forward(6)
             self.original_program_clock_reference_extension = bitbin.asint(9)  # 6 bytes
-            print(f'PID: {pid} OPCR {self.original_program_clock_reference_base}')
+            print(f"PID: {pid} OPCR {self.original_program_clock_reference_base}")
             afl -= 48
         if self.splicing_point_flag:
             self.splice_countdown = bitbin.asint(8)  # 1 byte
@@ -206,7 +206,6 @@ class StreamParser:
 def do():
     sparser = StreamParser()
     sparser.parse()
-
 
 
 if __name__ == "__main__":

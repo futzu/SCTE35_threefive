@@ -2,8 +2,7 @@
 SCTE35 Splice Commands
 """
 from bitn import BitBin, NBin
-from .tools import ifb, to_stderr
-
+from .tools import ifb
 
 class SpliceCommand:
     """
@@ -26,8 +25,8 @@ class SpliceCommand:
         """
         nbin = self._chk_nbin(nbin)
         return nbin
-
-    def _chk_nbin(self, nbin):
+    @staticmethod
+    def _chk_nbin(nbin):
         if not nbin:
             nbin = NBin()
         return nbin
@@ -75,7 +74,6 @@ class PrivateCommand(SpliceCommand):
         """
         nbin = self._chk_nbin(nbin)
         nbin.add_int(self.identifier, 24)  # 3 bytes of 8 bits = 24 bits
-        # to_stderr(f" command bytes {nbin.bites}")
         return nbin
 
 
@@ -106,7 +104,6 @@ class TimeSignal(SpliceCommand):
         """
         nbin = self._chk_nbin(nbin)
         self._encode_pts(nbin)
-        #        to_stderr(f" command bytes {nbin.bites}")
         return nbin
 
     def _set_len(self, start, end):
@@ -264,7 +261,6 @@ class SpliceInsert(TimeSignal):
             nbin.add_int(self.unique_program_id, 16)
             nbin.add_int(self.avail_num, 8)
             nbin.add_int(self.avail_expected, 8)
-        # to_stderr(f" command bytes {nbin.bites}")
         return nbin
 
 

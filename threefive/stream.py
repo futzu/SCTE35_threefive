@@ -58,9 +58,13 @@ class Stream:
         """
         sync_byte = b"G"
         while self._tsdata:
-            if self._tsdata.read(1) == sync_byte:
+            one = self._tsdata.read(1)
+            if not one:
+                raise Exception("No Packets Found")
+            if one == sync_byte:
                 if self._tsdata.read(self._PACKET_SIZE - 1):
-                    return
+                    return True
+        raise Exception("No Packets Found")
 
     def decode(self, func=show_cue):
         """

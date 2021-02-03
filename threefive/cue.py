@@ -51,14 +51,15 @@ class Cue:
         """
         bites = self.mk_info_section(self.bites)
         if not bites:
-            return False
+            raise Exception("Boom")
         bites = self._set_splice_command(bites)
         if not bites:
-            return False
+            raise Exception("Boom")
         bites = self._mk_descriptors(bites)
         if not bites:
-            return False
+            raise Exception("Boom")
         self.info_section.crc = hex(ifb(bites[0:4]))
+        # self.encode()
         return True
 
     def encode(self):
