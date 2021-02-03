@@ -42,8 +42,9 @@ class Stream:
         self._tsdata = tsdata
         self.show_null = show_null
         self._scte35_pids = set()
+        # map of pid -> program
         self._pid_prog = {}
-        self._pid_pts = {}
+        self._prgm_pts = {}
         self._pmt_pids = set()
         self._prog_pmt_pid = {}
         self._programs = set()
@@ -129,8 +130,8 @@ class Stream:
         if pid in self._pid_prog:
             prgm = self._pid_prog[pid]
             packet_data["program"] = prgm
-            if prgm in self._pid_pts:
-                packet_data["pts"] = round(self._pid_pts[prgm], 6)
+            if prgm in self._prgm_pts:
+                packet_data["pts"] = round(self._prgm_pts[prgm], 6)
         return packet_data
 
     def _parser(self, pkt):
@@ -170,8 +171,8 @@ class Stream:
         pts |= ((pkt[14] << 7) | (pkt[15] >> 1)) << 15
         pts |= (pkt[16] << 7) | (pkt[17] >> 1)
         pts /= PTS_TICKS_PER_SECOND
-        ppp = self._pid_prog[pid]
-        self._pid_pts[ppp] = pts
+        prgm = self._pid_prog[pid]
+        self._prgm_pts[prgm] = pts
 
     def _parse_pusi(self, pkt, pid):
         """
@@ -247,11 +248,6 @@ class Stream:
         # current_next = pkt[10] & 1
         if self.the_program and (program_number != self.the_program):
             return None
-        if (
-            program_number not in self._prog_pmt_pid
-            or pid != self._prog_pmt_pid[program_number]
-        ):
-            return None
         # section_number = pkt[11]
         # last_section_number = pkt[12]
         # pcr_pid = (pkt[13]& 31) << 8 | pkt[14]
@@ -275,8 +271,6 @@ class Stream:
             end_idx = (idx + si_len) - chunk_size
             while idx < end_idx:
                 stream_type, pid, ei_len = self._parse_stream_type(pkt, idx)
-                if not stream_type:
-                    break
                 idx += chunk_size
                 idx += ei_len
                 self._pid_prog[pid] = program_number
@@ -291,8 +285,6 @@ class Stream:
         """
         extract stream pid and type
         """
-        if len(pkt) <= idx + 4:
-            return None, None, None
         stream_type = hex(pkt[idx])  # 1 byte
         el_pid = self._parse_pid(pkt[idx + 1], pkt[idx + 2])  # 2 bytes
         ei_len = (pkt[idx + 3] & 15) << 8 | pkt[idx + 4]  # 2 bytes

@@ -4,6 +4,7 @@ SCTE35 Splice Commands
 from bitn import BitBin, NBin
 from .tools import ifb
 
+
 class SpliceCommand:
     """
     Base class, not used directly.
@@ -25,6 +26,7 @@ class SpliceCommand:
         """
         nbin = self._chk_nbin(nbin)
         return nbin
+
     @staticmethod
     def _chk_nbin(nbin):
         if not nbin:

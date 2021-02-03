@@ -109,7 +109,6 @@ class DtmfDescriptor(SpliceDescriptor):
             d_c -= 1
             self.dtmf_chars.append(i2b(bitbin.asint(8), 1).decode("utf-8"))
 
-
     def encode(self, nbin=None):
         """
             encode SCTE35 Dtmf Descriptor
@@ -146,7 +145,6 @@ class TimeDescriptor(SpliceDescriptor):
         self.tai_seconds = bitbin.asint(48)
         self.tai_ns = bitbin.asint(32)
         self.utc_offset = bitbin.asint(16)
-
 
     def encode(self, nbin=None):
         """
@@ -187,7 +185,6 @@ class AudioDescriptor(SpliceDescriptor):
             comp["num_channels"] = bitbin.asint(4)
             comp["full_srvc_audio"] = bitbin.asflag(1)
             self.components.append(comp)
-
 
     def encode(self, nbin=None):
         """
