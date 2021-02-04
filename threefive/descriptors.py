@@ -3,7 +3,7 @@ SCTE35 Splice Descriptors
 """
 from bitn import BitBin, NBin
 from .segmentation import table20, table22
-from .tools import k_by_v, i2b, to_stderr
+from .tools import k_by_v, i2b, ifb, to_stderr
 
 
 class SpliceDescriptor:
@@ -53,8 +53,8 @@ class SpliceDescriptor:
         """
         parse splice descriptor identifier
         """
-        self.identifier = "0x43554549"
-        nbin.add_hex(self.identifier, 32)
+        self.identifier = "CUEI"
+        nbin.add_bites(self.identifier.encode("utf-8"), 32)
 
 
 class AvailDescriptor(SpliceDescriptor):
@@ -326,15 +326,13 @@ class SegmentationDescriptor(SpliceDescriptor):
             nbin.add_90k(self.segmentation_duration, 40)  # 5 bytes
         nbin.add_int(self.segmentation_upid_type, 8)  # 1 byte
         nbin.add_int(self.segmentation_upid_length, 8)  # 1 byte
-        """
-        self.segmentation_upid = self._decode_segmentation_upid(
-            bitbin, self.segmentation_upid_type, self.segmentation_upid_length
+        self._encode_segmentation_upid(
+            nbin, self.segmentation_upid_type, self.segmentation_upid_length
         )
-        self.segmentation_type_id = bitbin.asint(8)  # 1 byte
-        if self.segmentation_type_id in table22.keys():
-            self.segmentation_message = table22[self.segmentation_type_id]
-            self._decode_segments(bitbin)
-        """
+        nbin.add_int(self.segmentation_type_id, 8)  # 1 byte
+        # if self.segmentation_type_id in table22.keys():
+        #   self.segmentation_message = table22[self.segmentation_type_id]
+        self._encode_segments(nbin)
 
     def _decode_segmentation_upid(self, bitbin, upid_type, upid_length):
 
@@ -343,16 +341,16 @@ class SegmentationDescriptor(SpliceDescriptor):
             0x03: ["Ad ID", self._uri],
             0x04: ["UMID", self._umid],
             0x05: ["ISAN", self._isan],
-            0x06: ["ISAN", self._isan],
+            0x06: ["ISAN", self._isan],  # works
             0x07: ["TID", self._uri],
             0x08: ["AiringID", self._air_id],
             0x09: ["ADI", self._uri],
             0x0A: ["EIDR", self._eidr],
             0x0B: ["ATSC", self._atsc],
             0x0C: ["MPU", self._mpu],
-            0x0D: ["MID", self._mid],
-            0x0E: ["ADS Info", self._uri],
-            0x0F: ["URI", self._uri],
+            0x0D: ["MID", self._mid],  # works
+            0x0E: ["ADS Info", self._uri],  # works
+            0x0F: ["URI", self._uri],  # works
         }
 
         upid_id = ""
@@ -361,6 +359,39 @@ class SegmentationDescriptor(SpliceDescriptor):
             if upid_type != 0x09:
                 return f"{upid_map[upid_type][0]}:{upid_id}"
         return upid_id
+
+    def _encode_segmentation_upid(self, nbin, upid_type, upid_length):
+        """
+            0x02  # works
+            0x03  # works
+            0x04
+            0x05  # works
+            0x06 
+            0x07  # works
+            0x08
+            0x09
+            0x0A # maybe works
+            0x0B
+            0x0C
+            0x0D 
+            0x0E  # works
+            0x0F  # works
+        """
+        if upid_type in [0x02, 0x03, 0x07, 0x0E, 0x0F]:
+            seg_upid = (self.segmentation_upid.split(":", 1)[1]).encode("utf-8")
+            nbin.add_bites(seg_upid, (upid_length << 3))
+            return
+        if upid_type in [0x0A]:
+            # 0xa : EIDR:10.5240/f85a-e100-b068-5b8f-T
+            pre, post = self.segmentation_upid[8:].split("/")
+            nbin.add_int(int(pre), 16)
+            repost = post.replace("-T", "").replace("-", "")  # .encode("utf-8")
+            nbin.add_hex(repost, 80)
+            return
+        if upid_type in [0x08]:
+            aired = self.segmentation_upid.split(":", 1)[1]
+            aired = (aired[:-(upid_length)]).encode("utf-8")
+            nbin.add_bites(aired, (upid_length << 3))
 
     def _decode_segments(self, bitbin):
         self.segment_num = bitbin.asint(8)  # 1 byte
@@ -374,6 +405,19 @@ class SegmentationDescriptor(SpliceDescriptor):
                 self.sub_segments_expected = bitbin.asint(8)  # 1 byte
             else:
                 self.sub_segment_num = self.sub_segments_expected = 0
+
+    def _encode_segments(self, nbin):
+        nbin.add_int(self.segment_num, 8)  # 1 byte
+        nbin.add_int(self.segments_expected, 8)  # 1 byte
+        if self.segmentation_type_id in [0x34, 0x36, 0x38, 0x3A]:
+            """
+            if there are 16 more bits in bitbin, read them.
+            """
+            if self.sub_segment_num:
+                nbin.add_int(self.sub_segment_num, 8)  # 1 byte
+                nbin.add_int(self.sub_segments_expected, 8)  # 1 byte
+            # else:
+            #   self.sub_segment_num = self.sub_segments_expected = 0
 
     @staticmethod
     def _air_id(bitbin, upid_length):
