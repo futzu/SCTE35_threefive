@@ -60,7 +60,7 @@ class Cue:
         if not bites:
             raise Exception("Boom")
         self.info_section.crc = hex(ifb(bites[0:4]))
-        #self.encode()
+        # self.encode()
         return True
 
     def encode(self):
@@ -194,7 +194,7 @@ class Cue:
         return bites[info_size:]
 
     def pretty_print(self):
-        pp = pprint.PrettyPrinter(indent=2,compact=True)
+        pp = pprint.PrettyPrinter(indent=2, compact=True)
         pp.pprint(self.get())
 
     def _set_splice_command(self, bites):

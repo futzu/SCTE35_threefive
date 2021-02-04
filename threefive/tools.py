@@ -33,7 +33,6 @@ def k_by_v(adict, avalue):
     """
     dict key lookup by value
     """
-    for k,v in adict.items():
+    for k, v in adict.items():
         if v == avalue:
             return k
-        

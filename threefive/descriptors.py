@@ -109,7 +109,6 @@ class DtmfDescriptor(SpliceDescriptor):
             d_c -= 1
             self.dtmf_chars.append(i2b(bitbin.asint(8), 1).decode("utf-8"))
 
-
     def encode(self, nbin=None):
         """
             encode SCTE35 Dtmf Descriptor
@@ -146,7 +145,6 @@ class TimeDescriptor(SpliceDescriptor):
         self.tai_seconds = bitbin.asint(48)
         self.tai_ns = bitbin.asint(32)
         self.utc_offset = bitbin.asint(16)
-
 
     def encode(self, nbin=None):
         """
@@ -187,7 +185,6 @@ class AudioDescriptor(SpliceDescriptor):
             comp["num_channels"] = bitbin.asint(4)
             comp["full_srvc_audio"] = bitbin.asflag(1)
             self.components.append(comp)
-
 
     def encode(self, nbin=None):
         """
@@ -298,7 +295,6 @@ class SegmentationDescriptor(SpliceDescriptor):
         else:
             bitbin.forward(5)
 
-    
     def _encode_flags(self, nbin):  # 1 byte for set flags
         nbin.add_flag(self.program_segmentation_flag)
         nbin.add_flag(self.segmentation_duration_flag)
@@ -307,7 +303,7 @@ class SegmentationDescriptor(SpliceDescriptor):
             nbin.add_flag(self.web_delivery_allowed_flag)
             nbin.add_flag(self.no_regional_blackout_flag)
             nbin.add_flag(self.archive_allowed_flag)
-            nbin.add_int(k_by_v(table20, self.device_restrictions),2)
+            nbin.add_int(k_by_v(table20, self.device_restrictions), 2)
         else:
             nbin.forward(5)
 
@@ -327,10 +323,10 @@ class SegmentationDescriptor(SpliceDescriptor):
 
     def _encode_segmentation(self, nbin):
         if self.segmentation_duration_flag:
-            nbin.add_90k(self.segmentation_duration,40)  # 5 bytes
-        nbin.add_int(self.segmentation_upid_type,8)  # 1 byte
-        nbin.add_int(self.segmentation_upid_length,8)  # 1 byte
-        '''
+            nbin.add_90k(self.segmentation_duration, 40)  # 5 bytes
+        nbin.add_int(self.segmentation_upid_type, 8)  # 1 byte
+        nbin.add_int(self.segmentation_upid_length, 8)  # 1 byte
+        """
         self.segmentation_upid = self._decode_segmentation_upid(
             bitbin, self.segmentation_upid_type, self.segmentation_upid_length
         )
@@ -338,8 +334,8 @@ class SegmentationDescriptor(SpliceDescriptor):
         if self.segmentation_type_id in table22.keys():
             self.segmentation_message = table22[self.segmentation_type_id]
             self._decode_segments(bitbin)
-        '''
-        
+        """
+
     def _decode_segmentation_upid(self, bitbin, upid_type, upid_length):
 
         upid_map = {
