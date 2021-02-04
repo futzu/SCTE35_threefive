@@ -27,3 +27,13 @@ def to_stderr(stuff):
     Wrapper for printing to sys.stderr
     """
     print(stuff, file=sys.stderr)
+
+
+def k_by_v(adict, avalue):
+    """
+    dict key lookup by value
+    """
+    for k,v in adict.items():
+        if v == avalue:
+            return k
+        

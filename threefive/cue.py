@@ -3,6 +3,7 @@ threefive.Cue Class
 """
 
 import json
+import pprint
 from base64 import b64decode
 from bitn import NBin
 from .section import SpliceInfoSection
@@ -59,7 +60,7 @@ class Cue:
         if not bites:
             raise Exception("Boom")
         self.info_section.crc = hex(ifb(bites[0:4]))
-        # self.encode()
+        #self.encode()
         return True
 
     def encode(self):
@@ -69,8 +70,8 @@ class Cue:
         nbin.add_int(self.info_section.descriptor_loop_length, 16)
         [d.encode(nbin) for d in self.descriptors]
         nbin.add_hex(self.info_section.crc, 32)
-        to_stderr(self.bites)
-        to_stderr(f"\033[92m{nbin.bites}\033[0m")
+        to_stderr(f" Cue.bites --->>> {self.bites}")
+        to_stderr(f" Encoded   --->>> {nbin.bites}\n\n")
 
     def _descriptorloop(self, bites, dll):
         """
@@ -131,7 +132,7 @@ class Cue:
         get_json returns the Cue instance
         data in json.
         """
-        return json.dumps(self.get(), indent=2)
+        return json.dumps(self.get(), indent=4)
 
     def get_packet_data(self):
         """
@@ -191,6 +192,10 @@ class Cue:
         self.info_section = SpliceInfoSection()
         self.info_section.decode(info_bites)
         return bites[info_size:]
+
+    def pretty_print(self):
+        pp = pprint.PrettyPrinter(indent=2,compact=True)
+        pp.pprint(self.get())
 
     def _set_splice_command(self, bites):
         """
