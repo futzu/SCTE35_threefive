@@ -7,7 +7,6 @@ from functools import partial
 from .cue import Cue
 from .streamtype import stream_type_map
 from .tools import to_stderr
-from .const import PTS_TICKS_PER_SECOND
 
 
 def show_cue(cue):
@@ -42,7 +41,6 @@ class Stream:
         self._tsdata = tsdata
         self.show_null = show_null
         self._scte35_pids = set()
-        # map of pid -> program
         self._pid_prog = {}
         self._prgm_pts = {}
         self._pmt_pids = set()
@@ -170,7 +168,7 @@ class Stream:
         pts = ((pkt[13] >> 1) & 7) << 30
         pts |= ((pkt[14] << 7) | (pkt[15] >> 1)) << 15
         pts |= (pkt[16] << 7) | (pkt[17] >> 1)
-        pts /= PTS_TICKS_PER_SECOND
+        pts /= 90000.0
         prgm = self._pid_prog[pid]
         self._prgm_pts[prgm] = pts
 

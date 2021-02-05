@@ -3,10 +3,8 @@ section.py
 
 SCTE35 Splice Info Section
 """
-from bitn import NBin
+from bitn import BitBin, NBin
 from threefive.tools import ifb, to_stderr
-from .const import PTS_TICKS_PER_SECOND
-
 
 class SpliceInfoSection:
     """
@@ -33,40 +31,29 @@ class SpliceInfoSection:
     def __repr__(self):
         return str(vars(self))
 
-    def _parse_pts_adjustment(self, bites):
-        """
-        parse the 33 bit pts_adjustment
-        from bites
-        """
-        self.pts_adjustment = bites[4] & 1 << 32
-        self.pts_adjustment |= ifb(bites[5:9])
-        self.pts_adjustment /= PTS_TICKS_PER_SECOND
-
     def decode(self, bites):
-        """
-        decode the SCTE35 splice info section
-        from bites
-        """
-        self.table_id = hex(bites[0])
-        if self.table_id != "0xfc":
-            return False
-        self.section_syntax_indicator = bites[1] >> 7 == 1
-        self.private = (bites[1] >> 6) & 1 == 1
-        self.reserved = hex((bites[1] >> 4) & 3)
-        if self.reserved != "0x3":
-            return False
-        self.section_length = (bites[1] & 15) << 8 | bites[2]
-        self.protocol_version = bites[3]
-        self.encrypted_packet = bites[4] >> 7 == 1
-        self.encryption_algorithm = (bites[4] >> 1) & 63
-        self._parse_pts_adjustment(bites)
-        self.cw_index = hex(bites[9])
-        self.tier = hex(bites[10] << 4 | (bites[11] >> 4) & 15)
-        self.splice_command_length = (bites[11] & 15) << 8 | bites[12]
-        self.splice_command_type = bites[13]
+        bitbin = BitBin(bites)
+        self.table_id = bitbin.ashex(8)
+        if self.table_id != '0xfc':
+            raise ValueError('splice_info_section.table_id should be 0xfc')
+        self.section_syntax_indicator = bitbin.asflag(1)
+        self.private = bitbin.asflag(1)
+        self.reserved = bitbin.ashex(2)
+        if self.reserved != '0x3':
+            raise ValueError('splice_info_section.reserved should be 0x3')
+        self.section_length = bitbin.asint(12)
+        self.protocol_version = bitbin.asint(8)
+        if self.protocol_version != 0:
+            raise ValueError('splice_info_section.protocol_version should be 0')
+        self.encrypted_packet = bitbin.asflag(1)
+        self.encryption_algorithm = bitbin.asint(6)
+        self.pts_adjustment = bitbin.as90k(33)
+        self.cw_index = bitbin.ashex(8)
+        self.tier = bitbin.ashex(12)
+        self.splice_command_length = bitbin.asint(12)
+        self.splice_command_type = bitbin.asint(8)
         self.descriptor_loop_length = 0
-        self.encode()
-
+        
     def encode(self, nbin=None):
         """
         SpliceInfoSection.encode
@@ -75,12 +62,12 @@ class SpliceInfoSection:
         """
         if not nbin:
             nbin = NBin()
-        nbin.add_hex(self.table_id, 8)
-        nbin.add_flag(self.section_syntax_indicator)
-        nbin.add_flag(self.private)
+        nbin.add_hex('0xfc', 8) # self.table_id
+        nbin.add_int(0,1) # self.section_syntax_indicator
+        nbin.add_int(0,1) # self.private
         nbin.reserve(2)
         nbin.add_int(self.section_length, 12)
-        nbin.add_int(self.protocol_version, 8)
+        nbin.add_int(0, 8)
         nbin.add_flag(self.encrypted_packet)
         nbin.add_int(self.encryption_algorithm, 6)
         nbin.add_90k(self.pts_adjustment, 33)
@@ -88,5 +75,4 @@ class SpliceInfoSection:
         nbin.add_hex(self.tier, 12)
         nbin.add_int(self.splice_command_length, 12)
         nbin.add_int(self.splice_command_type, 8)
-        # to_stderr(f"info section bytes {nbin.bites}")
         return nbin

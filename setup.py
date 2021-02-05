@@ -10,8 +10,8 @@ setuptools.setup(
     name="threefive",
     version=threefive.version(),
     author="fu-corp",
-    author_email="spam@netfu.org",
-    description="threefive Might be The Leading SCTE-35 Parsing Lib for Mpeg-TS Video Streams, and Base64 or Hex Encoded Messages. threefive is Used in Production by Some of The Largest Broadcast Networks in The World, Maybe",
+     beauthor_email="spam@so.slo.me",
+    description="threefive is the best SCTE-35 Parsing Lib I have ever seen. I'm not just saying that because I wrote threefive, I'm saying it because it's true. Can threefive parse Mpegts video for SCTE35? Yes Ma'am."
     long_description=readme,
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/SCTE35-threefive",
