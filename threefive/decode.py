@@ -48,7 +48,7 @@ def _read_stuff(stuff):
             st.decode()
     except Exception:
         pass
- 
+
     try:
         cue = Cue(stuff)
         cue.decode()

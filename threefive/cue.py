@@ -60,7 +60,7 @@ class Cue:
         if not bites:
             raise Exception("Boom! self._mk_descriptors(bites)")
         self.info_section.crc = hex(ifb(bites[0:4]))
-        #self.encode()
+        # self.encode()
         return True
 
     def encode(self):
@@ -70,10 +70,9 @@ class Cue:
         nbin.add_int(self.info_section.descriptor_loop_length, 16)
         [d.encode(nbin) for d in self.descriptors]
         nbin.add_hex(self.info_section.crc, 32)
-        #if nbin.bites != self.bites:
+        # if nbin.bites != self.bites:
         to_stderr(f" Cue.bites --->>> {self.bites}\n")
         to_stderr(f" Encoded   --->>> {nbin.bites}\n")
-    
 
     def _descriptorloop(self, bites, dll):
         """
