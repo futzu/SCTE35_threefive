@@ -47,7 +47,7 @@ class SpliceDescriptor:
         self.identifier = bitbin.asdecodedhex(32)
         # identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
         if self.identifier != "CUEI":
-            to_stderr('Descriptors should have an identifier of "CUEI"')
+            raise Exception('Descriptors should have an identifier of "CUEI"')
 
     def encode_id(self, nbin):
         """
@@ -368,9 +368,9 @@ class SegmentationDescriptor(SpliceDescriptor):
             0x05  # works
             0x06 
             0x07  # works
-            0x08
-            0x09
-            0x0A # maybe works
+            0x08  # works
+            0x09  # works
+            0x0A  # maybe works
             0x0B
             0x0C
             0x0D 
@@ -390,8 +390,14 @@ class SegmentationDescriptor(SpliceDescriptor):
             return
         if upid_type in [0x08]:
             aired = self.segmentation_upid.split(":", 1)[1]
-            aired = (aired[:-(upid_length)]).encode("utf-8")
-            nbin.add_bites(aired, (upid_length << 3))
+            aired = int(aired, 16)
+            nbin.add_hex(hex(aired), (upid_length << 3))
+            return
+
+        if upid_type in [0x09]:
+            seg_upid = (self.segmentation_upid).encode("utf-8")
+            nbin.add_bites(seg_upid, (upid_length << 3))
+            return
 
     def _decode_segments(self, bitbin):
         self.segment_num = bitbin.asint(8)  # 1 byte
