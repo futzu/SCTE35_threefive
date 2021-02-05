@@ -44,8 +44,8 @@ def _read_stuff(stuff):
         pass
     try:
         with open(stuff, "rb") as tsdata:
-            st = Stream(tsdata)
-            st.decode()
+            s = Stream(tsdata)
+            s.decode()
     except Exception:
         pass
 

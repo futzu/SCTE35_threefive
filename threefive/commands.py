@@ -99,7 +99,7 @@ class TimeSignal(SpliceCommand):
         self._decode_pts(bitbin)
         self._set_len(start, bitbin.idx)
 
-    def encode(self, nbin):
+    def encode(self, nbin=None):
         """
         encode converts TimeSignal vars
         to bytes

@@ -3,7 +3,7 @@ SCTE35 Splice Descriptors
 """
 from bitn import BitBin, NBin
 from .segmentation import table20, table22
-from .tools import k_by_v, i2b, ifb, to_stderr
+from .tools import k_by_v, i2b
 
 
 class SpliceDescriptor:
@@ -366,14 +366,14 @@ class SegmentationDescriptor(SpliceDescriptor):
             0x03  # works
             0x04
             0x05  # works
-            0x06 
+            0x06
             0x07  # works
             0x08  # works
             0x09  # works
             0x0A  # maybe works
             0x0B
             0x0C
-            0x0D 
+            0x0D
             0x0E  # works
             0x0F  # works
         """
@@ -381,6 +381,7 @@ class SegmentationDescriptor(SpliceDescriptor):
             seg_upid = (self.segmentation_upid.split(":", 1)[1]).encode("utf-8")
             nbin.add_bites(seg_upid, (upid_length << 3))
             return
+
         if upid_type in [0x0A]:
             # 0xa : EIDR:10.5240/f85a-e100-b068-5b8f-T
             pre, post = self.segmentation_upid[8:].split("/")
@@ -388,6 +389,7 @@ class SegmentationDescriptor(SpliceDescriptor):
             repost = post.replace("-T", "").replace("-", "")  # .encode("utf-8")
             nbin.add_hex(repost, 80)
             return
+
         if upid_type in [0x08]:
             aired = self.segmentation_upid.split(":", 1)[1]
             aired = int(aired, 16)
@@ -403,9 +405,8 @@ class SegmentationDescriptor(SpliceDescriptor):
         self.segment_num = bitbin.asint(8)  # 1 byte
         self.segments_expected = bitbin.asint(8)  # 1 byte
         if self.segmentation_type_id in [0x34, 0x36, 0x38, 0x3A]:
-            """
-            if there are 16 more bits in bitbin, read them.
-            """
+            # if there are 16 more bits in bitbin, read them.
+            
             if bitbin.idx >= 16:
                 self.sub_segment_num = bitbin.asint(8)  # 1 byte
                 self.sub_segments_expected = bitbin.asint(8)  # 1 byte
@@ -416,14 +417,12 @@ class SegmentationDescriptor(SpliceDescriptor):
         nbin.add_int(self.segment_num, 8)  # 1 byte
         nbin.add_int(self.segments_expected, 8)  # 1 byte
         if self.segmentation_type_id in [0x34, 0x36, 0x38, 0x3A]:
-            """
-            if there are 16 more bits in bitbin, read them.
-            """
-            if self.sub_segment_num:
-                nbin.add_int(self.sub_segment_num, 8)  # 1 byte
-                nbin.add_int(self.sub_segments_expected, 8)  # 1 byte
-            # else:
-            #   self.sub_segment_num = self.sub_segments_expected = 0
+            # if there are 16 more bits in bitbin, read them.
+            # if self.sub_segment_num:
+            nbin.add_int(self.sub_segment_num, 8)  # 1 byte
+            nbin.add_int(self.sub_segments_expected, 8)  # 1 byte
+            #else:
+             #   self.sub_segment_num = self.sub_segments_expected = 0
 
     @staticmethod
     def _air_id(bitbin, upid_length):

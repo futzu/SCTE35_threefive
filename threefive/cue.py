@@ -39,6 +39,7 @@ class Cue:
         self.info_section = None
         self.command = None
         self.descriptors = []
+        self.crc = None
         self.data = self._strip_header(data)
         self.bites = self._mk_bits(self.data)
         self.packet_data = packet_data
@@ -59,8 +60,8 @@ class Cue:
         bites = self._mk_descriptors(bites)
         if not bites:
             raise Exception("Boom! self._mk_descriptors(bites)")
-        self.info_section.crc = hex(ifb(bites[0:4]))
-        # self.encode()
+        self.crc = hex(ifb(bites[0:4]))
+        #self.encode()
         return True
 
     def encode(self):
@@ -69,10 +70,10 @@ class Cue:
         self.command.encode(nbin)
         nbin.add_int(self.info_section.descriptor_loop_length, 16)
         [d.encode(nbin) for d in self.descriptors]
-        nbin.add_hex(self.info_section.crc, 32)
-        # if nbin.bites != self.bites:
-        to_stderr(f" Cue.bites --->>> {self.bites}\n")
-        to_stderr(f" Encoded   --->>> {nbin.bites}\n")
+        nbin.add_hex(self.crc, 32)
+        if nbin.bites != self.bites:
+            to_stderr(f" Cue.bites --->>> {self.bites}\n")
+            to_stderr(f" Encoded   --->>> {nbin.bites}\n")
 
     def _descriptorloop(self, bites, dll):
         """
@@ -101,6 +102,7 @@ class Cue:
                 "info_section": self.get_info_section(),
                 "command": self.get_command(),
                 "descriptors": self.get_descriptors(),
+                "crc": self.crc,
             }
             if self.packet_data:
                 scte35.update(self.get_packet_data())
@@ -193,10 +195,6 @@ class Cue:
         self.info_section = SpliceInfoSection()
         self.info_section.decode(info_bites)
         return bites[info_size:]
-
-    def pretty_print(self):
-        pp = pprint.PrettyPrinter(indent=2, compact=True)
-        pp.pprint(self.get())
 
     def _set_splice_command(self, bites):
         """

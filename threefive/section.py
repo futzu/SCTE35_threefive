@@ -4,7 +4,6 @@ section.py
 SCTE35 Splice Info Section
 """
 from bitn import BitBin, NBin
-from threefive.tools import ifb, to_stderr
 
 
 class SpliceInfoSection:

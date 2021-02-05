@@ -142,7 +142,7 @@ class Stream:
             self._program_association_table(pkt)
             return None
         if pid in self._pmt_pids:
-            self._program_map_section(pkt, pid)
+            self._program_map_section(pkt)
             return None
         if self.info:
             return None
@@ -235,7 +235,7 @@ class Stream:
             idx += chunk_size
         self.pat = None
 
-    def _program_map_section(self, pkt, pid):
+    def _program_map_section(self, pkt):
         """
         parse program maps for streams
         """
