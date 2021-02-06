@@ -460,11 +460,23 @@ class SegmentationDescriptor(SpliceDescriptor):
             upids.append(segmentation_upid)
         return upids
 
+    format_identifier_map = {}
+
     @staticmethod
     def _mpu(bitbin, upid_length):
+        fimap = SegmentationDescriptor.format_identifier_map
+        fi = bitbin.asint(32)
+        if fi in fimap.keys():
+            private_data = fimap[fi][1](bitbin.asbites(upid_length * 8), upid_length)
+            finame = fimap[fi][0]
+            return {
+                "format identifier": fi,
+                finame: private_data,
+            }
+
         b_c = upid_length << 3
         return {
-            "format identifier": bitbin.asint(32),
+            "format identifier": fi,
             "private data": bitbin.asint(b_c - 32),
         }
 
