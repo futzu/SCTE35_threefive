@@ -3,7 +3,7 @@ SCTE35 Splice Descriptors
 """
 from bitn import BitBin, NBin
 from .segmentation import table20, table22
-from .tools import k_by_v
+from .tools import k_by_v, i2b
 
 
 class SpliceDescriptor:
@@ -44,7 +44,7 @@ class SpliceDescriptor:
         """
         parse splice descriptor identifier
         """
-        self.identifier = bitbin.astext(32)
+        self.identifier = bitbin.asdecodedhex(32)
         # identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
         if self.identifier != "CUEI":
             raise Exception('Descriptors should have an identifier of "CUEI"')
@@ -107,7 +107,7 @@ class DtmfDescriptor(SpliceDescriptor):
         bitbin.forward(5)
         while d_c:
             d_c -= 1
-            self.dtmf_chars.append(bitbin.astext(8))
+            self.dtmf_chars.append(i2b(bitbin.asint(8), 1).decode("utf-8"))
 
     def encode(self, nbin=None):
         """
@@ -435,7 +435,7 @@ class SegmentationDescriptor(SpliceDescriptor):
             "reserved": bitbin.asint(2),
             "end_of_day": bitbin.asint(5),
             "unique_for": bitbin.asint(9),
-            "content_id": bitbin.astext((upid_length - 4) << 3),
+            "content_id": bitbin.asdecodedhex((upid_length - 4) << 3),
         }
 
     @staticmethod
@@ -460,23 +460,11 @@ class SegmentationDescriptor(SpliceDescriptor):
             upids.append(segmentation_upid)
         return upids
 
-    format_identifier_map = {}
-
     @staticmethod
     def _mpu(bitbin, upid_length):
-        fimap = SegmentationDescriptor.format_identifier_map
-        fi = bitbin.asint(32)
-        if fi in fimap.keys():
-            private_data = fimap[fi][1](bitbin.asbites(upid_length * 8), upid_length)
-            finame = fimap[fi][0]
-            return {
-                "format identifier": fi,
-                finame: private_data,
-            }
-
         b_c = upid_length << 3
         return {
-            "format identifier": fi,
+            "format identifier": bitbin.asint(32),
             "private data": bitbin.asint(b_c - 32),
         }
 
