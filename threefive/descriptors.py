@@ -3,7 +3,7 @@ SCTE35 Splice Descriptors
 """
 from bitn import BitBin, NBin
 from .segmentation import table20, table22
-from .tools import k_by_v, i2b
+from .tools import k_by_v
 
 
 class SpliceDescriptor:
@@ -44,7 +44,7 @@ class SpliceDescriptor:
         """
         parse splice descriptor identifier
         """
-        self.identifier = bitbin.asdecodedhex(32)
+        self.identifier = bitbin.astext(32)
         # identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
         if self.identifier != "CUEI":
             raise Exception('Descriptors should have an identifier of "CUEI"')
@@ -107,7 +107,7 @@ class DtmfDescriptor(SpliceDescriptor):
         bitbin.forward(5)
         while d_c:
             d_c -= 1
-            self.dtmf_chars.append(i2b(bitbin.asint(8), 1).decode("utf-8"))
+            self.dtmf_chars.append(bitbin.astext(8))
 
     def encode(self, nbin=None):
         """
@@ -435,7 +435,7 @@ class SegmentationDescriptor(SpliceDescriptor):
             "reserved": bitbin.asint(2),
             "end_of_day": bitbin.asint(5),
             "unique_for": bitbin.asint(9),
-            "content_id": bitbin.asdecodedhex((upid_length - 4) << 3),
+            "content_id": bitbin.astext((upid_length - 4) << 3),
         }
 
     @staticmethod
