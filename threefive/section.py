@@ -4,6 +4,10 @@ section.py
 SCTE35 Splice Info Section
 """
 from bitn import BitBin, NBin
+from .tools import k_by_v
+
+
+sap_map = {"0x0": "Type 1", "0x1": "Type 2", "0x2": "Type 3", "0x3": "No Sap Type"}
 
 
 class SpliceInfoSection:
@@ -17,6 +21,7 @@ class SpliceInfoSection:
         self.section_syntax_indicator = None
         self.private = None
         self.reserved = None
+        self.sap_type = None
         self.section_length = None
         self.protocol_version = None
         self.encrypted_packet = None
@@ -38,9 +43,7 @@ class SpliceInfoSection:
             raise ValueError("splice_info_section.table_id should be 0xfc")
         self.section_syntax_indicator = bitbin.asflag(1)
         self.private = bitbin.asflag(1)
-        self.reserved = bitbin.ashex(2)
-        if self.reserved != "0x3":
-            raise ValueError("splice_info_section.reserved should be 0x3")
+        self.sap_type = sap_map[bitbin.ashex(2)]
         self.section_length = bitbin.asint(12)
         self.protocol_version = bitbin.asint(8)
         if self.protocol_version != 0:
@@ -65,7 +68,7 @@ class SpliceInfoSection:
         nbin.add_hex("0xfc", 8)  # self.table_id
         nbin.add_int(0, 1)  # self.section_syntax_indicator
         nbin.add_int(0, 1)  # self.private
-        nbin.reserve(2)
+        nbin.add_hex(k_by_v(sap_map, self.sap_type), 2)
         nbin.add_int(self.section_length, 12)
         nbin.add_int(0, 8)
         nbin.add_flag(self.encrypted_packet)

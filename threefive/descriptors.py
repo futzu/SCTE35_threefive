@@ -338,13 +338,13 @@ class SegmentationDescriptor(SpliceDescriptor):
 
         upid_map = {
             0x02: ["Deprecated", self._uri],
-            0x03: ["Ad ID", self._uri],
+            0x03: ["AdID", self._uri],
             0x04: ["UMID", self._umid],
             0x05: ["ISAN", self._isan],
             0x06: ["ISAN", self._isan],  # works
             0x07: ["TID", self._uri],
             0x08: ["AiringID", self._air_id],
-            0x09: ["ADI", self._uri],
+            0x09: ["ADI", self._adi],
             0x0A: ["EIDR", self._eidr],
             0x0B: ["ATSC", self._atsc],
             0x0C: ["MPU", self._mpu],
@@ -356,8 +356,8 @@ class SegmentationDescriptor(SpliceDescriptor):
         upid_id = ""
         if upid_type in upid_map.keys():
             upid_id = upid_map[upid_type][1](bitbin, upid_length)
-            if upid_type != 0x09:
-                return f"{upid_map[upid_type][0]}:{upid_id}"
+            # if upid_type != 0x09:
+            #    return f"{upid_map[upid_type][0]}:{upid_id}"
         return upid_id
 
     def _encode_segmentation_upid(self, nbin, upid_type, upid_length):
@@ -365,12 +365,12 @@ class SegmentationDescriptor(SpliceDescriptor):
             0x02  # works
             0x03  # works
             0x04
-            0x05  # works
+            0x05  
             0x06
             0x07  # works
             0x08  # works
-            0x09  # works
-            0x0A  # maybe works
+            0x09  
+            0x0A  
             0x0B
             0x0C
             0x0D
@@ -378,27 +378,14 @@ class SegmentationDescriptor(SpliceDescriptor):
             0x0F  # works
         """
         if upid_type in [0x02, 0x03, 0x07, 0x0E, 0x0F]:
-            seg_upid = (self.segmentation_upid.split(":", 1)[1]).encode("utf-8")
+            seg_upid = self.segmentation_upid.encode("utf-8")
             nbin.add_bites(seg_upid, (upid_length << 3))
-            return
-
-        if upid_type in [0x0A]:
-            # 0xa : EIDR:10.5240/f85a-e100-b068-5b8f-T
-            pre, post = self.segmentation_upid[8:].split("/")
-            nbin.add_int(int(pre), 16)
-            repost = post.replace("-T", "").replace("-", "")  # .encode("utf-8")
-            nbin.add_hex(repost, 80)
             return
 
         if upid_type in [0x08]:
-            aired = self.segmentation_upid.split(":", 1)[1]
+            aired = self.segmentation_upid
             aired = int(aired, 16)
             nbin.add_hex(hex(aired), (upid_length << 3))
-            return
-
-        if upid_type in [0x09]:
-            seg_upid = (self.segmentation_upid).encode("utf-8")
-            nbin.add_bites(seg_upid, (upid_length << 3))
             return
 
     def _decode_segments(self, bitbin):
@@ -406,7 +393,7 @@ class SegmentationDescriptor(SpliceDescriptor):
         self.segments_expected = bitbin.asint(8)  # 1 byte
         if self.segmentation_type_id in [0x34, 0x36, 0x38, 0x3A]:
             # if there are 16 more bits in bitbin, read them.
-            
+
             if bitbin.idx >= 16:
                 self.sub_segment_num = bitbin.asint(8)  # 1 byte
                 self.sub_segments_expected = bitbin.asint(8)  # 1 byte
@@ -421,8 +408,8 @@ class SegmentationDescriptor(SpliceDescriptor):
             # if self.sub_segment_num:
             nbin.add_int(self.sub_segment_num, 8)  # 1 byte
             nbin.add_int(self.sub_segments_expected, 8)  # 1 byte
-            #else:
-             #   self.sub_segment_num = self.sub_segments_expected = 0
+            # else:
+            #   self.sub_segment_num = self.sub_segments_expected = 0
 
     @staticmethod
     def _air_id(bitbin, upid_length):
@@ -463,10 +450,11 @@ class SegmentationDescriptor(SpliceDescriptor):
     @staticmethod
     def _mpu(bitbin, upid_length):
         b_c = upid_length << 3
-        return {
-            "format identifier": bitbin.asint(32),
+        mpu_data = {
+            "format identifier": bitbin.ashex(32),
             "private data": bitbin.asint(b_c - 32),
         }
+        return mpu_data
 
     @staticmethod
     def _eidr(bitbin, upid_length):
@@ -485,6 +473,12 @@ class SegmentationDescriptor(SpliceDescriptor):
         if upid_length > 0:
             return bitbin.asdecodedhex(upid_length << 3)
         return None
+
+    @staticmethod
+    def _adi(bitbin, upid_length):
+        uri = bitbin.asdecodedhex(upid_length << 3)
+        element, identifier = uri.split(":")
+        return {"element": element, "identifier": identifier}
 
 
 # map of known descriptors and associated classes
