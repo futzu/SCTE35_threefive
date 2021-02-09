@@ -348,7 +348,7 @@ class SegmentationDescriptor(SpliceDescriptor):
             0x06: ["ISAN", self._isan],  # works
             0x07: ["TID", self._uri],
             0x08: ["AiringID", self._air_id],
-            0x09: ["ADI", self._adi],
+            0x09: ["ADI", self._uri],
             0x0A: ["EIDR", self._eidr],
             0x0B: ["ATSC", self._atsc],
             0x0C: ["MPU", self._mpu],
@@ -379,7 +379,7 @@ class SegmentationDescriptor(SpliceDescriptor):
             0x0E  # works
             0x0F  # works
         """
-        if upid_type in [0x02, 0x03, 0x07, 0x0E, 0x0F]:
+        if upid_type in [0x02, 0x03, 0x07, 0x09, 0x0E, 0x0F]:
             seg_upid = self.segmentation_upid.encode("utf-8")
             nbin.add_bites(seg_upid, (upid_length << 3))
             return
@@ -493,12 +493,6 @@ class SegmentationDescriptor(SpliceDescriptor):
         if upid_length > 0:
             return bitbin.asdecodedhex(upid_length << 3)
         return None
-
-    @staticmethod
-    def _adi(bitbin, upid_length):
-        uri = bitbin.asdecodedhex(upid_length << 3)
-        element, identifier = uri.split(":")
-        return {"element": element, "identifier": identifier}
 
 
 # map of known descriptors and associated classes
