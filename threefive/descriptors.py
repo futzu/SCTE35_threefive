@@ -345,16 +345,16 @@ class SegmentationDescriptor(SpliceDescriptor):
             0x03: ["AdID", self._uri],
             0x04: ["UMID", self._umid],
             0x05: ["ISAN", self._isan],
-            0x06: ["ISAN", self._isan],  # works
+            0x06: ["ISAN", self._isan],
             0x07: ["TID", self._uri],
             0x08: ["AiringID", self._air_id],
             0x09: ["ADI", self._uri],
             0x0A: ["EIDR", self._eidr],
             0x0B: ["ATSC", self._atsc],
             0x0C: ["MPU", self._mpu],
-            0x0D: ["MID", self._mid],  # works
-            0x0E: ["ADS Info", self._uri],  # works
-            0x0F: ["URI", self._uri],  # works
+            0x0D: ["MID", self._mid],
+            0x0E: ["ADS Info", self._uri],
+            0x0F: ["URI", self._uri],
         }
 
         upid_id = ""
@@ -367,11 +367,11 @@ class SegmentationDescriptor(SpliceDescriptor):
             0x02  # works
             0x03  # works
             0x04
-            0x05  
-            0x06
+            0x05  # works
+            0x06  # works
             0x07  # works
             0x08  # works
-            0x09  
+            0x09  # works
             0x0A  
             0x0B  # works
             0x0C  # works
@@ -382,13 +382,14 @@ class SegmentationDescriptor(SpliceDescriptor):
         if upid_type in [0x02, 0x03, 0x07, 0x09, 0x0E, 0x0F]:
             seg_upid = self.segmentation_upid.encode("utf-8")
             nbin.add_bites(seg_upid, (upid_length << 3))
-            return
+
+        if upid_type in [0x05, 0x06]:
+            self._encode_isan(nbin, self.segmentation_upid, upid_length)
 
         if upid_type in [0x08]:
             aired = self.segmentation_upid
-            # aired = int(aired, 16)
             nbin.add_hex(aired, (upid_length << 3))
-            return
+
         if upid_type in [0x0B]:
             self._encode__atsc(nbin, self.segmentation_upid, upid_length)
 
@@ -399,8 +400,6 @@ class SegmentationDescriptor(SpliceDescriptor):
         self.segment_num = bitbin.asint(8)  # 1 byte
         self.segments_expected = bitbin.asint(8)  # 1 byte
         if self.segmentation_type_id in [0x34, 0x36, 0x38, 0x3A]:
-            # if there are 16 more bits in bitbin, read them.
-
             if bitbin.idx > 15:
                 self.sub_segment_num = bitbin.asint(8)  # 1 byte
                 self.sub_segments_expected = bitbin.asint(8)  # 1 byte
@@ -411,23 +410,12 @@ class SegmentationDescriptor(SpliceDescriptor):
         nbin.add_int(self.segment_num, 8)  # 1 byte
         nbin.add_int(self.segments_expected, 8)  # 1 byte
         if self.segmentation_type_id in [0x34, 0x36, 0x38, 0x3A]:
-            # if there are 16 more bits in bitbin, read them.
-            # if self.sub_segment_num:
             nbin.add_int(self.sub_segment_num, 8)  # 1 byte
             nbin.add_int(self.sub_segments_expected, 8)  # 1 byte
 
     @staticmethod
     def _air_id(bitbin, upid_length):
         return bitbin.ashex(upid_length << 3)
-
-    @staticmethod
-    def _encode__atsc(nbin, seg_upid, upid_length):
-        ulbits = upid_length << 3
-        nbin.add_int(seg_upid["TSID"], 16)
-        nbin.add_int(seg_upid["reserved"], 2)
-        nbin.add_int(seg_upid["end_of_day"], 5)
-        nbin.add_int(seg_upid["unique_for"], 9),
-        nbin.add_bites(seg_upid["content_id"].encode("utf-8"), (ulbits - 32))
 
     @staticmethod
     def _atsc(bitbin, upid_length):
@@ -440,11 +428,21 @@ class SegmentationDescriptor(SpliceDescriptor):
         }
 
     @staticmethod
+    def _encode__atsc(nbin, seg_upid, upid_length):
+        ulbits = upid_length << 3
+        nbin.add_int(seg_upid["TSID"], 16)
+        nbin.add_int(seg_upid["reserved"], 2)
+        nbin.add_int(seg_upid["end_of_day"], 5)
+        nbin.add_int(seg_upid["unique_for"], 9),
+        nbin.add_bites(seg_upid["content_id"].encode("utf-8"), (ulbits - 32))
+
+    @staticmethod
     def _isan(bitbin, upid_length):
-        pre = "0000-0000-"
-        middle = bitbin.ashex(upid_length << 3)
-        post = "-0000-Z-0000-0000-6"
-        return f"{pre}{middle[2:6]}{post}"
+        return bitbin.ashex(upid_length << 3)
+
+    @staticmethod
+    def _encode_isan(nbin, seg_upid, upid_length):
+        nbin.add_hex(seg_upid, (upid_length << 3))
 
     def _mid(self, bitbin, upid_length):
         upids = []
