@@ -3,7 +3,6 @@ threefive.Cue Class
 """
 
 import json
-import pprint
 from base64 import b64decode
 from bitn import NBin
 from .section import SpliceInfoSection
@@ -61,7 +60,7 @@ class Cue:
         if not bites:
             raise Exception("Boom! self._mk_descriptors(bites)")
         self.crc = hex(ifb(bites[0:4]))
-        #self.encode()
+        # self.encode()
         return True
 
     def encode(self):
