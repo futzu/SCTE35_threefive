@@ -323,7 +323,6 @@ class SegmentationDescriptor(SpliceDescriptor):
         if self.segmentation_type_id in table22.keys():
             self.segmentation_message = table22[self.segmentation_type_id]
             self._decode_segments(bitbin)
-        bitbin = None
 
     def _encode_segmentation(self, nbin):
         if self.segmentation_duration_flag:
@@ -334,8 +333,6 @@ class SegmentationDescriptor(SpliceDescriptor):
             nbin, self.segmentation_upid_type, self.segmentation_upid_length
         )
         nbin.add_int(self.segmentation_type_id, 8)  # 1 byte
-        # if self.segmentation_type_id in table22.keys():
-        #   self.segmentation_message = table22[self.segmentation_type_id]
         self._encode_segments(nbin)
 
     def _decode_segmentation_upid(self, bitbin, upid_type, upid_length):
@@ -356,11 +353,9 @@ class SegmentationDescriptor(SpliceDescriptor):
             0x0E: ["ADS Info", self._uri],
             0x0F: ["URI", self._uri],
         }
-
-        upid_id = ""
         if upid_type in upid_map.keys():
             upid_id = upid_map[upid_type][1](bitbin, upid_length)
-        return upid_id
+            return upid_id
 
     def _encode_segmentation_upid(self, nbin, upid_type, upid_length):
         """
@@ -376,8 +371,7 @@ class SegmentationDescriptor(SpliceDescriptor):
             self._encode_isan(nbin, self.segmentation_upid, upid_length)
 
         if upid_type in [0x08]:
-            aired = self.segmentation_upid
-            nbin.add_hex(aired, (upid_length << 3))
+            self._encode_air_id(nbin, self.segmentation_upid, upid_length)
 
         if upid_type in [0x0A]:
             self._encode_eidr(nbin, self.segmentation_upid, upid_length)
@@ -408,6 +402,10 @@ class SegmentationDescriptor(SpliceDescriptor):
     @staticmethod
     def _air_id(bitbin, upid_length):
         return bitbin.ashex(upid_length << 3)
+
+    @staticmethod
+    def _encode_air_id(nbin, seg_upid, upid_length):
+        nbin.add_hex(seg_upid, (upid_length << 3))
 
     @staticmethod
     def _atsc(bitbin, upid_length):
@@ -469,12 +467,11 @@ class SegmentationDescriptor(SpliceDescriptor):
     @staticmethod
     def _eidr(bitbin, upid_length):
         pre = bitbin.asint(16)
-        post = [
-            bitbin.ashex(20)[2:],
-            bitbin.ashex(20)[2:],
-            bitbin.ashex(20)[2:],
-            bitbin.ashex(20)[2:],
-        ]
+        post = []
+        bit_count = 80
+        while bit_count:
+            bit_count -= 16
+            post.append(bitbin.ashex(16)[2:])
         return f"10.{pre}/{'-'.join(post)}"
 
     @staticmethod
