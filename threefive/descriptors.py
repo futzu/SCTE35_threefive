@@ -373,7 +373,7 @@ class SegmentationDescriptor(SpliceDescriptor):
             0x08  # works
             0x09  
             0x0A  
-            0x0B
+            0x0B  # works
             0x0C  # works
             0x0D
             0x0E  # works
