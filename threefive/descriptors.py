@@ -364,24 +364,13 @@ class SegmentationDescriptor(SpliceDescriptor):
 
     def _encode_segmentation_upid(self, nbin, upid_type, upid_length):
         """
-            0x02  # works
-            0x03  # works
-            0x04
-            0x05  # works
-            0x06  # works
-            0x07  # works
-            0x08  # works
-            0x09  # works
-            0x0A  
-            0x0B  # works
-            0x0C  # works
             0x0D
-            0x0E  # works
-            0x0F  # works
         """
         if upid_type in [0x02, 0x03, 0x07, 0x09, 0x0E, 0x0F]:
-            seg_upid = self.segmentation_upid.encode("utf-8")
-            nbin.add_bites(seg_upid, (upid_length << 3))
+            self._encode_uri(nbin, self.segmentation_upid, upid_length)
+
+        if upid_type in [0x04]:
+            self._encode_umid(nbin, self.segmentation_upid, upid_length)
 
         if upid_type in [0x05, 0x06]:
             self._encode_isan(nbin, self.segmentation_upid, upid_length)
@@ -389,6 +378,9 @@ class SegmentationDescriptor(SpliceDescriptor):
         if upid_type in [0x08]:
             aired = self.segmentation_upid
             nbin.add_hex(aired, (upid_length << 3))
+
+        if upid_type in [0x0A]:
+            self._encode_eidr(nbin, self.segmentation_upid, upid_length)
 
         if upid_type in [0x0B]:
             self._encode__atsc(nbin, self.segmentation_upid, upid_length)
@@ -477,20 +469,43 @@ class SegmentationDescriptor(SpliceDescriptor):
     @staticmethod
     def _eidr(bitbin, upid_length):
         pre = bitbin.asint(16)
-        post = bitbin.ashex(80)
-        return f"10.{pre}/{post[2:6]}-{post[6:10]}-{post[10:14]}-{post[14:18]}-T"
+        post = [
+            bitbin.ashex(20)[2:],
+            bitbin.ashex(20)[2:],
+            bitbin.ashex(20)[2:],
+            bitbin.ashex(20)[2:],
+        ]
+        return f"10.{pre}/{'-'.join(post)}"
+
+    @staticmethod
+    def _encode_eidr(nbin, seg_upid, upid_length):
+        pre, post = seg_upid[3:].split("/", 1)
+        nbin.add_int(int(pre), 16)
+        nbin.add_hex(post.replace("-", ""), 80)
 
     @staticmethod
     def _umid(bitbin, upid_length):
-        n_u = 8
-        pre = "".join(bitbin.ashex(upid_length << 3).split("x", 1))
-        return ".".join([pre[i : i + n_u] for i in range(0, len(pre), n_u)])
+        chunks = []
+        ulb = upid_length << 3
+        while ulb:
+            chunks.append(bitbin.ashex(32).split("x", 1)[1])
+            ulb -= 32
+        return ".".join(chunks)
+
+    @staticmethod
+    def _encode_umid(nbin, seg_upid, upid_length):
+        chunks = seg_upid.split(".")
+        for chunk in chunks:
+            nbin.add_hex(chunk, 32)
 
     @staticmethod
     def _uri(bitbin, upid_length):
-        if upid_length > 0:
-            return bitbin.asdecodedhex(upid_length << 3)
-        return None
+        return bitbin.asdecodedhex(upid_length << 3)
+
+    @staticmethod
+    def _encode_uri(nbin, seg_upid, upid_length):
+        seg_upid = seg_upid.encode("utf-8")
+        nbin.add_bites(seg_upid, (upid_length << 3))
 
 
 # map of known descriptors and associated classes
