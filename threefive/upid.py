@@ -42,9 +42,26 @@ def _mid(bitbin, upid_length):
         upid_length = bitbin.asint(8)
         ulb -= 8
         segmentation_upid = upid_decoder(bitbin, upid_type, upid_length)
+        mid_upid = {
+            "upid_type": upid_type,
+            "upid_length": upid_length,
+            "segmentation_upid": segmentation_upid,
+        }
         ulb -= upid_length << 3
-        upids.append(segmentation_upid)
+        upids.append(mid_upid)
     return upids
+
+
+def _encode_mid(nbin, seg_upid, upid_length):
+    for mid_upid in seg_upid:
+        nbin.add_int(mid_upid["upid_type"], 8)
+        nbin.add_int(mid_upid["upid_length"], 8)
+        upid_encoder(
+            nbin,
+            mid_upid["upid_type"],
+            mid_upid["upid_length"],
+            mid_upid["segmentation_upid"],
+        )
 
 
 def _mpu(bitbin, upid_length):
@@ -138,7 +155,7 @@ def upid_encoder(nbin, upid_type, upid_length, seg_upid):
         0x0A: ["EIDR", _encode_eidr],
         0x0B: ["ATSC", _encode_atsc],
         0x0C: ["MPU", _encode_mpu],
-        # 0x0D: ["MID",  _encode_uri],
+        0x0D: ["MID", _encode_mid],
         0x0E: ["ADS Info", _encode_uri],
         0x0F: ["URI", _encode_uri],
     }

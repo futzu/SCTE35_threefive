@@ -3,7 +3,7 @@ threefive.Cue Class
 """
 
 import json
-from base64 import b64decode
+from base64 import b64decode, b64encode
 from bitn import NBin
 from .section import SpliceInfoSection
 from .commands import splice_command
@@ -70,9 +70,8 @@ class Cue:
         nbin.add_int(self.info_section.descriptor_loop_length, 16)
         [d.encode(nbin) for d in self.descriptors]
         nbin.add_hex(self.crc, 32)
-        if nbin.bites != self.bites:
-            to_stderr(f" Cue.bites --->>> {self.bites}\n")
-            to_stderr(f" Encoded   --->>> {nbin.bites}\n")
+        be64 = b64encode(nbin.bites)
+        return be64
 
     def _descriptorloop(self, bites, dll):
         """
