@@ -4,6 +4,7 @@ SCTE35 Splice Descriptors
 from bitn import BitBin, NBin
 from .segmentation import table20, table22
 from .tools import k_by_v, i2b
+from .upid import upid_decoder, upid_encoder
 
 
 class SpliceDescriptor:
@@ -316,7 +317,7 @@ class SegmentationDescriptor(SpliceDescriptor):
             )
         self.segmentation_upid_type = bitbin.asint(8)  # 1 byte
         self.segmentation_upid_length = bitbin.asint(8)  # 1 byte
-        self.segmentation_upid = self._decode_segmentation_upid(
+        self.segmentation_upid = upid_decoder(
             bitbin, self.segmentation_upid_type, self.segmentation_upid_length
         )
         self.segmentation_type_id = bitbin.asint(8)  # 1 byte
@@ -329,58 +330,14 @@ class SegmentationDescriptor(SpliceDescriptor):
             nbin.add_int(self.segmentation_duration_raw, 40)  # 5 bytes
         nbin.add_int(self.segmentation_upid_type, 8)  # 1 byte
         nbin.add_int(self.segmentation_upid_length, 8)  # 1 byte
-        self._encode_segmentation_upid(
-            nbin, self.segmentation_upid_type, self.segmentation_upid_length
+        upid_encoder(
+            nbin,
+            self.segmentation_upid_type,
+            self.segmentation_upid_length,
+            self.segmentation_upid,
         )
         nbin.add_int(self.segmentation_type_id, 8)  # 1 byte
         self._encode_segments(nbin)
-
-    def _decode_segmentation_upid(self, bitbin, upid_type, upid_length):
-
-        upid_map = {
-            0x02: ["Deprecated", self._uri],
-            0x03: ["AdID", self._uri],
-            0x04: ["UMID", self._umid],
-            0x05: ["ISAN", self._isan],
-            0x06: ["ISAN", self._isan],
-            0x07: ["TID", self._uri],
-            0x08: ["AiringID", self._air_id],
-            0x09: ["ADI", self._uri],
-            0x0A: ["EIDR", self._eidr],
-            0x0B: ["ATSC", self._atsc],
-            0x0C: ["MPU", self._mpu],
-            0x0D: ["MID", self._mid],
-            0x0E: ["ADS Info", self._uri],
-            0x0F: ["URI", self._uri],
-        }
-        if upid_type in upid_map.keys():
-            upid_id = upid_map[upid_type][1](bitbin, upid_length)
-            return upid_id
-
-    def _encode_segmentation_upid(self, nbin, upid_type, upid_length):
-        """
-            0x0D
-        """
-        if upid_type in [0x02, 0x03, 0x07, 0x09, 0x0E, 0x0F]:
-            self._encode_uri(nbin, self.segmentation_upid, upid_length)
-
-        if upid_type in [0x04]:
-            self._encode_umid(nbin, self.segmentation_upid, upid_length)
-
-        if upid_type in [0x05, 0x06]:
-            self._encode_isan(nbin, self.segmentation_upid, upid_length)
-
-        if upid_type in [0x08]:
-            self._encode_air_id(nbin, self.segmentation_upid, upid_length)
-
-        if upid_type in [0x0A]:
-            self._encode_eidr(nbin, self.segmentation_upid, upid_length)
-
-        if upid_type in [0x0B]:
-            self._encode__atsc(nbin, self.segmentation_upid, upid_length)
-
-        if upid_type in [0x0C]:
-            self._encode_mpu(nbin, self.segmentation_upid, upid_length)
 
     def _decode_segments(self, bitbin):
         self.segment_num = bitbin.asint(8)  # 1 byte
@@ -398,111 +355,6 @@ class SegmentationDescriptor(SpliceDescriptor):
         if self.segmentation_type_id in [0x34, 0x36, 0x38, 0x3A]:
             nbin.add_int(self.sub_segment_num, 8)  # 1 byte
             nbin.add_int(self.sub_segments_expected, 8)  # 1 byte
-
-    @staticmethod
-    def _air_id(bitbin, upid_length):
-        return bitbin.ashex(upid_length << 3)
-
-    @staticmethod
-    def _encode_air_id(nbin, seg_upid, upid_length):
-        nbin.add_hex(seg_upid, (upid_length << 3))
-
-    @staticmethod
-    def _atsc(bitbin, upid_length):
-        return {
-            "TSID": bitbin.asint(16),
-            "reserved": bitbin.asint(2),
-            "end_of_day": bitbin.asint(5),
-            "unique_for": bitbin.asint(9),
-            "content_id": bitbin.asdecodedhex((upid_length - 4) << 3),
-        }
-
-    @staticmethod
-    def _encode__atsc(nbin, seg_upid, upid_length):
-        ulbits = upid_length << 3
-        nbin.add_int(seg_upid["TSID"], 16)
-        nbin.add_int(seg_upid["reserved"], 2)
-        nbin.add_int(seg_upid["end_of_day"], 5)
-        nbin.add_int(seg_upid["unique_for"], 9)
-        nbin.add_bites(seg_upid["content_id"].encode("utf-8"), (ulbits - 32))
-
-    @staticmethod
-    def _isan(bitbin, upid_length):
-        return bitbin.ashex(upid_length << 3)
-
-    @staticmethod
-    def _encode_isan(nbin, seg_upid, upid_length):
-        nbin.add_hex(seg_upid, (upid_length << 3))
-
-    def _mid(self, bitbin, upid_length):
-        upids = []
-        ulb = upid_length << 3
-        while ulb:
-            upid_type = bitbin.asint(8)  # 1 byte
-            ulb -= 8
-            upid_length = bitbin.asint(8)
-            ulb -= 8
-            segmentation_upid = self._decode_segmentation_upid(
-                bitbin, upid_type, upid_length
-            )
-            ulb -= upid_length << 3
-            upids.append(segmentation_upid)
-        return upids
-
-    @staticmethod
-    def _mpu(bitbin, upid_length):
-        ulbits = upid_length << 3
-        mpu_data = {
-            "format_identifier": bitbin.ashex(32),
-            "private_data": bitbin.ashex(ulbits - 32),
-        }
-        return mpu_data
-
-    @staticmethod
-    def _encode_mpu(nbin, seg_upid, upid_length):
-        ulbits = upid_length << 3
-        nbin.add_hex(seg_upid["format_identifier"], 32)
-        nbin.add_hex(seg_upid["private_data"], (ulbits - 32))
-
-    @staticmethod
-    def _eidr(bitbin, upid_length):
-        pre = bitbin.asint(16)
-        post = []
-        bit_count = 80
-        while bit_count:
-            bit_count -= 16
-            post.append(bitbin.ashex(16)[2:])
-        return f"10.{pre}/{'-'.join(post)}"
-
-    @staticmethod
-    def _encode_eidr(nbin, seg_upid, upid_length):
-        pre, post = seg_upid[3:].split("/", 1)
-        nbin.add_int(int(pre), 16)
-        nbin.add_hex(post.replace("-", ""), 80)
-
-    @staticmethod
-    def _umid(bitbin, upid_length):
-        chunks = []
-        ulb = upid_length << 3
-        while ulb:
-            chunks.append(bitbin.ashex(32).split("x", 1)[1])
-            ulb -= 32
-        return ".".join(chunks)
-
-    @staticmethod
-    def _encode_umid(nbin, seg_upid, upid_length):
-        chunks = seg_upid.split(".")
-        for chunk in chunks:
-            nbin.add_hex(chunk, 32)
-
-    @staticmethod
-    def _uri(bitbin, upid_length):
-        return bitbin.asdecodedhex(upid_length << 3)
-
-    @staticmethod
-    def _encode_uri(nbin, seg_upid, upid_length):
-        seg_upid = seg_upid.encode("utf-8")
-        nbin.add_bites(seg_upid, (upid_length << 3))
 
 
 # map of known descriptors and associated classes
