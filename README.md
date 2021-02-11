@@ -3,30 +3,6 @@
 
 ### threefive is a SCTE35 Parser, Decoder, Encoder library in Python3.
 
- *  __02/10/2021__: threefive now encodes SCTE35 Cues
-   	* __Encoding__ should be considered __Unstable__. 
-   	* Everything __works__, but __not__ everything works __completely__.
-   	* __Example__ Change pts_time for a Time Signal Splice Command
-```python3
-[PyPy 7.3.2 with GCC 10.2.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>>> from threefive import Cue
->>>> cue = Cue(b'/DA9AAAAAAAAAACABQb+0fha8gAnAiVDVUVJSAAAv3/PAAD4+mMNEQ4FTEEzMDkICAAAAAAuU4SBNAAAPIaCPw==')
->>>> cue.decode()
->>>> cue.command.pts_time
-39141.2706
->>>> cue.get_command()
-{'command_length': 5, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 39141.2706}
-# 
-# Change the pts_time for the Time Signal Splice Command and encode a new Base64 encoded SCTE35 Cue. 
-#
->>>> cue.command.pts_time= 5000.9999
->>>> cue.get_command()
-{'command_length': 5, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 5000.9999}
->>>> cue.encode()
-b'/DA9AAAAAAAAAACABQb+GtPUBwAnAiVDVUVJSAAAv3/PAAD4+mMNEQ4FTEEzMDkICAAAAAAuU4SBNAAAPIaCPw=='
-```
-   
 *   References the __2020__ SCTE35 Specification.
 
 *   __threefive__ is __simple__ and __easy__ to use. 
@@ -99,6 +75,32 @@ ___
 ---
 
 #### __Changes__
+
+
+ *  __02/10/2021__: threefive now __encodes SCTE35 Cues
+   	* __Encoding__ should be considered __Unstable__. 
+   	* Everything __works__, but __not__ everything works __completely__.
+   	* __Example__ Change pts_time for a Time Signal Splice Command
+```python3
+[PyPy 7.3.2 with GCC 10.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>>> from threefive import Cue
+>>>> cue = Cue(b'/DA9AAAAAAAAAACABQb+0fha8gAnAiVDVUVJSAAAv3/PAAD4+mMNEQ4FTEEzMDkICAAAAAAuU4SBNAAAPIaCPw==')
+>>>> cue.decode()
+>>>> cue.command.pts_time
+39141.2706
+>>>> cue.get_command()
+{'command_length': 5, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 39141.2706}
+# 
+# Change the pts_time for the Time Signal Splice Command and encode a new Base64 encoded SCTE35 Cue. 
+#
+>>>> cue.command.pts_time= 5000.9999
+>>>> cue.get_command()
+{'command_length': 5, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 5000.9999}
+>>>> cue.encode()
+b'/DA9AAAAAAAAAACABQb+GtPUBwAnAiVDVUVJSAAAv3/PAAD4+mMNEQ4FTEEzMDkICAAAAAAuU4SBNAAAPIaCPw=='
+```
+   
 
    *  Back by popular demand...   [Stream.__decode_next__()](#streamdecode_next)                                                                 
 
