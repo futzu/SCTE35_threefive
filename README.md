@@ -1,9 +1,30 @@
 
 # :rocket: threefive
 
-## threefive is a SCTE35 Parser library in Python3.
+### threefive is a SCTE35 (Parser\| Decoder \| Encoder) library in Python3.
+
+### 02/10/2021: ```threefive now encodes SCTE35 Cues```
+```
+[PyPy 7.3.2 with GCC 10.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>>> from threefive import Cue
+>>>> cue = Cue(b'/DA9AAAAAAAAAACABQb+0fha8gAnAiVDVUVJSAAAv3/PAAD4+mMNEQ4FTEEzMDkICAAAAAAuU4SBNAAAPIaCPw==')
+>>>> cue.decode()
+True
+>>>> cue.command.pts_time
+39141.2706
+>>>> cue.get_command()
+{'command_length': 5, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 39141.2706}
+>>>> cue.command.pts_time= 5000.9999
+>>>> cue.get_command()
+{'command_length': 5, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 5000.9999}
+>>>> cue.encode()
+b'/DA9AAAAAAAAAACABQb+GtPUBwAnAiVDVUVJSAAAv3/PAAD4+mMNEQ4FTEEzMDkICAAAAAAuU4SBNAAAPIaCPw=='
+```
+
+
    
-*   __2019a SCTE-35__ in about 900 lines of code.
+*   References the __2020__ SCTE35 Specification.
 
 *   __threefive__ is __simple__ and __easy__ to use. 
  	*  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
