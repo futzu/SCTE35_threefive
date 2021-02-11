@@ -9,18 +9,7 @@
  	*  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
   	* __SCTE-35__ can be parsed from strings or video with __one function__  [__threefive.decode()__](#the-decode-function).
-  	*  threefive __automatically identifies__ and parses __Base64, Hexidecimal__, or __Binary__ .  
-  	*   __Multiple programs__ and __multiple SCTE-35 streams__ are __well__ supported.
-	*  __SCTE35 cues__ up to __4096 bytes__ long can be __parsed from video__ streams or __encoded__ strings. 
-___
 
-## Why __so many releases__?
-
- *  I generate [__a lot of releases__](https://github.com/futzu/SCTE35-threefive/releases), however the interface to classes and functions rarely [__changes__](#changes)
- *  Releases are made for __incremental improvements__. This __keeps pip and the git repo in sync__.
- *  Having several relases makes it much __easier to resolve__ [issues](https://github.com/futzu/SCTE35-threefive/issues)
- 
----
 
 #### [__Heads Up!__ Changes as of 1/1/2021](#changes)
 
@@ -100,27 +89,6 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>> cue.encode()
 b'/DA9AAAAAAAAAACABQb+GtPUBwAnAiVDVUVJSAAAv3/PAAD4+mMNEQ4FTEEzMDkICAAAAAAuU4SBNAAAPIaCPw=='
 ```
-   
-
-   *  Back by popular demand...   [Stream.__decode_next__()](#streamdecode_next)                                                                 
-
-   *  As of threefive __v.2.2.39__  threefive.__Cue__ will require __Cue.decode()__ to be called to parse data.
-
-```python3
-from threefive import Cue
-Base64 = "/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g="
-cue = Cue(Base64)
-cue.decode()   # Now required
-cue.show()
-```
-                                    
-   *   As of version __2.1.95__, __threefive.version__ returns a string for the current __version__. 
-
-```python3
->>> import threefive
->>> threefive.version()
-'2.2.35'
-``` 
 ---
 
 ## Fast __Start__
