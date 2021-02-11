@@ -13,8 +13,7 @@
 
 #### [__Heads Up!__ Changes as of 1/1/2021](#changes)
 
-* [ __threefive__ runs __three times faster__ with __pypy3__](https://www.pypy.org/)
-* [__Requires__ Python __3.6 +__](https://www.python.org/downloads/release/python-390/)
+* [__Requires__ Python __3.6 +__ or __pypy3+ _](https://www.python.org/downloads/release/python-390/)
 * [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
 *  [__Fast__ Start](#fast-start-directions)
       * [__Dependencies__](#dependencies)
@@ -65,8 +64,7 @@
 
 #### __Changes__
 
-
- *  __02/10/2021__: threefive now __encodes SCTE35 Cues
+ *  __02/10/2021__: threefive now __encodes SCTE35 Cues__.
    	* __Encoding__ should be considered __Unstable__. 
    	* Everything __works__, but __not__ everything works __completely__.
    	* __Example__ Change pts_time for a Time Signal Splice Command
