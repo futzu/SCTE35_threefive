@@ -4,25 +4,26 @@
 ### threefive is a SCTE35 (Parser\| Decoder \| Encoder) library in Python3.
 
 ### 02/10/2021: ```threefive now encodes SCTE35 Cues```
-```
+ * Change pts_time for a Time Signal Splice Command
+```python3
 [PyPy 7.3.2 with GCC 10.2.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>>> from threefive import Cue
 >>>> cue = Cue(b'/DA9AAAAAAAAAACABQb+0fha8gAnAiVDVUVJSAAAv3/PAAD4+mMNEQ4FTEEzMDkICAAAAAAuU4SBNAAAPIaCPw==')
 >>>> cue.decode()
-True
 >>>> cue.command.pts_time
 39141.2706
 >>>> cue.get_command()
 {'command_length': 5, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 39141.2706}
+# 
+# Change the pts_time for the Time Signal Splice Command and encode a new Base64 encoded SCTE35 Cue. 
+#
 >>>> cue.command.pts_time= 5000.9999
 >>>> cue.get_command()
 {'command_length': 5, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 5000.9999}
 >>>> cue.encode()
 b'/DA9AAAAAAAAAACABQb+GtPUBwAnAiVDVUVJSAAAv3/PAAD4+mMNEQ4FTEEzMDkICAAAAAAuU4SBNAAAPIaCPw=='
 ```
-
-
    
 *   References the __2020__ SCTE35 Specification.
 
