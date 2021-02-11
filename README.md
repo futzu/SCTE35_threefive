@@ -4,7 +4,9 @@
 ### threefive is a SCTE35 (Parser\| Decoder \| Encoder) library in Python3.
 
 ### 02/10/2021: ```threefive now encodes SCTE35 Cues```
- * Change pts_time for a Time Signal Splice Command
+ * __Encoding__ should be considered __Unstable__. 
+ * Everything __works__, but __not__ everything works __completely__.
+ * __Example__ Change pts_time for a Time Signal Splice Command
 ```python3
 [PyPy 7.3.2 with GCC 10.2.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
