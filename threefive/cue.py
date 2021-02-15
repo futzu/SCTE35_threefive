@@ -60,25 +60,21 @@ class Cue:
         if not bites:
             raise Exception("Boom! self._mk_descriptors(bites)")
         self.crc = hex(ifb(bites[0:4]))
-        self.encode()
+        # self.encode()
         return True
 
     def encode(self):
         nbin = NBin()
         self.info_section.encode(nbin)
         self.command.encode(nbin)
-        tag_n_len_bites = 2
-        # recalculate descriptor_loop_length
-        self.info_section.descriptor_loop_length = 0
-        for spliced in self.descriptors:
-            sd_size = tag_n_len_bites + spliced.descriptor_length
-            self.info_section.descriptor_loop_length += sd_size
-            spliced.encode(nbin)
+        dll = sum([(d.descriptor_length+2) for d in self.descriptors])
+        self.info_section.descriptor_loop_length = dll
         nbin.add_int(self.info_section.descriptor_loop_length, 16)
+        [d.encode(nbin) for d in self.descriptors]
         nbin.add_hex(self.crc, 32)
         be64 = b64encode(nbin.bites)
         return be64
-
+    
     def _descriptorloop(self, bites, dll):
         """
         parse all splice descriptors
