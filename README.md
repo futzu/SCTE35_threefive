@@ -64,32 +64,10 @@
 
 #### __Changes__
 
- *  __02/10/2021__: threefive now __encodes SCTE35 Cues__.
-   	* __Encoding__ should be considered __Unstable__. 
-   	* Everything __works__, but __not__ everything works __completely__.
-   	* __Example__ Change pts_time for a Time Signal Splice Command
-```python3
-[PyPy 7.3.2 with GCC 10.2.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>>> from threefive import Cue
->>>> cue = Cue(b'/DA9AAAAAAAAAACABQb+0fha8gAnAiVDVUVJSAAAv3/PAAD4+mMNEQ4FTEEzMDkICAAAAAAuU4SBNAAAPIaCPw==')
->>>> cue.decode()
->>>> cue.command.pts_time
-39141.2706
->>>> cue.get_command()
-{'command_length': 5, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 39141.2706}
-# 
-# Change the pts_time for the Time Signal Splice Command and encode a new Base64 encoded SCTE35 Cue. 
-#
->>>> cue.command.pts_time= 5000.9999
->>>> cue.get_command()
-{'command_length': 5, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 5000.9999}
->>>> cue.encode()
-b'/DA9AAAAAAAAAACABQb+GtPUBwAnAiVDVUVJSAAAv3/PAAD4+mMNEQ4FTEEzMDkICAAAAAAuU4SBNAAAPIaCPw=='
-```
----
-
-## Fast __Start__
+*  I think __I'm going to roll back the encoding code__. I've spent hours trying to understand exactly which bytes to run crc32() on.
+__The SCTE35 specification is bannanas__, and __it was clearly written by people who think they know how to write code__. There is no reference  
+implementation. __threefive is the most complete implementation I've seen__ and __that__ kind of __scares me__. __I had to guess at a lot of it__.
+The decoder is solid and well tested. I'll clean it up and fix a few things and then __somebody else__ can __take over__. __I've got other things__ man.  
 
 *  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
