@@ -1,7 +1,7 @@
 
 # :rocket: threefive
 
-### threefive is a SCTE35 Parser, Decoder, Encoder library in Python3.
+### threefive is a SCTE35 Parser, Decoder library in Python3.
 
 *   References the __2020__ SCTE35 Specification.
 
