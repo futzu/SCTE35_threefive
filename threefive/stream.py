@@ -84,7 +84,6 @@ class Stream:
         Stream.decode_next returns the next
         SCTE35 cue as a threefive.Cue instance.
         """
-        self._find_start()
         cue = self.decode(func=False)
         if cue:
             return cue
@@ -94,7 +93,6 @@ class Stream:
         Stream.decode_program limits SCTE35 parsing
         to a specific MPEGTS program.
         """
-        self._find_start()
         self.the_program = the_program
         self.decode(func)
 
@@ -146,8 +144,6 @@ class Stream:
             return None
         if self.info:
             return None
-        # if pid not in self._pid_prog:
-        #    return None
         if pid in self._scte35_pids:
             return self._parse_scte35(pkt, pid)
         if pid in self._pid_prog:

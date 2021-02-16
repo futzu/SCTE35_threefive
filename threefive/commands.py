@@ -55,7 +55,6 @@ class PrivateCommand(SpliceCommand):
         self.name = "Private Command"
         self.identifier = ifb(self.bites[0:3])  # 3 bytes of 8 bits = 24 bits
         self.command_length = 3
-        self.encode()
 
 
 class TimeSignal(SpliceCommand):
