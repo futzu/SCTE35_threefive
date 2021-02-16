@@ -3,9 +3,7 @@ section.py
 
 SCTE35 Splice Info Section
 """
-from bitn import BitBin, NBin
-from .tools import k_by_v
-
+from bitn import BitBin
 
 sap_map = {"0x0": "Type 1", "0x1": "Type 2", "0x2": "Type 3", "0x3": "No Sap Type"}
 
@@ -56,26 +54,3 @@ class SpliceInfoSection:
         self.splice_command_length = bitbin.asint(12)
         self.splice_command_type = bitbin.asint(8)
         self.descriptor_loop_length = 0
-
-    def encode(self, nbin=None):
-        """
-        SpliceInfoSection.encode
-        takes the vars from an instance and
-        encodes them as bytes.
-        """
-        if not nbin:
-            nbin = NBin()
-        nbin.add_hex("0xfc", 8)  # self.table_id
-        nbin.add_int(0, 1)  # self.section_syntax_indicator
-        nbin.add_int(0, 1)  # self.private
-        nbin.add_hex(k_by_v(sap_map, self.sap_type), 2)
-        nbin.add_int(self.section_length, 12)
-        nbin.add_int(0, 8)
-        nbin.add_flag(self.encrypted_packet)
-        nbin.add_int(self.encryption_algorithm, 6)
-        nbin.add_90k(self.pts_adjustment, 33)
-        nbin.add_hex(self.cw_index, 8)
-        nbin.add_hex(self.tier, 12)
-        nbin.add_int(self.splice_command_length, 12)
-        nbin.add_int(self.splice_command_type, 8)
-        return nbin

@@ -146,11 +146,14 @@ class Stream:
             return None
         if self.info:
             return None
+        # if pid not in self._pid_prog:
+        #    return None
         if pid in self._scte35_pids:
             return self._parse_scte35(pkt, pid)
         if pid in self._pid_prog:
             if (pkt[1] >> 6) & 1:
                 self._parse_pusi(pkt, pid)
+                return None
         return None
 
     @staticmethod
@@ -277,7 +280,7 @@ class Stream:
                 self._chk_pid_stream_type(pid, stream_type)
         else:
             if self.info:
-                sys.exit()
+                self._tsdata.seek(0, 2)
 
     def _parse_stream_type(self, pkt, idx):
         """
