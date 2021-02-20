@@ -1,20 +1,26 @@
 
 # :rocket: threefive
 
-### threefive is a SCTE35 Parser, Decoder library in Python3.
+### threefive is a SCTE35 Parser, Decoder, Encoder library in Python3.
+
 
 *   References the __2020__ SCTE35 Specification.
 
 *   __threefive__ is __simple__ and __easy__ to use. 
+
  	*  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
   	* __SCTE-35__ can be parsed from strings or video with __one function__  [__threefive.decode()__](#the-decode-function).
 
-* [__threefive__ in __The White House?__](https://github.com/futzu/SCTE35-threefive/blob/master/wh-threefive.png)
+*   [__threefive__ now __Encodes__ SCTE35 __Cues__](#changes)
 
-#### [__Heads Up!__ Changes as of 1/1/2021](#changes)
+*   [__threefive__ in __The White House?__](https://github.com/futzu/SCTE35-threefive/blob/master/wh-threefive.png)
 
-* [__Requires__ Python __3.6 +__ or __pypy3+__](https://www.python.org/downloads/release/python-390/)
+
+
+#### [__Heads Up!__ Changes as of 1/1/2021](#changes
+
+* [__Requires__ Python __3.6 +__ or __pypy3+ _](https://www.python.org/downloads/release/python-390/)
 * [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
 *  [__Fast__ Start](#fast-start-directions)
       * [__Dependencies__](#dependencies)
@@ -65,10 +71,31 @@
 
 #### __Changes__
 
-*  I think __I'm going to roll back the encoding code__. I've spent hours trying to understand exactly which bytes to run crc32() on.
-__The SCTE35 specification is bannanas__, and __it was clearly written by people who think they know how to write code__. There is no reference  
-implementation. __threefive is the most complete implementation I've seen__ and __that__ kind of __scares me__. __I had to guess at a lot of it__.
-The decoder is solid and well tested. I'll clean it up and fix a few things and then __somebody else__ can __take over__. __I've got other things__ man.  
+ *  __02/10/2021__: threefive now __encodes SCTE35 Cues__.
+   	* __Encoding__ may be buggy, please don't use encoding in production just yet. 
+   	* __Example__ Change pts_time for a Time Signal Splice Command
+```python3
+[PyPy 7.3.2 with GCC 10.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>>> from threefive import Cue
+>>>> cue = Cue(b'/DA9AAAAAAAAAACABQb+0fha8gAnAiVDVUVJSAAAv3/PAAD4+mMNEQ4FTEEzMDkICAAAAAAuU4SBNAAAPIaCPw==')
+>>>> cue.decode()
+>>>> cue.command.pts_time
+39141.2706
+>>>> cue.get_command()
+{'command_length': 5, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 39141.2706}
+# 
+# Change the pts_time for the Time Signal Splice Command and encode a new Base64 encoded SCTE35 Cue. 
+#
+>>>> cue.command.pts_time= 5000.9999
+>>>> cue.get_command()
+{'command_length': 5, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 5000.9999}
+>>>> cue.encode()
+b'/DA9AAAAAAAAAACABQb+GtPUBwAnAiVDVUVJSAAAv3/PAAD4+mMNEQ4FTEEzMDkICAAAAAAuU4SBNAAAPIaCPw=='
+```
+---
+
+## Fast __Start__
 
 *  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
