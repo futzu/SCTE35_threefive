@@ -1,9 +1,10 @@
 """
 threefive.Cue Class
 """
-
 import json
-from base64 import b64decode
+from base64 import b64decode, b64encode
+from bitn import NBin
+import crcmod.predefined
 from .section import SpliceInfoSection
 from .commands import splice_command
 from .descriptors import splice_descriptor
@@ -38,6 +39,7 @@ class Cue:
         self.command = None
         self.descriptors = []
         self.crc = None
+        self.crc_me = None
         self.data = self._strip_header(data)
         self.bites = self._mk_bits(self.data)
         self.packet_data = packet_data
@@ -49,6 +51,7 @@ class Cue:
         """
         Cue.decode() parses for SCTE35 data
         """
+        isb = bytearray(self.bites[:-4])
         bites = self.mk_info_section(self.bites)
         if not bites:
             raise Exception("Boom! self.mk_info_section(self.bites)")
@@ -59,7 +62,27 @@ class Cue:
         if not bites:
             raise Exception("Boom! self._mk_descriptors(bites)")
         self.crc = hex(ifb(bites[0:4]))
+        crc32_func = crcmod.predefined.mkCrcFun("crc-32-mpeg")
+        self.crc_me = hex(crc32_func(isb))
+        self.encode()
         return True
+
+    def encode(self):
+        nbin = NBin()
+        self.info_section.encode(nbin)
+        self.command.encode(nbin)
+        dll = sum([(d.descriptor_length + 2) for d in self.descriptors])
+        self.info_section.descriptor_loop_length = dll
+        nbin.add_int(self.info_section.descriptor_loop_length, 16)
+        [d.encode(nbin) for d in self.descriptors]
+        crc32_func = crcmod.predefined.mkCrcFun("crc-32-mpeg")
+        print(f" Decode bites: {self.bites} crc32: {self.crc}")
+        self.crc = hex(crc32_func(nbin.bites))
+        nbin.add_hex(self.crc, 32)
+        print(f" Encode bites: {nbin.bites} crc32: {self.crc}")
+
+        be64 = b64encode(nbin.bites)
+        return be64
 
     def _descriptorloop(self, bites, dll):
         """
