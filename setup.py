@@ -16,7 +16,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/SCTE35-threefive",
     packages=setuptools.find_packages(),
-    install_requires=["bitn>=0.0.37",],
+    install_requires=["bitn>=0.0.37","crcmod",],
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
