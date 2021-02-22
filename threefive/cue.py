@@ -52,7 +52,7 @@ class Cue:
         """
         Cue.decode() parses for SCTE35 data
         """
-        isb=bytearray(self.bites[:-4])
+        isb = bytearray(self.bites[:-4])
         bites = self.mk_info_section(self.bites)
         if not bites:
             raise Exception("Boom! self.mk_info_section(self.bites)")
@@ -83,13 +83,13 @@ class Cue:
         self.info_section.section_length = 11 + cmdl + 2 + dll + 4
         cuebin = NBin()
         info_bites = self.info_section.encode()
-        info_bitlen = (len(info_bites) << 3)
-        cuebin.add_bites(info_bites,info_bitlen)
-        cmd_bitlen = (cmdl << 3)
+        info_bitlen = len(info_bites) << 3
+        cuebin.add_bites(info_bites, info_bitlen)
+        cmd_bitlen = cmdl << 3
         cuebin.add_bites(cmd_bites, cmd_bitlen)
         cuebin.add_int(self.info_section.descriptor_loop_length, 16)
         cuebin.add_bites(dscptr_bites, (dll << 3))
-        crc32_func = crcmod.predefined.mkCrcFun('crc-32-mpeg')
+        crc32_func = crcmod.predefined.mkCrcFun("crc-32-mpeg")
         self.crc = hex(crc32_func(cuebin.bites))
         cuebin.add_hex(self.crc, 32)
         be64 = b64encode(cuebin.bites)
@@ -97,15 +97,14 @@ class Cue:
 
     def _unloop_descriptors(self):
         all_bites = NBin()
-        dbite_chunks =[d.encode() for d in self.descriptors]
-        for chunk,d in zip(dbite_chunks,self.descriptors):
+        dbite_chunks = [d.encode() for d in self.descriptors]
+        for chunk, d in zip(dbite_chunks, self.descriptors):
             d.descriptor_length = len(chunk)
             all_bites.add_int(d.tag, 8)
             all_bites.add_int(d.descriptor_length, 8)
             dbits = d.descriptor_length << 3
-            all_bites.add_bites(chunk,dbits)
+            all_bites.add_bites(chunk, dbits)
         return all_bites.bites
-
 
     def _descriptorloop(self, bites, dll):
         """
@@ -135,7 +134,6 @@ class Cue:
                 "command": self.get_command(),
                 "descriptors": self.get_descriptors(),
                 "crc": self.crc,
-
             }
             try:
                 scte35.update(self.get_packet_data())
@@ -227,7 +225,7 @@ class Cue:
         """
         info_size = 14
         info_bites = bites[:info_size]
-        #self.info_section = SpliceInfoSection()
+        # self.info_section = SpliceInfoSection()
         self.info_section.decode(info_bites)
         return bites[info_size:]
 

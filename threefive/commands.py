@@ -41,6 +41,7 @@ class BandwidthReservation(SpliceCommand):
     """
     Table 11 - bandwidth_reservation()
     """
+
     def __init__(self, bites=None):
         super().__init__(bites)
         self.command_type = 255
@@ -53,6 +54,7 @@ class SpliceNull(SpliceCommand):
     """
     Table 7 - splice_null()
     """
+
     def __init__(self, bites=None):
         super().__init__(bites)
         self.command_type = 0
@@ -72,7 +74,6 @@ class PrivateCommand(SpliceCommand):
         self.name = "Private Command"
         self.identifier = None
         self.command_length = 3
-
 
     def decode(self):
         """

@@ -33,7 +33,6 @@ class SpliceDescriptor:
         must implement a decode method.
         """
 
-
     def encode(self, nbin=None):
         if not nbin:
             nbin = NBin()

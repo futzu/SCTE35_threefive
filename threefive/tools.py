@@ -37,13 +37,14 @@ def k_by_v(adict, avalue):
         if v == avalue:
             return k
 
-def loader(obj,stuff):
+
+def loader(obj, stuff):
     """
     loader is used to load
     data from a dict or json string
     into a class instance.
     """
-    if isinstance(stuff,str):
+    if isinstance(stuff, str):
         stuff = json.loads(stuff)
-    if isinstance(stuff,dict):
+    if isinstance(stuff, dict):
         obj.__dict__.update(stuff)
