@@ -15,8 +15,8 @@ class SpliceDescriptor:
     """
 
     def __init__(self, bites=None):
-        self.tag = None
-        self.descriptor_length = None
+        self.tag = -1
+        self.descriptor_length = 0
         self.identifier = None
         self.bites = bites
         if bites:
@@ -24,20 +24,19 @@ class SpliceDescriptor:
             self.descriptor_length = bites[1]
             self.bites = bites[2:]
 
+    def __repr__(self):
+        return str(vars(self))
+
     def decode(self):
         """
         SpliceDescriptor subclasses
         must implement a decode method.
         """
 
-    def encode_meta(self, nbin):
-        nbin.add_int(self.tag, 8)
-        nbin.add_int(self.descriptor_length, 8)
 
     def encode(self, nbin=None):
         if not nbin:
             nbin = NBin()
-        self.encode_meta(nbin)
         self.encode_id(nbin)
         return nbin
 
@@ -65,6 +64,7 @@ class AvailDescriptor(SpliceDescriptor):
 
     def __init__(self, bites=None):
         super().__init__(bites)
+        self.tag = 0
         self.name = "Avail Descriptor"
         self.provider_avail_id = None
 
@@ -82,7 +82,7 @@ class AvailDescriptor(SpliceDescriptor):
         """
         nbin = super().encode(nbin)
         nbin.add_int(self.provider_avail_id, 32)
-        return nbin
+        return nbin.bites
 
 
 class DtmfDescriptor(SpliceDescriptor):
@@ -92,6 +92,7 @@ class DtmfDescriptor(SpliceDescriptor):
 
     def __init__(self, bites=None):
         super().__init__(bites)
+        self.tag = 1
         self.name = "DTMF Descriptor"
         self.preroll = None
         self.dtmf_count = None
@@ -122,7 +123,7 @@ class DtmfDescriptor(SpliceDescriptor):
         while d_c < self.dtmf_count:
             nbin.add_int(ord(self.dtmf_chars[d_c]), 8)
             d_c += 1
-        return nbin
+        return nbin.bites
 
 
 class TimeDescriptor(SpliceDescriptor):
@@ -132,6 +133,7 @@ class TimeDescriptor(SpliceDescriptor):
 
     def __init__(self, bites=None):
         super().__init__(bites)
+        self.tag = 4
         self.name = "Time Descriptor"
         self.tai_seconds = None
         self.tai_ns = None
@@ -155,7 +157,7 @@ class TimeDescriptor(SpliceDescriptor):
         nbin.add_int(self.tai_seconds, 48)
         nbin.add_int(self.tai_ns, 32)
         nbin.add_int(self.utc_offset, 16)
-        return nbin
+        return nbin.bites
 
 
 class AudioDescriptor(SpliceDescriptor):
@@ -165,6 +167,7 @@ class AudioDescriptor(SpliceDescriptor):
 
     def __init__(self, bites=None):
         super().__init__(bites)
+        self.tag = 4
         self.name = "Audio Descriptor"
         self.components = []
         self.audio_count = None
@@ -202,7 +205,7 @@ class AudioDescriptor(SpliceDescriptor):
             nbin.add_int(comp["bit_stream_mode"], 3)
             nbin.add_int(comp["num_channels"], 4)
             nbin.add_flag(comp["full_srvc_audio"])
-        return nbin
+        return nbin.bites
 
 
 class SegmentationDescriptor(SpliceDescriptor):
@@ -212,6 +215,7 @@ class SegmentationDescriptor(SpliceDescriptor):
 
     def __init__(self, bites=None):
         super().__init__(bites)
+        self.tag = 2
         self.name = "Segmentation Descriptor"
         self.segmentation_event_id = None
         self.segmentation_event_cancel_indicator = None
@@ -264,6 +268,7 @@ class SegmentationDescriptor(SpliceDescriptor):
             if not self.program_segmentation_flag:
                 self._encode_components(nbin)
             self._encode_segmentation(nbin)
+        return nbin.bites
 
     def _decode_components(self, bitbin):
         self.component_count = c_c = bitbin.asint(8)  # 1 byte

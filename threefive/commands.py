@@ -12,8 +12,11 @@ class SpliceCommand:
 
     def __init__(self, bites=None):
         self.command_length = 0
+        self.command_type = None
         self.bites = bites
-        self.name = None
+
+    def __repr__(self):
+        return str(vars(self))
 
     def decode(self):
         """
@@ -25,7 +28,7 @@ class SpliceCommand:
         encode
         """
         nbin = self._chk_nbin(nbin)
-        return nbin
+        return nbin.bites
 
     @staticmethod
     def _chk_nbin(nbin):
@@ -38,6 +41,9 @@ class BandwidthReservation(SpliceCommand):
     """
     Table 11 - bandwidth_reservation()
     """
+    def __init__(self, bites=None):
+        super().__init__(bites)
+        self.command_type = 255
 
     def decode(self):
         self.name = "Bandwidth Reservation"
@@ -47,6 +53,9 @@ class SpliceNull(SpliceCommand):
     """
     Table 7 - splice_null()
     """
+    def __init__(self, bites=None):
+        super().__init__(bites)
+        self.command_type = 0
 
     def decode(self):
         self.name = "Splice Null"
@@ -59,15 +68,17 @@ class PrivateCommand(SpliceCommand):
 
     def __init__(self, bites=None):
         super().__init__(bites)
+        self.command_type = 255
+        self.name = "Private Command"
         self.identifier = None
+        self.command_length = 3
+
 
     def decode(self):
         """
         decode private command
         """
-        self.name = "Private Command"
         self.identifier = ifb(self.bites[0:3])  # 3 bytes of 8 bits = 24 bits
-        self.command_length = 3
         self.encode()
 
     def encode(self, nbin=None):
@@ -76,7 +87,7 @@ class PrivateCommand(SpliceCommand):
         """
         nbin = self._chk_nbin(nbin)
         nbin.add_int(self.identifier, 24)  # 3 bytes of 8 bits = 24 bits
-        return nbin
+        return nbin.bites
 
 
 class TimeSignal(SpliceCommand):
@@ -86,6 +97,7 @@ class TimeSignal(SpliceCommand):
 
     def __init__(self, bites=None):
         super().__init__(bites)
+        self.command_type = 6
         self.name = "Time Signal"
         self.time_specified_flag = None
         self.pts_time = None
@@ -106,7 +118,7 @@ class TimeSignal(SpliceCommand):
         """
         nbin = self._chk_nbin(nbin)
         self._encode_pts(nbin)
-        return nbin
+        return nbin.bites
 
     def _set_len(self, start, end):
         self.command_length = (start - end) >> 3
@@ -140,6 +152,7 @@ class SpliceInsert(TimeSignal):
 
     def __init__(self, bites=None):
         super().__init__(bites)
+        self.command_type = 5
         self.name = "Splice Insert"
         self.break_auto_return = None
         self.break_duration = None
@@ -263,7 +276,7 @@ class SpliceInsert(TimeSignal):
             nbin.add_int(self.unique_program_id, 16)
             nbin.add_int(self.avail_num, 8)
             nbin.add_int(self.avail_expected, 8)
-        return nbin
+        return nbin.bites
 
 
 command_map = {

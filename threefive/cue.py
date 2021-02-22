@@ -30,22 +30,23 @@ class Cue:
 
     """
 
-    def __init__(self, data, packet_data=None):
+    def __init__(self, data=None, packet_data=None):
         """
         data may be packet bites or encoded string
         packet_data is a dict passed from a Stream instance
         """
-        self.info_section = None
+        self.info_section = SpliceInfoSection()
+
         self.command = None
         self.descriptors = []
         self.crc = None
-        self.crc_me = None
-        self.data = self._strip_header(data)
-        self.bites = self._mk_bits(self.data)
-        self.packet_data = packet_data
+        if data:
+            self.data = self._strip_header(data)
+            self.bites = self._mk_bits(self.data)
+            self.packet_data = packet_data
 
     def __repr__(self):
-        return str(self.get())
+        return str(vars(self))
 
     def decode(self):
         """
@@ -65,21 +66,45 @@ class Cue:
         return True
 
     def encode(self):
-        nbin = NBin()
-        self.info_section.encode(nbin)
-        self.command.encode(nbin)
-        dll = sum([(d.descriptor_length+2) for d in self.descriptors])
+        if not self.info_section:
+            self.info_section
+        dscptr_bites = self._unloop_descriptors()
+        dll = len(dscptr_bites)
         self.info_section.descriptor_loop_length = dll
-        nbin.add_int(self.info_section.descriptor_loop_length, 16)
-        [d.encode(nbin) for d in self.descriptors]
+        cmd_bites = self.command.encode()
+        cmdl = len(cmd_bites)
+        self.info_section.splice_command_length = self.command.command_length
+        self.info_section.splice_command_type = self.command.command_type
+        # 11 bytes for info_section after section length
+        # cmdl for command length
+        # 2 for the variable descriptor loop length
+        # dll for the descriptor loop
+        # 4 for crc
+        self.info_section.section_length = 11 + cmdl + 2 + dll + 4
+        cuebin = NBin()
+        info_bites = self.info_section.encode()
+        info_bitlen = (len(info_bites) << 3)
+        cuebin.add_bites(info_bites,info_bitlen)
+        cmd_bitlen = (cmdl << 3)
+        cuebin.add_bites(cmd_bites, cmd_bitlen)
+        cuebin.add_int(self.info_section.descriptor_loop_length, 16)
+        cuebin.add_bites(dscptr_bites, (dll << 3))
         crc32_func = crcmod.predefined.mkCrcFun('crc-32-mpeg')
-        # print(f' Decode bites: {self.bites} crc32: {self.crc}')
-        self.crc = hex(crc32_func(nbin.bites))
-        nbin.add_hex(self.crc, 32)
-        # print(f' Encode bites: {nbin.bites} crc32: {self.crc}')
-        be64 = b64encode(nbin.bites)
+        self.crc = hex(crc32_func(cuebin.bites))
+        cuebin.add_hex(self.crc, 32)
+        be64 = b64encode(cuebin.bites)
         return be64
 
+    def _unloop_descriptors(self):
+        all_bites = NBin()
+        dbite_chunks =[d.encode() for d in self.descriptors]
+        for chunk,d in zip(dbite_chunks,self.descriptors):
+            d.descriptor_length = len(chunk)
+            all_bites.add_int(d.tag, 8)
+            all_bites.add_int(d.descriptor_length, 8)
+            dbits = d.descriptor_length << 3
+            all_bites.add_bites(chunk,dbits)
+        return all_bites.bites
 
 
     def _descriptorloop(self, bites, dll):
@@ -112,8 +137,10 @@ class Cue:
                 "crc": self.crc,
 
             }
-            if self.packet_data:
+            try:
                 scte35.update(self.get_packet_data())
+            except:
+                pass
             return scte35
         return False
 
@@ -200,7 +227,7 @@ class Cue:
         """
         info_size = 14
         info_bites = bites[:info_size]
-        self.info_section = SpliceInfoSection()
+        #self.info_section = SpliceInfoSection()
         self.info_section.decode(info_bites)
         return bites[info_size:]
 
