@@ -36,6 +36,11 @@ class SpliceCommand:
             nbin = NBin()
         return nbin
 
+    def precheck(self, nbin_method, var_name, bit_count):
+        if self.__dict__[var_name] is None:
+            raise ValueError(f"{var_name} is not set")
+        nbin_method(self.__dict__[var_name], bit_count)
+
 
 class BandwidthReservation(SpliceCommand):
     """
@@ -45,8 +50,6 @@ class BandwidthReservation(SpliceCommand):
     def __init__(self, bites=None):
         super().__init__(bites)
         self.command_type = 255
-
-    def decode(self):
         self.name = "Bandwidth Reservation"
 
 
@@ -58,8 +61,6 @@ class SpliceNull(SpliceCommand):
     def __init__(self, bites=None):
         super().__init__(bites)
         self.command_type = 0
-
-    def decode(self):
         self.name = "Splice Null"
 
 
@@ -87,7 +88,7 @@ class PrivateCommand(SpliceCommand):
         encode private command
         """
         nbin = self._chk_nbin(nbin)
-        nbin.add_int(self.identifier, 24)  # 3 bytes of 8 bits = 24 bits
+        self.precheck(nbin.add_int, "identifier", 24)  # 3 bytes of 8 bits = 24 bits
         return nbin.bites
 
 
@@ -138,10 +139,10 @@ class TimeSignal(SpliceCommand):
             bitbin.forward(7)
 
     def _encode_pts(self, nbin):
-        nbin.add_flag(self.time_specified_flag)
+        self.precheck(nbin.add_flag, "time_specified_flag", 1)
         if self.time_specified_flag:
             nbin.reserve(6)
-            nbin.add_90k(self.pts_time, 33)
+            self.precheck(nbin.add_90k, "pts_time", 33)
         else:
             nbin.reserve(7)
 
@@ -183,9 +184,9 @@ class SpliceInsert(TimeSignal):
         SpliceInsert._encode_break(nbin) is called
         if SpliceInsert.duration_flag is set
         """
-        nbin.add_flag(self.break_auto_return)
+        self.precheck(nbin.add_flag, "break_auto_return", 1)
         nbin.forward(6)
-        nbin.add_90k(self.break_duration, 33)
+        self.precheck(nbin.add_90k, "break_duration", 33)
 
     def _decode_flags(self, bitbin):
         """
@@ -203,10 +204,10 @@ class SpliceInsert(TimeSignal):
         SpliceInsert._encode_flags converts four flags
         to bits
         """
-        nbin.add_flag(self.out_of_network_indicator)
-        nbin.add_flag(self.program_splice_flag)
-        nbin.add_flag(self.duration_flag)
-        nbin.add_flag(self.splice_immediate_flag)
+        self.precheck(nbin.add_flag, "out_of_network_indicator", 1)
+        self.precheck(nbin.add_flag, "program_splice_flag", 1)
+        self.precheck(nbin.add_flag, "duration_flag", 1)
+        self.precheck(nbin.add_flag, "splice_immediate_flag", 1)
         nbin.forward(4)
 
     def _decode_components(self, bitbin):
@@ -260,8 +261,8 @@ class SpliceInsert(TimeSignal):
         SpliceInsert.encode
         """
         nbin = self._chk_nbin(nbin)
-        nbin.add_int(self.splice_event_id, 32)
-        nbin.add_flag(self.splice_event_cancel_indicator)
+        self.precheck(nbin.add_int, "splice_event_id", 32)
+        self.precheck(nbin.add_flag, "splice_event_cancel_indicator", 1)
         nbin.forward(7)
         if not self.splice_event_cancel_indicator:
             self._encode_flags(nbin)
@@ -274,9 +275,9 @@ class SpliceInsert(TimeSignal):
                     self._encode_pts(nbin)
             if self.duration_flag:
                 self._encode_break(nbin)
-            nbin.add_int(self.unique_program_id, 16)
-            nbin.add_int(self.avail_num, 8)
-            nbin.add_int(self.avail_expected, 8)
+            self.precheck(nbin.add_int, "unique_program_id", 16)
+            self.precheck(nbin.add_int, "avail_num", 8)
+            self.precheck(nbin.add_int, "avail_expected", 8)
         return nbin.bites
 
 

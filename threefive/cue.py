@@ -36,7 +36,6 @@ class Cue:
         packet_data is a dict passed from a Stream instance
         """
         self.info_section = SpliceInfoSection()
-
         self.command = None
         self.descriptors = []
         self.crc = None
@@ -66,8 +65,6 @@ class Cue:
         return True
 
     def encode(self):
-        if not self.info_section:
-            self.info_section
         dscptr_bites = self._unloop_descriptors()
         dll = len(dscptr_bites)
         self.info_section.descriptor_loop_length = dll
