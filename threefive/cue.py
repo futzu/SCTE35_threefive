@@ -51,6 +51,7 @@ class Cue:
         """
         Cue.decode() parses for SCTE35 data
         """
+        self.descriptors = []
         isb = bytearray(self.bites[:-4])
         bites = self.mk_info_section(self.bites)
         if not bites:
@@ -90,9 +91,16 @@ class Cue:
         self.crc = hex(crc32_func(cuebin.bites))
         cuebin.add_hex(self.crc, 32)
         be64 = b64encode(cuebin.bites)
+        self.bites = cuebin.bites
         return be64
 
     def _unloop_descriptors(self):
+        """
+        _unloop_descriptors
+        for each descriptor in self.descriptors
+        encode descriptor tag, descriptor length,
+        and the descriptor into all_bites.bites
+        """
         all_bites = NBin()
         dbite_chunks = [d.encode() for d in self.descriptors]
         for chunk, d in zip(dbite_chunks, self.descriptors):

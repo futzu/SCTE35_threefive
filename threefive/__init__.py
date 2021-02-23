@@ -14,5 +14,7 @@ from .descriptors import (
     SegmentationDescriptor,
     TimeDescriptor,
 )
+from .section import SpliceInfoSection
 from .stream import Stream
+from .tools import i2b, ifb, k_by_v, to_stderr, loader
 from .version import version

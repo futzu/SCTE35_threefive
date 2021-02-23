@@ -250,8 +250,8 @@ class SegmentationDescriptor(SpliceDescriptor):
         encode a segmentation descriptor
         """
         nbin = super().encode(nbin)
-        nbin.add_hex(self.segmentation_event_id, 32)  # 4 bytes
-        nbin.add_flag(self.segmentation_event_cancel_indicator)
+        self.precheck(str, nbin.add_hex, "segmentation_event_id", 32)  # 4 bytes
+        self.precheck(bool, nbin.add_flag, "segmentation_event_cancel_indicator", 1)
         nbin.forward(7)  # 1 byte
         if not self.segmentation_event_cancel_indicator:
             self._encode_flags(nbin)  # 1 byte
@@ -322,16 +322,16 @@ class SegmentationDescriptor(SpliceDescriptor):
 
     def _encode_segmentation(self, nbin):
         if self.segmentation_duration_flag:
-            nbin.add_int(self.segmentation_duration_raw, 40)  # 5 bytes
-        nbin.add_int(self.segmentation_upid_type, 8)  # 1 byte
-        nbin.add_int(self.segmentation_upid_length, 8)  # 1 byte
+            self.precheck(int, nbin.add_int, "segmentation_duration_raw", 40)  # 5 bytes
+        self.precheck(int, nbin.add_int, "segmentation_upid_type", 8)  # 1 byte
+        self.precheck(int, nbin.add_int, "segmentation_upid_length", 8)  # 1 byte
         upid_encoder(
             nbin,
             self.segmentation_upid_type,
             self.segmentation_upid_length,
             self.segmentation_upid,
         )
-        nbin.add_int(self.segmentation_type_id, 8)  # 1 byte
+        self.precheck(int, nbin.add_int, "segmentation_type_id", 8)  # 1 byte
         self._encode_segments(nbin)
 
     def _decode_segments(self, bitbin):
@@ -345,8 +345,8 @@ class SegmentationDescriptor(SpliceDescriptor):
                 self.sub_segment_num = self.sub_segments_expected = 0
 
     def _encode_segments(self, nbin):
-        nbin.add_int(self.segment_num, 8)  # 1 byte
-        nbin.add_int(self.segments_expected, 8)  # 1 byte
+        self.precheck(int, nbin.add_int, "segment_num", 8)  # 1 byte
+        self.precheck(int, nbin.add_int, "segments_expected", 8)  # 1 byte
         # if self.segmentation_type_id in [0x34, 0x36, 0x38, 0x3A]:
         # nbin.add_int(self.sub_segment_num, 8)  # 1 byte
         #  nbin.add_int(self.sub_segments_expected, 8)  # 1 byte
