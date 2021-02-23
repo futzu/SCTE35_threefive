@@ -2,12 +2,13 @@
 SCTE35 Splice Descriptors
 """
 from bitn import BitBin, NBin
+from .base import SCTE35Base
 from .segmentation import table20, table22
 from .tools import k_by_v, i2b
 from .upid import upid_decoder, upid_encoder
 
 
-class SpliceDescriptor:
+class SpliceDescriptor(SCTE35Base):
     """
     SpliceDescriptor is the
     base class for all splice descriptors.
@@ -24,18 +25,8 @@ class SpliceDescriptor:
             self.descriptor_length = bites[1]
             self.bites = bites[2:]
 
-    def __repr__(self):
-        return str(vars(self))
-
-    def decode(self):
-        """
-        SpliceDescriptor subclasses
-        must implement a decode method.
-        """
-
     def encode(self, nbin=None):
-        if not nbin:
-            nbin = NBin()
+        nbin = self._chk_nbin(nbin)
         self.encode_id(nbin)
         return nbin
 
@@ -80,7 +71,7 @@ class AvailDescriptor(SpliceDescriptor):
         encode SCTE35 Avail Descriptor
         """
         nbin = super().encode(nbin)
-        nbin.add_int(self.provider_avail_id, 32)
+        self.precheck(int,nbin.add_int,"provider_avail_id", 32)
         return nbin.bites
 
 
@@ -115,9 +106,9 @@ class DtmfDescriptor(SpliceDescriptor):
         encode SCTE35 Dtmf Descriptor
         """
         nbin = super().encode(nbin)
-        nbin.add_int(self.preroll, 8)
+        self.precheck(int,nbin.add_int,"preroll", 8)
         d_c = 0
-        nbin.add_int(self.dtmf_count, 3)
+        self.precheck(int,nbin.add_int,"dtmf_count", 3)
         nbin.forward(5)
         while d_c < self.dtmf_count:
             nbin.add_int(ord(self.dtmf_chars[d_c]), 8)
@@ -153,9 +144,9 @@ class TimeDescriptor(SpliceDescriptor):
         encode SCTE35 Avail Descriptor
         """
         nbin = super().encode(nbin)
-        nbin.add_int(self.tai_seconds, 48)
-        nbin.add_int(self.tai_ns, 32)
-        nbin.add_int(self.utc_offset, 16)
+        self.precheck(int,nbin.add_int,"tai_seconds", 48)
+        self.precheck(int,nbin.add_int,"tai_ns", 32)
+        self.precheck(int,nbin.add_int,"utc_offset", 16)
         return nbin.bites
 
 
@@ -302,13 +293,13 @@ class SegmentationDescriptor(SpliceDescriptor):
             bitbin.forward(5)
 
     def _encode_flags(self, nbin):  # 1 byte for set flags
-        nbin.add_flag(self.program_segmentation_flag)
-        nbin.add_flag(self.segmentation_duration_flag)
-        nbin.add_flag(self.delivery_not_restricted_flag)
+        self.precheck(bool,nbin.add_flag,"program_segmentation_flag",1)
+        self.precheck(bool,nbin.add_flag,"segmentation_duration_flag",1)
+        self.precheck(bool,nbin.add_flag,"delivery_not_restricted_flag",1)
         if not self.delivery_not_restricted_flag:
-            nbin.add_flag(self.web_delivery_allowed_flag)
-            nbin.add_flag(self.no_regional_blackout_flag)
-            nbin.add_flag(self.archive_allowed_flag)
+            self.precheck(bool,nbin.add_flag,"web_delivery_allowed_flag",1)
+            self.precheck(bool,nbin.add_flag,"no_regional_blackout_flag",1)
+            self.precheck(bool,nbin.add_flag,"archive_allowed_flag",1)
             nbin.add_int(k_by_v(table20, self.device_restrictions), 2)
         else:
             nbin.reserve(5)
