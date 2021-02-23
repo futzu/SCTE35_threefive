@@ -71,7 +71,7 @@ class AvailDescriptor(SpliceDescriptor):
         encode SCTE35 Avail Descriptor
         """
         nbin = super().encode(nbin)
-        self.precheck(int,nbin.add_int,"provider_avail_id", 32)
+        self.precheck(int, nbin.add_int, "provider_avail_id", 32)
         return nbin.bites
 
 
@@ -106,9 +106,9 @@ class DtmfDescriptor(SpliceDescriptor):
         encode SCTE35 Dtmf Descriptor
         """
         nbin = super().encode(nbin)
-        self.precheck(int,nbin.add_int,"preroll", 8)
+        self.precheck(int, nbin.add_int, "preroll", 8)
         d_c = 0
-        self.precheck(int,nbin.add_int,"dtmf_count", 3)
+        self.precheck(int, nbin.add_int, "dtmf_count", 3)
         nbin.forward(5)
         while d_c < self.dtmf_count:
             nbin.add_int(ord(self.dtmf_chars[d_c]), 8)
@@ -144,9 +144,9 @@ class TimeDescriptor(SpliceDescriptor):
         encode SCTE35 Avail Descriptor
         """
         nbin = super().encode(nbin)
-        self.precheck(int,nbin.add_int,"tai_seconds", 48)
-        self.precheck(int,nbin.add_int,"tai_ns", 32)
-        self.precheck(int,nbin.add_int,"utc_offset", 16)
+        self.precheck(int, nbin.add_int, "tai_seconds", 48)
+        self.precheck(int, nbin.add_int, "tai_ns", 32)
+        self.precheck(int, nbin.add_int, "utc_offset", 16)
         return nbin.bites
 
 
@@ -293,13 +293,13 @@ class SegmentationDescriptor(SpliceDescriptor):
             bitbin.forward(5)
 
     def _encode_flags(self, nbin):  # 1 byte for set flags
-        self.precheck(bool,nbin.add_flag,"program_segmentation_flag",1)
-        self.precheck(bool,nbin.add_flag,"segmentation_duration_flag",1)
-        self.precheck(bool,nbin.add_flag,"delivery_not_restricted_flag",1)
+        self.precheck(bool, nbin.add_flag, "program_segmentation_flag", 1)
+        self.precheck(bool, nbin.add_flag, "segmentation_duration_flag", 1)
+        self.precheck(bool, nbin.add_flag, "delivery_not_restricted_flag", 1)
         if not self.delivery_not_restricted_flag:
-            self.precheck(bool,nbin.add_flag,"web_delivery_allowed_flag",1)
-            self.precheck(bool,nbin.add_flag,"no_regional_blackout_flag",1)
-            self.precheck(bool,nbin.add_flag,"archive_allowed_flag",1)
+            self.precheck(bool, nbin.add_flag, "web_delivery_allowed_flag", 1)
+            self.precheck(bool, nbin.add_flag, "no_regional_blackout_flag", 1)
+            self.precheck(bool, nbin.add_flag, "archive_allowed_flag", 1)
             nbin.add_int(k_by_v(table20, self.device_restrictions), 2)
         else:
             nbin.reserve(5)
