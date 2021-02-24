@@ -12,7 +12,7 @@
 
   	* __SCTE-35__ can be parsed from strings or video with __one function__  [__threefive.decode()__](#the-decode-function).
 
-*   [__threefive__ now __Encodes__ SCTE35 __Cues__](#changes)
+*   [__threefive__ now __Encodes__ SCTE35 __Cues__](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
 
 *   [__threefive__ in __The White House?__](https://github.com/futzu/SCTE35-threefive/blob/master/wh-threefive.png)
 
@@ -71,29 +71,20 @@
 ---
 
 #### __Changes__
+* __02/24/2021__ All Splice Commands and Splice Descriptors have been hoisted up.
+    * threefive.**BandwidthReservation()** 
+    * threefive.**PrivateCommand()**
+    * threefive.**SpliceInsert()**
+    * threefive.**SpliceNull()**
+    * threefive.**TimeSignal()**
+    * threefive.**AuioDescriptor()**
+    * threefive.**AvailDescriptor()**
+    * threefive.**DtmfDescriptor()**
+    * threefive.**SegmentationDescriptor()**
+    * threefive.**TimeDescriptor()**
 
  *  __02/10/2021__: threefive now __encodes SCTE35 Cues__.
-   	* __Encoding__ may be buggy, please don't use encoding in production just yet. 
-   	* __Example__ Change pts_time for a Time Signal Splice Command
-```python3
-[PyPy 7.3.2 with GCC 10.2.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>>> from threefive import Cue
->>>> cue = Cue(b'/DA9AAAAAAAAAACABQb+0fha8gAnAiVDVUVJSAAAv3/PAAD4+mMNEQ4FTEEzMDkICAAAAAAuU4SBNAAAPIaCPw==')
->>>> cue.decode()
->>>> cue.command.pts_time
-39141.2706
->>>> cue.get_command()
-{'command_length': 5, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 39141.2706}
-# 
-# Change the pts_time for the Time Signal Splice Command and encode a new Base64 encoded SCTE35 Cue. 
-#
->>>> cue.command.pts_time= 5000.9999
->>>> cue.get_command()
-{'command_length': 5, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 5000.9999}
->>>> cue.encode()
-b'/DA9AAAAAAAAAACABQb+GtPUBwAnAiVDVUVJSAAAv3/PAAD4+mMNEQ4FTEEzMDkICAAAAAAuU4SBNAAAPIaCPw=='
-```
+
 ---
 
 ## Fast __Start__
