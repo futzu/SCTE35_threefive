@@ -21,7 +21,82 @@ threefive.**Cue()**
     * threefive.**TimeDescriptor()**
 
 
-## Cue with a Time Signal Command Example
+
+### Edit the Splice Insert Command in a Cue 
+```python3
+>>>> import threefive
+>>>> Base64 = "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
+>>>> cue = threefive.Cue(Base64)
+>>>> cue.decode()
+True
+>>>> cue.command
+{'command_length': 20, 'command_type': 5, 'name': 'Splice Insert', 'time_specified_flag': True, 'pts_time': 21514.559089, 'break_auto_return': True, 'break_duration': 60.293567, 'splice_event_id': 1207959695, 'splice_event_cancel_indicator': False, 'out_of_network_indicator': True, 'program_splice_flag': True, 'duration_flag': True, 'splice_immediate_flag': False, 'components': None, 'component_count': None, 'unique_program_id': 0, 'avail_num': 0, 'avail_expected': 0}
+
+    # use dot notation to access values 
+    
+>>>> cue.command.break_duration = 90.0
+
+   # Run cue.encode to generate new base64 string
+      
+>>>> cue.encode()
+b'/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4Ae5igAAAAAAAKAAhDVUVJAAABNVB2fJs='
+
+
+>>>> cue.show()
+```
+### Remove a Splice Descriptor in a Cue
+```python3
+>>>> import threefive
+>>>> Base64 = "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
+>>>> cue = threefive.Cue(Base64)
+>>>> cue.decode()
+True
+>>>> cue.descriptors
+[{'tag': 0, 'descriptor_length': 8, 'identifier': 'CUEI', 'name': 'Avail Descriptor', 'provider_avail_id': 309}]
+
+   # cue.descriptors is a list
+
+>>>> del cue.descriptors[0]
+>>>> cue.descriptors
+[]
+>>>> cue.encode()
+b'/DAlAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAAYinJUA=='
+```
+### Add a Dtmf Descriptor
+```python3
+>>>> import threefive
+>>>> Base64 = "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
+>>>> cue = threefive.Cue(Base64)
+>>>> cue.decode()
+True
+>>>> dscrptr = threefive.DtmfDescriptor()
+>>>> dscrptr
+{'tag': 1, 'descriptor_length': 0, 'identifier': None, 'bites': None, 'name': 'DTMF Descriptor', 'preroll': None, 'dtmf_count': None, 'dtmf_chars': []}
+
+ # My data to load into the DtmfDescriptor instance
+
+>>>> data = {'tag': 1, 'descriptor_length': 10, 'identifier': 'CUEI', 'name': 'DTMF Descriptor', 'preroll': 177, 'dtmf_count': 4, 'dtmf_chars': ['1'\
+, '2', '1', '#']}
+
+ #  Use threefive.tools.loader to load a dict or json data
+
+
+>>>> threefive.tools.loader(dscrptr,data)
+
+>>>> dscrptr
+{'tag': 1, 'descriptor_length': 10, 'identifier': 'CUEI', 'bites': None, 'name': 'DTMF Descriptor', 'preroll': 177, 'dtmf_count': 4, 'dtmf_chars': ['1', '2', '1', '#']}
+
+
+  # Append to cue.descrptors
+
+
+>>>> cue.descriptors.append(dscrptr)
+  # Run encode to generate new Base64 string
+>>>> cue.encode()
+b'/DA7AAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAWAAhDVUVJAAABNQEKQ1VFSbGfMTIxI55FecI='
+```
+
+## Cue with a Time Signal Command from scratch
 
 ```python3
 >>>> import threefive
@@ -32,35 +107,10 @@ threefive.**Cue()**
 >>>> cue.command = cmd
 >>>> cue.encode()
 b'/DAWAAAAAAAAAP/wBQb+e2KfxwAAN6nTrw=='
->>>> cue.show()
-{
-    "info_section": {
-        "table_id": "0xfc",
-        "section_syntax_indicator": false,
-        "private": false,
-        "sap_type": "0x3",
-        "sap_details": "No Sap Type",
-        "section_length": 22,
-        "protocol_version": 0,
-        "encrypted_packet": 0,
-        "encryption_algorithm": 0,
-        "pts_adjustment": 0.0,
-        "cw_index": "0x0",
-        "tier": "0xfff",
-        "splice_command_length": 5,
-        "splice_command_type": 6,
-        "descriptor_loop_length": 0
-    },
-    "command": {
-        "command_length": 5,
-        "command_type": 6,
-        "name": "Time Signal",
-        "time_specified_flag": true,
-        "pts_time": 23000.677777
-    },
-    "descriptors": [],
-    "crc": "0x37a9d3af"
-}
+
+   #  run cue.show() to check values.
+   
+cue.show()
 ```
 * threefive throws exceptions to help you.
 ```python3
