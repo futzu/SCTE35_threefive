@@ -63,7 +63,7 @@ b'/DAWAAAAAAAAAP/wBQb+e2KfxwAAN6nTrw=='
 }
 ```
 * threefive throws exceptions to help you.
-```
+```python3
 >>>> import threefive
 >>>> cue = threefive.Cue()
 >>>> cue.encode()
