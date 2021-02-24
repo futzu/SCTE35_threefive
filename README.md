@@ -16,12 +16,12 @@
 
 *   [__threefive__ in __The White House?__](https://github.com/futzu/SCTE35-threefive/blob/master/wh-threefive.png)
 
-
+^ [__threefive in tne wild](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 
 
 #### [Changes](#changes)
 
-* [__Requires__ Python __3.6 +__ or __pypy3+ _](https://www.python.org/downloads/release/python-390/)
+* [__Requires__ Python __3.6 +__ or __pypy3+__](https://www.python.org/downloads/release/python-390/)
 * [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
 *  [__Fast__ Start](#fast-start-directions)
       * [__Dependencies__](#dependencies)
