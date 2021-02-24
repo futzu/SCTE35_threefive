@@ -1,7 +1,7 @@
 """
 SCTE35 Splice Commands
 """
-from bitn import BitBin, NBin
+from bitn import BitBin
 from .base import SCTE35Base
 from .tools import ifb
 

@@ -3,8 +3,8 @@ threefive.Cue Class
 """
 import json
 from base64 import b64decode, b64encode
-from bitn import NBin
 import crcmod.predefined
+from bitn import NBin
 from .section import SpliceInfoSection
 from .commands import splice_command
 from .descriptors import splice_descriptor

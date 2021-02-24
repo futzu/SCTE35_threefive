@@ -1,7 +1,7 @@
 """
 SCTE35 Splice Descriptors
 """
-from bitn import BitBin, NBin
+from bitn import BitBin
 from .base import SCTE35Base
 from .segmentation import table20, table22
 from .tools import k_by_v, i2b
