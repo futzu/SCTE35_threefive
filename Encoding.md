@@ -62,7 +62,7 @@ True
 >>>> cue.encode()
 b'/DAlAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAAYinJUA=='
 ```
-### Add a Dtmf Descriptor
+### Add a Dtmf Descriptor to an existing Cue
 ```python3
 >>>> import threefive
 >>>> Base64 = "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
