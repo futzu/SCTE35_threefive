@@ -3,6 +3,7 @@
 
 ### threefive is a SCTE35 Parser, Decoder, Encoder library in Python3.
 
+*   [__threefive__ now __Encodes__ SCTE35 __Cues__](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
 
 *   References the __2020__ SCTE35 Specification.
 
@@ -12,14 +13,13 @@
 
   	* __SCTE-35__ can be parsed from strings or video with __one function__  [__threefive.decode()__](#the-decode-function).
 
-*   [__threefive__ now __Encodes__ SCTE35 __Cues__](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
 
 *   [__threefive__ in __The White House?__](https://github.com/futzu/SCTE35-threefive/blob/master/wh-threefive.png)
 
 
 
 
-#### [__Heads Up!__ Changes as of 1/1/2021](#changes
+#### [Changes](#changes)
 
 * [__Requires__ Python __3.6 +__ or __pypy3+ _](https://www.python.org/downloads/release/python-390/)
 * [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
@@ -72,6 +72,7 @@
 
 #### __Changes__
 * __02/24/2021__ All Splice Commands and Splice Descriptors have been hoisted up.
+
     * threefive.**BandwidthReservation()** 
     * threefive.**PrivateCommand()**
     * threefive.**SpliceInsert()**
