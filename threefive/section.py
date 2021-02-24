@@ -68,7 +68,7 @@ class SpliceInfoSection:
         nbin.add_hex(self.table_id, 8)  # self.table_id
         self.section_syntax_indicator = False
         nbin.add_flag(self.section_syntax_indicator, 1)  # self.section_syntax_indicator
-        self.private = False
+        self.private = False 
         nbin.add_flag(self.private, 1)  # self.private
         if self.sap_type not in sap_map.keys():
             self.sap_type = "0x3"
@@ -77,9 +77,11 @@ class SpliceInfoSection:
         if not self.section_length:
             self.section_length = 11
         nbin.add_int(self.section_length, 12)
-        nbin.add_int(0, 8)
+        if not self.protocol_version:
+            self.protocol_version = 0
+        nbin.add_int(self.protocol_version, 8)
         if not self.encrypted_packet:
-            self.encrypted_packet = 0
+            self.encrypted_packet = 0   
         nbin.add_flag(self.encrypted_packet)
         if not self.encryption_algorithm:
             self.encryption_algorithm = 0
@@ -88,7 +90,7 @@ class SpliceInfoSection:
             self.pts_adjustment = 0.0
         nbin.add_90k(self.pts_adjustment, 33)
         if not self.cw_index:
-            self.cw_index = "0x0"
+            self.cw_index = "0x0"    
         nbin.add_hex(self.cw_index, 8)
         if not self.tier:
             self.tier = "0xfff"

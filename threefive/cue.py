@@ -69,15 +69,14 @@ class Cue:
         dscptr_bites = self._unloop_descriptors()
         dll = len(dscptr_bites)
         self.info_section.descriptor_loop_length = dll
+        if not self.command:
+            raise Exception("A splice command is required")
         cmd_bites = self.command.encode()
-        cmdl = len(cmd_bites)
-        self.info_section.splice_command_length = self.command.command_length
+        cmdl = self.command.command_length = len(cmd_bites)
+        self.info_section.splice_command_length = cmdl
         self.info_section.splice_command_type = self.command.command_type
-        # 11 bytes for info_section after section length
-        # cmdl for command length
-        # 2 for the variable descriptor loop length
-        # dll for the descriptor loop
-        # 4 for crc
+        # 11 bytes for info section + command + 2 descriptor loop length
+        # + descriptor loop + 4 for crc
         self.info_section.section_length = 11 + cmdl + 2 + dll + 4
         cuebin = NBin()
         info_bites = self.info_section.encode()
