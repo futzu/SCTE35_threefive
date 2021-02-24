@@ -62,4 +62,23 @@ b'/DAWAAAAAAAAAP/wBQb+e2KfxwAAN6nTrw=='
     "crc": "0x37a9d3af"
 }
 ```
+* threefive throws exceptions to help you.
+```
+>>>> import threefive
+>>>> cue = threefive.Cue()
+>>>> cue.encode()
+Exception: A splice command is required
 
+
+>>>> cmd = threefive.TimeSignal()
+>>>> cmd
+{'command_length': 0, 'command_type': 6, 'bites': None, 'name': 'Time Signal', 'time_specified_flag': None, 'pts_time': None}
+>>>> cmd.encode()
+ValueError: time_specified_flag is not set, it should be <class 'bool'>
+
+
+>>>> cmd.time_specified_flag = True
+>>>> cmd.pts_time = 'Hell Yes'
+>>>> cmd.encode()
+Exception:  pts_time is "Hell Yes" <class 'str'>, should be <class 'float'> 
+```
