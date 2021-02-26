@@ -130,27 +130,21 @@ class Stream:
                 packet_data["pts"] = round(self._prgm_pts[prgm], 6)
         return packet_data
 
-    def _parser(self, pkt):
+    @staticmethod
+    def mk_payload(pkt):
         """
-        parse pid from pkt and
-        route it appropriately.
+        mk_payload checks if
+        the adaptive field control flag is set
+        and sets payload size accordingly
         """
-        pid = self._parse_pid(pkt[1], pkt[2])
-        if pid == 0:
-            self._program_association_table(pkt)
-            return None
-        if pid in self._pmt_pids:
-            self._program_map_section(pkt)
-            return None
-        if self.info:
-            return None
-        if pid in self._scte35_pids:
-            return self._parse_scte35(pkt, pid)
-        if pid in self._pid_prog:
-            if (pkt[1] >> 6) & 1:
-                self._parse_pusi(pkt, pid)
-                return None
-        return None
+        afc = (pkt[3] >> 5) & 1
+        if afc:
+            afl = pkt[4]
+            # print(afl)
+            payload = pkt[4 + afl :]
+        else:
+            payload = pkt[4:]
+        return payload
 
     @staticmethod
     def _parse_pid(byte1, byte2):
@@ -158,6 +152,25 @@ class Stream:
         parse pid from packet
         """
         return (byte1 << 8 | byte2) & 0x01FFF
+
+    def _parser(self, pkt):
+        """
+        parse pid from pkt and
+        route it appropriately.
+        """
+        pid = self._parse_pid(pkt[1], pkt[2])
+        payload = self.mk_payload(pkt)
+        if pid == 0:
+            self._program_association_table(payload)
+        if pid in self._pmt_pids:
+            self._program_map_table(payload)
+        if pid in self._scte35_pids:
+            return self._parse_scte35(payload, pid)
+        if pid in self._pid_prog:
+            if (pkt[1] >> 6) & 1:
+                self._parse_pusi(pkt, pid)
+                return None
+        return None
 
     def _parse_pts(self, pkt, pid):
         """
@@ -181,24 +194,25 @@ class Stream:
                     if (pkt[13] >> 4) & 2:
                         self._parse_pts(pkt, pid)
 
-    def _parse_scte35(self, pkt, pid):
+    def _parse_scte35(self, payload, pid):
         """
         parse a scte35 cue from one or more packets
         """
         if not self.cue:
             try:
-                pkt = b"\xfc0".join([pkt[:5], pkt.split(b"\xfc0", 1)[1]])
+                payload = b"".join([b"\xfc0", payload.split(b"\xfc0", 1)[1]])
+
             except:
                 self._scte35_pids.discard(pid)
                 return None
-            packet_data = self._mk_packet_data(pid)
-            if (pkt[18] == 0) and (not self.show_null):
+            if (payload[13] == 0) and (not self.show_null):
                 return None
-            self.cue = Cue(pkt[:19], packet_data)
-            self.cue.mk_info_section(pkt[5:19])
-            self.cue.bites += pkt[19:]
+            packet_data = self._mk_packet_data(pid)
+            self.cue = Cue(payload[:14], packet_data)
+            self.cue.mk_info_section(payload[:14])
+            self.cue.bites += payload[14:]
         else:
-            self.cue.bites += pkt[4:]
+            self.cue.bites += payload
         if (self.cue.info_section.section_length + 3) <= len(self.cue.bites):
             self.cue.decode()
             cue = self.cue
@@ -206,17 +220,17 @@ class Stream:
             return cue
         return None
 
-    def _program_association_table(self, pkt):
+    def _program_association_table(self, payload):
         """
         parse program association table ( pid 0 )
         to program to program table pid mappings.
         """
         if not self.pat:
             self.pat = {}
-            self.pat["sectionlen"] = ((pkt[6] & 15) << 8) | pkt[7]
-            self.pat["data"] = pkt[13:]
+            self.pat["sectionlen"] = ((payload[2] & 15) << 8) | payload[3]
+            self.pat["data"] = payload[9:]
         else:
-            self.pat["data"] += pkt[4:]
+            self.pat["data"] += payload
         if len(self.pat["data"]) < self.pat["sectionlen"]:
             return
         pat_data = self.pat["data"]
@@ -227,35 +241,39 @@ class Stream:
         idx = 0
         while idx + 3 < sec_len:
             program_number = pat_data[idx] << 8 | pat_data[idx + 1]
+            # print("program: ", program_number)
             if program_number != 0:
                 pmt_pid = self._parse_pid(pat_data[idx + 2], pat_data[idx + 3])
+                #    print('PMT_PID: ',pmt_pid)
                 self._pmt_pids.add(pmt_pid)
                 self._prog_pmt_pid[program_number] = pmt_pid
             idx += chunk_size
         self.pat = None
 
-    def _program_map_section(self, pkt):
+    def _program_map_table(self, payload):
         """
         parse program maps for streams
         """
-        # table_id = pkt[5]
-        sectioninfolen = ((pkt[6] & 15) << 8) | pkt[7]
-        program_number = (pkt[8] << 8) | pkt[9]
-        # version = pkt[10] >> 1 & 31
-        # current_next = pkt[10] & 1
+        table_id = payload[1]
+        sectioninfolen = ((payload[2] & 15) << 8) | payload[3]
+        program_number = (payload[4] << 8) | payload[5]
+        # print(program_number, " Program Number")
+        version = payload[6] >> 1 & 31
+        current_next = payload[6] & 1
         if self.the_program and (program_number != self.the_program):
             return None
-        # section_number = pkt[11]
-        # last_section_number = pkt[12]
-        # pcr_pid = (pkt[13]& 31) << 8 | pkt[14]
-        proginfolen = ((pkt[15] & 15) << 8) | pkt[16]
-        idx = 17
+        section_number = payload[7]
+        last_section_number = payload[8]
+        pcr_pid = self._parse_pid(payload[9], payload[10])
+        # print('PCR_PID ', pcr_pid)
+        proginfolen = ((payload[11] & 15) << 8) | payload[12]
+        idx = 13
         idx += proginfolen
         si_len = sectioninfolen - 9
         si_len -= proginfolen  # Skip descriptors
-        self._parse_program_streams(si_len, pkt, idx, program_number)
+        self._parse_program_streams(si_len, payload, idx, program_number)
 
-    def _parse_program_streams(self, si_len, pkt, idx, program_number):
+    def _parse_program_streams(self, si_len, payload, idx, program_number):
         """
         parse the elementary streams
         from a program
@@ -267,7 +285,7 @@ class Stream:
             chunk_size = 5  # 5 bytes for stream_type info
             end_idx = (idx + si_len) - chunk_size
             while idx < end_idx:
-                stream_type, pid, ei_len = self._parse_stream_type(pkt, idx)
+                stream_type, pid, ei_len = self._parse_stream_type(payload, idx)
                 idx += chunk_size
                 idx += ei_len
                 self._pid_prog[pid] = program_number
@@ -276,15 +294,16 @@ class Stream:
                 self._chk_pid_stream_type(pid, stream_type)
         else:
             if self.info:
+                # seek to end of stream
                 self._tsdata.seek(0, 2)
 
-    def _parse_stream_type(self, pkt, idx):
+    def _parse_stream_type(self, payload, idx):
         """
         extract stream pid and type
         """
-        stream_type = hex(pkt[idx])  # 1 byte
-        el_pid = self._parse_pid(pkt[idx + 1], pkt[idx + 2])  # 2 bytes
-        ei_len = (pkt[idx + 3] & 15) << 8 | pkt[idx + 4]  # 2 bytes
+        stream_type = hex(payload[idx])  # 1 byte
+        el_pid = self._parse_pid(payload[idx + 1], payload[idx + 2])  # 2 bytes
+        ei_len = (payload[idx + 3] & 15) << 8 | payload[idx + 4]  # 2 bytes
         return stream_type, el_pid, ei_len
 
     @staticmethod
