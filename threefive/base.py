@@ -17,11 +17,6 @@ class SCTE35Base:
             nbin = NBin()
         return nbin
 
-    def decode(self):
-        """
-        decode
-        """
-
     def load(self, stuff):
         """
         load is used to load
@@ -38,11 +33,11 @@ class SCTE35Base:
         """
         var_value = self.__dict__[var_name]
         if var_value is None:
-            raise ValueError(
-                f"\033[7m{var_name} is not set, it should be {var_type}\033[27m"
+            raise Exception(
+                f"\033[7m{var_name} is not set, it should be type{var_type}\033[27m"
             )
         if not isinstance(var_value, var_type):
             raise Exception(
-                f' \033[7m{var_name} is "{var_value}" {type(var_value)}, should be {var_type}\033[27m '
+                f' \033[7m{var_name} is "{var_value}", it should be type {var_type}\033[27m '
             )
         nbin_method(var_value, bit_count)

@@ -39,7 +39,7 @@ class SpliceInfoSection(SCTE35Base):
         bitbin = BitBin(bites)
         self.table_id = bitbin.ashex(8)
         if self.table_id != "0xfc":
-            raise ValueError("splice_info_section.table_id should be 0xfc")
+            raise Exception("splice_info_section.table_id should be 0xfc")
         self.section_syntax_indicator = bitbin.asflag(1)
         self.private = bitbin.asflag(1)
         self.sap_type = bitbin.ashex(2)
@@ -47,7 +47,7 @@ class SpliceInfoSection(SCTE35Base):
         self.section_length = bitbin.asint(12)
         self.protocol_version = bitbin.asint(8)
         if self.protocol_version != 0:
-            raise ValueError("splice_info_section.protocol_version should be 0")
+            raise Exception("splice_info_section.protocol_version should be 0")
         self.encrypted_packet = bitbin.asflag(1)
         self.encryption_algorithm = bitbin.asint(6)
         self.pts_adjustment = bitbin.as90k(33)

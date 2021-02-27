@@ -27,7 +27,6 @@ class Cue:
     scte35 = Cue(Base64)
     scte35.decode()
     scte35.show()
-
     """
 
     def __init__(self, data=None, packet_data=None):
@@ -52,7 +51,6 @@ class Cue:
         Cue.decode() parses for SCTE35 data
         """
         self.descriptors = []
-        isb = bytearray(self.bites[:-4])
         bites = self.mk_info_section(self.bites)
         if not bites:
             raise Exception("Boom! self.mk_info_section(self.bites)")
@@ -66,6 +64,10 @@ class Cue:
         return True
 
     def encode(self):
+        """
+        Cue.encode() converts SCTE35 data
+        to a base64 encoded string.
+        """
         dscptr_bites = self._unloop_descriptors()
         dll = len(dscptr_bites)
         self.info_section.descriptor_loop_length = dll
