@@ -31,7 +31,7 @@ a@fuhq$ ffmpeg -copyts \
         -streamid 0:510  -streamid 1:511 -streamid 2:512 -streamid 3:515 -mpegts_service_id 51 \
         -metadata service_provider="NBCU" -metadata service_name="CNBC HD" -y out.ts
 ```
-* **This Warning Pops Up **
+* **This Warning Pops Up**
 ```
 [mpegts @ 0x55ccc4ca5480] Stream 3, codec scte_35, is muxed as a private data stream and may not be recognized upon reading.  
 
@@ -53,7 +53,6 @@ Input #0, mpegts, from 'out.ts':
 
 
 * **Parse out.ts For SCTE35**
-* 
 ```sh
 a@fuhq$ pypy3 -c 'import threefive; threefive.decode("out.ts")'
 
