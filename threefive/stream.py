@@ -153,7 +153,7 @@ class Stream:
         return (byte1 << 8 | byte2) & 0x01FFF
 
     @staticmethod
-    def _parse_length(byte1,byte2):
+    def _parse_length(byte1, byte2):
         """
         parse a 12 bit length value
         """
@@ -240,7 +240,7 @@ class Stream:
         """
         if not self.pat:
             self.pat = {}
-            self.pat["sectionlen"] = self._parse_length(payload[2],payload[3])
+            self.pat["sectionlen"] = self._parse_length(payload[2], payload[3])
             self.pat["data"] = payload[9:]
         else:
             self.pat["data"] += payload
@@ -253,7 +253,9 @@ class Stream:
         chunk_size = 4  # 4 bytes per program -> pid mapping
         idx = 0
         while idx < sec_len:
-            program_number = self._parse_program_number(pat_data[idx], pat_data[idx + 1])
+            program_number = self._parse_program_number(
+                pat_data[idx], pat_data[idx + 1]
+            )
             a_pid = self._parse_pid(pat_data[idx + 2], pat_data[idx + 3])
             if program_number != 0:
                 self._pmt_pids.add(a_pid)
@@ -265,16 +267,16 @@ class Stream:
         """
         parse program maps for streams
         """
-        #table_id = payload[1]
-        #section_syntax_indicator = payload[2] >> 7
-        sectioninfolen = self._parse_length(payload[2],payload[3])
+        # table_id = payload[1]
+        # section_syntax_indicator = payload[2] >> 7
+        sectioninfolen = self._parse_length(payload[2], payload[3])
         program_number = self._parse_program_number(payload[4], payload[5])
-        #version = payload[6] >> 1 & 31
-        #current_next = payload[6] & 1
+        # version = payload[6] >> 1 & 31
+        # current_next = payload[6] & 1
         if self.the_program and (program_number != self.the_program):
             return None
-        #section_number = payload[7]
-        #last_section_number = payload[8]
+        # section_number = payload[7]
+        # last_section_number = payload[8]
         pcr_pid = self._parse_pid(payload[9], payload[10])
         if program_number not in self._programs:
             if self.info:
