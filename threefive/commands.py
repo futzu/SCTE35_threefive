@@ -16,6 +16,11 @@ class SpliceCommand(SCTE35Base):
         self.command_type = None
         self.bites = bites
 
+    def decode(self):
+        """
+        default decode method
+        """
+
     def encode(self, nbin=None):
         """
         encode
