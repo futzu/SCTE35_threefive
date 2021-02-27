@@ -4,12 +4,12 @@ section.py
 SCTE35 Splice Info Section
 """
 from bitn import BitBin, NBin
-
+from .base import SCTE35Base
 
 sap_map = {"0x0": "Type 1", "0x1": "Type 2", "0x2": "Type 3", "0x3": "No Sap Type"}
 
 
-class SpliceInfoSection:
+class SpliceInfoSection(SCTE35Base):
     """
     The SCTE-35 splice info section
     data.
