@@ -131,9 +131,21 @@ class Stream:
         return packet_data
 
     @staticmethod
-    def mk_payload(pkt):
+    def _janky_parse(payload, marker, prefix):
         """
-        mk_payload checks if
+        _janky_parse splits payload on first marker
+        and then joins prefix and everything after marker.
+        """
+        try:
+            payload = b"".join([prefix, payload.split(marker, 1)[1]])
+        except:
+            payload = False
+        return payload
+
+    @staticmethod
+    def _mk_payload(pkt):
+        """
+        _mk_payload checks if
         the adaptive field control flag is set
         and sets payload size accordingly
         """
@@ -172,7 +184,7 @@ class Stream:
         route it appropriately.
         """
         pid = self._parse_pid(pkt[1], pkt[2])
-        payload = self.mk_payload(pkt)
+        payload = self._mk_payload(pkt)
         if pid == 0:
             self._program_association_table(payload)
         if pid in self._pmt_pids:
@@ -212,10 +224,8 @@ class Stream:
         parse a scte35 cue from one or more packets
         """
         if not self.cue:
-            try:
-                payload = b"".join([b"\xfc0", payload.split(b"\xfc0", 1)[1]])
-
-            except:
+            payload = self._janky_parse(payload, b"\xfc0", b"\xfc0")
+            if not payload:
                 self._scte35_pids.discard(pid)
                 return None
             if (payload[13] == 0) and (not self.show_null):
@@ -267,11 +277,14 @@ class Stream:
         """
         parse program maps for streams
         """
-        # table_id = payload[1]
+        payload = self._janky_parse(payload, b"\x02", b"\x00\x02")
+        if not payload:
+            return
+        #table_id = payload[1]
         # section_syntax_indicator = payload[2] >> 7
         sectioninfolen = self._parse_length(payload[2], payload[3])
         program_number = self._parse_program_number(payload[4], payload[5])
-        # version = payload[6] >> 1 & 31
+        #version = payload[6] >> 1 & 31
         # current_next = payload[6] & 1
         if self.the_program and (program_number != self.the_program):
             return None
@@ -286,6 +299,7 @@ class Stream:
         idx += proginfolen
         si_len = sectioninfolen - 9
         si_len -= proginfolen  # Skip descriptors
+        #       if table_id == 2:
         self._parse_program_streams(si_len, payload, idx, program_number)
 
     def _parse_program_streams(self, si_len, payload, idx, program_number):
@@ -297,13 +311,17 @@ class Stream:
             self._programs.add(program_number)
             chunk_size = 5  # 5 bytes for stream_type info
             end_idx = (idx + si_len) - chunk_size
+
             while idx < end_idx:
-                stream_type, pid, ei_len = self._parse_stream_type(payload, idx)
+                try:
+                    stream_type, pid, ei_len = self._parse_stream_type(payload, idx)
+                except:
+                    return
                 idx += chunk_size
                 idx += ei_len
                 self._pid_prog[pid] = program_number
-                if self.info:
-                    self._show_program_stream(pid, stream_type)
+                #                if self.info:
+                self._show_program_stream(pid, stream_type)
                 self._chk_pid_stream_type(pid, stream_type)
         else:
             if self.info:
