@@ -49,6 +49,7 @@ class Stream:
         self.the_program = None
         self.cue = None
         self.pat = None
+        self.pmt = None
 
     def _find_start(self):
         """
@@ -277,12 +278,20 @@ class Stream:
         """
         parse program maps for streams
         """
+        if self.pmt:
+            # Handle PMT split over multiple packets
+            tail = payload[: payload[0]]
+            payload = self.pmt + tail
+            self.pmt = None
         payload = self._janky_parse(payload, b"\x02", b"\x00\x02")
         if not payload:
-            return
+            return None
         # table_id = payload[1]
         # section_syntax_indicator = payload[2] >> 7
         sectioninfolen = self._parse_length(payload[2], payload[3])
+        if sectioninfolen + 4 > len(payload):
+            self.pmt = payload
+            return None
         program_number = self._parse_program_number(payload[4], payload[5])
         # version = payload[6] >> 1 & 31
         # current_next = payload[6] & 1
@@ -313,10 +322,7 @@ class Stream:
             chunk_size = 5  # 5 bytes for stream_type info
             end_idx = (idx + si_len) - chunk_size
             while idx < end_idx:
-                try:
-                    stream_type, pid, ei_len = self._parse_stream_type(payload, idx)
-                except:
-                    return
+                stream_type, pid, ei_len = self._parse_stream_type(payload, idx)
                 idx += chunk_size
                 idx += ei_len
                 self._pid_prog[pid] = program_number
