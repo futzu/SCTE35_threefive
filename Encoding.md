@@ -28,6 +28,38 @@ threefive.**Cue()**
 
 ## Examples
 
+### Using threefive.Cue.load ( Requires threefive 2.2.67+)
+* pass all Cue data at once 
+* The format is the same as the output of Cue.decode()
+```        
+ {
+      'info_section': {dict} ,
+       'command': {dict},
+        'descriptors': [list of {dicts}],
+  }
+
+```
+* Command instance will be auto created if info_section dict has the key 'splice_command_type'
+* Command instance will be auto created if command dict has the key 'command_type'
+* descriptor instances will be auto created if each descriptor has the key 'tag'
+   
+```
+>>>> from threefive import Cue
+
+>>>> stuff = {
+'info_section': {'table_id': '0xfc', 'section_syntax_indicator': False, 'private': False, 'sap_type': '0x3', 'sap_details': 'No Sap Type', 'section_length': 47, 'protocol_version': 0, 'encrypted_packet': False, 'encryption_algorithm': 0, 'pts_adjustment': 0.0, 'cw_index': '0xff', 'tier': '0xfff', 'splice_command_length': 20, 'splice_command_type': 5},
+
+'command': {'command_length': 20, 'command_type': 5, 'name': 'Splice Insert', 'time_specified_flag': True, 'pts_time': 21514.559089, 'break_auto_return': True, 'break_duration': 60.293567, 'splice_event_id': 1207959695, 'splice_event_cancel_indicator': False, 'out_of_network_indicator': True, 'program_splice_flag': True, 'duration_flag': True, 'splice_immediate_flag': False, 'unique_program_id': 0, 'avail_num': 0, 'avail_expected': 0}, 
+
+'descriptors': [{'tag': 0, 'descriptor_length': 8, 'identifier': 'CUEI', 'name': 'Avail Descriptor', 'provider_avail_id': 309}], 
+}
+
+>>>> cue = Cue()
+>>>> cue.load(stuff)
+>>>> cue.encode()
+b'/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo='
+```
+
 ### Edit the Splice Insert Command in a Cue 
 ```python3
 >>>> import threefive
