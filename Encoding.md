@@ -31,7 +31,7 @@ threefive.**Cue()**
 ### Using threefive.Cue.load ( Requires threefive 2.2.67+)
 * pass all Cue data at once 
 * The format is the same as the output of Cue.decode()
-```        
+```python3       
  {
       'info_section': {dict} ,
        'command': {dict},
@@ -43,7 +43,7 @@ threefive.**Cue()**
 * Command instance will be auto created if command dict has the key 'command_type'
 * descriptor instances will be auto created if each descriptor has the key 'tag'
    
-```
+```python3
 >>>> from threefive import Cue
 
 >>>> stuff = {
