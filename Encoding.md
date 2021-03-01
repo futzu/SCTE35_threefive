@@ -24,7 +24,7 @@ threefive.**Cue()**
 
 * Splice Info Section of the Cue is automatically generated. 
 * length vars for Cue.command and Cue.descriptors are automatically generated.  
-* Descriptor loop length and crc32 are automatically generated. 
+* Descriptor loop length and crc32 are automatically calculated 
 
 ## Examples
 
@@ -45,7 +45,7 @@ threefive.**Cue()**
 * descriptors will be auto created if each descriptor has the key 'tag'
 * All length related variables are auto calculated.
 * descriptor_loop_length, and crc are auto created.
-* 
+
 ```python3
 >>>> from threefive import Cue
 
