@@ -80,7 +80,7 @@ class SpliceInfoSection(SCTE35Base):
             self.protocol_version = 0
         nbin.add_int(self.protocol_version, 8)
         if not self.encrypted_packet:
-            self.encrypted_packet = 0
+            self.encrypted_packet = False
         nbin.add_flag(self.encrypted_packet)
         if not self.encryption_algorithm:
             self.encryption_algorithm = 0

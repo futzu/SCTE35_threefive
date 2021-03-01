@@ -6,8 +6,8 @@ from base64 import b64decode, b64encode
 import crcmod.predefined
 from bitn import NBin
 from .section import SpliceInfoSection
-from .commands import splice_command
-from .descriptors import splice_descriptor
+from .commands import splice_command, command_map
+from .descriptors import splice_descriptor, descriptor_map
 from .tools import (
     i2b,
     ifb,
@@ -94,6 +94,71 @@ class Cue:
         be64 = b64encode(cuebin.bites)
         self.bites = cuebin.bites
         return be64
+
+    def load_info_section(self, isec):
+        """
+        load_info_section loads data for Cue.info_section
+        isec should be a dict.
+        if 'splice_command_type' is included,
+        an empty command instance will be created for Cue.command
+        """
+        if not isinstance(isec, dict):
+            raise Exception("info section data should be a dict")
+        self.info_section.load(isec)
+        if "splice_command_type" in isec:
+            cmd_type = isec["splice_command_type"]
+            command_map[cmd_type]()
+
+    def load_command(self, cmd):
+        """
+        load_command loads data for Cue.command
+        cmd should be a dict.
+        if 'command_type' is included,
+        the command instance will be created.
+        """
+        if not isinstance(cmd, dict):
+            raise Exception("command data should be a dict")
+        if "command_type" in cmd:
+            self.command = command_map[cmd["command_type"]]()
+        if self.command:
+            self.command.load(cmd)
+
+    def load_descriptors(self, dlist):
+        """
+        Load_descriptors loads descriptor data.
+        dlist is a list of dicts
+        if 'tag' is included in each dict,
+        a descriptor instance will be created.
+        """
+        if not isinstance(dlist, list):
+            raise Exception("descriptors should be a list")
+        for dstuff in dlist:
+            if not isinstance(dstuff, dict):
+                raise Exception("descriptor data should be a dict")
+            if "tag" in dstuff:
+                dscptr = descriptor_map[dstuff["tag"]]()
+                dscptr.load(dstuff)
+                self.descriptors.append(dscptr)
+
+    def load(self, stuff):
+        """
+        Cue.load loads SCTE35 data for encoding.
+        stuff is a dict or json
+        with any or all of these keys
+        stuff = {
+            'info_section': {dict} ,
+            'command': {dict},
+            'descriptors': [list of {dicts}],
+            }
+        """
+        if isinstance(stuff, str):
+            stuff = json.loads(stuff)
+        if "info_section" in stuff:
+            self.load_info_section(stuff["info_section"])
+        if "command" in stuff:
+            self.load_command(stuff["command"])
+        if "descriptors" in stuff:
+            self.load_descriptors(stuff["descriptors"])
 
     def _unloop_descriptors(self):
         """
