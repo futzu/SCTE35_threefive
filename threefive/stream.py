@@ -187,8 +187,10 @@ class Stream:
         payload = self._mk_payload(pkt)
         if pid == 0:
             self._program_association_table(payload)
+            return None
         if pid in self._pmt_pids:
             self._program_map_table(payload, pid)
+            return None
         if pid in self._scte35_pids:
             return self._parse_scte35(payload, pid)
         if pid in self._pid_prog:
@@ -268,7 +270,6 @@ class Stream:
             a_pid = self._parse_pid(pat_data[idx + 2], pat_data[idx + 3])
             if program_number != 0:
                 self._pmt_pids.add(a_pid)
-            #  self._prog_pmt_pid[program_number] = a_pid
             idx += chunk_size
         self.pat = None
 
@@ -290,8 +291,8 @@ class Stream:
         # section_number = payload[7]
         # last_section_number = payload[8]
         pcr_pid = self._parse_pid(payload[9], payload[10])
-        if program_number not in self._programs:
-            if self.info:
+        if self.info:
+            if program_number not in self._programs:
                 to_stderr(
                     f"\nProgram {program_number}\n\tPMT pid: {pid}\tPCR pid: {pcr_pid}"
                 )
@@ -300,7 +301,6 @@ class Stream:
         idx += proginfolen
         si_len = sectioninfolen - 9
         si_len -= proginfolen  # Skip descriptors
-        #       if table_id == 2:
         self._parse_program_streams(si_len, payload, idx, program_number)
 
     def _parse_program_streams(self, si_len, payload, idx, program_number):
@@ -349,8 +349,8 @@ class Stream:
 
     def _chk_pid_stream_type(self, pid, stream_type):
         """
-        Determine if the stream might have SCTE35 data
-        by the stream type.
+        if stream_type is 0x06 or 0x86
+        add it to self._scte35_pids.
         """
         if stream_type in ["0x6", "0x86"]:
             self._scte35_pids.add(pid)
