@@ -44,8 +44,8 @@ def _read_stuff(stuff):
         pass
     try:
         with open(stuff, "rb") as tsdata:
-            s = Stream(tsdata)
-            s.decode()
+            strm = Stream(tsdata)
+            strm.decode()
     except Exception:
         pass
 
@@ -55,6 +55,19 @@ def _read_stuff(stuff):
         cue.show()
     except Exception:
         pass
+
+
+def _read_http(stuff):
+    """
+    _read_http reads mpegts over http or https
+    and parses for SCTE35
+    """
+    import urllib3
+
+    http = urllib3.PoolManager()
+    req = http.request("GET", stuff, preload_content=False)
+    strm = Stream(req)
+    strm.decode()
 
 
 def decode(stuff=None):
@@ -78,5 +91,7 @@ def decode(stuff=None):
     """
     if stuff in [None, sys.stdin.buffer]:
         _read_stdin()
+    if stuff.startswith("http"):
+        _read_http(stuff)
     else:
         _read_stuff(stuff)
