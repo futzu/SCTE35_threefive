@@ -123,23 +123,25 @@ threefive.decode('/path/to/mpegwithscte35.ts')
 * __Base64__ 
 
 ```python3
-mesg='/DBUAAAAAAAA///wBQb+AAAAAAA+AjxDVUVJAAAACn+/Dy11cm46dXVpZDphYTg1YmJiNi01YzQzLTRiNmEtYmViYi1lZTNiMTNlYjc5OTkRAAB2c6LA'
+mesg='/DA4AAAAAAAA///wBQb+AAAAAAAiAiBDVUVJAAAAA3//AAApPWwDDEFCQ0QwMTIzNDU2SBAAAGgCL9A='
 threefive.decode(mesg)
 ```
+
 * __Hex__
 
 ```python3
 hexed='0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A'
 threefive.decode(hexed)
 ```
- * __Directly from a file__ encoded in __Base64__, __Binary__ or  __Base64__
+
+* __Directly from a file__ encoded in __Base64__, __Binary__ or  __Base64__
 
 ```bash
 $ cat cue.dat
     /DCSAAAAAAAAAP/wBQb/RgeVUgB8AhdDVUVJbs6+VX+/CAgAAAAABy0IxzELGQIXQ1VFSW7MmIh/vwgIAAABGDayFhE3AQECHENVRUluzw0If/8AABvLoAgIAAAAAActVhIwDBkCKkNVRUluzw02f78MG1JUTE4xSAEAAAAAMTM3NjkyMDI1NDQ5NUgxAAEAAGnbuXg=
 ```
 
- *  __pass__ threefive.__decode__ the __file name__ and it will __parse__ it for __SCTE35__.
+    *  __pass__ threefive.__decode__ the __file name__ and it will __parse__ it for __SCTE35__.
 
 ```python3
 from threefive import decode
@@ -197,28 +199,31 @@ cue.decode()
 ```
 #### A decoded Cue instance contains 
 
-* **cue.info_section** an instance of threefive.**SpliceInfoSection()**
+* **cue.info_section** 1 threefive.**SpliceInfoSection()** instance
     * src [section.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)
 
 * **cue.command** 1 command instance
+    * src [commands.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py)
+
     * commands are:
         * threefive.**BandwidthReservation()**
         * threefive.**PrivateCommand()**
         * threefive.**SpliceInsert()**
         * threefive.**SpliceNull()**
         * threefive.**TimeSignal()**
-    * src [commands.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py)
 
 * **cue.descriptors** a list of 0 or more descriptors instances
+     * src [descriptors.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)
+
     *  descriptors are:
         * threefive.**AuioDescriptor()**
         * threefive.**AvailDescriptor()**
         * threefive.**DtmfDescriptor()**
         * threefive.**SegmentationDescriptor()**
         * threefive.**TimeDescriptor()**
-    * src [descriptors.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)
 
 * All instance vars can be accessed via dot notation.
+
 ```python3
 >>>> from threefive import Cue
 >>>> cue = Cue(b64)
