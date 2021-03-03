@@ -197,7 +197,8 @@ cue.decode()
 ```
 #### A decoded Cue instance contains 
 
-* **cue.info_section** 1 instance of threefive.**SpliceInfoSection()**
+* **cue.info_section** an instance of threefive.**SpliceInfoSection()**
+    * Source [section.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)
 
 * **cue.command** 1 command instance
     * commands are:
@@ -206,6 +207,7 @@ cue.decode()
         * threefive.**SpliceInsert()**
         * threefive.**SpliceNull()**
         * threefive.**TimeSignal()**
+    * Source [commands.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py)
 
 * **cue.descriptors** a list of 0 or more descriptors instances
     *  descriptors are:
@@ -214,9 +216,10 @@ cue.decode()
         * threefive.**DtmfDescriptor()**
         * threefive.**SegmentationDescriptor()**
         * threefive.**TimeDescriptor()**
+    * Source [descriptors.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)
 
 * All instance vars can be accessed via dot notation.
-```
+```python3
 >>>> from threefive import Cue
 >>>> cue = Cue(b64)
 >>>> cue.decode()
