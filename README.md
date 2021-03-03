@@ -203,12 +203,7 @@ cue.decode()
 * **cue.info_section** 1 [threefive.**SpliceInfoSection()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py) instance
 
 * **cue.command** 1 command instance
-    * commands :  
-        [ threefive.**BandwidthReservation()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L32)  | 
-        [ threefive.**PrivateCommand()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L54)  | 
-        [ threefive.**SpliceInsert()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L139)  | 
-        [ threefive.**SpliceNull()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L43)  | 
-        [ threefive.**TimeSignal()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L84)
+    * commands :   [ threefive.**BandwidthReservation()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L32)  |  [ threefive.**PrivateCommand()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L54)  |  [ threefive.**SpliceInsert()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L139)  |  [ threefive.**SpliceNull()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L43)  |  [ threefive.**TimeSignal()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L84)
 
 * **cue.descriptors** a list of 0 or more descriptors instances
     * descriptors :  
