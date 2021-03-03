@@ -11,14 +11,11 @@
 *   [__threefive__ now __Encodes__ SCTE35 __Cues__](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
 
  
-*  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+* __Fast__ Start  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
-
-*  [__Fast__ Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md)
-
-*  [__Dependencies__](#dependencies)
 
 * [__Install__](#install)
+
 
 * [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 
