@@ -15,15 +15,14 @@
 
 
 * [<u>__Install__</u>](#install)
-
    
-* [__Easy__ threefive](#easy-threefive)
-  *   [The __decode__ Function](#the-decode-function)
+*   [The __decode__ Function](#the-decode-function)
       * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__](#the-decode-function)
       * [Parsing __SCTE 35__ Cue strings encoded in __Base64__, or __Hex__](#the-decode-function)
       * [Parsing __SCTE 35__ Cues directly from a file encoded in __Base64__, __Binary__,  or __Hex__](#the-decode-function)
       
 *  [__Advanced threefive__](#advanced-threefive)
+     
      *  [__Cue__ Class](#cue-class)
         
      * [__Stream__ Class](#stream-class)
