@@ -1,4 +1,5 @@
 
+
 # :rocket: threefive
 
 ### threefive is a SCTE35 Parser, Decoder, Encoder library in Python3.
@@ -185,7 +186,7 @@ decode('cue.dat')
    *  source [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
    *  __threefive.Cue__ provides several methods to access the parsed data.
-   
+
 ```python3
 from threefive import Cue
 
@@ -194,16 +195,43 @@ b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAA
 cue = Cue(b64)
 cue.decode()
 ```
-* cue return format after decode
+* A decoded Cue instance contains 
 
-```json
- {
-      'info_section': {dict} ,
-       'command': {dict},
-        'descriptors': [list of {dicts}],
-  }
+ threefive.**Cue()** 
+
+* **cue.info_section** 
+    * threefive.**SpliceInfoSection()**
+
+* **cue.command** 1 command instance
+    * commands are:
+        * threefive.**BandwidthReservation()**
+        * threefive.**PrivateCommand()**
+        * threefive.**SpliceInsert()**
+        * threefive.**SpliceNull()**
+        * threefive.**TimeSignal()**
+
+* **cue.descriptors** a list of 0 or more descriptors instances
+    *  descriptors are:
+        * threefive.**AuioDescriptor()**
+        * threefive.**AvailDescriptor()**
+        * threefive.**DtmfDescriptor()**
+        * threefive.**SegmentationDescriptor()**
+        * threefive.**TimeDescriptor()**
+
+* All instance vars can be accessed via dot notation.
 ```
-### call one of these methods after decode.
+>>>> from threefive import Cue
+>>>> cue = Cue(b64)
+>>>> cue.decode()
+True
+>>>> cue.command
+{'command_length': 5, 'command_type': 6, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 22798.906911}
+>>>> cue.command.pts_time
+22798.906911
+>>>> 
+```
+
+* call one or more of these methods after decode.
 
 |Cue Method                  | Description                                    |
 |----------------------------|------------------------------------------------|
