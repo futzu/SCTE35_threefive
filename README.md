@@ -3,25 +3,32 @@
 
 ### threefive is a SCTE35 Parser, Decoder, Encoder library in Python3.
 
+*   References the __2020 SCTE35__ Specification.
+*   __Decodes SCTE35__ from __MPEG-TS video__ files and streams.
+*   __Parses__ SCTE35 from __Base64, Hex, and Binary__ encoded __strings__.
+*  __Encodes SCTE35__ data as __Base64__ strings.
+
+
+* __SCTE35__ can be parsed from strings or video with __one function__  [__threefive.decode()__](#the-decode-function).
+ 
+*  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+
 *   [__threefive__ now __Encodes__ SCTE35 __Cues__](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
 
-*   References the __2020__ SCTE35 Specification.
-
-*   __threefive__ is __simple__ and __easy__ to use. 
-
- 	*  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
-
-  	* __SCTE-35__ can be parsed from strings or video with __one function__  [__threefive.decode()__](#the-decode-function).
-
 * [__threefive in the wild__](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
+
 * [__ffmpeg and threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
-
 * [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
-*  [__Fast__ Start](#fast-start-directions)
-      * [__Dependencies__](#dependencies)
-      * [__Install__](#install)
-      * [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
+
+*  [__Fast__ Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md)
+
+*  [__Dependencies__](#dependencies)
+
+* [__Install__](#install)
+
+* [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
+   
 * [__Easy__ threefive](#easy-threefive)
   *   [The __decode__ Function](#the-decode-function)
       * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__](#the-decode-function)
@@ -41,9 +48,6 @@
           * [Stream.__decode_proxy__(func=show_cue)](#streamdecode_proxyfunc--show_cue)    
 ---
 
-## Fast __Start__
-
-*  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
 ### Dependencies
 
