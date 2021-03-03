@@ -113,6 +113,7 @@ $ pypy3 -mensurepip install pip
  *   __MpegTS__
  
 ```python3
+import threefive
 threefive.decode('/path/to/mpegwithscte35.ts') 
 ```
 
