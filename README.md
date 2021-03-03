@@ -212,7 +212,7 @@ cue.decode()
         [ threefive.**SegmentationDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L201)  | 
         [threefive.**TimeDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L119)
 
-* All instance vars can be accessed via dot notation.
+###### All instance vars can be accessed via dot notation.
 
 ```python3
 >>>> from threefive import Cue
@@ -226,17 +226,6 @@ True
 >>>> 
 ```
 
-```python3
->>>> from threefive import Cue
->>>> cue = Cue(b64)
->>>> cue.decode()
-True
->>>> cue.command
-{'command_length': 5, 'command_type': 6, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 22798.906911}
->>>> cue.command.pts_time
-22798.906911
->>>> 
-```
 
 * call one or more of these methods after decode.
 
