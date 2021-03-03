@@ -5,18 +5,14 @@
 
 *   References the __2020 SCTE35__ Specification.
 
-*   __Decodes SCTE35__ from __MPEG-TS video__ files and streams __Base64, Hex, and Binary__ encoded __strings__.
+*   __Decode SCTE35__ from __MPEG-TS video__ files and streams __Base64, Hex, and Binary__ encoded __strings__  with __One Function__  [__threefive.decode()__](#the-decode-function).
+ 
   
 *   [__threefive__ now __Encodes__ SCTE35 __Cues__](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
 
-* __SCTE35__ can be parsed from strings or video with __one function__  [__threefive.decode()__](#the-decode-function).
  
 *  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
-
-* [__threefive in the wild__](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
-
-* [__ffmpeg and threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
 *  [__Fast__ Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md)
 
@@ -57,6 +53,9 @@
 * __Stream__
       [Stream.__decode_proxy()__ Example](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Proxy_Demo.py)
 
+* [__threefive in the wild__](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
+
+* [__ffmpeg and threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
    
 * [__Easy__ threefive](#easy-threefive)
