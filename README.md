@@ -195,12 +195,9 @@ b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAA
 cue = Cue(b64)
 cue.decode()
 ```
-* A decoded Cue instance contains 
+#### A decoded Cue instance contains 
 
- threefive.**Cue()** 
-
-* **cue.info_section** 
-    * threefive.**SpliceInfoSection()**
+* **cue.info_section** 1 instance of threefive.**SpliceInfoSection()**
 
 * **cue.command** 1 command instance
     * commands are:
