@@ -8,19 +8,19 @@
 
 * **cue.command** 1 command instance
     * commands are:
-        [* threefive.**BandwidthReservation()**](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L32)
-        [* threefive.**PrivateCommand()**](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L54)
-        [* threefive.**SpliceInsert()**](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L139)
-        [* threefive.**SpliceNull()**](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L43)
-        [* threefive.**TimeSignal()**](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L84)
+        [ threefive.**BandwidthReservation()**](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L32)
+        [ threefive.**PrivateCommand()**](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L54)
+        [ threefive.**SpliceInsert()**](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L139)
+        [ threefive.**SpliceNull()**](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L43)
+        [ threefive.**TimeSignal()**](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L84)
 
 * **cue.descriptors** a list of 0 or more descriptors instances
     *  descriptors are:
-        * [threefive.**AudioDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L153)
-        * [threefive.**AvailDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L50)
-        * [threefive.**DtmfDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L78)
-        * [threefive.**SegmentationDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L201)
-        * [threefive.**TimeDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L119)
+        [threefive.**AudioDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L153)
+        [threefive.**AvailDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L50)
+        [threefive.**DtmfDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L78)
+        [threefive.**SegmentationDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L201)
+        [threefive.**TimeDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L119)
 
 * All instance vars can be accessed via dot notation.
 
