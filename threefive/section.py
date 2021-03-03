@@ -3,10 +3,15 @@ section.py
 
 SCTE35 Splice Info Section
 """
-from bitn import BitBin, NBin
+from bitn import BitBin
 from .base import SCTE35Base
 
-sap_map = {"0x0": "Type 1", "0x1": "Type 2", "0x2": "Type 3", "0x3": "No Sap Type"}
+sap_map = {
+    "0x0": "Type 1 Closed GOP with no leading pictures",
+    "0x1": "Type 2 Closed GOP with leading pictures",
+    "0x2": "Type 3 Open GOP",
+    "0x3": "No Sap Type",
+}
 
 
 class SpliceInfoSection(SCTE35Base):
@@ -41,6 +46,8 @@ class SpliceInfoSection(SCTE35Base):
         if self.table_id != "0xfc":
             raise Exception("splice_info_section.table_id should be 0xfc")
         self.section_syntax_indicator = bitbin.asflag(1)
+        if self.section_syntax_indicator != 0:
+            raise Exception("section_syntax_indicator should be 0")
         self.private = bitbin.asflag(1)
         self.sap_type = bitbin.ashex(2)
         self.sap_details = sap_map[self.sap_type]
@@ -62,7 +69,7 @@ class SpliceInfoSection(SCTE35Base):
         takes the vars from an instance and
         encodes them as bytes.
         """
-        nbin = NBin()
+        nbin = self._chk_nbin(nbin)
         self.table_id = "0xfc"
         nbin.add_hex(self.table_id, 8)  # self.table_id
         self.section_syntax_indicator = False
