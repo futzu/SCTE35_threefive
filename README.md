@@ -31,6 +31,9 @@
 
 * [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 
+   * __DTMF:__
+      [DTMF __Descriptor__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/dtmf)
+
    * __HLS:__
        [Using threefive with __HLS Manifests__](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
 
@@ -43,8 +46,11 @@
 
    * __Splice_Null:__
       [Splice __Null__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/splicenull)
+      
+  *  __Stream:__
+        [Decode __SCTE35__ from __MPEG-TS__ video over __HTTPS__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/stream/Decode_Over_Http.py) |     [Stream.__decode_proxy()__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Proxy_Demo.py)
 
-   * __Time Signal:__
+  * __Time Signal:__
       [Time Signal __Blackout Override Program End__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal_Blackout_Override_Program_End.py) | 
        [Time Signal __Placement Opportunity Start__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Placement_Opportunity_Start.py) | 
        [Time Signal __Placement Opportunity End__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Placement_Opportunity_End.py) |
@@ -56,11 +62,7 @@
       [__Multiple__ Segmentation __Descriptors__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Multi_Upid.py) | 
       [Combination __Upid__ Segmentation Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Combo.py)
 
-   * __DTMF:__
-      [DTMF __Descriptor__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/dtmf)
- 
-  *  __Stream:__
-        [Decode __SCTE35__ from __MPEG-TS__ video over __HTTPS__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/stream/Decode_Over_Http.py) |     [Stream.__decode_proxy()__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Proxy_Demo.py)
+
 
 * [__threefive in the wild__](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 
