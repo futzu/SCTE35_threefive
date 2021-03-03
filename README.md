@@ -198,32 +198,43 @@ b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAA
 cue = Cue(B64)
 cue.decode()
 ```
+* cue format after decode
 
-### __Return Cue__ instance as __dict__
-
-```python3
-cue.get()
-
-# Splice Info Section
-cue.get_info_section()
-
-# Splice Command
-cue.get_command()
-
-# Splice Descriptors
-cue.get_descriptors()
-````
-
-### __Return Cue__ instance as __JSON__
-
-```python3
-jason = cue.get_json()
+```json
+ {
+      'info_section': {dict} ,
+       'command': {dict},
+        'descriptors': [list of {dicts}],
+  }
 ```
-### __Print Cue__ instance as __JSON__ 
+* call one of these methods after decode.
+
+|Cue Method                  | Description                                    |
+|----------------------------|------------------------------------------------|
+| cue.**get()**              | returns **cue as a dict**                      |
+| cue.**get_info_section()** | returns **cue.info_section as a dict **        |
+| cue.**get_command()**      | returns **cue.command as a dict **             |
+| cue.**get_descriptors()  **| returns **cue.descriptors as a list of dicts**.|
+| cue.**get_json()**         | returns **cue as a JSON **string               |
+| cue.**show()**             | prints **cue as JSON**                         |
+|                            |                                                |
+
 
 ```python3
-cue.show()
-```    
+
+cue.get()    		# return cue as a dict 
+
+cue.get_info_section()  # return cue.info_section as a dict
+
+cue.get_command()   	# return cue.command as a dict
+
+cue.get_descriptors()   # return cue.descriptors as a list of dicts
+
+cue.get_json()		# return cue as JSON
+
+cue.show()		# print cue as JSON
+
+```
 
 [🡡 top](#rocket-threefive)
 
