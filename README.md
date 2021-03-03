@@ -25,9 +25,7 @@
       
 *  [__Advanced threefive__](#advanced-threefive)
      *  [__Cue__ Class](#cue-class)
-          * [Return __Cue__ instance as __dict__](#return-cue-instance-as-dict)   
-          * [Return __Cue__ instance as __JSON__](#return-cue-instance-as-json)   
-          * [Print __Cue__ instance as __JSON__](#print-cue-instance-as-json)   
+        
      * [__Stream__ Class](#stream-class)
      	  * [Stream.__show__()](#streamshow) 
           * [Stream.__decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                
@@ -195,7 +193,7 @@ from threefive import Cue
 
 b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAABl/nwgIAAAAACyk26AQAACZcuND"
 
-cue = Cue(B64)
+cue = Cue(b64)
 cue.decode()
 ```
 * cue format after decode
@@ -207,7 +205,7 @@ cue.decode()
         'descriptors': [list of {dicts}],
   }
 ```
-* call one of these methods after decode.
+### call one of these methods after decode.
 
 |Cue Method                  | Description                                    |
 |----------------------------|------------------------------------------------|
@@ -219,20 +217,92 @@ cue.decode()
 | cue.**show()**             | prints **cue as JSON**                         |
 |                            |                                                |
 
-
+### Full Example 
 ```python3
+>>>> from threefive import Cue
 
-cue.get()    		# return cue as a dict 
+>>>> b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAABl/nwgIAAAAACyk26AQAACZcuND"
 
-cue.get_info_section()  # return cue.info_section as a dict
+>>>> cue.decode()
+True
+>>>> cue.show()
+{
+    "info_section": {
+        "table_id": "0xfc",
+        "section_syntax_indicator": false,
+        "private": false,
+        "sap_type": "0x3",
+        "sap_details": "No Sap Type",
+        "section_length": 72,
+        "protocol_version": 0,
+        "encrypted_packet": false,
+        "encryption_algorithm": 0,
+        "pts_adjustment": 0.0,
+        "cw_index": "0xff",
+        "tier": "0xfff",
+        "splice_command_length": 5,
+        "splice_command_type": 6,
+        "descriptor_loop_length": 50
+    },
+    "command": {
+        "command_length": 5,
+        "command_type": 6,
+        "name": "Time Signal",
+        "time_specified_flag": true,
+        "pts_time": 22798.906911
+    },
+    "descriptors": [
+        {
+            "tag": 2,
+            "descriptor_length": 23,
+            "identifier": "CUEI",
+            "name": "Segmentation Descriptor",
+            "segmentation_event_id": "0x48000018",
+            "segmentation_event_cancel_indicator": false,
+            "components": [],
+            "program_segmentation_flag": true,
+            "segmentation_duration_flag": false,
+            "delivery_not_restricted_flag": false,
+            "web_delivery_allowed_flag": true,
+            "no_regional_blackout_flag": true,
+            "archive_allowed_flag": true,
+            "device_restrictions": "No Restrictions",
+            "segmentation_message": "Program End",
+            "segmentation_upid_type": 8,
+            "segmentation_upid_length": 8,
+            "segmentation_upid": "0x2ccbc344",
+            "segmentation_type_id": 17,
+            "segment_num": 0,
+            "segments_expected": 0
+        },
+        {
+            "tag": 2,
+            "descriptor_length": 23,
+            "identifier": "CUEI",
+            "name": "Segmentation Descriptor",
+            "segmentation_event_id": "0x48000019",
+            "segmentation_event_cancel_indicator": false,
+            "components": [],
+            "program_segmentation_flag": true,
+            "segmentation_duration_flag": false,
+            "delivery_not_restricted_flag": false,
+            "web_delivery_allowed_flag": true,
+            "no_regional_blackout_flag": true,
+            "archive_allowed_flag": true,
+            "device_restrictions": "No Restrictions",
+            "segmentation_message": "Program Start",
+            "segmentation_upid_type": 8,
+            "segmentation_upid_length": 8,
+            "segmentation_upid": "0x2ca4dba0",
+            "segmentation_type_id": 16,
+            "segment_num": 0,
+            "segments_expected": 0
+        }
+    ],
+    "crc": "0x9972e343"
+}
 
-cue.get_command()   	# return cue.command as a dict
 
-cue.get_descriptors()   # return cue.descriptors as a list of dicts
-
-cue.get_json()		# return cue as JSON
-
-cue.show()		# print cue as JSON
 
 ```
 
