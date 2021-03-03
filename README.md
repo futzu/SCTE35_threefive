@@ -16,9 +16,7 @@
 * [__threefive in the wild__](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 * [__ffmpeg and threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
-#### [Changes](#changes)
 
-* [__Requires__ Python __3.6 +__ or __pypy3+__](https://www.python.org/downloads/release/python-390/)
 * [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
 *  [__Fast__ Start](#fast-start-directions)
       * [__Dependencies__](#dependencies)
@@ -49,8 +47,10 @@
 
 ### Dependencies
 
-*  Python 3.6+ or pypy3
+*  Python 3.6+ or pypy3 (__pypy3 runs threefive three times faster than python3__)
 *  [__bitn__](https://github.com/futzu/bitn)
+*  [__crcmod__](https://github.com/gsutil-mirrors/crcmod)
+*  [__urllib3__](https://github.com/urllib3/urllib3)
 
 ### Install
 
