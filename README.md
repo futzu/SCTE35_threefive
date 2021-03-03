@@ -68,17 +68,18 @@
    
 ---
 
-
-### Dependencies
-
-*  Python 3.6+ or pypy3 (__pypy3 runs threefive three times faster than python3__)
-*  [__bitn__](https://github.com/futzu/bitn)
-*  [__crcmod__](https://github.com/gsutil-mirrors/crcmod)
-*  [__urllib3__](https://github.com/urllib3/urllib3)
-
 ### Install
 
-*    __git__
+
+
+* __dependencies__
+   *  Python 3.6+ or pypy3 (__pypy3 runs threefive three times faster than python3__)
+   *  [__bitn__](https://github.com/futzu/bitn)
+   *  [__crcmod__](https://github.com/gsutil-mirrors/crcmod)
+   *  [__urllib3__](https://github.com/urllib3/urllib3)
+
+
+*  __install from git__
 
 ```bash
 $ git clone https://github.com/futzu/SCTE35-threefive.git
@@ -90,7 +91,7 @@ $ make install
 # for pypy3 
 $ make pypy3
 ```
-*  __pip__
+*  __install from pip__
 
 ```bash
 $ pip3 install threefive
@@ -102,7 +103,9 @@ $ pypy3 -mpip install threefive
 $ pypy3 -mensurepip install pip 
 ```
 
+
 [🡡 top](#rocket-threefive)
+
 
 ## __Easy__ threefive
 
