@@ -14,7 +14,7 @@
 * __Fast__ Start  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
 
-* [__Install__](#install)
+* [<u>__Install__</u>](#install)
 
    
 * [__Easy__ threefive](#easy-threefive)
