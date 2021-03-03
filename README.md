@@ -60,7 +60,7 @@
       [DTMF __Descriptor__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/dtmf)
  
   *  __Stream:__
-      [Stream.__decode_proxy()__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Proxy_Demo.py)
+      [Stream.__decode_proxy()__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Proxy_Demo.py)[__Decode_Over_Http__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/stream/Decode_Over_Http.py)
 
 * [__threefive in the wild__](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 
