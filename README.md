@@ -16,6 +16,25 @@
 
 * [__Install__](#install)
 
+   
+* [__Easy__ threefive](#easy-threefive)
+  *   [The __decode__ Function](#the-decode-function)
+      * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__](#the-decode-function)
+      * [Parsing __SCTE 35__ Cue strings encoded in __Base64__, or __Hex__](#the-decode-function)
+      * [Parsing __SCTE 35__ Cues directly from a file encoded in __Base64__, __Binary__,  or __Hex__](#the-decode-function)
+      
+*  [__Advanced threefive__](#advanced-threefive)
+     *  [__Cue__ Class](#cue-class)
+          * [Return __Cue__ instance as __dict__](#return-cue-instance-as-dict)   
+          * [Return __Cue__ instance as __JSON__](#return-cue-instance-as-json)   
+          * [Print __Cue__ instance as __JSON__](#print-cue-instance-as-json)   
+     * [__Stream__ Class](#stream-class)
+     	  * [Stream.__show__()](#streamshow) 
+          * [Stream.__decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                
+          * [Stream.__decode_next__()](#streamdecode_next)                                                                
+          * [Stream.__decode_program__(the_program=None, func=show_cue)](#streamdecode_programthe_program-func--show_cue)
+          * [Stream.__decode_proxy__(func=show_cue)](#streamdecode_proxyfunc--show_cue) 
+
 
 * [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 
@@ -53,25 +72,7 @@
 * [__threefive in the wild__](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 
 * [__ffmpeg and threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
-
    
-* [__Easy__ threefive](#easy-threefive)
-  *   [The __decode__ Function](#the-decode-function)
-      * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__](#the-decode-function)
-      * [Parsing __SCTE 35__ Cue strings encoded in __Base64__, or __Hex__](#the-decode-function)
-      * [Parsing __SCTE 35__ Cues directly from a file encoded in __Base64__, __Binary__,  or __Hex__](#the-decode-function)
-      
-*  [__Advanced threefive__](#advanced-threefive)
-     *  [__Cue__ Class](#cue-class)
-          * [Return __Cue__ instance as __dict__](#return-cue-instance-as-dict)   
-          * [Return __Cue__ instance as __JSON__](#return-cue-instance-as-json)   
-          * [Print __Cue__ instance as __JSON__](#print-cue-instance-as-json)   
-     * [__Stream__ Class](#stream-class)
-     	  * [Stream.__show__()](#streamshow) 
-          * [Stream.__decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                
-          * [Stream.__decode_next__()](#streamdecode_next)                                                                
-          * [Stream.__decode_program__(the_program=None, func=show_cue)](#streamdecode_programthe_program-func--show_cue)
-          * [Stream.__decode_proxy__(func=show_cue)](#streamdecode_proxyfunc--show_cue)    
 ---
 
 
