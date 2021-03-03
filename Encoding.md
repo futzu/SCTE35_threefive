@@ -21,11 +21,11 @@ threefive.**Cue()**
      * src [descriptors.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)
 
     *  descriptors are:
-        * threefive.**AuioDescriptor()**
-        * threefive.**AvailDescriptor()**
-        * threefive.**DtmfDescriptor()**
-        * threefive.**SegmentationDescriptor()**
-        * threefive.**TimeDescriptor()**
+        * [threefive.**AuioDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L153)
+        * [threefive.**AvailDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L50)
+        * [threefive.**DtmfDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L78)
+        * [threefive.**SegmentationDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L201)
+        * [threefive.**TimeDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L119)
 
 * All instance vars can be accessed via dot notation.
 
