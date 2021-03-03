@@ -4,22 +4,19 @@
 ### threefive is a SCTE35 Parser, Decoder, Encoder library in Python3.
 
 *   References the __2020 SCTE35__ Specification.
-*   __Decodes SCTE35__ from __MPEG-TS video__ files and streams.
-*   __Parses__ SCTE35 from __Base64, Hex, and Binary__ encoded __strings__.
-*  __Encodes SCTE35__ data as __Base64__ strings.
 
+*   __Decodes SCTE35__ from __MPEG-TS video__ files and streams __Base64, Hex, and Binary__ encoded __strings__.
+*   
+*   [__threefive__ now __Encodes__ SCTE35 __Cues__](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
 
 * __SCTE35__ can be parsed from strings or video with __one function__  [__threefive.decode()__](#the-decode-function).
  
 *  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
-*   [__threefive__ now __Encodes__ SCTE35 __Cues__](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
 
 * [__threefive in the wild__](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 
 * [__ffmpeg and threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
-
-* [ Latest __Pip__ Version]( https://pypi.org/project/threefive/)
 
 *  [__Fast__ Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md)
 
@@ -28,6 +25,39 @@
 * [__Install__](#install)
 
 * [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
+
+ * __HLS__
+       [Using threefive with __HLS Manifests__](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
+
+ * __Multicast__
+       [Parsing SCTE-35 from a __Multicast__ Source](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/README.txt)
+
+ * __Splice Insert__
+       [Splice __Insert__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert.py)
+       [Splice __Insert__ Too](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert_Too.py)
+
+ * __Splice_Null__
+      [Splice __Null__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/splicenull)
+
+ * __Time Signal__
+      [Time Signal __Blackout Override Program End__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal_Blackout_Override_Program_End.py)
+       [Time Signal __Placement Opportunity Start__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Placement_Opportunity_Start.py)
+       [Time Signal __Placement Opportunity End__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Placement_Opportunity_End.py)
+       [Time Signal __Program Overlap__ ](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Overlap.py)
+       [Time Signal __Program Start End__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Start_End.py)
+ 
+* __UPID__
+       [__Upids__ with Custom Output](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Custom_Output.py)
+      [__Multiple__ Segmentation __Descriptors__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Multi_Upid.py)
+      [Combination __Upid__ Segmentation Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Combo.py)
+
+ * __DTMF__
+      [DTMF __Descriptor__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/dtmf)
+ 
+* __Stream__
+      [Stream.__decode_proxy()__ Example](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Proxy_Demo.py)
+
+
    
 * [__Easy__ threefive](#easy-threefive)
   *   [The __decode__ Function](#the-decode-function)
