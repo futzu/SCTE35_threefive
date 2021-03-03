@@ -111,7 +111,7 @@ $ pypy3 -mensurepip install pip
 
 ###   The __decode__ Function
 
- *   source [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)
+ *   src [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)
  * __threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.
  *   __MpegTS__
  
@@ -183,7 +183,7 @@ decode('cue.dat')
 
 ##  __Cue__ Class
 
-   *  source [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
+   *  src [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
    *  __threefive.Cue__ provides several methods to access the parsed data.
 
@@ -198,7 +198,7 @@ cue.decode()
 #### A decoded Cue instance contains 
 
 * **cue.info_section** an instance of threefive.**SpliceInfoSection()**
-    * Source [section.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)
+    * src [section.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)
 
 * **cue.command** 1 command instance
     * commands are:
@@ -207,7 +207,7 @@ cue.decode()
         * threefive.**SpliceInsert()**
         * threefive.**SpliceNull()**
         * threefive.**TimeSignal()**
-    * Source [commands.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py)
+    * src [commands.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py)
 
 * **cue.descriptors** a list of 0 or more descriptors instances
     *  descriptors are:
@@ -216,7 +216,7 @@ cue.decode()
         * threefive.**DtmfDescriptor()**
         * threefive.**SegmentationDescriptor()**
         * threefive.**TimeDescriptor()**
-    * Source [descriptors.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)
+    * src [descriptors.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)
 
 * All instance vars can be accessed via dot notation.
 ```python3
@@ -340,7 +340,7 @@ True
   threefive.Stream(tsdata, show_null = False)
   ```
 
-  * source [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
+  * src [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
 
   * The threefive.__Stream__ class parses SCTE35 messages from a file or stream.
 
