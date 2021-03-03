@@ -37,7 +37,7 @@
    * __Multicast:__
        [Parsing SCTE-35 from a __Multicast__ Source](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/README.txt)
 
-   * __Splice Insert: __
+   * __Splice Insert:__
        [Splice __Insert__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert.py) |
        [Splice __Insert__ Too ](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert_Too.py)
 
