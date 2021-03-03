@@ -23,7 +23,7 @@
 *  [__Fast__ Start](#fast-start-directions)
       * [__Dependencies__](#dependencies)
       * [__Install__](#install)
-      * [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
+      * [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 * [__Easy__ threefive](#easy-threefive)
   *   [The __decode__ Function](#the-decode-function)
       * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__](#the-decode-function)
@@ -41,48 +41,6 @@
           * [Stream.__decode_next__()](#streamdecode_next)                                                                
           * [Stream.__decode_program__(the_program=None, func=show_cue)](#streamdecode_programthe_program-func--show_cue)
           * [Stream.__decode_proxy__(func=show_cue)](#streamdecode_proxyfunc--show_cue)    
- *   [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples)
-     * __HLS__
-          * [Using threefive with __HLS Manifests__](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
-     * __Multicast__
-          * [Parsing SCTE-35 from a __Multicast__ Source](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/README.txt)
-     * __Splice Insert__
-          * [Splice __Insert__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert.py)
-          * [Splice __Insert__ Too](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert_Too.py)
-     * __Splice_Null__
-          * [Splice __Null__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/splicenull)
-     * __Time Signal__
-          * [Time Signal __Blackout Override Program End__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal_Blackout_Override_Program_End.py)
-          * [Time Signal __Placement Opportunity Start__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Placement_Opportunity_Start.py)
-          * [Time Signal __Placement Opportunity End__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Placement_Opportunity_End.py)
-          * [Time Signal __Program Overlap__ ](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Overlap.py)
-          * [Time Signal __Program Start End__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Start_End.py)
-     * __UPID__
-          * [__Upids__ with Custom Output](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Custom_Output.py)
-          * [__Multiple__ Segmentation __Descriptors__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Multi_Upid.py)
-          * [Combination __Upid__ Segmentation Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Combo.py)
-     * __DTMF__
-     	  * [DTMF __Descriptor__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/dtmf)
-     * __Stream__
-          * [Stream.__decode_proxy()__ Example](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Proxy_Demo.py)
----
-
-#### __Changes__
-* __02/24/2021__ All Splice Commands and Splice Descriptors have been hoisted up.
-
-    * threefive.**BandwidthReservation()** 
-    * threefive.**PrivateCommand()**
-    * threefive.**SpliceInsert()**
-    * threefive.**SpliceNull()**
-    * threefive.**TimeSignal()**
-    * threefive.**AuioDescriptor()**
-    * threefive.**AvailDescriptor()**
-    * threefive.**DtmfDescriptor()**
-    * threefive.**SegmentationDescriptor()**
-    * threefive.**TimeDescriptor()**
-
- *  __02/10/2021__: threefive now __encodes SCTE35 Cues__.
-
 ---
 
 ## Fast __Start__
