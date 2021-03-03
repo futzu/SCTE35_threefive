@@ -27,12 +27,7 @@
      *  [__Cue__ Class](#cue-class)
         
      * [__Stream__ Class](#stream-class)
-     	  * [Stream.__show__()](#streamshow) 
-          * [Stream.__decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                
-          * [Stream.__decode_next__()](#streamdecode_next)                                                                
-          * [Stream.__decode_program__(the_program=None, func=show_cue)](#streamdecode_programthe_program-func--show_cue)
-          * [Stream.__decode_proxy__(func=show_cue)](#streamdecode_proxyfunc--show_cue) 
-
+     
 
 * [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 
@@ -210,10 +205,10 @@ cue.decode()
 |Cue Method                  | Description                                    |
 |----------------------------|------------------------------------------------|
 | cue.**get()**              | returns **cue as a dict**                      |
-| cue.**get_info_section()** | returns **cue.info_section as a dict **        |
-| cue.**get_command()**      | returns **cue.command as a dict **             |
-| cue.**get_descriptors()  **| returns **cue.descriptors as a list of dicts**.|
-| cue.**get_json()**         | returns **cue as a JSON **string               |
+| cue.**get_info_section()** | returns **cue.info_section as a dict**         |
+| cue.**get_command()**      | returns **cue.command as a dict**              |
+| cue.**get_descriptors()**  | returns **cue.descriptors as a list of dicts**.|
+| cue.**get_json()**         | returns **cue as a JSON** string               |
 | cue.**show()**             | prints **cue as JSON**                         |
 |                            |                                                |
 
