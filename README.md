@@ -185,7 +185,7 @@ decode('cue.dat')
    *  source [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
    *  __threefive.Cue__ provides several methods to access the parsed data.
-
+   
 ```python3
 from threefive import Cue
 
@@ -194,7 +194,7 @@ b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAA
 cue = Cue(b64)
 cue.decode()
 ```
-* cue format after decode
+* cue return format after decode
 
 ```json
  {
