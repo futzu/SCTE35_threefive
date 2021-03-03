@@ -197,32 +197,40 @@ b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAA
 cue = Cue(b64)
 cue.decode()
 ```
-#### A decoded Cue instance contains 
 
-* **cue.info_section** 1 threefive.**SpliceInfoSection()** instance
-    * src [section.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)
+###### A decoded __Cue__ instance contains: 
+
+* **cue.info_section** 1 [threefive.**SpliceInfoSection()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py) instance
 
 * **cue.command** 1 command instance
-    * src [commands.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py)
-
-    * commands are:
-        * threefive.**BandwidthReservation()**
-        * threefive.**PrivateCommand()**
-        * threefive.**SpliceInsert()**
-        * threefive.**SpliceNull()**
-        * threefive.**TimeSignal()**
+    * commands :  
+        [ threefive.**BandwidthReservation()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L32)  , 
+        [ threefive.**PrivateCommand()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L54)  , 
+        [ threefive.**SpliceInsert()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L139)  , 
+        [ threefive.**SpliceNull()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L43)  , 
+        [ threefive.**TimeSignal()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L84)
 
 * **cue.descriptors** a list of 0 or more descriptors instances
-     * src [descriptors.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)
-
-    *  descriptors are:
-        * threefive.**AuioDescriptor()**
-        * threefive.**AvailDescriptor()**
-        * threefive.**DtmfDescriptor()**
-        * threefive.**SegmentationDescriptor()**
-        * threefive.**TimeDescriptor()**
+    * descriptors :  
+        [ threefive.**AudioDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L153)  , 
+        [ threefive.**AvailDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L50)  , 
+        [ threefive.**DtmfDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L78)  , 
+        [ threefive.**SegmentationDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L201)  , 
+        [threefive.**TimeDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L119)
 
 * All instance vars can be accessed via dot notation.
+
+```python3
+>>>> from threefive import Cue
+>>>> cue = Cue(b64)
+>>>> cue.decode()
+True
+>>>> cue.command
+{'command_length': 5, 'command_type': 6, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 22798.906911}
+>>>> cue.command.pts_time
+22798.906911
+>>>> 
+```
 
 ```python3
 >>>> from threefive import Cue
