@@ -11,11 +11,9 @@
   
 *   [__threefive__ now __Encodes__ SCTE35 __Cues__](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
 
-#### Fast Start  
-* [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+#### Fast Start  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
-#### Install threefive
-* [Dependencies and Installation](#install)
+#### Install threefive [Dependencies and Installation](#install)
    
 ####  Easy threefive
    * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__](#the-decode-function)
@@ -37,7 +35,7 @@
   * [Combination __Upid__ Segmentation Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Combo.py)
 
  
- *   [Parsing __HLS Manifests__with threefive](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
+ *   [Parsing __HLS Manifests__ with threefive](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
 
 
 *  [__SCTE35__ from a __Multicast__ Stream](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/README.txt)
