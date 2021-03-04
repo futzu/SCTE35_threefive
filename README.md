@@ -2,30 +2,32 @@
 
 # :rocket: threefive
 
-### threefive is a SCTE35 Parser, Decoder, Encoder library in Python3.
 
-*   References the __2020 SCTE35__ Specification.
+#### threefive is a SCTE35 Parser, Decoder, Encoder library in Python3.
 
-*   __Decode SCTE35__ from __MPEG-TS video__ files and streams __Base64, Hex, and Binary__ encoded __strings__  with [__threefive.decode()__](#the-decode-function).
- 
+#####   References the __2020 SCTE35__ Specification.
+
+#####   __Decode SCTE35__ from __MPEG-TS video__ files and streams __Base64, Hex, and Binary__ encoded __strings__  with [__threefive.decode()__](#the-decode-function).
   
-*   [__threefive__ now __Encodes__ SCTE35 __Cues__](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
+##### __threefive__ now  [ __Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) SCTE35 __Cues__.
+
+---
 
 ### Fast Start 
 *   [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
-
+---
 ### Install threefive 
 * [Dependencies and Installation](#install)
-   
+---   
 ###  Easy threefive
    * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__](#the-decode-function)
    * [Parsing __SCTE 35__ Cue strings encoded in __Base64__, or __Hex__](#the-decode-function)
    * [Parsing __SCTE 35__ Cues directly from a file encoded in __Base64__, __Binary__,  or __Hex__](#the-decode-function)
-      
+---      
 ###  Advanced threefive     
   *  [__Cue__ Class](#cue-class)       
   *  [__Stream__ Class](#stream-class)
-     
+---     
 ### Examples
   *  [Splice __Insert__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert.py) 
   *  [DTMF __Descriptor__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/dtmf) 
