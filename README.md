@@ -12,24 +12,24 @@
 *   [__threefive__ now __Encodes__ SCTE35 __Cues__](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
 
  
-### Fast Start  
+#### Fast Start  
 * [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
 
-### [Installation](#install)
+#### [Installation](#install)
    
-###  The __decode__ Function
+####  Easy threefive
    * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__](#the-decode-function)
    * [Parsing __SCTE 35__ Cue strings encoded in __Base64__, or __Hex__](#the-decode-function)
    * [Parsing __SCTE 35__ Cues directly from a file encoded in __Base64__, __Binary__,  or __Hex__](#the-decode-function)
       
-###  Advanced threefive
+####  Advanced threefive
      
   *  [__Cue__ Class](#cue-class)
         
   * [__Stream__ Class](#stream-class)
      
-### Examples
+#### Examples
 
    * __DTMF:__
       [DTMF __Descriptor__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/dtmf)
