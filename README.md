@@ -28,8 +28,7 @@
         
      * [__Stream__ Class](#stream-class)
      
-
-* [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
+### Examples
 
    * __DTMF:__
       [DTMF __Descriptor__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/dtmf)
@@ -41,30 +40,23 @@
        [Parsing SCTE-35 from a __Multicast__ Source](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/README.txt)
 
    * __Splice Insert:__
-       [Splice __Insert__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert.py) |
-       [Splice __Insert__ Too ](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert_Too.py)
-
-   * __Splice_Null:__
-      [Splice __Null__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/splicenull)
+       [Splice __Insert__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert.py) 
       
   *  __Stream:__
-        [Decode __SCTE35__ from __MPEG-TS__ video over __HTTPS__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/stream/Decode_Over_Http.py) |     [Stream.__decode_proxy()__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/Proxy_Demo.py)
+        [Decode __SCTE35__ from __MPEG-TS__ video over __HTTPS__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/stream/Decode_Over_Http.py) 
 
   * __Time Signal:__
-      [Time Signal __Blackout Override Program End__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal_Blackout_Override_Program_End.py) | 
-       [Time Signal __Placement Opportunity Start__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Placement_Opportunity_Start.py) | 
-       [Time Signal __Placement Opportunity End__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Placement_Opportunity_End.py) |
-       [Time Signal __Program Overlap__ ](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Overlap.py) | 
        [Time Signal __Program Start End__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Start_End.py)
  
    * __UPID:__
-       [__Upids__ with Custom Output](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Custom_Output.py) | 
-      [__Multiple__ Segmentation __Descriptors__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Multi_Upid.py) | 
       [Combination __Upid__ Segmentation Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Combo.py)
 
+   
+   * [__All Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 
 
 * [__threefive in the wild__](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
+
 
 * [__ffmpeg and threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
    
