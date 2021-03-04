@@ -44,7 +44,7 @@
    
 
 ---
-### Stuff
+### Cool Stuff
 
 * [threefive in the wild](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 
