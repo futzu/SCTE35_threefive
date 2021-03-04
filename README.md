@@ -5,16 +5,16 @@
 
 #### threefive is a SCTE35 Parser, Decoder, Encoder library in Python3.
 
-#####   References the __2020 SCTE35__ Specification.
+* References the __2020 SCTE35__ Specification.
 
-#####   __Decode SCTE35__ from __MPEG-TS video__ files and streams __Base64, Hex, and Binary__ encoded __strings__  with [__threefive.decode()__](#the-decode-function).
+* Decode __SCTE35__ from __MPEG-TS video__ files and streams, __Base64, Hex, and Binary__ encoded strings  with [__threefive.decode()__](#the-decode-function).
   
-##### __threefive__ now  [ __Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) SCTE35 __Cues__.
+* __threefive__ now  [ __Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) SCTE35 Cues.
 
 ---
 
 ### Fast Start 
-*   [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+*   [Up and Running in Less Than Seven Seconds](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 ---
 ### Install threefive 
 * [Dependencies and Installation](#install)
@@ -31,7 +31,7 @@
 ### Examples
   *  [Splice __Insert__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert.py) 
   *  [DTMF __Descriptor__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/dtmf) 
-  * [Time Signal __Program Start End__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Start_End.py)
+  * [__Time Signal__ Program Start End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Start_End.py)
   *  [Combination __Upid__ Segmentation Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Combo.py)
   
 *   [Parsing __HLS Manifests__ with threefive](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
@@ -50,7 +50,7 @@
 * [threefive in the wild](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 
 
-* [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
+* [__ffmpeg__ and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
    
 
 ---
@@ -185,12 +185,12 @@ cue.decode()
 
 ###### A decoded __Cue__ instance contains: 
 
-* **cue.info_section** 1 [threefive.**SpliceInfoSection()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py) instance
+* **cue.info_section** 1 [threefive.**SpliceInfoSection()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)
 
-* **cue.command** 1 command instance
+* **cue.command** 1 command
 	* commands: [ threefive.**BandwidthReservation()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L32)  |    [ threefive.**PrivateCommand()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L54)  |    [ threefive.**SpliceInsert()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L139)  |    [ threefive.**SpliceNull()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L43)  |    [ threefive.**TimeSignal()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L84)
 
-* **cue.descriptors** a list of 0 or more descriptors instances
+* **cue.descriptors** a list of 0 or more descriptors
     * descriptors :    [ threefive.**AudioDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L153)  | 
         [ threefive.**AvailDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L50)  | 
         [ threefive.**DtmfDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L78)  | 
@@ -337,7 +337,7 @@ Method                              | Description
 [Stream.__decode_program__(the_program=None, func=show_cue)](#streamdecode_programthe_program-func--show_cue) |Same as Stream.__decode__ except only packets where program == __the_program__
 [Stream.__decode_proxy__(func=show_cue)](#streamdecode_proxyfunc--show_cue)      |Same as Stream.__decode__ except raw packets are written to stdout for piping to another program.
 
-### `Stream.show()`
+#### `Stream.show()`
 
  *  List programs and streams for a video.
 
@@ -381,7 +381,7 @@ Program 1050
 ```
 
 
-### ```Stream.decode(func=show_cue)```
+#### ```Stream.decode(func=show_cue)```
  
  ```python3
  import sys
@@ -417,7 +417,7 @@ if __name__ == '__main__':
     do()
 ```
 
-### ```Stream.decode_next()```
+#### ```Stream.decode_next()```
 
 * Stream.decode_next returns the next SCTE35 cue as a threefive.Cue instance.
 
@@ -440,7 +440,7 @@ if __name__ == "__main__":
     do()
 ```
 
-### ```Stream.decode_program(the_program, func = show_cue)```
+#### ```Stream.decode_program(the_program, func = show_cue)```
 
 * Use Stream.__decode_program()__ instead of Stream.__decode()__ 
 to decode SCTE-35 from packets where program == __the_program__
@@ -452,7 +452,7 @@ with open('../35.ts','rb') as tsdata:
     threefive.Stream(tsdata).decode_program(1)
 ```
 
-### ```Stream.decode_proxy(func = show_cue)```
+#### ```Stream.decode_proxy(func = show_cue)```
 
 *  Writes all packets to __sys.stdout__.
 
