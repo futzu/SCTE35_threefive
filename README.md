@@ -12,17 +12,18 @@
 *   [__threefive__ now __Encodes__ SCTE35 __Cues__](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
 
  
-* __Fast__ Start  [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+### __Fast__ Start  
+* [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
 
-* [<u>__Install__</u>](#install)
+### [__Install__](#install)
    
-*   [The __decode__ Function](#the-decode-function)
+###  The __decode__ Function
       * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__](#the-decode-function)
       * [Parsing __SCTE 35__ Cue strings encoded in __Base64__, or __Hex__](#the-decode-function)
       * [Parsing __SCTE 35__ Cues directly from a file encoded in __Base64__, __Binary__,  or __Hex__](#the-decode-function)
       
-*  [__Advanced threefive__](#advanced-threefive)
+###  Advanced threefive__
      
      *  [__Cue__ Class](#cue-class)
         
@@ -53,6 +54,7 @@
 
    
    * [__All Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
+   ---
 
 
 * [__threefive in the wild__](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
@@ -63,8 +65,6 @@
 ---
 
 ### Install
-
-
 
 * __dependencies__
    *  Python 3.6+ or pypy3 (__pypy3 runs threefive three times faster than python3__)
