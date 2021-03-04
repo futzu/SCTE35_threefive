@@ -120,13 +120,12 @@ threefive.decode(hexed)
 
 * __Directly from a file__ encoded in __Base64__, __Binary__ or  __Base64__
 
+    *  pass threefive.__decode__ the file name and it will parse it for SCTE35.
 ```bash
 $ cat cue.dat
     /DCSAAAAAAAAAP/wBQb/RgeVUgB8AhdDVUVJbs6+VX+/CAgAAAAABy0IxzELGQIXQ1VFSW7MmIh/vwgIAAABGDayFhE3AQECHENVRUluzw0If/8AABvLoAgIAAAAAActVhIwDBkCKkNVRUluzw02f78MG1JUTE4xSAEAAAAAMTM3NjkyMDI1NDQ5NUgxAAEAAGnbuXg=
 ```
-
-   *  __pass__ threefive.__decode__ the __file name__ and it will __parse__ it for __SCTE35__.
-
+*
 ```python3
 from threefive import decode
 
@@ -187,10 +186,10 @@ cue.decode()
 	* **cue.info_section** 1 [threefive.**SpliceInfoSection()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)
 
 	* **cue.command** 1 command
-		* commands: [ threefive.**BandwidthReservation()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L32)  |    [ threefive.**PrivateCommand()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L54)  |    [ threefive.**SpliceInsert()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L139)  |    [ threefive.**SpliceNull()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L43)  |    [ threefive.**TimeSignal()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L84)
+	    * commands: [ threefive.**BandwidthReservation()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L32)  |    [ threefive.**PrivateCommand()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L54)  |    [ threefive.**SpliceInsert()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L139)  |    [ threefive.**SpliceNull()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L43)  |    [ threefive.**TimeSignal()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L84)
 
 	* **cue.descriptors** a list of 0 or more descriptors
-    		* descriptors :    [ threefive.**AudioDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L153)  | 
+	    * descriptors :    [ threefive.**AudioDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L153)  | 
         [ threefive.**AvailDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L50)  | 
         [ threefive.**DtmfDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L78)  | 
         [ threefive.**SegmentationDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L201)  | 
