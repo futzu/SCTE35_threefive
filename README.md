@@ -11,49 +11,39 @@
   
 *   [__threefive__ now __Encodes__ SCTE35 __Cues__](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
 
- 
 #### Fast Start  
 * [__Up and Running in Less Than Seven Seconds__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
-
-#### [Installation](#install)
+#### Install threefive
+* [Dependencies and Installation(#install)
    
 ####  Easy threefive
    * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__](#the-decode-function)
    * [Parsing __SCTE 35__ Cue strings encoded in __Base64__, or __Hex__](#the-decode-function)
    * [Parsing __SCTE 35__ Cues directly from a file encoded in __Base64__, __Binary__,  or __Hex__](#the-decode-function)
       
-####  Advanced threefive
-     
-  *  [__Cue__ Class](#cue-class)
-        
-  * [__Stream__ Class](#stream-class)
+####  Advanced threefive     
+  *  [__Cue__ Class](#cue-class)       
+  *  [__Stream__ Class](#stream-class)
      
 #### Examples
 
-   * __DTMF:__
-      [DTMF __Descriptor__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/dtmf)
+  *  [DTMF __Descriptor__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/dtmf)
 
-   * __HLS:__
-       [Using threefive with __HLS Manifests__](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
+  *   [Parsing__HLS Manifests__with threefive](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
 
-   * __Multicast:__
-       [Parsing SCTE-35 from a __Multicast__ Source](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/README.txt)
+  *  [Parsing SCTE-35 from a __Multicast__ Stream](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/README.txt)
 
-   * __Splice Insert:__
-       [Splice __Insert__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert.py) 
+  *  [Splice __Insert__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert.py) 
       
-  *  __Stream:__
-        [Decode __SCTE35__ from __MPEG-TS__ video over __HTTPS__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/stream/Decode_Over_Http.py) 
+  *  [Decode SCTE35__ from __MPEG-TS__ video over __HTTPS__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/stream/Decode_Over_Http.py) 
 
-  * __Time Signal:__
-       [Time Signal __Program Start End__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Start_End.py)
+  * [Time Signal __Program Start End__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Start_End.py)
  
-   * __UPID:__
-      [Combination __Upid__ Segmentation Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Combo.py)
+  * [Combination __Upid__ Segmentation Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Combo.py)
 
+  * [__All Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
    
-   * [__All Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
    ---
 
 
