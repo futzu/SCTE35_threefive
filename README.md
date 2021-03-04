@@ -6,7 +6,7 @@
 
 *   References the __2020 SCTE35__ Specification.
 
-*   __Decode SCTE35__ from __MPEG-TS video__ files and streams __Base64, Hex, and Binary__ encoded __strings__  with __One Function__  [__threefive.decode()__](#the-decode-function).
+*   __Decode SCTE35__ from __MPEG-TS video__ files and streams __Base64, Hex, and Binary__ encoded __strings__  with [__threefive.decode()__](#the-decode-function).
  
   
 *   [__threefive__ now __Encodes__ SCTE35 __Cues__](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
