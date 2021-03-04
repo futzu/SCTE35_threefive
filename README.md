@@ -182,21 +182,21 @@ cue = Cue(b64)
 cue.decode()
 ```
 
-###### A decoded __Cue__ instance contains: 
+* A decoded __Cue__ instance contains: 
 
-* **cue.info_section** 1 [threefive.**SpliceInfoSection()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)
+	* **cue.info_section** 1 [threefive.**SpliceInfoSection()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)
 
-* **cue.command** 1 command
-	* commands: [ threefive.**BandwidthReservation()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L32)  |    [ threefive.**PrivateCommand()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L54)  |    [ threefive.**SpliceInsert()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L139)  |    [ threefive.**SpliceNull()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L43)  |    [ threefive.**TimeSignal()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L84)
+	* **cue.command** 1 command
+		* commands: [ threefive.**BandwidthReservation()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L32)  |    [ threefive.**PrivateCommand()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L54)  |    [ threefive.**SpliceInsert()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L139)  |    [ threefive.**SpliceNull()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L43)  |    [ threefive.**TimeSignal()** ](https://github.com/futzu/SCTE35-threefive/blob/d3db590a99f01b3355309b6c83f47fde9801e79c/threefive/commands.py#L84)
 
-* **cue.descriptors** a list of 0 or more descriptors
-    * descriptors :    [ threefive.**AudioDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L153)  | 
+	* **cue.descriptors** a list of 0 or more descriptors
+    		* descriptors :    [ threefive.**AudioDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L153)  | 
         [ threefive.**AvailDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L50)  | 
         [ threefive.**DtmfDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L78)  | 
         [ threefive.**SegmentationDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L201)  | 
         [threefive.**TimeDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/2018430b11949895722ac7bd9ac6a5e042eab1ce/threefive/descriptors.py#L119)
 
-###### All instance vars can be accessed via dot notation.
+* All instance vars can be accessed via dot notation.
 
 ```python3
 >>>> from threefive import Cue
@@ -210,7 +210,6 @@ True
 >>>> 
 ```
 
-
 * call one or more of these methods after decode.
 
 |Cue Method                  | Description                                    |
@@ -223,7 +222,7 @@ True
 | cue.**show()**             | prints **cue as JSON**                         |
 |                            |                                                |
 
-### Full Example 
+* Full Example 
 ```python3
 >>>> from threefive import Cue
 
@@ -314,6 +313,8 @@ True
 
 [🡡 top](#rocket-threefive)
 
+___
+
 ##  __Stream__ Class
 
  ```python3
@@ -336,7 +337,7 @@ Method                              | Description
 [Stream.__decode_program__(the_program=None, func=show_cue)](#streamdecode_programthe_program-func--show_cue) |Same as Stream.__decode__ except only packets where program == __the_program__
 [Stream.__decode_proxy__(func=show_cue)](#streamdecode_proxyfunc--show_cue)      |Same as Stream.__decode__ except raw packets are written to stdout for piping to another program.
 
-#### `Stream.show()`
+#### Stream.show()
 
  *  List programs and streams for a video.
 
@@ -380,7 +381,7 @@ Program 1050
 ```
 
 
-#### ```Stream.decode(func=show_cue)```
+#### Stream.decode(func=show_cue)
  
  ```python3
  import sys
@@ -416,7 +417,7 @@ if __name__ == '__main__':
     do()
 ```
 
-#### ```Stream.decode_next()```
+#### Stream.decode_next()
 
 * Stream.decode_next returns the next SCTE35 cue as a threefive.Cue instance.
 
@@ -439,7 +440,7 @@ if __name__ == "__main__":
     do()
 ```
 
-#### ```Stream.decode_program(the_program, func = show_cue)```
+#### Stream.decode_program(the_program, func = show_cue)
 
 * Use Stream.__decode_program()__ instead of Stream.__decode()__ 
 to decode SCTE-35 from packets where program == __the_program__
@@ -451,7 +452,7 @@ with open('../35.ts','rb') as tsdata:
     threefive.Stream(tsdata).decode_program(1)
 ```
 
-#### ```Stream.decode_proxy(func = show_cue)```
+#### Stream.decode_proxy(func = show_cue)
 
 *  Writes all packets to __sys.stdout__.
 
