@@ -18,6 +18,7 @@
       * [__Upids__ with Custom Output](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Custom_Output.py)
       * [__Multiple__ Segmentation __Descriptors__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Multi_Upid.py)
       * [Combination __Upid__ Segmentation Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Combo.py)
+      * [Custom Handling __MPU Upid__ data](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Custom_Upid_Handling.py)
  * __DTMF__
       * [DTMF __Descriptor__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/dtmf)
  * __Stream__
