@@ -343,39 +343,40 @@ Method                              | Description
 ```python3
 >>>> from threefive import Stream, version
 >>>> version()
-'2.2.67'
+'2.2.69'
 >>>> with open('video.ts','rb') as tsdata:
 ....     strm = Stream(tsdata)
 ....     strm.show()
 ....     
 
 Program 1030
-        PMT pid: 1030   PCR pid: 1031
+
+        PMT pid: 1030
+        PCR pid: 1031
+        Descriptor: tag: 5 length: 4 data: b'CUEI'
         1031: [0x1b] Video
         1032: [0x3] ISO/IEC 11172 Audio
         1034: [0x6] SO/IEC 13818-1 PES packets- private data
         1035: [0x86] SCTE 35
 
 Program 1100
-        PMT pid: 1100   PCR pid: 1101
+
+        PMT pid: 1100
+        PCR pid: 1101
+        Descriptor: tag: 5 length: 4 data: b'CUEI'
         1101: [0x1b] Video
         1102: [0x3] ISO/IEC 11172 Audio
         1104: [0x6] SO/IEC 13818-1 PES packets- private data
         1105: [0x86] SCTE 35
 
-Program 1010
-        PMT pid: 1010   PCR pid: 1011
-        1011: [0x1b] Video
-        1012: [0x3] ISO/IEC 11172 Audio
-        1014: [0x6] SO/IEC 13818-1 PES packets- private data
-        1015: [0x86] SCTE 35
-	
-Program 1050
-        PMT pid: 1050   PCR pid: 1051
-        1051: [0x1b] Video
-        1052: [0x3] ISO/IEC 11172 Audio
-        1054: [0x6] SO/IEC 13818-1 PES packets- private data
-        1055: [0x86] SCTE 35
+Program 1080
+
+        PMT pid: 1080
+        PCR pid: 1081
+        1081: [0x1b] Video
+        1082: [0x3] ISO/IEC 11172 Audio
+        1084: [0x6] SO/IEC 13818-1 PES packets- private data
+
 
 ```
 
