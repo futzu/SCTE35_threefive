@@ -331,54 +331,14 @@ ___
   ```
 
   * src [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
-```json
-Help on class Stream in module threefive.stream:
-
-class Stream(builtins.object)
- |  Stream class for parsing MPEG-TS data.
- |  
- |  Methods defined here:
- |  
- |  __init__(self, tsdata, show_null=False)
- |      tsdata is an open file handle
- |      set show_null=True to include Splice Nulls
- |      
- |      Use like...
- |      
- |      from threefive import Stream
- |      
- |      with open("vid.ts",'rb') as tsdata:
- |          strm = Stream(tsdata,show_null=True)
- |          strm.decode()
- |  
- |  decode(self, func=<function show_cue at 0x00007f0b2aa34d40>)
- |      Stream.decode reads self.tsdata to find SCTE35 packets.
- |      func can be set to a custom function that accepts
- |      a threefive.Cue instance as it's only argument.
- |  
- |  decode_next(self)
- |      Stream.decode_next returns the next
- |      SCTE35 cue as a threefive.Cue instance.
- |  
- |  decode_program(self, the_program, func=<function show_cue at 0x00007f0b2aa34d40>)
- |      Stream.decode_program limits SCTE35 parsing
- |      to a specific MPEGTS program.
- |  
- |  decode_proxy(self, func=<function show_cue at 0x00007f0b2aa34d40>)
- |      Stream.decode_proxy writes all ts packets are written to stdout
- |      for piping into another program like mplayer.
- |  
- |  show(self)
- |      displays all programs and stream mappings
- |  
- |  ----------------------------------------------------------------------
-```
-
   * The threefive.__Stream__ class parses SCTE35 messages from a file or stream.
+  * Supports 
+  	* __Multiple Programs__.
+  	* __Multiple SCTE35 Streams__.
+  	* __Multi-Packet PAT,PMT, and SCTE35 data__. 
 
-       *  __tsdata__ is an open file handle.
-   
-       *  __show_null__ if set to __True__, enables showing SCTE 35 __null commands__.
+  *  __tsdata__ is an open file handle. 
+  *  __show_null__ if set to __True__, enables showing SCTE 35 __null commands__.
    
 Method                              | Description
 ------------------------------------| -------------------------------------
