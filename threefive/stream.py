@@ -39,6 +39,7 @@ class Stream:
 
         """
         self._tsdata = tsdata
+        self._find_start()
         self.show_null = show_null
         self._scte35_pids = set()
         self._pid_prog = {}
@@ -71,7 +72,6 @@ class Stream:
         func can be set to a custom function that accepts
         a threefive.Cue instance as it's only argument.
         """
-        self._find_start()
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
             cue = self._parser(pkt)
             if cue:
@@ -102,7 +102,6 @@ class Stream:
         for piping into another program like mplayer.
         threefive always prints messages and such to stderr.
         """
-        self._find_start()
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
             sys.stdout.buffer.write(pkt)
             cue = self._parser(pkt)
@@ -150,12 +149,13 @@ class Stream:
         the adaptive field control flag is set
         and sets payload size accordingly
         """
+        head_size = 4
         afc = (pkt[3] >> 5) & 1
         if afc:
             afl = pkt[4]
-            payload = pkt[4 + afl :]
-        else:
-            payload = pkt[4:]
+            head_size += afl
+        # header = pkt[:head_size]
+        payload = pkt[head_size:]
         return payload
 
     @staticmethod
@@ -192,12 +192,14 @@ class Stream:
         if pid in self._pmt_pids:
             self._program_map_table(payload, pid)
             return None
+        if self.info:
+            return None
         if pid in self._scte35_pids:
             return self._parse_scte35(payload, pid)
         if pid in self._pid_prog:
             if (pkt[1] >> 6) & 1:
                 self._parse_pusi(pkt, pid)
-                return None
+            return None
         return None
 
     def _parse_pts(self, pkt, pid):
@@ -303,11 +305,22 @@ class Stream:
         if self.info:
             if program_number not in self._programs:
                 to_stderr(
-                    f"\nProgram {program_number}\n\tPMT pid: {pid}\tPCR pid: {pcr_pid}"
+                    f"\nProgram {program_number}\n\n\tPMT pid: {pid}\n\tPCR pid: {pcr_pid}"
                 )
         proginfolen = self._parse_length(payload[11], payload[12])
         idx = 13
-        idx += proginfolen
+        end = idx + proginfolen
+        while idx < end:
+            tag = payload[idx]
+            idx += 1
+            length = payload[idx]
+            idx += 1
+            data = payload[idx : idx + length]
+            if self.info:
+                if program_number not in self._programs:
+                    to_stderr(f"\tDescriptor: tag: {tag} length: {length} data: {data}")
+            idx += length
+        # idx += proginfolen
         si_len = sectioninfolen - 9
         si_len -= proginfolen  # Skip descriptors
         self._parse_program_streams(si_len, payload, idx, program_number)

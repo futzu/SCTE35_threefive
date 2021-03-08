@@ -6,7 +6,7 @@ from base64 import b64decode, b64encode
 import crcmod.predefined
 from bitn import NBin
 from .section import SpliceInfoSection
-from .commands import splice_command, command_map
+from .commands import command_map
 from .descriptors import splice_descriptor, descriptor_map
 from .tools import (
     i2b,
@@ -88,12 +88,15 @@ class Cue:
         cuebin.add_bites(cmd_bites, cmd_bitlen)
         cuebin.add_int(self.info_section.descriptor_loop_length, 16)
         cuebin.add_bites(dscptr_bites, (dll << 3))
-        crc32_func = crcmod.predefined.mkCrcFun("crc-32-mpeg")
-        self.crc = hex(crc32_func(cuebin.bites))
-        cuebin.add_hex(self.crc, 32)
+        self._encode_crc(cuebin)
         be64 = b64encode(cuebin.bites)
         self.bites = cuebin.bites
         return be64
+
+    def _encode_crc(self, cuebin):
+        crc32_func = crcmod.predefined.mkCrcFun("crc-32-mpeg")
+        self.crc = hex(crc32_func(cuebin.bites))
+        cuebin.add_hex(self.crc, 32)
 
     def load_info_section(self, isec):
         """
@@ -296,7 +299,6 @@ class Cue:
         """
         info_size = 14
         info_bites = bites[:info_size]
-        # self.info_section = SpliceInfoSection()
         self.info_section.decode(info_bites)
         return bites[info_size:]
 
@@ -306,11 +308,13 @@ class Cue:
         of a SCTE35 cue.
         """
         sct = self.info_section.splice_command_type
-        self.command = splice_command(sct, bites)
-        if self.command:
-            del self.command.bites
-            self.info_section.splice_command_length = self.command.command_length
-            bites = bites[self.command.command_length :]
+        if sct not in command_map:
+            return False
+        self.command = command_map[sct](bites)
+        self.command.decode()
+        del self.command.bites
+        self.info_section.splice_command_length = self.command.command_length
+        bites = bites[self.command.command_length :]
         return bites
 
     def show(self):

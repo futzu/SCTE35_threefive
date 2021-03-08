@@ -277,16 +277,3 @@ command_map = {
     7: BandwidthReservation,
     255: PrivateCommand,
 }
-
-
-def splice_command(sct, bites):
-    """
-    splice_command
-    returns an instance
-    command_map[sct]
-    """
-    if sct in command_map:
-        cmd = command_map[sct](bites)
-        cmd.decode()
-        return cmd
-    return False
