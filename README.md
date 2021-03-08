@@ -389,7 +389,7 @@ Program 1080
  
  if __name__ =='__main__':
     with open(sys.argv[1],'rb') as tsdata:
-        sp = Stream.decode_nextStream(tsdata)
+        sp = Stream(tsdata)
         sp.decode()
 
 ```
