@@ -436,6 +436,7 @@ Method                              | Description
 ....     strm.show()
 ....     
 
+
 Program 1030
 
         PMT pid: 1030
@@ -463,6 +464,26 @@ Program 1080
         1081: [0x1b] Video
         1082: [0x3] ISO/IEC 11172 Audio
         1084: [0x6] SO/IEC 13818-1 PES packets- private data
+
+Program 1010
+
+        PMT pid: 1010
+        PCR pid: 1011
+        Descriptor: tag: 5 length: 4 data: b'CUEI'
+        1011: [0x1b] Video
+        1012: [0x3] ISO/IEC 11172 Audio
+        1014: [0x6] SO/IEC 13818-1 PES packets- private data
+        1015: [0x86] SCTE 35
+	
+Program 1050
+
+        PMT pid: 1050
+        PCR pid: 1051
+        Descriptor: tag: 5 length: 4 data: b'CUEI'
+        1051: [0x1b] Video
+        1052: [0x3] ISO/IEC 11172 Audio
+        1054: [0x6] SO/IEC 13818-1 PES packets- private data
+        1055: [0x86] SCTE 35
 
 
 ```
