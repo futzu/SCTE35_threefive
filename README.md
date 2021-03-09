@@ -193,82 +193,26 @@ cue.decode()
 
 * A decoded __Cue__ instance contains: 
 
-* **cue.info_section** *1 [threefive.**SpliceInfoSection()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)*
-```json
-	{
-    "info_section": {
-        "table_id": "0xfc",
-        "section_syntax_indicator": false,
-        "private": false,
-        "sap_type": "0x3",
-        "sap_details": "No Sap Type",
-        "section_length": 47,
-        "protocol_version": 0,
-        "encrypted_packet": false,
-        "encryption_algorithm": 0,
-        "pts_adjustment": 0.0,
-        "cw_index": "0xff",
-        "tier": "0xfff",
-        "splice_command_length": 20,
-        "splice_command_type": 5,
-        "descriptor_loop_length": 10
-    },
-```
+	* **cue.info_section** *1 [threefive.**SpliceInfoSection()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)*
 
-* **cue.command**  *1 command*
-	 * commands:
-	 	*  [ threefive.**BandwidthReservation()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L32)    
-	 	*  [ threefive.**PrivateCommand()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L54)
-	 	*  [ threefive.**SpliceInsert()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L139) 
-	 	*  [ threefive.**SpliceNull()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L43) 
-	 	*  [ threefive.**TimeSignal()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L84)
-```json
+	* **cue.command**  *1 command*
+	 * * commands:
+         *  [ threefive.**BandwidthReservation()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L32)    
+         *  [ threefive.**PrivateCommand()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L54 
+         *  [ threefive.**SpliceInsert()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L139) 
+	 *  [ threefive.**SpliceNull()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L43) 
+        *  [ threefive.**TimeSignal()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L84)
 
-    "command": {
-        "command_length": 20,
-        "command_type": 5,
-        "name": "Splice Insert",
-        "time_specified_flag": true,
-        "pts_time": 21951.133267,
-        "break_auto_return": false,
-        "break_duration": 75.0,
-        "splice_event_id": 18,
-        "splice_event_cancel_indicator": false,
-        "out_of_network_indicator": true,
-        "program_splice_flag": true,
-        "duration_flag": true,
-	"splice_immediate_flag": false,
-        "unique_program_id": 1,
-        "avail_num": 18,
-        "avail_expected": 255
-    },
-    
-   
-```
 
- * **cue.descriptors**  *a list of 0 or more descriptors*
-     * descriptors :    [ threefive.**AudioDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L153)  | 
-        [ threefive.**AvailDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L50)  | 
-        [ threefive.**DtmfDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L78)  | 
-        [ threefive.**SegmentationDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L201)  | 
-        [threefive.**TimeDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L119)
-```json
- 
-    "descriptors": [
-        {
-            "tag": 0,
-            "descriptor_length": 8,
-            "identifier": "CUEI",
-            "name": "Avail Descriptor",
-            "provider_avail_id": 18
-        }
-    ],
-```
+     * **cue.descriptors**  *a list of 0 or more descriptors*
+        * descriptors :    [ threefive.**AudioDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L153)  | 
+      
+       * [ threefive.**AvailDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L50)  | 
+       * [ threefive.**DtmfDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L78)  | 
+       * [ threefive.**SegmentationDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L201)  | 
+       * [threefive.**TimeDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L119)
 
 *  __crc__
-```json
-"crc": "0xeaa8473f",
-```
      
 * 'When parsing SCTE35 Cues from MPEGTS streams, 
  threefive attempts to include as many of the 
@@ -277,12 +221,6 @@ cue.decode()
     *  __program__ of the pid 
     *  __pts__ of the packet 
 
-```json
-    "pid": 1055,
-    "program": 1050,
-    "pts": 21940.713289
-}
-```
 
 
 * All instance vars can be accessed via dot notation.
