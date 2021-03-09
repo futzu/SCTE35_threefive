@@ -261,13 +261,13 @@ cue.decode()
     ],
 ```
 
-     *  __crc__
+*  __crc__
      
-     * *When parsing SCTE35 Cues from MPEGTS streams, threefive attempts to include as many of ther following as possible*.  
+* *When parsing SCTE35 Cues from MPEGTS streams, threefive attempts to include as many of ther following as possible*.  
         	
-         *  __pid__ of the packet  
-         *  __program__ of the pid  	
-         *  __pts__ of the packet 
+    *  __pid__ of the packet  
+    *  __program__ of the pid 
+    *  __pts__ of the packet 
 	
 
 * All instance vars can be accessed via dot notation.
