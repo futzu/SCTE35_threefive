@@ -3,7 +3,7 @@
 # :rocket: threefive
 
 
-#### threefive is a SCTE35 Parser, Decoder, Encoder library in Python3.
+#### threefive is a SCTE35 Decoder,Editor, Encoder, and Parser library in Python3.
 
 * References the __2020 SCTE35__ Specification.
 
@@ -47,12 +47,11 @@
 ---
 ### Cool Stuff
 
-* [threefive in the wild](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
+* [__threefive__ Spotted in __The Wild__](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 
 
-* [__ffmpeg__ and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
+* [__ffmpeg__ and __SCTE35__ and __Stream Type__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
    
-*  [PSA](https://github.com/futzu/SCTE35-threefive/blob/master/psa.md)
 ---
 
 ### Install
@@ -205,6 +204,13 @@ cue.decode()
         [ threefive.**DtmfDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L78)  | 
         [ threefive.**SegmentationDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L201)  | 
         [threefive.**TimeDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L119)
+
+     *  **CRC**
+     *  threefive adds a __packet_data__  when parsing SCTE35 from MPEGTS.
+        * __packet_data__ is 
+        	*  __pid of the packet__ (parsed from the SCTE35 packet)
+        	*  __program of the pid__ (parsed from the PMT)
+        	*  __estimated PTS__ of the packet (parsed from ther PCR_PID of the program) 
 
 * All instance vars can be accessed via dot notation.
 
