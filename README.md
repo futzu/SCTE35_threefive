@@ -194,7 +194,7 @@ cue.decode()
 * A decoded __Cue__ instance contains: 
 
 * **cue.info_section** 1 [threefive.**SpliceInfoSection()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)
-	```
+```json
 	{
     "info_section": {
         "table_id": "0xfc",
@@ -217,7 +217,7 @@ cue.decode()
 
 * **cue.command** 1 command
 	 * commands: [ threefive.**BandwidthReservation()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L32)  |    [ threefive.**PrivateCommand()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L54)  |    [ threefive.**SpliceInsert()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L139)  |    [ threefive.**SpliceNull()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L43)  |    [ threefive.**TimeSignal()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L84)
-```
+```json
 
     "command": {
         "command_length": 20,
@@ -241,14 +241,13 @@ cue.decode()
    
 ```
 
-
  * **cue.descriptors** a list of 0 or more descriptors
      * descriptors :    [ threefive.**AudioDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L153)  | 
         [ threefive.**AvailDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L50)  | 
         [ threefive.**DtmfDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L78)  | 
         [ threefive.**SegmentationDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L201)  | 
         [threefive.**TimeDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L119)
-```
+```json
  
     "descriptors": [
         {
@@ -262,15 +261,24 @@ cue.decode()
 ```
 
 *  __crc__
+```json
+"crc": "0xeaa8473f",
+```
      
-`When parsing SCTE35 Cues from MPEGTS streams, 
+* 'When parsing SCTE35 Cues from MPEGTS streams, 
  threefive attempts to include as many of the 
- following as possible.`  
-        	
+ following as possible.'   	
     *  __pid__ of the packet  
     *  __program__ of the pid 
     *  __pts__ of the packet 
-	
+
+```json
+    "pid": 1055,
+    "program": 1050,
+    "pts": 21940.713289
+}
+```
+
 
 * All instance vars can be accessed via dot notation.
 
