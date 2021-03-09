@@ -206,10 +206,13 @@ cue.decode()
         [threefive.**TimeDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L119)
 
      *  CRC
-     *  *When parsing MPEGTS streams threefive tries to parse and add the following values*.  
-        	*  __pid__ of the packet *(parsed from the SCTE35 packet)
-        	*  __program__ of the pid  *(parsed from the PMT)
-        	*  Estimated __PTS__ of the packet *(parsed from ther PCR_PID of the program) 
+     *  *When prsing SCTE35 Cues from MPEGTS streams, threefive attempts to include as many of ther following as possible*.  
+        	
+		*  __pid__ of the packet  
+        	
+		*  __program__ of the pid  
+        	
+		*  __pts__ of the packet 
 	
 
 * All instance vars can be accessed via dot notation.
