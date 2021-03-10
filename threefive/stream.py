@@ -252,7 +252,7 @@ class Stream:
         """
         parse program association table ( pid 0 )
         to program to program table pid mappings.
-        StreamParser is imported from threefive.afc3.
+        Pat is imported from threefive.afc3.
         """
         fat_pat = Pat()
         fat_pat.decode(pkt)
