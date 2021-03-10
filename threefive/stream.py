@@ -4,7 +4,7 @@ Mpeg-TS Stream parsing class Stream
 
 import sys
 from functools import partial
-from .afc3 import StreamParser
+from .afc3 import Pat
 from .cue import Cue
 from .streamtype import stream_type_map
 from .tools import to_stderr
@@ -254,9 +254,9 @@ class Stream:
         to program to program table pid mappings.
         StreamParser is imported from threefive.afc3.
         """
-        sparser = StreamParser()
-        sparser.head_n_pat(pkt)
-        self._pmt_pids |= sparser.pmt_pids
+        fat_pat = Pat()
+        fat_pat.decode(pkt)
+        self._pmt_pids |= fat_pat.pmt_pids
         return
 
     def _program_map_table(self, payload, pid):
@@ -288,7 +288,7 @@ class Stream:
         if self.info:
             if program_number not in self._programs:
                 to_stderr(
-                    f"\nProgram {program_number}\n\n\tPMT pid: {pid}\tPCR pid: {pcr_pid}\n"
+                    f"\nProgram {program_number}\n\n\tPMT pid: {pid}\n\tPCR pid: {pcr_pid}"
                 )
         proginfolen = self._parse_length(payload[11], payload[12])
         idx = 13
