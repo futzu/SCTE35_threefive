@@ -4,6 +4,7 @@ Mpeg-TS Stream parsing class Stream
 
 import sys
 from functools import partial
+from .afc3 import StreamParser
 from .cue import Cue
 from .streamtype import stream_type_map
 from .tools import to_stderr
@@ -185,10 +186,10 @@ class Stream:
         route it appropriately.
         """
         pid = self._parse_pid(pkt[1], pkt[2])
-        payload = self._mk_payload(pkt)
         if pid == 0:
-            self._program_association_table(payload)
+            self._program_association_table(pkt)
             return None
+        payload = self._mk_payload(pkt)
         if pid in self._pmt_pids:
             self._program_map_table(payload, pid)
             return None
@@ -247,34 +248,16 @@ class Stream:
             return cue
         return None
 
-    def _program_association_table(self, payload):
+    def _program_association_table(self, pkt):
         """
         parse program association table ( pid 0 )
         to program to program table pid mappings.
+        StreamParser is imported from threefive.afc3.
         """
-        if not self.pat:
-            self.pat = {}
-            self.pat["sectionlen"] = self._parse_length(payload[2], payload[3])
-            self.pat["data"] = payload[9:]
-        else:
-            self.pat["data"] += payload
-        if len(self.pat["data"]) < self.pat["sectionlen"]:
-            return
-        pat_data = self.pat["data"]
-        sec_len = self.pat["sectionlen"]
-        sec_len -= 5  # bytes not read
-        sec_len -= 4  # skip CRC at the end
-        chunk_size = 4  # 4 bytes per program -> pid mapping
-        idx = 0
-        while idx < sec_len:
-            program_number = self._parse_program_number(
-                pat_data[idx], pat_data[idx + 1]
-            )
-            a_pid = self._parse_pid(pat_data[idx + 2], pat_data[idx + 3])
-            if program_number != 0:
-                self._pmt_pids.add(a_pid)
-            idx += chunk_size
-        self.pat = None
+        sparser = StreamParser()
+        sparser.head_n_pat(pkt)
+        self._pmt_pids |= sparser.pmt_pids
+        return
 
     def _program_map_table(self, payload, pid):
         """
@@ -305,7 +288,7 @@ class Stream:
         if self.info:
             if program_number not in self._programs:
                 to_stderr(
-                    f"\nProgram {program_number}\n\n\tPMT pid: {pid}\n\tPCR pid: {pcr_pid}"
+                    f"\nProgram {program_number}\n\n\tPMT pid: {pid}\tPCR pid: {pcr_pid}\n"
                 )
         proginfolen = self._parse_length(payload[11], payload[12])
         idx = 13
