@@ -3,7 +3,7 @@
 # :rocket: threefive
 
 
-#### threefive is a SCTE35 Parser, Decoder, Encoder library in Python3.
+#### threefive is a SCTE35 Decoder,Editor, Encoder, and Parser library in Python3.
 
 * References the __2020 SCTE35__ Specification.
 
@@ -20,6 +20,7 @@
 ---
 ###  Easy threefive
    * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__](#the-decode-function)
+   * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__ over __HTTPS__](#the-decode-function)
    * [Parsing __SCTE 35__ Cue strings encoded in __Base64__, or __Hex__](#the-decode-function)
    * [Parsing __SCTE 35__ Cues directly from a file encoded in __Base64__, __Binary__,  or __Hex__](#the-decode-function)
 ---      
@@ -46,12 +47,11 @@
 ---
 ### Cool Stuff
 
-* [threefive in the wild](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
+* [__threefive__ Spotted in __The Wild__](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 
 
-* [__ffmpeg__ and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
+* [__ffmpeg__ and __SCTE35__ and __Stream Type__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
    
-
 ---
 
 ### Install
@@ -193,17 +193,35 @@ cue.decode()
 
 * A decoded __Cue__ instance contains: 
 
-	* **cue.info_section** 1 [threefive.**SpliceInfoSection()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)
+	* **cue.info_section** *1 [threefive.**SpliceInfoSection()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)*
 
-	* **cue.command** 1 command
-	    * commands: [ threefive.**BandwidthReservation()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L32)  |    [ threefive.**PrivateCommand()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L54)  |    [ threefive.**SpliceInsert()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L139)  |    [ threefive.**SpliceNull()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L43)  |    [ threefive.**TimeSignal()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L84)
+     * **cue.command** 1 command	 
+       * commands:
+         *  [ threefive.**BandwidthReservation()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L32)    
+         *  [ threefive.**PrivateCommand()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L54 )
+         *  [ threefive.**SpliceInsert()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L139)
+         * [ threefive.**SpliceNull()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L43) 
+         *  [ threefive.**TimeSignal()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L84)
 
-	* **cue.descriptors** a list of 0 or more descriptors
-	    * descriptors :    [ threefive.**AudioDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L153)  | 
-        [ threefive.**AvailDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L50)  | 
-        [ threefive.**DtmfDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L78)  | 
-        [ threefive.**SegmentationDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L201)  | 
-        [threefive.**TimeDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L119)
+
+     * **cue.descriptors**  *a list of 0 or more descriptors*
+        * descriptors :    
+          * [ threefive.**AudioDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L153)  
+          * [ threefive.**AvailDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L50)  
+          * [ threefive.**DtmfDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L78)  
+          * [ threefive.**SegmentationDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L201)  
+          * [threefive.**TimeDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L119)
+
+     *  __crc__
+     
+     * 'When parsing SCTE35 Cues from MPEGTS streams, 
+       threefive attempts to include as many of the 
+       following as possible.'   	
+       *  __pid__ of the packet  
+       *  __program__ of the pid 
+       *  __pts__ of the packet 
+
+
 
 * All instance vars can be accessed via dot notation.
 
@@ -361,6 +379,7 @@ Method                              | Description
 ....     strm.show()
 ....     
 
+
 Program 1030
 
         PMT pid: 1030
@@ -388,6 +407,26 @@ Program 1080
         1081: [0x1b] Video
         1082: [0x3] ISO/IEC 11172 Audio
         1084: [0x6] SO/IEC 13818-1 PES packets- private data
+
+Program 1010
+
+        PMT pid: 1010
+        PCR pid: 1011
+        Descriptor: tag: 5 length: 4 data: b'CUEI'
+        1011: [0x1b] Video
+        1012: [0x3] ISO/IEC 11172 Audio
+        1014: [0x6] SO/IEC 13818-1 PES packets- private data
+        1015: [0x86] SCTE 35
+	
+Program 1050
+
+        PMT pid: 1050
+        PCR pid: 1051
+        Descriptor: tag: 5 length: 4 data: b'CUEI'
+        1051: [0x1b] Video
+        1052: [0x3] ISO/IEC 11172 Audio
+        1054: [0x6] SO/IEC 13818-1 PES packets- private data
+        1055: [0x86] SCTE 35
 
 
 ```
