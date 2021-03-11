@@ -41,10 +41,7 @@ class Pat:
     """
 
     def __init__(self):
-        self.table_id = None
-        self.section_syntax_indicator = None
         self.section_length = None
-        self.transport_stream_id = None
         self.program_number = None
         self.network_pid = None
         self.pmt_pids = set()
@@ -53,10 +50,9 @@ class Pat:
         bitbin = BitBin(pkt)
         head = Header()
         head.decode(bitbin)
-        if head.pid != 0:
-            return
-        self.table_id = bitbin.asint(8)
-        self.section_syntax_indicator = bitbin.asflag(1)
+        #self.table_id = bitbin.asint(8)
+        #self.section_syntax_indicator = bitbin.asflag(1)
+        bitbin.forward(9)
         if bitbin.asflag(1):
             return
         # reserved
