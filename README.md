@@ -9,7 +9,6 @@
 * Decode __SCTE35__ from __MPEG-TS video__ files and streams, __Base64, Hex, and Binary__ encoded strings.
   
 * __threefive__ now  [ __Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) SCTE35 Cues.
-![Happy threefive users](https://github.com/futzu/SCTE35-threefive/blob/master/threefiveishappy.jpg)
 
 
 ---
@@ -52,6 +51,9 @@
 
 
 * [__ffmpeg__ and __SCTE35__ and __Stream Type__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
+
+
+* [threefive __Cyclomatic Complexity__](https://github.com/futzu/SCTE35-threefive/blob/master/cyclomatic_complexity.md)
    
 ---
 
@@ -523,5 +525,8 @@ with open('vid.ts','rb') as tsdata:
 ```bash
 $ python3 proxy.py | mplayer -
 ```
+
+![Happy threefive users](https://github.com/futzu/SCTE35-threefive/blob/master/threefiveishappy.jpg)
+
 
 [🡡 top](#rocket-threefive)
