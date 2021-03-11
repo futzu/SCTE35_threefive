@@ -155,7 +155,6 @@ class Stream:
         if afc:
             afl = pkt[4]
             head_size += afl
-        # header = pkt[:head_size]
         payload = pkt[head_size:]
         return payload
 
@@ -252,12 +251,11 @@ class Stream:
         """
         parse program association table ( pid 0 )
         to program to program table pid mappings.
-        Pat is imported from threefive.afc3.
+        StreamParser is imported from threefive.afc3.
         """
         fat_pat = Pat()
         fat_pat.decode(pkt)
         self._pmt_pids |= fat_pat.pmt_pids
-        return
 
     def _program_map_table(self, payload, pid):
         """
@@ -265,25 +263,16 @@ class Stream:
         """
         if self.pmt:
             # Handle PMT split over multiple packets
-            tail = payload[: payload[0]]
-            payload = self.pmt + tail
+            payload = self.pmt + payload
             self.pmt = None
         payload = self._janky_parse(payload, b"\x02", b"\x00\x02")
-        if not payload:
-            return None
-        # table_id = payload[1]
-        # section_syntax_indicator = payload[2] >> 7
         sectioninfolen = self._parse_length(payload[2], payload[3])
         if sectioninfolen + 4 > len(payload):
             self.pmt = payload
             return None
         program_number = self._parse_program_number(payload[4], payload[5])
-        # version = payload[6] >> 1 & 31
-        # current_next = payload[6] & 1
         if self.the_program and (program_number != self.the_program):
             return None
-        # section_number = payload[7]
-        # last_section_number = payload[8]
         pcr_pid = self._parse_pid(payload[9], payload[10])
         if self.info:
             if program_number not in self._programs:
@@ -303,7 +292,6 @@ class Stream:
                 if program_number not in self._programs:
                     to_stderr(f"\tDescriptor: tag: {tag} length: {length} data: {data}")
             idx += length
-        # idx += proginfolen
         si_len = sectioninfolen - 9
         si_len -= proginfolen  # Skip descriptors
         self._parse_program_streams(si_len, payload, idx, program_number)
