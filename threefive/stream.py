@@ -191,7 +191,6 @@ class Stream:
         payload = self._mk_payload(pkt)
         if pid in self._pmt_pids:
             self._program_map_table(payload, pid)
-            return None
         if self.info:
             return None
         if pid in self._scte35_pids:
@@ -288,10 +287,10 @@ class Stream:
             length = payload[idx]
             idx += 1
             data = payload[idx : idx + length]
+            idx += length
             if self.info:
                 if program_number not in self._programs:
                     to_stderr(f"\tDescriptor: tag: {tag} length: {length} data: {data}")
-            idx += length
         si_len = sectioninfolen - 9
         si_len -= proginfolen  # Skip descriptors
         self._parse_program_streams(si_len, payload, idx, program_number)

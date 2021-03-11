@@ -16,24 +16,20 @@ class Header:
 
     def __init__(self):
         self.pid = None
-        self.scramble = None
         self.adapt_field_flag = None
         self.afl = None
-        self.bump = None
 
     def decode(self, bitbin):
         bitbin.forward(11)
         self.pid = bitbin.asint(13)
-        self.scramble = bitbin.asint(2)
+        #self.scramble = bitbin.asint(2)
+        bitbin.forward(2)
         self.adapt_field_flag = bitbin.asflag(1)
         bitbin.forward(5)
         if self.adapt_field_flag:
             self.afl = bitbin.asint(8)  # pkt[4]
             bitbin.forward(self.afl << 3)
-            self.bump = bitbin.asint(8)  # pkt[5]
-            bitbin.forward(self.bump << 3)
-        else:
-            bitbin.forward(8)  # pkt[4]
+        bitbin.forward(8)  # pkt[4]
 
     def show(self):
         print(vars(self))
@@ -67,8 +63,8 @@ class Pat:
         bitbin.forward(2)
         self.section_length = bitbin.asint(12)
         secl = self.section_length << 3
-        self.transport_stream_id = bitbin.asint(16)
-        bitbin.forward(24)
+       # self.transport_stream_id = bitbin.asint(16)
+        bitbin.forward(40)
         secl -= 40
         while secl > 32:  # self.crc = bitbin.asint(32)
             self.program_number = bitbin.asint(16)  # 16
