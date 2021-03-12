@@ -1,7 +1,7 @@
 
 ### Tuning PAT and PMT packet parsing in threefive.Stream
 
-* step 1: __cProfile'd the Stream class parsing 3.7GB of MPEGTS video for SCTE35.__
+*  __cProfile'd the Stream class parsing 3.7GB of MPEGTS video for SCTE35.__
  ```sh
  
         106,143,354 function calls (106142526 primitive calls) in 36.231 seconds
@@ -18,12 +18,15 @@
     37840    0.105    0.000    0.107    0.000 stream.py:296(_parse_program_streams)
 
 ```
-* Step 2: Added Stream._last_pat (type bytes, holds last pat packet payload) and Stream._last_pmt (type dict, maps pmt_pid and  packet payload)
+*  __Added Stream._last_pat__ (type bytes, holds last pat packet payload) 
+*  __Added Stream._last_pmt__ (type dict, maps pmt_pid and  packet payload)
 
-* Step 3: Added comparison checks in Stream._parser(pkt) to skip parsing for PAT or PMT packets with the samer payload.
+* __Added comparison checks__ in Stream._parser(pkt) to __skip parsing for PAT or PMT packets with the samer payload__.
 
 
-* Step 4: __cProfile'd the Stream class parsing 3.7GB of MPEGTS video for SCTE35.__ with the changes.
+* __cProfile'd the Stream class parsing 3.7GB of MPEGTS video for SCTE35.__ ( *with the changes)
+       
+     *  __Boom goes the dynamite__.
 ```sh
        105,227,586 function calls (105226758 primitive calls) in 32.990 seconds
 
