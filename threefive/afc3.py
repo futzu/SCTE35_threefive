@@ -18,11 +18,14 @@ class Header:
         self.pid = None
         self.adapt_field_flag = None
         self.afl = None
+        self.head = b""
+        self.payload = b""
 
-    def decode(self, bitbin):
+    def decode(self, pkt):
+        bitbin = BitBin(pkt)
         bitbin.forward(11)
         self.pid = bitbin.asint(13)
-        #self.scramble = bitbin.asint(2)
+        # self.scramble = bitbin.asint(2)
         bitbin.forward(2)
         self.adapt_field_flag = bitbin.asflag(1)
         bitbin.forward(5)
@@ -30,6 +33,9 @@ class Header:
             self.afl = bitbin.asint(8)  # pkt[4]
             bitbin.forward(self.afl << 3)
         bitbin.forward(8)  # pkt[4]
+        head_bites = (bitbin.bitsize - bitbin.idx) >> 3
+        self.head, self.payload = pkt[:head_bites], pkt[head_bites:]
+        return bitbin
 
     def show(self):
         print(vars(self))
@@ -47,11 +53,10 @@ class Pat:
         self.pmt_pids = set()
 
     def decode(self, pkt):
-        bitbin = BitBin(pkt)
         head = Header()
-        head.decode(bitbin)
-        #self.table_id = bitbin.asint(8)
-        #self.section_syntax_indicator = bitbin.asflag(1)
+        bitbin = head.decode(pkt)
+        # self.table_id = bitbin.asint(8)
+        # self.section_syntax_indicator = bitbin.asflag(1)
         bitbin.forward(9)
         if bitbin.asflag(1):
             return
@@ -59,7 +64,7 @@ class Pat:
         bitbin.forward(2)
         self.section_length = bitbin.asint(12)
         secl = self.section_length << 3
-       # self.transport_stream_id = bitbin.asint(16)
+        # self.transport_stream_id = bitbin.asint(16)
         bitbin.forward(40)
         secl -= 40
         while secl > 32:  # self.crc = bitbin.asint(32)

@@ -51,7 +51,9 @@ class Stream:
         self.the_program = None
         self.cue = None
         self.pat = None
+        self._last_pat = b""
         self.pmt = None
+        self._last_pmt = {}
 
     def _find_start(self):
         """
@@ -60,8 +62,6 @@ class Stream:
         sync_byte = b"G"
         while self._tsdata:
             one = self._tsdata.read(1)
-            if not one:
-                raise Exception("No Packets Found")
             if one == sync_byte:
                 if self._tsdata.read(self._PACKET_SIZE - 1):
                     return True
@@ -186,11 +186,19 @@ class Stream:
         """
         pid = self._parse_pid(pkt[1], pkt[2])
         if pid == 0:
+            if pkt[5:] == self._last_pat:
+                return None
             self._program_association_table(pkt)
+            self._last_pat = pkt[5:]
             return None
         payload = self._mk_payload(pkt)
         if pid in self._pmt_pids:
+            if pid in self._last_pmt:
+                if payload == self._last_pmt:
+                    return None
             self._program_map_table(payload, pid)
+            self._last_pmt == payload
+            return None
         if self.info:
             return None
         if pid in self._scte35_pids:
