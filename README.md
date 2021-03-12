@@ -10,7 +10,7 @@
   
 * __threefive__ now  [ __Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) SCTE35 Cues.
 
-* [Performance Matters __OR__ Tuning threefive.Stream](https://github.com/futzu/SCTE35-threefive/blob/master/stream_tune.md#tuning-pat-and-pmt-packet-parsing-in-threefivestream)
+* [Performance Tuning threefive.Stream](https://github.com/futzu/SCTE35-threefive/blob/master/stream_tune.md#tuning-pat-and-pmt-packet-parsing-in-threefivestream)
 
 
 ---
