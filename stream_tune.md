@@ -24,7 +24,7 @@
 * __Added comparison checks__ in Stream._parser(pkt) to __skip parsing for PAT or PMT packets with the samer payload__.
 
 
-* __cProfile'd the Stream class parsing 3.7GB of MPEGTS video for SCTE35.__ ( *with the changes)
+* cProfile'd the Stream class parsing 3.7GB of MPEGTS video for SCTE35.__( after the changes)__
        
      *  __Boom goes the dynamite__.
 ```sh
@@ -42,3 +42,6 @@
 
 
 ```
+
+
+
