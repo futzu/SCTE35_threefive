@@ -51,7 +51,7 @@ class Stream:
         self.the_program = None
         self.cue = None
         self.pat = None
-        self._last_pat = b""
+        self._last_pat = b''
         self.pmt = None
         self._last_pmt = {}
 
@@ -194,10 +194,10 @@ class Stream:
         payload = self._mk_payload(pkt)
         if pid in self._pmt_pids:
             if pid in self._last_pmt:
-                if payload == self._last_pmt:
+                if payload == self._last_pmt[pid]:
                     return None
             self._program_map_table(payload, pid)
-            self._last_pmt == payload
+            self._last_pmt[pid] = payload
             return None
         if self.info:
             return None
