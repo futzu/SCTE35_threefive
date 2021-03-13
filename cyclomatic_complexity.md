@@ -1,7 +1,7 @@
-### Average complexity: A (2.1375)
+### Average complexity: A (2.142857142857143)
 
 
-```python3
+```js
 a@fuhq:~/SCTE35-threefive$ radon cc -s -a threefive/
 threefive/section.py
     M 66:4 SpliceInfoSection.encode - C (11)
@@ -10,31 +10,32 @@ threefive/section.py
     M 23:4 SpliceInfoSection.__init__ - A (1)
     M 40:4 SpliceInfoSection.__repr__ - A (1)
 threefive/stream.py
-    M 259:4 Stream._program_map_table - B (10)
-    M 182:4 Stream._parser - B (7)
-    M 225:4 Stream._parse_scte35 - B (6)
-    M 56:4 Stream._find_start - A (5)
-    M 215:4 Stream._parse_pusi - A (5)
-    M 298:4 Stream._parse_program_streams - A (5)
-    M 70:4 Stream.decode - A (4)
+    M 185:4 Stream._parser - B (10)
+    M 270:4 Stream._program_map_table - B (10)
+    M 236:4 Stream._parse_scte35 - B (6)
+    M 226:4 Stream._parse_pusi - A (5)
+    M 310:4 Stream._parse_program_streams - A (5)
+    M 61:4 Stream._find_start - A (4)
+    M 73:4 Stream.decode - A (4)
     C 21:0 Stream - A (3)
-    M 100:4 Stream.decode_proxy - A (3)
-    M 119:4 Stream._mk_packet_data - A (3)
-    M 83:4 Stream.decode_next - A (2)
-    M 135:4 Stream._janky_parse - A (2)
-    M 147:4 Stream._mk_payload - A (2)
-    M 330:4 Stream._show_program_stream - A (2)
-    M 339:4 Stream._chk_pid_stream_type - A (2)
+    M 103:4 Stream.decode_proxy - A (3)
+    M 122:4 Stream._mk_packet_data - A (3)
+    M 86:4 Stream.decode_next - A (2)
+    M 138:4 Stream._janky_parse - A (2)
+    M 150:4 Stream._mk_payload - A (2)
+    M 342:4 Stream._show_program_stream - A (2)
+    M 351:4 Stream._chk_pid_stream_type - A (2)
     F 13:0 show_cue - A (1)
     M 28:4 Stream.__init__ - A (1)
-    M 92:4 Stream.decode_program - A (1)
-    M 112:4 Stream.show - A (1)
-    M 162:4 Stream._parse_pid - A (1)
-    M 169:4 Stream._parse_length - A (1)
-    M 176:4 Stream._parse_program_number - A (1)
-    M 204:4 Stream._parse_pts - A (1)
-    M 249:4 Stream._program_association_table - A (1)
-    M 320:4 Stream._parse_stream_type - A (1)
+    M 58:4 Stream.__repr__ - A (1)
+    M 95:4 Stream.decode_program - A (1)
+    M 115:4 Stream.show - A (1)
+    M 165:4 Stream._parse_pid - A (1)
+    M 172:4 Stream._parse_length - A (1)
+    M 179:4 Stream._parse_program_number - A (1)
+    M 215:4 Stream._parse_pts - A (1)
+    M 260:4 Stream._program_association_table - A (1)
+    M 332:4 Stream._parse_stream_type - A (1)
 threefive/tools.py
     F 32:0 k_by_v - A (3)
     F 41:0 loader - A (3)
@@ -110,14 +111,14 @@ threefive/upid.py
     F 182:0 _decode_uri - A (1)
     F 186:0 _encode_uri - A (1)
 threefive/afc3.py
-    M 49:4 Pat.decode - A (4)
-    C 38:0 Pat - A (3)
+    M 55:4 Pat.decode - A (4)
+    C 44:0 Pat - A (3)
     C 12:0 Header - A (2)
-    M 22:4 Header.decode - A (2)
+    M 24:4 Header.decode - A (2)
     M 17:4 Header.__init__ - A (1)
-    M 34:4 Header.show - A (1)
-    M 43:4 Pat.__init__ - A (1)
-    M 76:4 Pat.show - A (1)
+    M 40:4 Header.show - A (1)
+    M 49:4 Pat.__init__ - A (1)
+    M 81:4 Pat.show - A (1)
 threefive/cue.py
     M 129:4 Cue.load_descriptors - A (5)
     M 146:4 Cue.load - A (5)
@@ -175,7 +176,7 @@ threefive/commands.py
     M 180:4 SpliceInsert._decode_flags - A (1)
     M 191:4 SpliceInsert._encode_flags - A (1)
 
-160 blocks (classes, functions, methods) analyzed.
-Average complexity: A (2.1375)
-a@fuhq:~/SCTE35-threefive$ 
+161 blocks (classes, functions, methods) analyzed.
+Average complexity: A (2.142857142857143)
+
 ```
