@@ -1,21 +1,16 @@
 ### Up and Running in Less Than 7 Seconds.
 
-* Requires pip3 and python >=3.6 or pypy3
-
-
 #### Step One of Two
 
 * Estimated time to complete this step : 2.0 - 2.5 seconds
 
 ```js
-pip install threefive
-```
-* OR
-```js
+pip3 install threefive
+
+# for pypy3
+
 pypy3 -mpip install threefive
 ```
-
-
 
 #### Step Two of Two
 *  Estimated time to complete this step : 3.0 - 4.5 seconds 
