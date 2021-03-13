@@ -7,11 +7,11 @@
 
 * Estimated time to complete this step : 2.0 - 2.5 seconds
 
-```go
+```js
 pip install threefive
 ```
 * OR
-```go
+```js
 pypy3 -mpip install threefive
 ```
 
@@ -24,7 +24,7 @@ pypy3 -c 'import threefive; threefive.decode("https://futzu.com/xaa.ts")'
 ```
 
 * Ouput looks like this.
-```js
+```sh
 {
     "info_section": {
         "table_id": "0xfc",
