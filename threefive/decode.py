@@ -41,14 +41,12 @@ def _read_stuff(stuff):
             cue = Cue(tsd)
             cue.decode()
             cue.show()
-            return cue
     except Exception:
         pass
     try:
         with open(stuff, "rb") as tsdata:
             strm = Stream(tsdata)
             strm.decode()
-            return strm
     except Exception:
         pass
 
@@ -56,7 +54,6 @@ def _read_stuff(stuff):
         cue = Cue(stuff)
         cue.decode()
         cue.show()
-        return cue
     except Exception:
         pass
 
@@ -70,7 +67,7 @@ def _read_http(stuff):
     req = http.request("GET", stuff, preload_content=False)
     strm = Stream(req)
     strm.decode()
-    return strm
+
 
 def decode(stuff=None):
 
@@ -104,9 +101,10 @@ def decode(stuff=None):
     if stuff is not set, reads from stdin.
     """
     if stuff in [None, sys.stdin.buffer]:
-       return  _read_stdin()
-        
+        _read_stdin()
+        return
     if stuff.startswith("http"):
-        return _read_http(stuff)
-    else:
-        return _read_stuff(stuff)
+        _read_http(stuff)
+        return
+    _read_stuff(stuff)
+    return

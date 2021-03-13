@@ -51,9 +51,12 @@ class Stream:
         self.the_program = None
         self.cue = None
         self.pat = None
-        self._last_pat = b''
+        self._last_pat = b""
         self.pmt = None
         self._last_pmt = {}
+
+    def __repr__(self):
+        return str(vars(self))
 
     def _find_start(self):
         """
@@ -272,22 +275,23 @@ class Stream:
             # Handle PMT split over multiple packets
             payload = self.pmt + payload
             self.pmt = None
-        payload = self._janky_parse(payload, b"\x02", b"\x00\x02")
-        sectioninfolen = self._parse_length(payload[2], payload[3])
+        payload = self._janky_parse(payload, b"\x02", b"\x02")
+        table_id = payload[0]
+        sectioninfolen = self._parse_length(payload[1], payload[2])
         if sectioninfolen + 4 > len(payload):
             self.pmt = payload
             return None
-        program_number = self._parse_program_number(payload[4], payload[5])
+        program_number = self._parse_program_number(payload[3], payload[4])
         if self.the_program and (program_number != self.the_program):
             return None
-        pcr_pid = self._parse_pid(payload[9], payload[10])
+        pcr_pid = self._parse_pid(payload[8], payload[9])
         if self.info:
             if program_number not in self._programs:
                 to_stderr(
                     f"\nProgram {program_number}\n\n\tPMT pid: {pid}\n\tPCR pid: {pcr_pid}"
                 )
-        proginfolen = self._parse_length(payload[11], payload[12])
-        idx = 13
+        proginfolen = self._parse_length(payload[10], payload[11])
+        idx = 12
         end = idx + proginfolen
         while idx < end:
             tag = payload[idx]
