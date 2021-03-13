@@ -12,7 +12,7 @@
 
 * threefive [__Cyclomatic Complexity__](https://github.com/futzu/SCTE35-threefive/blob/master/cyclomatic_complexity.md)
 
-* Performance [Tuning](https://github.com/futzu/SCTE35-threefive/blob/master/stream_tune.md#tuning-pat-and-pmt-packet-parsing-in-threefivestream) threefive.Stream
+* Performance [__Tuning__](https://github.com/futzu/SCTE35-threefive/blob/master/stream_tune.md#tuning-pat-and-pmt-packet-parsing-in-threefivestream) threefive.Stream
 
 
 ---
