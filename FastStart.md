@@ -6,14 +6,18 @@
 
 ```js
 pip3 install threefive
+```
 
-# for pypy3
+* for pypy3
 
+```sh
 pypy3 -mpip install threefive
 ```
 
 #### Step Two of Two
+
 *  Estimated time to complete this step : 3.0 - 4.5 seconds 
+
 ```js
 pypy3 -c 'import threefive; threefive.decode("https://futzu.com/xaa.ts")' 
 ```
