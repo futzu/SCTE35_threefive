@@ -1,7 +1,7 @@
 
 ### Tuning PAT and PMT packet parsing in threefive.Stream
 
-* step 1: __cProfile'd the Stream class parsing 3.7GB of MPEGTS video for SCTE35.__
+*  __cProfile'd the Stream class parsing 3.7GB of MPEGTS video for SCTE35.__
  ```sh
  
         106,143,354 function calls (106142526 primitive calls) in 36.231 seconds
@@ -18,12 +18,15 @@
     37840    0.105    0.000    0.107    0.000 stream.py:296(_parse_program_streams)
 
 ```
-* Step 2: Added Stream._last_pat (type bytes, holds last pat packet payload) and Stream._last_pmt (type dict, maps pmt_pid and  packet payload)
+*  __Added Stream._last_pat__ (type bytes, holds last pat packet payload) 
+*  __Added Stream._last_pmt__ (type dict, maps pmt_pid and  packet payload)
 
-* Step 3: Added comparison checks in Stream._parser(pkt) to skip parsing for PAT or PMT packets with the samer payload.
+* __Added comparison checks__ in Stream._parser(pkt) to __skip parsing for PAT or PMT packets with the same payload__.
 
 
-* Step 4: __cProfile'd the Stream class parsing 3.7GB of MPEGTS video for SCTE35.__ with the changes.
+* cProfile'd the Stream class parsing 3.7GB of MPEGTS video for SCTE35.__( after the changes)__
+       
+     *  __Boom goes the dynamite__.
 ```sh
        105,227,586 function calls (105226758 primitive calls) in 32.990 seconds
 
@@ -32,10 +35,17 @@
        
  20859289    5.141    0.000    6.502    0.000 stream.py:182(_parser
  
+                 # 1 call. 1 unique PAT in the video stream.
+                 
         1    0.000    0.000    0.001    0.001 stream.py:258(_program_association_table)
-        
+      
+                 # 10 calls. 10 programs in the video stream. 10 PMTs
+       
        10    0.000    0.000    0.002    0.000 stream.py:268(_program_map_table)
        10    0.000    0.000    0.002    0.000 stream.py:307(_parse_program_streams)
 
 
 ```
+
+
+
