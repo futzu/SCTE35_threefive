@@ -41,12 +41,14 @@ def _read_stuff(stuff):
             cue = Cue(tsd)
             cue.decode()
             cue.show()
+            return cue
     except Exception:
         pass
     try:
         with open(stuff, "rb") as tsdata:
             strm = Stream(tsdata)
             strm.decode()
+            return strm
     except Exception:
         pass
 
@@ -54,6 +56,7 @@ def _read_stuff(stuff):
         cue = Cue(stuff)
         cue.decode()
         cue.show()
+        return cue
     except Exception:
         pass
 
@@ -67,17 +70,20 @@ def _read_http(stuff):
     req = http.request("GET", stuff, preload_content=False)
     strm = Stream(req)
     strm.decode()
-
+    return strm
 
 def decode(stuff=None):
 
     """
     All purpose SCTE 35 decoder function
 
+
     # for a mpegts video
 
         import threefive
         threefive.decode('/path/to/mpegts')
+
+
 
     # for a base64 encoded string
 
@@ -85,12 +91,22 @@ def decode(stuff=None):
         Bee64='/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
         threefive.decode(Bee64)
 
+
+
+    # mpegts over http / https
+
+        from threefive import decode
+        decode('https://futzu.com/xaa.ts')
+
+
+
     stuff can be a filename or encoded string.
     if stuff is not set, reads from stdin.
     """
     if stuff in [None, sys.stdin.buffer]:
-        _read_stdin()
+       return  _read_stdin()
+        
     if stuff.startswith("http"):
-        _read_http(stuff)
+        return _read_http(stuff)
     else:
-        _read_stuff(stuff)
+        return _read_stuff(stuff)
