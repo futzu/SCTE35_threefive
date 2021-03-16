@@ -54,4 +54,4 @@
 |Stream._parse_program_number      |     __37840__ |        __10__ |
 |Stream._program_association_table |      __8399__ |         __1__ |
 |Stream._program_map_table         |     __37840__ |        __10__ |
-
+|Stream._parse_program_streams|     __37840__ |        __10__ |
