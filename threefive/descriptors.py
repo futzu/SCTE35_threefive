@@ -34,7 +34,7 @@ class SpliceDescriptor(SCTE35Base):
         """
         parse splice descriptor identifier
         """
-        self.identifier = bitbin.asdecodedhex(32)
+        self.identifier = bitbin.asascii(32)
         # identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
         if self.identifier != "CUEI":
             raise Exception('Descriptors should have an identifier of "CUEI"')
@@ -99,7 +99,7 @@ class DtmfDescriptor(SpliceDescriptor):
         bitbin.forward(5)
         while d_c:
             d_c -= 1
-            self.dtmf_chars.append(i2b(bitbin.asint(8), 1).decode("utf-8"))
+            self.dtmf_chars.append(bitbin.asascii(8))
 
     def encode(self, nbin=None):
         """

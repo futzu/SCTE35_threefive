@@ -81,7 +81,7 @@ def _decode_atsc(bitbin, upid_length):
         "reserved": bitbin.asint(2),
         "end_of_day": bitbin.asint(5),
         "unique_for": bitbin.asint(9),
-        "content_id": bitbin.asdecodedhex((upid_length - 4) << 3),
+        "content_id": bitbin.asascii(((upid_length - 4) << 3)),
     }
 
 
@@ -180,10 +180,9 @@ def _encode_umid(nbin, seg_upid, upid_length):
 
 
 def _decode_uri(bitbin, upid_length):
-    try:
-        return bitbin.asdecodedhex(upid_length << 3)
-    except:
-        return bitbin.ashex(upid_length << 3)
+    if upid_length > 0:
+        return bitbin.asascii(upid_length << 3)
+    return 0
 
 
 def _encode_uri(nbin, seg_upid, upid_length):
