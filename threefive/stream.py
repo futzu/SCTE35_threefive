@@ -49,10 +49,10 @@ class Stream:
         self._programs = set()
         self.info = None
         self.the_program = None
-        self.cue = None
-        self.pat = None
+        self._cue = None
+        self._pat = None
         self._last_pat = b""
-        self.pmt = None
+        self._pmt = {}
         self._last_pmt = {}
 
     def __repr__(self):
@@ -188,20 +188,11 @@ class Stream:
         route it appropriately.
         """
         pid = self._parse_pid(pkt[1], pkt[2])
-        if pid == 0:
-            if pkt[5:] == self._last_pat:
-                return None
-            self._program_association_table(pkt)
-            self._last_pat = pkt[5:]
-            return None
         payload = self._mk_payload(pkt)
+        if pid == 0:
+            return self._parse_pat_pid(pkt)
         if pid in self._pmt_pids:
-            if pid in self._last_pmt:
-                if payload == self._last_pmt[pid]:
-                    return None
-            self._program_map_table(payload, pid)
-            self._last_pmt[pid] = payload
-            return None
+            return self._parse_pmt_pid(payload,pid)
         if self.info:
             return None
         if pid in self._scte35_pids:
@@ -211,6 +202,21 @@ class Stream:
                 self._parse_pusi(pkt, pid)
         return None
 
+    def _parse_pat_pid(self, pkt):
+        if pkt[5:] == self._last_pat:
+            return None
+        self._program_association_table(pkt)
+        self._last_pat = pkt[5:]
+        return None        
+
+    def _parse_pmt_pid(self,payload,pid):
+        if pid in self._last_pmt:
+            if payload == self._last_pmt[pid]:
+                return None
+        self._program_map_table(payload, pid)
+        self._last_pmt[pid] = payload
+        return None
+        
     def _parse_pts(self, pkt, pid):
         """
         parse pts and store by program key
@@ -236,7 +242,7 @@ class Stream:
         """
         parse a scte35 cue from one or more packets
         """
-        if not self.cue:
+        if not self._cue:
             payload = self._janky_parse(payload, b"\xfc0", b"\xfc0")
             if not payload:
                 self._scte35_pids.discard(pid)
@@ -244,15 +250,15 @@ class Stream:
             if (payload[13] == 0) and (not self.show_null):
                 return None
             packet_data = self._mk_packet_data(pid)
-            self.cue = Cue(payload, packet_data)
-            self.cue.info_section.decode(payload[:14])
-            self.cue.bites = payload
+            self._cue = Cue(payload, packet_data)
+            self._cue.info_section.decode(payload[:14])
+            self._cue.bites = payload
         else:
-            self.cue.bites += payload
-        if (self.cue.info_section.section_length + 3) <= len(self.cue.bites):
-            self.cue.decode()
-            cue = self.cue
-            self.cue = None
+            self._cue.bites += payload
+        if (self._cue.info_section.section_length + 3) <= len(self._cue.bites):
+            self._cue.decode()
+            cue = self._cue
+            self._cue = None
             return cue
         return None
 
@@ -270,15 +276,15 @@ class Stream:
         """
         parse program maps for streams
         """
-        if self.pmt:
+        if pid in self._pmt:
             # Handle PMT split over multiple packets
-            payload = self.pmt + payload
-            self.pmt = None
+            payload = self._pmt[pid] + payload
+            del self._pmt[pid]
         payload = self._janky_parse(payload, b"\x02", b"\x02")
         # table_id = payload[0]
         sectioninfolen = self._parse_length(payload[1], payload[2])
         if sectioninfolen + 4 > len(payload):
-            self.pmt = payload
+            self._pmt[pid] = payload
             return None
         program_number = self._parse_program_number(payload[3], payload[4])
         if self.the_program and (program_number != self.the_program):
