@@ -97,10 +97,10 @@ True
 >>>> data = {'tag': 1, 'descriptor_length': 10, 'identifier': 'CUEI', 'name': 'DTMF Descriptor', 'preroll': 177, 'dtmf_count': 4, 'dtmf_chars': ['1'\
 , '2', '1', '#']}
 
- #  Use threefive.tools.loader to load a dict or json data
+ #  All Splice Commands and Descriptors have a load method
 
 
->>>> threefive.tools.loader(dscrptr,data)
+>>>> threefive.dscrptr.load(data)
 
 >>>> dscrptr
 {'tag': 1, 'descriptor_length': 10, 'identifier': 'CUEI', 'bites': None, 'name': 'DTMF Descriptor', 'preroll': 177, 'dtmf_count': 4, 'dtmf_chars': ['1', '2', '1', '#']}
