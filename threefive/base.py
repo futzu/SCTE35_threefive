@@ -1,6 +1,6 @@
 import json
-from bitn import NBin
 import sys
+from bitn import NBin
 
 
 def to_stderr(stuff):
