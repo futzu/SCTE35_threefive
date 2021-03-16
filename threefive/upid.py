@@ -180,7 +180,10 @@ def _encode_umid(nbin, seg_upid, upid_length):
 
 
 def _decode_uri(bitbin, upid_length):
-    return bitbin.asdecodedhex(upid_length << 3)
+    try:
+        return bitbin.asdecodedhex(upid_length << 3)
+    except:
+        return bitbin.ashex(upid_length << 3)
 
 
 def _encode_uri(nbin, seg_upid, upid_length):
