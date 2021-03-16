@@ -7,7 +7,7 @@ from functools import partial
 from .afc3 import Pat
 from .cue import Cue
 from .streamtype import stream_type_map
-from .tools import to_stderr
+from .base import to_stderr
 
 
 def show_cue(cue):

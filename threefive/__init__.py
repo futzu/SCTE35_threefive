@@ -1,4 +1,10 @@
+from .base import  to_stderr
+from .cue import Cue
 from .decode import decode
+from .section import SpliceInfoSection
+from .stream import Stream
+from .version import version
+
 from .commands import (
     TimeSignal,
     SpliceInsert,
@@ -6,7 +12,7 @@ from .commands import (
     PrivateCommand,
     BandwidthReservation,
 )
-from .cue import Cue
+
 from .descriptors import (
     AudioDescriptor,
     AvailDescriptor,
@@ -14,7 +20,3 @@ from .descriptors import (
     SegmentationDescriptor,
     TimeDescriptor,
 )
-from .section import SpliceInfoSection
-from .stream import Stream
-from .tools import to_stderr, loader
-from .version import version
