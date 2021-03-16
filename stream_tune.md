@@ -48,4 +48,10 @@
 ```
 
 
+| Method                           |                  Before|                   After|
+|----------------------------------|------------------------|------------------------|
+|Stream._parse_length              |     75710 in 0.035 secs|        50 in 0.000 secs|
+|Stream._parse_program_number      |     37840 in 0.007 secs|        10 in 0.000 secs|
+|Stream._program_association_table |      8399 in 0.448 secs|         1 in 0.000 secs|
+|Stream._program_map_table         |     37840 in 0.325 secs|        10 in 0.000 secs|
 
