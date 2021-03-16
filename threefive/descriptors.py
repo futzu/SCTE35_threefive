@@ -45,6 +45,7 @@ class SpliceDescriptor(SCTE35Base):
         """
         self.identifier = "CUEI"
         nbin.add_bites(self.identifier.encode("utf-8"), 32)
+        
 
 
 class AvailDescriptor(SpliceDescriptor):
