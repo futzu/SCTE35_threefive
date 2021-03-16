@@ -236,11 +236,8 @@ class Stream:
         """
         parse a scte35 cue from one or more packets
         """
-        print(payload)
         if not self.cue:
             payload = self._janky_parse(payload, b"\xfc0", b"\xfc0")
-            print(payload)
-
             if not payload:
                 self._scte35_pids.discard(pid)
                 return None
@@ -252,7 +249,6 @@ class Stream:
             self.cue.bites = payload
         else:
             self.cue.bites += payload
-        print(   self.cue.info_section.section_length)
         if (self.cue.info_section.section_length + 3) <= len(self.cue.bites):
             self.cue.decode()
             cue = self.cue
