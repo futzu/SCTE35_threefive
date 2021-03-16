@@ -190,23 +190,12 @@ class Stream:
         """
         pid = self._parse_pid(pkt[1], pkt[2])
         if pid in self._pcr_pids:
-            return
+            return None
         if pid == 0:
-            # return self._parse_pat_pid(pkt)
-            if pkt[5:] == self._last_pat:
-                return None
-            self._program_association_table(pkt)
-            self._last_pat = pkt[5:]
-            return None
-        payload = self._mk_payload(pkt)
+            return self._parse_pat_pid(pkt)
+        payload = self._mk_payload(pkt)        
         if pid in self._pmt_pids:
-            # return self._parse_pmt_pid(payload,pid)
-            if pid in self._last_pmt:
-                if payload == self._last_pmt[pid]:
-                    return None
-            self._program_map_table(payload, pid)
-            self._last_pmt[pid] = payload
-            return None
+            return self._parse_pmt_pid(payload,pid)
         if self.info:
             return None
         if pid in self._scte35_pids:
@@ -216,9 +205,20 @@ class Stream:
                 self._parse_pusi(pkt, pid)
         return None
 
-    # def _parse_pat_pid(self, pkt):
+    def _parse_pat_pid(self, pkt):
+        if pkt[5:] == self._last_pat:
+            return None
+        self._program_association_table(pkt)
+        self._last_pat = pkt[5:]
+        return None
 
-    # def _parse_pmt_pid(self,payload,pid):
+    def _parse_pmt_pid(self,payload,pid):
+        if pid in self._last_pmt:
+            if payload == self._last_pmt[pid]:
+                return None
+        self._program_map_table(payload, pid)
+        self._last_pmt[pid] = payload
+        return None
 
     def _parse_pts(self, pkt, pid):
         """
@@ -313,7 +313,7 @@ class Stream:
                 if program_number not in self._programs:
                     to_stderr(f"\tDescriptor: tag: {tag} length: {length} data: {data}")
         si_len = sectioninfolen - 9
-        si_len -= proginfolen  # Skip descriptors
+        si_len -= proginfolen
         self._parse_program_streams(si_len, payload, idx, program_number)
 
     def _parse_program_streams(self, si_len, payload, idx, program_number):
