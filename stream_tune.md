@@ -48,10 +48,10 @@
 ```
 
 
-| Method                           |                  Before|                   After|
+| Method                           |          Calls  Before|                 Calls  After|
 |----------------------------------|------------------------|------------------------|
-|Stream._parse_length              |     __75710__ in 0.035 secs|        __50__ in 0.000 secs|
-|Stream._parse_program_number      |     __37840__ in 0.007 secs|        __10__ in 0.000 secs|
-|Stream._program_association_table |      __8399__ in 0.448 secs|         __1__ in 0.000 secs|
-|Stream._program_map_table         |     __37840__ in 0.325 secs|        __10__ in 0.000 secs|
+|Stream._parse_length              |     __75710__ |        __50__ |
+|Stream._parse_program_number      |     __37840__ |        __10__ |
+|Stream._program_association_table |      __8399__ |         __1__ |
+|Stream._program_map_table         |     __37840__ |        __10__ |
 
