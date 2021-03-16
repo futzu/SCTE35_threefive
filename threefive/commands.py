@@ -3,7 +3,6 @@ SCTE35 Splice Commands
 """
 from bitn import BitBin
 from .base import SCTE35Base
-from .tools import ifb
 
 
 class SpliceCommand(SCTE35Base):
@@ -67,7 +66,9 @@ class PrivateCommand(SpliceCommand):
         """
         decode private command
         """
-        self.identifier = ifb(self.bites[0:3])  # 3 bytes of 8 bits = 24 bits
+        self.identifier = int.from_bytes(
+            self.bites[0:3], byteorder="big"
+        )  # 3 bytes of 8 bits = 24 bits
         self.encode()
 
     def encode(self, nbin=None):

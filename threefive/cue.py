@@ -8,11 +8,7 @@ from bitn import NBin
 from .section import SpliceInfoSection
 from .commands import command_map
 from .descriptors import splice_descriptor, descriptor_map
-from .tools import (
-    i2b,
-    ifb,
-    to_stderr,
-)
+from .tools import to_stderr
 
 
 class Cue:
@@ -60,7 +56,7 @@ class Cue:
         bites = self._mk_descriptors(bites)
         if not bites:
             raise Exception("Boom! self._mk_descriptors(bites)")
-        self.crc = hex(ifb(bites[0:4]))
+        self.crc = hex(int.from_bytes(bites[0:4], byteorder="big"))
         return True
 
     def encode(self):
@@ -266,7 +262,7 @@ class Cue:
             # Handles hex byte strings
             i = int(data, 16)
             i_len = i.bit_length() >> 3
-            bites = i2b(i, i_len)
+            bites = int.to_bytes(i, i_len, byteorder="big")
             return bites
         except:
             if data[:2].lower() == "0x":

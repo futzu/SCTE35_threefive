@@ -4,8 +4,16 @@ SCTE35 Splice Descriptors
 from bitn import BitBin
 from .base import SCTE35Base
 from .segmentation import table20, table22
-from .tools import k_by_v, i2b
 from .upid import upid_decoder, upid_encoder
+
+
+def k_by_v(adict, avalue):
+    """
+    dict key lookup by value
+    """
+    for k, v in adict.items():
+        if v == avalue:
+            return k
 
 
 class SpliceDescriptor(SCTE35Base):
@@ -45,7 +53,6 @@ class SpliceDescriptor(SCTE35Base):
         """
         self.identifier = "CUEI"
         nbin.add_bites(self.identifier.encode("utf-8"), 32)
-        
 
 
 class AvailDescriptor(SpliceDescriptor):
