@@ -209,7 +209,6 @@ class Stream:
         if pid in self._pid_prog:
             if (pkt[1] >> 6) & 1:
                 self._parse_pusi(pkt, pid)
-            return None
         return None
 
     def _parse_pts(self, pkt, pid):
@@ -237,19 +236,23 @@ class Stream:
         """
         parse a scte35 cue from one or more packets
         """
+        print(payload)
         if not self.cue:
             payload = self._janky_parse(payload, b"\xfc0", b"\xfc0")
+            print(payload)
+
             if not payload:
                 self._scte35_pids.discard(pid)
                 return None
             if (payload[13] == 0) and (not self.show_null):
                 return None
             packet_data = self._mk_packet_data(pid)
-            self.cue = Cue(payload[:14], packet_data)
-            self.cue.mk_info_section(payload[:14])
-            self.cue.bites += payload[14:]
+            self.cue = Cue(payload, packet_data)
+            self.cue.info_section.decode(payload[:14])
+            self.cue.bites = payload
         else:
             self.cue.bites += payload
+        print(   self.cue.info_section.section_length)
         if (self.cue.info_section.section_length + 3) <= len(self.cue.bites):
             self.cue.decode()
             cue = self.cue
@@ -276,7 +279,7 @@ class Stream:
             payload = self.pmt + payload
             self.pmt = None
         payload = self._janky_parse(payload, b"\x02", b"\x02")
-        table_id = payload[0]
+        # table_id = payload[0]
         sectioninfolen = self._parse_length(payload[1], payload[2])
         if sectioninfolen + 4 > len(payload):
             self.pmt = payload
