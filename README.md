@@ -10,7 +10,9 @@
   
 * __threefive__ now  [ __Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) SCTE35 Cues.
 
-* Performance [Tuning](https://github.com/futzu/SCTE35-threefive/blob/master/stream_tune.md#tuning-pat-and-pmt-packet-parsing-in-threefivestream) threefive.Stream
+* threefive [__Cyclomatic Complexity__](https://github.com/futzu/SCTE35-threefive/blob/master/cyclomatic_complexity.md)
+
+* Performance [__Tuning__](https://github.com/futzu/SCTE35-threefive/blob/master/stream_tune.md#tuning-pat-and-pmt-packet-parsing-in-threefivestream) threefive.Stream
 
 
 ---
@@ -55,7 +57,6 @@
 * [__ffmpeg__ and __SCTE35__ and __Stream Type__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
 
-* [threefive __Cyclomatic Complexity__](https://github.com/futzu/SCTE35-threefive/blob/master/cyclomatic_complexity.md)
    
 ---
 
@@ -133,9 +134,8 @@ hexed='0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000
 threefive.decode(hexed)
 ```
 
-* __Directly from a file__ encoded in __Base64__, __Binary__ or  __Base64__
+* __Read a string directly from a file__ encoded in __Base64__, __Binary__ or  __Base64__
 
-    *  pass threefive.__decode__ the file name and it will parse it for SCTE35.
 ```bash
 $ cat cue.dat
     /DCSAAAAAAAAAP/wBQb/RgeVUgB8AhdDVUVJbs6+VX+/CAgAAAAABy0IxzELGQIXQ1VFSW7MmIh/vwgIAAABGDayFhE3AQECHENVRUluzw0If/8AABvLoAgIAAAAAActVhIwDBkCKkNVRUluzw02f78MG1JUTE4xSAEAAAAAMTM3NjkyMDI1NDQ5NUgxAAEAAGnbuXg=
@@ -146,36 +146,7 @@ from threefive import decode
 
 decode('cue.dat')
 
-{
-  "info_section": {
-    "table_id": "0xfc",
-    "section_syntax_indicator": false,
-    "private": false,
-    "reserved": "0x3",
-    
-     <--Snipped for Brevity -->
-     
-    {
-      "tag": 2,
-      "identifier": "CUEI",
-      "name": "Segmentation Descriptor",
-      "segmentation_event_id": "0x6ecf0d36",
-      "segmentation_event_cancel_indicator": false,
-      "components": [],
-      "program_segmentation_flag": true,
-      "segmentation_duration_flag": false,
-      "delivery_not_restricted_flag": true,
-      "segmentation_message": "Content Identification",
-      "segmentation_upid_type": 12,
-      "segmentation_upid_length": 27,
-      "segmentation_upid": "MPU:{'format identifier': 1381256270, 'private data': 4720207453582705227611785054965731163782383190579622144}",
-      "segmentation_type_id": 1,
-      "segment_num": 0,
-      "segments_expected": 0,
-      "descriptor_length": 42
-    }
-  ]
-}
+
 ```
  [🡡 top](#rocket-threefive)
  
@@ -198,10 +169,12 @@ cue.decode()
 
 * A decoded __Cue__ instance contains: 
 
-	* **cue.info_section** *1 [threefive.**SpliceInfoSection()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)*
+     * **cue.info_section** 
+       * 1 [threefive.**SpliceInfoSection()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)
 
-     * **cue.command** 1 command	 
-       * commands:
+     * **cue.command** 	 
+       * 1 of these commands:
+       
          *  [ threefive.**BandwidthReservation()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L32)    
          *  [ threefive.**PrivateCommand()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L54 )
          *  [ threefive.**SpliceInsert()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L139)
@@ -209,8 +182,9 @@ cue.decode()
          *  [ threefive.**TimeSignal()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L84)
 
 
-     * **cue.descriptors**  *a list of 0 or more descriptors*
-        * descriptors :    
+     * **cue.descriptors**  
+        * a list of 0 or more of these descriptors :   
+         
           * [ threefive.**AudioDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L153)  
           * [ threefive.**AvailDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L50)  
           * [ threefive.**DtmfDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L78)  
