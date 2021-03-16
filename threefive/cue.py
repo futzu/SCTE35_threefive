@@ -262,7 +262,7 @@ class Cue:
             # Handles hex byte strings
             i = int(data, 16)
             i_len = i.bit_length() >> 3
-            bites = int.to_bytes(i, i_len,byteorder="big")
+            bites = int.to_bytes(i, i_len, byteorder="big")
             return bites
         except:
             if data[:2].lower() == "0x":

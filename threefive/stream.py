@@ -193,9 +193,9 @@ class Stream:
             return None
         if pid == 0:
             return self._parse_pat_pid(pkt)
-        payload = self._mk_payload(pkt)        
+        payload = self._mk_payload(pkt)
         if pid in self._pmt_pids:
-            return self._parse_pmt_pid(payload,pid)
+            return self._parse_pmt_pid(payload, pid)
         if self.info:
             return None
         if pid in self._scte35_pids:
@@ -212,7 +212,7 @@ class Stream:
         self._last_pat = pkt[5:]
         return None
 
-    def _parse_pmt_pid(self,payload,pid):
+    def _parse_pmt_pid(self, payload, pid):
         if pid in self._last_pmt:
             if payload == self._last_pmt[pid]:
                 return None
