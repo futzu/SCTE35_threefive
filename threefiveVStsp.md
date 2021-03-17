@@ -19,8 +19,6 @@ ___
 ```
 tsp -I file plp0.ts  -P tables --pid 0x03F7 --pid 0x040B --pid 0x0415 --pid 0x041F --pid 0x0451 --text -  -O drop
 ```
-___
-
 ## time: __9.845__ seconds 
 ___
 
@@ -30,17 +28,13 @@ ___
 pypy3 -c "from threefive import decode; decode('plp0.ts')"
 
 ```
-___
-
 ## time: __10.399__ seconds
-
 ___
 
 
 
 
 #### Cue Data
-___
 
 
 * __tsp__ 
