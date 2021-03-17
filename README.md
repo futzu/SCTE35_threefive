@@ -14,7 +14,7 @@ ___
 
 * threefive [__Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) __SCTE35__ Cues.
 
-* threefive is __Fast__. [threefive __VS__ tsduck ](https://github.com/futzu/SCTE35-threefive/blob/master/threefiveVStsp.md) tsduck.
+* threefive is __Fast__. [threefive __VS__ tsduck ](https://github.com/futzu/SCTE35-threefive/blob/master/threefiveVStsp.md).
 
 * threefive [__Cyclomatic Complexity__](https://github.com/futzu/SCTE35-threefive/blob/master/cyclomatic_complexity.md)
 
@@ -426,8 +426,8 @@ Program 1050
         1054: [0x6] SO/IEC 13818-1 PES packets- private data
         1055: [0x86] SCTE 35
 
-
 ```
+___
 
 
 #### Stream.decode(func=show_cue)
@@ -465,6 +465,8 @@ def do():
 if __name__ == '__main__':
     do()
 ```
+___
+
 
 #### Stream.decode_next()
 
@@ -488,6 +490,8 @@ def do():
 if __name__ == "__main__":
     do()
 ```
+___
+
 
 #### Stream.decode_program(the_program, func = show_cue)
 
@@ -500,6 +504,8 @@ import threefive
 with open('../35.ts','rb') as tsdata:
     threefive.Stream(tsdata).decode_program(1)
 ```
+___
+
 
 #### Stream.decode_proxy(func = show_cue)
 
@@ -520,6 +526,7 @@ with open('vid.ts','rb') as tsdata:
 ```bash
 $ python3 proxy.py | mplayer -
 ```
+___
 
 ![Happy threefive users](https://github.com/futzu/SCTE35-threefive/blob/master/threefiveishappy.jpg)
 
