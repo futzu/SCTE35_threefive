@@ -1,41 +1,61 @@
 
 
-# :rocket: threefive		
+# :rocket: threefive	
+___
 
-#### threefive is a SCTE35 Decoder,Editor, Encoder, and Parser library in Python3.
 
-* References the __2020 SCTE35__ Specification.
+#### threefive is a SCTE35 Decoder Encoder Parser library in Python3.
 
-* Decode __SCTE35__ from __MPEG-TS video__ files and streams, __Base64, Hex, and Binary__ encoded strings.
-  
-* __threefive__ now  [ __Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) SCTE35 Cues.
+* threefive references the __2020 SCTE35__ Specification.
+
+* threefive decodes __SCTE35__ from __MPEG-TS video__ files and streams.
+
+* threefive decodes __SCTE35__ from __Base64, Hex, and Binary__ encoded strings.
+
+* threefive [__Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) __SCTE35__ Cues.
+
+* threefive is __Fast__. [threefive __VS__ tsduck ](https://github.com/futzu/SCTE35-threefive/blob/master/threefiveVStsp.md).
 
 * threefive [__Cyclomatic Complexity__](https://github.com/futzu/SCTE35-threefive/blob/master/cyclomatic_complexity.md)
 
-* Performance [__Tuning__](https://github.com/futzu/SCTE35-threefive/blob/master/stream_tune.md#tuning-pat-and-pmt-packet-parsing-in-threefivestream) threefive.Stream
-
-
+* threefive [__Performance Tuning__](https://github.com/futzu/SCTE35-threefive/blob/master/stream_tune.md#tuning-pat-and-pmt-packet-parsing-in-threefivestream) the threefive.Stream class
 ---
+
+![Happy threefive users](https://github.com/futzu/SCTE35-threefive/blob/master/14s.jpg)
+
 ### Install threefive 
 * [Dependencies and Installation](#install)
 ---   
+
 ### Fast Start 
 *   [Up and Running in Less Than Seven Seconds](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 ---
-###  Easy threefive
+
+
+##  Easy threefive
+
    * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__](#the-decode-function)
    * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__ over __HTTPS__](#the-decode-function)
    * [Parsing __SCTE 35__ Cue strings encoded in __Base64__, or __Hex__](#the-decode-function)
    * [Parsing __SCTE 35__ Cues directly from a file encoded in __Base64__, __Binary__,  or __Hex__](#the-decode-function)
 ---      
-###  Advanced threefive     
+
+
+##  Advanced threefive     
+
   *  [__Cue__ Class](#cue-class)       
   *  [__Stream__ Class](#stream-class)
 ---     
+
+
 ### Examples
+  
   *  [Splice __Insert__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert.py) 
+  
   *  [DTMF __Descriptor__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/dtmf) 
+  
   * [__Time Signal__ Program Start End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Start_End.py)
+  
   *  [Combination __Upid__ Segmentation Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Combo.py)
   
 *   [Parsing __HLS Manifests__ with threefive](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
@@ -45,22 +65,21 @@
 *  [__SCTE35__ from __MPEG-TS__ video over __HTTPS__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/stream/Decode_Over_Http.py) 
 
 
-  * [__All Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
-   
-
+  * [__All Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)   
 ---
+
+
 ### Cool Stuff
 
 * [__threefive__ Spotted in __The Wild__](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 
 
 * [__ffmpeg__ and __SCTE35__ and __Stream Type__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
-
-
-   
 ---
 
-### Install
+
+
+## Install
 
 * __dependencies__
    *  Python 3.6+ or pypy3 (__pypy3 runs threefive three times faster than python3__)
@@ -92,14 +111,15 @@ $ pypy3 -mpip install threefive
 #If you don't have pip installed, try this.
 $ pypy3 -mensurepip install pip 
 ```
+___
 
 
 [🡡 top](#rocket-threefive)
 
 
-## __Easy__ threefive
+# __Easy__ threefive
 
-###   The __decode__ Function
+##   The __decode__ Function
 
 
  *   src [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)   
@@ -146,11 +166,17 @@ from threefive import decode
 
 decode('cue.dat')
 
-
 ```
- [🡡 top](#rocket-threefive)
- 
+___
+
+
+[🡡 top](#rocket-threefive)
+
+![Happy threefive users](https://github.com/futzu/SCTE35-threefive/blob/master/16s.jpg)
+
 #  __Advanced__ threefive
+___
+
 
 ##  __Cue__ Class
 
@@ -166,6 +192,8 @@ b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAA
 cue = Cue(b64)
 cue.decode()
 ```
+___
+
 
 * A decoded __Cue__ instance contains: 
 
@@ -199,7 +227,7 @@ cue.decode()
        *  __pid__ of the packet  
        *  __program__ of the pid 
        *  __pts__ of the packet 
-
+___
 
 
 * All instance vars can be accessed via dot notation.
@@ -227,6 +255,9 @@ True
 | cue.**get_json()**         | returns **cue as a JSON** string               |
 | cue.**show()**             | prints **cue as JSON**                         |
 |                            |                                                |
+
+___
+
 
 * Full Example 
 ```python3
@@ -316,10 +347,12 @@ True
 
 
 ```
+___
+
 
 [🡡 top](#rocket-threefive)
-
 ___
+
 
 ##  __Stream__ Class
 
@@ -344,6 +377,7 @@ Method                              | Description
 [Stream.__decode_next__()](#streamdecode_next)|__Returns__ the next SCTE35 cue as a threefive.Cue instance. 
 [Stream.__decode_program__(the_program=None, func=show_cue)](#streamdecode_programthe_program-func--show_cue) |Same as Stream.__decode__ except only packets where program == __the_program__
 [Stream.__decode_proxy__(func=show_cue)](#streamdecode_proxyfunc--show_cue)      |Same as Stream.__decode__ except raw packets are written to stdout for piping to another program.
+
 
 #### Stream.show()
 
@@ -407,8 +441,8 @@ Program 1050
         1054: [0x6] SO/IEC 13818-1 PES packets- private data
         1055: [0x86] SCTE 35
 
-
 ```
+___
 
 
 #### Stream.decode(func=show_cue)
@@ -446,6 +480,8 @@ def do():
 if __name__ == '__main__':
     do()
 ```
+___
+
 
 #### Stream.decode_next()
 
@@ -469,6 +505,8 @@ def do():
 if __name__ == "__main__":
     do()
 ```
+___
+
 
 #### Stream.decode_program(the_program, func = show_cue)
 
@@ -481,6 +519,8 @@ import threefive
 with open('../35.ts','rb') as tsdata:
     threefive.Stream(tsdata).decode_program(1)
 ```
+___
+
 
 #### Stream.decode_proxy(func = show_cue)
 
@@ -501,6 +541,7 @@ with open('vid.ts','rb') as tsdata:
 ```bash
 $ python3 proxy.py | mplayer -
 ```
+___
 
 ![Happy threefive users](https://github.com/futzu/SCTE35-threefive/blob/master/threefiveishappy.jpg)
 
