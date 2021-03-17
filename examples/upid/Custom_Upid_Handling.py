@@ -74,7 +74,7 @@ def parse_SBSB(pdata):
         "private_version": bitbin.asint(8),
         "private_transmission_id": bitbin.asint(64),
         "private_product_code": bitbin.asint(64),
-        "private_web_publication_key": bitbin.asdecodedhex(200),
+        "private_web_publication_key": bitbin.asascii(200),
     }
 
 
