@@ -1,10 +1,10 @@
 # threefive VS. tsduck
+#### MPEGTS SCTE35 Parsing
 
-* Paring __3.7GB video__
 ```js
 -rw-r--r-- 1 root root 3.7G May 21  2020 plp0.ts
 ```
-* plp0.ts:
+*   __3.7GB video__
   * __10__ Programs
   * __5__ SCTE35 Streams
   * __30__ Streams Total
