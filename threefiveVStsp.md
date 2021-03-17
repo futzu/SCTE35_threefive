@@ -1,5 +1,8 @@
 ```sh
-[a@localhost SCTE35-threefive]$ time tsp -I file /mnt/build/plp0.ts  -P tables --pid 0x03F7 --pid 0x040B --pid 0x0415 --pid 0x041F --pid 0x0451 --text -  -O drop
+[a@localhost SCTE35-threefive]$ ls -alh /mnt/build/plp0.ts
+-rw-r--r-- 1 root root 3.7G May 21  2020 /mnt/build/plp0.ts
+
+[a@fuhq]$ time tsp -I file /mnt/build/plp0.ts  -P tables --pid 0x03F7 --pid 0x040B --pid 0x0415 --pid 0x041F --pid 0x0451 --text -  -O drop
 
 * SCTE 35 Splice Information, TID 252 (0xFC), PID 1055 (0x041F)
   Short section, total size: 50 bytes
