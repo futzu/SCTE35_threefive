@@ -5,9 +5,9 @@
 [a@fusq]$ ls -alh /mnt/build/plp0.ts
 -rw-r--r-- 1 root root 3.7G May 21  2020 plp0.ts
 ```
-* __10__ Programs
+  * __10__ Programs
   * __5__ SCTE35 Streams
-  *   * __30__ Streams Total
+  * __30__ Streams Total
   * __18__ SCTE35 Cues
 ___
 
