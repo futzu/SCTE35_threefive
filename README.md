@@ -12,7 +12,7 @@
 
 * threefive [__Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) __SCTE35__ Cues.
 
-* threefive [__VS__](https://github.com/futzu/SCTE35-threefive/blob/master/threefiveVStsp.md) tsduck
+* threefive is __Fast__. threefive [__VS__](https://github.com/futzu/SCTE35-threefive/blob/master/threefiveVStsp.md) tsduck.
 
 * threefive [__Cyclomatic Complexity__](https://github.com/futzu/SCTE35-threefive/blob/master/cyclomatic_complexity.md)
 
