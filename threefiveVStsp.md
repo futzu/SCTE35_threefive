@@ -1,38 +1,47 @@
-## threefive VS. tsduck
+# threefive VS. tsduck
 
 * __3.7GB video__
 ```sh
 [a@fusq]$ ls -alh /mnt/build/plp0.ts
 -rw-r--r-- 1 root root 3.7G May 21  2020 plp0.ts
 ```
+___
+
+
 * __10__ Programs
 * __5__ SCTE35 Streams
 * __30__ Streams Total
 * __18__ SCTE35 Cues
-
 ___
+
+
 ### tsp
 ```
 tsp -I file plp0.ts  -P tables --pid 0x03F7 --pid 0x040B --pid 0x0415 --pid 0x041F --pid 0x0451 --text -  -O drop
 ```
-## time: __9.845__ seconds 
-
-
 ___
+
+## time: __9.845__ seconds 
+___
+
+
 ### threefive 
 ```
 pypy3 -c "from threefive import decode; decode('plp0.ts')"
 
 ```
+___
+
 ## time: __10.399__ seconds
 
----
-
+___
 
 
 
 
 #### Cue Data
+___
+
 
 * __tsp__ 
 ```
