@@ -1,8 +1,7 @@
 # threefive VS. tsduck
 
-* __3.7GB video__
+* Paring __3.7GB video__
 ```sh
-[a@fusq]$ ls -alh /mnt/build/plp0.ts
 -rw-r--r-- 1 root root 3.7G May 21  2020 plp0.ts
 ```
   * __10__ Programs
@@ -22,7 +21,7 @@ ___
 
 
 ### threefive 
-```
+```sh
 pypy3 -c "from threefive import decode; decode('plp0.ts')"
 
 ```
@@ -36,7 +35,7 @@ ___
 
 
 * __tsp__ 
-```
+```js
  SCTE 35 Splice Information, TID 252 (0xFC), PID 1055 (0x041F)
   Short section, total size: 50 bytes
   - Section 0:
@@ -59,7 +58,7 @@ ___
 
 
 * __threefive__ 
-``` 
+```js
 {
     "info_section": {
         "table_id": "0xfc",
