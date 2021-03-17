@@ -4,22 +4,24 @@
 
 #### threefive is a SCTE35 Decoder,Editor, Encoder, and Parser library in Python3.
 
-* References the __2020 SCTE35__ Specification.
+* threefive references the __2020 SCTE35__ Specification.
 
 * threefive decodes __SCTE35__ from __MPEG-TS video__ files and streams.
 
-* threefive decodes __Base64, Hex, and Binary__ encoded strings.
+* threefive decodes __SCTE@%__ from __Base64, Hex, and Binary__ encoded strings.
 
-* threefive[ __Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) SCTE35 Cues.
+* threefive [__Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) __SCTE35__ Cues.
 
-* threefive[__VS__](https://github.com/futzu/SCTE35-threefive/blob/master/threefiveVStsp.md)tsduck
+* threefive [__VS__](https://github.com/futzu/SCTE35-threefive/blob/master/threefiveVStsp.md) tsduck
 
-* threefive[ __Cyclomatic Complexity__](https://github.com/futzu/SCTE35-threefive/blob/master/cyclomatic_complexity.md)
+* threefive [__Cyclomatic Complexity__](https://github.com/futzu/SCTE35-threefive/blob/master/cyclomatic_complexity.md)
 
-* threefive [__Performance Tuning__](https://github.com/futzu/SCTE35-threefive/blob/master/stream_tune.md#tuning-pat-and-pmt-packet-parsing-in-threefivestream) threefive.Stream
+* threefive [__Performance Tuning__](https://github.com/futzu/SCTE35-threefive/blob/master/stream_tune.md#tuning-pat-and-pmt-packet-parsing-in-threefivestream) the threefive.Stream class
 
 
 ---
+
+
 ### Install threefive 
 * [Dependencies and Installation](#install)
 ---   
