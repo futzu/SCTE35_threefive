@@ -1,7 +1,7 @@
 # threefive VS. tsduck
 
 * Paring __3.7GB video__
-```sh
+```js
 -rw-r--r-- 1 root root 3.7G May 21  2020 plp0.ts
 ```
 * plp0.ts:
@@ -14,19 +14,19 @@ ___
 
 
 ### tsp
-```
+```sh
 tsp -I file plp0.ts  -P tables --pid 0x03F7 --pid 0x040B --pid 0x0415 --pid 0x041F --pid 0x0451 --text -  -O drop
 ```
-##### time: __9.845__ seconds 
+##### time: 9.845 seconds 
 ___
 
 
 ### threefive 
-```sh
+```python3
 pypy3 -c "from threefive import decode; decode('plp0.ts')"
 
 ```
-##### time: __10.399__ seconds
+##### time: 10.399 seconds
 ___
 
 
@@ -59,7 +59,7 @@ ___
 
 
 * __threefive__ 
-```js
+```sh
 {
     "info_section": {
         "table_id": "0xfc",
