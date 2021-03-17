@@ -24,9 +24,10 @@ pypy3 -c "from threefive import decode; decode('plp0.ts')"
 ```
 * __threefive found 18 Cues Found in 10.399s__
 
+---
+#### Cue Data
 
-
-* __tsp__ Cue Data
+* __tsp__ 
 ```
  SCTE 35 Splice Information, TID 252 (0xFC), PID 1055 (0x041F)
   Short section, total size: 50 bytes
@@ -47,7 +48,7 @@ pypy3 -c "from threefive import decode; decode('plp0.ts')"
     CRC32: 0xEAA8473F (OK)
 ```
 
-* __threefive__ Cue Data
+* __threefive__ 
 ``` 
 {
     "info_section": {
