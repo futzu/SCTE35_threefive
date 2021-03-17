@@ -148,7 +148,7 @@ class Stream:
         return payload
 
     @staticmethod
-    def _mk_payload(pkt):
+    def _parse_payload(pkt):
         """
         _mk_payload checks if
         the adaptive field control flag is set
@@ -163,18 +163,18 @@ class Stream:
         return payload
 
     @staticmethod
-    def _parse_pid(byte1, byte2):
-        """
-        parse a 13 bit pid value
-        """
-        return (byte1 << 8 | byte2) & 0x01FFF
-
-    @staticmethod
     def _parse_length(byte1, byte2):
         """
         parse a 12 bit length value
         """
         return ((byte1 & 0xF) << 8) | byte2
+
+    @staticmethod
+    def _parse_pid(byte1, byte2):
+        """
+        parse a 13 bit pid value
+        """
+        return (byte1 << 8 | byte2) & 0x01FFF
 
     @staticmethod
     def _parse_program_number(byte1, byte2):
@@ -189,23 +189,34 @@ class Stream:
         route it appropriately.
         """
         pid = self._parse_pid(pkt[1], pkt[2])
+        # drop pcr_pid packets, we don't need them for pts.
         if pid in self._pcr_pids:
             return None
+        # PAT
         if pid == 0:
             return self._parse_pat_pid(pkt)
-        payload = self._mk_payload(pkt)
+        payload = self._parse_payload(pkt)
+        # PMT
         if pid in self._pmt_pids:
             return self._parse_pmt_pid(payload, pid)
+        # Stream.show()
         if self.info:
             return None
+        # SCTE35
         if pid in self._scte35_pids:
             return self._parse_scte35(payload, pid)
+        # for PTS
         if pid in self._pid_prog:
             if (pkt[1] >> 6) & 1:
                 self._parse_pusi(pkt, pid)
         return None
 
     def _parse_pat_pid(self, pkt):
+        """
+        Compare PAT packet payload
+        to the last PAT packet payload
+        before parsing
+        """
         if pkt[5:] == self._last_pat:
             return None
         self._program_association_table(pkt)
@@ -213,6 +224,11 @@ class Stream:
         return None
 
     def _parse_pmt_pid(self, payload, pid):
+        """
+        Use pid to compare PMT packet payloads
+        to the last PMT packet payload
+        before parsing
+        """
         if pid in self._last_pmt:
             if payload == self._last_pmt[pid]:
                 return None
