@@ -32,7 +32,8 @@ ___
 ---
 
 
-###  Easy threefive
+##  Easy threefive
+
    * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__](#the-decode-function)
    * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__ over __HTTPS__](#the-decode-function)
    * [Parsing __SCTE 35__ Cue strings encoded in __Base64__, or __Hex__](#the-decode-function)
@@ -40,16 +41,21 @@ ___
 ---      
 
 
-###  Advanced threefive     
+##  Advanced threefive     
+
   *  [__Cue__ Class](#cue-class)       
   *  [__Stream__ Class](#stream-class)
 ---     
 
 
 ### Examples
+  
   *  [Splice __Insert__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert.py) 
+  
   *  [DTMF __Descriptor__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/dtmf) 
+  
   * [__Time Signal__ Program Start End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Start_End.py)
+  
   *  [Combination __Upid__ Segmentation Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Combo.py)
   
 *   [Parsing __HLS Manifests__ with threefive](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
@@ -72,7 +78,7 @@ ___
 ---
 
 
-### Install
+## Install
 
 * __dependencies__
    *  Python 3.6+ or pypy3 (__pypy3 runs threefive three times faster than python3__)
@@ -110,9 +116,9 @@ ___
 [🡡 top](#rocket-threefive)
 
 
-## __Easy__ threefive
+# __Easy__ threefive
 
-###   The __decode__ Function
+##   The __decode__ Function
 
 
  *   src [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)   
@@ -248,6 +254,9 @@ True
 | cue.**show()**             | prints **cue as JSON**                         |
 |                            |                                                |
 
+___
+
+
 * Full Example 
 ```python3
 >>>> from threefive import Cue
@@ -336,10 +345,12 @@ True
 
 
 ```
+___
+
 
 [🡡 top](#rocket-threefive)
-
 ___
+
 
 ##  __Stream__ Class
 
@@ -364,6 +375,7 @@ Method                              | Description
 [Stream.__decode_next__()](#streamdecode_next)|__Returns__ the next SCTE35 cue as a threefive.Cue instance. 
 [Stream.__decode_program__(the_program=None, func=show_cue)](#streamdecode_programthe_program-func--show_cue) |Same as Stream.__decode__ except only packets where program == __the_program__
 [Stream.__decode_proxy__(func=show_cue)](#streamdecode_proxyfunc--show_cue)      |Same as Stream.__decode__ except raw packets are written to stdout for piping to another program.
+
 
 #### Stream.show()
 
