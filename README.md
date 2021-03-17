@@ -6,15 +6,17 @@
 
 * References the __2020 SCTE35__ Specification.
 
-* Decode __SCTE35__ from __MPEG-TS video__ files and streams, __Base64, Hex, and Binary__ encoded strings.
+* threefive decodes __SCTE35__ from __MPEG-TS video__ files and streams.
 
-* [__threefive__ VS __tsduck__](https://github.com/futzu/SCTE35-threefive/blob/master/threefiveVStsp.md)
-  
-* __threefive__ now  [ __Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) SCTE35 Cues.
+* threefive decodes __Base64, Hex, and Binary__ encoded strings.
 
-* threefive [__Cyclomatic Complexity__](https://github.com/futzu/SCTE35-threefive/blob/master/cyclomatic_complexity.md)
+* threefive[ __Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) SCTE35 Cues.
 
-* Performance [__Tuning__](https://github.com/futzu/SCTE35-threefive/blob/master/stream_tune.md#tuning-pat-and-pmt-packet-parsing-in-threefivestream) threefive.Stream
+* threefive[__VS__](https://github.com/futzu/SCTE35-threefive/blob/master/threefiveVStsp.md)tsduck
+
+* threefive[ __Cyclomatic Complexity__](https://github.com/futzu/SCTE35-threefive/blob/master/cyclomatic_complexity.md)
+
+* threefive [__Performance Tuning__](https://github.com/futzu/SCTE35-threefive/blob/master/stream_tune.md#tuning-pat-and-pmt-packet-parsing-in-threefivestream) threefive.Stream
 
 
 ---
