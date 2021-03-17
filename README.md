@@ -8,7 +8,7 @@
 
 * threefive decodes __SCTE35__ from __MPEG-TS video__ files and streams.
 
-* threefive decodes __SCTE@%__ from __Base64, Hex, and Binary__ encoded strings.
+* threefive decodes __SCTE35__ from __Base64, Hex, and Binary__ encoded strings.
 
 * threefive [__Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) __SCTE35__ Cues.
 
