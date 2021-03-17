@@ -21,7 +21,7 @@ ___
 * threefive [__Performance Tuning__](https://github.com/futzu/SCTE35-threefive/blob/master/stream_tune.md#tuning-pat-and-pmt-packet-parsing-in-threefivestream) the threefive.Stream class
 ---
 
-![Happy threefive users](https://github.com/futzu/SCTE35-threefive/blob/master/16.jpg)
+![Happy threefive users](https://github.com/futzu/SCTE35-threefive/blob/master/16s.jpg)
 
 ### Install threefive 
 * [Dependencies and Installation](#install)
