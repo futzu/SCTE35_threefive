@@ -2,6 +2,94 @@
 [a@localhost SCTE35-threefive]$ ls -alh /mnt/build/plp0.ts
 -rw-r--r-- 1 root root 3.7G May 21  2020 /mnt/build/plp0.ts
 
+[a@localhost SCTE35-threefive]$ pypy3 cli.py /mnt/build/plp0.ts
+
+Program 1030
+
+	PMT pid: 1030
+	PCR pid: 1031
+	Descriptor: tag: 5 length: 4 data: b'CUEI'
+	1031: [0x1b] Video
+	1032: [0x3] ISO/IEC 11172 Audio
+	1034: [0x6] SO/IEC 13818-1 PES packets- private data
+	1035: [0x86] SCTE 35
+
+Program 1100
+
+	PMT pid: 1100
+	PCR pid: 1101
+	Descriptor: tag: 5 length: 4 data: b'CUEI'
+	1101: [0x1b] Video
+	1102: [0x3] ISO/IEC 11172 Audio
+	1104: [0x6] SO/IEC 13818-1 PES packets- private data
+	1105: [0x86] SCTE 35
+
+Program 1080
+
+	PMT pid: 1080
+	PCR pid: 1081
+	1081: [0x1b] Video
+	1082: [0x3] ISO/IEC 11172 Audio
+	1084: [0x6] SO/IEC 13818-1 PES packets- private data
+
+Program 1010
+
+	PMT pid: 1010
+	PCR pid: 1011
+	Descriptor: tag: 5 length: 4 data: b'CUEI'
+	1011: [0x1b] Video
+	1012: [0x3] ISO/IEC 11172 Audio
+	1014: [0x6] SO/IEC 13818-1 PES packets- private data
+	1015: [0x86] SCTE 35
+
+Program 1120
+
+	PMT pid: 1120
+	PCR pid: 1122
+	1122: [0x3] ISO/IEC 11172 Audio
+
+Program 1060
+
+	PMT pid: 1060
+	PCR pid: 1061
+	1061: [0x1b] Video
+	1062: [0x3] ISO/IEC 11172 Audio
+	1064: [0x6] SO/IEC 13818-1 PES packets- private data
+
+Program 1050
+
+	PMT pid: 1050
+	PCR pid: 1051
+	Descriptor: tag: 5 length: 4 data: b'CUEI'
+	1051: [0x1b] Video
+	1052: [0x3] ISO/IEC 11172 Audio
+	1054: [0x6] SO/IEC 13818-1 PES packets- private data
+	1055: [0x86] SCTE 35
+
+Program 1110
+
+	PMT pid: 1110
+	PCR pid: 1112
+	1112: [0x3] ISO/IEC 11172 Audio
+
+Program 1040
+
+	PMT pid: 1040
+	PCR pid: 1041
+	Descriptor: tag: 5 length: 4 data: b'CUEI'
+	1041: [0x1b] Video
+	1042: [0x3] ISO/IEC 11172 Audio
+	1044: [0x6] SO/IEC 13818-1 PES packets- private data
+	1045: [0x86] SCTE 35
+
+Program 1090
+
+	PMT pid: 1090
+	PCR pid: 1091
+	1091: [0x1b] Video
+	1092: [0x3] ISO/IEC 11172 Audio
+
+
 [a@fuhq]$ time tsp -I file /mnt/build/plp0.ts  -P tables --pid 0x03F7 --pid 0x040B --pid 0x0415 --pid 0x041F --pid 0x0451 --text -  -O drop
 
 * SCTE 35 Splice Information, TID 252 (0xFC), PID 1055 (0x041F)
