@@ -22,7 +22,7 @@ ___
 
 
 ### threefive 
-```python3
+```sh
 pypy3 -c "from threefive import decode; decode('plp0.ts')"
 
 ```
@@ -36,7 +36,7 @@ ___
 
 
 * __tsp__ 
-```js
+```sh
  SCTE 35 Splice Information, TID 252 (0xFC), PID 1055 (0x041F)
   Short section, total size: 50 bytes
   - Section 0:
