@@ -3,9 +3,8 @@
 * __3.7GB video__
 ```sh
 [a@fusq]$ ls -alh /mnt/build/plp0.ts
--rw-r--r-- 1 root root 3.7G May 21  2020 /mnt/build/plp0.ts
+-rw-r--r-- 1 root root 3.7G May 21  2020 plp0.ts
 ```
-
 * __10 Programs.__ 
 * __5 SCTE35 Streams.__
 * __30 Streams Total.__
@@ -13,21 +12,21 @@
 
 ### tsp command
 ```
-[a@fusq]$ tsp -I file /mnt/build/plp0.ts  -P tables --pid 0x03F7 --pid 0x040B --pid 0x0415 --pid 0x041F --pid 0x0451 --text -  -O drop
+tsp -I file plp0.ts  -P tables --pid 0x03F7 --pid 0x040B --pid 0x0415 --pid 0x041F --pid 0x0451 --text -  -O drop
 ```
 * __tsp found 18 Cues Found in 9.845s__
 
 
 ### threefive command
 ```
-[a@fusq]$ pypy3 -c "from threefive import decode; decode('/mnt/build/plp0.ts')"
+pypy3 -c "from threefive import decode; decode('plp0.ts')"
 
 ```
 * __threefive found 18 Cues Found in 10.399s__
 
 
 
-* tsp Cue data
+* __tsp__ Cue Data
 ```
  SCTE 35 Splice Information, TID 252 (0xFC), PID 1055 (0x041F)
   Short section, total size: 50 bytes
@@ -48,10 +47,7 @@
     CRC32: 0xEAA8473F (OK)
 ```
 
-
-
-
-* threefive Cue data
+* __threefive__ Cue Data
 ``` 
 {
     "info_section": {
