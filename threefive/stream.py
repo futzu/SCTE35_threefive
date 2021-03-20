@@ -4,7 +4,7 @@ Mpeg-TS Stream parsing class Stream
 
 import sys
 from functools import partial
-from .afc3 import Pat
+from bitn import BitBin
 from .cue import Cue
 from .streamtype import stream_type_map
 from .base import to_stderr
@@ -42,19 +42,19 @@ class Stream:
         self._tsdata = tsdata
         self._find_start()
         self.show_null = show_null
-        self._scte35_pids = set()
-        self._pid_prog = {}
-        self._prgm_pts = {}
-        self._pmt_pids = set()
-        self._programs = set()
         self.info = None
         self.the_program = None
+        self._pids={'pcr': set(),
+                   'pmt': set(),
+                   'scte35': set()}
+        self._programs = set()
+        self._pid_prog = {}
+        self._prgm_pts = {}
         self._cue = None
         self._pat = None
         self._last_pat = b""
         self._pmt = {}
         self._last_pmt = {}
-        self._pcr_pids = set()
 
     def __repr__(self):
         return str(vars(self))
@@ -190,20 +190,20 @@ class Stream:
         """
         pid = self._parse_pid(pkt[1], pkt[2])
         # drop pcr_pid packets, we don't need them for pts.
-        if pid in self._pcr_pids:
+        if pid in self._pids['pcr']:
             return None
+        payload = self._parse_payload(pkt)
         # PAT
         if pid == 0:
-            return self._parse_pat_pid(pkt)
-        payload = self._parse_payload(pkt)
+            return self._chk_pat_payload(payload)
         # PMT
-        if pid in self._pmt_pids:
-            return self._parse_pmt_pid(payload, pid)
+        if pid in self._pids["pmt"]:
+            return self._chk_pmt_payload(payload, pid)
         # Stream.show()
         if self.info:
             return None
         # SCTE35
-        if pid in self._scte35_pids:
+        if pid in self._pids["scte35"]:
             return self._parse_scte35(payload, pid)
         # for PTS
         if pid in self._pid_prog:
@@ -211,19 +211,19 @@ class Stream:
                 self._parse_pusi(pkt, pid)
         return None
 
-    def _parse_pat_pid(self, pkt):
+    def _chk_pat_payload(self, payload):
         """
         Compare PAT packet payload
         to the last PAT packet payload
         before parsing
         """
-        if pkt[5:] == self._last_pat:
+        if payload == self._last_pat:
             return None
-        self._program_association_table(pkt)
-        self._last_pat = pkt[5:]
+        self._program_association_table(payload)
+        self._last_pat = payload
         return None
 
-    def _parse_pmt_pid(self, payload, pid):
+    def _chk_pmt_payload(self, payload, pid):
         """
         Use pid to compare PMT packet payloads
         to the last PMT packet payload
@@ -264,7 +264,8 @@ class Stream:
         if not self._cue:
             payload = self._janky_parse(payload, b"\xfc0", b"\xfc0")
             if not payload:
-                self._scte35_pids.discard(pid)
+                self._pids["scte35"].discard(pid)
+                self._pids["pcr"].add(pid)
                 return None
             if (payload[13] == 0) and (not self.show_null):
                 return None
@@ -281,15 +282,37 @@ class Stream:
             return cue
         return None
 
-    def _program_association_table(self, pkt):
+    def _program_association_table(self, payload):
         """
         parse program association table ( pid 0 )
-        to program to program table pid mappings.
-        StreamParser is imported from threefive.afc3.
+        for program to pmt_pid mappings.
         """
-        fat_pat = Pat()
-        fat_pat.decode(pkt)
-        self._pmt_pids |= fat_pat.pmt_pids
+        payload = payload[1:]  # remove pointer byte
+        if self._last_pat:
+            payload = self._last_pat + payload
+        bitbin = BitBin(payload)
+        bitbin.forward(9)  # table_id 8  + section_syntax_indicator 1
+        if bitbin.asflag(1):
+            return
+        bitbin.forward(2)  # reserved
+        section_length = bitbin.asint(12)
+        if len(payload) < (section_length + 3):  # +3 bytes before section_length
+            self._last_pat = payload
+            return None
+        secl = section_length << 3
+        # transport_stream_id = bitbin.asint(16)
+        bitbin.forward(40)
+        secl -= 40
+        while secl > 32:  # crc = bitbin.asint(32)
+            program_number = bitbin.asint(16)  # 16
+            bitbin.forward(3)  # 3
+            secl -= 19  # 16 + 3  = 19
+            if program_number == 0:
+                network_pid = bitbin.asint(13)
+            else:
+                self._pids["pmt"].add(bitbin.asint(13))
+            secl -= 13
+        bitbin = None
 
     def _program_map_table(self, payload, pid):
         """
@@ -298,7 +321,7 @@ class Stream:
         if pid in self._pmt:
             # Handle PMT split over multiple packets
             payload = self._pmt[pid] + payload
-            del self._pmt[pid]
+            # del self._pmt[pid]
         payload = self._janky_parse(payload, b"\x02", b"\x02")
         # table_id = payload[0]
         sectioninfolen = self._parse_length(payload[1], payload[2])
@@ -309,7 +332,7 @@ class Stream:
         if self.the_program and (program_number != self.the_program):
             return None
         pcr_pid = self._parse_pid(payload[8], payload[9])
-        self._pcr_pids.add(pcr_pid)
+        self._pids["pcr"].add(pcr_pid)
         if self.info:
             if program_number not in self._programs:
                 to_stderr(
@@ -379,4 +402,6 @@ class Stream:
         add it to self._scte35_pids.
         """
         if stream_type in ["0x6", "0x86"]:
-            self._scte35_pids.add(pid)
+            self._pids["scte35"].add(pid)
+            if pid in self._pids["pcr"]:
+                self._pids["pcr"].discard(pid)
