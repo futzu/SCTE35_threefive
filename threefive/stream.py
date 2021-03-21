@@ -4,7 +4,6 @@ Mpeg-TS Stream parsing class Stream
 
 import sys
 from functools import partial
-from bitn import BitBin
 from .cue import Cue
 from .streamtype import stream_type_map
 from .base import to_stderr
@@ -44,9 +43,7 @@ class Stream:
         self.show_null = show_null
         self.info = None
         self.the_program = None
-        self._pids={'pcr': set(),
-                   'pmt': set(),
-                   'scte35': set()}
+        self._pids = {"pcr": set(), "pmt": set(), "scte35": set()}
         self._programs = set()
         self._pid_prog = {}
         self._prgm_pts = {}
@@ -190,7 +187,7 @@ class Stream:
         """
         pid = self._parse_pid(pkt[1], pkt[2])
         # drop pcr_pid packets, we don't need them for pts.
-        if pid in self._pids['pcr']:
+        if pid in self._pids["pcr"]:
             return None
         payload = self._parse_payload(pkt)
         # PAT
@@ -287,32 +284,18 @@ class Stream:
         parse program association table ( pid 0 )
         for program to pmt_pid mappings.
         """
-        payload = payload[1:]  # remove pointer byte
-        if self._last_pat:
-            payload = self._last_pat + payload
-        bitbin = BitBin(payload)
-        bitbin.forward(9)  # table_id 8  + section_syntax_indicator 1
-        if bitbin.asflag(1):
-            return
-        bitbin.forward(2)  # reserved
-        section_length = bitbin.asint(12)
-        if len(payload) < (section_length + 3):  # +3 bytes before section_length
-            self._last_pat = payload
-            return None
-        secl = section_length << 3
-        # transport_stream_id = bitbin.asint(16)
-        bitbin.forward(40)
-        secl -= 40
-        while secl > 32:  # crc = bitbin.asint(32)
-            program_number = bitbin.asint(16)  # 16
-            bitbin.forward(3)  # 3
-            secl -= 19  # 16 + 3  = 19
-            if program_number == 0:
-                network_pid = bitbin.asint(13)
-            else:
-                self._pids["pmt"].add(bitbin.asint(13))
-            secl -= 13
-        bitbin = None
+        # table_id  = payload[1]
+        section_length = self._parse_length(payload[2], payload[3])
+        section_length -= 5  # payload bytes 4,5,6,7,8
+        idx = 9
+        chunk_size = 4
+        while section_length > 4:  #  4 bytes for crc
+            program_number = self._parse_program_number(payload[idx], payload[idx + 1])
+            if program_number > 0:
+                pmt_pid = self._parse_pid(payload[idx + 2], payload[idx + 3])
+                self._pids["pmt"].add(pmt_pid)
+            section_length -= 4
+            idx += 4
 
     def _program_map_table(self, payload, pid):
         """
