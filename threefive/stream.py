@@ -43,7 +43,7 @@ class Stream:
         self.show_null = show_null
         self.info = None
         self.the_program = None
-        self._pids = {"pcr": set(), "pmt": set(), "scte35": set()}
+        self._pids = {"ignore": set(), "pmt": set(), "scte35": set()}
         self._programs = set()
         self._pid_prog = {}
         self._prgm_pts = {}
@@ -155,7 +155,7 @@ class Stream:
         afc = (pkt[3] >> 5) & 1
         if afc:
             afl = pkt[4]
-            head_size += afl
+            head_size += afl + 1  # +1 for afl byte
         payload = pkt[head_size:]
         return payload
 
@@ -187,25 +187,23 @@ class Stream:
         """
         pid = self._parse_pid(pkt[1], pkt[2])
         # drop pcr_pid packets, we don't need them for pts.
-        if pid in self._pids["pcr"]:
+        if pid in self._pids["ignore"]:
             return None
         payload = self._parse_payload(pkt)
-        # PAT
         if pid == 0:
             return self._chk_pat_payload(payload)
-        # PMT
         if pid in self._pids["pmt"]:
             return self._chk_pmt_payload(payload, pid)
         # Stream.show()
         if self.info:
             return None
-        # SCTE35
         if pid in self._pids["scte35"]:
             return self._parse_scte35(payload, pid)
         # for PTS
         if pid in self._pid_prog:
             if (pkt[1] >> 6) & 1:
                 self._parse_pusi(pkt, pid)
+            return None
         return None
 
     def _chk_pat_payload(self, payload):
@@ -262,7 +260,7 @@ class Stream:
             payload = self._janky_parse(payload, b"\xfc0", b"\xfc0")
             if not payload:
                 self._pids["scte35"].discard(pid)
-                self._pids["pcr"].add(pid)
+                self._pids["ignore"].add(pid)
                 return None
             if (payload[13] == 0) and (not self.show_null):
                 return None
@@ -304,18 +302,17 @@ class Stream:
         if pid in self._pmt:
             # Handle PMT split over multiple packets
             payload = self._pmt[pid] + payload
-            # del self._pmt[pid]
         payload = self._janky_parse(payload, b"\x02", b"\x02")
         # table_id = payload[0]
         sectioninfolen = self._parse_length(payload[1], payload[2])
-        if sectioninfolen + 4 > len(payload):
+        if sectioninfolen + 3 > len(payload):  # +3 for bytes before sectioninfolen
             self._pmt[pid] = payload
             return None
         program_number = self._parse_program_number(payload[3], payload[4])
         if self.the_program and (program_number != self.the_program):
             return None
         pcr_pid = self._parse_pid(payload[8], payload[9])
-        self._pids["pcr"].add(pcr_pid)
+        self._pids["ignore"].add(pcr_pid)
         if self.info:
             if program_number not in self._programs:
                 to_stderr(
@@ -386,5 +383,5 @@ class Stream:
         """
         if stream_type in ["0x6", "0x86"]:
             self._pids["scte35"].add(pid)
-            if pid in self._pids["pcr"]:
-                self._pids["pcr"].discard(pid)
+            if pid in self._pids["ignore"]:
+                self._pids["ignore"].discard(pid)
