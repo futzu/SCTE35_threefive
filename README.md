@@ -2,7 +2,6 @@
 
 # :rocket: threefive	
 ___
-![Happy threefive users](https://github.com/futzu/SCTE35-threefive/blob/master/7w.jpg)
 
 
 #### threefive is a SCTE35 Decoder Encoder Parser library in Python3.
@@ -22,7 +21,6 @@ ___
 * threefive [__Performance Tuning__](https://github.com/futzu/SCTE35-threefive/blob/master/stream_tune.md#tuning-pat-and-pmt-packet-parsing-in-threefivestream) the threefive.Stream class
 ---
 
-![Happy threefive users](https://github.com/futzu/SCTE35-threefive/blob/master/14s.jpg)
 
 ### Install threefive 
 * [Dependencies and Installation](#install)
