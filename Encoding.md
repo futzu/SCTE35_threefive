@@ -22,9 +22,10 @@
 ###### All instance vars can be accessed via dot notation.
 
 ```python3
->>>> from threefive import Cue
->>>> cue = Cue(b64)
+from threefive import Cue
+cue = Cue(b64)
 >>>> cue.decode()
+
 True
 >>>> cue.command
 {'command_length': 5, 'command_type': 6, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 22798.906911}
@@ -100,7 +101,7 @@ True
  #  All Splice Commands and Descriptors have a load method
 
 
->>>> threefive.dscrptr.load(data)
+>>>> dscrptr.load(data)
 
 >>>> dscrptr
 {'tag': 1, 'descriptor_length': 10, 'identifier': 'CUEI', 'bites': None, 'name': 'DTMF Descriptor', 'preroll': 177, 'dtmf_count': 4, 'dtmf_chars': ['1', '2', '1', '#']}
