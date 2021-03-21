@@ -171,7 +171,6 @@ ___
 
 [🡡 top](#rocket-threefive)
 
-![Happy threefive users](https://github.com/futzu/SCTE35-threefive/blob/master/16s.jpg)
 
 #  __Advanced__ threefive
 ___
@@ -542,7 +541,6 @@ $ python3 proxy.py | mplayer -
 ```
 ___
 
-![Happy threefive users](https://github.com/futzu/SCTE35-threefive/blob/master/threefiveishappy.jpg)
 
 
 [🡡 top](#rocket-threefive)
