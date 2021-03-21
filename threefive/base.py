@@ -25,6 +25,19 @@ class SCTE35Base:
             nbin = NBin()
         return nbin
 
+    def get(self):
+        """
+        Returns instance as a dict
+        """
+        return self._kv_clean(vars(self))
+
+    @staticmethod
+    def _kv_clean(obj):
+        """
+        kv_clean removes items from a dict if the value is None
+        """
+        return {k: v for k, v in obj.items() if v is not None}
+
     def load(self, stuff):
         """
         load is used to load
@@ -37,7 +50,7 @@ class SCTE35Base:
 
     def precheck(self, var_type, nbin_method, var_name, bit_count):
         """
-        precheck is used check vars before encoding
+        precheck is used to check var values and types before encoding
         """
         var_value = self.__dict__[var_name]
         if var_value is None:

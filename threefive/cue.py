@@ -101,8 +101,6 @@ class Cue:
         if 'splice_command_type' is included,
         an empty command instance will be created for Cue.command
         """
-        if not isinstance(isec, dict):
-            raise Exception("info section data should be a dict")
         self.info_section.load(isec)
         if "splice_command_type" in isec:
             cmd_type = isec["splice_command_type"]
@@ -115,8 +113,6 @@ class Cue:
         if 'command_type' is included,
         the command instance will be created.
         """
-        if not isinstance(cmd, dict):
-            raise Exception("command data should be a dict")
         if "command_type" in cmd:
             self.command = command_map[cmd["command_type"]]()
         if self.command:
@@ -132,8 +128,6 @@ class Cue:
         if not isinstance(dlist, list):
             raise Exception("descriptors should be a list")
         for dstuff in dlist:
-            if not isinstance(dstuff, dict):
-                raise Exception("descriptor data should be a dict")
             if "tag" in dstuff:
                 dscptr = descriptor_map[dstuff["tag"]]()
                 dscptr.load(dstuff)
@@ -217,21 +211,21 @@ class Cue:
         returns the SCTE 35
         splice command data as a dict.
         """
-        return self._kv_clean(vars(self.command))
+        return self.command.get()
 
     def get_descriptors(self):
         """
         Returns a list of SCTE 35
         splice descriptors as dicts.
         """
-        return [self._kv_clean(vars(d)) for d in self.descriptors]
+        return [d.get() for d in self.descriptors]
 
     def get_info_section(self):
         """
         Returns SCTE 35
         splice info section as a dict
         """
-        return self._kv_clean(vars(self.info_section))
+        return self.info_section.get()
 
     def get_json(self):
         """
@@ -244,14 +238,7 @@ class Cue:
         """
         returns cleaned Cue.packet_data
         """
-        return self._kv_clean(self.packet_data)
-
-    @staticmethod
-    def _kv_clean(obj):
-        """
-        kv_clean removes items from a dict if the value is None
-        """
-        return {k: v for k, v in obj.items() if v is not None}
+        return self.packet_data
 
     @staticmethod
     def _mk_bits(data):

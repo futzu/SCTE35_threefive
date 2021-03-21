@@ -35,10 +35,10 @@ class SpliceDescriptor(SCTE35Base):
 
     def encode(self, nbin=None):
         nbin = self._chk_nbin(nbin)
-        self.encode_id(nbin)
+        self._encode_id(nbin)
         return nbin
 
-    def parse_id(self, bitbin):
+    def _parse_id(self, bitbin):
         """
         parse splice descriptor identifier
         """
@@ -47,7 +47,7 @@ class SpliceDescriptor(SCTE35Base):
         if self.identifier != "CUEI":
             raise Exception('Descriptors should have an identifier of "CUEI"')
 
-    def encode_id(self, nbin):
+    def _encode_id(self, nbin):
         """
         parse splice descriptor identifier
         """
@@ -71,7 +71,7 @@ class AvailDescriptor(SpliceDescriptor):
         decode SCTE35 Avail Descriptor
         """
         bitbin = BitBin(self.bites)
-        self.parse_id(bitbin)
+        self._parse_id(bitbin)
         self.provider_avail_id = bitbin.asint(32)
 
     def encode(self, nbin=None):
@@ -101,7 +101,7 @@ class DtmfDescriptor(SpliceDescriptor):
         decode SCTE35 Dtmf Descriptor
         """
         bitbin = BitBin(self.bites)
-        self.parse_id(bitbin)
+        self._parse_id(bitbin)
         self.preroll = bitbin.asint(8)
         self.dtmf_count = d_c = bitbin.asint(3)
         bitbin.forward(5)
@@ -142,7 +142,7 @@ class TimeDescriptor(SpliceDescriptor):
         decode SCTE35 Time Descriptor
         """
         bitbin = BitBin(self.bites)
-        self.parse_id(bitbin)
+        self._parse_id(bitbin)
         self.tai_seconds = bitbin.asint(48)
         self.tai_ns = bitbin.asint(32)
         self.utc_offset = bitbin.asint(16)
@@ -175,7 +175,7 @@ class AudioDescriptor(SpliceDescriptor):
         Decode SCTE35 Audio Descriptor
         """
         bitbin = BitBin(self.bites)
-        self.parse_id(bitbin)
+        self._parse_id(bitbin)
         self.audio_count = a_c = bitbin.asint(4)
         bitbin.forward(4)
         while a_c:
@@ -243,7 +243,7 @@ class SegmentationDescriptor(SpliceDescriptor):
         decode a segmentation descriptor
         """
         bitbin = BitBin(self.bites)
-        self.parse_id(bitbin)
+        self._parse_id(bitbin)
         self.segmentation_event_id = bitbin.ashex(32)  # 4 bytes
         self.segmentation_event_cancel_indicator = bitbin.asflag(1)
         bitbin.forward(7)  # 1 byte
