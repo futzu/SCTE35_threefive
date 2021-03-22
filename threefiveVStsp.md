@@ -6,15 +6,14 @@ __The Video__
 ```js
 -rw-r--r-- 1 root root 3.7G May 21  2020 plp0.ts
 ```
-  *   __3.7GB__
-  
-  * __10__ Programs
-  
-  * __30__ Streams Total
-  
-  * __5__ SCTE35 Streams
-  
-  * __18__ SCTE35 Cues
+  * Size: __3.7GB__
+  * Duration: __21 mins__
+  * Overall Bitrate: __24.9 Mb/s__
+  * Programs: __10__ 
+  * Streams: __30__
+  * SCTE35
+      * Streams: __5__
+      * Cues: __18__
 
 ___
 
