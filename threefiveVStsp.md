@@ -29,13 +29,21 @@ ___
 
 
 ### threefive 
+* `pypy3 `
 ```sh
 pypy3 -c "from threefive import decode; decode('plp0.ts')"
 
 ```
-#### time: 10.399 seconds
+*  `time: 10.399 seconds`
 ___
 
+* `python3.7`
+```sh
+python3 -c "from threefive import decode; decode('plp0.ts')"
+
+```
+*  `time: 22.241 seconds`
+___
 
 
 
