@@ -44,7 +44,7 @@ class Stream:
         self.info = None
         self.the_program = None
         self._pids = {"ignore": set(), "pmt": set(), "scte35": set()}
-        self._programs = set()
+        self._programs = {}
         self._pid_prog = {}
         self._prgm_pts = {}
         self._cue = None
@@ -116,6 +116,14 @@ class Stream:
         """
         self.info = True
         self.decode()
+        for k,v in self._programs.items():
+            to_stderr(f'\nProgram:{k}')
+            for kk,vv in v.items():
+                if not isinstance(kk,int):
+                    to_stderr(f'\t{kk}:{vv}')
+                else:
+                    to_stderr(f'\tpid: {kk} {vv}')
+
 
     def _mk_packet_data(self, pid):
         """
@@ -290,10 +298,13 @@ class Stream:
         while section_length > 4:  #  4 bytes for crc
             program_number = self._parse_program_number(payload[idx], payload[idx + 1])
             if program_number > 0:
+                self._programs[program_number] = {}
                 pmt_pid = self._parse_pid(payload[idx + 2], payload[idx + 3])
+                self._programs[program_number]['pmt_pid'] = pmt_pid
                 self._pids["pmt"].add(pmt_pid)
-            section_length -= 4
-            idx += 4
+            section_length -= chunk_size
+            idx += chunk_size
+
 
     def _program_map_table(self, payload, pid):
         """
@@ -313,24 +324,19 @@ class Stream:
             return None
         pcr_pid = self._parse_pid(payload[8], payload[9])
         self._pids["ignore"].add(pcr_pid)
-        if self.info:
-            if program_number not in self._programs:
-                to_stderr(
-                    f"\nProgram {program_number}\n\n\tPMT pid: {pid}\n\tPCR pid: {pcr_pid}"
-                )
+        self._programs[program_number]['pcr_pid'] = pcr_pid
         proginfolen = self._parse_length(payload[10], payload[11])
         idx = 12
         end = idx + proginfolen
         while idx < end:
-            tag = payload[idx]
+            #tag = payload[idx]
             idx += 1
             length = payload[idx]
             idx += 1
-            data = payload[idx : idx + length]
+            #data = payload[idx : idx + length]
             idx += length
-            if self.info:
-                if program_number not in self._programs:
-                    to_stderr(f"\tDescriptor: tag: {tag} length: {length} data: {data}")
+           # if self.info:
+            #        to_stderr(f"\tDescriptor: tag: {tag} length: {length} data: {data}")
         si_len = sectioninfolen - 9
         si_len -= proginfolen
         self._parse_program_streams(si_len, payload, idx, program_number)
@@ -340,22 +346,17 @@ class Stream:
         parse the elementary streams
         from a program
         """
-        if program_number not in self._programs:
-            self._programs.add(program_number)
-            chunk_size = 5  # 5 bytes for stream_type info
-            end_idx = (idx + si_len) - chunk_size
-            while idx < end_idx:
-                stream_type, pid, ei_len = self._parse_stream_type(payload, idx)
-                idx += chunk_size
-                idx += ei_len
-                self._pid_prog[pid] = program_number
-                if self.info:
-                    self._show_program_stream(pid, stream_type)
-                self._chk_pid_stream_type(pid, stream_type)
-        else:
+        chunk_size = 5  # 5 bytes for stream_type info
+        end_idx = (idx + si_len) - chunk_size
+        while idx < end_idx:
+            stream_type, pid, ei_len = self._parse_stream_type(payload, idx)
+            idx += chunk_size
+            idx += ei_len
+            self._pid_prog[pid] = program_number
             if self.info:
-                # seek to end of stream
-                self._tsdata.seek(0, 2)
+                self._show_program_stream(pid,program_number, stream_type)
+            self._chk_pid_stream_type(pid, stream_type)
+
 
     def _parse_stream_type(self, payload, idx):
         """
@@ -366,15 +367,15 @@ class Stream:
         ei_len = self._parse_length(payload[idx + 3], payload[idx + 4])  # 2 bytes
         return stream_type, el_pid, ei_len
 
-    @staticmethod
-    def _show_program_stream(pid, stream_type):
+    def _show_program_stream(self,pid,program_number, stream_type):
         """
         print program -> stream mappings
         """
         streaminfo = f"[{stream_type}] Reserved or Private"
         if stream_type in stream_type_map:
             streaminfo = f"[{stream_type}] {stream_type_map[stream_type]}"
-        to_stderr(f"\t{pid}: {streaminfo}")
+        self._programs[program_number][pid] = streaminfo
+
 
     def _chk_pid_stream_type(self, pid, stream_type):
         """
