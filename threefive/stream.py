@@ -150,7 +150,7 @@ class Stream:
     @staticmethod
     def _parse_payload(pkt):
         """
-        _mk_payload checks if
+        _parse_payload checks if
         the adaptive field control flag is set
         and sets payload size accordingly
         """
@@ -179,7 +179,7 @@ class Stream:
     @staticmethod
     def _parse_program_number(byte1, byte2):
         """
-        parse a 16 bit progrsm number value
+        parse a 16 bit program number value
         """
         return (byte1 << 8) | byte2
 
@@ -189,22 +189,21 @@ class Stream:
         route it appropriately.
         """
         pid = self._parse_pid(pkt[1], pkt[2])
-        # drop pcr_pid packets, we don't need them for pts.
         if pid in self._pids["ignore"]:
             return None
-        if pid == 0:
+        elif pid == 0:
             return self._chk_pat_payload(pkt)
-        if pid in self._pids["pmt"]:
+        elif pid in self._pids["pmt"]:
             return self._chk_pmt_payload(pkt, pid)
-        # Stream.show()
-        if self.info:
+        elif self.info:
             return None
-        if pid in self._pids["scte35"]:
+        elif pid in self._pids["scte35"]:
             return self._parse_scte35(pkt, pid)
         # for PTS
-        if pid in self._pid_prog:
+        elif pid in self._pid_prog:
             return self._parse_pusi(pkt, pid)
-        return None
+        else:
+            return None
 
     def _chk_pat_payload(self, pkt):
         """
@@ -270,7 +269,7 @@ class Stream:
                 return None
             packet_data = self._mk_packet_data(pid)
             self._cue = Cue(payload, packet_data)
-            self._cue.info_section.decode(payload[:14])
+            self._cue.info_section.decode(payload)
             self._cue.bites = payload
         else:
             self._cue.bites += payload
@@ -278,7 +277,7 @@ class Stream:
         if (self._cue.info_section.section_length + 3) > len(self._cue.bites):
             return None
         self._cue.decode()
-        cue,self._cue = self._cue,None
+        cue, self._cue = self._cue, None
         return cue
 
     def _program_association_table(self, payload):
@@ -286,7 +285,7 @@ class Stream:
         parse program association table ( pid 0 )
         for program to pmt_pid mappings.
         """
-        #pointer_field = payload[0]
+        # pointer_field = payload[0]
         # table_id  = payload[1]
         section_length = self._parse_length(payload[2], payload[3])
         section_length -= 5  # payload bytes 4,5,6,7,8
@@ -341,9 +340,8 @@ class Stream:
             idx += ei_len
             self._pid_prog[pid] = program_number
             if self.info:
-                self._add_program_stream_info(pid,program_number, stream_type)
+                self._add_program_stream_info(pid, program_number, stream_type)
             self._chk_pid_stream_type(pid, stream_type)
-
 
     def _parse_stream_type(self, payload, idx):
         """
@@ -354,7 +352,7 @@ class Stream:
         ei_len = self._parse_length(payload[idx + 3], payload[idx + 4])  # 2 bytes
         return stream_type, el_pid, ei_len
 
-    def _add_program_stream_info(self,pid,program_number, stream_type):
+    def _add_program_stream_info(self, pid, program_number, stream_type):
         """
         print program -> stream mappings
         """
@@ -363,14 +361,13 @@ class Stream:
             streaminfo = f"[{stream_type}] {stream_type_map[stream_type]}"
         self._programs[program_number][pid] = streaminfo
 
-    def _show_program_info(self,program):
+    def _show_program_info(self, program):
         """
         show streams in a program
         """
-        to_stderr(f'\nProgram:{program}')
-        for k,v in self._programs[program].items():
-            to_stderr(f'  {k}:{v}')
-
+        to_stderr(f"\nProgram:{program}")
+        for k, v in self._programs[program].items():
+            to_stderr(f"  {k}:{v}")
 
     def _chk_pid_stream_type(self, pid, stream_type):
         """
