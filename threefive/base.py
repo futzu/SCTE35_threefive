@@ -1,3 +1,7 @@
+"""
+threefive.base contains the function to_stderr
+and the class SCTE35Base.
+"""
 import json
 import sys
 from bitn import NBin

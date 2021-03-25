@@ -4,10 +4,7 @@ segmentation.py
 SCTE35 Segmentation Descriptor tables.
 """
 
-"""
-Table 20 from page 58 of
-https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
-"""
+
 table20 = {
     0x00: "Restrict Group 0",
     0x01: "Restrict Group 1",
@@ -15,12 +12,7 @@ table20 = {
     0x03: "No Restrictions",
 }
 
-"""
-table 22 from page 62 of
-https://www.scte.org/SCTEDocs/Standards/ANSI_SCTE%2035%202019r1.pdf
-I am using the segmentation_type_id as a key.
-Segmentation_type_id : segmentation_message
-"""
+
 table22 = {
     0x00: "Not Indicated",
     0x01: "Content Identification",

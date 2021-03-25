@@ -38,6 +38,9 @@ class SpliceInfoSection(SCTE35Base):
         self.descriptor_loop_length = 0
 
     def decode(self, bites):
+        """
+        InfoSection.decode
+        """
         bitbin = BitBin(bites)
         self.table_id = bitbin.ashex(8)
         if self.table_id != "0xfc":

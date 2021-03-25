@@ -11,9 +11,9 @@ def k_by_v(adict, avalue):
     """
     dict key lookup by value
     """
-    for k, v in adict.items():
-        if v == avalue:
-            return k
+    for kay, vee in adict.items():
+        if vee == avalue:
+            return kay
 
 
 class SpliceDescriptor(SCTE35Base):
@@ -34,6 +34,9 @@ class SpliceDescriptor(SCTE35Base):
             self.bites = bites[2:]
 
     def encode(self, nbin=None):
+        """
+        SpliceDescriptor.encode
+        """
         nbin = self._chk_nbin(nbin)
         self._encode_id(nbin)
         return nbin

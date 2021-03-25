@@ -1,3 +1,6 @@
+"""
+threefive.__init__.py
+"""
 from .base import to_stderr
 from .cue import Cue
 from .decode import decode
