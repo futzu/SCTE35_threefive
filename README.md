@@ -12,13 +12,9 @@ ___
 
 * threefive decodes __SCTE35__ from __Base64, Hex, and Binary__ encoded strings.
 
-* threefive [__Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) __SCTE35__ Cues.
+* threefive now [__Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) __SCTE35__ Cues.
 
-* threefive is __Fast__. [threefive __VS__ tsduck ](https://github.com/futzu/SCTE35-threefive/blob/master/threefiveVStsp.md).
 
-* threefive [__Cyclomatic Complexity__](https://github.com/futzu/SCTE35-threefive/blob/master/cyclomatic_complexity.md)
-
-* threefive [__Performance Tuning__](https://github.com/futzu/SCTE35-threefive/blob/master/stream_tune.md#tuning-pat-and-pmt-packet-parsing-in-threefivestream) the threefive.Stream class
 ---
 
 
