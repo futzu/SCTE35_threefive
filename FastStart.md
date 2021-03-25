@@ -13,7 +13,7 @@ pip3 install threefive
 *  Estimated time to complete this step : 3.0 - 4.5 seconds 
 
 ```sh
-pthon3 -c 'import threefive; threefive.decode("https://futzu.com/xaa.ts")' 
+python3 -c 'import threefive; threefive.decode("https://futzu.com/xaa.ts")' 
 ```
 
 * Ouput looks like this.
