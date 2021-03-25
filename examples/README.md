@@ -1,6 +1,6 @@
 ### threefive Examples
 * __Cli__
-      * [__Command line tool__ for threefive](https://github.com/futzu/SCTE35-threefive/blob/master/examples/cli.py)
+* * [__Command line tool__ for threefive](https://github.com/futzu/SCTE35-threefive/blob/master/examples/cli.py)
  ---
 
  * __Stream__
