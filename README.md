@@ -255,90 +255,11 @@ ___
 
 * Full Example 
 ```python3
->>>> from threefive import Cue
 
->>>> b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAABl/nwgIAAAAACyk26AQAACZcuND"
-
->>>> cue.decode()
-True
->>>> cue.show()
-{
-    "info_section": {
-        "table_id": "0xfc",
-        "section_syntax_indicator": false,
-        "private": false,
-        "sap_type": "0x3",
-        "sap_details": "No Sap Type",
-        "section_length": 72,
-        "protocol_version": 0,
-        "encrypted_packet": false,
-        "encryption_algorithm": 0,
-        "pts_adjustment": 0.0,
-        "cw_index": "0xff",
-        "tier": "0xfff",
-        "splice_command_length": 5,
-        "splice_command_type": 6,
-        "descriptor_loop_length": 50
-    },
-    "command": {
-        "command_length": 5,
-        "command_type": 6,
-        "name": "Time Signal",
-        "time_specified_flag": true,
-        "pts_time": 22798.906911
-    },
-    "descriptors": [
-        {
-            "tag": 2,
-            "descriptor_length": 23,
-            "identifier": "CUEI",
-            "name": "Segmentation Descriptor",
-            "segmentation_event_id": "0x48000018",
-            "segmentation_event_cancel_indicator": false,
-            "components": [],
-            "program_segmentation_flag": true,
-            "segmentation_duration_flag": false,
-            "delivery_not_restricted_flag": false,
-            "web_delivery_allowed_flag": true,
-            "no_regional_blackout_flag": true,
-            "archive_allowed_flag": true,
-            "device_restrictions": "No Restrictions",
-            "segmentation_message": "Program End",
-            "segmentation_upid_type": 8,
-            "segmentation_upid_length": 8,
-            "segmentation_upid": "0x2ccbc344",
-            "segmentation_type_id": 17,
-            "segment_num": 0,
-            "segments_expected": 0
-        },
-        {
-            "tag": 2,
-            "descriptor_length": 23,
-            "identifier": "CUEI",
-            "name": "Segmentation Descriptor",
-            "segmentation_event_id": "0x48000019",
-            "segmentation_event_cancel_indicator": false,
-            "components": [],
-            "program_segmentation_flag": true,
-            "segmentation_duration_flag": false,
-            "delivery_not_restricted_flag": false,
-            "web_delivery_allowed_flag": true,
-            "no_regional_blackout_flag": true,
-            "archive_allowed_flag": true,
-            "device_restrictions": "No Restrictions",
-            "segmentation_message": "Program Start",
-            "segmentation_upid_type": 8,
-            "segmentation_upid_length": 8,
-            "segmentation_upid": "0x2ca4dba0",
-            "segmentation_type_id": 16,
-            "segment_num": 0,
-            "segments_expected": 0
-        }
-    ],
-    "crc": "0x9972e343"
-}
-
-
+from threefive import Cue
+b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAABl/nwgIAAAAACyk26AQAACZcuND"
+cue.decode(b64)
+cue_data = cue.get()
 
 ```
 ___
@@ -359,14 +280,14 @@ ___
   * Supports 
   	* __Multiple Programs__.
   	* __Multiple SCTE35 Streams__.
-  	* __Multi-Packet PAT,PMT, and SCTE35 data__. 
+  	* __Multi-Packet PMT, and SCTE35 data__. 
 
   *  __tsdata__ is an open file handle. 
   *  __show_null__ if set to __True__, enables showing SCTE 35 __null commands__.
    
 Method                              | Description
 ------------------------------------| -------------------------------------
-[Stream.__show__()](#streamshow)                 |__Prints__ all recognized Programs and streams by pid and type. 
+[Stream.__show__()](#streamshow)                 |__Prints__ Streams that will be checked for SCTE35 
  [Stream.__decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                             | __Prints__ SCTE-35 __cues__ for SCTE-35 packets. Accepts an optional function, func, as arg.
 [Stream.__decode_next__()](#streamdecode_next)|__Returns__ the next SCTE35 cue as a threefive.Cue instance. 
 [Stream.__decode_program__(the_program=None, func=show_cue)](#streamdecode_programthe_program-func--show_cue) |Same as Stream.__decode__ except only packets where program == __the_program__
@@ -375,7 +296,7 @@ Method                              | Description
 
 #### Stream.show()
 
- *  List programs and streams for a video.
+ *  List programs and streams that will be checked for SCTE35 data.
 
 ```python3
 >>>> from threefive import Stream, version
@@ -386,54 +307,20 @@ Method                              | Description
 ....     strm.show()
 ....     
 
+Program:1030
+        PID: 1034(0x40a) Type: 0x6
+        PID: 1035(0x40b) Type: 0x86 SCTE35
 
-Program 1030
+Program:1100
+        PID: 1104(0x450) Type: 0x6
+        PID: 1105(0x451) Type: 0x86 SCTE35
 
-        PMT pid: 1030
-        PCR pid: 1031
-        Descriptor: tag: 5 length: 4 data: b'CUEI'
-        1031: [0x1b] Video
-        1032: [0x3] ISO/IEC 11172 Audio
-        1034: [0x6] SO/IEC 13818-1 PES packets- private data
-        1035: [0x86] SCTE 35
+Program:1080
+        PID: 1084(0x43c) Type: 0x6
 
-Program 1100
-
-        PMT pid: 1100
-        PCR pid: 1101
-        Descriptor: tag: 5 length: 4 data: b'CUEI'
-        1101: [0x1b] Video
-        1102: [0x3] ISO/IEC 11172 Audio
-        1104: [0x6] SO/IEC 13818-1 PES packets- private data
-        1105: [0x86] SCTE 35
-
-Program 1080
-
-        PMT pid: 1080
-        PCR pid: 1081
-        1081: [0x1b] Video
-        1082: [0x3] ISO/IEC 11172 Audio
-        1084: [0x6] SO/IEC 13818-1 PES packets- private data
-
-Program 1010
-
-        PMT pid: 1010
-        PCR pid: 1011
-        Descriptor: tag: 5 length: 4 data: b'CUEI'
-        1011: [0x1b] Video
-        1012: [0x3] ISO/IEC 11172 Audio
-        1014: [0x6] SO/IEC 13818-1 PES packets- private data
-        1015: [0x86] SCTE 35
-	
-Program 1050
-
-        PMT pid: 1050
-        PCR pid: 1051
-        Descriptor: tag: 5 length: 4 data: b'CUEI'
-        1051: [0x1b] Video
-        1052: [0x3] ISO/IEC 11172 Audio
-        1054: [0x6] SO/IEC 13818-1 PES packets- private data
-        1055: [0x86] SCTE 35
+Program:1010
+        PID: 1014(0x3f6) Type: 0x6
+        PID: 1015(0x3f7) Type: 0x86 SCTE35
 
 ```
 ___
