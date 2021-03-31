@@ -34,8 +34,8 @@ def upid_decoder(bitbin, upid_type, upid_length):
         0x10: ["UUID", _decode_uri],
     }
     if upid_type in upid_map.keys():
-        upid_id = upid_map[upid_type][1](bitbin, upid_length)
-        return upid_id
+        return upid_map[upid_type][0], upid_map[upid_type][1](bitbin, upid_length)
+    return False
 
 
 def upid_encoder(nbin, upid_type, upid_length, seg_upid):
@@ -49,23 +49,28 @@ def upid_encoder(nbin, upid_type, upid_length, seg_upid):
     upid_map = {
         0x02: ["Deprecated", _encode_uri],
         0x03: ["AdID", _encode_uri],
-        0x04: ["UMID", _encode_umid],
         0x05: ["ISAN", _encode_isan],
         0x06: ["ISAN", _encode_isan],
         0x07: ["TID", _encode_uri],
         0x08: ["AiringID", _encode_air_id],
         0x09: ["ADI", _encode_uri],
-        0x0A: ["EIDR", _encode_eidr],
         0x0B: ["ATSC", _encode_atsc],
         0x0C: ["MPU", _encode_mpu],
-        0x0D: ["MID", _encode_mid],
         0x0E: ["ADS Info", _encode_uri],
         0x0F: ["URI", _encode_uri],
         0x10: ["UUID", _encode_uri],
     }
-    if upid_type in upid_map.keys():
+    upid_map2 = {
+        0x04: ["UMID", _encode_umid],
+        0x0A: ["EIDR", _encode_eidr],
+        0x0D: ["MID", _encode_mid],
+    }
+
+    if upid_type in upid_map:
         upid_map[upid_type][1](nbin, seg_upid, upid_length)
 
+    if upid_type in upid_map2:
+        upid_map[upid_type][1](nbin, seg_upid)
 
 def _decode_air_id(bitbin, upid_length):
     return bitbin.ashex(upid_length << 3)
@@ -95,6 +100,8 @@ def _encode_atsc(nbin, seg_upid, upid_length):
 
 
 def _decode_eidr(bitbin, upid_length):
+    if upid_length < 12:
+        raise Exception(f"upid_length is {upid_length} should be 12 bytes")
     pre = bitbin.asint(16)
     post = []
     bit_count = 80
@@ -104,7 +111,7 @@ def _decode_eidr(bitbin, upid_length):
     return f"10.{pre}/{'-'.join(post)}"
 
 
-def _encode_eidr(nbin, seg_upid, upid_length):
+def _encode_eidr(nbin, seg_upid):
     pre, post = seg_upid[3:].split("/", 1)
     nbin.add_int(int(pre), 16)
     nbin.add_hex(post.replace("-", ""), 80)
@@ -126,9 +133,10 @@ def _decode_mid(bitbin, upid_length):
         ulb -= 8
         upid_length = bitbin.asint(8)
         ulb -= 8
-        segmentation_upid = upid_decoder(bitbin, upid_type, upid_length)
+        upid_type_name,segmentation_upid = upid_decoder(bitbin, upid_type, upid_length)
         mid_upid = {
             "upid_type": upid_type,
+            "upid_type_name": upid_type_name,
             "upid_length": upid_length,
             "segmentation_upid": segmentation_upid,
         }
@@ -137,7 +145,7 @@ def _decode_mid(bitbin, upid_length):
     return upids
 
 
-def _encode_mid(nbin, seg_upid, upid_length):
+def _encode_mid(nbin, seg_upid):
     for mid_upid in seg_upid:
         nbin.add_int(mid_upid["upid_type"], 8)
         nbin.add_int(mid_upid["upid_length"], 8)
@@ -173,7 +181,7 @@ def _decode_umid(bitbin, upid_length):
     return ".".join(chunks)
 
 
-def _encode_umid(nbin, seg_upid, upid_length):
+def _encode_umid(nbin, seg_upid):
     chunks = seg_upid.split(".")
     for chunk in chunks:
         nbin.add_hex(chunk, 32)

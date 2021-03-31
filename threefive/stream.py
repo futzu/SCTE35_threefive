@@ -77,7 +77,6 @@ class Stream:
                 if not func:
                     return cue
                 func(cue)
-                return
 
     def decode_next(self):
         """
@@ -199,7 +198,6 @@ class Stream:
         # for PTS
         if pid in self._pid_prog:
             return self._parse_pusi(pkt, pid)
-        return None
 
     def _chk_pat_payload(self, pkt):
         """
@@ -273,7 +271,7 @@ class Stream:
         if (self._cue.info_section.section_length + 3) > len(self._cue.bites):
             return None
         self._cue.decode()
-        cue,self._cue = self._cue,None
+        cue, self._cue = self._cue, None
         return cue
 
     def _program_association_table(self, payload):
@@ -281,8 +279,8 @@ class Stream:
         parse program association table ( pid 0 )
         for program to pmt_pid mappings.
         """
-        #pointer_field = payload[0]
-        #table_id  = payload[1]
+        # pointer_field = payload[0]
+        # table_id  = payload[1]
         section_length = self._parse_length(payload[2], payload[3])
         section_length -= 5  # payload bytes 4,5,6,7,8
         idx = 9
@@ -314,7 +312,7 @@ class Stream:
         if self.the_program and (program_number != self.the_program):
             return None
         if self.info:
-            to_stderr(f'\nProgram:{program_number}')
+            to_stderr(f"\nProgram:{program_number}")
         pcr_pid = self._parse_pid(payload[8], payload[9])
         self._pids["ignore"].add(pcr_pid)
         proginfolen = self._parse_length(payload[10], payload[11])
@@ -359,6 +357,6 @@ class Stream:
                 self._pids["ignore"].discard(pid)
             if self.info:
                 if stream_type == "0x86":
-                    to_stderr(f'\tPID: {pid}({hex(pid)}) Type: {stream_type} SCTE35')
+                    to_stderr(f"\tPID: {pid}({hex(pid)}) Type: {stream_type} SCTE35")
                 else:
-                    to_stderr(f'\tPID: {pid}({hex(pid)}) Type: {stream_type}')
+                    to_stderr(f"\tPID: {pid}({hex(pid)}) Type: {stream_type}")

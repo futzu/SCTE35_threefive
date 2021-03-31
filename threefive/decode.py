@@ -20,14 +20,16 @@ def _read_stdin():
     handles piped in data
     """
     try:
+        # mpegts
         Stream(sys.stdin.buffer).decode()
-    except:
+    except Exception:
         try:
+            # base64, binary, bytes or hex
             stuff = sys.stdin.buffer.read()
             cue = Cue(stuff)
             cue.decode()
             cue.show()
-        except:
+        except Exception:
             pass
 
 
@@ -36,6 +38,7 @@ def _read_stuff(stuff):
     reads filename or a string
     """
     try:
+        # base64, binary, bytes or hex in a file
         with open(stuff, "rb") as tsdata:
             tsd = tsdata.read(_MAX_CUE_SIZE)
             cue = Cue(tsd)
@@ -44,13 +47,14 @@ def _read_stuff(stuff):
     except Exception:
         pass
     try:
+        # mpegts
         with open(stuff, "rb") as tsdata:
             strm = Stream(tsdata)
             strm.decode()
     except Exception:
         pass
-
     try:
+        # base64, binary, bytes or hex
         cue = Cue(stuff)
         cue.decode()
         cue.show()
@@ -74,12 +78,10 @@ def decode(stuff=None):
     """
     All purpose SCTE 35 decoder function
 
-
     # for a mpegts video
 
         import threefive
         threefive.decode('/path/to/mpegts')
-
 
 
     # for a base64 encoded string
@@ -89,16 +91,18 @@ def decode(stuff=None):
         threefive.decode(Bee64)
 
 
-
     # mpegts over http / https
 
         from threefive import decode
         decode('https://futzu.com/xaa.ts')
 
 
+    # hex, base64, binary, bytes, or mpegts from sys.stdin.buffer
 
-    stuff can be a filename or encoded string.
-    if stuff is not set, reads from stdin.
+        from threefive import decode
+        decode()
+
+
     """
     if stuff in [None, sys.stdin.buffer]:
         _read_stdin()

@@ -14,6 +14,7 @@ def k_by_v(adict, avalue):
     for kay, vee in adict.items():
         if vee == avalue:
             return kay
+        return None
 
 
 class SpliceDescriptor(SCTE35Base):
@@ -233,6 +234,7 @@ class SegmentationDescriptor(SpliceDescriptor):
         self.segmentation_duration_raw = None
         self.segmentation_message = None
         self.segmentation_upid_type = None
+        self.segmentation_upid_type_name = None
         self.segmentation_upid_length = None
         self.segmentation_upid = None
         self.segmentation_type_id = None
@@ -323,7 +325,7 @@ class SegmentationDescriptor(SpliceDescriptor):
             )
         self.segmentation_upid_type = bitbin.asint(8)  # 1 byte
         self.segmentation_upid_length = bitbin.asint(8)  # 1 byte
-        self.segmentation_upid = upid_decoder(
+        self.segmentation_upid_type_name, self.segmentation_upid = upid_decoder(
             bitbin, self.segmentation_upid_type, self.segmentation_upid_length
         )
         self.segmentation_type_id = bitbin.asint(8)  # 1 byte
