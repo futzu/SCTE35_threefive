@@ -8,7 +8,11 @@ black:
 	black threefive/
 
 commit: black
-	git commit threefive/
+	git pull
+	git commit $(args)
+
+push: black 
+	git push
     
 clean:
 	rm -f dist/*
