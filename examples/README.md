@@ -36,3 +36,7 @@
 ---
 * __DTMF__
       * [DTMF __Descriptor__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/dtmf)
+---
+* __Encode__
+     * [__Edit__ and Encode](https://github.com/futzu/SCTE35-threefive/blob/master/examples/encode/edit_break_duration.py)
+     * [Encode __Time_Signal__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/encode/encode_time_signal.py)
