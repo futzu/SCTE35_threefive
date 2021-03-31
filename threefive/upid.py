@@ -72,6 +72,7 @@ def upid_encoder(nbin, upid_type, upid_length, seg_upid):
     if upid_type in upid_map2:
         upid_map[upid_type][1](nbin, seg_upid)
 
+
 def _decode_air_id(bitbin, upid_length):
     return bitbin.ashex(upid_length << 3)
 
@@ -133,7 +134,7 @@ def _decode_mid(bitbin, upid_length):
         ulb -= 8
         upid_length = bitbin.asint(8)
         ulb -= 8
-        upid_type_name,segmentation_upid = upid_decoder(bitbin, upid_type, upid_length)
+        upid_type_name, segmentation_upid = upid_decoder(bitbin, upid_type, upid_length)
         mid_upid = {
             "upid_type": upid_type,
             "upid_type_name": upid_type_name,
