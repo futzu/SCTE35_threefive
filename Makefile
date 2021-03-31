@@ -4,6 +4,12 @@ PYPY3 = pypy3
 
 default: install
 
+black:
+	black threefive/
+
+commit: black
+	git commit threefive/
+    
 clean:
 	rm -f dist/*
 	rm -rf build/*
