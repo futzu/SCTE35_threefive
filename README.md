@@ -1,11 +1,12 @@
 
 
 # :rocket: threefive	
+                          "decode early, encode late."   _~effbot_
+
 ___
 
 
 
-"decode early, encode late."   _~effbot_
 
 
 #### threefive is a SCTE35 Decoder Encoder Parser library in Python3.
