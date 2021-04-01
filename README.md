@@ -5,8 +5,7 @@ ___
 
 
 
-"decode early, encode late."  
-                          _~effbot_
+"decode early, encode late."   _~effbot_
 
 
 #### threefive is a SCTE35 Decoder Encoder Parser library in Python3.
