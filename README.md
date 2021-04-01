@@ -1,7 +1,7 @@
 
 
 # :rocket: threefive	
-                          "decode early, encode late."   _~effbot_
+                          "decode early, encode late."   ~effbot
 
 ___
 
