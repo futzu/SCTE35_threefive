@@ -303,7 +303,7 @@ class Stream:
         payload = self._janky_parse(payload, b"\x02")
         if not payload:
             return None
-        table_id = payload[0]
+        #table_id = payload[0]
         sectioninfolen = self._parse_length(payload[1], payload[2])
         if sectioninfolen + 3 > len(payload):  # +3 for bytes before sectioninfolen
             self._pmt[pid] = payload
