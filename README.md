@@ -4,6 +4,11 @@
 ___
 
 
+
+"decode early, encode late."  
+                          _~effbot_
+
+
 #### threefive is a SCTE35 Decoder Encoder Parser library in Python3.
 
 * threefive references the __2020 SCTE35__ Specification.
@@ -13,7 +18,6 @@ ___
 * threefive decodes __SCTE35__ from __Base64, Hex, and Binary__ encoded strings.
 
 * threefive now [__Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) __SCTE35__ Cues.
-
 
 ---
 
