@@ -1,6 +1,6 @@
 """
-threefive.base contains the function to_stderr
-and the class SCTE35Base.
+threefive.base contains 
+the class SCTE35Base.
 """
 import json
 from bitn import NBin
