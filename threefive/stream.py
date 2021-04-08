@@ -144,13 +144,12 @@ class Stream:
     @staticmethod
     def _janky_parse(payload, marker):
         """
-        _janky_parse splits payload on first marker
-        and then joins marker and everything after marker.
+        _janky_parse splits payload at first marker
         I use this to handle SCTE35 with stuffing before SCTE35 tables
         and pmt packets with a section before the PMT.
         """
         try:
-            return payload[payload.index(marker) :]
+            return payload[payload.index(marker): ]
         except:
             return False
 
