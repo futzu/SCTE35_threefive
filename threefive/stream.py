@@ -5,7 +5,6 @@ Mpeg-TS Stream parsing class Stream
 import sys
 from functools import partial
 from .cue import Cue
-from .base import to_stderr
 
 
 def show_cue(cue):
@@ -14,6 +13,14 @@ def show_cue(cue):
     when a SCTE-35 packet is found.
     """
     cue.show()
+
+
+def show_cue_stderr(cue):
+    """
+    print cue data to sys.stderr
+    for Stream.decode_proxy
+    """
+    cue.to_stderr()
 
 
 class Stream:
@@ -38,7 +45,6 @@ class Stream:
 
         """
         self._tsdata = tsdata
-        self._find_start()
         self.show_null = show_null
         self.info = None
         self.the_program = None
@@ -60,10 +66,12 @@ class Stream:
         sync_byte = b"G"
         while self._tsdata:
             one = self._tsdata.read(1)
+            if not one:
+                return False
             if one == sync_byte:
                 if self._tsdata.read(self._PACKET_SIZE - 1):
                     return True
-        raise Exception("No Packets Found")
+        return False
 
     def decode(self, func=show_cue):
         """
@@ -71,12 +79,15 @@ class Stream:
         func can be set to a custom function that accepts
         a threefive.Cue instance as it's only argument.
         """
+        if not self._find_start():
+            return False
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
             cue = self._parser(pkt)
             if cue:
                 if not func:
                     return cue
                 func(cue)
+        return
 
     def decode_next(self):
         """
@@ -94,19 +105,22 @@ class Stream:
         to a specific MPEGTS program.
         """
         self.the_program = the_program
-        self.decode(func)
+        return self.decode(func)
 
-    def decode_proxy(self, func=show_cue):
+    def decode_proxy(self, func=show_cue_stderr):
         """
         Stream.decode_proxy writes all ts packets are written to stdout
         for piping into another program like mplayer.
         threefive always prints messages and such to stderr.
         """
+        if not self._find_start():
+            return False
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
             sys.stdout.buffer.write(pkt)
             cue = self._parser(pkt)
             if cue:
                 func(cue)
+        return
 
     def show(self):
         """
@@ -120,13 +134,11 @@ class Stream:
         creates packet_data dict
         to pass to a threefive.Cue instance
         """
-        packet_data = {}
-        packet_data["pid"] = pid
         prgm = self._pid_prog[pid]
-        packet_data["program"] = prgm
+        packet_data = {"pid": hex(pid), "program": prgm}
         if prgm in self._prgm_pts:
-            pts = self._prgm_pts[prgm] / 90000.0
-            packet_data["pts"] = round(pts, 6)
+            pts = round((self._prgm_pts[prgm] / 90000.0), 6)
+            packet_data["pts"] = pts
         return packet_data
 
     @staticmethod
@@ -138,10 +150,9 @@ class Stream:
         and pmt packets with a section before the PMT.
         """
         try:
-            payload = b"".join([marker, payload.split(marker, 1)[1]])
+            return payload[payload.index(marker) :]
         except:
-            payload = False
-        return payload
+            return False
 
     @staticmethod
     def _parse_payload(pkt):
@@ -302,17 +313,17 @@ class Stream:
             payload = self._pmt[pid] + payload
         payload = self._janky_parse(payload, b"\x02")
         if not payload:
-            return None
-        #table_id = payload[0]
+            return
+        # table_id = payload[0]
         sectioninfolen = self._parse_length(payload[1], payload[2])
         if sectioninfolen + 3 > len(payload):  # +3 for bytes before sectioninfolen
             self._pmt[pid] = payload
-            return None
+            return
         program_number = self._parse_program_number(payload[3], payload[4])
         if self.the_program and (program_number != self.the_program):
-            return None
+            return
         if self.info:
-            to_stderr(f"\nProgram:{program_number}")
+            print(f"\nProgram:{program_number}")
         pcr_pid = self._parse_pid(payload[8], payload[9])
         self._pids["ignore"].add(pcr_pid)
         proginfolen = self._parse_length(payload[10], payload[11])
@@ -321,6 +332,7 @@ class Stream:
         si_len = sectioninfolen - 9
         si_len -= proginfolen
         self._parse_program_streams(si_len, payload, idx, program_number)
+        return
 
     def _parse_program_streams(self, si_len, payload, idx, program_number):
         """
@@ -357,6 +369,6 @@ class Stream:
                 self._pids["ignore"].discard(pid)
             if self.info:
                 if stream_type == "0x86":
-                    to_stderr(f"\tPID: {pid}({hex(pid)}) Type: {stream_type} SCTE35")
+                    print(f"\tPID: {pid}({hex(pid)}) Type: {stream_type} SCTE35")
                 else:
-                    to_stderr(f"\tPID: {pid}({hex(pid)}) Type: {stream_type}")
+                    print(f"\tPID: {pid}({hex(pid)}) Type: {stream_type}")

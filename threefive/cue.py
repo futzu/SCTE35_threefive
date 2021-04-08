@@ -1,14 +1,14 @@
 """
 threefive.Cue Class
 """
-import json
 from base64 import b64decode, b64encode
+import json
+from sys import stderr
 import crcmod.predefined
 from bitn import NBin
 from .section import SpliceInfoSection
 from .commands import command_map
 from .descriptors import splice_descriptor, descriptor_map
-from .base import to_stderr
 
 
 class Cue:
@@ -304,7 +304,13 @@ class Cue:
         """
         pretty prints the SCTE 35 message
         """
-        to_stderr(self.get_json())
+        print(self.get_json())
+
+    def to_stderr(self):
+        """
+        Wrapper for printing to sys.stderr
+        """
+        print(self.get_json(), file=stderr)
 
     @staticmethod
     def _strip_header(data):

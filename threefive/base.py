@@ -3,15 +3,7 @@ threefive.base contains the function to_stderr
 and the class SCTE35Base.
 """
 import json
-import sys
 from bitn import NBin
-
-
-def to_stderr(stuff):
-    """
-    Wrapper for printing to sys.stderr
-    """
-    print(stuff, file=sys.stderr)
 
 
 class SCTE35Base:
