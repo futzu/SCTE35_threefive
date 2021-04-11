@@ -149,7 +149,7 @@ class Stream:
         and pmt packets with a section before the PMT.
         """
         try:
-            return payload[payload.index(marker): ]
+            return payload[payload.index(marker) :]
         except:
             return False
 

@@ -11,8 +11,8 @@ cue.decode()
 cue.command.break_duration = 90.0
 
 # Run cue.encode to generate new base64 string
-      
-newb64=cue.encode()
+
+newb64 = cue.encode()
 
 # returns
 # b'/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4Ae5igAAAAAAAKAAhDVUVJAAABNVB2fJs='

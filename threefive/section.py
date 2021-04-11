@@ -63,7 +63,28 @@ class SpliceInfoSection(SCTE35Base):
         self.splice_command_length = bitbin.asint(12)
         self.splice_command_type = bitbin.asint(8)
 
-    def _encode_sap(self,nbin):
+    def _encode_table_id(self, nbin):
+        """
+        encode SpliceInfoSection.table_id
+        """
+        self.table_id = "0xfc"
+        nbin.add_hex(self.table_id, 8)
+
+    def _encode_section_syntax_indicator(self, nbin):
+        """
+        encode SpliceInfoSection.section_syntax_indicator
+        """
+        self.section_syntax_indicator = False
+        nbin.add_flag(self.section_syntax_indicator, 1)
+
+    def _encode_private_flag(self, nbin):
+        """
+        encode SpliceInfoSection.private
+        """
+        self.private = False
+        nbin.add_flag(self.private, 1)
+
+    def _encode_sap(self, nbin):
         """
         the 3 reserved bits now map SAP
         """
@@ -72,7 +93,7 @@ class SpliceInfoSection(SCTE35Base):
         self.sap_details = sap_map[self.sap_type]
         nbin.add_hex(self.sap_type, 2)
 
-    def _encode_section_length(self,nbin):
+    def _encode_section_length(self, nbin):
         """
         encode SpliceInfoSection.section_length
         """
@@ -80,7 +101,7 @@ class SpliceInfoSection(SCTE35Base):
             self.section_length = 11
         nbin.add_int(self.section_length, 12)
 
-    def _encode_protocol_version(self,nbin):
+    def _encode_protocol_version(self, nbin):
         """
         encode SpliceInfoSection.protocol_version
         """
@@ -88,7 +109,7 @@ class SpliceInfoSection(SCTE35Base):
             self.protocol_version = 0
         nbin.add_int(self.protocol_version, 8)
 
-    def _encode_encrypted(self,nbin):
+    def _encode_encrypted(self, nbin):
         """
         encode SpliceInfoSection.encrypted_packet
         and SpliceInfoSection.encyption_algorithm
@@ -100,7 +121,31 @@ class SpliceInfoSection(SCTE35Base):
             self.encryption_algorithm = 0
         nbin.add_int(self.encryption_algorithm, 6)
 
-    def _encode_splice_command(self,nbin):
+    def _encode_pts_adjustment(self, nbin):
+        """
+        encode SpliceInfoSection.pts_adjustment
+        """
+        if not self.pts_adjustment:
+            self.pts_adjustment = 0.0
+        nbin.add_90k(self.pts_adjustment, 33)
+
+    def _encode_cw_index(self, nbin):
+        """
+        encode SpliceInfoSection.cw_index
+        """
+        if not self.cw_index:
+            self.cw_index = "0x0"
+        nbin.add_hex(self.cw_index, 8)
+
+    def _encode_tier(self, nbin):
+        """
+        encode SpliceInfoSection.tier
+        """
+        if not self.tier:
+            self.tier = "0xfff"
+        nbin.add_hex(self.tier, 12)
+
+    def _encode_splice_command(self, nbin):
         """
         encode Splice.InfoSection.splice_command_length
         and Splice.InfoSection.splice_command_type
@@ -119,25 +164,15 @@ class SpliceInfoSection(SCTE35Base):
         encodes them as bytes.
         """
         nbin = self._chk_nbin(nbin)
-        self.table_id = "0xfc"
-        nbin.add_hex(self.table_id, 8)  # self.table_id
-        self.section_syntax_indicator = False
-        nbin.add_flag(self.section_syntax_indicator, 1)  # self.section_syntax_indicator
-        self.private = False
-        nbin.add_flag(self.private, 1)  # self.private
+        self._encode_table_id(nbin)
+        self._encode_section_syntax_indicator(nbin)
+        self._encode_private_flag(nbin)
         self._encode_sap(nbin)
         self._encode_section_length(nbin)
         self._encode_protocol_version(nbin)
         self._encode_encrypted(nbin)
-
-        if not self.pts_adjustment:
-            self.pts_adjustment = 0.0
-        nbin.add_90k(self.pts_adjustment, 33)
-        if not self.cw_index:
-            self.cw_index = "0x0"
-        nbin.add_hex(self.cw_index, 8)
-        if not self.tier:
-            self.tier = "0xfff"
-        nbin.add_hex(self.tier, 12)
+        self._encode_pts_adjustment(nbin)
+        self._encode_cw_index(nbin)
+        self._encode_tier(nbin)
         self._encode_splice_command(nbin)
         return nbin.bites
