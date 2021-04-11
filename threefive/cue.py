@@ -194,24 +194,17 @@ class Cue:
         """
         if self.command and self.info_section:
             scte35 = {
-                "info_section": self.get_info_section(),
-                "command": self.get_command(),
+                "info_section": self.info_section.get(),
+                "command": self.command.get(),
                 "descriptors": self.get_descriptors(),
                 "crc": self.crc,
             }
             try:
-                scte35.update(self.get_packet_data())
+                scte35.update(self.packet_data)
             except:
                 pass
             return scte35
         return False
-
-    def get_command(self):
-        """
-        returns the SCTE 35
-        splice command data as a dict.
-        """
-        return self.command.get()
 
     def get_descriptors(self):
         """
@@ -220,25 +213,12 @@ class Cue:
         """
         return [d.get() for d in self.descriptors]
 
-    def get_info_section(self):
-        """
-        Returns SCTE 35
-        splice info section as a dict
-        """
-        return self.info_section.get()
-
     def get_json(self):
         """
         get_json returns the Cue instance
         data in json.
         """
         return json.dumps(self.get(), indent=4)
-
-    def get_packet_data(self):
-        """
-        returns cleaned Cue.packet_data
-        """
-        return self.packet_data
 
     @staticmethod
     def _mk_bits(data):
