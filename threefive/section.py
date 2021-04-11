@@ -63,6 +63,55 @@ class SpliceInfoSection(SCTE35Base):
         self.splice_command_length = bitbin.asint(12)
         self.splice_command_type = bitbin.asint(8)
 
+    def _encode_sap(self,nbin):
+        """
+        the 3 reserved bits now map SAP
+        """
+        if self.sap_type not in sap_map.keys():
+            self.sap_type = "0x3"
+        self.sap_details = sap_map[self.sap_type]
+        nbin.add_hex(self.sap_type, 2)
+
+    def _encode_section_length(self,nbin):
+        """
+        encode SpliceInfoSection.section_length
+        """
+        if not self.section_length:
+            self.section_length = 11
+        nbin.add_int(self.section_length, 12)
+
+    def _encode_protocol_version(self,nbin):
+        """
+        encode SpliceInfoSection.protocol_version
+        """
+        if not self.protocol_version:
+            self.protocol_version = 0
+        nbin.add_int(self.protocol_version, 8)
+
+    def _encode_encrypted(self,nbin):
+        """
+        encode SpliceInfoSection.encrypted_packet
+        and SpliceInfoSection.encyption_algorithm
+        """
+        if not self.encrypted_packet:
+            self.encrypted_packet = False
+        nbin.add_flag(self.encrypted_packet)
+        if not self.encryption_algorithm:
+            self.encryption_algorithm = 0
+        nbin.add_int(self.encryption_algorithm, 6)
+
+    def _encode_splice_command(self,nbin):
+        """
+        encode Splice.InfoSection.splice_command_length
+        and Splice.InfoSection.splice_command_type
+        """
+        if not self.splice_command_length:
+            self.splice_command_length = 0
+        nbin.add_int(self.splice_command_length, 12)
+        if not self.splice_command_type:
+            self.splice_command_type = 0
+        nbin.add_int(self.splice_command_type, 8)
+
     def encode(self, nbin=None):
         """
         SpliceInfoSection.encode
@@ -76,22 +125,11 @@ class SpliceInfoSection(SCTE35Base):
         nbin.add_flag(self.section_syntax_indicator, 1)  # self.section_syntax_indicator
         self.private = False
         nbin.add_flag(self.private, 1)  # self.private
-        if self.sap_type not in sap_map.keys():
-            self.sap_type = "0x3"
-        self.sap_details = sap_map[self.sap_type]
-        nbin.add_hex(self.sap_type, 2)
-        if not self.section_length:
-            self.section_length = 11
-        nbin.add_int(self.section_length, 12)
-        if not self.protocol_version:
-            self.protocol_version = 0
-        nbin.add_int(self.protocol_version, 8)
-        if not self.encrypted_packet:
-            self.encrypted_packet = False
-        nbin.add_flag(self.encrypted_packet)
-        if not self.encryption_algorithm:
-            self.encryption_algorithm = 0
-        nbin.add_int(self.encryption_algorithm, 6)
+        self._encode_sap(nbin)
+        self._encode_section_length(nbin)
+        self._encode_protocol_version(nbin)
+        self._encode_encrypted(nbin)
+
         if not self.pts_adjustment:
             self.pts_adjustment = 0.0
         nbin.add_90k(self.pts_adjustment, 33)
@@ -101,10 +139,5 @@ class SpliceInfoSection(SCTE35Base):
         if not self.tier:
             self.tier = "0xfff"
         nbin.add_hex(self.tier, 12)
-        if not self.splice_command_length:
-            self.splice_command_length = 0
-        nbin.add_int(self.splice_command_length, 12)
-        if not self.splice_command_type:
-            self.splice_command_type = 0
-        nbin.add_int(self.splice_command_type, 8)
+        self._encode_splice_command(nbin)
         return nbin.bites

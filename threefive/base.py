@@ -1,5 +1,5 @@
 """
-threefive.base contains 
+threefive.base contains
 the class SCTE35Base.
 """
 import json
