@@ -22,59 +22,51 @@ ___
 ---
 
 ### [Versions and Releases](#versions-and-releases)
----
+
 ### [Install threefive ](#install)
----   
-### Fast Start  [Up and Running in Less Than Seven Seconds](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
----
+ 
+### [Quick Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
-
-##  Easy threefive
-
+###  Easy threefive
    * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__](#the-decode-function)
    * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__ over __HTTPS__](#the-decode-function)
    * [Parsing __SCTE 35__ Cue strings encoded in __Base64__, or __Hex__](#the-decode-function)
    * [Parsing __SCTE 35__ Cues directly from a file encoded in __Base64__, __Binary__,  or __Hex__](#the-decode-function)
----      
 
-
-##  Advanced threefive     
-
+###  Advanced threefive     
   *  [__Cue__ Class](#cue-class)       
   *  [__Stream__ Class](#stream-class)
----     
-
 
 ### Examples
-  
   *  [Splice __Insert__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert.py) 
-  
   *  [DTMF __Descriptor__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/dtmf) 
-  
-  * [__Time Signal__ Program Start End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Start_End.py)
-  
+  * [__Time Signal__ Program Start End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Start_End.py) 
   *  [Combination __Upid__ Segmentation Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/upid/Upid_Combo.py)
-  
-*   [Parsing __HLS Manifests__ with threefive](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
-
-*  [__SCTE35__ from a __Multicast__ Stream](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/README.txt)
-      
+  *   [Parsing __HLS Manifests__ with threefive](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
+*  [__SCTE35__ from a __Multicast__ Stream](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/README.txt)      
 *  [__SCTE35__ from __MPEG-TS__ video over __HTTPS__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/stream/Decode_Over_Http.py) 
-
-
   * [__All Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)   
----
-
 
 ### Cool Stuff
-
 * [__threefive__ Spotted in __The Wild__](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
-
-
 * [__ffmpeg__ and __SCTE35__ and __Stream Type__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
+
+
 ---
 
 ## Versions and Releases
+* Odd numbered versions are releases.
+* Even numbered versions are testing builds between versions
+```python3
+a@fumatica:~/threefive$ pypy3
+
+Python 3.6.12 (7.3.3+dfsg-3, Feb 25 2021, 22:28:03)
+[PyPy 7.3.3 with GCC 10.2.1 20210110] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>>> from threefive import version
+>>>> version()
+'2.2.82'
+```
 
 ## Install
 
