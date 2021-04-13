@@ -9,11 +9,9 @@ black:
 
 commit: black
 	git pull
-	git commit -a 
+	git commit -a
+	git push	
 
-push: black 
-	git push
-    
 clean:
 	rm -f dist/*
 	rm -rf build/*
