@@ -21,14 +21,11 @@ ___
 
 ---
 
-
-### Install threefive 
-* [Versions and Releases](#)
-* [Dependencies and Installation](#install)
+### [Versions and Releases](#versions-and-releases)
+---
+### [Install threefive ](#install)
 ---   
-
-### Fast Start 
-*   [Up and Running in Less Than Seven Seconds](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+### Fast Start  [Up and Running in Less Than Seven Seconds](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 ---
 
 
