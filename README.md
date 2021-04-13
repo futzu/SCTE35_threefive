@@ -58,10 +58,9 @@ Type "help", "copyright", "credits" or "license" for more information.
 *  __install from git__
 
 ```bash
-$ git clone https://github.com/futzu/SCTE35-threefive.git
+$ git clone https://github.com/futzu/threefive.git
 
-$ cd SCTE-threefive
-# you need root to install for the system
+$ cd threefive
 $ make install
 
 # for pypy3 
