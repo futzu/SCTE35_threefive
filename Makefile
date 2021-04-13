@@ -9,7 +9,7 @@ black:
 
 commit: black
 	git pull
-	git commit $(args)
+	git commit -a 
 
 push: black 
 	git push
