@@ -1,23 +1,13 @@
 
+#### threefive is a SCTE-35 Decoder Encoder Parser library in Python3.
 
-# :rocket: threefive	
->"decode early, encode late."   ~effbot
+* threefive references the __2020 SCTE-35__ Specification.
 
-___
+* threefive decodes __SCTE-35__ from __MPEG-TS video__ files and streams.
 
+* threefive decodes __SCTE-35__ from __Base64, Hex, and Binary__ encoded strings.
 
-
-
-
-#### threefive is a SCTE35 Decoder Encoder Parser library in Python3.
-
-* threefive references the __2020 SCTE35__ Specification.
-
-* threefive decodes __SCTE35__ from __MPEG-TS video__ files and streams.
-
-* threefive decodes __SCTE35__ from __Base64, Hex, and Binary__ encoded strings.
-
-* threefive now [__Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) __SCTE35__ Cues.
+* threefive now [__Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) __SCTE-35__ Cues.
 
 ---
 
@@ -28,10 +18,10 @@ ___
 ### [Quick Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
 ###  Easy threefive
-   * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__](#the-decode-function)
-   * [Parsing __SCTE 35__ Cues from __Mpeg-TS Streams__ over __HTTPS__](#the-decode-function)
-   * [Parsing __SCTE 35__ Cue strings encoded in __Base64__, or __Hex__](#the-decode-function)
-   * [Parsing __SCTE 35__ Cues directly from a file encoded in __Base64__, __Binary__,  or __Hex__](#the-decode-function)
+   * [Parsing __SCTE-35__ Cues from __Mpeg-TS Streams__](#the-decode-function)
+   * [Parsing __SCTE-35__ Cues from __Mpeg-TS Streams__ over __HTTPS__](#the-decode-function)
+   * [Parsing __SCTE-35__ Cue strings encoded in __Base64__, or __Hex__](#the-decode-function)
+   * [Parsing __SCTE-35__ Cues directly from a file encoded in __Base64__, __Binary__,  or __Hex__](#the-decode-function)
 
 ###  Advanced threefive     
   *  [__Cue__ Class](#cue-class)       
@@ -238,9 +228,6 @@ True
 |Cue Method                  | Description                                    |
 |----------------------------|------------------------------------------------|
 | cue.**get()**              | returns **cue as a dict**                      |
-| cue.**get_info_section()** | returns **cue.info_section as a dict**         |
-| cue.**get_command()**      | returns **cue.command as a dict**              |
-| cue.**get_descriptors()**  | returns **cue.descriptors as a list of dicts**.|
 | cue.**get_json()**         | returns **cue as a JSON** string               |
 | cue.**show()**             | prints **cue as JSON**                         |
 |                            |                                                |
