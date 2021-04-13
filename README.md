@@ -1,5 +1,5 @@
-
-#### threefive is a SCTE-35 Decoder Encoder Parser library in Python3.
+# threefive
+* threefive is a SCTE-35 Decoder Encoder Parser library in Python3.
 
 * threefive references the __2020 SCTE-35__ Specification.
 
@@ -12,22 +12,17 @@
 ---
 
 ### [Versions and Releases](#versions-and-releases)
-
 ### [Install threefive ](#install)
- 
 ### [Quick Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
-
-###  Easy threefive
+###  [Easy threefive](#the-decode-function)
    * [Parsing __SCTE-35__ Cues from __Mpeg-TS Streams__](#the-decode-function)
    * [Parsing __SCTE-35__ Cues from __Mpeg-TS Streams__ over __HTTPS__](#the-decode-function)
    * [Parsing __SCTE-35__ Cue strings encoded in __Base64__, or __Hex__](#the-decode-function)
    * [Parsing __SCTE-35__ Cues directly from a file encoded in __Base64__, __Binary__,  or __Hex__](#the-decode-function)
-
-###  Advanced threefive     
+###  [Advanced threefive](#cue-class)         
   *  [__Cue__ Class](#cue-class)       
   *  [__Stream__ Class](#stream-class)
-
-### Examples
+### [Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples) 
   *  [Splice __Insert__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/Splice_Insert.py) 
   *  [DTMF __Descriptor__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/dtmf) 
   * [__Time Signal__ Program Start End](https://github.com/futzu/SCTE35-threefive/blob/master/examples/timesignal/Time_Signal-Program_Start_End.py) 
@@ -37,7 +32,7 @@
 *  [__SCTE35__ from __MPEG-TS__ video over __HTTPS__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/stream/Decode_Over_Http.py) 
   * [__All Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)   
 
-### Cool Stuff
+### [| more](#)
 * [__threefive__ Spotted in __The Wild__](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 * [__ffmpeg__ and __SCTE35__ and __Stream Type__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
@@ -93,10 +88,6 @@ $ pypy3 -mensurepip install pip
 ```
 ___
 
-
-[🡡 top](#rocket-threefive)
-
-
 # __Easy__ threefive
 
 ##   The __decode__ Function
@@ -149,14 +140,7 @@ decode('cue.dat')
 ```
 ___
 
-
-[🡡 top](#rocket-threefive)
-
-
 #  __Advanced__ threefive
-___
-
-
 ##  __Cue__ Class
 
    *  src [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
@@ -245,11 +229,6 @@ cue_data = cue.get()
 
 ```
 ___
-
-
-[🡡 top](#rocket-threefive)
-___
-
 
 ##  __Stream__ Class
 
@@ -406,6 +385,3 @@ $ python3 proxy.py | mplayer -
 ```
 ___
 
-
-
-[🡡 top](#rocket-threefive)
