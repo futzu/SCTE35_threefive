@@ -1,13 +1,16 @@
 """
 threeefive.version
 
+Odd number versions are releases.
+Even number versions are testing builds between releases.
+
 Used to set version in setup.py
 and as an easy way to check which
 version you have installed.
 """
 version_tuple = (
-    "2.2.81",
-    "Two Two eighty-one",
+    "2.2.82",
+    "Two Two eighty-two",
 )
 
 
