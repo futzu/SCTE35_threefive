@@ -68,9 +68,9 @@ def _read_http(stuff):
     and parses for SCTE35
     """
     http = urllib3.PoolManager()
-    req = http.request("GET", stuff, preload_content=False)
-    strm = Stream(req)
-    strm.decode()
+    Stream(http.request("GET", stuff, preload_content=False), show_null=True).decode()
+    # strm = Stream(req)
+    # strm.decode()
 
 
 def decode(stuff=None):

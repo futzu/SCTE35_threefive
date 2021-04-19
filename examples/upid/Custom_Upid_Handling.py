@@ -22,7 +22,7 @@ under segmentation_upid
             "segmentation_message": "Content Identification",
             "segmentation_upid_type": 12,
             "segmentation_upid_length": 48,
-            
+
             "segmentation_upid": {
                 "format_identifier": "0x53425342",
                 "private_data": "0x360c014c12c933ba0000006eff1000000000007a715077777345673273350000000000000000000000000000",
@@ -39,7 +39,7 @@ under segmentation_upid
             },
 
 
-            
+
             "segmentation_type_id": 1,
             "segment_num": 0,
             "segments_expected": 0

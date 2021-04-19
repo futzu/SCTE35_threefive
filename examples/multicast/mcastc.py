@@ -2,7 +2,6 @@ from functools import partial
 import socket
 import sys
 from threefive import Stream
-from threefive.tools import to_stderr
 
 """
 See README.txt
@@ -17,7 +16,7 @@ def foundit(cue):
     example:
             Stream.decode(func=foundit)
     """
-    to_stderr(cue.get_json())
+    cue.to_stderr()
 
 
 class StreamFu(Stream):

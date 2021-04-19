@@ -2,7 +2,7 @@ import socket
 import sys
 
 """
-See README.txt   
+See README.txt
 """
 
 mcast_ip = "225.255.0.35"

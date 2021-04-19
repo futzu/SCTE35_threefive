@@ -3,13 +3,13 @@ from threefive import Stream
 
 """
 Stream.proxy example.
-writes SCTE-35 data to stderr 
+writes SCTE-35 data to stderr
 writes the MPEG-TS packets to stdout
 so you can pipe it.
 
 Example:
 
-python3 proxydemo.py video.ts | mplayer - 
+python3 proxydemo.py video.ts | mplayer -
 
 """
 
