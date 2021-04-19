@@ -50,11 +50,9 @@ class SCTE35Base:
         """
         var_value = self.__dict__[var_name]
         if var_value is None:
-            raise Exception(
-                f"\033[7m{var_name} is not set, it should be type{var_type}\033[27m"
-            )
+            err_mesg=f"\033[7m{var_name} is not set, it should be type {var_type}\033[27m"
+            raise ValueError(err_mesg)
         if not isinstance(var_value, var_type):
-            raise Exception(
-                f' \033[7m{var_name} is "{var_value}", it should be type {var_type}\033[27m '
-            )
+            err_mesg=f' \033[7m{var_name} is "{var_value}", it should be type {var_type}\033[27m '
+            raise ValueError(err_mesg)
         nbin_method(var_value, bit_count)
