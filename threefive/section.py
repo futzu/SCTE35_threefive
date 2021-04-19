@@ -25,7 +25,7 @@ class SpliceInfoSection(SCTE35Base):
         self.section_syntax_indicator = None
         self.private = None
         # sap_type used to be marked reserved.
-        self.sap_type  = None
+        self.sap_type = None
         self.sap_details = None
         self.section_length = None
         self.protocol_version = None
