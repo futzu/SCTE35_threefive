@@ -68,7 +68,7 @@ class PrivateCommand(SpliceCommand):
         """
         self.identifier = int.from_bytes(
             self.bites[0:3], byteorder="big"
-        )  # 3 bytes of 8 bits = 24 bits
+        )  # 3 bytes = 24 bits
         self.encode()
 
     def encode(self, nbin=None):
@@ -76,9 +76,7 @@ class PrivateCommand(SpliceCommand):
         encode private command
         """
         nbin = self._chk_nbin(nbin)
-        self.precheck(
-            int, nbin.add_int, "identifier", 24
-        )  # 3 bytes of 8 bits = 24 bits
+        self.precheck(int, nbin.add_int, "identifier", 24)  # 3 bytes = 24 bits
         return nbin.bites
 
 

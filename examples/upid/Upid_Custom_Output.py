@@ -39,4 +39,5 @@ def stuff(t, upid):
 for m in dmesg:
     tf = threefive.Cue(m)
     tf.decode()
+    tf.encode()
     [stuff(d.segmentation_upid_type, d.segmentation_upid) for d in tf.descriptors]

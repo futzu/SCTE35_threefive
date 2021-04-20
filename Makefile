@@ -6,6 +6,8 @@ default: install
 
 black:
 	black threefive/
+	black examples/
+	black setup.py
 
 commit: black
 	git pull
