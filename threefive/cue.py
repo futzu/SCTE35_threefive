@@ -47,17 +47,16 @@ class Cue:
         Cue.decode() parses for SCTE35 data
         """
         self.descriptors = []
-        bites = self.mk_info_section(self.bites)
-        if not bites:
-            raise Exception("Boom! self.mk_info_section(self.bites)")
-        bites = self._set_splice_command(bites)
-        if not bites:
-            raise Exception("Boom! self._set_splice_command(bites) ")
-        bites = self._mk_descriptors(bites)
-        if not bites:
-            raise Exception("Boom! self._mk_descriptors(bites)")
-        self.crc = hex(int.from_bytes(bites[0:4], byteorder="big"))
-        return True
+        # self.bites after_info section decoding
+        after_info = self.mk_info_section(self.bites)
+        if after_info:
+            after_cmd = self._set_splice_command(after_info)
+            if after_cmd:
+                after_dscrptrs = self._mk_descriptors(after_cmd)
+                if after_dscrptrs:
+                    self.crc = hex(int.from_bytes(after_dscrptrs[0:4], byteorder="big"))
+                    return True
+        return False
 
     def encode(self):
         """
@@ -76,23 +75,20 @@ class Cue:
         # 11 bytes for info section + command + 2 descriptor loop length
         # + descriptor loop + 4 for crc
         self.info_section.section_length = 11 + cmdl + 2 + dll + 4
-        cuebin = NBin()
-        info_bites = self.info_section.encode()
-        info_bitlen = len(info_bites) << 3
-        cuebin.add_bites(info_bites, info_bitlen)
-        cmd_bitlen = cmdl << 3
-        cuebin.add_bites(cmd_bites, cmd_bitlen)
-        cuebin.add_int(self.info_section.descriptor_loop_length, 16)
-        cuebin.add_bites(dscptr_bites, (dll << 3))
-        self._encode_crc(cuebin)
-        be64 = b64encode(cuebin.bites)
-        self.bites = cuebin.bites
-        return be64
+        self.bites = self.info_section.encode()
+        self.bites += cmd_bites
+        self.bites += int.to_bytes(
+            self.info_section.descriptor_loop_length, 16, byteorder="big"
+        )
+        self.bites += dscptr_bites
+        self._encode_crc()
+        return b64encode(self.bites)
 
-    def _encode_crc(self, cuebin):
+    def _encode_crc(self):
         crc32_func = crcmod.predefined.mkCrcFun("crc-32-mpeg")
-        self.crc = hex(crc32_func(cuebin.bites))
-        cuebin.add_hex(self.crc, 32)
+        crc_int = crc32_func(self.bites)
+        self.crc = hex(crc_int)
+        self.bites += int.to_bytes(crc_int, 32, byteorder="big")
 
     def load_info_section(self, isec):
         """
