@@ -13,7 +13,7 @@ cue = threefive.Cue()
 # set cue.command to the TimeSignal Command cmd
 cue.command = cmd
 
-cue.encode()
+print(cue.encode())
 # b'/DAWAAAAAAAAAP/wBQb+e2KfxwAAN6nTrw=='
 
 #  run cue.show() to check values.
