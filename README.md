@@ -233,6 +233,9 @@ ___
   	* __Multiple Programs__.
   	* __Multiple SCTE35 Streams__.
   	* __Multi-Packet PMT, and SCTE35 data__. 
+  	* __Constant Data Parsing__.
+  	     * threefive is designed to run continuously. 
+  	     * Lonest run reported: single Stream instance parsing video nonstop for 47 days.  
 
   *  __tsdata__ is an open file handle. 
   *  __show_null__ if set to __True__, enables showing SCTE 35 __null commands__.
