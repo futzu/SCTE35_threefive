@@ -17,9 +17,8 @@ setuptools.setup(
     url="https://github.com/futzu/threefive",
     packages=setuptools.find_packages(),
     install_requires=[
-        "bitn==0.0.41",
         "crcmod",
-        " urllib3>=1.26.3",
+        "urllib3>=1.26.3",
     ],
     classifiers=[
         "License :: OSI Approved :: MIT License",
