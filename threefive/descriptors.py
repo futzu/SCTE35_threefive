@@ -1,7 +1,7 @@
 """
 SCTE35 Splice Descriptors
 """
-from bitn import BitBin
+from .bitn import BitBin
 from .base import SCTE35Base
 from .segmentation import table20, table22
 from .upid import upid_decoder, upid_encoder

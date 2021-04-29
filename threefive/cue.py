@@ -5,7 +5,7 @@ from base64 import b64decode, b64encode
 import json
 from sys import stderr
 import crcmod.predefined
-from bitn import NBin
+from .bitn import NBin
 from .section import SpliceInfoSection
 from .commands import command_map
 from .descriptors import splice_descriptor, descriptor_map

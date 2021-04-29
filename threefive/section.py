@@ -3,7 +3,7 @@ section.py
 
 SCTE35 Splice Info Section
 """
-from bitn import BitBin
+from .bitn import BitBin
 from .base import SCTE35Base
 
 sap_map = {

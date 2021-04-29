@@ -3,7 +3,7 @@ threefive.base contains
 the class SCTE35Base.
 """
 import json
-from bitn import NBin
+from .bitn import NBin
 
 
 class SCTE35Base:
