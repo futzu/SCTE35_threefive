@@ -1,6 +1,7 @@
 ### [threefive](https://github.com/futzu/SCTE35-threefive/) 
 
 * [base.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/base.py)     SCTE35Base class for all Splice Commands and Descriptors. 
+* [bitn.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/bitn.py)   bitn.BitBin and bitn.NBin classes for bitslicing. 
 * [commands.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py)     All Splice Command classes.
 * [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)    The Cue class.
 * [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)    The decode function.
