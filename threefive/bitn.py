@@ -1,3 +1,8 @@
+"""
+The bitn.BitBin and bitn.NBin classes
+"""
+
+
 import sys
 
 
@@ -31,8 +36,7 @@ class BitBin:
         if self.idx >= num_bits:
             self.idx -= num_bits
             return (self.bits >> (self.idx)) & ~(~0 << num_bits)
-        else:
-            self.negative_shift(num_bits)
+        return self.negative_shift(num_bits)
 
     def ashex(self, num_bits):
         """
@@ -46,9 +50,9 @@ class BitBin:
         Returns num_bits of bits
         as bytes decoded to ascii
         """
-        k = self.asint(num_bits)
-        w = num_bits >> 3
-        return int.to_bytes(k, w, byteorder="big").decode("utf-8")
+        stuff = self.asint(num_bits)
+        wide = num_bits >> 3
+        return int.to_bytes(stuff, wide, byteorder="big").decode("utf-8")
 
     def asflag(self, num_bits=1):
         """
