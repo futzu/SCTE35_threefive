@@ -157,12 +157,12 @@ class Cue:
         and the descriptor into all_bites.bites
         """
         all_bites = NBin()
-        dbite_chunks = [d.encode() for d in self.descriptors]
-        for chunk, d in zip(dbite_chunks, self.descriptors):
-            d.descriptor_length = len(chunk)
-            all_bites.add_int(d.tag, 8)
-            all_bites.add_int(d.descriptor_length, 8)
-            dbits = d.descriptor_length << 3
+        dbite_chunks = [dsptr.encode() for dsptr in self.descriptors]
+        for chunk, dsptr in zip(dbite_chunks, self.descriptors):
+            dsptr.descriptor_length = len(chunk)
+            all_bites.add_int(dsptr.tag, 8)
+            all_bites.add_int(dsptr.descriptor_length, 8)
+            dbits = dsptr.descriptor_length << 3
             all_bites.add_bites(chunk, dbits)
         return all_bites.bites
 
