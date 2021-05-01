@@ -187,6 +187,13 @@ class Stream:
         """
         return (byte1 << 8) | byte2
 
+    @staticmethod
+    def _parse_pusi(pkt):
+        """
+        check if Pusi is set on packet.
+        """
+        return (pkt[1] >> 6) & 1
+
     def _parser(self, pkt):
         """
         parse pid from pkt and
@@ -205,7 +212,7 @@ class Stream:
             return self._parse_scte35(pkt, pid)
         # for PTS
         if pid in self._pid_prog:
-            return self._parse_pusi(pkt, pid)
+            return self._parse_pts(pkt, pid)
 
     def _chk_pat_payload(self, pkt):
         """
@@ -239,24 +246,12 @@ class Stream:
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
-        pts = ((pkt[13] >> 1) & 7) << 30
-        pts |= ((pkt[14] << 7) | (pkt[15] >> 1)) << 15
-        pts |= (pkt[16] << 7) | (pkt[17] >> 1)
-        prgm = self._pid_prog[pid]
-        self._prgm_pts[prgm] = pts
-
-    def _parse_pusi(self, pkt, pid):
-        """
-        used to determine if pts data is available.
-        """
-        if (pkt[1] >> 6) & 1:
-            """
-            if pkt[6] & 1:
-                if pkt[10] & 0x80:
-                    if pkt[11] & 0x80:
-                        if pkt[13] & 0x20:
-            """
-            self._parse_pts(pkt, pid)
+        if self._parse_pusi(pkt):
+            pts = ((pkt[13] >> 1) & 7) << 30
+            pts |= ((pkt[14] << 7) | (pkt[15] >> 1)) << 15
+            pts |= (pkt[16] << 7) | (pkt[17] >> 1)
+            prgm = self._pid_prog[pid]
+            self._prgm_pts[prgm] = pts
 
     def _parse_scte35(self, pkt, pid):
         """
