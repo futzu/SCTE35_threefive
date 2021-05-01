@@ -44,9 +44,9 @@ class SCTE35Base:
         if isinstance(stuff, dict):
             self.__dict__.update(stuff)
 
-    def precheck(self, var_type, nbin_method, var_name, bit_count):
+    def _chk_var(self, var_type, nbin_method, var_name, bit_count):
         """
-        precheck is used to check var values and types before encoding
+        _chk_var is used to check var values and types before encoding
         """
         var_value = self.__dict__[var_name]
         if var_value is None:
