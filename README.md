@@ -3,6 +3,8 @@
 * threefive references the __2020 SCTE-35__ Specification.
 * threefive decodes __SCTE-35__ from __MPEG-TS video__ files and streams.
 * threefive decodes __SCTE-35__ from __Base64, Hex, and Binary__ encoded strings.
+* [__ffmpeg__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) threefive can read SCTE-35 from streams transcoded by ffmpeg. 
+
 * threefive now [__Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) __SCTE-35__ Cues.
 
 *   [__Versions and Releases__](#versions-and-releases)
