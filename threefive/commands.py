@@ -119,10 +119,10 @@ class TimeSignal(SpliceCommand):
         TimeSignal or SpliceInsert instance
         to decode pts.
         """
-        self.time_specified_flag = bitbin.asflag(1)
+        self.time_specified_flag = bitbin.as_flag(1)
         if self.time_specified_flag:
             bitbin.forward(6)
-            self.pts_time = bitbin.as90k(33)
+            self.pts_time = bitbin.as_90k(33)
         else:
             bitbin.forward(7)
 
@@ -163,9 +163,9 @@ class SpliceInsert(TimeSignal):
         SpliceInsert._decode_break(bitbin) is called
         if SpliceInsert.duration_flag is set
         """
-        self.break_auto_return = bitbin.asflag(1)
+        self.break_auto_return = bitbin.as_flag(1)
         bitbin.forward(6)
-        self.break_duration = bitbin.as90k(33)
+        self.break_duration = bitbin.as_90k(33)
 
     def _encode_break(self, nbin):
         """
@@ -181,10 +181,10 @@ class SpliceInsert(TimeSignal):
         SpliceInsert._decode_flags set four flags
         and is called from SpliceInsert.decode()
         """
-        self.out_of_network_indicator = bitbin.asflag(1)
-        self.program_splice_flag = bitbin.asflag(1)
-        self.duration_flag = bitbin.asflag(1)
-        self.splice_immediate_flag = bitbin.asflag(1)
+        self.out_of_network_indicator = bitbin.as_flag(1)
+        self.program_splice_flag = bitbin.as_flag(1)
+        self.duration_flag = bitbin.as_flag(1)
+        self.splice_immediate_flag = bitbin.as_flag(1)
         bitbin.forward(4)
 
     def _encode_flags(self, nbin):
@@ -204,10 +204,10 @@ class SpliceInsert(TimeSignal):
         over SpliceInsert.components,
         and is called from SpliceInsert.decode()
         """
-        self.component_count = bitbin.asint(8)
+        self.component_count = bitbin.as_int(8)
         self.components = []
         for i in range(0, self.component_count):
-            self.components[i] = bitbin.asint(8)
+            self.components[i] = bitbin.as_int(8)
 
     def _encode_components(self, nbin):
         """
@@ -225,8 +225,8 @@ class SpliceInsert(TimeSignal):
         """
         bitbin = BitBin(self.bites)
         start = bitbin.idx
-        self.splice_event_id = bitbin.asint(32)
-        self.splice_event_cancel_indicator = bitbin.asflag(1)
+        self.splice_event_id = bitbin.as_int(32)
+        self.splice_event_cancel_indicator = bitbin.as_flag(1)
         bitbin.forward(7)
         if not self.splice_event_cancel_indicator:
             self._decode_flags(bitbin)
@@ -239,9 +239,9 @@ class SpliceInsert(TimeSignal):
                     self._decode_pts(bitbin)
             if self.duration_flag:
                 self._decode_break(bitbin)
-            self.unique_program_id = bitbin.asint(16)
-            self.avail_num = bitbin.asint(8)
-            self.avail_expected = bitbin.asint(8)
+            self.unique_program_id = bitbin.as_int(16)
+            self.avail_num = bitbin.as_int(8)
+            self.avail_expected = bitbin.as_int(8)
         self._set_len(start, bitbin.idx)
 
     def encode(self, nbin=None):

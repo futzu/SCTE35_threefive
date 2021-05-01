@@ -1,5 +1,5 @@
 import sys
-from bitn import BitBin
+from threefive.bitn import BitBin
 from threefive import Cue, Stream
 
 """
@@ -70,11 +70,11 @@ def parse_SBSB(pdata):
     bites = bytes.fromhex(pdata[2:])
     bitbin = BitBin(bites)
     return {
-        "private_cni": bitbin.ashex(16),
-        "private_version": bitbin.asint(8),
-        "private_transmission_id": bitbin.asint(64),
-        "private_product_code": bitbin.asint(64),
-        "private_web_publication_key": bitbin.asascii(200),
+        "private_cni": bitbin.as_hex(16),
+        "private_version": bitbin.as_int(8),
+        "private_transmission_id": bitbin.as_int(64),
+        "private_product_code": bitbin.as_int(64),
+        "private_web_publication_key": bitbin.as_ascii(200),
     }
 
 

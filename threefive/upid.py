@@ -74,7 +74,7 @@ def upid_encoder(nbin, upid_type, upid_length, seg_upid):
 
 
 def _decode_air_id(bitbin, upid_length):
-    return bitbin.ashex(upid_length << 3)
+    return bitbin.as_hex(upid_length << 3)
 
 
 def _encode_air_id(nbin, seg_upid, upid_length):
@@ -83,11 +83,11 @@ def _encode_air_id(nbin, seg_upid, upid_length):
 
 def _decode_atsc(bitbin, upid_length):
     return {
-        "TSID": bitbin.asint(16),
-        "reserved": bitbin.asint(2),
-        "end_of_day": bitbin.asint(5),
-        "unique_for": bitbin.asint(9),
-        "content_id": bitbin.asascii(((upid_length - 4) << 3)),
+        "TSID": bitbin.as_int(16),
+        "reserved": bitbin.as_int(2),
+        "end_of_day": bitbin.as_int(5),
+        "unique_for": bitbin.as_int(9),
+        "content_id": bitbin.as_ascii(((upid_length - 4) << 3)),
     }
 
 
@@ -103,12 +103,12 @@ def _encode_atsc(nbin, seg_upid, upid_length):
 def _decode_eidr(bitbin, upid_length):
     if upid_length < 12:
         raise Exception(f"upid_length is {upid_length} should be 12 bytes")
-    pre = bitbin.asint(16)
+    pre = bitbin.as_int(16)
     post = []
     bit_count = 80
     while bit_count:
         bit_count -= 16
-        post.append(bitbin.ashex(16)[2:])
+        post.append(bitbin.as_hex(16)[2:])
     return f"10.{pre}/{'-'.join(post)}"
 
 
@@ -119,7 +119,7 @@ def _encode_eidr(nbin, seg_upid):
 
 
 def _decode_isan(bitbin, upid_length):
-    return bitbin.ashex(upid_length << 3)
+    return bitbin.as_hex(upid_length << 3)
 
 
 def _encode_isan(nbin, seg_upid, upid_length):
@@ -130,9 +130,9 @@ def _decode_mid(bitbin, upid_length):
     upids = []
     ulb = upid_length << 3
     while ulb:
-        upid_type = bitbin.asint(8)  # 1 byte
+        upid_type = bitbin.as_int(8)  # 1 byte
         ulb -= 8
-        upid_length = bitbin.asint(8)
+        upid_length = bitbin.as_int(8)
         ulb -= 8
         upid_type_name, segmentation_upid = upid_decoder(bitbin, upid_type, upid_length)
         mid_upid = {
@@ -161,8 +161,8 @@ def _encode_mid(nbin, seg_upid):
 def _decode_mpu(bitbin, upid_length):
     ulbits = upid_length << 3
     mpu_data = {
-        "format_identifier": bitbin.ashex(32),
-        "private_data": bitbin.ashex(ulbits - 32),
+        "format_identifier": bitbin.as_hex(32),
+        "private_data": bitbin.as_hex(ulbits - 32),
     }
     return mpu_data
 
@@ -177,7 +177,7 @@ def _decode_umid(bitbin, upid_length):
     chunks = []
     ulb = upid_length << 3
     while ulb:
-        chunks.append(bitbin.ashex(32).split("x", 1)[1])
+        chunks.append(bitbin.as_hex(32).split("x", 1)[1])
         ulb -= 32
     return ".".join(chunks)
 
@@ -190,7 +190,7 @@ def _encode_umid(nbin, seg_upid):
 
 def _decode_uri(bitbin, upid_length):
     if upid_length > 0:
-        return bitbin.asascii(upid_length << 3)
+        return bitbin.as_ascii(upid_length << 3)
     return 0
 
 
