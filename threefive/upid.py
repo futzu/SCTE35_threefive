@@ -46,31 +46,33 @@ def upid_encoder(nbin, upid_type, upid_length, seg_upid):
 
     Used by the SegmentationDescriptor class.
     """
+
     upid_map = {
         0x02: ["Deprecated", _encode_uri],
         0x03: ["AdID", _encode_uri],
-        0x05: ["ISAN", _encode_isan],
-        0x06: ["ISAN", _encode_isan],
+        0x04: ["UMID", _encode_umid],
         0x07: ["TID", _encode_uri],
-        0x08: ["AiringID", _encode_air_id],
-        0x09: ["ADI", _encode_uri],
         0x0B: ["ATSC", _encode_atsc],
-        0x0C: ["MPU", _encode_mpu],
+        0x09: ["ADI", _encode_uri],
+        0x0A: ["EIDR", _encode_eidr],
+        0x0D: ["MID", _encode_mid],
         0x0E: ["ADS Info", _encode_uri],
         0x0F: ["URI", _encode_uri],
         0x10: ["UUID", _encode_uri],
     }
-    upid_map2 = {
-        0x04: ["UMID", _encode_umid],
-        0x0A: ["EIDR", _encode_eidr],
-        0x0D: ["MID", _encode_mid],
+
+    upid_map_too = {
+        0x05: ["ISAN", _encode_isan],
+        0x06: ["ISAN", _encode_isan],
+        0x08: ["AiringID", _encode_air_id],
+        0x0C: ["MPU", _encode_mpu],
     }
 
     if upid_type in upid_map:
-        upid_map[upid_type][1](nbin, seg_upid, upid_length)
+        upid_map[upid_type][1](nbin, seg_upid)
 
-    if upid_type in upid_map2:
-        upid_map2[upid_type][1](nbin, seg_upid)
+    if upid_type in upid_map_too:
+        upid_map_too[upid_type][1](nbin, seg_upid, upid_length)
 
 
 def _decode_air_id(bitbin, upid_length):
@@ -91,13 +93,12 @@ def _decode_atsc(bitbin, upid_length):
     }
 
 
-def _encode_atsc(nbin, seg_upid, upid_length):
-    ulbits = upid_length << 3
+def _encode_atsc(nbin, seg_upid):
     nbin.add_int(seg_upid["TSID"], 16)
     nbin.add_int(seg_upid["reserved"], 2)
     nbin.add_int(seg_upid["end_of_day"], 5)
     nbin.add_int(seg_upid["unique_for"], 9)
-    nbin.add_bites(seg_upid["content_id"].encode("utf-8"), (ulbits - 32))
+    nbin.add_bites(seg_upid["content_id"].encode("utf-8"))
 
 
 def _decode_eidr(bitbin, upid_length):
@@ -194,6 +195,6 @@ def _decode_uri(bitbin, upid_length):
     return 0
 
 
-def _encode_uri(nbin, seg_upid, upid_length):
+def _encode_uri(nbin, seg_upid):
     seg_upid = seg_upid.encode("utf-8")
-    nbin.add_bites(seg_upid, (upid_length << 3))
+    nbin.add_bites(seg_upid)

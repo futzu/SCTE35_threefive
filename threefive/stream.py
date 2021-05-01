@@ -142,11 +142,10 @@ class Stream:
         return packet_data
 
     @staticmethod
-    def _janky_parse(payload, marker):
+    def _split_by_idx(payload, marker):
         """
-        _janky_parse splits payload at first marker
-        I use this to handle SCTE35 with stuffing before SCTE35 tables
-        and pmt packets with a section before the PMT.
+        _split_by_idx splits payload at
+        first index of marker.
         """
         try:
             return payload[payload.index(marker) :]
@@ -264,7 +263,7 @@ class Stream:
         """
         payload = self._parse_payload(pkt)
         if not self._cue:
-            payload = self._janky_parse(payload, b"\xfc0")
+            payload = self._split_by_idx(payload, b"\xfc0")
             if not payload:
                 self._pids["scte35"].discard(pid)
                 self._pids["ignore"].add(pid)
@@ -310,7 +309,7 @@ class Stream:
         if pid in self._pmt:
             # Handle PMT split over multiple packets
             payload = self._pmt[pid] + payload
-        payload = self._janky_parse(payload, b"\x02")
+        payload = self._split_by_idx(payload, b"\x02")
         if not payload:
             return
         # table_id = payload[0]

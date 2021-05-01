@@ -101,7 +101,7 @@ class NBin:
         self.nbits = 0
         self.idx = 0
 
-    def add_bites(self, plus_bites, bit_len):
+    def add_bites(self, plus_bites):
         """
         add_bites appends plus_bites
         to self.bites

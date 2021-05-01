@@ -162,8 +162,7 @@ class Cue:
             dsptr.descriptor_length = len(chunk)
             all_bites.add_int(dsptr.tag, 8)
             all_bites.add_int(dsptr.descriptor_length, 8)
-            dbits = dsptr.descriptor_length << 3
-            all_bites.add_bites(chunk, dbits)
+            all_bites.add_bites(chunk)
         return all_bites.bites
 
     def _descriptorloop(self, bites, dll):
