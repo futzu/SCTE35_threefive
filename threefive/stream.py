@@ -164,8 +164,7 @@ class Stream:
         if afc:
             afl = pkt[4]
             head_size += afl + 1  # +1 for afl byte
-        payload = pkt[head_size:]
-        return payload
+        return pkt[head_size:]
 
     @staticmethod
     def _parse_length(byte1, byte2):
@@ -251,11 +250,13 @@ class Stream:
         used to determine if pts data is available.
         """
         if (pkt[1] >> 6) & 1:
+            """
             if pkt[6] & 1:
                 if pkt[10] & 0x80:
                     if pkt[11] & 0x80:
                         if pkt[13] & 0x20:
-                            self._parse_pts(pkt, pid)
+            """
+            self._parse_pts(pkt, pid)
 
     def _parse_scte35(self, pkt, pid):
         """
