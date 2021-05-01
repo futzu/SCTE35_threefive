@@ -4,7 +4,7 @@
 * threefive decodes __SCTE-35__ from __MPEG-TS video__ files and streams.
 * threefive decodes __SCTE-35__ from __Base64, Hex, and Binary__ encoded strings.
 * [__ffmpeg__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) __threefive can read SCTE-35__ from streams __transcoded__ by __ffmpeg__.
-`Stream #0:0[0x100]: Data: bin_data ([6][0][0][0] / 0x0006)`
+` Data: bin_data ([6][0][0][0] / 0x0006)`
 
 * threefive now [__Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) __SCTE-35__ Cues.
 
