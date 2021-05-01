@@ -18,7 +18,6 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         "crcmod",
-        "urllib3>=1.26.3",
     ],
     classifiers=[
         "License :: OSI Approved :: MIT License",

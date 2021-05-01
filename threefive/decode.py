@@ -6,7 +6,7 @@ threefive.decode() function
 """
 
 import sys
-import urllib3
+import urllib.request
 
 from .cue import Cue
 from .stream import Stream
@@ -67,10 +67,9 @@ def _read_http(stuff):
     _read_http reads mpegts over http or https
     and parses for SCTE35
     """
-    http = urllib3.PoolManager()
-    Stream(http.request("GET", stuff, preload_content=False), show_null=True).decode()
-    # strm = Stream(req)
-    # strm.decode()
+    with urllib.request.urlopen("https://www.python.org/") as tsdata:
+        strm = Stream(tsdata)
+        strm.decode()
 
 
 def decode(stuff=None):
