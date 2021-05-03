@@ -82,13 +82,13 @@ class TimeSignal(SpliceCommand):
         """
         bitbin = BitBin(self.bites)
         start = bitbin.idx
-        self._decode_pts(bitbin)
+        self._splice_time(bitbin)
         self._set_len(start, bitbin.idx)
 
     def _set_len(self, start, end):
         self.command_length = (start - end) >> 3
 
-    def _decode_pts(self, bitbin):
+    def _splice_time(self, bitbin):
         """
         parse_pts is called by either a
         TimeSignal or SpliceInsert instance
@@ -130,9 +130,15 @@ class SpliceInsert(TimeSignal):
         SpliceInsert._decode_break(bitbin) is called
         if SpliceInsert.duration_flag is set
         """
-        self.break_auto_return = bitbin.as_flag(1)
-        bitbin.forward(6)
-        self.break_duration = bitbin.as_90k(33)
+        if self.duration_flag:
+            self.break_auto_return = bitbin.as_flag(1)
+            bitbin.forward(6)
+            self.break_duration = bitbin.as_90k(33)
+
+    def _decode_event(self, bitbin):
+        self.splice_event_id = bitbin.as_int(32)
+        self.splice_event_cancel_indicator = bitbin.as_flag(1)
+        bitbin.forward(7)
 
     def _decode_flags(self, bitbin):
         """
@@ -142,8 +148,6 @@ class SpliceInsert(TimeSignal):
         self.out_of_network_indicator = bitbin.as_flag(1)
         self.program_splice_flag = bitbin.as_flag(1)
         self.duration_flag = bitbin.as_flag(1)
-        self.splice_immediate_flag = bitbin.as_flag(1)
-        bitbin.forward(4)
 
     def _decode_components(self, bitbin):
         """
@@ -156,66 +160,91 @@ class SpliceInsert(TimeSignal):
         for i in range(0, self.component_count):
             self.components[i] = bitbin.as_int(8)
 
+    def _decode_unique_avail(self, bitbin):
+        self.unique_program_id = bitbin.as_int(16)
+        self.avail_num = bitbin.as_int(8)
+        self.avail_expected = bitbin.as_int(8)
+
     def decode(self):
         """
         SpliceInsert.decode
         """
         bitbin = BitBin(self.bites)
         start = bitbin.idx
-        self.splice_event_id = bitbin.as_int(32)
-        self.splice_event_cancel_indicator = bitbin.as_flag(1)
-        bitbin.forward(7)
+        self._decode_event(bitbin)
         if not self.splice_event_cancel_indicator:
             self._decode_flags(bitbin)
+            self.splice_immediate_flag = bitbin.as_flag(1)
+            bitbin.forward(4)
             if self.program_splice_flag:
                 if not self.splice_immediate_flag:
-                    self._decode_pts(bitbin)
+                    self._splice_time(bitbin)
             else:
                 self._decode_components(bitbin)
                 if not self.splice_immediate_flag:
-                    self._decode_pts(bitbin)
-            if self.duration_flag:
-                self._decode_break(bitbin)
-            self.unique_program_id = bitbin.as_int(16)
-            self.avail_num = bitbin.as_int(8)
-            self.avail_expected = bitbin.as_int(8)
+                    self._splice_time(bitbin)
+            self._decode_break(bitbin)
+            self._decode_unique_avail(bitbin)
         self._set_len(start, bitbin.idx)
 
 
-class SpliceSchedule(SpliceCommand):
+class Splice(SpliceInsert):
+    """
+    SpliceSchedule is comprised
+    of Splice instances
+    """
+
+    def __init__(self):
+        self.bites = None
+        super().__init__(self.bites)
+        self.command_type = None
+        self.name = None
+        self.utc_splice_time = None
+
+    def _decode_components(self, bitbin):
+        self.component_count = bitbin.as_int(8)
+        self.components = []
+        for j in range(0, self.component_count):
+            self.components[j] = {
+                "component_tag": bitbin.as_int(8),
+                "utc_splice_time": bitbin.as_int(32),
+            }
+
+    def decode(self, bitbin):
+        self._decode_event(bitbin)
+        if not self.splice_event_cancel_indicator:
+            self._decode_flags(bitbin)
+            bitbin.forward(5)
+            if self.program_splice_flag:
+                self.utc_splice_time = bitbin.as_int(32)
+            else:
+                self._decode_components(bitbin)
+            self._decode_break(bitbin)
+            self._decode_unique_avail(bitbin)
+
+
+class SpliceSchedule:
     """
     Table 8 - splice_schedule()
     """
 
-    def __init__(self):
+    def __init__(self, bites=None):
+        self.bites = bites
         self.name = "Splice Schedule"
+        self.command_type = 4
+        self.splice_count = None
+        self.splices = []
 
-    def decode(self, bitbin):
-        splice_count = bitbin.asint(8)
-        for i in range(0, splice_count):
-            self.splice_event_id = bitbin.asint(32)
-            self.splice_event_cancel_indicator = bitbin.asflag(1)
-            bitbin.forward(7)
-            if not self.splice_event_cancel_indicator:
-                self.out_of_network_indicator = bitbin.asflag(1)
-                self.program_splice_flag = bitbin.asflag(1)
-                self.duration_flag = bitbin.asflag(1)
-                bitbin.forward(5)
-                if self.program_splice_flag:
-                    self.utc_splice_time = bitbin.asint(32)
-                else:
-                    self.component_count = bitbin.asint(8)
-                    self.components = []
-                    for j in range(0, self.component_count):
-                        self.components[j] = {
-                            "component_tag": bitbin.asint(8),
-                            "utc_splice_time": bitbin.asint(32),
-                        }
-                if self.duration_flag:
-                    self.break_duration(bitbin)
-                self.unique_program_id = bitbin.asint(16)
-                self.avail_num = bitbin.asint(8)
-                self.avails_expected = bitbin.asint(8)
+    def decode(self):
+        """
+        SpliceSchedule.decode
+        """
+        bitbin = BitBin(self.bites)
+        self.splice_count = bitbin.as_int(8)
+        for i in range(0, self.splice_count):
+            asplice = Splice()
+            asplice.decode(bitbin)
+            self.splices.append(asplice)
 
 
 command_map = {
