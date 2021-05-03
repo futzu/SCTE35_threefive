@@ -67,7 +67,7 @@ def _read_http(stuff):
     _read_http reads mpegts over http or https
     and parses for SCTE35
     """
-    with urllib.request.urlopen("https://www.python.org/") as tsdata:
+    with urllib.request.urlopen(stuff) as tsdata:
         strm = Stream(tsdata)
         strm.decode()
 

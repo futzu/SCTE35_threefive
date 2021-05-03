@@ -1,14 +1,12 @@
 """
 threefive.Cue Class
 """
-from base64 import b64decode, b64encode
+from base64 import b64decode
 import json
 from sys import stderr
-import crcmod.predefined
-from .bitn import NBin
 from .section import SpliceInfoSection
 from .commands import command_map
-from .descriptors import splice_descriptor, descriptor_map
+from .descriptors import splice_descriptor
 
 
 class Cue:
@@ -57,113 +55,6 @@ class Cue:
                     self.crc = hex(int.from_bytes(after_dscrptrs[0:4], byteorder="big"))
                     return True
         return False
-
-    def encode(self):
-        """
-        Cue.encode() converts SCTE35 data
-        to a base64 encoded string.
-        """
-        dscptr_bites = self._unloop_descriptors()
-        dll = len(dscptr_bites)
-        self.info_section.descriptor_loop_length = dll
-        if not self.command:
-            raise Exception("A splice command is required")
-        cmd_bites = self.command.encode()
-        cmdl = self.command.command_length = len(cmd_bites)
-        self.info_section.splice_command_length = cmdl
-        self.info_section.splice_command_type = self.command.command_type
-        # 11 bytes for info section + command + 2 descriptor loop length
-        # + descriptor loop + 4 for crc
-        self.info_section.section_length = 11 + cmdl + 2 + dll + 4
-        self.bites = self.info_section.encode()
-        self.bites += cmd_bites
-        self.bites += int.to_bytes(
-            self.info_section.descriptor_loop_length, 16, byteorder="big"
-        )
-        self.bites += dscptr_bites
-        self._encode_crc()
-        return b64encode(self.bites)
-
-    def _encode_crc(self):
-        crc32_func = crcmod.predefined.mkCrcFun("crc-32-mpeg")
-        crc_int = crc32_func(self.bites)
-        self.crc = hex(crc_int)
-        self.bites += int.to_bytes(crc_int, 32, byteorder="big")
-
-    def load_info_section(self, isec):
-        """
-        load_info_section loads data for Cue.info_section
-        isec should be a dict.
-        if 'splice_command_type' is included,
-        an empty command instance will be created for Cue.command
-        """
-        self.info_section.load(isec)
-        if "splice_command_type" in isec:
-            cmd_type = isec["splice_command_type"]
-            command_map[cmd_type]()
-
-    def load_command(self, cmd):
-        """
-        load_command loads data for Cue.command
-        cmd should be a dict.
-        if 'command_type' is included,
-        the command instance will be created.
-        """
-        if "command_type" in cmd:
-            self.command = command_map[cmd["command_type"]]()
-        if self.command:
-            self.command.load(cmd)
-
-    def load_descriptors(self, dlist):
-        """
-        Load_descriptors loads descriptor data.
-        dlist is a list of dicts
-        if 'tag' is included in each dict,
-        a descriptor instance will be created.
-        """
-        if not isinstance(dlist, list):
-            raise Exception("descriptors should be a list")
-        for dstuff in dlist:
-            if "tag" in dstuff:
-                dscptr = descriptor_map[dstuff["tag"]]()
-                dscptr.load(dstuff)
-                self.descriptors.append(dscptr)
-
-    def load(self, stuff):
-        """
-        Cue.load loads SCTE35 data for encoding.
-        stuff is a dict or json
-        with any or all of these keys
-        stuff = {
-            'info_section': {dict} ,
-            'command': {dict},
-            'descriptors': [list of {dicts}],
-            }
-        """
-        if isinstance(stuff, str):
-            stuff = json.loads(stuff)
-        if "info_section" in stuff:
-            self.load_info_section(stuff["info_section"])
-        if "command" in stuff:
-            self.load_command(stuff["command"])
-        if "descriptors" in stuff:
-            self.load_descriptors(stuff["descriptors"])
-
-    def _unloop_descriptors(self):
-        """
-        _unloop_descriptors
-        for each descriptor in self.descriptors
-        encode descriptor tag, descriptor length,
-        and the descriptor into all_bites.bites
-        """
-        all_bites = NBin()
-        dbite_chunks = [dsptr.encode() for dsptr in self.descriptors]
-        for chunk, dsptr in zip(dbite_chunks, self.descriptors):
-            dsptr.descriptor_length = len(chunk)
-            all_bites.add_int(dsptr.tag, 8)
-            all_bites.add_int(dsptr.descriptor_length, 8)
-            all_bites.add_bites(chunk)
-        return all_bites.bites
 
     def _descriptorloop(self, bites, dll):
         """
