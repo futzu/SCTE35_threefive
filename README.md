@@ -5,7 +5,6 @@
 * threefive decodes __SCTE-35__ from __Base64, Hex, and Binary__ encoded strings.
 * threefive decodes __SCTE-35__ from __ffmpeg__ [` Data: bin_data ([6][0][0][0] / 0x0006)`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) streams.
 
-* threefive now [__Encodes__ ](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) __SCTE-35__ Cues.
 
 *   [__Versions and Releases__](#versions-and-releases)
 *   [__Install threefive__](#install)
@@ -52,7 +51,6 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 * __dependencies__
    *  Python 3.6+ or pypy3 (__pypy3__ runs threefive __3x faster__)
-   *  [__crcmod__](https://github.com/gsutil-mirrors/crcmod)
 
 *  __install from git__
 
