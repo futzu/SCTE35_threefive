@@ -11,6 +11,7 @@ from .commands import (
     TimeSignal,
     SpliceInsert,
     SpliceNull,
+    SpliceSchedule,
     PrivateCommand,
     BandwidthReservation,
 )

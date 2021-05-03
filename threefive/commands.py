@@ -182,8 +182,45 @@ class SpliceInsert(TimeSignal):
         self._set_len(start, bitbin.idx)
 
 
+class SpliceSchedule(SpliceCommand):
+    """
+    Table 8 - splice_schedule()
+    """
+
+    def __init__(self):
+        self.name = "Splice Schedule"
+
+    def decode(self, bitbin):
+        splice_count = bitbin.asint(8)
+        for i in range(0, splice_count):
+            self.splice_event_id = bitbin.asint(32)
+            self.splice_event_cancel_indicator = bitbin.asflag(1)
+            bitbin.forward(7)
+            if not self.splice_event_cancel_indicator:
+                self.out_of_network_indicator = bitbin.asflag(1)
+                self.program_splice_flag = bitbin.asflag(1)
+                self.duration_flag = bitbin.asflag(1)
+                bitbin.forward(5)
+                if self.program_splice_flag:
+                    self.utc_splice_time = bitbin.asint(32)
+                else:
+                    self.component_count = bitbin.asint(8)
+                    self.components = []
+                    for j in range(0, self.component_count):
+                        self.components[j] = {
+                            "component_tag": bitbin.asint(8),
+                            "utc_splice_time": bitbin.asint(32),
+                        }
+                if self.duration_flag:
+                    self.break_duration(bitbin)
+                self.unique_program_id = bitbin.asint(16)
+                self.avail_num = bitbin.asint(8)
+                self.avails_expected = bitbin.asint(8)
+
+
 command_map = {
     0: SpliceNull,
+    4: SpliceSchedule,
     5: SpliceInsert,
     6: TimeSignal,
     7: BandwidthReservation,
