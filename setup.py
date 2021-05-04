@@ -16,9 +16,6 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/threefive",
     packages=setuptools.find_packages(),
-    install_requires=[
-        "crcmod",
-    ],
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
