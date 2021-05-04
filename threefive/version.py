@@ -9,8 +9,8 @@ and as an easy way to check which
 version you have installed.
 """
 version_tuple = (
-    "2.2.82",
-    "Two Two eighty-two",
+    "2.2.83",
+    "Two Two eighty-three",
 )
 
 

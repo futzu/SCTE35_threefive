@@ -12,7 +12,6 @@ class SpliceCommand(SCTE35Base):
 
     def __init__(self, bites=None):
         self.command_length = 0
-        self.command_type = None
         self.bites = bites
 
     def decode(self):
@@ -136,6 +135,10 @@ class SpliceInsert(TimeSignal):
             self.break_duration = bitbin.as_90k(33)
 
     def _decode_event(self, bitbin):
+        """
+        _decode_event sets splice_event_id
+        and splice_event_cancel_indicator
+        """
         self.splice_event_id = bitbin.as_int(32)
         self.splice_event_cancel_indicator = bitbin.as_flag(1)
         bitbin.forward(7)
@@ -194,9 +197,8 @@ class Splice(SpliceInsert):
     of Splice instances
     """
 
-    def __init__(self):
-        self.bites = None
-        super().__init__(self.bites)
+    def __init__(self, bites=None):
+        super().__init__(bites)
         self.command_type = None
         self.name = None
         self.utc_splice_time = None
