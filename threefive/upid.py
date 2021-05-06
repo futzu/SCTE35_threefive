@@ -1,9 +1,9 @@
 """
 threefive/upid.py
 
-threefve.upid exposes two functions,
-upid_decoder and upid_encoder for
-use by the SegmentationDescriptor class.
+threefve.upid exposes one function,
+upid_decoder for use by the
+SegmentationDescriptor class.
 
 """
 

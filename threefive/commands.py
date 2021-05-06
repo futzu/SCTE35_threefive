@@ -244,9 +244,8 @@ class SpliceSchedule:
         bitbin = BitBin(self.bites)
         self.splice_count = bitbin.as_int(8)
         for i in range(0, self.splice_count):
-            asplice = Splice()
-            asplice.decode(bitbin)
-            self.splices.append(asplice)
+            self.splices[i] = Splice()
+            self.splices[i].decode(bitbin)
 
 
 command_map = {
