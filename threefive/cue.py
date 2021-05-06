@@ -164,6 +164,11 @@ class Cue:
         del self.command.bites
         self.info_section.splice_command_length = self.command.command_length
         bites = bites[self.command.command_length :]
+        if self.command.pts_time:
+            if self.packet_data["pts"]:
+                self.packet_data["preroll"] = round(
+                    self.command.pts_time - self.packet_data["pts"], 6
+                )
         return bites
 
     def show(self):
