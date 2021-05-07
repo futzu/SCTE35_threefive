@@ -191,10 +191,10 @@ class SpliceInsert(TimeSignal):
         self._set_len(start, bitbin.idx)
 
 
-class Splice(SpliceInsert):
+class ScheduledSplice(SpliceInsert):
     """
     SpliceSchedule is comprised
-    of Splice instances
+    of ScheduledSplice instances
     """
 
     def __init__(self, bites=None):
@@ -244,7 +244,7 @@ class SpliceSchedule:
         bitbin = BitBin(self.bites)
         self.splice_count = bitbin.as_int(8)
         for i in range(0, self.splice_count):
-            self.splices[i] = Splice()
+            self.splices[i] = ScheduledSplice()
             self.splices[i].decode(bitbin)
 
 

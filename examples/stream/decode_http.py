@@ -12,4 +12,3 @@ http = urllib3.PoolManager()
 req = http.request("GET", video, preload_content=False)
 strm = Stream(req)
 strm.decode()
-

@@ -1,5 +1,6 @@
 import sys
 from threefive import Stream
+
 """
 Show the preroll, the difference between
 the SCTE35 packet data PTS and PTS of the splice command. 
@@ -31,16 +32,19 @@ Program: 1030   Splice Insert @23676.9783       Splice Time: 23683.480033       
 
 def show_preroll(cue):
     if cue.command.pts_time:
-        print(f'Program: {cue.packet_data["program"]}\t{cue.command.name} @{cue.packet_data["pts"]}\tSplice Time: {cue.command.pts_time}\tPreroll: {cue.packet_data["preroll"]}')
+        print(
+            f'Program: {cue.packet_data["program"]}\t{cue.command.name} @{cue.packet_data["pts"]}\tSplice Time: {cue.command.pts_time}\tPreroll: {cue.packet_data["preroll"]}'
+        )
 
 
 def do():
     args = sys.argv[1:]
     for arg in args:
-        print(f'next file: {arg}')
-        with open(arg,'rb') as vid:
-            strm = Stream(vid,show_null=True)
+        print(f"next file: {arg}")
+        with open(arg, "rb") as vid:
+            strm = Stream(vid, show_null=True)
             strm.decode(func=show_preroll)
+
 
 if __name__ == "__main__":
     do()
