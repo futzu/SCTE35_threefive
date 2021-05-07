@@ -69,7 +69,6 @@ class TimeSignal(SpliceCommand):
     """
 
     def __init__(self, bites=None):
-        super().__init__(bites)
         self.command_type = 6
         self.name = "Time Signal"
         self.time_specified_flag = None
