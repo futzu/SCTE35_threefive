@@ -162,7 +162,7 @@ class Cue:
         self.command = command_map[sct](bites)
         self.command.decode()
         del self.command.bites
-        self.info_section.splice_command_length = self.command.command_length
+        self.command.command_length = self.info_section.splice_command_length
         bites = bites[self.command.command_length :]
         if self.command.name in ["Splice Insert", "Time Signal"]:
             if self.packet_data:

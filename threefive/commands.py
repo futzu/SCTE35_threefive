@@ -11,8 +11,13 @@ class SpliceCommand(SCTE35Base):
     """
 
     def __init__(self, bites=None):
-        self.command_length = 0
+        self.command_type = None
+        self.name = None
         self.bites = bites
+        self.identifier = None
+        self.time_specified_flag = None
+        self.pts_time = None
+        self.splices = None
 
     def decode(self):
         """
@@ -25,8 +30,10 @@ class BandwidthReservation(SpliceCommand):
     Table 11 - bandwidth_reservation()
     """
 
-    def __init__(self, bites=None):
-        super().__init__(bites)
+    def decode(self):
+        """
+        BandwidthReservation.decode method
+        """
         self.command_type = 255
         self.name = "Bandwidth Reservation"
 
@@ -36,8 +43,10 @@ class SpliceNull(SpliceCommand):
     Table 7 - splice_null()
     """
 
-    def __init__(self, bites=None):
-        super().__init__(bites)
+    def decode(self):
+        """
+        SpliceNull.decode method
+        """
         self.command_type = 0
         self.name = "Splice Null"
 
@@ -47,20 +56,35 @@ class PrivateCommand(SpliceCommand):
     Table 12 - private_command
     """
 
-    def __init__(self, bites=None):
-        super().__init__(bites)
+    def decode(self):
+        """
+        PrivateCommand.decode method
+        """
         self.command_type = 255
         self.name = "Private Command"
         self.identifier = None
-        self.command_length = 3
-
-    def decode(self):
-        """
-        decode private command
-        """
         self.identifier = int.from_bytes(
             self.bites[0:3], byteorder="big"
         )  # 3 bytes = 24 bits
+
+
+class SpliceSchedule(SpliceCommand):
+    """
+    Table 8 - splice_schedule()
+    """
+
+    def decode(self):
+        """
+        SpliceSchedule.decode
+        """
+        self.name = "Splice Schedule"
+        self.command_type = 4
+        self.splices = []
+        bitbin = BitBin(self.bites)
+        splice_count = bitbin.as_int(8)
+        for i in range(0, splice_count):
+            self.splices[i] = ScheduledSplice()
+            self.splices[i].decode(bitbin)
 
 
 class TimeSignal(SpliceCommand):
@@ -68,23 +92,14 @@ class TimeSignal(SpliceCommand):
     Table 10 - time_signal()
     """
 
-    def __init__(self, bites=None):
-        self.command_type = 6
-        self.name = "Time Signal"
-        self.time_specified_flag = None
-        self.pts_time = None
-
     def decode(self):
         """
-        decode is called only by a TimeSignal instance
+        TimeSignal.decode method
         """
+        self.command_type = 6
+        self.name = "Time Signal"
         bitbin = BitBin(self.bites)
-        start = bitbin.idx
         self._splice_time(bitbin)
-        self._set_len(start, bitbin.idx)
-
-    def _set_len(self, start, end):
-        self.command_length = (start - end) >> 3
 
     def _splice_time(self, bitbin):
         """
@@ -172,7 +187,6 @@ class SpliceInsert(TimeSignal):
         SpliceInsert.decode
         """
         bitbin = BitBin(self.bites)
-        start = bitbin.idx
         self._decode_event(bitbin)
         if not self.splice_event_cancel_indicator:
             self._decode_flags(bitbin)
@@ -187,7 +201,6 @@ class SpliceInsert(TimeSignal):
                     self._splice_time(bitbin)
             self._decode_break(bitbin)
             self._decode_unique_avail(bitbin)
-        self._set_len(start, bitbin.idx)
 
 
 class ScheduledSplice(SpliceInsert):
@@ -222,29 +235,6 @@ class ScheduledSplice(SpliceInsert):
                 self._decode_components(bitbin)
             self._decode_break(bitbin)
             self._decode_unique_avail(bitbin)
-
-
-class SpliceSchedule:
-    """
-    Table 8 - splice_schedule()
-    """
-
-    def __init__(self, bites=None):
-        self.bites = bites
-        self.name = "Splice Schedule"
-        self.command_type = 4
-        self.splice_count = None
-        self.splices = []
-
-    def decode(self):
-        """
-        SpliceSchedule.decode
-        """
-        bitbin = BitBin(self.bites)
-        self.splice_count = bitbin.as_int(8)
-        for i in range(0, self.splice_count):
-            self.splices[i] = ScheduledSplice()
-            self.splices[i].decode(bitbin)
 
 
 command_map = {
