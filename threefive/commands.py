@@ -38,19 +38,6 @@ class BandwidthReservation(SpliceCommand):
         self.name = "Bandwidth Reservation"
 
 
-class SpliceNull(SpliceCommand):
-    """
-    Table 7 - splice_null()
-    """
-
-    def decode(self):
-        """
-        SpliceNull.decode method
-        """
-        self.command_type = 0
-        self.name = "Splice Null"
-
-
 class PrivateCommand(SpliceCommand):
     """
     Table 12 - private_command
@@ -66,6 +53,19 @@ class PrivateCommand(SpliceCommand):
         self.identifier = int.from_bytes(
             self.bites[0:3], byteorder="big"
         )  # 3 bytes = 24 bits
+
+
+class SpliceNull(SpliceCommand):
+    """
+    Table 7 - splice_null()
+    """
+
+    def decode(self):
+        """
+        SpliceNull.decode method
+        """
+        self.command_type = 0
+        self.name = "Splice Null"
 
 
 class SpliceSchedule(SpliceCommand):
