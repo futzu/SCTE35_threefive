@@ -106,8 +106,13 @@ def decode(stuff=None):
     if stuff in [None, sys.stdin.buffer]:
         _read_stdin()
         return
-    if stuff.startswith("http"):
-        _read_http(stuff)
-        return
+    if isinstance(stuff, str):
+        if stuff.startswith("http"):
+            _read_http(stuff)
+            return
+    if isinstance(stuff, bytes):
+        if stuff.startswith(b"http"):
+            _read_http(stuff.decode())
+            return
     _read_stuff(stuff)
     return

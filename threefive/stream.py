@@ -30,9 +30,6 @@ class Stream:
 
     _PACKET_SIZE = 188
 
-    _MULTIPLIER = 1000
-    _PCOUNT = _PACKET_SIZE * _MULTIPLIER
-
     def __init__(self, tsdata, show_null=False):
         """
         tsdata is an open file handle
@@ -77,7 +74,11 @@ class Stream:
         return False
 
     def fu(self, func=show_cue):
-        for chunk in iter(partial(self._tsdata.read, self._PCOUNT), b""):
+        MULTIPLIER = 1000
+        PCOUNT = self._PACKET_SIZE * MULTIPLIER
+        if not self._find_start():
+            return False
+        for chunk in iter(partial(self._tsdata.read, PCOUNT), b""):
             clist = [
                 self._parser(chunk[i : i + self._PACKET_SIZE])
                 for i in range(0, len(chunk), self._PACKET_SIZE)
@@ -85,7 +86,6 @@ class Stream:
             # if not func:
             #   return [ cue for cue in clist if cue]
             [func(cue) for cue in clist if cue]
-        return
 
     def decode(self, func=show_cue):
         """

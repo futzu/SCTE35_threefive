@@ -58,7 +58,7 @@ class Cue:
 
     def _descriptorloop(self, bites, dll):
         """
-        parse all splice descriptors
+        Cue._descriptorloop parses all splice descriptors
         """
         tag_n_len_bites = 2  # 1 byte for descriptor tag,
         # 1 byte for descriptor length
@@ -75,8 +75,8 @@ class Cue:
 
     def get(self):
         """
-        Returns a dict of dicts for all three parts
-        of a SCTE 35 message.
+        Cue.get returns a dict of dicts
+        for all three parts of a SCTE 35 message.
         """
         if self.command and self.info_section:
             scte35 = {
@@ -94,14 +94,14 @@ class Cue:
 
     def get_descriptors(self):
         """
-        Returns a list of SCTE 35
-        splice descriptors as dicts.
+        Cue.get_descriptors returns a list of
+        SCTE 35 splice descriptors as dicts.
         """
         return [d.get() for d in self.descriptors]
 
     def get_json(self):
         """
-        get_json returns the Cue instance
+        Cue.get_json returns the Cue instance
         data in json.
         """
         return json.dumps(self.get(), indent=4)
@@ -109,7 +109,8 @@ class Cue:
     @staticmethod
     def _mk_bits(data):
         """
-        Convert Hex and Base64 strings into bytes.
+        cue._mk_bits Converts
+        Hex and Base64 strings into bytes.
         """
         try:
             # Handles hex byte strings
@@ -129,7 +130,8 @@ class Cue:
 
     def _mk_descriptors(self, bites):
         """
-        parse descriptor loop length,
+        Cue._mk_descriptors parses
+        Cue.info_section.descriptor_loop_length,
         then call Cue._descriptorloop
         """
         try:
@@ -143,7 +145,8 @@ class Cue:
 
     def mk_info_section(self, bites):
         """
-        parses the Splice Info Section
+        Cue.mk_info_section parses the
+        Splice Info Section
         of a SCTE35 cue.
         """
         info_size = 14
@@ -151,10 +154,31 @@ class Cue:
         self.info_section.decode(info_bites)
         return bites[info_size:]
 
+    def _set_pts(self):
+        """
+        Cue._set_pts applies pts adjustment
+        and calculates preroll if needed.
+        """
+        if self.command.name in ["Splice Insert", "Time Signal"]:
+            if self.command.pts_time:
+                self.command.pts_time += self.info_section.pts_adjustment
+                self._set_preroll()
+
+    def _set_preroll(self):
+        """
+        cue._set_preroll calculates
+        preroll if needed.
+        """
+        if self.packet_data:
+            if "pts" in self.packet_data:
+                self.packet_data["preroll"] = round(
+                    self.command.pts_time - self.packet_data["pts"], 6
+                )
+
     def _set_splice_command(self, bites):
         """
-        parses the command section
-        of a SCTE35 cue.
+        Cue._set_splice_command parses
+        the command section of a SCTE35 cue.
         """
         sct = self.info_section.splice_command_type
         if sct not in command_map:
@@ -162,35 +186,28 @@ class Cue:
         self.command = command_map[sct](bites)
         self.command.decode()
         del self.command.bites
-        self.command.command_length = self.info_section.splice_command_length
-        bites = bites[self.command.command_length :]
-        if self.command.name in ["Splice Insert", "Time Signal"]:
-            if self.command.pts_time:
-                if self.packet_data:
-                    if "pts" in self.packet_data:
-                        self.packet_data["preroll"] = round(
-                            self.command.pts_time - self.packet_data["pts"], 6
-                        )
-
+        bites = bites[self.command.calculated_length :]
+        self._set_pts()
         return bites
 
     def show(self):
         """
-        pretty prints the SCTE 35 message
+        Cue.show pretty prints the SCTE 35 message
         """
         print(self.get_json())
 
     def to_stderr(self):
         """
-        Wrapper for printing to sys.stderr
+        Cue.to_stderr is a Wrapper
+        for printing to sys.stderr
         """
         print(self.get_json(), file=stderr)
 
     @staticmethod
     def _strip_header(data):
         """
-        _strip_header strips off packet headers
-        when present
+        Cue._strip_header strips off
+        packet headers when present
         """
         if data[0] == 0x47:
             return data[5:]
