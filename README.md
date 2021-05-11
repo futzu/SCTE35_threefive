@@ -176,6 +176,7 @@ ___
        *  __pid__ of the packet  
        *  __program__ of the pid 
        *  __pts__ of the packet 
+       *  __preroll__ ( difference between the packet pts and the pts specified in a TimeSignal or SpliceInsert) 
 ___
 
 
