@@ -30,17 +30,17 @@ class Stream:
 
     _PACKET_SIZE = 188
 
-    def __init__(self, tsdata, show_null=False):
+    def __init__(self, tsdata, show_null=True):
         """
         tsdata is an open file handle
-        set show_null=True to include Splice Nulls
+        set show_null=False to exclude Splice Nulls
 
         Use like...
 
         from threefive import Stream
 
         with open("vid.ts",'rb') as tsdata:
-            strm = Stream(tsdata,show_null=True)
+            strm = Stream(tsdata,show_null=False)
             strm.decode()
 
         """
@@ -74,11 +74,11 @@ class Stream:
         return False
 
     def fu(self, func=show_cue):
-        MULTIPLIER = 1000
-        PCOUNT = self._PACKET_SIZE * MULTIPLIER
+        number_of_pkts = 1000
+        pkt_count = self._PACKET_SIZE * number_of_pkts
         if not self._find_start():
             return False
-        for chunk in iter(partial(self._tsdata.read, PCOUNT), b""):
+        for chunk in iter(partial(self._tsdata.read, pkt_count), b""):
             clist = [
                 self._parser(chunk[i : i + self._PACKET_SIZE])
                 for i in range(0, len(chunk), self._PACKET_SIZE)

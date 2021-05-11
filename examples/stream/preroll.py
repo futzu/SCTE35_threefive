@@ -3,7 +3,7 @@ from threefive import Stream
 
 """
 Show the preroll, the difference between
-the SCTE35 packet data PTS and PTS of the splice command. 
+the SCTE35 packet data PTS and PTS of the splice command.
 
 Usage:
 python3  preroll.py vid.ts
