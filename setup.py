@@ -11,7 +11,7 @@ setuptools.setup(
     version=threefive.version(),
     author="fu-corp",
     author_email="spam@so.slo.me",
-    description="threefive, Pythonc SCTE-35.",
+    description="threefive, Pythonic SCTE-35.",
     long_description=readme,
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/threefive",
