@@ -48,14 +48,14 @@ Type "help", "copyright", "credits" or "license" for more information.
 ## Install
 
 
-* __dependencies__
-   *  Python 3.6+ or pypy3 (__pypy3__ runs threefive __3x faster__)
+### __dependencies__
+*  Python 3.6+ or pypy3 (__pypy3__ runs threefive __3x faster__)
 
+* To install for the system, Install as root.
 
 *  __install from pip__ (recommended)
-   *   To install for the system, Install as root.
    
-```bash
+```python3
 $ pip3 install threefive
 
 # for pypy3
@@ -70,7 +70,7 @@ ___
 
 *  __install from git__
 
-```bash
+```python3
 $ git clone https://github.com/futzu/threefive.git
 
 $ cd threefive
