@@ -53,7 +53,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 
 *  __install from pip__ (recommended)
-  * To install for the system, Install as root.
+  *  To install for the system, Install as root.
    
 ```bash
 $ pip3 install threefive
@@ -79,6 +79,7 @@ $ make install
 # for pypy3 
 $ make pypy3
 ```
+
 
 # __Easy__ threefive
 
