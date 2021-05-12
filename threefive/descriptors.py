@@ -42,7 +42,7 @@ class SpliceDescriptor(SCTE35Base):
         """
         self.identifier = self.bites[:4].decode()
         if self.identifier != "CUEI":
-            raise Exception('Descriptors should have an identifier of "CUEI"')
+            raise Exception('Identifier Is Not "CUEI"')
         self.bites = self.bites[4:]
 
 
@@ -50,6 +50,19 @@ class AudioDescriptor(SpliceDescriptor):
     """
     Table 26 - audio_descriptor()
     """
+
+    def _mk_comp(self, bitbin):
+        """
+        AudioDescriptor._mk_comp parses
+        for audio component data.
+        """
+        comp = {}
+        comp["component_tag"] = bitbin.as_int(8)
+        comp["ISO_code="] = bitbin.as_int(24)
+        comp["bit_stream_mode"] = bitbin.as_int(3)
+        comp["num_channels"] = bitbin.as_int(4)
+        comp["full_srvc_audio"] = bitbin.as_flag(1)
+        self.components.append(comp)
 
     def decode(self):
         """
@@ -62,13 +75,7 @@ class AudioDescriptor(SpliceDescriptor):
         self.components = []
         while a_c:
             a_c -= 1
-            comp = {}
-            comp["component_tag"] = bitbin.as_int(8)
-            comp["ISO_code="] = bitbin.as_int(24)
-            comp["bit_stream_mode"] = bitbin.as_int(3)
-            comp["num_channels"] = bitbin.as_int(4)
-            comp["full_srvc_audio"] = bitbin.as_flag(1)
-            self.components.append(comp)
+            self._mk_comp(bitbin)
 
 
 class AvailDescriptor(SpliceDescriptor):
@@ -92,22 +99,18 @@ class DtmfDescriptor(SpliceDescriptor):
 
     def __init__(self, bites):
         super().__init__(bites)
-        self.name = "DTMF Descriptor"
         self.preroll = None
-        self.dtmf_count = None
-        self.dtmf_chars = []
+        self.dtmf_chars = None
 
     def decode(self):
         """
         decode SCTE35 Dtmf Descriptor
         """
-        bitbin = BitBin(self.bites)
-        self.preroll = bitbin.as_int(8)
-        self.dtmf_count = d_c = bitbin.as_int(3)
-        bitbin.forward(5)
-        while d_c:
-            d_c -= 1
-            self.dtmf_chars.append(bitbin.as_ascii(8))
+        self.name = "DTMF Descriptor"
+        self.preroll = self.bites[0]
+        dtmf_count = self.bites[1] >> 5
+        self.bites = self.bites[2:]
+        self.dtmf_chars = list(self.bites[:dtmf_count].decode())
 
 
 class TimeDescriptor(SpliceDescriptor):
@@ -117,7 +120,6 @@ class TimeDescriptor(SpliceDescriptor):
 
     def __init__(self, bites):
         super().__init__(bites)
-        self.name = "Time Descriptor"
         self.tai_seconds = None
         self.tai_ns = None
         self.utc_offset = None
@@ -126,6 +128,7 @@ class TimeDescriptor(SpliceDescriptor):
         """
         decode SCTE35 Time Descriptor
         """
+        self.name = "Time Descriptor"
         bitbin = BitBin(self.bites)
         self.tai_seconds = bitbin.as_int(48)
         self.tai_ns = bitbin.as_int(32)
@@ -139,7 +142,6 @@ class SegmentationDescriptor(SpliceDescriptor):
 
     def __init__(self, bites):
         super().__init__(bites)
-        self.name = "Segmentation Descriptor"
         self.segmentation_event_id = None
         self.segmentation_event_cancel_indicator = None
         self.component_count = None
@@ -168,6 +170,7 @@ class SegmentationDescriptor(SpliceDescriptor):
         """
         decode a segmentation descriptor
         """
+        self.name = "Segmentation Descriptor"
         bitbin = BitBin(self.bites)
         self.segmentation_event_id = bitbin.as_hex(32)  # 4 bytes
         self.segmentation_event_cancel_indicator = bitbin.as_flag(1)
@@ -202,10 +205,7 @@ class SegmentationDescriptor(SpliceDescriptor):
 
     def _decode_segmentation(self, bitbin):
         if self.segmentation_duration_flag:
-            self.segmentation_duration_raw = bitbin.as_int(40)  # 5 bytes
-            self.segmentation_duration = round(
-                self.segmentation_duration_raw / 90000.0, 6
-            )
+            self.segmentation_duration = bitbin.as_90k(40)  # 5 bytes
         self.segmentation_upid_type = bitbin.as_int(8)  # 1 byte
         self.segmentation_upid_length = bitbin.as_int(8)  # 1 byte
         self.segmentation_upid_type_name, self.segmentation_upid = upid_decoder(
