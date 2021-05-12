@@ -51,6 +51,23 @@ Type "help", "copyright", "credits" or "license" for more information.
 * __dependencies__
    *  Python 3.6+ or pypy3 (__pypy3__ runs threefive __3x faster__)
 
+
+*  __install from pip__ (recommended)
+  * To install for the system, Install as root.
+   
+```bash
+$ pip3 install threefive
+
+# for pypy3
+$ pypy3 -mpip install threefive
+
+#If you don't have pip installed, try this.
+$ pypy3 -mensurepip install pip 
+```
+___
+
+### OR
+
 *  __install from git__
 
 ```bash
@@ -62,18 +79,6 @@ $ make install
 # for pypy3 
 $ make pypy3
 ```
-*  __install from pip__
-
-```bash
-$ pip3 install threefive
-
-# for pypy3
-$ pypy3 -mpip install threefive
-
-#If you don't have pip installed, try this.
-$ pypy3 -mensurepip install pip 
-```
-___
 
 # __Easy__ threefive
 
