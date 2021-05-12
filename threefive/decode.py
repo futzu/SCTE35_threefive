@@ -17,7 +17,7 @@ _MAX_CUE_SIZE = 4096
 
 def _read_stdin():
     """
-    handles piped in data
+    _read_stdin handles piped in data
     """
     try:
         # mpegts
@@ -38,7 +38,9 @@ def _read_stuff(stuff):
     reads filename or a string
     """
     try:
-        # base64, binary, bytes or hex in a file
+
+        # if stuff is a file containing a
+        # base64, binary, bytes, hex or hex string
         with open(stuff, "rb") as tsdata:
             tsd = tsdata.read(_MAX_CUE_SIZE)
             cue = Cue(tsd)
@@ -47,14 +49,19 @@ def _read_stuff(stuff):
     except Exception:
         pass
     try:
-        # mpegts
+
+        # if stuff is a mpegts stream file.
+
         with open(stuff, "rb") as tsdata:
             strm = Stream(tsdata)
-            strm.decode()
+            strm.decode_fu()
     except Exception:
         pass
     try:
-        # base64, binary, bytes or hex
+
+        # if stuff is a Base64, Binary, Byte, or Hex
+        # encoded string to parse as a SCTE-35 Cue.
+
         cue = Cue(stuff)
         cue.decode()
         cue.show()
@@ -64,12 +71,12 @@ def _read_stuff(stuff):
 
 def _read_http(stuff):
     """
-    _read_http reads mpegts over http or https
-    and parses for SCTE35
+    _read_http if stuff is a
+    http or https url string.
     """
     with urllib.request.urlopen(stuff) as tsdata:
         strm = Stream(tsdata)
-        strm.decode()
+        strm.decode_fu()
 
 
 def decode(stuff=None):
@@ -77,42 +84,39 @@ def decode(stuff=None):
     """
     All purpose SCTE 35 decoder function
 
-    # for a mpegts video
+    # MPEG-TS video file
 
         import threefive
         threefive.decode('/path/to/mpegts')
 
 
-    # for a base64 encoded string
+    # Base64 encoded string
 
         import threefive
         Bee64='/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
         threefive.decode(Bee64)
 
 
-    # mpegts over http / https
+    # MPEG-TS over HTTP or HTTPS
 
         from threefive import decode
         decode('https://futzu.com/xaa.ts')
 
 
-    # hex, base64, binary, bytes, or mpegts from sys.stdin.buffer
+    # Data piped in
 
-        from threefive import decode
-        decode()
-
+        cat SCTE-35.ts | python3 -c 'import threefive; threefive.decode()'
 
     """
-    if stuff in [None, sys.stdin.buffer]:
+    if stuff in [None, sys.stdin.buffer]:  # piped in data
         _read_stdin()
         return
+    if isinstance(stuff, bytes):
+        if stuff.startswith(b"http"):
+            stuff = stuff.decode()
     if isinstance(stuff, str):
         if stuff.startswith("http"):
             _read_http(stuff)
-            return
-    if isinstance(stuff, bytes):
-        if stuff.startswith(b"http"):
-            _read_http(stuff.decode())
             return
     _read_stuff(stuff)
     return

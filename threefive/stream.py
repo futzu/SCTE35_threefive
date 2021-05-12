@@ -73,20 +73,6 @@ class Stream:
                     return True
         return False
 
-    def fu(self, func=show_cue):
-        number_of_pkts = 1000
-        pkt_count = self._PACKET_SIZE * number_of_pkts
-        if not self._find_start():
-            return False
-        for chunk in iter(partial(self._tsdata.read, pkt_count), b""):
-            clist = [
-                self._parser(chunk[i : i + self._PACKET_SIZE])
-                for i in range(0, len(chunk), self._PACKET_SIZE)
-            ]
-            # if not func:
-            #   return [ cue for cue in clist if cue]
-            [func(cue) for cue in clist if cue]
-
     def decode(self, func=show_cue):
         """
         Stream.decode reads self.tsdata to find SCTE35 packets.
@@ -102,6 +88,31 @@ class Stream:
                     return cue
                 func(cue)
         return
+
+    def _mk_pkts(self, chunk):
+        return [
+            self._parser(chunk[i : i + self._PACKET_SIZE])
+            for i in range(0, len(chunk), self._PACKET_SIZE)
+        ]
+
+    def decode_fu(self, func=show_cue):
+        """
+        Stream.decode_fu reads self.tsdata,
+        1000 mpegts packets at a tine,
+        to find SCTE35 packets.
+        Using pypy3 with Stream.decode_fu reduces the parsing
+        time 25%.
+        Using python3, Stream.decode_fu performs slightly better
+        than Stream.decode.
+        func can be set to a custom function that accepts
+        a threefive.Cue instance as it's only argument.
+        """
+        pkts = 1000
+        if not self._find_start():
+            return False
+        for chunk in iter(partial(self._tsdata.read, (self._PACKET_SIZE * pkts)), b""):
+
+            [func(cue) for cue in self._mk_pkts(chunk) if cue]
 
     def decode_next(self):
         """
