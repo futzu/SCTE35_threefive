@@ -47,9 +47,10 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 ## Install
 
-##### Requires python 3.6+ or pypy3 
+* Requires python 3.6+ or pypy3 
 
 * To install for the system, Install as root.
+
 
 *  __install from pip__ (recommended)
    
@@ -66,6 +67,7 @@ ___
 
 ### OR
 
+
 *  __install from git__
 
 ```python3
@@ -77,11 +79,11 @@ $ make install
 # for pypy3 
 $ make pypy3
 ```
+___
 
+## __Easy__ threefive
 
-# __Easy__ threefive
-
-##   The __decode__ Function
+###   The __decode__ Function
 
 
  *   src [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)   
@@ -133,9 +135,13 @@ ___
 
 ![openbsdransom](https://user-images.githubusercontent.com/52701496/117953431-04568a00-b2e4-11eb-85eb-a26d7d4c9045.png)
 
+___
 
-#  __Advanced__ threefive
-##  __Cue__ Class
+##  __Advanced__ threefive
+
+___
+
+###  __Cue__ Class
 
    *  src [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
@@ -225,7 +231,7 @@ cue_data = cue.get()
 ```
 ___
 
-##  __Stream__ Class
+###  __Stream__ Class
 
  ```python3
   threefive.Stream(tsdata, show_null = False)
