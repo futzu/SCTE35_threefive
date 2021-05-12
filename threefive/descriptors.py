@@ -7,15 +7,6 @@ from .segmentation import table20, table22
 from .upid import upid_decoder
 
 
-def k_by_v(adict, avalue):
-    """
-    dict key lookup by value
-    """
-    for kay, vee in adict.items():
-        if vee == avalue:
-            return kay
-
-
 class SpliceDescriptor(SCTE35Base):
     """
     SpliceDescriptor is the
@@ -23,24 +14,61 @@ class SpliceDescriptor(SCTE35Base):
     It should not be used directly
     """
 
-    def __init__(self, bites=None):
-        self.tag = -1
+    def __init__(self, bites):
+        self.tag = None
         self.descriptor_length = 0
+        self.name = None
         self.identifier = None
         self.bites = bites
-        if bites:
-            self.tag = bites[0]
-            self.descriptor_length = bites[1]
-            self.bites = bites[2:]
+        self.parse_tag_and_len()
+        self.parse_id()
+        self.provider_avail_id = None
+        self.components = None
+        self.audio_count = None
 
-    def _parse_id(self, bitbin):
+    def parse_tag_and_len(self):
+        """
+        parse_tag_and_len
+        parses the descriptors tag and length
+        from self.bites
+        """
+        self.tag = self.bites[0]
+        self.descriptor_length = self.bites[1]
+        self.bites = self.bites[2:]
+
+    def parse_id(self):
         """
         parse splice descriptor identifier
         """
-        self.identifier = bitbin.as_ascii(32)
-        # identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
+        self.identifier = self.bites[:4].decode()
         if self.identifier != "CUEI":
             raise Exception('Descriptors should have an identifier of "CUEI"')
+        self.bites = self.bites[4:]
+
+
+class AudioDescriptor(SpliceDescriptor):
+    """
+    Table 26 - audio_descriptor()
+    """
+
+    def decode(self):
+        """
+        Decode SCTE35 Audio Descriptor
+        """
+        self.name = "Audio Descriptor"
+        bitbin = BitBin(self.bites)
+        self.audio_count = a_c = bitbin.as_int(4)
+        bitbin.forward(4)
+        self.components = []
+        while a_c:
+            a_c -= 1
+            comp = {}
+            comp["component_tag"] = bitbin.as_int(8)
+            comp["ISO_code="] = bitbin.as_int(24)
+            comp["bit_stream_mode"] = bitbin.as_int(3)
+            comp["num_channels"] = bitbin.as_int(4)
+            comp["full_srvc_audio"] = bitbin.as_flag(1)
+            self.components.append(comp)
 
 
 class AvailDescriptor(SpliceDescriptor):
@@ -48,18 +76,12 @@ class AvailDescriptor(SpliceDescriptor):
     Table 17 -  avail_descriptor()
     """
 
-    def __init__(self, bites=None):
-        super().__init__(bites)
-        self.tag = 0
-        self.name = "Avail Descriptor"
-        self.provider_avail_id = None
-
     def decode(self):
         """
         decode SCTE35 Avail Descriptor
         """
+        self.name = "Avail Descriptor"
         bitbin = BitBin(self.bites)
-        self._parse_id(bitbin)
         self.provider_avail_id = bitbin.as_int(32)
 
 
@@ -68,9 +90,8 @@ class DtmfDescriptor(SpliceDescriptor):
     Table 18 -  DTMF_descriptor()
     """
 
-    def __init__(self, bites=None):
+    def __init__(self, bites):
         super().__init__(bites)
-        self.tag = 1
         self.name = "DTMF Descriptor"
         self.preroll = None
         self.dtmf_count = None
@@ -81,7 +102,6 @@ class DtmfDescriptor(SpliceDescriptor):
         decode SCTE35 Dtmf Descriptor
         """
         bitbin = BitBin(self.bites)
-        self._parse_id(bitbin)
         self.preroll = bitbin.as_int(8)
         self.dtmf_count = d_c = bitbin.as_int(3)
         bitbin.forward(5)
@@ -95,9 +115,8 @@ class TimeDescriptor(SpliceDescriptor):
     Table 25 - time_descriptor()
     """
 
-    def __init__(self, bites=None):
+    def __init__(self, bites):
         super().__init__(bites)
-        self.tag = 4
         self.name = "Time Descriptor"
         self.tai_seconds = None
         self.tai_ns = None
@@ -108,41 +127,9 @@ class TimeDescriptor(SpliceDescriptor):
         decode SCTE35 Time Descriptor
         """
         bitbin = BitBin(self.bites)
-        self._parse_id(bitbin)
         self.tai_seconds = bitbin.as_int(48)
         self.tai_ns = bitbin.as_int(32)
         self.utc_offset = bitbin.as_int(16)
-
-
-class AudioDescriptor(SpliceDescriptor):
-    """
-    Table 26 - audio_descriptor()
-    """
-
-    def __init__(self, bites=None):
-        super().__init__(bites)
-        self.tag = 4
-        self.name = "Audio Descriptor"
-        self.components = []
-        self.audio_count = None
-
-    def decode(self):
-        """
-        Decode SCTE35 Audio Descriptor
-        """
-        bitbin = BitBin(self.bites)
-        self._parse_id(bitbin)
-        self.audio_count = a_c = bitbin.as_int(4)
-        bitbin.forward(4)
-        while a_c:
-            a_c -= 1
-            comp = {}
-            comp["component_tag"] = bitbin.as_int(8)
-            comp["ISO_code="] = bitbin.as_int(24)
-            comp["bit_stream_mode"] = bitbin.as_int(3)
-            comp["num_channels"] = bitbin.as_int(4)
-            comp["full_srvc_audio"] = bitbin.as_flag(1)
-            self.components.append(comp)
 
 
 class SegmentationDescriptor(SpliceDescriptor):
@@ -150,9 +137,8 @@ class SegmentationDescriptor(SpliceDescriptor):
     Table 19 - segmentation_descriptor()
     """
 
-    def __init__(self, bites=None):
+    def __init__(self, bites):
         super().__init__(bites)
-        self.tag = 2
         self.name = "Segmentation Descriptor"
         self.segmentation_event_id = None
         self.segmentation_event_cancel_indicator = None
@@ -183,7 +169,6 @@ class SegmentationDescriptor(SpliceDescriptor):
         decode a segmentation descriptor
         """
         bitbin = BitBin(self.bites)
-        self._parse_id(bitbin)
         self.segmentation_event_id = bitbin.as_hex(32)  # 4 bytes
         self.segmentation_event_cancel_indicator = bitbin.as_flag(1)
         bitbin.forward(7)  # 1 byte
