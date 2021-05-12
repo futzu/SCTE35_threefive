@@ -127,7 +127,7 @@ decode('cue.dat')
 ```
 ___
 
-![openbsdransom](https://user-images.githubusercontent.com/52701496/117951710-6adaa880-b2e2-11eb-8d7b-d68903937ece.png)
+![openbsdransom](https://user-images.githubusercontent.com/52701496/117953431-04568a00-b2e4-11eb-85eb-a26d7d4c9045.png)
 
 
 #  __Advanced__ threefive
