@@ -32,6 +32,8 @@
 ---
 
 ## Versions and Releases
+---
+
 * Odd numbered versions are releases.
 * Even numbered versions are testing builds between versions
 ```python3
@@ -45,7 +47,8 @@ Type "help", "copyright", "credits" or "license" for more information.
 '2.2.82'
 ```
 
-## Install
+### Install
+---
 
 * Requires python 3.6+ or pypy3 
 
