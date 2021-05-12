@@ -47,9 +47,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 ## Install
 
-
-### __dependencies__
-*  Python 3.6+ or pypy3 (__pypy3__ runs threefive __3x faster__)
+### Requires python 3.6+ or pypy3 (__pypy3__ runs threefive __3x faster__)
 
 * To install for the system, Install as root.
 
