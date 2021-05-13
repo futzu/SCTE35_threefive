@@ -43,7 +43,7 @@ def do():
         print(f"next file: {arg}")
         with open(arg, "rb") as vid:
             strm = Stream(vid, show_null=True)
-            strm.decode_proxy()
+            strm.decode(func=show_preroll)
 
 
 if __name__ == "__main__":
