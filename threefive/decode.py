@@ -19,18 +19,7 @@ def _read_stdin():
     """
     _read_stdin handles piped in data
     """
-    try:
-        # mpegts
-        Stream(sys.stdin.buffer).decode()
-    except Exception:
-        try:
-            # base64, binary, bytes or hex
-            stuff = sys.stdin.buffer.read()
-            cue = Cue(stuff)
-            cue.decode()
-            cue.show()
-        except Exception:
-            pass
+    return Stream(sys.stdin.buffer).decode()
 
 
 def _read_stuff(stuff):
@@ -46,7 +35,7 @@ def _read_stuff(stuff):
             cue = Cue(tsd)
             cue.decode()
             cue.show()
-    except Exception:
+    except ValueError:
         pass
     try:
 
@@ -55,7 +44,7 @@ def _read_stuff(stuff):
         with open(stuff, "rb") as tsdata:
             strm = Stream(tsdata)
             strm.decode_fu()
-    except Exception:
+    except ValueError:
         pass
     try:
 
@@ -65,7 +54,7 @@ def _read_stuff(stuff):
         cue = Cue(stuff)
         cue.decode()
         cue.show()
-    except Exception:
+    except ValueError:
         pass
 
 
@@ -108,9 +97,9 @@ def decode(stuff=None):
         cat SCTE-35.ts | python3 -c 'import threefive; threefive.decode()'
 
     """
-    if stuff in [None, sys.stdin.buffer]:  # piped in data
-        _read_stdin()
-        return
+    if stuff in [None]:  # piped in data
+        if _read_stdin():
+            return
     if isinstance(stuff, bytes):
         if stuff.startswith(b"http"):
             stuff = stuff.decode()
