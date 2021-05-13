@@ -100,11 +100,11 @@ def decode(stuff=None):
     if stuff in [None]:  # piped in data
         if _read_stdin():
             return
+    if isinstance(stuff, str):
+        stuff = stuff.encode()
     if isinstance(stuff, bytes):
         if stuff.startswith(b"http"):
             stuff = stuff.decode()
-    if isinstance(stuff, str):
-        if stuff.startswith("http"):
             _read_http(stuff)
             return
     _read_stuff(stuff)

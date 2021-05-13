@@ -85,10 +85,8 @@ class Cue:
                 "descriptors": self.get_descriptors(),
                 "crc": self.crc,
             }
-            try:
+            if self.packet_data is not None:
                 scte35.update(self.packet_data)
-            except:
-                pass
             return scte35
         return False
 
@@ -118,7 +116,7 @@ class Cue:
             i_len = i.bit_length() >> 3
             bites = int.to_bytes(i, i_len, byteorder="big")
             return bites
-        except:
+        except ValueError:
             if data[:2].lower() == "0x":
                 data = data[2:]
             if data[:2].lower() == "fc":
