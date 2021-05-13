@@ -170,7 +170,7 @@ class Stream:
         """
         try:
             return payload[payload.index(marker) :]
-        except:
+        except (LookupError, TypeError, ValueError):
             return False
 
     @staticmethod

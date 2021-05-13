@@ -116,14 +116,14 @@ class Cue:
             i_len = i.bit_length() >> 3
             bites = int.to_bytes(i, i_len, byteorder="big")
             return bites
-        except ValueError:
+        except (LookupError, TypeError, ValueError):
             if data[:2].lower() == "0x":
                 data = data[2:]
             if data[:2].lower() == "fc":
                 return bytes.fromhex(data)
         try:
             return b64decode(data)
-        except Exception:
+        except (LookupError, TypeError, ValueError):
             return data
 
     def _mk_descriptors(self, bites):
@@ -134,7 +134,7 @@ class Cue:
         """
         try:
             dll = (bites[0] << 8) | bites[1]
-        except:
+        except (LookupError, TypeError, ValueError):
             return False
         self.info_section.descriptor_loop_length = dll
         bites = bites[2:]
