@@ -89,27 +89,6 @@ class Stream:
                 func(cue)
         return True
 
-    def _mk_pkts(self, chunk):
-        return [
-            self._parser(chunk[i : i + self._PACKET_SIZE])
-            for i in range(0, len(chunk), self._PACKET_SIZE)
-        ]
-
-    def decode_fu(self, func=show_cue):
-        """
-        Stream.decode_fu reads self.tsdata,
-        1000 mpegts packets at a time.
-
-        func can be set to a custom function that accepts
-        a threefive.Cue instance as it's only argument.
-        """
-        pkts = 1000
-        if not self._find_start():
-            return False
-        for chunk in iter(partial(self._tsdata.read, (self._PACKET_SIZE * pkts)), b""):
-            [func(cue) for cue in self._mk_pkts(chunk) if cue]
-        return True
-
     def decode_next(self):
         """
         Stream.decode_next returns the next
@@ -141,14 +120,18 @@ class Stream:
             cue = self._parser(pkt)
             if cue:
                 func(cue)
-        return
+        return True
 
     def show(self):
         """
-        displays all programs and stream mappings
+        displays streams that will be
+        parsed for SCTE-35.
         """
         self.info = True
         self.decode()
+
+    def _prog_pts(self, prgm):
+        return round((self._prgm_pts[prgm] / 90000.0), 6)
 
     def _mk_packet_data(self, pid):
         """
@@ -158,8 +141,7 @@ class Stream:
         prgm = self._pid_prog[pid]
         packet_data = {"pid": hex(pid), "program": prgm}
         if prgm in self._prgm_pts:
-            pts = round((self._prgm_pts[prgm] / 90000.0), 6)
-            packet_data["pts"] = pts
+            packet_data["pts"] = self._prog_pts(prgm)
         return packet_data
 
     @staticmethod
@@ -215,6 +197,17 @@ class Stream:
         """
         return (pkt[1] >> 6) & 1
 
+    def _parse_tables(self, pkt, pid):
+        if pid == 0:
+            self._chk_pat_payload(pkt)
+            return True
+        if pid in self._pids["pmt"]:
+            self._chk_pmt_payload(pkt, pid)
+            return True
+        if self.info:
+            return True
+        return False
+
     def _parser(self, pkt):
         """
         parse pid from pkt and
@@ -223,17 +216,14 @@ class Stream:
         pid = self._parse_pid(pkt[1], pkt[2])
         if pid in self._pids["ignore"]:
             return None
-        if pid == 0:
-            return self._chk_pat_payload(pkt)
-        if pid in self._pids["pmt"]:
-            return self._chk_pmt_payload(pkt, pid)
-        if self.info:
+        if self._parse_tables(pkt, pid):
             return None
         if pid in self._pids["scte35"]:
             return self._parse_scte35(pkt, pid)
         # for PTS
         if pid in self._pid_prog:
             return self._parse_pts(pkt, pid)
+        return None
 
     def _chk_pat_payload(self, pkt):
         """
@@ -274,6 +264,12 @@ class Stream:
             prgm = self._pid_prog[pid]
             self._prgm_pts[prgm] = pts
 
+    def _parse_cue(self, payload, pid):
+        packet_data = self._mk_packet_data(pid)
+        self._cue = Cue(payload, packet_data)
+        self._cue.info_section.decode(payload)
+        self._cue.bites = payload
+
     def _parse_scte35(self, pkt, pid):
         """
         parse a scte35 cue from one or more packets
@@ -282,15 +278,11 @@ class Stream:
         if not self._cue:
             payload = self._split_by_idx(payload, b"\xfc0")
             if not payload:
-                self._pids["scte35"].discard(pid)
                 self._pids["ignore"].add(pid)
                 return None
             if (payload[13] == 0) and (not self.show_null):
                 return None
-            packet_data = self._mk_packet_data(pid)
-            self._cue = Cue(payload, packet_data)
-            self._cue.info_section.decode(payload)
-            self._cue.bites = payload
+            self._parse_cue(payload, pid)
         else:
             self._cue.bites += payload
         # + 3 for the bytes before section starts

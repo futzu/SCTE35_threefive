@@ -42,8 +42,8 @@ def _read_stuff(stuff):
         # if stuff is a mpegts stream file.
 
         with open(stuff, "rb") as tsdata:
-            strm = Stream(tsdata)
-            strm.decode_fu()
+            strm = Stream(tsdata).decode()
+            strm.decode()
     except ValueError:
         pass
     try:
@@ -65,7 +65,7 @@ def _read_http(stuff):
     """
     with urllib.request.urlopen(stuff) as tsdata:
         strm = Stream(tsdata)
-        strm.decode_fu()
+        strm.decode()
 
 
 def decode(stuff=None):
