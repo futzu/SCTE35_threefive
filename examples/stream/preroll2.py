@@ -38,7 +38,8 @@ def show_preroll(cue):
             if "pts" in cue.packet_data:
                 two = f'{cue.command.pts_time}(preroll time = {cue.packet_data["preroll"]})'
                 print(two)
-            
+
+
 def do():
     args = sys.argv[1:]
     for arg in args:

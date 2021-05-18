@@ -119,7 +119,6 @@ class SpliceInsert(TimeSignal):
         self.duration_flag = None
         self.splice_immediate_flag = None
         self.components = None
-        self.component_count = None
         self.unique_program_id = None
         self.avail_num = None
         self.avail_expected = None
@@ -208,9 +207,9 @@ class SpliceSchedule(SpliceCommand):
             self.utc_splice_time = None
 
         def _decode_components(self, bitbin):
-            self.component_count = bitbin.as_int(8)
+            component_count = bitbin.as_int(8)
             self.components = []
-            for j in range(0, self.component_count):
+            for j in range(0, component_count):
                 self.components[j] = {
                     "component_tag": bitbin.as_int(8),
                     "utc_splice_time": bitbin.as_int(32),
