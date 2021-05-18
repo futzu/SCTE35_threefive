@@ -24,7 +24,6 @@ class SpliceDescriptor(SCTE35Base):
         self.parse_id()
         self.provider_avail_id = None
         self.components = None
-        self.audio_count = None
 
     def parse_tag_and_len(self):
         """
@@ -70,7 +69,7 @@ class AudioDescriptor(SpliceDescriptor):
         """
         self.name = "Audio Descriptor"
         bitbin = BitBin(self.bites)
-        self.audio_count = a_c = bitbin.as_int(4)
+        a_c = bitbin.as_int(4)
         bitbin.forward(4)
         self.components = []
         while a_c:

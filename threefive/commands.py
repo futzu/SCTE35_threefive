@@ -13,12 +13,11 @@ class SpliceCommand(SCTE35Base):
     def __init__(self, bites=None):
         self.calculated_length = None
         self.name = None
-        self.bites = bites
         self.identifier = None
         self.time_specified_flag = None
         self.pts_time = None
         self.splices = None
-        self.data = None
+        self.bites = bites
 
     def decode(self):
         """
@@ -55,11 +54,10 @@ class PrivateCommand(SpliceCommand):
         PrivateCommand.decode method
         """
         self.name = "Private Command"
-        self.identifier = None
         self.identifier = int.from_bytes(
             self.bites[0:3], byteorder="big"
         )  # 3 bytes = 24 bits
-        self.data = self.bites[3:]
+        self.bites = self.bites[3:]
 
 
 class SpliceNull(SpliceCommand):
@@ -160,9 +158,9 @@ class SpliceInsert(TimeSignal):
         over SpliceInsert.components,
         and is called from SpliceInsert.decode()
         """
-        self.component_count = bitbin.as_int(8)
+        component_count = bitbin.as_int(8)
         self.components = []
-        for i in range(0, self.component_count):
+        for i in range(0, component_count):
             self.components[i] = bitbin.as_int(8)
 
     def _decode_unique_avail(self, bitbin):
@@ -204,8 +202,8 @@ class SpliceSchedule(SpliceCommand):
         of SpliceEvent instances
         """
 
-        def __init__(self, bites=None):
-            super().__init__(bites)
+        def __init__(self):
+            super().__init__(None)
             self.name = None
             self.utc_splice_time = None
 
