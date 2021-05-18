@@ -51,6 +51,7 @@ class Stream:
         self._pids = {"ignore": set(), "pcr": set(), "pmt": set(), "scte35": set()}
         self._pid_prog = {}
         self._prgm_pcr = {}
+        self._prgm_pts = {}
         self._cue = None
         self._last_pat = b""
         self._pmt = {}
@@ -159,6 +160,11 @@ class Stream:
         ext /= 27000.0
         return round((pcrb + ext), 6)
 
+    def _mk_pts(self, prgm):
+        pts = self._prgm_pts[prgm]
+        pts /= 90000.0
+        return round(pts, 6)
+
     def _mk_packet_data(self, pid):
         """
         creates packet_data dict
@@ -168,6 +174,9 @@ class Stream:
         packet_data = {"pid": hex(pid), "program": prgm}
         if prgm in self._prgm_pcr:
             packet_data["pcr"] = self._mk_pcr(prgm)
+        if prgm in self._prgm_pts:
+            packet_data["pts"] = self._mk_pts(prgm)
+
         return packet_data
 
     @staticmethod
@@ -216,6 +225,25 @@ class Stream:
         """
         return (byte1 << 8) | byte2
 
+    @staticmethod
+    def _parse_pusi(pkt):
+        """
+        check if Pusi is set on packet.
+        """
+        return (pkt[1] >> 6) & 1
+
+    def _parse_pts(self, pkt, pid):
+        """
+        parse pts and store by program key
+        in the dict Stream._pid_pts
+        """
+        if self._parse_pusi(pkt):
+            pts = ((pkt[13] >> 1) & 7) << 30
+            pts |= ((pkt[14] << 7) | (pkt[15] >> 1)) << 15
+            pts |= (pkt[16] << 7) | (pkt[17] >> 1)
+            prgm = self._pid_prog[pid]
+            self._prgm_pts[prgm] = pts
+
     def _parse_tables(self, pkt, pid):
         if pid == 0:
             self._chk_pat_payload(pkt)
@@ -261,6 +289,8 @@ class Stream:
             return self._parse_scte35(pkt, pid)
         if pid in self._pids["pcr"]:
             return self._parse_pcr(pkt, pid)
+        if pid in self._pid_prog:
+            return self._parse_pts(pkt, pid)
         return None
 
     def _chk_pat_payload(self, pkt):
