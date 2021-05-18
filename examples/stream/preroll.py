@@ -35,7 +35,7 @@ def show_preroll(cue):
         if cue.packet_data:
             if "pts" in cue.packet_data:
                 one = f'Program: {cue.packet_data["program"]}\t{cue.command.name} @ {cue.packet_data["pts"]}'
-                two = f'\tSplice Time: {cue.command.pts_time}\tPreroll: {cue.packet_data["preroll"]}'
+                two = f'\tSplice Time: {cue.command.pst_time}\tPreroll: {cue.packet_data["preroll"]}'
                 print(one, two)
 
 

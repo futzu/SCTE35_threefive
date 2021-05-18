@@ -168,9 +168,9 @@ class Cue:
         preroll if needed.
         """
         if self.packet_data:
-            if "pts" in self.packet_data:
+            if "pcr" in self.packet_data:
                 self.packet_data["preroll"] = round(
-                    self.command.pts_time - self.packet_data["pts"], 6
+                    self.command.pts_time - self.packet_data["pcr"], 6
                 )
 
     def _set_splice_command(self, bites):
