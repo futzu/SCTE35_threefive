@@ -33,8 +33,8 @@ Program: 1030   Splice Insert @23676.9783       Splice Time: 23683.480033       
 def show_preroll(cue):
     if cue.command.pts_time:
         if cue.packet_data:
-            if "pts" in cue.packet_data:
-                one = f'Program: {cue.packet_data["program"]}\t{cue.command.name} @ {cue.packet_data["pts"]}'
+            if "pcr" in cue.packet_data:
+                one = f'Program: {cue.packet_data["program"]}\t{cue.command.name} @ {cue.packet_data["pcr"]}'
                 two = f'\tSplice Time: {cue.command.pst_time}\tPreroll: {cue.packet_data["preroll"]}'
                 print(one, two)
 
