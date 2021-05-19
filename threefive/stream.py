@@ -4,7 +4,7 @@ Mpeg-TS Stream parsing class Stream
 
 import sys
 from functools import partial
-from threefive import Cue
+from .cue import Cue
 
 
 def show_cue(cue):
@@ -46,6 +46,7 @@ class Stream:
         """
         self._tsdata = tsdata
         self.show_null = show_null
+        self.use_pcr = False
         self.info = None
         self.the_program = None
         self._pids = {"ignore": set(), "pcr": set(), "pmt": set(), "scte35": set()}
@@ -90,6 +91,15 @@ class Stream:
                 func(cue)
         return True
 
+    def decode_pcr(self, func=show_cue):
+        """
+        Stream.decode_pcr works just like
+        Stream.decode but parses pcr for
+        SCTE-35 packet times instead of pts
+        """
+        self.use_pcr = True
+        return self.decode(func)
+
     def _mk_pkts(self, chunk):
         return [
             self._parser(chunk[i : i + self._PACKET_SIZE])
@@ -132,7 +142,7 @@ class Stream:
         """
         Stream.decode_proxy writes all ts packets are written to stdout
         for piping into another program like mplayer.
-        threefive always prints messages and such to stderr.
+        SCTE-35 cues are printed to stderr.
         """
         if not self._find_start():
             return False
@@ -176,7 +186,6 @@ class Stream:
             packet_data["pcr"] = self._mk_pcr(prgm)
         if prgm in self._prgm_pts:
             packet_data["pts"] = self._mk_pts(prgm)
-
         return packet_data
 
     @staticmethod
@@ -260,16 +269,11 @@ class Stream:
         Parse PCR base and ext from
         PCR PID packets
         """
-        if (pkt[3] >> 5) & 1:
+        if (pkt[3] >> 5) & 1:  #
             if (pkt[5] >> 4) & 1:
                 # pcrb is 33 bits
-                pcrb = (
-                    (pkt[6] << 25)
-                    | (pkt[7] << 17)
-                    | (pkt[8] << 9)
-                    | (pkt[9] << 1)
-                    | (pkt[10] >> 7)
-                )
+                pcrb = (pkt[6] << 25) | (pkt[7] << 17)
+                pcrb |= (pkt[8] << 9) | (pkt[9] << 1) | (pkt[10] >> 7)
                 # ext is 9 bits
                 ext = ((pkt[10] & 1) << 8) | pkt[11]
                 prgm = self._pid_prog[pid]
@@ -287,10 +291,14 @@ class Stream:
             return None
         if pid in self._pids["scte35"]:
             return self._parse_scte35(pkt, pid)
-        if pid in self._pids["pcr"]:
-            return self._parse_pcr(pkt, pid)
-        if pid in self._pid_prog:
-            return self._parse_pts(pkt, pid)
+        if not self.use_pcr:
+            if pid not in self._pids["pcr"]:
+                if pid in self._pid_prog:
+                    return self._parse_pts(pkt, pid)
+        else:
+            if pid in self._pids["pcr"]:
+                return self._parse_pcr(pkt, pid)
+
         return None
 
     def _chk_pat_payload(self, pkt):
@@ -429,8 +437,6 @@ class Stream:
         """
         if stream_type in ["0x6", "0x86"]:
             self._pids["scte35"].add(pid)
-            if pid in self._pids["ignore"]:
-                self._pids["ignore"].discard(pid)
             if self.info:
                 if stream_type == "0x86":
                     print(f"\tPID: {pid}({hex(pid)}) Type: {stream_type} SCTE35")

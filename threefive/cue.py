@@ -160,18 +160,6 @@ class Cue:
         if self.command.name in ["Splice Insert", "Time Signal"]:
             if self.command.pts_time:
                 self.command.pts_time += self.info_section.pts_adjustment
-                self._set_preroll()
-
-    def _set_preroll(self):
-        """
-        cue._set_preroll calculates
-        preroll if needed.
-        """
-        if self.packet_data:
-            if "pcr" in self.packet_data:
-                self.packet_data["preroll"] = round(
-                    self.command.pts_time - self.packet_data["pcr"], 6
-                )
 
     def _set_splice_command(self, bites):
         """
