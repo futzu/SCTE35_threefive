@@ -1,4 +1,7 @@
 """
+
+! Requires threefive 2.2.88+ !
+
 Shows preroll using PCR and PTS
 for the time of the SCTE-35 packet.
 """
