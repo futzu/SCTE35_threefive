@@ -8,16 +8,17 @@ for the time of the SCTE-35 packet.
 import sys
 from threefive import Stream
 
+
 def show_preroll(cue):
     if cue.command.pts_time:
         if cue.packet_data:
-            two = f' Splice Time: {cue.command.pts_time} Preroll:'
+            two = f" Splice Time: {cue.command.pts_time} Preroll:"
             if "pcr" in cue.packet_data:
-                pcr_preroll = cue.command.pts_time - cue.packet_data['pcr']
-                two += f' (PCR): {round(pcr_preroll,6)}'
+                pcr_preroll = cue.command.pts_time - cue.packet_data["pcr"]
+                two += f" (PCR): {round(pcr_preroll,6)}"
             if "pts" in cue.packet_data:
-                pts_preroll = cue.command.pts_time - cue.packet_data['pts']
-                two+= f' (PTS): {round(pts_preroll,6)}'
+                pts_preroll = cue.command.pts_time - cue.packet_data["pts"]
+                two += f" (PTS): {round(pts_preroll,6)}"
             print(two)
 
 
