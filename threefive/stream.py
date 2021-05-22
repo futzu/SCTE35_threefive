@@ -285,21 +285,13 @@ class Stream:
         route it appropriately.
         """
         pid = self._parse_pid(pkt[1], pkt[2])
-        if pid in self._pids["ignore"]:
-            return None
-        if self._parse_tables(pkt, pid):
-            return None
+        if pid in self._pids["pcr"]:
+            return self._parse_pcr(pkt, pid)
         if pid in self._pids["scte35"]:
             return self._parse_scte35(pkt, pid)
-        if not self.use_pcr:
-            if pid not in self._pids["pcr"]:
-                if pid in self._pid_prog:
-                    return self._parse_pts(pkt, pid)
-        else:
-            if pid in self._pids["pcr"]:
-                return self._parse_pcr(pkt, pid)
-
-        return None
+        self._parse_tables(pkt, pid)
+        if pid in self._pid_prog:
+            self._parse_pts(pkt, pid)
 
     def _chk_pat_payload(self, pkt):
         """
@@ -342,7 +334,7 @@ class Stream:
         if not self._cue:
             payload = self._split_by_idx(payload, b"\xfc0")
             if not payload:
-                self._pids["ignore"].add(pid)
+                # self._pids["ignore"].add(pid)
                 return None
             # if 0 == False:
             if payload[13] == self.show_null:
