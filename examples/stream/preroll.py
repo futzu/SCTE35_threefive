@@ -25,11 +25,7 @@ def show_preroll(cue):
 def do():
     args = sys.argv[1:]
     for arg in args:
-        print(f"file: {arg} with PCR")
-        with open(arg, "rb") as vid:
-            strm = Stream(vid, show_null=True)
-            strm.decode_pcr(func=show_preroll)
-        print(f"file: {arg} with PTS")
+        print(f"file: {arg}")
         with open(arg, "rb") as vid:
             strm = Stream(vid, show_null=True)
             strm.decode_fu(func=show_preroll)
