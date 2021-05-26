@@ -49,7 +49,7 @@ class Stream:
         self.info = None
         self.the_program = None
         self._pids = {"ignore": set(), "pcr": set(), "pmt": set(), "scte35": set()}
-        self._pid_prog = {}
+        self._pid_prgm = {}
         self._prgm_pcr = {}
         self._prgm_pts = {}
         self._cue = None
@@ -168,7 +168,7 @@ class Stream:
         creates packet_data dict
         to pass to a threefive.Cue instance
         """
-        prgm = self._pid_prog[pid]
+        prgm = self._pid_prgm[pid]
         packet_data = {"pid": hex(pid), "program": prgm}
         if prgm in self._prgm_pcr:
             packet_data["pcr"] = self._mk_pcr(prgm)
@@ -216,7 +216,7 @@ class Stream:
         return (byte1 << 8 | byte2) & 0x01FFF
 
     @staticmethod
-    def _parse_program_number(byte1, byte2):
+    def _parse_program(byte1, byte2):
         """
         parse a 16 bit program number value
         """
@@ -248,23 +248,13 @@ class Stream:
         in the dict Stream._pid_pts
         """
         if self._parse_pusi(pkt):
-            pts = ((pkt[13] >> 1) & 7) << 30
-            pts |= ((pkt[14] << 7) | (pkt[15] >> 1)) << 15
-            pts |= (pkt[16] << 7) | (pkt[17] >> 1)
-            prgm = self._pid_prog[pid]
-            self._prgm_pts[prgm] = pts
+            if pid in self._pid_prgm:
+                pts = ((pkt[13] >> 1) & 7) << 30
+                pts |= ((pkt[14] << 7) | (pkt[15] >> 1)) << 15
+                pts |= (pkt[16] << 7) | (pkt[17] >> 1)
+                prgm = self._pid_prgm[pid]
+                self._prgm_pts[prgm] = pts
             # print(f'Program {prgm} PID {pid} PTS {pts/90000.0}')
-
-    def _parse_tables(self, pkt, pid):
-        if pid == 0:
-            self._chk_pat_payload(pkt)
-            return True
-        if pid in self._pids["pmt"]:
-            self._chk_pmt_payload(pkt, pid)
-            return True
-        if self.info:
-            return True
-        return False
 
     def _parse_pcr(self, pkt, pid):
         """
@@ -278,7 +268,7 @@ class Stream:
                 pcrb |= (pkt[8] << 9) | (pkt[9] << 1) | (pkt[10] >> 7)
                 # ext is 9 bits
                 ext = ((pkt[10] & 1) << 8) | pkt[11]
-                prgm = self._pid_prog[pid]
+                prgm = self._pid_prgm[pid]
                 self._prgm_pcr[prgm] = (pcrb, ext)
                 # print(f'Program {prgm} PID {pid} PCR {self._mk_pcr( prgm)}')
 
@@ -288,15 +278,18 @@ class Stream:
         route it appropriately.
         """
         pid = self._parse_pid(pkt[1], pkt[2])
-        if self._parse_tables(pkt, pid):
+        if pid == 0:
+            self._chk_pat_payload(pkt)
+        if pid in self._pids["pmt"]:
+            self._chk_pmt_payload(pkt, pid)
+        if self.info:
             return None
         if pid in self._pids["pcr"]:
-            return self._parse_pcr(pkt, pid)
-        if pid not in self._pids["ignore"]:
-            if pid in self._pids["scte35"]:
-                return self._parse_scte35(pkt, pid)
-        if pid in self._pid_prog:
-            return self._parse_pts(pkt, pid)
+            self._parse_pcr(pkt, pid)
+        else:
+            self._parse_pts(pkt, pid)
+        if pid in self._pids["scte35"]:
+            return self._parse_scte35(pkt, pid)
 
     def _chk_pat_payload(self, pkt):
         """
@@ -366,10 +359,11 @@ class Stream:
         idx = 9
         chunk_size = 4
         while section_length > 4:  #  4 bytes for crc
-            program_number = self._parse_program_number(payload[idx], payload[idx + 1])
+            program_number = self._parse_program(payload[idx], payload[idx + 1])
             if program_number > 0:
                 pmt_pid = self._parse_pid(payload[idx + 2], payload[idx + 3])
                 self._pids["pmt"].add(pmt_pid)
+                # self._pid_prgm[pmt_pid] = program_number
             section_length -= chunk_size
             idx += chunk_size
 
@@ -388,7 +382,7 @@ class Stream:
         if sectioninfolen + 3 > len(payload):  # +3 for bytes before sectioninfolen
             self._pmt[pid] = payload
             return
-        program_number = self._parse_program_number(payload[3], payload[4])
+        program_number = self._parse_program(payload[3], payload[4])
         if self.the_program and (program_number != self.the_program):
             return
         if self.info:
@@ -415,7 +409,7 @@ class Stream:
             stream_type, pid, ei_len = self._parse_stream_type(payload, idx)
             idx += chunk_size
             idx += ei_len
-            self._pid_prog[pid] = program_number
+            self._pid_prgm[pid] = program_number
             self._chk_pid_stream_type(pid, stream_type)
 
     def _parse_stream_type(self, payload, idx):

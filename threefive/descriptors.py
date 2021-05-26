@@ -143,7 +143,6 @@ class SegmentationDescriptor(SpliceDescriptor):
         super().__init__(bites)
         self.segmentation_event_id = None
         self.segmentation_event_cancel_indicator = None
-        self.component_count = None
         self.components = []
         self.program_segmentation_flag = None
         self.segmentation_duration_flag = None
@@ -153,7 +152,6 @@ class SegmentationDescriptor(SpliceDescriptor):
         self.archive_allowed_flag = None
         self.device_restrictions = None
         self.segmentation_duration = None
-        self.segmentation_duration_raw = None
         self.segmentation_message = None
         self.segmentation_upid_type = None
         self.segmentation_upid_type_name = None
@@ -181,7 +179,7 @@ class SegmentationDescriptor(SpliceDescriptor):
             self._decode_segmentation(bitbin)
 
     def _decode_components(self, bitbin):
-        self.component_count = c_c = bitbin.as_int(8)  # 1 byte
+        c_c = bitbin.as_int(8)  # 1 byte
         while c_c:  # 6 bytes each
             c_c -= 1
             comp = {}
