@@ -153,10 +153,9 @@ class Stream:
         """
         Combine prc base and ext
         """
-        pcrb, ext = self._prgm_pcr[prgm]
+        pcrb = self._prgm_pcr[prgm]
         pcrb /= 90000.0
-        ext /= 27000.0
-        return round((pcrb + ext), 6)
+        return round(pcrb, 6)
 
     def _mk_pts(self, prgm):
         pts = self._prgm_pts[prgm]
@@ -222,25 +221,13 @@ class Stream:
         """
         return (byte1 << 8) | byte2
 
-    '''
-    @staticmethod
-    def _parse_pusi(pkt):
-        """
-        check if Pusi is set on packet.
-        """
-        return (pkt[1] >> 6) & 1
-    '''
-
     @staticmethod
     def _parse_pusi(pkt):
         """
         used to determine if pts data is available.
         """
         if (pkt[1] >> 6) & 1:
-            if pkt[6] & 1:
-                if pkt[10] & 0x80:
-                    if pkt[11] & 0x80:
-                        return pkt[13] & 0x20
+            return pkt[6] & 1
 
     def _parse_pts(self, pkt, pid):
         """
@@ -254,7 +241,6 @@ class Stream:
                 pts |= (pkt[16] << 7) | (pkt[17] >> 1)
                 prgm = self._pid_prgm[pid]
                 self._prgm_pts[prgm] = pts
-            # print(f'Program {prgm} PID {pid} PTS {pts/90000.0}')
 
     def _parse_pcr(self, pkt, pid):
         """
@@ -263,14 +249,23 @@ class Stream:
         """
         if (pkt[3] >> 5) & 1:  #
             if (pkt[5] >> 4) & 1:
-                # pcrb is 33 bits
                 pcrb = (pkt[6] << 25) | (pkt[7] << 17)
                 pcrb |= (pkt[8] << 9) | (pkt[9] << 1) | (pkt[10] >> 7)
-                # ext is 9 bits
-                ext = ((pkt[10] & 1) << 8) | pkt[11]
                 prgm = self._pid_prgm[pid]
-                self._prgm_pcr[prgm] = (pcrb, ext)
-                # print(f'Program {prgm} PID {pid} PCR {self._mk_pcr( prgm)}')
+                self._prgm_pcr[prgm] = pcrb
+
+    def _parse_tables(self, pkt, pid):
+        if pid == 0:
+            self._chk_pat_payload(pkt)
+        else:
+            if pid in self._pids["pmt"]:
+                self._chk_pmt_payload(pkt, pid)
+
+    def _parse_times(self, pkt, pid):
+        if pid in self._pids["pcr"]:
+            self._parse_pcr(pkt, pid)
+        else:
+            self._parse_pts(pkt, pid)
 
     def _parser(self, pkt):
         """
@@ -278,16 +273,10 @@ class Stream:
         route it appropriately.
         """
         pid = self._parse_pid(pkt[1], pkt[2])
-        if pid == 0:
-            self._chk_pat_payload(pkt)
-        if pid in self._pids["pmt"]:
-            self._chk_pmt_payload(pkt, pid)
+        self._parse_tables(pkt, pid)
         if self.info:
             return None
-        if pid in self._pids["pcr"]:
-            self._parse_pcr(pkt, pid)
-        else:
-            self._parse_pts(pkt, pid)
+        self._parse_times(pkt, pid)
         if pid in self._pids["scte35"]:
             return self._parse_scte35(pkt, pid)
 
