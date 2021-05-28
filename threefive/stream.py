@@ -237,8 +237,10 @@ class Stream:
         if self._parse_pusi(pkt):
             if pid in self._pid_prgm:
                 pts = ((pkt[13] >> 1) & 7) << 30
-                pts |= ((pkt[14] << 7) | (pkt[15] >> 1)) << 15
-                pts |= (pkt[16] << 7) | (pkt[17] >> 1)
+                pts |= pkt[14] << 22
+                pts |= (pkt[15] >> 1) << 15
+                pts |= pkt[16] << 7
+                pts |= pkt[17] >> 1
                 prgm = self._pid_prgm[pid]
                 self._prgm_pts[prgm] = pts
 
@@ -247,12 +249,15 @@ class Stream:
         Parse PCR base and ext from
         PCR PID packets
         """
-        if (pkt[3] >> 5) & 1:  #
+        if (pkt[3] >> 5) & 1:
             if (pkt[5] >> 4) & 1:
-                pcrb = (pkt[6] << 25) | (pkt[7] << 17)
-                pcrb |= (pkt[8] << 9) | (pkt[9] << 1) | (pkt[10] >> 7)
+                pcr = pkt[6] << 25
+                pcr |= pkt[7] << 17
+                pcr |= pkt[8] << 9
+                pcr |= pkt[9] << 1
+                pcr |= pkt[10] >> 7
                 prgm = self._pid_prgm[pid]
-                self._prgm_pcr[prgm] = pcrb
+                self._prgm_pcr[prgm] = pcr
 
     def _parse_tables(self, pkt, pid):
         if pid == 0:
