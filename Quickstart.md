@@ -1,22 +1,25 @@
-### Up and Running in Less Than 7 Seconds.
+# Quickstart: Decode a transport stream
 
-#### Step One of Two
+In this quickstart, you install the `threefive` Python package. You then decode a MPEG transport stream (TS) from a URL pointing to a TS resource. 
 
-* Estimated time to complete this step : 2.0 - 2.5 seconds
+## Before you begin
 
-```js
-pip3 install threefive
+Make sure you have Python 3 or `pypy3` installed.
+
+## Install `threefive`
+
+```sh
+python3 -m pip install threefive
 ```
 
-#### Step Two of Two
-
-*  Estimated time to complete this step : 3.0 - 4.5 seconds 
+## Parse the TS stream
 
 ```sh
 python3 -c 'import threefive; threefive.decode("https://futzu.com/xaa.ts")' 
 ```
 
-* Ouput looks like this.
+Output similar to the following is displayed:
+
 ```sh
 {
     "info_section": {
@@ -68,6 +71,9 @@ python3 -c 'import threefive; threefive.decode("https://futzu.com/xaa.ts")'
     "program": 1,
     "pts": 89730.289522
 }
-
-
 ```
+
+## What's next
+
+With threefive installed, you can continue to explore the other examples. For a complete list of
+available examples, see [examples](https://github.com/futzu/threefive/tree/master/examples).
