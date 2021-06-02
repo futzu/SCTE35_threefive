@@ -121,7 +121,7 @@ hexed = "0xFC301100000000000000FFFFFF0000004F253396"
 threefive.decode(hexed)
 ```
 
-* __Read a string directly from a file__ encoded in __Base64__, __Binary__ or  __Base64__
+* __Read a string directly from a file__ encoded in __Base64__, __Binary__ or  __Hex__
 
 ```bash
 $ cat cue.dat
