@@ -54,7 +54,7 @@ class Stream:
         self._prgm_pts = {}
         self._cue = None
         self._last_pat = b""
-        self._pmt = {}
+        self._partial = {}
         self._last_pmt = {}
 
     def __repr__(self):
@@ -226,23 +226,21 @@ class Stream:
         """
         used to determine if pts data is available.
         """
-        if (pkt[1] >> 6) & 1:
-            return pkt[6] & 1
+        return (pkt[1] >> 6) & 1
 
     def _parse_pts(self, pkt, pid):
         """
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
-        if self._parse_pusi(pkt):
-            if pid in self._pid_prgm:
-                pts = ((pkt[13] >> 1) & 7) << 30
-                pts |= pkt[14] << 22
-                pts |= (pkt[15] >> 1) << 15
-                pts |= pkt[16] << 7
-                pts |= pkt[17] >> 1
-                prgm = self._pid_prgm[pid]
-                self._prgm_pts[prgm] = pts
+        if pkt[6] & 1:
+            pts = ((pkt[13] >> 1) & 7) << 30
+            pts |= pkt[14] << 22
+            pts |= (pkt[15] >> 1) << 15
+            pts |= pkt[16] << 7
+            pts |= pkt[17] >> 1
+            prgm = self._pid_prgm[pid]
+            self._prgm_pts[prgm] = pts
 
     def _parse_pcr(self, pkt, pid):
         """
@@ -259,31 +257,31 @@ class Stream:
                 prgm = self._pid_prgm[pid]
                 self._prgm_pcr[prgm] = pcr
 
-    def _parse_tables(self, pkt, pid):
-        if pid == 0:
-            self._chk_pat_payload(pkt)
-        else:
-            if pid in self._pids["pmt"]:
-                self._chk_pmt_payload(pkt, pid)
-
-    def _parse_times(self, pkt, pid):
-        if pid in self._pids["pcr"]:
-            self._parse_pcr(pkt, pid)
-        else:
-            self._parse_pts(pkt, pid)
-
     def _parser(self, pkt):
         """
         parse pid from pkt and
         route it appropriately.
         """
         pid = self._parse_pid(pkt[1], pkt[2])
-        self._parse_tables(pkt, pid)
+        if pid == 0:
+            return self._chk_pat_payload(pkt)
+        if pid in self._pids["pmt"]:
+            return self._chk_pmt_payload(pkt, pid)
         if self.info:
             return None
-        self._parse_times(pkt, pid)
+        if pid in self._pids["pcr"]:
+            return self._parse_pcr(pkt, pid)
+        if self._parse_pusi(pkt):
+            if pid in self._pid_prgm:
+                self._parse_pts(pkt, pid)
         if pid in self._pids["scte35"]:
             return self._parse_scte35(pkt, pid)
+
+    def _chk_partial(self, payload, pid):
+        if pid in self._partial:
+            # Handle tables split over multiple packets
+            payload = self._partial.pop(pid) + payload
+        return payload
 
     def _chk_pat_payload(self, pkt):
         """
@@ -346,9 +344,14 @@ class Stream:
         parse program association table ( pid 0 )
         for program to pmt_pid mappings.
         """
+        pid = 0
+        payload = self._chk_partial(payload, pid)
         # pointer_field = payload[0]
         # table_id  = payload[1]
         section_length = self._parse_length(payload[2], payload[3])
+        if section_length + 3 > len(payload):
+            self._partial[pid] = payload
+            return None
         section_length -= 5  # payload bytes 4,5,6,7,8
         idx = 9
         chunk_size = 4
@@ -357,7 +360,6 @@ class Stream:
             if program_number > 0:
                 pmt_pid = self._parse_pid(payload[idx + 2], payload[idx + 3])
                 self._pids["pmt"].add(pmt_pid)
-                # self._pid_prgm[pmt_pid] = program_number
             section_length -= chunk_size
             idx += chunk_size
 
@@ -365,16 +367,12 @@ class Stream:
         """
         parse program maps for streams
         """
-        if pid in self._pmt:
-            # Handle PMT split over multiple packets
-            payload = self._pmt[pid] + payload
+        payload = self._chk_partial(payload, pid)
         payload = self._split_by_idx(payload, b"\x02")
-        if not payload:
-            return
         # table_id = payload[0]
         sectioninfolen = self._parse_length(payload[1], payload[2])
         if sectioninfolen + 3 > len(payload):  # +3 for bytes before sectioninfolen
-            self._pmt[pid] = payload
+            self._partial[pid] = payload
             return
         program_number = self._parse_program(payload[3], payload[4])
         if self.the_program and (program_number != self.the_program):
@@ -389,7 +387,6 @@ class Stream:
         si_len = sectioninfolen - 9
         si_len -= proginfolen
         self._parse_program_streams(si_len, payload, idx, program_number)
-        return
 
     def _parse_program_streams(self, si_len, payload, idx, program_number):
         """

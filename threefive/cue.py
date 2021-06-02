@@ -33,7 +33,7 @@ class Cue:
         self.descriptors = []
         self.crc = None
         if data:
-            self.data = self._strip_header(data)
+            self.data = data
             self.bites = self._mk_bits(self.data)
             self.packet_data = packet_data
 
@@ -188,13 +188,3 @@ class Cue:
         for printing to sys.stderr
         """
         print(self.get_json(), file=stderr)
-
-    @staticmethod
-    def _strip_header(data):
-        """
-        Cue._strip_header strips off
-        packet headers when present
-        """
-        if data[0] == 0x47:
-            return data[5:]
-        return data
