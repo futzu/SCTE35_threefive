@@ -36,7 +36,8 @@ if __name__ == "__main__":
 
 ```
 ___
-### Python3 version 3.9.2
+### Python3 
+* version 3.9.2
 ```sh
 
 a@fu:~/$ time python3 cli.py plp0.ts
@@ -47,7 +48,8 @@ a@fu:~/$ time python3 cli.py plp0.ts
 
 
 ___
-### pypy3 version 7.3.3 
+### pypy3 
+* version 7.3.3 
 
 ```sh
 
