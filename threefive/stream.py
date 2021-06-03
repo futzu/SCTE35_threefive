@@ -53,9 +53,8 @@ class Stream:
         self._prgm_pcr = {}
         self._prgm_pts = {}
         self._cue = None
-        self._last_pat = b""
         self._partial = {}
-        self._last_pmt = {}
+        self._last = {}
 
     def __repr__(self):
         return str(vars(self))
@@ -101,7 +100,7 @@ class Stream:
         Stream.decode_fu decodes
         1000 packets at a time.
         """
-        pkts = 1000
+        pkts = 1384
         if not self._find_start():
             return False
         for chunk in iter(partial(self._tsdata.read, (self._PACKET_SIZE * pkts)), b""):
@@ -222,11 +221,11 @@ class Stream:
         return (byte1 << 8) | byte2
 
     @staticmethod
-    def _parse_pusi(pkt):
+    def _parse_pusi(one):
         """
         used to determine if pts data is available.
         """
-        return (pkt[1] >> 6) & 1
+        return (one >> 6) & 1
 
     def _parse_pts(self, pkt, pid):
         """
@@ -269,13 +268,15 @@ class Stream:
             return self._chk_pmt_payload(pkt, pid)
         if self.info:
             return None
+        if pid not in self._pid_prgm:
+            return None
         if pid in self._pids["pcr"]:
             return self._parse_pcr(pkt, pid)
-        if self._parse_pusi(pkt):
-            if pid in self._pid_prgm:
-                self._parse_pts(pkt, pid)
+        if self._parse_pusi(pkt[1]):
+            self._parse_pts(pkt, pid)
         if pid in self._pids["scte35"]:
-            return self._parse_scte35(pkt, pid)
+            if pid not in self._pids["ignore"]:
+                return self._parse_scte35(pkt, pid)
 
     def _chk_partial(self, payload, pid):
         if pid in self._partial:
@@ -283,18 +284,23 @@ class Stream:
             payload = self._partial.pop(pid) + payload
         return payload
 
+    def _chk_last(self, payload, pid):
+        if pid in self._last:
+            return payload == self._last[pid]
+        self._last[pid] = payload
+        return False
+
     def _chk_pat_payload(self, pkt):
         """
         Compare PAT packet payload
         to the last PAT packet payload
         before parsing
         """
+        pid = 0
         payload = self._parse_payload(pkt)
-        if payload == self._last_pat:
+        if self._chk_last(payload, pid):
             return None
-        self._last_pat = payload
         self._program_association_table(payload)
-        return None
 
     def _chk_pmt_payload(self, pkt, pid):
         """
@@ -303,12 +309,9 @@ class Stream:
         before parsing
         """
         payload = self._parse_payload(pkt)
-        if pid in self._last_pmt:
-            if payload == self._last_pmt[pid]:
-                return None
-        self._last_pmt[pid] = payload
+        if self._chk_last(payload, pid):
+            return None
         self._program_map_table(payload, pid)
-        return None
 
     def _parse_cue(self, payload, pid):
         packet_data = self._mk_packet_data(pid)
