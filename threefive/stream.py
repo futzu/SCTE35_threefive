@@ -82,7 +82,7 @@ class Stream:
         if not self._find_start():
             return False
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
-            cue = self._parser(pkt)
+            cue = self._parse(pkt)
             if cue:
                 if not func:
                     return cue
@@ -91,7 +91,7 @@ class Stream:
 
     def _mk_pkts(self, chunk):
         return [
-            self._parser(chunk[i : i + self._PACKET_SIZE])
+            self._parse(chunk[i : i + self._PACKET_SIZE])
             for i in range(0, len(chunk), self._PACKET_SIZE)
         ]
 
@@ -135,7 +135,7 @@ class Stream:
             return False
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
             sys.stdout.buffer.write(pkt)
-            cue = self._parser(pkt)
+            cue = self._parse(pkt)
             if cue:
                 func(cue)
         return True
@@ -148,18 +148,26 @@ class Stream:
         self.info = True
         self.decode()
 
+    @staticmethod
+    def _mk_timestamp(seconds):
+        """
+        90khtz clock applied and rounded
+        """
+        return round((seconds / 90000.0), 6)
+
     def _mk_pcr(self, prgm):
         """
-        Combine prc base and ext
+        make pcr timestamp
         """
         pcrb = self._prgm_pcr[prgm]
-        pcrb /= 90000.0
-        return round(pcrb, 6)
+        return self._mk_timestamp(pcrb)
 
     def _mk_pts(self, prgm):
+        """
+        make pts timestamp
+        """
         pts = self._prgm_pts[prgm]
-        pts /= 90000.0
-        return round(pts, 6)
+        return self._mk_timestamp(pts)
 
     def _mk_packet_data(self, pid):
         """
@@ -221,11 +229,11 @@ class Stream:
         return (byte1 << 8) | byte2
 
     @staticmethod
-    def _parse_pusi(one):
+    def _parse_pusi(byte1):
         """
         used to determine if pts data is available.
         """
-        return (one >> 6) & 1
+        return (byte1 >> 6) & 1
 
     def _parse_pts(self, pkt, pid):
         """
@@ -256,7 +264,7 @@ class Stream:
                 prgm = self._pid_prgm[pid]
                 self._prgm_pcr[prgm] = pcr
 
-    def _parser(self, pkt):
+    def _parse(self, pkt):
         """
         parse pid from pkt and
         route it appropriately.
@@ -301,6 +309,7 @@ class Stream:
         if self._chk_last(payload, pid):
             return None
         self._program_association_table(payload)
+        return None
 
     def _chk_pmt_payload(self, pkt, pid):
         """
@@ -312,6 +321,7 @@ class Stream:
         if self._chk_last(payload, pid):
             return None
         self._program_map_table(payload, pid)
+        return None
 
     def _parse_cue(self, payload, pid):
         packet_data = self._mk_packet_data(pid)
