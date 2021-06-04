@@ -1,4 +1,9 @@
-## threefive.  Python3 Vs. Pypy3
+## threefive Performance, Python3 vs. Pypy3.
+I was very skeptical when I found pypy3. I tried pypy3 anyway. 
+At first, threefive actually ran slower on pypy3. I started using a profiler
+and noticed that pypy3 was much faster than python3 at some tasks, like bitwise operations. 
+
+__threefive on pypy3 parses MPEGTS video at over 1GB a second on my laptop__ 
 
 
 ___
@@ -46,7 +51,7 @@ ___
 a@fu:~/$ time python3 cli.py plp0.ts
 ```
 
-#### real:   15.547s
+#### real:   15.266s
 
 
 
@@ -59,7 +64,7 @@ ___
 a@fu:~/$  time pypy3 cli.py plp0.ts
 
 ```
-#### real	:   4.592s
+#### real	:   3.407s
 
 
 
