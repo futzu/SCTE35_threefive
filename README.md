@@ -52,7 +52,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 ---
 
 * Requires python 3.6+ or pypy3
-     * [threefive runs 4x Faster on pypy3  ](https://github.com/futzu/threefive/blob/master/py3vspypy3.md#threefive--python3-vs-pypy3)
+     * [threefive runs 3x Faster on pypy3  ](https://github.com/futzu/threefive/blob/master/py3vspypy3.md#threefive--python3-vs-pypy3)
 
 * To install for the system, Install as root.
 
