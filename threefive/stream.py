@@ -205,7 +205,8 @@ class Stream:
         if afc:
             afl = pkt[4]
             head_size += afl + 1  # +1 for afl byte
-        return pkt[head_size:]
+        payload = pkt[head_size:]
+        return payload
 
     @staticmethod
     def _parse_length(byte1, byte2):
@@ -271,7 +272,7 @@ class Stream:
         """
         pid = self._parse_pid(pkt[1], pkt[2])
         if pid == 0:
-            return self._chk_pat_payload(pkt)
+            return self._chk_pat_payload(pkt, pid)
         if pid in self._pids["pmt"]:
             return self._chk_pmt_payload(pkt, pid)
         if self.info:
@@ -279,7 +280,7 @@ class Stream:
         if pid not in self._pid_prgm:
             return None
         if pid in self._pids["pcr"]:
-            return self._parse_pcr(pkt, pid)
+            self._parse_pcr(pkt, pid)
         if self._parse_pusi(pkt[1]):
             self._parse_pts(pkt, pid)
         if pid in self._pids["scte35"]:
@@ -298,18 +299,15 @@ class Stream:
         self._last[pid] = payload
         return False
 
-    def _chk_pat_payload(self, pkt):
+    def _chk_pat_payload(self, pkt, pid):
         """
         Compare PAT packet payload
         to the last PAT packet payload
         before parsing
         """
-        pid = 0
         payload = self._parse_payload(pkt)
-        if self._chk_last(payload, pid):
-            return None
-        self._program_association_table(payload)
-        return None
+        if not self._chk_last(payload, pid):
+            self._program_association_table(payload)
 
     def _chk_pmt_payload(self, pkt, pid):
         """
@@ -318,10 +316,8 @@ class Stream:
         before parsing
         """
         payload = self._parse_payload(pkt)
-        if self._chk_last(payload, pid):
-            return None
-        self._program_map_table(payload, pid)
-        return None
+        if not self._chk_last(payload, pid):
+            self._program_map_table(payload, pid)
 
     def _parse_cue(self, payload, pid):
         packet_data = self._mk_packet_data(pid)
@@ -344,7 +340,7 @@ class Stream:
                 return None
             self._parse_cue(payload, pid)
         else:
-            self._cue.bites += payload
+            self._cue.bites = self._chk_partial(payload, pid)
         # + 3 for the bytes before section starts
         if (self._cue.info_section.section_length + 3) > len(self._cue.bites):
             return None
@@ -358,15 +354,15 @@ class Stream:
         for program to pmt_pid mappings.
         """
         pid = 0
-        payload = self._chk_partial(payload, pid)
+        payload = self._chk_partial(payload, pid)[1:]
         # pointer_field = payload[0]
-        # table_id  = payload[1]
-        section_length = self._parse_length(payload[2], payload[3])
+        # table_id  = payload[0]
+        section_length = self._parse_length(payload[1], payload[2])
         if section_length + 3 > len(payload):
             self._partial[pid] = payload
             return None
-        section_length -= 5  # payload bytes 4,5,6,7,8
-        idx = 9
+        section_length -= 5  # payload bytes 3,4,5,6,7
+        idx = 8
         chunk_size = 4
         while section_length > 4:  #  4 bytes for crc
             program_number = self._parse_program(payload[idx], payload[idx + 1])
@@ -382,6 +378,8 @@ class Stream:
         """
         payload = self._chk_partial(payload, pid)
         payload = self._split_by_idx(payload, b"\x02")
+        if not payload:
+            return
         # table_id = payload[0]
         sectioninfolen = self._parse_length(payload[1], payload[2])
         if sectioninfolen + 3 > len(payload):  # +3 for bytes before sectioninfolen

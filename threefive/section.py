@@ -45,7 +45,9 @@ class SpliceInfoSection(SCTE35Base):
         bitbin = BitBin(bites)
         self.table_id = bitbin.as_hex(8)
         if self.table_id != "0xfc":
-            raise ValueError("splice_info_section.table_id should be 0xfc")
+            raise ValueError(
+                ("splice_info_section.table_id should be 0xfc Not: ", self.table_id)
+            )
         self.section_syntax_indicator = bitbin.as_flag(1)
         if self.section_syntax_indicator != 0:
             raise ValueError("section_syntax_indicator should be 0")
