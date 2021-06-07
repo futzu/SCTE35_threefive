@@ -1,7 +1,8 @@
-[![Go Report Card](https://goreportcard.com/badge/github.com/FUTZU/scte35)](https://goreportcard.com/report/github.com/FUTZU/scte35)
-# scte35			
-The SCTE 35 Parser in Go.
-### Heads up, work in progress.
+[![Go Report Card](https://goreportcard.com/badge/github.com/FUTZU/threefive/go)](https://goreportcard.com/report/github.com/FUTZU/threefive/go)
+# threefive/go			
+The threefive Parser in Go.
+
+##### Heads up, work in progress.
 
 #### What is working:
 
