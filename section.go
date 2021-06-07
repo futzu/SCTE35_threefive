@@ -1,4 +1,4 @@
-package scte35
+package threefive
 
 import "github.com/futzu/bitter"
 
