@@ -1,70 +1,73 @@
-[![Go Report Card](https://goreportcard.com/badge/github.com/FUTZU/threefive/go)](https://goreportcard.com/report/github.com/FUTZU/threefive/go)
-# threefive/go			
+# threefive/go
+
+[![Go Report Card](https://goreportcard.com/badge/FUTZU/threefive)](https://goreportcard.com/report/FUTZU/threefive)
+
 The threefive Parser in Go.
 
-##### Heads up, work in progress.
+_This is a work in progress, please look at the develop branch for ongoing development._
 
-#### What is working:
+## Roadmap
 
+| SCTE35 Formats |   |
+|----------------|---|
+| MPEG-TS        | ✓ |
+| Base64 Strings | ✓ |
 
+| Splice Commands       |   |
+|-----------------------|---|
+| Splice Insert         | ✓ |
+| Splice Null           | ✓ |
+| Time Signal           | ✓ |
+| Private Command       | ✓ |
+| Bandwidth Reservation | ✓ |
 
-| SCTE35 Formats    |   |
-|-------------------|-----|
-| MPEG-TS           | ✓ |
-| Base64 Strings    |   ✓ |
-   
+| Splice Descriptors       |   |
+|--------------------------|---|
+| Avail Descriptors        | ✓ |
+| DTMF descriptors         | ✓ |
+| Time Descriptors         | ✓ |
+| Segmentation Descriptors | x |
 
+## Installation
 
-| Splice Commands         |   |
-|-------------------------|-------|
-|   Splice Insert         |  ✓    |
-|  Splice Null            |  ✓    |
-|  Time Signal            |  ✓    |
-|     Private Command     |   ✓   |
-|  Bandwidth Reservation  |    ✓  |
-
-
-|Splice Descriptors        |    |
-|--------------------------|-----|
-| Avail Descriptors        |   ✓ |
-| DTMF descriptors         |   ✓ |
-| Time Descriptors         |    ✓|
-| Segmentation Descriptors | x    |
-
-
-#### Installation
 ```sh
 go get -u github.com/futzu/scte35
 ```
-#### Parsing MPEGTS files 
-* Make a file test.go
-```go
 
+## Parsing MPEGTS files
+
+* Make a file test.go
+
+```go
 package main
 
 import (
-	"os"
 	"fmt"
 	"github.com/futzu/threefive/go"
+	"os"
 )
 
-func main(){
+func main() {
 
 	args := os.Args[1:]
-	for i := range args{
-		fmt.Printf( "\nNext File: %s\n\n",args[i] )
-		var stream   threefive.Stream
+	for i := range args {
+		fmt.Printf("\nNext File: %s\n\n", args[i])
+		var stream threefive.Stream
 		stream.Decode(args[i])
 	}
-}     
+}
 ```
-*  Build
-```sh 
+
+## Build
+
+```sh
 go build test.go
 ```
-*  Use.
-```sh	
-~$ :~$  ./test mpegts/udp.livetv.ts 
+
+## Use
+
+```sh
+./test mpegts/udp.livetv.ts
 
 Next File: mpegts/udp.livetv.ts
 {
@@ -180,89 +183,86 @@ Next File: mpegts/udp.livetv.ts
     "Pts": 38199.872111,
     "Pcr": 38199.918911
 }
+```
 
+## Parsing a base64 string
 
-
-``` 	
-
-#### Parsing a base64 string
 ```go
 /** call this file test1.go
 
-    go build test1.go 
-    
+    go build test1.go
+
    ./test1 "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
 **/
 
 package main
 
 import (
-	"os"
 	"fmt"
 	"github.com/futzu/threefive/go"
+	"os"
 )
 
 func main() {
 
-
 	args := os.Args[1:]
-	for i := range args{
+	for i := range args {
 		bites := threefive.DeB64(args[i])
 		fmt.Println(args[i])
 		threefive.SCTE35Parser(bites)
 	}
 }
-```  
----
-##### Output 
-*(Now in json format)*
-```js
-}
-1035
-{
-    "InfoSection": {
-        "Name": "Splice Info Section",
-        "TableId": "0xfc",
-        "SectionSyntaxIndicator": false,
-        "Private": false,
-        "Reserved": "0x3",
-        "SectionLength": 42,
-        "ProtocolVersion": 0,
-        "EncryptedPacket": false,
-        "EncryptionAlgorithm": 0,
-        "PtsAdjustment": 0,
-        "CwIndex": "0xff",
-        "Tier": "0xfff",
-        "SpliceCommandLength": 15,
-        "SpliceCommandType": 5,
-        "DescriptorLoopLength": 10
-    },
-    "Command": {
-        "Name": "Splice Insert",
-        "SpliceEventId": "0x163a",
-        "SpliceEventCancelIndicator": false,
-        "OutOfNetworkIndicator": true,
-        "ProgramSpliceFlag": true,
-        "DurationFlag": false,
-        "BreakAutoReturn": false,
-        "SpliceImmediateFlag": false,
-        "TimeSpecifiedFlag": true,
-        "PTS": 23683.480033,
-        "UniqueProgramId": 0,                                           
-        "AvailNum": 0,
-        "AvailExpected": 0,
-        "Identifier": 0
-    },
-    "Descriptors": [
-        {
-            "DescriptorType": 0,
-            "DescriptorLen": 8,
-            "Identifier": "0x43554549",
-            "Name": "Avail Descriptor",
-            "ProviderAvailId": 0
-        }
-    ]
-}
+```
 
-	
+### Output
+
+_(Now in json format)_
+
+```json
+{
+    "1035": {
+        "InfoSection": {
+            "Name": "Splice Info Section",
+            "TableId": "0xfc",
+            "SectionSyntaxIndicator": false,
+            "Private": false,
+            "Reserved": "0x3",
+            "SectionLength": 42,
+            "ProtocolVersion": 0,
+            "EncryptedPacket": false,
+            "EncryptionAlgorithm": 0,
+            "PtsAdjustment": 0,
+            "CwIndex": "0xff",
+            "Tier": "0xfff",
+            "SpliceCommandLength": 15,
+            "SpliceCommandType": 5,
+            "DescriptorLoopLength": 10
+        },
+        "Command": {
+            "Name": "Splice Insert",
+            "SpliceEventId": "0x163a",
+            "SpliceEventCancelIndicator": false,
+            "OutOfNetworkIndicator": true,
+            "ProgramSpliceFlag": true,
+            "DurationFlag": false,
+            "BreakAutoReturn": false,
+            "SpliceImmediateFlag": false,
+            "TimeSpecifiedFlag": true,
+            "PTS": 23683.480033,
+            "UniqueProgramId": 0,
+            "AvailNum": 0,
+            "AvailExpected": 0,
+            "Identifier": 0
+        },
+        "Descriptors": [
+            {
+                "DescriptorType": 0,
+                "DescriptorLen": 8,
+                "Identifier": "0x43554549",
+                "Name": "Avail Descriptor",
+                "ProviderAvailId": 0
+            }
+        ]
+    }
+}
 ```
