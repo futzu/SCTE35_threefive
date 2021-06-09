@@ -53,9 +53,9 @@ func main(){
 ```sh 
 go build test.go
 ```
-*  Use.
+*  Run.
 ```sh	
-~$ time ./test threefive/plp0.ts
+~$ ./test threefive/plp0.ts
 Next File: threefive/plp0.ts
 {
     "InfoSection": {
@@ -163,13 +163,9 @@ Next File: threefive/plp0.ts
 ``` 	
 
 #### Parsing a base64 string
-```go
-/** call this file test1.go
 
-    go build test1.go 
-    
-   ./test1 "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
-**/
+* Make a file test1.go
+```go
 package main
 
 import (
@@ -187,6 +183,14 @@ func main(){
     }
 }
 ```  
+* Build
+```sh
+  go build test1.go 
+```
+* Run
+```
+   ./test1 "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
+```
 ---
 ##### Output 
 *(Now in json format)*
