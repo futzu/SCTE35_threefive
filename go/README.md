@@ -8,34 +8,25 @@ The threefive Parser in Go.
 
 
 
-| SCTE35 Formats    |   |
-|-------------------|-----|
-| MPEG-TS           | ✓ |
-| Base64 Strings    |   ✓ |
-   
+| Working           | |
+|-------------------|-|
+| MPEG-TS          | ✓ |
+| Base64 Strings   | ✓ |
+| Splice Commands  | ✓ |
 
 
-| Splice Commands         |   |
-|-------------------------|-------|
-|   Splice Insert         |  ✓    |
-|  Splice Null            |  ✓    |
-|  Time Signal            |  ✓    |
-|     Private Command     |   ✓   |
-|  Bandwidth Reservation  |    ✓  |
-
-
-|Splice Descriptors        |    |
-|--------------------------|-----|
-| Avail Descriptors        |   ✓ |
-| DTMF descriptors         |   ✓ |
-| Time Descriptors         |    ✓|
-| Segmentation Descriptors | x    |
+|Not Working       	   | |
+|--------------------------|-|
+| Segmentation Descriptors |x|
 
 
 #### Installation
 ```sh
 go get -u github.com/futzu/threefive/go
 ```
+
+
+
 #### Parsing MPEGTS files 
 * Make a file test.go
 ```go
