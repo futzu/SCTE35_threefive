@@ -203,7 +203,7 @@ func (stream *Stream) parsePat(pay []byte, pid uint16) {
 	}
 	seclen -= 5 // pay bytes 4,5,6,7,8
 	idx := uint16(9)
-    end := idx +seclen -4  //  4 bytes for crc
+	end := idx + seclen - 4 //  4 bytes for crc
 	chunksize := uint16(4)
 	for idx < end {
 		prgm := parsePrgm(pay[idx], pay[idx+1])
@@ -214,7 +214,7 @@ func (stream *Stream) parsePat(pay []byte, pid uint16) {
 				fmt.Printf("Program: %v Pmt Pid: %v\n", prgm, pmtpid)
 			}
 		}
-        idx += chunksize
+		idx += chunksize
 
 	}
 	delete(stream.partial, pid)
@@ -254,13 +254,13 @@ func (stream *Stream) parseScte35(pay []byte, pid uint16) {
 	}
 	seclen := parseLen(pay[1], pay[2])
 	if !stream.sectionDone(pay, pid, seclen) {
-			return
+		return
 	}
 	cue := stream.mkCue(pid)
-	if !cue.Decode(pay){
-	    return
-	 }
-    cue.Show()
+	if !cue.Decode(pay) {
+		return
+	}
+	cue.Show()
 	delete(stream.partial, pid)
 }
 
@@ -292,7 +292,7 @@ func (stream *Stream) parseStreams(silen uint16, pay []byte, idx uint16, prgm ui
 }
 
 func (stream *Stream) vrfyStreamType(pid uint16, streamtype uint8) {
-    if streamtype == 134 {
+	if streamtype == 134 {
 		if !(stream.pids.isScte35(pid)) {
 			stream.pids.scte35 = append(stream.pids.scte35, pid)
 		}
