@@ -34,7 +34,7 @@ The threefive Parser in Go.
 
 #### Installation
 ```sh
-go get -u github.com/futzu/scte35
+go get -u github.com/futzu/threefive/go
 ```
 #### Parsing MPEGTS files 
 * Make a file test.go
@@ -74,55 +74,47 @@ Next File: mpegts/udp.livetv.ts
         "SectionSyntaxIndicator": false,
         "Private": false,
         "Reserved": "0x3",
-        "SectionLength": 49,
+        "SectionLength": 42,
         "ProtocolVersion": 0,
         "EncryptedPacket": false,
         "EncryptionAlgorithm": 0,
         "PtsAdjustment": 0,
-        "CwIndex": "0x0",
+        "CwIndex": "0xff",
         "Tier": "0xfff",
-        "SpliceCommandLength": 20,
+        "SpliceCommandLength": 15,
         "SpliceCommandType": 5,
-        "DescriptorLoopLength": 12
+        "DescriptorLoopLength": 10
     },
     "Command": {
         "Name": "Splice Insert",
-        "SpliceEventId": "0x5d",
+        "SpliceEventId": "0x400004f7",
         "SpliceEventCancelIndicator": false,
-        "OutOfNetworkIndicator": true,
+        "OutOfNetworkIndicator": false,
         "ProgramSpliceFlag": true,
-        "DurationFlag": true,
+        "DurationFlag": false,
         "BreakAutoReturn": false,
-        "BreakDuration": 90.023266,
         "SpliceImmediateFlag": false,
         "TimeSpecifiedFlag": true,
-        "PTS": 38113.135577,
-        "UniqueProgramId": 0,
-        "AvailNum": 0,
-        "AvailExpected": 0,
+        "PTS": 23696.827655,
+        "UniqueProgramId": 1,
+        "AvailNum": 12,
+        "AvailExpected": 255,
         "Identifier": 0
     },
     "Descriptors": [
         {
-            "DescriptorType": 1,
-            "DescriptorLen": 10,
+            "DescriptorType": 0,
+            "DescriptorLen": 8,
             "Identifier": "0x43554549",
-            "Name": "DTMF Descriptor",
-            "ProviderAvailId": 0,
-            "PreRoll": 177,
-            "DTMFCount": 4,
-            "DTMFChars": [
-                "1",
-                "2",
-                "1",
-                "*"
-            ]
+            "Name": "Avail Descriptor",
+            "ProviderAvailId": 12
         }
     ],
-    "Pid": 515,
-    "Program": 51,
-    "Pts": 38103.872111,
-    "Pcr": 38103.868588
+    "PacketNumber": 20038146,
+    "Pid": 1015,
+    "Program": 1010,
+    "Pcr": 23690.340577,
+    "Pts": 23690.393066
 }
 {
     "InfoSection": {
@@ -131,28 +123,28 @@ Next File: mpegts/udp.livetv.ts
         "SectionSyntaxIndicator": false,
         "Private": false,
         "Reserved": "0x3",
-        "SectionLength": 44,
+        "SectionLength": 42,
         "ProtocolVersion": 0,
         "EncryptedPacket": false,
         "EncryptionAlgorithm": 0,
         "PtsAdjustment": 0,
-        "CwIndex": "0x0",
+        "CwIndex": "0xff",
         "Tier": "0xfff",
         "SpliceCommandLength": 15,
         "SpliceCommandType": 5,
-        "DescriptorLoopLength": 12
+        "DescriptorLoopLength": 10
     },
     "Command": {
         "Name": "Splice Insert",
-        "SpliceEventId": "0x5e",
+        "SpliceEventId": "0x163a",
         "SpliceEventCancelIndicator": false,
-        "OutOfNetworkIndicator": false,
+        "OutOfNetworkIndicator": true,
         "ProgramSpliceFlag": true,
         "DurationFlag": false,
         "BreakAutoReturn": false,
         "SpliceImmediateFlag": false,
         "TimeSpecifiedFlag": true,
-        "PTS": 38203.125477,
+        "PTS": 23683.480033,
         "UniqueProgramId": 0,
         "AvailNum": 0,
         "AvailExpected": 0,
@@ -160,26 +152,21 @@ Next File: mpegts/udp.livetv.ts
     },
     "Descriptors": [
         {
-            "DescriptorType": 1,
-            "DescriptorLen": 10,
+            "DescriptorType": 0,
+            "DescriptorLen": 8,
             "Identifier": "0x43554549",
-            "Name": "DTMF Descriptor",
-            "ProviderAvailId": 0,
-            "PreRoll": 177,
-            "DTMFCount": 4,
-            "DTMFChars": [
-                "1",
-                "2",
-                "1",
-                "#"
-            ]
+            "Name": "Avail Descriptor",
+            "ProviderAvailId": 0
         }
     ],
-    "Pid": 515,
-    "Program": 51,
-    "Pts": 38199.872111,
-    "Pcr": 38199.918911
+    "PacketNumber": 20122112,
+    "Pid": 1035,
+    "Program": 1030,
+    "Pcr": 23677.003266,
+    "Pts": 23677.030188
 }
+
+
 
 
 
