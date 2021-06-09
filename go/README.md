@@ -13,6 +13,7 @@ The threefive Parser in Go.
 | MPEG-TS          | ✓ |
 | Base64 Strings   | ✓ |
 | Splice Commands  | ✓ |
+| Splice Descriptors  | 70% |
 
 
 |Not Working       	   | |
