@@ -1,7 +1,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/FUTZU/threefive/go)](https://goreportcard.com/report/github.com/FUTZU/threefive/go)
 # threefive/go			
 The threefive Parser in Go.
-* __threefive/go__ is the __fast__.
+* __threefive/go__ is __Fast__.
 	* __Full decode of 3.7GB of MPEGTS video in 1.187 seconds.  
 
 ##### Heads up, work in progress.
