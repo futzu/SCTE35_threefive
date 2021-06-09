@@ -13,9 +13,6 @@ a@fuhq$ ffmpeg -hide_banner -i video.ts
 Input #0, mpegts, from 'video.ts':                                                                                            
   Duration: 00:02:41.17, start: 38090.624111, bitrate: 7044 kb/s
   Program 51 
-    Metadata:
-      service_name    : CNBC HD
-      service_provider: NBCU
     Stream #0:0[0x1fe]: Video: h264 (High) ([27][0][0][0] / 0x001B), yuv420p(tv, bt709, top first), 1920x1080 [SAR 1:1 DAR 16:9], Closed Captions, 29.97 fps, 59.94 tbr, 90k tbn, 59.94 tbc
     Stream #0:1[0x1ff]: Audio: ac3 ([129][0][0][0] / 0x0081), 48000 Hz, 5.1(side), fltp, 384 kb/s
     Stream #0:2[0x200]: Audio: ac3 ([129][0][0][0] / 0x0081), 48000 Hz, stereo, fltp, 192 kb/s
@@ -29,7 +26,7 @@ Input #0, mpegts, from 'video.ts':
 a@fuhq$ ffmpeg -copyts \
         -i video.ts -c copy -map 0 \
         -streamid 0:510  -streamid 1:511 -streamid 2:512 -streamid 3:515 -mpegts_service_id 51 \
-        -metadata service_provider="NBCU" -metadata service_name="CNBC HD" -y out.ts
+        -y out.ts
 ```
 * **This Warning Pops Up**
 ```
@@ -42,9 +39,6 @@ a@fuhq$ ffmpeg -hide_banner -i out.ts
 Input #0, mpegts, from 'out.ts':                                                                                              
   Duration: 00:02:41.17, start: 38092.024111, bitrate: 7065 kb/s
   Program 51 
-    Metadata:
-      service_name    : CNBC HD
-      service_provider: NBCU
     Stream #0:0[0x1fe]: Video: h264 (High) ([27][0][0][0] / 0x001B), yuv420p(tv, bt709, top first), 1920x1080 [SAR 1:1 DAR 16:9], Closed Captions, 29.97 fps, 59.94 tbr, 90k tbn, 59.94 tbc
     Stream #0:1[0x1ff]: Audio: ac3 ([129][0][0][0] / 0x0081), 48000 Hz, 5.1(side), fltp, 384 kb/s
     Stream #0:2[0x200]: Audio: ac3 ([129][0][0][0] / 0x0081), 48000 Hz, stereo, fltp, 192 kb/s
