@@ -36,7 +36,7 @@ func (spi *SpInfo) Decode(bitn *bitter.Bitn) bool {
 	spi.Reserved = bitn.AsHex(2)
 	spi.SectionLength = bitn.AsUInt64(12)
 	spi.ProtocolVersion = bitn.AsUInt64(8)
-	if spi.ProtocolVersion != 0 {
+if spi.ProtocolVersion != 0 {
 		return false
 	}
 	spi.EncryptedPacket = bitn.AsBool()

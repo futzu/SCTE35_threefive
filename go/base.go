@@ -87,7 +87,6 @@ func (cue *Cue) Decode(bites []byte) bool {
 	var bitn bitter.Bitn
 	bitn.Load(bites)
 	if !cue.InfoSection.Decode(&bitn) {
-
 		return false
 	}
 	cue.Command.Decode(&bitn, cue.InfoSection.SpliceCommandType)
