@@ -105,59 +105,7 @@ Next File: threefive/plp0.ts
     "Pcr": 23690.340577,
     "Pts": 23690.393066
 }
-{
-    "InfoSection": {
-        "Name": "Splice Info Section",
-        "TableId": "0xfc",
-        "SectionSyntaxIndicator": false,
-        "Private": false,
-        "Reserved": "0x3",
-        "SectionLength": 42,
-        "ProtocolVersion": 0,
-        "EncryptedPacket": false,
-        "EncryptionAlgorithm": 0,
-        "PtsAdjustment": 0,
-        "CwIndex": "0xff",
-        "Tier": "0xfff",
-        "SpliceCommandLength": 15,
-        "SpliceCommandType": 5,
-        "DescriptorLoopLength": 10
-    },
-    "Command": {
-        "Name": "Splice Insert",
-        "SpliceEventId": "0x163a",
-        "SpliceEventCancelIndicator": false,
-        "OutOfNetworkIndicator": true,
-        "ProgramSpliceFlag": true,
-        "DurationFlag": false,
-        "BreakAutoReturn": false,
-        "SpliceImmediateFlag": false,
-        "TimeSpecifiedFlag": true,
-        "PTS": 23683.480033,
-        "UniqueProgramId": 0,
-        "AvailNum": 0,
-        "AvailExpected": 0,
-        "Identifier": 0
-    },
-    "Descriptors": [
-        {
-            "DescriptorType": 0,
-            "DescriptorLen": 8,
-            "Identifier": "0x43554549",
-            "Name": "Avail Descriptor",
-            "ProviderAvailId": 0
-        }
-    ],
-    "PacketNumber": 20122112,
-    "Pid": 1035,
-    "Program": 1030,
-    "Pcr": 23677.003266,
-    "Pts": 23677.030188
-}
-
-
-
-
+...
 
 ``` 	
 
