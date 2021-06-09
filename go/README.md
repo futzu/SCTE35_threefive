@@ -4,14 +4,12 @@ The threefive Parser in Go.
 
 ##### Heads up, work in progress.
 
-#### What is working:
-
-
 
 | Working           | |
 |-------------------|-|
 | MPEG-TS          | ✓ |
 | Base64 Strings   | ✓ |
+| Splice Info Section  | ✓ | 
 | Splice Commands  | ✓ |
 | Splice Descriptors  | 70% |
 
