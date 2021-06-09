@@ -2,7 +2,6 @@
 * threefive is a __SCTE-35 Decoder / Parser library in Python3__.
 * threefive references the __2020 SCTE-35__ Specification.
 * threefive decodes __SCTE-35__ from __MPEG-TS video__ files and streams.
- * threefive is MPEGTS __Frame Accurate and Packet Accurate__ to the __Nanosecond__ (__0.000001__) .
 * threefive decodes __SCTE-35__ from __Base64, Hex, and Binary__ encoded strings.
 * threefive decodes __SCTE-35__ from __ffmpeg__ [` Data: bin_data ([6][0][0][0] / 0x0006)`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) streams.
 
