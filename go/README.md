@@ -2,7 +2,7 @@
 # threefive/go			
 The threefive Parser in Go.
 * __threefive/go__ is __Fast__.
-	* __Full decode of 3.7GB of MPEGTS video in 1.187 seconds.  
+	* __Full decode of 3.7GB of MPEGTS video in 1.187 seconds__ on my [__laptop__](https://www.samsung.com/us/computing/windows-laptops/notebook-series-7/notebook-7-spin-np730qaa-k02us/#specs)  running Debian [__Sid__](https://www.debian.org/releases/sid/).
 
 ##### Heads up, work in progress.
 
