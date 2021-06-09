@@ -64,9 +64,8 @@ go build test.go
 ```
 *  Use.
 ```sh	
-~$ :~$  ./test mpegts/udp.livetv.ts 
-
-Next File: mpegts/udp.livetv.ts
+~$ time ./test threefive/plp0.ts
+Next File: threefive/plp0.ts
 {
     "InfoSection": {
         "Name": "Splice Info Section",
