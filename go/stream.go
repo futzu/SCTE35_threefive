@@ -6,6 +6,7 @@ import (
 	"os"
 )
 
+//Pids holds collections of pids by type for threefive.Stream.
 type Pids struct {
 	pmt    []uint16
 	pcr    []uint16
@@ -27,13 +28,16 @@ func (pids *Pids) isIgnore(pid uint16) bool {
 	return IsIn16(pids.ignore, pid)
 }
 
+//Stream for parsing MPEGTS for SCTE-35
 type Stream struct {
-	Pkts     int
-	pid2prgm map[uint16]uint16
-	prgm2pcr map[uint16]uint64
-	prgm2pts map[uint16]uint64
-	partial  map[uint16][]byte
-	last     map[uint16][]byte
+	Pkts     int               // packet count.
+	pid2prgm map[uint16]uint16 //lookup table for pid to program
+
+	prgm2pcr map[uint16]uint64 //lookup table for program to pcr
+
+	prgm2pts map[uint16]uint64 //lookup table for program to pts
+	partial  map[uint16][]byte // partial manages tables spread across multiple packets by pid
+	last     map[uint16][]byte // last compares current packet payload to last packet payload by pid
 	pids     Pids
 }
 
@@ -45,7 +49,7 @@ func (stream *Stream) mkMaps() {
 	stream.prgm2pts = make(map[uint16]uint64)
 }
 
-// Decode for Stream
+// Decode fname (a file name) for SCTE-35
 func (stream *Stream) Decode(fname string) {
 	stream.mkMaps()
 	stream.Pkts = 0

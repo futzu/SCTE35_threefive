@@ -14,7 +14,7 @@ const PktSz = 188
 // BufferSize is the size of a read when parsing files.
 const BufferSize = 13000 * PktSz
 
-// Generic catchall error checking
+//Chk generic catchall error checking
 func Chk(e error) {
 	if e != nil {
 		fmt.Println(e)
@@ -108,6 +108,7 @@ func (cue *Cue) DscptrLoop(bitn *bitter.Bitn) {
 	}
 }
 
+//Show display SCTE-35 data as JSON.
 func (cue *Cue) Show() {
 	fmt.Println(MkJson(&cue))
 }
