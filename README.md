@@ -1,16 +1,19 @@
 # threefive
 * threefive is a __SCTE-35 Decoder / Parser library in Python3__ 
-* threefive is now testing a [__Golang__  version too.](https://github.com/futzu/threefive/tree/master/go).
 * threefive references the __2020 SCTE-35__ Specification.
 * threefive decodes __SCTE-35__ from __MPEG-TS video__ files and streams.
 * threefive decodes __SCTE-35__ from __Base64, Hex, and Binary__ encoded strings.
 * threefive decodes __SCTE-35__ from __ffmpeg__ [` Data: bin_data ([6][0][0][0] / 0x0006)`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) streams.
-
+* threefive is now testing a [__Golang__  version too.](https://github.com/futzu/threefive/tree/master/go).
+___
 
 
 *   [__Versions and Releases__](#versions-and-releases)
+
 *   [__Install threefive__](#install)
+
 *   [__Quick Start__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+
 *   [__Easy threefive__](#the-decode-function)
       * [Parsing __SCTE-35__ Cues from __Mpeg-TS Streams__](#the-decode-function)
       * [Parsing __SCTE-35__ Cues from __Mpeg-TS Streams__ over __HTTPS__](#the-decode-function)
