@@ -64,12 +64,12 @@ func parsePrgm(byte1 byte, byte2 byte) uint16 {
 	return uint16(byte1)<<8 | uint16(byte2)
 }
 
-func splitBefore(payload []byte, bite byte) []byte {
+func splitByIdx(payload []byte, bite byte) []byte {
 	idx := bytes.IndexByte(payload, bite)
-	if idx != -1 {
-		return payload[idx:]
+	if idx == -1 {
+		return []byte("")
 	}
-	return []byte("")
+	return payload[idx:]
 }
 
 // Cue a SCTE35 cue.

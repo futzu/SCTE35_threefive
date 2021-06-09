@@ -134,7 +134,7 @@ func (stream *Stream) parsePayload(pkt []byte) []byte {
 	return pkt[head:]
 }
 
-func (stream *Stream) plusPayload(pay []byte, pid uint16) []byte {
+func (stream *Stream) plusPartial(pay []byte, pid uint16) []byte {
 	var ok bool
 	var val []byte
 	val, ok = stream.partial[pid]
@@ -190,7 +190,7 @@ func (stream *Stream) parsePat(pay []byte, pid uint16) {
 	if stream.sameAsLast(pay, pid) {
 		return
 	}
-	pay = stream.plusPayload(pay, pid)
+	pay = stream.plusPartial(pay, pid)
 	// pointer field = pay[0]
 	// table_id  = pay[1]
 	seclen := parseLen(pay[2], pay[3])
@@ -219,8 +219,8 @@ func (stream *Stream) parsePmt(pay []byte, pid uint16) {
 	if stream.sameAsLast(pay, pid) {
 		return
 	}
-	pay = stream.plusPayload(pay, pid)
-	pay = splitBefore(pay, 0x02)
+	pay = stream.plusPartial(pay, pid)
+	pay = splitByIdx(pay, 0x02)
 	if len(pay) == 0 {
 		return
 	}
@@ -247,8 +247,8 @@ func (stream *Stream) parseScte35(pay []byte, pid uint16) {
 	if stream.pids.isIgnore(pid) {
 		return
 	}
-	pay = stream.plusPayload(pay, pid)
-	pay = splitBefore(pay, 0xfc)
+	pay = stream.plusPartial(pay, pid)
+	pay = splitByIdx(pay, 0xfc)
 	if len(pay) == 0 {
 		stream.pids.ignore = append(stream.pids.ignore, pid)
 		return
