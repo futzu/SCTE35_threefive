@@ -179,32 +179,27 @@ Next File: threefive/plp0.ts
     
    ./test1 "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
 **/
-
 package main
 
 import (
-	"os"
-	"fmt"
+    "os"
 	"github.com/futzu/threefive/go"
 )
-
-func main() {
-
-
+func main(){
 	args := os.Args[1:]
 	for i := range args{
-		bites := threefive.DeB64(args[i])
-		fmt.Println(args[i])
-		threefive.SCTE35Parser(bites)
-	}
+        bites := threefive.DeB64(args[i])
+        var cue threefive.Cue
+        if cue.Decode(bites){
+            cue.Show()
+        }
+    }
 }
 ```  
 ---
 ##### Output 
 *(Now in json format)*
 ```js
-}
-1035
 {
     "InfoSection": {
         "Name": "Splice Info Section",
@@ -212,29 +207,30 @@ func main() {
         "SectionSyntaxIndicator": false,
         "Private": false,
         "Reserved": "0x3",
-        "SectionLength": 42,
+        "SectionLength": 47,
         "ProtocolVersion": 0,
         "EncryptedPacket": false,
         "EncryptionAlgorithm": 0,
         "PtsAdjustment": 0,
         "CwIndex": "0xff",
         "Tier": "0xfff",
-        "SpliceCommandLength": 15,
+        "SpliceCommandLength": 20,
         "SpliceCommandType": 5,
         "DescriptorLoopLength": 10
     },
     "Command": {
         "Name": "Splice Insert",
-        "SpliceEventId": "0x163a",
+        "SpliceEventId": "0x4800008f",
         "SpliceEventCancelIndicator": false,
         "OutOfNetworkIndicator": true,
         "ProgramSpliceFlag": true,
-        "DurationFlag": false,
-        "BreakAutoReturn": false,
+        "DurationFlag": true,
+        "BreakAutoReturn": true,
+        "BreakDuration": 60.293566,
         "SpliceImmediateFlag": false,
         "TimeSpecifiedFlag": true,
-        "PTS": 23683.480033,
-        "UniqueProgramId": 0,                                           
+        "PTS": 21514.559088,
+        "UniqueProgramId": 0,
         "AvailNum": 0,
         "AvailExpected": 0,
         "Identifier": 0
@@ -245,7 +241,7 @@ func main() {
             "DescriptorLen": 8,
             "Identifier": "0x43554549",
             "Name": "Avail Descriptor",
-            "ProviderAvailId": 0
+            "ProviderAvailId": 309
         }
     ]
 }
