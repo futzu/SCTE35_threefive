@@ -188,13 +188,9 @@ func main(){
   go build test1.go 
 ```
 * Run
-```
-   ./test1 "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
-```
----
-##### Output 
-*(Now in json format)*
 ```js
+   ./test1 "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
+
 {
     "InfoSection": {
         "Name": "Splice Info Section",
