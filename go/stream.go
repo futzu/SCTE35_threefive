@@ -224,7 +224,7 @@ func (stream *Stream) parsePmt(pay []byte, pid uint16) {
 	if stream.sameAsLast(pay, pid) {
 		return
 	}
-	pay = stream.plusPartial(pay, pid, 0x02)
+	pay = stream.plusPartial(pay, pid, 02)
 	if len(pay) == 0 {
 		return
 	}
@@ -244,11 +244,17 @@ func (stream *Stream) parsePmt(pay []byte, pid uint16) {
 	silen -= proginfolen
 	stream.parseStreams(silen, pay, idx, prgm)
 	delete(stream.partial, pid)
-	return
+
 }
 
 func (stream *Stream) parseScte35(pay []byte, pid uint16) {
 	pay = stream.plusPartial(pay, pid, 0xfc)
+	splitup := bytes.Split(pay, []byte("\xfc0"))
+	if len(splitup) == 2 {
+		pay = append([]byte("\xfc0"), splitup[1]...)
+	} else {
+		return
+	}
 	if len(pay) == 0 {
 		return
 	}
@@ -292,7 +298,7 @@ func (stream *Stream) parseStreams(silen uint16, pay []byte, idx uint16, prgm ui
 }
 
 func (stream *Stream) vrfyStreamType(pid uint16, streamtype uint8) {
-	if streamtype == 134 {
+	if streamtype == 6 || streamtype == 134 {
 		if !(stream.pids.isScte35(pid)) {
 			stream.pids.scte35 = append(stream.pids.scte35, pid)
 		}
