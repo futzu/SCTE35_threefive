@@ -22,14 +22,23 @@ type SpInfo struct {
 }
 
 // Decode splice info section values.
-func (spi *SpInfo) Decode(bitn *bitter.Bitn) (bool, error) {
+func (spi *SpInfo) Decode(bitn *bitter.Bitn) bool {
 	spi.Name = "Splice Info Section"
 	spi.TableId = bitn.AsHex(8)
+	if spi.TableId != "0xfc" {
+		return false
+	}
 	spi.SectionSyntaxIndicator = bitn.AsBool()
+	if spi.SectionSyntaxIndicator {
+		return false
+	}
 	spi.Private = bitn.AsBool()
 	spi.Reserved = bitn.AsHex(2)
 	spi.SectionLength = bitn.AsUInt64(12)
 	spi.ProtocolVersion = bitn.AsUInt64(8)
+	if spi.ProtocolVersion != 0 {
+		return false
+	}
 	spi.EncryptedPacket = bitn.AsBool()
 	spi.EncryptionAlgorithm = bitn.AsUInt64(6)
 	spi.PtsAdjustment = bitn.As90k(33)
@@ -37,5 +46,5 @@ func (spi *SpInfo) Decode(bitn *bitter.Bitn) (bool, error) {
 	spi.Tier = bitn.AsHex(12)
 	spi.SpliceCommandLength = bitn.AsUInt64(12)
 	spi.SpliceCommandType = bitn.AsUInt64(8)
-	return true, nil
+	return true
 }

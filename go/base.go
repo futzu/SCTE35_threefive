@@ -24,9 +24,7 @@ func Chk(e error) {
 // MkJson structs to JSON
 func MkJson(i interface{}) string {
 	jason, err := json.MarshalIndent(&i, "", "    ")
-	if err != nil {
-		fmt.Println(err)
-	}
+	Chk(err)
 	return string(jason)
 }
 
@@ -85,14 +83,17 @@ type Cue struct {
 }
 
 // Decode extracts bits for the Cue values.
-func (cue *Cue) Decode(bites []byte) {
+func (cue *Cue) Decode(bites []byte) bool {
 	var bitn bitter.Bitn
 	bitn.Load(bites)
-	cue.InfoSection.Decode(&bitn)
+	if !cue.InfoSection.Decode(&bitn) {
+
+		return false
+	}
 	cue.Command.Decode(&bitn, cue.InfoSection.SpliceCommandType)
 	cue.InfoSection.DescriptorLoopLength = bitn.AsUInt64(16)
 	cue.DscptrLoop(&bitn)
-	fmt.Println(MkJson(&cue))
+	return true
 }
 
 // DscptrLoop loops over any splice descriptors
@@ -106,4 +107,8 @@ func (cue *Cue) DscptrLoop(bitn *bitter.Bitn) {
 		i += sd.DescriptorLen + 2
 		cue.Descriptors = append(cue.Descriptors, sd)
 	}
+}
+
+func (cue *Cue) Show() {
+	fmt.Println(MkJson(&cue))
 }
