@@ -1,4 +1,4 @@
-[![Go Report Card](https://goreportcard.com/badge/github.com/FUTZU/threefive/go)](https://goreportcard.com/report/github.com/FUTZU/threefive/go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/FUTZU/threefive)](https://goreportcard.com/report/github.com/FUTZU/threefive)
 # threefive/go			
 The threefive Parser in Go.
 * __threefive/go__ is __Fast__.
