@@ -2,39 +2,14 @@ package threefive
 
 import (
 	"bytes"
-	"fmt"
 	"os"
 )
-
-//Pids holds collections of pids by type for threefive.Stream.
-type Pids struct {
-	pmt    []uint16
-	pcr    []uint16
-	scte35 []uint16
-	ignore []uint16
-}
-
-func (pids *Pids) isPmt(pid uint16) bool {
-	return IsIn16(pids.pmt, pid)
-}
-func (pids *Pids) isPcr(pid uint16) bool {
-	return IsIn16(pids.pcr, pid)
-}
-func (pids *Pids) isScte35(pid uint16) bool {
-	return IsIn16(pids.scte35, pid)
-}
-
-func (pids *Pids) isIgnore(pid uint16) bool {
-	return IsIn16(pids.ignore, pid)
-}
 
 //Stream for parsing MPEGTS for SCTE-35
 type Stream struct {
 	Pkts     int               // packet count.
 	pid2prgm map[uint16]uint16 //lookup table for pid to program
-
 	prgm2pcr map[uint16]uint64 //lookup table for program to pcr
-
 	prgm2pts map[uint16]uint64 //lookup table for program to pts
 	partial  map[uint16][]byte // partial manages tables spread across multiple packets by pid
 	last     map[uint16][]byte // last compares current packet payload to last packet payload by pid
@@ -66,11 +41,10 @@ func (stream *Stream) Decode(fname string) {
 			end := i * PktSz
 			start := end - PktSz
 			pkt := buffer[start:end]
-			stream.Pkts += 1
+			stream.Pkts++
 			stream.parse(pkt)
 		}
 	}
-	// fmt.Printf("%+v",stream)
 }
 
 func (stream *Stream) mkPcr(prgm uint16) float64 {
@@ -140,9 +114,7 @@ func (stream *Stream) parsePayload(pkt []byte) []byte {
 }
 
 func (stream *Stream) plusPartial(pay []byte, pid uint16, bite byte) []byte {
-	var ok bool
-	var val []byte
-	val, ok = stream.partial[pid]
+	val, ok := stream.partial[pid]
 	if ok {
 		return append(val, pay...)
 	}
@@ -150,12 +122,9 @@ func (stream *Stream) plusPartial(pay []byte, pid uint16, bite byte) []byte {
 }
 
 func (stream *Stream) sameAsLast(pay []byte, pid uint16) bool {
-	var ok bool
-	var val []byte
-	val, ok = stream.last[pid]
+	val, ok := stream.last[pid]
 	if ok {
 		if bytes.Compare(pay, val) == 0 {
-
 			return true
 		}
 	}
@@ -166,10 +135,8 @@ func (stream *Stream) sameAsLast(pay []byte, pid uint16) bool {
 func (stream *Stream) sectionDone(pay []byte, pid uint16, seclen uint16) bool {
 	if seclen+3 > uint16(len(pay)) {
 		stream.partial[pid] = pay
-
 		return false
 	}
-
 	return true
 }
 
@@ -183,6 +150,7 @@ func (stream *Stream) parse(pkt []byte) {
 	}
 	if stream.pids.isPmt(*pid) {
 		stream.parsePmt(pay, *pid)
+
 	}
 	if stream.pids.isPcr(*pid) {
 		stream.parsePcr(pkt, *pid)
@@ -199,8 +167,6 @@ func (stream *Stream) parsePat(pay []byte, pid uint16) {
 		return
 	}
 	pay = stream.plusPartial(pay, pid, 0x00)
-	// pointer field = pay[0]
-	// table_id  = pay[1]
 	seclen := parseLen(pay[2], pay[3])
 	if !stream.sectionDone(pay, pid, seclen) {
 		return
@@ -213,13 +179,9 @@ func (stream *Stream) parsePat(pay []byte, pid uint16) {
 		prgm := parsePrgm(pay[idx], pay[idx+1])
 		if prgm > 0 {
 			pmtpid := parsePid(pay[idx+2], pay[idx+3])
-			if !stream.pids.isPmt(pmtpid) {
-				stream.pids.pmt = append(stream.pids.pmt, pmtpid)
-				fmt.Printf("Program: %v Pmt Pid: %v\n", prgm, pmtpid)
-			}
+			stream.pids.addPmt(pmtpid)
 		}
 		idx += chunksize
-
 	}
 	delete(stream.partial, pid)
 }
@@ -238,9 +200,7 @@ func (stream *Stream) parsePmt(pay []byte, pid uint16) {
 	}
 	prgm := parsePrgm(pay[3], pay[4])
 	pcrpid := parsePid(pay[8], pay[9])
-	if !(stream.pids.isPcr(pcrpid)) {
-		stream.pids.pcr = append(stream.pids.pcr, pcrpid)
-	}
+	stream.pids.addPcr(pcrpid)
 	proginfolen := parseLen(pay[10], pay[11])
 	idx := uint16(12)
 	idx += proginfolen
@@ -257,9 +217,6 @@ func (stream *Stream) parseScte35(pay []byte, pid uint16) {
 	if len(splitup) == 2 {
 		pay = append([]byte("\xfc0"), splitup[1]...)
 	} else {
-		return
-	}
-	if len(pay) == 0 {
 		return
 	}
 	seclen := parseLen(pay[1], pay[2])
@@ -303,9 +260,6 @@ func (stream *Stream) parseStreams(silen uint16, pay []byte, idx uint16, prgm ui
 
 func (stream *Stream) vrfyStreamType(pid uint16, streamtype uint8) {
 	if streamtype == 6 || streamtype == 134 {
-		if !(stream.pids.isScte35(pid)) {
-			stream.pids.scte35 = append(stream.pids.scte35, pid)
-		}
-
+		stream.pids.addScte35(pid)
 	}
 }
