@@ -1,10 +1,8 @@
-#### threefive Performance
+> threefive Performance
 ## Python3 vs. Pypy3.
-I was very skeptical when I found pypy3.
-At first, threefive actually ran slower on pypy3, then I started using a profiler
-and noticed that pypy3 was much faster than python3 at some tasks, like bitwise operations. 
-I've been playing to pypy3s strengths and the performane gains are massive.
-
+>I've found pypy3 to be 100% compatible with threefive. Everything works.
+>
+>Pypy3 is much faster than python3 at bitwise operations and just about everything else.
 
 ___
 ### Test File
