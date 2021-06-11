@@ -397,8 +397,8 @@ ___
 ## Social Injustice and Stuff
 ___
 ####  __I thought transcode was a word__. I use it all the time.
-transcode  *tran(t)s-ˈkōd,* en- 
- *to decode data from a stream in one format and then encode the data into another format.   
+transcode  *tran(t)s-ˈkōd, en- 
+ *to decode data from a stream in one format and then encode the data into another format*.   
 
   ![transcode](https://user-images.githubusercontent.com/52701496/121726762-fc436300-cab8-11eb-95c0-16243efcd860.png)
   ___
