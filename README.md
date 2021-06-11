@@ -31,7 +31,7 @@ ___
      * [__All Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)   
 * [__threefive Spotted in The Wild__](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 * [__ffmpeg__ and __SCTE35__ and __Stream Type__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
-
+* [__Social Injustice and Stuff__](https://github.com/futzu/threefive/blob/master/README.md#social-injustice-and-stuff)
 
 ---
 
@@ -139,9 +139,6 @@ from threefive import decode
 decode('cue.dat')
 
 ```
-___
-
-![openbsdransom](https://user-images.githubusercontent.com/52701496/117953431-04568a00-b2e4-11eb-85eb-a26d7d4c9045.png)
 
 ___
 
@@ -163,7 +160,7 @@ b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAA
 cue = Cue(b64)
 cue.decode()
 ```
-___
+___https://github.com/futzu/threefive/blob/master/README.md#social-injustice-and-stuff
 
 
 * A decoded __Cue__ instance contains: 
@@ -396,4 +393,13 @@ with open('vid.ts','rb') as tsdata:
 $ python3 proxy.py | mplayer -
 ```
 ___
+
+## Social Injustice and Stuff
+___
+####  __I thought transcode was a word__. I use it all the time.
+transcode  *tran(t)s-ˈkōd, en- 
+ *to decode data from a stream in one format and then encode the data into another format*.   
+
+  ![transcode](https://user-images.githubusercontent.com/52701496/121726762-fc436300-cab8-11eb-95c0-16243efcd860.png)
+  ___
 
