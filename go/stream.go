@@ -107,7 +107,7 @@ func (stream *Stream) parsePayload(pkt []byte) []byte {
 	return pkt[head:]
 }
 
-func (stream *Stream) plusPartial(pay []byte, pid uint16) []byte {
+func (stream *Stream) chkPartial(pay []byte, pid uint16) []byte {
 	val, ok := stream.partial[pid]
 	if ok {
 		pay = append(val, pay...)
@@ -139,13 +139,13 @@ func (stream *Stream) sectionDone(pay []byte, pid uint16, seclen uint16) bool {
 func (stream *Stream) parse(pkt []byte) {
 	p := parsePid(pkt[1], pkt[2])
 	pid := &p
-	pay := stream.parsePayload(pkt)
+	pl := stream.parsePayload(pkt)
+	pay := &pl
 	if *pid == 0 {
-		stream.parsePat(pay, *pid)
+		stream.parsePat(*pay, *pid)
 	}
 	if stream.pids.isPmt(*pid) {
-		stream.parsePmt(pay, *pid)
-
+		stream.parsePmt(*pay, *pid)
 	}
 	if stream.pids.isPcr(*pid) {
 		stream.parsePcr(pkt, *pid)
@@ -153,7 +153,7 @@ func (stream *Stream) parse(pkt []byte) {
 		stream.parsePts(pkt, *pid)
 	}
 	if stream.pids.isScte35(*pid) {
-		stream.parseScte35(pay, *pid)
+		stream.parseScte35(*pay, *pid)
 	}
 }
 
@@ -161,26 +161,25 @@ func (stream *Stream) parsePat(pay []byte, pid uint16) {
 	if stream.sameAsLast(pay, pid) {
 		return
 	}
-	pay = stream.plusPartial(pay, pid)
-	pay = splitByIdx(pay, 0x00)
+	pay = stream.chkPartial(pay, pid)
+	pay = splitByIdx(pay, []byte("\x00\x00"))
 	if len(pay) == 0 {
 		return
 	}
 	seclen := parseLen(pay[2], pay[3])
-	if !stream.sectionDone(pay, pid, seclen) {
-		return
-	}
-	seclen -= 5 // pay bytes 4,5,6,7,8
-	idx := uint16(9)
-	end := idx + seclen - 4 //  4 bytes for crc
-	chunksize := uint16(4)
-	for idx < end {
-		prgm := parsePrgm(pay[idx], pay[idx+1])
-		if prgm > 0 {
-			pmtpid := parsePid(pay[idx+2], pay[idx+3])
-			stream.pids.addPmt(pmtpid)
+	if stream.sectionDone(pay, pid, seclen) {
+		seclen -= 5 // pay bytes 4,5,6,7,8
+		idx := uint16(9)
+		end := idx + seclen - 4 //  4 bytes for crc
+		chunksize := uint16(4)
+		for idx < end {
+			prgm := parsePrgm(pay[idx], pay[idx+1])
+			if prgm > 0 {
+				pmtpid := parsePid(pay[idx+2], pay[idx+3])
+				stream.pids.addPmt(pmtpid)
+			}
+			idx += chunksize
 		}
-		idx += chunksize
 	}
 }
 
@@ -188,24 +187,23 @@ func (stream *Stream) parsePmt(pay []byte, pid uint16) {
 	if stream.sameAsLast(pay, pid) {
 		return
 	}
-	pay = stream.plusPartial(pay, pid)
-	pay = splitByIdx(pay, 0x02)
+	pay = stream.chkPartial(pay, pid)
+	pay = splitByIdx(pay, []byte("\x02"))
 	if len(pay) == 0 {
 		return
 	}
 	secinfolen := parseLen(pay[1], pay[2])
-	if !stream.sectionDone(pay, pid, secinfolen) {
-		return
+	if stream.sectionDone(pay, pid, secinfolen) {
+		prgm := parsePrgm(pay[3], pay[4])
+		pcrpid := parsePid(pay[8], pay[9])
+		stream.pids.addPcr(pcrpid)
+		proginfolen := parseLen(pay[10], pay[11])
+		idx := uint16(12)
+		idx += proginfolen
+		silen := secinfolen - 9
+		silen -= proginfolen
+		stream.parseStreams(silen, pay, idx, prgm)
 	}
-	prgm := parsePrgm(pay[3], pay[4])
-	pcrpid := parsePid(pay[8], pay[9])
-	stream.pids.addPcr(pcrpid)
-	proginfolen := parseLen(pay[10], pay[11])
-	idx := uint16(12)
-	idx += proginfolen
-	silen := secinfolen - 9
-	silen -= proginfolen
-	stream.parseStreams(silen, pay, idx, prgm)
 }
 
 func (stream *Stream) parseStreams(silen uint16, pay []byte, idx uint16, prgm uint16) {
@@ -229,22 +227,18 @@ func (stream *Stream) vrfyStreamType(pid uint16, streamtype uint8) {
 }
 
 func (stream *Stream) parseScte35(pay []byte, pid uint16) {
-	pay = stream.plusPartial(pay, pid)
-	splitup := bytes.Split(pay, []byte("\xfc0"))
-	if len(splitup) == 2 {
-		pay = append([]byte("\xfc0"), splitup[1]...)
-	} else {
+	pay = stream.chkPartial(pay, pid)
+	pay = splitByIdx(pay, []byte("\xfc0"))
+	if len(pay) == 0 {
 		return
 	}
 	seclen := parseLen(pay[1], pay[2])
-	if !stream.sectionDone(pay, pid, seclen) {
-		return
+	if stream.sectionDone(pay, pid, seclen) {
+		cue := stream.mkCue(pid)
+		if cue.Decode(pay) {
+			cue.Show()
+		}
 	}
-	cue := stream.mkCue(pid)
-	if !cue.Decode(pay) {
-		return
-	}
-	cue.Show()
 }
 
 func (stream *Stream) mkCue(pid uint16) Cue {

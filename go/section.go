@@ -5,7 +5,7 @@ import "github.com/futzu/bitter"
 // SpInfo is the splice info section of the SCTE 35 cue.
 type SpInfo struct {
 	Name                   string
-	TableId                string
+	TableID                string
 	SectionSyntaxIndicator bool
 	Private                bool
 	Reserved               string
@@ -24,8 +24,8 @@ type SpInfo struct {
 // Decode splice info section values.
 func (spi *SpInfo) Decode(bitn *bitter.Bitn) bool {
 	spi.Name = "Splice Info Section"
-	spi.TableId = bitn.AsHex(8)
-	if spi.TableId != "0xfc" {
+	spi.TableID = bitn.AsHex(8)
+	if spi.TableID != "0xfc" {
 		return false
 	}
 	spi.SectionSyntaxIndicator = bitn.AsBool()

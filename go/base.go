@@ -62,8 +62,8 @@ func parsePrgm(byte1 byte, byte2 byte) uint16 {
 	return uint16(byte1)<<8 | uint16(byte2)
 }
 
-func splitByIdx(payload []byte, bite byte) []byte {
-	idx := bytes.IndexByte(payload, bite)
+func splitByIdx(payload, sep []byte) []byte {
+	idx := bytes.Index(payload, sep)
 	if idx == -1 {
 		return []byte("")
 	}
