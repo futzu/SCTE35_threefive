@@ -68,9 +68,7 @@ func (stream *Stream) parsePusi(pkt []byte) bool {
 
 func (stream *Stream) parsePts(pkt []byte, pid uint16) {
 	if stream.parsePusi(pkt) {
-		var ok bool
-		var prgm uint16
-		prgm, ok = stream.pid2prgm[pid]
+		prgm, ok := stream.pid2prgm[pid]
 		if ok {
 			pts := (uint64(pkt[13]) >> 1 & 7) << 30
 			pts |= uint64(pkt[14]) << 22
@@ -78,10 +76,8 @@ func (stream *Stream) parsePts(pkt []byte, pid uint16) {
 			pts |= uint64(pkt[16]) << 7
 			pts |= uint64(pkt[17]) >> 1
 			stream.prgm2pts[prgm] = pts
-			return
 		}
 	}
-	return
 }
 
 func (stream *Stream) parsePcr(pkt []byte, pid uint16) {
@@ -94,10 +90,8 @@ func (stream *Stream) parsePcr(pkt []byte, pid uint16) {
 			pcr |= uint64(pkt[10]) >> 7
 			prgm := stream.pid2prgm[pid]
 			stream.prgm2pcr[prgm] = pcr
-			return
 		}
 	}
-	return
 }
 
 func (stream *Stream) parsePayload(pkt []byte) []byte {
@@ -113,12 +107,12 @@ func (stream *Stream) parsePayload(pkt []byte) []byte {
 	return pkt[head:]
 }
 
-func (stream *Stream) plusPartial(pay []byte, pid uint16, bite byte) []byte {
+func (stream *Stream) plusPartial(pay []byte, pid uint16) []byte {
 	val, ok := stream.partial[pid]
 	if ok {
-		return append(val, pay...)
+		pay = append(val, pay...)
 	}
-	return splitByIdx(pay, bite)
+	return pay
 }
 
 func (stream *Stream) sameAsLast(pay []byte, pid uint16) bool {
@@ -137,6 +131,7 @@ func (stream *Stream) sectionDone(pay []byte, pid uint16, seclen uint16) bool {
 		stream.partial[pid] = pay
 		return false
 	}
+	delete(stream.partial, pid)
 	return true
 }
 
@@ -166,7 +161,11 @@ func (stream *Stream) parsePat(pay []byte, pid uint16) {
 	if stream.sameAsLast(pay, pid) {
 		return
 	}
-	pay = stream.plusPartial(pay, pid, 0x00)
+	pay = stream.plusPartial(pay, pid)
+	pay = splitByIdx(pay, 0x00)
+	if len(pay) == 0 {
+		return
+	}
 	seclen := parseLen(pay[2], pay[3])
 	if !stream.sectionDone(pay, pid, seclen) {
 		return
@@ -183,14 +182,14 @@ func (stream *Stream) parsePat(pay []byte, pid uint16) {
 		}
 		idx += chunksize
 	}
-	delete(stream.partial, pid)
 }
 
 func (stream *Stream) parsePmt(pay []byte, pid uint16) {
 	if stream.sameAsLast(pay, pid) {
 		return
 	}
-	pay = stream.plusPartial(pay, pid, 02)
+	pay = stream.plusPartial(pay, pid)
+	pay = splitByIdx(pay, 0x02)
 	if len(pay) == 0 {
 		return
 	}
@@ -207,12 +206,30 @@ func (stream *Stream) parsePmt(pay []byte, pid uint16) {
 	silen := secinfolen - 9
 	silen -= proginfolen
 	stream.parseStreams(silen, pay, idx, prgm)
-	delete(stream.partial, pid)
+}
 
+func (stream *Stream) parseStreams(silen uint16, pay []byte, idx uint16, prgm uint16) {
+	chunksize := uint16(5)
+	endidx := (idx + silen) - chunksize
+	for idx < endidx {
+		streamtype := pay[idx]
+		elpid := parsePid(pay[idx+1], pay[idx+2])
+		eilen := parseLen(pay[idx+3], pay[idx+4])
+		idx += chunksize
+		idx += eilen
+		stream.pid2prgm[elpid] = prgm
+		stream.vrfyStreamType(elpid, streamtype)
+	}
+}
+
+func (stream *Stream) vrfyStreamType(pid uint16, streamtype uint8) {
+	if streamtype == 6 || streamtype == 134 {
+		stream.pids.addScte35(pid)
+	}
 }
 
 func (stream *Stream) parseScte35(pay []byte, pid uint16) {
-	pay = stream.plusPartial(pay, pid, 0xfc)
+	pay = stream.plusPartial(pay, pid)
 	splitup := bytes.Split(pay, []byte("\xfc0"))
 	if len(splitup) == 2 {
 		pay = append([]byte("\xfc0"), splitup[1]...)
@@ -228,7 +245,6 @@ func (stream *Stream) parseScte35(pay []byte, pid uint16) {
 		return
 	}
 	cue.Show()
-	delete(stream.partial, pid)
 }
 
 func (stream *Stream) mkCue(pid uint16) Cue {
@@ -240,26 +256,4 @@ func (stream *Stream) mkCue(pid uint16) Cue {
 	cue.Pts = stream.mkPts(prgm)
 	cue.PacketNumber = stream.Pkts
 	return cue
-}
-
-func (stream *Stream) parseStreams(silen uint16, pay []byte, idx uint16, prgm uint16) {
-	chunksize := uint16(5)
-	endidx := (idx + silen) - chunksize
-	for idx < endidx {
-		streamtype := pay[idx]
-		elpid := parsePid(pay[idx+1], pay[idx+2])
-		eilen := parseLen(pay[idx+3], pay[idx+4])
-		idx += chunksize
-		idx += eilen
-		//fmt.Printf(" Pid: %#x Stream Type: %v\n",elpid, streamtype)
-		stream.pid2prgm[elpid] = prgm
-		stream.vrfyStreamType(elpid, streamtype)
-	}
-
-}
-
-func (stream *Stream) vrfyStreamType(pid uint16, streamtype uint8) {
-	if streamtype == 6 || streamtype == 134 {
-		stream.pids.addScte35(pid)
-	}
 }

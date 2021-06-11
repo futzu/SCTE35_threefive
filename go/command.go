@@ -5,7 +5,7 @@ import "github.com/futzu/bitter"
 // SpCmd is the splice command for the SCTE35 cue.
 type SpCmd struct {
 	Name                       string
-	SpliceEventId              string
+	SpliceEventID              string
 	SpliceEventCancelIndicator bool
 	OutOfNetworkIndicator      bool
 	ProgramSpliceFlag          bool
@@ -17,7 +17,7 @@ type SpCmd struct {
 	PTS                        float64  `json:",omitempty"`
 	ComponentCount             uint64   `json:",omitempty"`
 	Components                 []uint64 `json:",omitempty"`
-	UniqueProgramId            uint64
+	UniqueProgramID            uint64
 	AvailNum                   uint64
 	AvailExpected              uint64
 	Identifier                 uint64
@@ -64,7 +64,7 @@ func (cmd *SpCmd) SpliceTime(bitn *bitter.Bitn) {
 // SpliceInsert handles SCTE 35 splice insert commands.
 func (cmd *SpCmd) SpliceInsert(bitn *bitter.Bitn) {
 	cmd.Name = "Splice Insert"
-	cmd.SpliceEventId = bitn.AsHex(32)
+	cmd.SpliceEventID = bitn.AsHex(32)
 	cmd.SpliceEventCancelIndicator = bitn.AsBool()
 	bitn.Forward(7)
 	if !(cmd.SpliceEventCancelIndicator) {
@@ -92,7 +92,7 @@ func (cmd *SpCmd) SpliceInsert(bitn *bitter.Bitn) {
 	if cmd.DurationFlag {
 		cmd.ParseBreak(bitn)
 	}
-	cmd.UniqueProgramId = bitn.AsUInt64(16)
+	cmd.UniqueProgramID = bitn.AsUInt64(16)
 	cmd.AvailNum = bitn.AsUInt64(8)
 	cmd.AvailExpected = bitn.AsUInt64(8)
 }
@@ -120,9 +120,9 @@ func (cmd *SpCmd) PrivateCommand(bitn *bitter.Bitn) {
 }
 
 type AudioCmpnt struct {
-	component_tag   string `json:"omitempty"`
-	ISO_code        uint64 `json:"omitempty"`
-	bit_stream_mode uint64 `json:"omitempty"`
-	num_channels    uint64 `json:"omitempty"`
-	full_srvc_audio bool   `json:"omitempty"`
+	ComponentTag  string `json:"omitempty"`
+	ISOCode       uint64 `json:"omitempty"`
+	BitstreamMode uint64 `json:"omitempty"`
+	NumChannels   uint64 `json:"omitempty"`
+	FullSrvcAudio bool   `json:"omitempty"`
 }

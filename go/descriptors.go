@@ -9,7 +9,7 @@ type SpDscptr struct {
 	// identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
 	Identifier      string
 	Name            string
-	ProviderAvailId uint64
+	ProviderAvailID uint64
 	PreRoll         uint64   `json:",omitempty"`
 	DTMFCount       uint64   `json:",omitempty"`
 	DTMFChars       []string `json:",omitempty"`
@@ -67,7 +67,7 @@ func (dscptr *SpDscptr) Decode(bitn *bitter.Bitn) {
 // AvailDscptr Avail Splice Descriptor
 func (dscptr *SpDscptr) AvailDscptr(bitn *bitter.Bitn) {
 	dscptr.Name = "Avail Descriptor"
-	dscptr.ProviderAvailId = bitn.AsUInt64(32)
+	dscptr.ProviderAvailID = bitn.AsUInt64(32)
 }
 
 // DTMFDscptr DTMF Splice Descriptor
