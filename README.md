@@ -139,9 +139,6 @@ from threefive import decode
 decode('cue.dat')
 
 ```
-___
-
-![openbsdransom](https://user-images.githubusercontent.com/52701496/117953431-04568a00-b2e4-11eb-85eb-a26d7d4c9045.png)
 
 ___
 
@@ -163,7 +160,7 @@ b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAA
 cue = Cue(b64)
 cue.decode()
 ```
-___
+___https://github.com/futzu/threefive/blob/master/README.md#social-injustice-and-stuff
 
 
 * A decoded __Cue__ instance contains: 
@@ -397,7 +394,10 @@ $ python3 proxy.py | mplayer -
 ```
 ___
 
-### Social Injustice and Stuff
+## Social Injustice and Stuff
 ___
 * __I thought transcode was a word__. I use it all the time.
 * ![transcode](https://user-images.githubusercontent.com/52701496/121726762-fc436300-cab8-11eb-95c0-16243efcd860.png)
+* __Ransomware Statistics by Operating System__
+* ![openbsdransom](https://user-images.githubusercontent.com/52701496/117953431-04568a00-b2e4-11eb-85eb-a26d7d4c9045.png)
+
