@@ -4,15 +4,6 @@ The threefive Parser in Go.
 
 ##### Heads up, work in progress.
 
-
-| Working           	| |
-|-----------------------|-|
-| Splice Info Section  	|✓|
-| Splice Commands	|✓|
-| Splice Descriptors   	|✓|
-
-
-
 |Not Working      	   	  | |
 |---------------------------------|-|
 | Splice Schedule Command 	  |x|
