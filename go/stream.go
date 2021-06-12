@@ -40,9 +40,10 @@ func (stream *Stream) Decode(fname string) {
 		for i := 1; i <= (bytesread / PktSz); i++ {
 			end := i * PktSz
 			start := end - PktSz
-			pkt := buffer[start:end]
+			p := buffer[start:end]
+			pkt := &p
 			stream.Pkts++
-			stream.parse(pkt)
+			stream.parse(*pkt)
 		}
 	}
 }
@@ -80,6 +81,7 @@ func (stream *Stream) parsePts(pkt []byte, pid uint16) {
 	}
 }
 
+//
 func (stream *Stream) parsePcr(pkt []byte, pid uint16) {
 	if (pkt[3]>>5)&1 == 1 {
 		if (pkt[5]>>4)&1 == 1 {
@@ -107,14 +109,16 @@ func (stream *Stream) parsePayload(pkt []byte) []byte {
 	return pkt[head:]
 }
 
-func (stream *Stream) chkPartial(pay []byte, pid uint16) []byte {
+//chkPartial appends the current packet payload to partial table by pid.
+func (stream *Stream) chkPartial(pay []byte, pid uint16, sep []byte) []byte {
 	val, ok := stream.partial[pid]
 	if ok {
 		pay = append(val, pay...)
 	}
-	return pay
+	return splitByIdx(pay, sep)
 }
 
+// sameAsLast compares the current packet to the last packet by pid.
 func (stream *Stream) sameAsLast(pay []byte, pid uint16) bool {
 	val, ok := stream.last[pid]
 	if ok {
@@ -126,6 +130,7 @@ func (stream *Stream) sameAsLast(pay []byte, pid uint16) bool {
 	return false
 }
 
+//sectionDone aggregates partial tables by pid until the section is complete.
 func (stream *Stream) sectionDone(pay []byte, pid uint16, seclen uint16) bool {
 	if seclen+3 > uint16(len(pay)) {
 		stream.partial[pid] = pay
@@ -161,9 +166,8 @@ func (stream *Stream) parsePat(pay []byte, pid uint16) {
 	if stream.sameAsLast(pay, pid) {
 		return
 	}
-	pay = stream.chkPartial(pay, pid)
-	pay = splitByIdx(pay, []byte("\x00\x00"))
-	if len(pay) == 0 {
+	pay = stream.chkPartial(pay, pid, []byte("\x00\x00"))
+	if len(pay) < 1 {
 		return
 	}
 	seclen := parseLen(pay[2], pay[3])
@@ -187,9 +191,8 @@ func (stream *Stream) parsePmt(pay []byte, pid uint16) {
 	if stream.sameAsLast(pay, pid) {
 		return
 	}
-	pay = stream.chkPartial(pay, pid)
-	pay = splitByIdx(pay, []byte("\x02"))
-	if len(pay) == 0 {
+	pay = stream.chkPartial(pay, pid, []byte("\x02"))
+	if len(pay) < 1 {
 		return
 	}
 	secinfolen := parseLen(pay[1], pay[2])
@@ -227,8 +230,7 @@ func (stream *Stream) vrfyStreamType(pid uint16, streamtype uint8) {
 }
 
 func (stream *Stream) parseScte35(pay []byte, pid uint16) {
-	pay = stream.chkPartial(pay, pid)
-	pay = splitByIdx(pay, []byte("\xfc0"))
+	pay = stream.chkPartial(pay, pid, []byte("\xfc0"))
 	if len(pay) == 0 {
 		return
 	}

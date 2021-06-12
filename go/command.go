@@ -24,23 +24,21 @@ type SpCmd struct {
 }
 
 // Decode the splice command values.
-func (cmd *SpCmd) Decode(bitn *bitter.Bitn, cmdtype uint64) {
-	if cmdtype == 0 {
-		cmd.SpliceNull()
+func (cmd *SpCmd) Decode(bitn *bitter.Bitn, cmdtype uint64) bool {
+
+	cmdmap := map[int]func(*bitter.Bitn){
+		//  0: cmd.SpliceNull,
+		5:   cmd.SpliceInsert,
+		6:   cmd.TimeSignal,
+		7:   cmd.BandwidthReservation,
+		255: cmd.PrivateCommand}
+
+	cmdfunc, ok := cmdmap[int(cmdtype)]
+	if ok {
+		cmdfunc(bitn)
+		return true
 	}
-	//4: Splice_Schedule,
-	if cmdtype == 5 {
-		cmd.SpliceInsert(bitn)
-	}
-	if cmdtype == 6 {
-		cmd.TimeSignal(bitn)
-	}
-	if cmdtype == 7 {
-		cmd.BandwidthReservation(bitn)
-	}
-	if cmdtype == 255 {
-		cmd.PrivateCommand(bitn)
-	}
+	return false
 }
 
 // ParseBreak parses out the ad break duration values.
@@ -97,11 +95,12 @@ func (cmd *SpCmd) SpliceInsert(bitn *bitter.Bitn) {
 	cmd.AvailExpected = bitn.AsUInt64(8)
 }
 
+/**
 // SpliceNull is a No-Op command.
 func (cmd *SpCmd) SpliceNull() {
 	cmd.Name = "Splice Null"
 }
-
+**/
 // TimeSignal splice command is a wrapper for SpliceTime.
 func (cmd *SpCmd) TimeSignal(bitn *bitter.Bitn) {
 	cmd.Name = "Time Signal"

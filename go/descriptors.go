@@ -35,7 +35,7 @@ type SpDscptr struct {
 	  SegmentationUpid
 	  SegmentationTypeId
 	  SegmentNum                 uint64
-	  Segments_expected          uint64
+	  SegmentsExpected          uint64
 	  SubSegmentNum              uint64
 	  SubSegmentsExpected        uint64
 	  **/
