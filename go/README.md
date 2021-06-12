@@ -1,35 +1,35 @@
 # threefive/go	 [![Go Report Card](https://goreportcard.com/badge/github.com/FUTZU/threefive)](https://goreportcard.com/report/github.com/FUTZU/threefive)
 		
 The threefive Parser in Go.
-* __threefive/go__ is __Fast__.
-	* __Full decode of 3.7GB of MPEGTS video in 1.187 seconds__ on my [__laptop__](https://www.samsung.com/us/computing/windows-laptops/notebook-series-7/notebook-7-spin-np730qaa-k02us/#specs)  running Debian [__Sid__](https://www.debian.org/releases/sid/).
 
 ##### Heads up, work in progress.
 
 
-| Working           | |
-|-------------------|-|
-| MPEG-TS          | ✓ |
-| Base64 Strings   | ✓ |
-| Splice Info Section  | ✓ | 
-| Splice Commands  | ✓ |
-| Splice Descriptors  | 70% |
+| Working           	| |
+|-----------------------|-|
+| Splice Info Section  	|✓|
+| Splice Commands	|✓|
+| Splice Descriptors   	|✓|
 
 
-|Not Working       	   | |
-|--------------------------|-|
-| Segmentation Descriptors |x|
+
+|Not Working      	   	  | |
+|---------------------------------|-|
+| Splice Schedule Command 	  |x|
+| Splice Segmentation Descriptors |x|
 
 
 #### Installation
+---
 ```sh
 go get -u github.com/futzu/threefive/go
 ```
 
-
-
 #### Parsing MPEGTS files 
+---
+
 * Make a file test.go
+
 ```go
 
 package main
@@ -112,8 +112,10 @@ Next File: threefive/plp0.ts
 ``` 	
 
 #### Parsing a base64 string
+---
 
 * Make a file test1.go
+
 ```go
 package main
 
