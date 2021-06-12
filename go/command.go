@@ -26,6 +26,11 @@ type SpCmd struct {
 // Decode the splice command values.
 func (cmd *SpCmd) Decode(bitn *bitter.Bitn, cmdtype uint64) bool {
 
+	if int(cmdtype) == 0 {
+		cmd.SpliceNull()
+		return true
+	}
+
 	cmdmap := map[int]func(*bitter.Bitn){
 		//  0: cmd.SpliceNull,
 		5:   cmd.SpliceInsert,
@@ -95,12 +100,11 @@ func (cmd *SpCmd) SpliceInsert(bitn *bitter.Bitn) {
 	cmd.AvailExpected = bitn.AsUInt64(8)
 }
 
-/**
 // SpliceNull is a No-Op command.
 func (cmd *SpCmd) SpliceNull() {
 	cmd.Name = "Splice Null"
 }
-**/
+
 // TimeSignal splice command is a wrapper for SpliceTime.
 func (cmd *SpCmd) TimeSignal(bitn *bitter.Bitn) {
 	cmd.Name = "Time Signal"
