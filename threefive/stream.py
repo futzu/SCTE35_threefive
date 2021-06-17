@@ -281,11 +281,12 @@ class Stream:
             return None
         if pid in self._pids["pcr"]:
             self._parse_pcr(pkt, pid)
-        if self._parse_pusi(pkt[1]):
-            self._parse_pts(pkt, pid)
+        else:
+            if self._parse_pusi(pkt[1]):
+                self._parse_pts(pkt, pid)
         if pid in self._pids["scte35"]:
-            # if pid not in self._pids["ignore"]:
-            return self._parse_scte35(pkt, pid)
+            if pid not in self._pids["ignore"]:
+                return self._parse_scte35(pkt, pid)
 
     def _chk_partial(self, payload, pid):
         if pid in self._partial:
@@ -343,8 +344,11 @@ class Stream:
             self._cue.bites = self._chk_partial(payload, pid)
         # + 3 for the bytes before section starts
         if (self._cue.info_section.section_length + 3) > len(self._cue.bites):
+            self._partial[pid] = payload
             return None
-        self._cue.decode()
+        if not self._cue.decode():
+            self._pids["ignore"].add(pid)
+            return None
         cue, self._cue = self._cue, None
         return cue
 
