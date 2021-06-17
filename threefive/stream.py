@@ -48,7 +48,7 @@ class Stream:
         self.show_null = show_null
         self.info = None
         self.the_program = None
-        self._pids = {"ignore": set(), "pcr": set(), "pmt": set(), "scte35": set()}
+        self._pids = {"pcr": set(), "pmt": set(), "scte35": set()}
         self._pid_prgm = {}
         self._prgm_pcr = {}
         self._prgm_pts = {}
@@ -205,8 +205,7 @@ class Stream:
         if afc:
             afl = pkt[4]
             head_size += afl + 1  # +1 for afl byte
-        payload = pkt[head_size:]
-        return payload
+        return pkt[head_size:]
 
     @staticmethod
     def _parse_length(byte1, byte2):
@@ -277,16 +276,14 @@ class Stream:
             return self._chk_pmt_payload(pkt, pid)
         if self.info:
             return None
-        if pid not in self._pid_prgm:
-            return None
         if pid in self._pids["pcr"]:
             self._parse_pcr(pkt, pid)
         else:
-            if self._parse_pusi(pkt[1]):
-                self._parse_pts(pkt, pid)
+            if pid in self._pid_prgm:
+                if self._parse_pusi(pkt[1]):
+                    self._parse_pts(pkt, pid)
         if pid in self._pids["scte35"]:
-            if pid not in self._pids["ignore"]:
-                return self._parse_scte35(pkt, pid)
+            return self._parse_scte35(pkt, pid)
 
     def _chk_partial(self, payload, pid):
         if pid in self._partial:
@@ -334,7 +331,7 @@ class Stream:
         if not self._cue:
             payload = self._split_by_idx(payload, b"\xfc0")
             if not payload:
-                self._pids["ignore"].add(pid)
+                self._pids["scte35"].remove(pid)
                 return None
             # if 0 == False:
             if payload[13] == self.show_null:
@@ -347,7 +344,7 @@ class Stream:
             self._partial[pid] = payload
             return None
         if not self._cue.decode():
-            self._pids["ignore"].add(pid)
+            self._pids["scte35"].remove(pid)
             return None
         cue, self._cue = self._cue, None
         return cue
