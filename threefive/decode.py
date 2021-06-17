@@ -42,8 +42,7 @@ def _read_stuff(stuff):
         # if stuff is a mpegts stream file.
 
         with open(stuff, "rb") as tsdata:
-            strm = Stream(tsdata).decode()
-            strm.decode()
+            return Stream(tsdata).decode()
     except ValueError:
         pass
     try:
