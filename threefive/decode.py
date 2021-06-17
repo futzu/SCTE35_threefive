@@ -17,9 +17,20 @@ _MAX_CUE_SIZE = 4096
 
 def _read_stdin():
     """
-    _read_stdin handles piped in data
+    handles piped in data
     """
-    return Stream(sys.stdin.buffer).decode()
+    try:
+        # mpegts
+        Stream(sys.stdin.buffer).decode()
+    except Exception:
+        try:
+            # base64, binary, bytes or hex
+            stuff = sys.stdin.buffer.read()
+            cue = Cue(stuff)
+            cue.decode()
+            cue.show()
+        except Exception:
+            pass
 
 
 def _read_stuff(stuff):
@@ -27,40 +38,34 @@ def _read_stuff(stuff):
     reads filename or a string
     """
     try:
-
-        # if stuff is a file containing a
-        # base64, binary, bytes, hex or hex string
+        # base64, binary, bytes or hex in a file
         with open(stuff, "rb") as tsdata:
             tsd = tsdata.read(_MAX_CUE_SIZE)
             cue = Cue(tsd)
             cue.decode()
             cue.show()
-    except ValueError:
+    except Exception:
         pass
     try:
-
-        # if stuff is a mpegts stream file.
-
+        # mpegts
         with open(stuff, "rb") as tsdata:
-            return Stream(tsdata).decode()
-    except ValueError:
+            strm = Stream(tsdata)
+            strm.decode()
+    except Exception:
         pass
     try:
-
-        # if stuff is a Base64, Binary, Byte, or Hex
-        # encoded string to parse as a SCTE-35 Cue.
-
+        # base64, binary, bytes or hex
         cue = Cue(stuff)
         cue.decode()
         cue.show()
-    except ValueError:
+    except Exception:
         pass
 
 
 def _read_http(stuff):
     """
-    _read_http if stuff is a
-    http or https url string.
+    _read_http reads mpegts over http or https
+    and parses for SCTE35
     """
     with urllib.request.urlopen(stuff) as tsdata:
         strm = Stream(tsdata)
@@ -72,39 +77,42 @@ def decode(stuff=None):
     """
     All purpose SCTE 35 decoder function
 
-    # MPEG-TS video file
+    # for a mpegts video
 
         import threefive
         threefive.decode('/path/to/mpegts')
 
 
-    # Base64 encoded string
+    # for a base64 encoded string
 
         import threefive
         Bee64='/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
         threefive.decode(Bee64)
 
 
-    # MPEG-TS over HTTP or HTTPS
+    # mpegts over http / https
 
         from threefive import decode
         decode('https://futzu.com/xaa.ts')
 
 
-    # Data piped in
+    # hex, base64, binary, bytes, or mpegts from sys.stdin.buffer
 
-        cat SCTE-35.ts | python3 -c 'import threefive; threefive.decode()'
+        from threefive import decode
+        decode()
+
 
     """
-    if stuff in [None]:  # piped in data
-        if _read_stdin():
-            return
+    if stuff in [None, sys.stdin.buffer]:
+        _read_stdin()
+        return
     if isinstance(stuff, str):
-        stuff = stuff.encode()
+        if stuff.startswith("http"):
+            _read_http(stuff)
+            return
     if isinstance(stuff, bytes):
         if stuff.startswith(b"http"):
-            stuff = stuff.decode()
-            _read_http(stuff)
+            _read_http(stuff.decode())
             return
     _read_stuff(stuff)
     return
