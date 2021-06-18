@@ -5,22 +5,22 @@ import "github.com/futzu/bitter"
 // SpCmd is the splice command for the SCTE35 cue.
 type SpCmd struct {
 	Name                       string
-	SpliceEventID              string
-	SpliceEventCancelIndicator bool
-	OutOfNetworkIndicator      bool
-	ProgramSpliceFlag          bool
-	DurationFlag               bool
-	BreakAutoReturn            bool
-	BreakDuration              float64 `json:",omitempty"`
-	SpliceImmediateFlag        bool
-	TimeSpecifiedFlag          bool
+	SpliceEventID              string   `json:",omitempty"`
+	SpliceEventCancelIndicator bool     `json:",omitempty"`
+	OutOfNetworkIndicator      bool     `json:",omitempty"`
+	ProgramSpliceFlag          bool     `json:",omitempty"`
+	DurationFlag               bool     `json:",omitempty"`
+	BreakAutoReturn            bool     `json:",omitempty"`
+	BreakDuration              float64  `json:",omitempty"`
+	SpliceImmediateFlag        bool     `json:",omitempty"`
+	TimeSpecifiedFlag          bool     `json:",omitempty"`
 	PTS                        float64  `json:",omitempty"`
 	ComponentCount             uint64   `json:",omitempty"`
 	Components                 []uint64 `json:",omitempty"`
-	UniqueProgramID            uint64
-	AvailNum                   uint64
-	AvailExpected              uint64
-	Identifier                 uint64
+	UniqueProgramID            uint64   `json:",omitempty"`
+	AvailNum                   uint64   `json:",omitempty"`
+	AvailExpected              uint64   `json:",omitempty"`
+	Identifier                 uint64   `json:",omitempty"`
 }
 
 // Decode the splice command values.
@@ -70,7 +70,7 @@ func (cmd *SpCmd) SpliceInsert(bitn *bitter.Bitn) {
 	cmd.SpliceEventID = bitn.AsHex(32)
 	cmd.SpliceEventCancelIndicator = bitn.AsBool()
 	bitn.Forward(7)
-	if !(cmd.SpliceEventCancelIndicator) {
+	if !cmd.SpliceEventCancelIndicator {
 		cmd.OutOfNetworkIndicator = bitn.AsBool()
 		cmd.ProgramSpliceFlag = bitn.AsBool()
 		cmd.DurationFlag = bitn.AsBool()
@@ -78,7 +78,7 @@ func (cmd *SpCmd) SpliceInsert(bitn *bitter.Bitn) {
 		bitn.Forward(4)
 	}
 	if cmd.ProgramSpliceFlag {
-		if !(cmd.SpliceImmediateFlag) {
+		if !cmd.SpliceImmediateFlag {
 			cmd.SpliceTime(bitn)
 		}
 	} else {
@@ -88,7 +88,7 @@ func (cmd *SpCmd) SpliceInsert(bitn *bitter.Bitn) {
 		for i := range cmd.Components {
 			cmd.Components[i] = bitn.AsUInt64(8)
 		}
-		if !(cmd.SpliceImmediateFlag) {
+		if !cmd.SpliceImmediateFlag {
 			cmd.SpliceTime(bitn)
 		}
 	}

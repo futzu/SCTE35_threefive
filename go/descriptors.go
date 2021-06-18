@@ -18,7 +18,7 @@ type SpDscptr struct {
 	TAISeconds                       uint64   `json:",omitempty"`
 	TAINano                          uint64   `json:",omitempty"`
 	UTCOffset                        uint64   `json:",omitempty"`
-	SegmentationEventID              uint64   `json:",omitempty"`
+	SegmentationEventID              string   `json:",omitempty"`
 	SegmentationEventCancelIndicator bool     `json:",omitempty"`
 	ProgramSegmentationFlag          bool     `json:",omitempty"`
 	SegmentationDurationFlag         bool     `json:",omitempty"`
@@ -107,18 +107,18 @@ func (dscptr *SpDscptr) TimeDscptr(bitn *bitter.Bitn) {
 // SegmentDscptr Segmentation Descriptor
 func (dscptr *SpDscptr) SegmentDscptr(bitn *bitter.Bitn) {
 	dscptr.Name = "Segmentation Descriptor"
-	dscptr.SegmentationEventID = bitn.AsUInt64(32)
+	dscptr.SegmentationEventID = bitn.AsHex(32)
 	dscptr.SegmentationEventCancelIndicator = bitn.AsBool()
 	bitn.Forward(7)
 	if !(dscptr.SegmentationEventCancelIndicator) {
-		dscptr.DecodeSegFlags(bitn)
+		dscptr.decodeSegFlags(bitn)
 		// if !(dscptr.ProgramSegmentationFlag {
 		//       dscptr.DecodeSegCmpnts(bitn)
 	}
 	//  dscptr.DecodeSeg(bitn)
 }
 
-func (dscptr *SpDscptr) DecodeSegFlags(bitn *bitter.Bitn) {
+func (dscptr *SpDscptr) decodeSegFlags(bitn *bitter.Bitn) {
 	dscptr.ProgramSegmentationFlag = bitn.AsBool()
 	dscptr.SegmentationDurationFlag = bitn.AsBool()
 	dscptr.DeliveryNotRestrictedFlag = bitn.AsBool()
