@@ -48,7 +48,7 @@ class Stream:
         self.show_null = show_null
         self.info = None
         self.the_program = None
-        self._pids = {"ignore": set(), "pcr": set(), "pmt": set(), "scte35": set()}
+        self._pids = {"pcr": set(), "pmt": set(), "scte35": set()}
         self._pid_prgm = {}
         self._prgm_pcr = {}
         self._prgm_pts = {}
@@ -205,8 +205,7 @@ class Stream:
         if afc:
             afl = pkt[4]
             head_size += afl + 1  # +1 for afl byte
-        payload = pkt[head_size:]
-        return payload
+        return pkt[head_size:]
 
     @staticmethod
     def _parse_length(byte1, byte2):
@@ -277,15 +276,14 @@ class Stream:
             return self._chk_pmt_payload(pkt, pid)
         if self.info:
             return None
-        if pid not in self._pid_prgm:
-            return None
         if pid in self._pids["pcr"]:
             self._parse_pcr(pkt, pid)
-        if self._parse_pusi(pkt[1]):
-            self._parse_pts(pkt, pid)
+        else:
+            if pid in self._pid_prgm:
+                if self._parse_pusi(pkt[1]):
+                    self._parse_pts(pkt, pid)
         if pid in self._pids["scte35"]:
-            if pid not in self._pids["ignore"]:
-                return self._parse_scte35(pkt, pid)
+            return self._parse_scte35(pkt, pid)
 
     def _chk_partial(self, payload, pid):
         if pid in self._partial:
@@ -333,7 +331,7 @@ class Stream:
         if not self._cue:
             payload = self._split_by_idx(payload, b"\xfc0")
             if not payload:
-                self._pids["ignore"].add(pid)
+                self._pids["scte35"].remove(pid)
                 return None
             # if 0 == False:
             if payload[13] == self.show_null:
@@ -343,8 +341,11 @@ class Stream:
             self._cue.bites = self._chk_partial(payload, pid)
         # + 3 for the bytes before section starts
         if (self._cue.info_section.section_length + 3) > len(self._cue.bites):
+            self._partial[pid] = payload
             return None
-        self._cue.decode()
+        if not self._cue.decode():
+            self._pids["scte35"].remove(pid)
+            return None
         cue, self._cue = self._cue, None
         return cue
 
@@ -354,15 +355,15 @@ class Stream:
         for program to pmt_pid mappings.
         """
         pid = 0
-        payload = self._chk_partial(payload, pid)[1:]
+        payload = self._chk_partial(payload, pid)
         # pointer_field = payload[0]
-        # table_id  = payload[0]
-        section_length = self._parse_length(payload[1], payload[2])
+        # table_id  = payload[1]
+        section_length = self._parse_length(payload[2], payload[3])
         if section_length + 3 > len(payload):
             self._partial[pid] = payload
             return None
-        section_length -= 5  # payload bytes 3,4,5,6,7
-        idx = 8
+        section_length -= 5  # payload bytes 4,5,6,7,8
+        idx = 9
         chunk_size = 4
         while section_length > 4:  #  4 bytes for crc
             program_number = self._parse_program(payload[idx], payload[idx + 1])
@@ -430,8 +431,8 @@ class Stream:
         """
         if stream_type in ["0x6", "0x86"]:
             self._pids["scte35"].add(pid)
-            if self.info:
-                if stream_type == "0x86":
-                    print(f"\tPID: {pid}({hex(pid)}) Type: {stream_type} SCTE35")
-                else:
-                    print(f"\tPID: {pid}({hex(pid)}) Type: {stream_type}")
+        if self.info:
+            if stream_type == "0x86":
+                print(f"\tPID: {pid}({hex(pid)}) Type: {stream_type} SCTE35")
+            else:
+                print(f"\tPID: {pid}({hex(pid)}) Type: {stream_type}")
