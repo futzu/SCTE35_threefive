@@ -2,7 +2,13 @@ package threefive
 
 import "github.com/futzu/bitter"
 
-// Splice descriptor
+// SegCmpt Segmentation Descriptor Component
+type SegCmpt struct {
+	ComponentTag uint64
+	PtsOffset    float64
+}
+
+// SpDscptr Splice Descriptor
 type SpDscptr struct {
 	Tag    uint64
 	Length uint64
@@ -27,6 +33,7 @@ type SpDscptr struct {
 	NoRegionalBlackoutFlag           bool     `json:",omitempty"`
 	ArchiveAllowedFlag               bool     `json:",omitempty"`
 	//  DeviceRestrictions = table20[bitn.AsUInt64(2)]
+	Components []SegCmpt `json:",omitempty"`
 	/**
 	  SegmentationEventId
 	  segmentation_event_cancel_indicator
@@ -110,12 +117,13 @@ func (dscptr *SpDscptr) SegmentDscptr(bitn *bitter.Bitn) {
 	dscptr.SegmentationEventID = bitn.AsHex(32)
 	dscptr.SegmentationEventCancelIndicator = bitn.AsBool()
 	bitn.Forward(7)
-	if !(dscptr.SegmentationEventCancelIndicator) {
+	if !dscptr.SegmentationEventCancelIndicator {
 		dscptr.decodeSegFlags(bitn)
-		// if !(dscptr.ProgramSegmentationFlag {
-		//       dscptr.DecodeSegCmpnts(bitn)
+		if !dscptr.ProgramSegmentationFlag {
+			dscptr.decodeSegCmpnts(bitn)
+		}
+		//  dscptr.DecodeSeg(bitn)
 	}
-	//  dscptr.DecodeSeg(bitn)
 }
 
 func (dscptr *SpDscptr) decodeSegFlags(bitn *bitter.Bitn) {
@@ -132,7 +140,13 @@ func (dscptr *SpDscptr) decodeSegFlags(bitn *bitter.Bitn) {
 	bitn.Forward(5)
 }
 
-//func (dscptr *SpDscptr) DecodeSegCmpnts((bitn *bitter.Bitn) {
-//    ccount = bitn.AsUint64(8)
-
-//}
+func (dscptr *SpDscptr) decodeSegCmpnts(bitn *bitter.Bitn) {
+	ccount := bitn.AsUInt64(8)
+	for ccount > 0 { // 6 bytes each
+		ccount--
+		ct := bitn.AsUInt64(8)
+		bitn.Forward(7)
+		po := bitn.As90k(33)
+		dscptr.Components = append(dscptr.Components, SegCmpt{ct, po})
+	}
+}
