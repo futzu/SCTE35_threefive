@@ -33,29 +33,22 @@ type SpDscptr struct {
 	NoRegionalBlackoutFlag           bool     `json:",omitempty"`
 	ArchiveAllowedFlag               bool     `json:",omitempty"`
 	//  DeviceRestrictions = table20[bitn.AsUInt64(2)]
-	Components []SegCmpt `json:",omitempty"`
+	Components               []SegCmpt `json:",omitempty"`
+	SegmentationDuration     float64   `json:",omitempty"`
+	SegmentationMessage      string    `json:",omitempty"`
+	SegmentationUpidType     uint64    `json:",omitempty"`
+	SegmentationUpidTypeName string    `json:",omitempty"`
+	SegmentationUpidLength   uint64    `json:",omitempty"`
+	SegmentationUpid         string    `json:",omitempty"`
+	SegmentationTypeID       uint64    `json:",omitempty"`
+	SegmentNum               uint64    `json:",omitempty"`
+	SegmentsExpected         uint64    `json:",omitempty"`
+	SubSegmentNum            uint64    `json:",omitempty"`
+	SubSegmentsExpected      uint64    `json:",omitempty"`
 	/**
-	  SegmentationEventId
-	  segmentation_event_cancel_indicator
-	  components
-	  ProgramSegmentationFlag     bool
-	  SegmentationDurationFlag    bool
-	  DeliveryNotRestrictedFlag   bool
-	  WebDeliveryAllowedFlag      bool
-	  NoRegionalBlackoutFlag      bool
-	  ArchiveAllowedFlag          bool
+
 	  DeviceRestrictions
-	  SegmentationDuration
-	  SegmentationMessage
-	  SegmentationUpidType
-	  SegmentationUpidTypeName   string
-	  SegmentationUpidLength     uint64
-	  SegmentationUpid
-	  SegmentationTypeId
-	  SegmentNum                 uint64
-	  SegmentsExpected          uint64
-	  SubSegmentNum              uint64
-	  SubSegmentsExpected        uint64
+
 	  **/
 }
 
@@ -122,7 +115,7 @@ func (dscptr *SpDscptr) SegmentDscptr(bitn *bitter.Bitn) {
 		if !dscptr.ProgramSegmentationFlag {
 			dscptr.decodeSegCmpnts(bitn)
 		}
-		//  dscptr.DecodeSeg(bitn)
+		dscptr.decodeSegmentation(bitn)
 	}
 }
 
@@ -149,4 +142,27 @@ func (dscptr *SpDscptr) decodeSegCmpnts(bitn *bitter.Bitn) {
 		po := bitn.As90k(33)
 		dscptr.Components = append(dscptr.Components, SegCmpt{ct, po})
 	}
+}
+
+func (dscptr *SpDscptr) decodeSegmentation(bitn *bitter.Bitn) {
+	if dscptr.SegmentationDurationFlag {
+		dscptr.SegmentationDuration = bitn.As90k(40)
+	}
+	dscptr.SegmentationUpidType = bitn.AsUInt64(8)
+	dscptr.SegmentationUpidLength = bitn.AsUInt64(8)
+	/**
+	        dscptr.SegmentationUpidTypeName, dscptr.SegmentationUpid = UpidDecoder(
+	            bitn, dscptr.SegmentationUpidType, dscptr.SegmentationUpidLength
+	        )
+	**/
+
+	dscptr.SegmentationTypeID = bitn.AsUInt64(8)
+
+	/**
+	        if dscptr.SegmentationTypeID in Table22.keys(){
+	            dscptr.SegmentationMessage = Table22[dscptr.SegmentationTypeID]
+	            dscptr._decode_segments(bitbin)
+
+	        }
+	**/
 }
