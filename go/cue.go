@@ -40,7 +40,7 @@ func (cue *Cue) DscptrLoop(bitn *bitter.Bitn) {
 		var sd SpDscptr
 		sd.MetaData(bitn)
 		sd.Decode(bitn)
-		i += sd.Length + 2
+		i += uint64(sd.Length) + 2
 		cue.Descriptors = append(cue.Descriptors, sd)
 	}
 }

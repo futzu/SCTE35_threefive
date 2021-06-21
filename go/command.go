@@ -5,26 +5,26 @@ import "github.com/futzu/bitter"
 // SpCmd is the splice command for the SCTE35 cue.
 type SpCmd struct {
 	Name                       string
-	SpliceEventID              string   `json:",omitempty"`
-	SpliceEventCancelIndicator bool     `json:",omitempty"`
-	OutOfNetworkIndicator      bool     `json:",omitempty"`
-	ProgramSpliceFlag          bool     `json:",omitempty"`
-	DurationFlag               bool     `json:",omitempty"`
-	BreakAutoReturn            bool     `json:",omitempty"`
-	BreakDuration              float64  `json:",omitempty"`
-	SpliceImmediateFlag        bool     `json:",omitempty"`
-	TimeSpecifiedFlag          bool     `json:",omitempty"`
-	PTS                        float64  `json:",omitempty"`
-	ComponentCount             uint64   `json:",omitempty"`
-	Components                 []uint64 `json:",omitempty"`
-	UniqueProgramID            uint64   `json:",omitempty"`
-	AvailNum                   uint64   `json:",omitempty"`
-	AvailExpected              uint64   `json:",omitempty"`
-	Identifier                 uint64   `json:",omitempty"`
+	SpliceEventID              string  `json:",omitempty"`
+	SpliceEventCancelIndicator bool    `json:",omitempty"`
+	OutOfNetworkIndicator      bool    `json:",omitempty"`
+	ProgramSpliceFlag          bool    `json:",omitempty"`
+	DurationFlag               bool    `json:",omitempty"`
+	BreakAutoReturn            bool    `json:",omitempty"`
+	BreakDuration              float64 `json:",omitempty"`
+	SpliceImmediateFlag        bool    `json:",omitempty"`
+	TimeSpecifiedFlag          bool    `json:",omitempty"`
+	PTS                        float64 `json:",omitempty"`
+	ComponentCount             uint8   `json:",omitempty"`
+	Components                 []uint8 `json:",omitempty"`
+	UniqueProgramID            uint64  `json:",omitempty"`
+	AvailNum                   uint8   `json:",omitempty"`
+	AvailExpected              uint8   `json:",omitempty"`
+	Identifier                 uint64  `json:",omitempty"`
 }
 
 // Decode the splice command values.
-func (cmd *SpCmd) Decode(bitn *bitter.Bitn, cmdtype uint64) bool {
+func (cmd *SpCmd) Decode(bitn *bitter.Bitn, cmdtype uint8) bool {
 
 	if int(cmdtype) == 0 {
 		cmd.SpliceNull()
@@ -82,11 +82,11 @@ func (cmd *SpCmd) SpliceInsert(bitn *bitter.Bitn) {
 			cmd.SpliceTime(bitn)
 		}
 	} else {
-		cmd.ComponentCount = bitn.AsUInt64(8)
-		var Components [256]uint64
+		cmd.ComponentCount = bitn.AsUInt8(8)
+		var Components [256]uint8
 		cmd.Components = Components[0:cmd.ComponentCount]
 		for i := range cmd.Components {
-			cmd.Components[i] = bitn.AsUInt64(8)
+			cmd.Components[i] = bitn.AsUInt8(8)
 		}
 		if !cmd.SpliceImmediateFlag {
 			cmd.SpliceTime(bitn)
@@ -96,8 +96,8 @@ func (cmd *SpCmd) SpliceInsert(bitn *bitter.Bitn) {
 		cmd.ParseBreak(bitn)
 	}
 	cmd.UniqueProgramID = bitn.AsUInt64(16)
-	cmd.AvailNum = bitn.AsUInt64(8)
-	cmd.AvailExpected = bitn.AsUInt64(8)
+	cmd.AvailNum = bitn.AsUInt8(8)
+	cmd.AvailExpected = bitn.AsUInt8(8)
 }
 
 // SpliceNull is a No-Op command.

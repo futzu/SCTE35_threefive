@@ -10,14 +10,14 @@ type SpInfo struct {
 	Private                bool
 	Reserved               string
 	SectionLength          uint64
-	ProtocolVersion        uint64
+	ProtocolVersion        uint8
 	EncryptedPacket        bool
-	EncryptionAlgorithm    uint64
+	EncryptionAlgorithm    uint8
 	PtsAdjustment          float64
 	CwIndex                string
 	Tier                   string
 	SpliceCommandLength    uint64
-	SpliceCommandType      uint64
+	SpliceCommandType      uint8
 	DescriptorLoopLength   uint64
 }
 
@@ -35,16 +35,16 @@ func (spi *SpInfo) Decode(bitn *bitter.Bitn) bool {
 	spi.Private = bitn.AsBool()
 	spi.Reserved = bitn.AsHex(2)
 	spi.SectionLength = bitn.AsUInt64(12)
-	spi.ProtocolVersion = bitn.AsUInt64(8)
+	spi.ProtocolVersion = bitn.AsUInt8(8)
 	if spi.ProtocolVersion != 0 {
 		return false
 	}
 	spi.EncryptedPacket = bitn.AsBool()
-	spi.EncryptionAlgorithm = bitn.AsUInt64(6)
+	spi.EncryptionAlgorithm = bitn.AsUInt8(6)
 	spi.PtsAdjustment = bitn.As90k(33)
 	spi.CwIndex = bitn.AsHex(8)
 	spi.Tier = bitn.AsHex(12)
 	spi.SpliceCommandLength = bitn.AsUInt64(12)
-	spi.SpliceCommandType = bitn.AsUInt64(8)
+	spi.SpliceCommandType = bitn.AsUInt8(8)
 	return true
 }
