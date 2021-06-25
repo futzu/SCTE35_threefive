@@ -7,6 +7,8 @@
 * threefive is now testing a [__Golang__  version too.](https://github.com/futzu/threefive/tree/master/go).
 ___
 
+* Please read the [__Code of Conduct__](https://github.com/futzu/threefive/blob/master/CODE_OF_CONDUCT.md).
+
 * [__Issues and Bugs and Feature Requests__](#issues-and-bugs-and-feature-requests)
 
 *   [__Versions and Releases__](#versions-and-releases)
