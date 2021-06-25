@@ -258,11 +258,7 @@ ___
   	* __Multi-Packet PAT, PMT, and SCTE35 tables__. 
   	* __Constant Data Parsing__.
   	     * threefive.Stream is designed to __run continuously__ 
-  	     * __Longest run reported__: a single Stream instance parsing video __nonstop for 47 days__.  
-
-  *  __tsdata__ is an open file handle. 
-  *  __show_null__ if set to __True__, enables showing SCTE 35 __null commands__.
-   
+  	     
 Method                              | Description
 ------------------------------------| -------------------------------------
 [Stream.__show__()](#streamshow)                 |__Prints__ Streams that will be checked for SCTE35 
@@ -295,10 +291,6 @@ Program:1100
 
 Program:1080
         PID: 1084(0x43c) Type: 0x6
-
-Program:1010
-        PID: 1014(0x3f6) Type: 0x6
-        PID: 1015(0x3f7) Type: 0x86 SCTE35
 
 ```
 ___
