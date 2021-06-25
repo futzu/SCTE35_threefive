@@ -10,41 +10,41 @@ type SegCmpt struct {
 
 // SpDscptr Splice Descriptor
 type SpDscptr struct {
-	Tag    uint8
-	Length uint8
-	Name   string
+	Tag    uint8  `json:",omitempty"`
+	Length uint8  `json:",omitempty"`
+	Name   string `json:",omitempty"`
 	// identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
 	ID string
 
-	ProviderAvailID uint64
+	ProviderAvailID uint64 `json:",omitempty"`
 
-	PreRoll                          uint8    `json:",omitempty"`
-	DTMFCount                        uint64   `json:",omitempty"`
-	DTMFChars                        []string `json:",omitempty"`
-	TAISeconds                       uint64   `json:",omitempty"`
-	TAINano                          uint64   `json:",omitempty"`
-	UTCOffset                        uint64   `json:",omitempty"`
-	SegmentationEventID              string   `json:",omitempty"`
-	SegmentationEventCancelIndicator bool     `json:",omitempty"`
-	ProgramSegmentationFlag          bool     `json:",omitempty"`
-	SegmentationDurationFlag         bool     `json:",omitempty"`
-	DeliveryNotRestrictedFlag        bool     `json:",omitempty"`
-	WebDeliveryAllowedFlag           bool     `json:",omitempty"`
-	NoRegionalBlackoutFlag           bool     `json:",omitempty"`
-	ArchiveAllowedFlag               bool     `json:",omitempty"`
-	//  DeviceRestrictions = table20[bitn.AsUInt64(2)]
-	Components               []SegCmpt `json:",omitempty"`
-	SegmentationDuration     float64   `json:",omitempty"`
-	SegmentationMessage      string    `json:",omitempty"`
-	SegmentationUpidType     uint8     `json:",omitempty"`
-	SegmentationUpidTypeName string    `json:",omitempty"`
-	SegmentationUpidLength   uint8     `json:",omitempty"`
-	SegmentationUpid         string    `json:",omitempty"`
-	SegmentationTypeID       uint8     `json:",omitempty"`
-	SegmentNum               uint64    `json:",omitempty"`
-	SegmentsExpected         uint64    `json:",omitempty"`
-	SubSegmentNum            uint64    `json:",omitempty"`
-	SubSegmentsExpected      uint64    `json:",omitempty"`
+	PreRoll                          uint8     `json:",omitempty"`
+	DTMFCount                        uint64    `json:",omitempty"`
+	DTMFChars                        []string  `json:",omitempty"`
+	TAISeconds                       uint64    `json:",omitempty"`
+	TAINano                          uint64    `json:",omitempty"`
+	UTCOffset                        uint64    `json:",omitempty"`
+	SegmentationEventID              string    `json:",omitempty"`
+	SegmentationEventCancelIndicator bool      `json:",omitempty"`
+	ProgramSegmentationFlag          bool      `json:",omitempty"`
+	SegmentationDurationFlag         bool      `json:",omitempty"`
+	DeliveryNotRestrictedFlag        bool      `json:",omitempty"`
+	WebDeliveryAllowedFlag           bool      `json:",omitempty"`
+	NoRegionalBlackoutFlag           bool      `json:",omitempty"`
+	ArchiveAllowedFlag               bool      `json:",omitempty"`
+	DeviceRestrictions               string    `json:",omitempty"`
+	Components                       []SegCmpt `json:",omitempty"`
+	SegmentationDuration             float64   `json:",omitempty"`
+	SegmentationMessage              string    `json:",omitempty"`
+	SegmentationUpidType             uint8     `json:",omitempty"`
+	SegmentationUpidTypeName         string    `json:",omitempty"`
+	SegmentationUpidLength           uint8     `json:",omitempty"`
+	SegmentationUpid                 string    `json:",omitempty"`
+	SegmentationTypeID               uint8     `json:",omitempty"`
+	SegmentNum                       uint64    `json:",omitempty"`
+	SegmentsExpected                 uint64    `json:",omitempty"`
+	SubSegmentNum                    uint64    `json:",omitempty"`
+	SubSegmentsExpected              uint64    `json:",omitempty"`
 	/**
 
 	  DeviceRestrictions
@@ -127,7 +127,7 @@ func (dscptr *SpDscptr) decodeSegFlags(bitn *bitter.Bitn) {
 		dscptr.WebDeliveryAllowedFlag = bitn.AsBool()
 		dscptr.NoRegionalBlackoutFlag = bitn.AsBool()
 		dscptr.ArchiveAllowedFlag = bitn.AsBool()
-		// dscptr.DeviceRestrictions = table20[bitn.AsUInt64(2)]
+		dscptr.DeviceRestrictions = table20[bitn.AsUInt8(2)]
 		return
 	}
 	bitn.Forward(5)
@@ -158,11 +158,11 @@ func (dscptr *SpDscptr) decodeSegmentation(bitn *bitter.Bitn) {
 
 	dscptr.SegmentationTypeID = bitn.AsUInt8(8)
 
-	/**
-	        if dscptr.SegmentationTypeID in Table22.keys(){
-	            dscptr.SegmentationMessage = Table22[dscptr.SegmentationTypeID]
-	            dscptr._decode_segments(bitbin)
+	mesg, ok := table22[dscptr.SegmentationTypeID]
+	if ok {
+		dscptr.SegmentationMessage = mesg
+		// dscptr._decode_segments(bitbin)
 
-	        }
-	**/
+	}
+
 }

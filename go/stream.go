@@ -146,6 +146,7 @@ func (stream *Stream) parse(pkt []byte) {
 	pid := &p
 	pl := stream.parsePayload(pkt)
 	pay := &pl
+
 	if *pid == 0 {
 		stream.parsePat(*pay, *pid)
 	}
