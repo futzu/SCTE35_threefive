@@ -203,7 +203,7 @@ ___https://github.com/futzu/threefive/blob/master/README.md#social-injustice-and
        *  __pid__ of the packet  
        *  __program__ of the pid 
        *  __pts__ of the packet 
-       *  __preroll__ ( difference between the packet pts and the pts specified in a TimeSignal or SpliceInsert) 
+       *  __pcr__ of the packet 
 ___
 
 
@@ -255,7 +255,7 @@ ___
   * Supports 
   	* __Multiple Programs__.
   	* __Multiple SCTE35 Streams__.
-  	* __Multi-Packet PMT, and SCTE35 data__. 
+  	* __Multi-Packet PAT, PMT, and SCTE35 tables. 
   	* __Constant Data Parsing__.
   	     * threefive.Stream is designed to __run continuously__ 
   	     * __Longest run reported__: a single Stream instance parsing video __nonstop for 47 days__.  
