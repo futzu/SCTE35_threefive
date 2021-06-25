@@ -255,7 +255,7 @@ ___
   * Supports 
   	* __Multiple Programs__.
   	* __Multiple SCTE35 Streams__.
-  	* __Multi-Packet PAT, PMT, and SCTE35 tables. 
+  	* __Multi-Packet PAT, PMT, and SCTE35 tables__. 
   	* __Constant Data Parsing__.
   	     * threefive.Stream is designed to __run continuously__ 
   	     * __Longest run reported__: a single Stream instance parsing video __nonstop for 47 days__.  
