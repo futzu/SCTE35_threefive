@@ -7,7 +7,7 @@
 * threefive is now testing a [__Golang__  version too.](https://github.com/futzu/threefive/tree/master/go).
 ___
 
-* [__Issues and Bugs and Feature Requests__]
+* [__Issues and Bugs and Feature Requests__](#issues-and-bugs-and-feature-requests)
 
 *   [__Versions and Releases__](#versions-and-releases)
 
