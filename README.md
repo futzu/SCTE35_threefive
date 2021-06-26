@@ -45,7 +45,7 @@ ___
 ## Issues and Bugs and Feature Requests
 ---
 
-> If threefive doesnt work as expected, 
+> If threefive doesn't work as expected, 
 > 
 > or if you find a bug , 
 > 
