@@ -43,7 +43,7 @@ ___
 * If you have a threefive specific issue, please open an issue.
   * If you have an issue parsing video, __a sample of the video is required__ to resolve the issue.
 * If you think you found a bug in threefive, please open an issue. 
-* If you have a feature request for threefive, and __it is directly related to SCTE-35__, please open an issue. 
+* If you have a SCTE-35 feature request for threefive, please open an issue. 
 
 ## Versions and Releases
 ---
