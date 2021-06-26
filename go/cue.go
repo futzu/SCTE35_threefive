@@ -7,8 +7,8 @@ import (
 
 // Cue a SCTE35 cue.
 type Cue struct {
-	InfoSection  SpInfo
-	Command      SpCmd
+	InfoSection SpInfo
+	Command
 	Descriptors  []SpDscptr `json:",omitempty"`
 	PacketNumber int        `json:",omitempty"`
 	Pid          uint16     `json:",omitempty"`
@@ -24,9 +24,18 @@ func (cue *Cue) Decode(bites []byte) bool {
 	if !cue.InfoSection.Decode(&bitn) {
 		return false
 	}
-	if !cue.Command.Decode(&bitn, cue.InfoSection.SpliceCommandType) {
-		return false
+	if cue.InfoSection.SpliceCommandType == 5 {
+		cue.Command = &SpliceInsert{}
+		cue.Command.Decode(&bitn)
+
 	}
+	if cue.InfoSection.SpliceCommandType == 0 {
+		cue.Command = &SpliceNull{}
+		cue.Command.Decode(&bitn)
+
+	}
+	//fmt.Printf("%+v\n",cue.Command)
+
 	cue.InfoSection.DescriptorLoopLength = bitn.AsUInt64(16)
 	cue.DscptrLoop(&bitn)
 	return true
