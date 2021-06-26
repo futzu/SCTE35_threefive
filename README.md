@@ -1,10 +1,15 @@
 # threefive
-* threefive is a __SCTE-35 Decoder / Parser library in Python3__ 
-* threefive references the __2020 SCTE-35__ Specification.
-* threefive decodes __SCTE-35__ from __MPEG-TS video__ files and streams.
-* threefive decodes __SCTE-35__ from __Base64, Hex, and Binary__ encoded strings.
-* threefive decodes __SCTE-35__ from __ffmpeg__ [` Data: bin_data ([6][0][0][0] / 0x0006)`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) streams.
-* threefive is now testing a [__Golang__  version too.](https://github.com/futzu/threefive/tree/master/go).
+> threefive is a __SCTE-35 Decoder / Parser library in Python3__ 
+> 
+> threefive references the __2020 SCTE-35__ Specification.
+>
+>  threefive decodes __SCTE-35__ from __MPEG-TS video__ files and streams.
+>
+>threefive decodes __SCTE-35__ from __Base64, Hex, and Binary__ encoded strings.
+>
+>  threefive decodes __SCTE-35__ from __ffmpeg__ [` Data: bin_data ([6][0][0][0] / 0x0006)`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) streams.
+>
+>  threefive is now testing a [__Golang__  version too.](https://github.com/futzu/threefive/tree/master/go).
 ___
 
 *  [__Code of Conduct__](https://github.com/futzu/threefive/blob/master/CODE_OF_CONDUCT.md).
@@ -40,16 +45,23 @@ ___
 ## Issues and Bugs and Feature Requests
 ---
 
-* If you have a threefive specific issue, please open an issue.
-  * If you have an issue parsing video, __a sample of the video is required__ to resolve the issue.
-* If you think you found a bug in threefive, please open an issue. 
-* If you have a SCTE-35 feature request for threefive, please open an issue. 
+> If threefive doesnt work as expected, 
+> 
+> or if you find a bug , 
+> 
+> or if you have feature request, 
+> 
+> __please open an issue__. 
+
+> If you want help resolving a video parsing issue, __a sample of the video is required__ .
 
 ## Versions and Releases
 ---
 
-* Odd numbered versions are releases.
-* Even numbered versions are testing builds between versions
+> Odd numbered versions are releases.
+> 
+> Even numbered versions are testing builds between versions
+> 
 ```python3
 a@fumatica:~/threefive$ pypy3
 
@@ -65,7 +77,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 ---
 
 * Requires python 3.6+ or pypy3
-     * [threefive runs 3x Faster on pypy3  ](https://github.com/futzu/threefive/blob/master/py3vspypy3.md#threefive--python3-vs-pypy3)
+> [threefive runs 3x Faster on pypy3  ](https://github.com/futzu/threefive/blob/master/py3vspypy3.md#threefive--python3-vs-pypy3)
 
 * To install for the system, Install as root.
 
