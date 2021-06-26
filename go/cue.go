@@ -24,18 +24,20 @@ func (cue *Cue) Decode(bites []byte) bool {
 	if !cue.InfoSection.Decode(&bitn) {
 		return false
 	}
-	if cue.InfoSection.SpliceCommandType == 5 {
-		cue.Command = &SpliceInsert{}
-		cue.Command.Decode(&bitn)
-
+	cmdList := []uint16{0, 5, 6}
+	if !IsIn16(cmdList, uint16(cue.InfoSection.SpliceCommandType)) {
+		return false
 	}
 	if cue.InfoSection.SpliceCommandType == 0 {
 		cue.Command = &SpliceNull{}
-		cue.Command.Decode(&bitn)
-
 	}
-	//fmt.Printf("%+v\n",cue.Command)
-
+	if cue.InfoSection.SpliceCommandType == 5 {
+		cue.Command = &SpliceInsert{}
+	}
+	if cue.InfoSection.SpliceCommandType == 6 {
+		cue.Command = &TimeSignal{}
+	}
+	cue.Command.Decode(&bitn)
 	cue.InfoSection.DescriptorLoopLength = bitn.AsUInt64(16)
 	cue.DscptrLoop(&bitn)
 	return true

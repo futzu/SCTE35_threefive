@@ -29,13 +29,12 @@ type SpliceInsert struct {
 	BreakAutoReturn            bool
 	BreakDuration              float64
 	SpliceImmediateFlag        bool
-	TimeSpecifiedFlag          bool
-	PTS                        float64
-	ComponentCount             uint8
-	Components                 []uint8
-	UniqueProgramID            uint64
-	AvailNum                   uint8
-	AvailExpected              uint8
+	TimeSignal
+	ComponentCount  uint8
+	Components      []uint8
+	UniqueProgramID uint64
+	AvailNum        uint8
+	AvailExpected   uint8
 }
 
 // Decode for the Command interface
@@ -74,7 +73,20 @@ func (cmd *SpliceInsert) Decode(bitn *bitter.Bitn) {
 	cmd.AvailExpected = bitn.AsUInt8(8)
 }
 
-func (cmd *SpliceInsert) spliceTime(bitn *bitter.Bitn) {
+func (cmd *SpliceInsert) parseBreak(bitn *bitter.Bitn) {
+	cmd.BreakAutoReturn = bitn.AsBool()
+	bitn.Forward(6)
+	cmd.BreakDuration = bitn.As90k(33)
+}
+
+// TimeSignal Splice Command
+type TimeSignal struct {
+	Name              string
+	TimeSpecifiedFlag bool
+	PTS               float64
+}
+
+func (cmd *TimeSignal) spliceTime(bitn *bitter.Bitn) {
 	cmd.TimeSpecifiedFlag = bitn.AsBool()
 	if cmd.TimeSpecifiedFlag {
 		bitn.Forward(6)
@@ -84,9 +96,8 @@ func (cmd *SpliceInsert) spliceTime(bitn *bitter.Bitn) {
 	}
 }
 
-// ParseBreak parses out the ad break duration values.
-func (cmd *SpliceInsert) parseBreak(bitn *bitter.Bitn) {
-	cmd.BreakAutoReturn = bitn.AsBool()
-	bitn.Forward(6)
-	cmd.BreakDuration = bitn.As90k(33)
+// Decode for the Command interface
+func (cmd *TimeSignal) Decode(bitn *bitter.Bitn) {
+	cmd.Name = "Time Signal"
+	cmd.spliceTime(bitn)
 }
