@@ -2,6 +2,13 @@ package threefive
 
 import "github.com/futzu/bitter"
 
+// Descriptor is the interface for all Splice Descriptors
+type Descriptor interface {
+	MetaData(t uint8, l uint8, i string)
+	Decode(bitn *bitter.Bitn)
+}
+
+/**
 // SegCmpt Segmentation Descriptor Component
 type SegCmpt struct {
 	ComponentTag uint8
@@ -9,21 +16,11 @@ type SegCmpt struct {
 }
 
 // SpDscptr Splice Descriptor
-type SpDscptr struct {
-	Tag    uint8  `json:",omitempty"`
-	Length uint8  `json:",omitempty"`
-	Name   string `json:",omitempty"`
-	// identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
-	ID string
+
 
 	ProviderAvailID uint64 `json:",omitempty"`
 
-	PreRoll                          uint8     `json:",omitempty"`
-	DTMFCount                        uint64    `json:",omitempty"`
-	DTMFChars                        []string  `json:",omitempty"`
-	TAISeconds                       uint64    `json:",omitempty"`
-	TAINano                          uint64    `json:",omitempty"`
-	UTCOffset                        uint64    `json:",omitempty"`
+
 	SegmentationEventID              string    `json:",omitempty"`
 	SegmentationEventCancelIndicator bool      `json:",omitempty"`
 	ProgramSegmentationFlag          bool      `json:",omitempty"`
@@ -45,46 +42,51 @@ type SpDscptr struct {
 	SegmentsExpected                 uint64    `json:",omitempty"`
 	SubSegmentNum                    uint64    `json:",omitempty"`
 	SubSegmentsExpected              uint64    `json:",omitempty"`
-	/**
+
 
 	  DeviceRestrictions
 
 	  **/
+
+// SpliceDscptr is embedded in all Splice Descriptor structs
+type SpliceDscptr struct {
+	Tag    uint8 `json:",omitempty"`
+	Length uint8 `json:",omitempty"`
+	// identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
+	Identifier string `json:",omitempty"`
 }
 
-// MetaData for splice descriptors
-func (dscptr *SpDscptr) MetaData(bitn *bitter.Bitn) {
-	dscptr.Tag = bitn.AsUInt8(8)
-	dscptr.Length = bitn.AsUInt8(8)
-	dscptr.ID = bitn.AsHex(32)
-}
-
-// Decode splice descriptor values
-func (dscptr *SpDscptr) Decode(bitn *bitter.Bitn) {
-	ddt := dscptr.Tag
-	if ddt == 0 {
-		dscptr.AvailDscptr(bitn)
-	}
-	if ddt == 1 {
-		dscptr.DTMFDscptr(bitn)
-	}
-	if ddt == 2 {
-		dscptr.SegmentDscptr(bitn)
-	}
-	if ddt == 3 {
-		dscptr.TimeDscptr(bitn)
-	}
-
+// MetaData pass in Tag, Length and ID for Splice Descriptors
+func (dscptr *SpliceDscptr) MetaData(t uint8, l uint8, i string) {
+	dscptr.Tag = t
+	dscptr.Length = l
+	dscptr.Identifier = i
 }
 
 // AvailDscptr Avail Splice Descriptor
-func (dscptr *SpDscptr) AvailDscptr(bitn *bitter.Bitn) {
+type AvailDscptr struct {
+	SpliceDscptr
+	Name            string
+	ProviderAvailID uint64
+}
+
+// Decode for the Descriptor interface
+func (dscptr *AvailDscptr) Decode(bitn *bitter.Bitn) {
 	dscptr.Name = "Avail Descriptor"
 	dscptr.ProviderAvailID = bitn.AsUInt64(32)
 }
 
 // DTMFDscptr DTMF Splice Descriptor
-func (dscptr *SpDscptr) DTMFDscptr(bitn *bitter.Bitn) {
+type DTMFDscptr struct {
+	SpliceDscptr
+	Name      string
+	PreRoll   uint8    `json:",omitempty"`
+	DTMFCount uint64   `json:",omitempty"`
+	DTMFChars []string `json:",omitempty"`
+}
+
+// Decode for the Descriptor interface
+func (dscptr *DTMFDscptr) Decode(bitn *bitter.Bitn) {
 	dscptr.Name = "DTMF Descriptor"
 	dscptr.PreRoll = bitn.AsUInt8(8)
 	dscptr.DTMFCount = bitn.AsUInt64(3)
@@ -97,13 +99,23 @@ func (dscptr *SpDscptr) DTMFDscptr(bitn *bitter.Bitn) {
 }
 
 // TimeDscptr Time Splice DSescriptor
-func (dscptr *SpDscptr) TimeDscptr(bitn *bitter.Bitn) {
+type TimeDscptr struct {
+	SpliceDscptr
+	Name       string
+	TAISeconds uint64 `json:",omitempty"`
+	TAINano    uint64 `json:",omitempty"`
+	UTCOffset  uint64 `json:",omitempty"`
+}
+
+// Decode for the Descriptor interface
+func (dscptr *TimeDscptr) Decode(bitn *bitter.Bitn) {
 	dscptr.Name = "Time Descriptor"
 	dscptr.TAISeconds = bitn.AsUInt64(48)
 	dscptr.TAINano = bitn.AsUInt64(32)
 	dscptr.UTCOffset = bitn.AsUInt64(16)
 }
 
+/**
 // SegmentDscptr Segmentation Descriptor
 func (dscptr *SpDscptr) SegmentDscptr(bitn *bitter.Bitn) {
 	dscptr.Name = "Segmentation Descriptor"
@@ -154,7 +166,7 @@ func (dscptr *SpDscptr) decodeSegmentation(bitn *bitter.Bitn) {
 	        dscptr.SegmentationUpidTypeName, dscptr.SegmentationUpid = UpidDecoder(
 	            bitn, dscptr.SegmentationUpidType, dscptr.SegmentationUpidLength
 	        )
-	**/
+
 
 	dscptr.SegmentationTypeID = bitn.AsUInt8(8)
 
@@ -166,3 +178,4 @@ func (dscptr *SpDscptr) decodeSegmentation(bitn *bitter.Bitn) {
 	}
 
 }
+**/

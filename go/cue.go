@@ -9,12 +9,12 @@ import (
 type Cue struct {
 	InfoSection SpInfo
 	Command
-	Descriptors  []SpDscptr `json:",omitempty"`
-	PacketNumber int        `json:",omitempty"`
-	Pid          uint16     `json:",omitempty"`
-	Program      uint16     `json:",omitempty"`
-	Pcr          float64    `json:",omitempty"`
-	Pts          float64    `json:",omitempty"`
+	Descriptors  []Descriptor `json:",omitempty"`
+	PacketNumber int          `json:",omitempty"`
+	Pid          uint16       `json:",omitempty"`
+	Program      uint16       `json:",omitempty"`
+	Pcr          float64      `json:",omitempty"`
+	Pts          float64      `json:",omitempty"`
 }
 
 // Decode extracts bits for the Cue values.
@@ -48,11 +48,36 @@ func (cue *Cue) DscptrLoop(bitn *bitter.Bitn) {
 	var i uint64
 	i = 0
 	for i < cue.InfoSection.DescriptorLoopLength {
-		var sd SpDscptr
-		sd.MetaData(bitn)
-		sd.Decode(bitn)
-		i += uint64(sd.Length) + 2
-		cue.Descriptors = append(cue.Descriptors, sd)
+		//var sd SpDscptr
+		//sd.MetaData(bitn)
+		tag := bitn.AsUInt8(8)
+		length := bitn.AsUInt8(8)
+		id := bitn.AsHex(32)
+		if id != "0x43554549" {
+			return
+		}
+		dscptrList := []uint16{0, 1, 3}
+		if !IsIn16(dscptrList, uint16(tag)) {
+			return
+		}
+		var Dscptr Descriptor
+
+		if tag == 0 {
+			Dscptr = &AvailDscptr{}
+		}
+		if tag == 1 {
+			Dscptr = &DTMFDscptr{}
+		}
+		// if tag == 2 {
+		//     Dscptr = &SegmentDscptr{Tag:tag,Length:length,ID:id}
+		//  }
+		if tag == 3 {
+			Dscptr = &TimeDscptr{}
+		}
+		Dscptr.MetaData(tag, length, id)
+		Dscptr.Decode(bitn)
+		i += uint64(length) + 2
+		cue.Descriptors = append(cue.Descriptors, Dscptr)
 	}
 }
 
