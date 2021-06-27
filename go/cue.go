@@ -54,7 +54,7 @@ func (cue *Cue) DscptrLoop(bitn *bitter.Bitn) {
 		if id != "0x43554549" {
 			return
 		}
-		dscptrList := []uint16{0, 1, 3}
+		dscptrList := []uint16{0, 1, 2, 3}
 		if !IsIn16(dscptrList, uint16(tag)) {
 			return
 		}
@@ -65,9 +65,9 @@ func (cue *Cue) DscptrLoop(bitn *bitter.Bitn) {
 		if tag == 1 {
 			Dscptr = &DTMFDscptr{}
 		}
-		// if tag == 2 {
-		//     Dscptr = &SegmentDscptr{}
-		//  }
+		if tag == 2 {
+			Dscptr = &SegmentDscptr{}
+		}
 		if tag == 3 {
 			Dscptr = &TimeDscptr{}
 		}

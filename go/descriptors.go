@@ -8,45 +8,11 @@ type Descriptor interface {
 	Decode(bitn *bitter.Bitn)
 }
 
-/**
 // SegCmpt Segmentation Descriptor Component
 type SegCmpt struct {
 	ComponentTag uint8
 	PtsOffset    float64
 }
-
-// SpDscptr Splice Descriptor
-
-
-	ProviderAvailID uint64 `json:",omitempty"`
-
-
-	SegmentationEventID              string    `json:",omitempty"`
-	SegmentationEventCancelIndicator bool      `json:",omitempty"`
-	ProgramSegmentationFlag          bool      `json:",omitempty"`
-	SegmentationDurationFlag         bool      `json:",omitempty"`
-	DeliveryNotRestrictedFlag        bool      `json:",omitempty"`
-	WebDeliveryAllowedFlag           bool      `json:",omitempty"`
-	NoRegionalBlackoutFlag           bool      `json:",omitempty"`
-	ArchiveAllowedFlag               bool      `json:",omitempty"`
-	DeviceRestrictions               string    `json:",omitempty"`
-	Components                       []SegCmpt `json:",omitempty"`
-	SegmentationDuration             float64   `json:",omitempty"`
-	SegmentationMessage              string    `json:",omitempty"`
-	SegmentationUpidType             uint8     `json:",omitempty"`
-	SegmentationUpidTypeName         string    `json:",omitempty"`
-	SegmentationUpidLength           uint8     `json:",omitempty"`
-	SegmentationUpid                 string    `json:",omitempty"`
-	SegmentationTypeID               uint8     `json:",omitempty"`
-	SegmentNum                       uint64    `json:",omitempty"`
-	SegmentsExpected                 uint64    `json:",omitempty"`
-	SubSegmentNum                    uint64    `json:",omitempty"`
-	SubSegmentsExpected              uint64    `json:",omitempty"`
-
-
-	  DeviceRestrictions
-
-	  **/
 
 // SpliceDscptr is embedded in all Splice Descriptor structs
 type SpliceDscptr struct {
@@ -115,9 +81,35 @@ func (dscptr *TimeDscptr) Decode(bitn *bitter.Bitn) {
 	dscptr.UTCOffset = bitn.AsUInt64(16)
 }
 
-/**
 // SegmentDscptr Segmentation Descriptor
-func (dscptr *SpDscptr) SegmentDscptr(bitn *bitter.Bitn) {
+type SegmentDscptr struct {
+	SpliceDscptr
+	Name                             string
+	SegmentationEventID              string
+	SegmentationEventCancelIndicator bool
+	ProgramSegmentationFlag          bool
+	SegmentationDurationFlag         bool
+	DeliveryNotRestrictedFlag        bool
+	WebDeliveryAllowedFlag           bool
+	NoRegionalBlackoutFlag           bool
+	ArchiveAllowedFlag               bool
+	DeviceRestrictions               string    `json:",omitempty"`
+	Components                       []SegCmpt `json:",omitempty"`
+	SegmentationDuration             float64
+	SegmentationMessage              string
+	SegmentationUpidType             uint8
+	SegmentationUpidTypeName         string
+	SegmentationUpidLength           uint8
+	SegmentationUpid                 string
+	SegmentationTypeID               uint8
+	SegmentNum                       uint64
+	SegmentsExpected                 uint64 `json:",omitempty"`
+	SubSegmentNum                    uint64 `json:",omitempty"`
+	SubSegmentsExpected              uint64 `json:",omitempty"`
+}
+
+// Decode for the Descriptor interface
+func (dscptr *SegmentDscptr) Decode(bitn *bitter.Bitn) {
 	dscptr.Name = "Segmentation Descriptor"
 	dscptr.SegmentationEventID = bitn.AsHex(32)
 	dscptr.SegmentationEventCancelIndicator = bitn.AsBool()
@@ -131,7 +123,7 @@ func (dscptr *SpDscptr) SegmentDscptr(bitn *bitter.Bitn) {
 	}
 }
 
-func (dscptr *SpDscptr) decodeSegFlags(bitn *bitter.Bitn) {
+func (dscptr *SegmentDscptr) decodeSegFlags(bitn *bitter.Bitn) {
 	dscptr.ProgramSegmentationFlag = bitn.AsBool()
 	dscptr.SegmentationDurationFlag = bitn.AsBool()
 	dscptr.DeliveryNotRestrictedFlag = bitn.AsBool()
@@ -145,7 +137,7 @@ func (dscptr *SpDscptr) decodeSegFlags(bitn *bitter.Bitn) {
 	bitn.Forward(5)
 }
 
-func (dscptr *SpDscptr) decodeSegCmpnts(bitn *bitter.Bitn) {
+func (dscptr *SegmentDscptr) decodeSegCmpnts(bitn *bitter.Bitn) {
 	ccount := bitn.AsUInt8(8)
 	for ccount > 0 { // 6 bytes each
 		ccount--
@@ -156,26 +148,27 @@ func (dscptr *SpDscptr) decodeSegCmpnts(bitn *bitter.Bitn) {
 	}
 }
 
-func (dscptr *SpDscptr) decodeSegmentation(bitn *bitter.Bitn) {
+func (dscptr *SegmentDscptr) decodeSegmentation(bitn *bitter.Bitn) {
 	if dscptr.SegmentationDurationFlag {
 		dscptr.SegmentationDuration = bitn.As90k(40)
 	}
 	dscptr.SegmentationUpidType = bitn.AsUInt8(8)
 	dscptr.SegmentationUpidLength = bitn.AsUInt8(8)
 	/**
-	        dscptr.SegmentationUpidTypeName, dscptr.SegmentationUpid = UpidDecoder(
-	            bitn, dscptr.SegmentationUpidType, dscptr.SegmentationUpidLength
-	        )
+		        dscptr.SegmentationUpidTypeName, dscptr.SegmentationUpid = UpidDecoder(
+		            bitn, dscptr.SegmentationUpidType, dscptr.SegmentationUpidLength
+		        )
 
 
-	dscptr.SegmentationTypeID = bitn.AsUInt8(8)
+		dscptr.SegmentationTypeID = bitn.AsUInt8(8)
 
-	mesg, ok := table22[dscptr.SegmentationTypeID]
-	if ok {
-		dscptr.SegmentationMessage = mesg
-		// dscptr._decode_segments(bitbin)
+		mesg, ok := table22[dscptr.SegmentationTypeID]
+		if ok {
+			dscptr.SegmentationMessage = mesg
+			// dscptr._decode_segments(bitbin)
+
+		}
 
 	}
-
+	**/
 }
-**/
