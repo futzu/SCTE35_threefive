@@ -48,8 +48,6 @@ func (cue *Cue) DscptrLoop(bitn *bitter.Bitn) {
 	var i uint64
 	i = 0
 	for i < cue.InfoSection.DescriptorLoopLength {
-		//var sd SpDscptr
-		//sd.MetaData(bitn)
 		tag := bitn.AsUInt8(8)
 		length := bitn.AsUInt8(8)
 		id := bitn.AsHex(32)
@@ -61,7 +59,6 @@ func (cue *Cue) DscptrLoop(bitn *bitter.Bitn) {
 			return
 		}
 		var Dscptr Descriptor
-
 		if tag == 0 {
 			Dscptr = &AvailDscptr{}
 		}
@@ -69,7 +66,7 @@ func (cue *Cue) DscptrLoop(bitn *bitter.Bitn) {
 			Dscptr = &DTMFDscptr{}
 		}
 		// if tag == 2 {
-		//     Dscptr = &SegmentDscptr{Tag:tag,Length:length,ID:id}
+		//     Dscptr = &SegmentDscptr{}
 		//  }
 		if tag == 3 {
 			Dscptr = &TimeDscptr{}
