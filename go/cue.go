@@ -54,27 +54,15 @@ func (cue *Cue) DscptrLoop(bitn *bitter.Bitn) {
 		if id != "0x43554549" {
 			return
 		}
-		dscptrList := []uint8{0, 1, 2, 3}
-		if !IsIn8(dscptrList, tag) {
-			return
-		}
-		var Dscptr Descriptor
-		if tag == 0 {
-			Dscptr = &AvailDscptr{}
-		}
-		if tag == 1 {
-			Dscptr = &DTMFDscptr{}
-		}
-		if tag == 2 {
-			Dscptr = &SegmentDscptr{}
-		}
-		if tag == 3 {
-			Dscptr = &TimeDscptr{}
-		}
-		Dscptr.MetaData(tag, length, id)
-		Dscptr.Decode(bitn)
-		i += uint64(length) + 2
-		cue.Descriptors = append(cue.Descriptors, Dscptr)
+        sd, ok := DscptrMap[tag]
+		if ok {
+                var Dscptr Descriptor
+                Dscptr = sd
+                Dscptr.MetaData(tag, length, id)
+                Dscptr.Decode(bitn)
+                i += uint64(length) + 2
+                cue.Descriptors = append(cue.Descriptors, Dscptr)
+        }
 	}
 }
 

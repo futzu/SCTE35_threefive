@@ -8,6 +8,13 @@ type Descriptor interface {
 	Decode(bitn *bitter.Bitn)
 }
 
+// DscptrMap maps Splice Descriptor Tags to a Descriptor interface
+var DscptrMap = map[uint8]Descriptor{
+        0: &AvailDscptr{},
+        1: &DTMFDscptr{},
+        2: &SegmentDscptr{},
+        3: &TimeDscptr{}}
+      
 // SegCmpt Segmentation Descriptor Component
 type SegCmpt struct {
 	ComponentTag uint8

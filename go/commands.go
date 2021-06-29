@@ -7,6 +7,8 @@ type Command interface {
 	Decode(bitn *bitter.Bitn)
 }
 
+//var CmdMap = map[uint8]Command{
+
 // SpliceNull is the Splice Null Command
 type SpliceNull struct {
 	Name string
