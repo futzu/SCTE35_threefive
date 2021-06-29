@@ -24,8 +24,8 @@ func (cue *Cue) Decode(bites []byte) bool {
 	if !cue.InfoSection.Decode(&bitn) {
 		return false
 	}
-	cmdList := []uint16{0, 5, 6}
-	if !IsIn16(cmdList, uint16(cue.InfoSection.SpliceCommandType)) {
+	cmdList := []uint8{0, 5, 6}
+	if !IsIn8(cmdList, cue.InfoSection.SpliceCommandType) {
 		return false
 	}
 	if cue.InfoSection.SpliceCommandType == 0 {
@@ -54,8 +54,8 @@ func (cue *Cue) DscptrLoop(bitn *bitter.Bitn) {
 		if id != "0x43554549" {
 			return
 		}
-		dscptrList := []uint16{0, 1, 2, 3}
-		if !IsIn16(dscptrList, uint16(tag)) {
+		dscptrList := []uint8{0, 1, 2, 3}
+		if !IsIn8(dscptrList, tag) {
 			return
 		}
 		var Dscptr Descriptor

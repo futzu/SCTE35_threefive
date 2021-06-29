@@ -46,8 +46,8 @@ func (dscptr *AvailDscptr) Decode(bitn *bitter.Bitn) {
 type DTMFDscptr struct {
 	SpliceDscptr
 	Name      string
-	PreRoll   uint8    `json:",omitempty"`
-	DTMFCount uint64   `json:",omitempty"`
+	PreRoll   uint8
+	DTMFCount uint64
 	DTMFChars []string `json:",omitempty"`
 }
 
@@ -68,9 +68,9 @@ func (dscptr *DTMFDscptr) Decode(bitn *bitter.Bitn) {
 type TimeDscptr struct {
 	SpliceDscptr
 	Name       string
-	TAISeconds uint64 `json:",omitempty"`
-	TAINano    uint64 `json:",omitempty"`
-	UTCOffset  uint64 `json:",omitempty"`
+	TAISeconds uint64
+	TAINano    uint64
+	UTCOffset  uint64
 }
 
 // Decode for the Descriptor interface
@@ -155,20 +155,18 @@ func (dscptr *SegmentDscptr) decodeSegmentation(bitn *bitter.Bitn) {
 	dscptr.SegmentationUpidType = bitn.AsUInt8(8)
 	dscptr.SegmentationUpidLength = bitn.AsUInt8(8)
 	/**
-		        dscptr.SegmentationUpidTypeName, dscptr.SegmentationUpid = UpidDecoder(
-		            bitn, dscptr.SegmentationUpidType, dscptr.SegmentationUpidLength
-		        )
+			        dscptr.SegmentationUpidTypeName, dscptr.SegmentationUpid = UpidDecoder(
+			            bitn, dscptr.SegmentationUpidType, dscptr.SegmentationUpidLength
+			        )
 
+	**/
+	dscptr.SegmentationTypeID = bitn.AsUInt8(8)
 
-		dscptr.SegmentationTypeID = bitn.AsUInt8(8)
-
-		mesg, ok := table22[dscptr.SegmentationTypeID]
-		if ok {
-			dscptr.SegmentationMessage = mesg
-			// dscptr._decode_segments(bitbin)
-
-		}
+	mesg, ok := table22[dscptr.SegmentationTypeID]
+	if ok {
+		dscptr.SegmentationMessage = mesg
+		// dscptr._decode_segments(bitbin)
 
 	}
-	**/
+
 }

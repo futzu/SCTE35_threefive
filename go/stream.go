@@ -5,6 +5,12 @@ import (
 	"os"
 )
 
+// PktSz is the size of an MPEG-TS packet in bytes.
+const PktSz = 188
+
+// BufferSize is the size of a read when parsing files.
+const BufferSize = 13000 * PktSz
+
 //Stream for parsing MPEGTS for SCTE-35
 type Stream struct {
 	Pkts     int               // packet count.
@@ -96,6 +102,7 @@ func (stream *Stream) parsePcr(pkt []byte, pid uint16) {
 	}
 }
 
+//parsePay packet payload starts after header and afc (if present)
 func (stream *Stream) parsePayload(pkt []byte) []byte {
 	head := 4
 	afc := (pkt[3] >> 5) & 1
@@ -140,7 +147,7 @@ func (stream *Stream) sectionDone(pay []byte, pid uint16, seclen uint16) bool {
 	return true
 }
 
-// Parser for Stream
+// parse is the parser method for Stream
 func (stream *Stream) parse(pkt []byte) {
 	p := parsePid(pkt[1], pkt[2])
 	pid := &p
