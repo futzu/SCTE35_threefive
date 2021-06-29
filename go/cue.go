@@ -7,7 +7,7 @@ import (
 
 // Cue a SCTE35 cue.
 type Cue struct {
-	InfoSection SpInfo
+	InfoSection
 	Command
 	Descriptors  []Descriptor `json:",omitempty"`
 	PacketNumber int          `json:",omitempty"`
