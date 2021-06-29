@@ -24,23 +24,15 @@ func (cue *Cue) Decode(bites []byte) bool {
 	if !cue.InfoSection.Decode(&bitn) {
 		return false
 	}
-	cmdList := []uint8{0, 5, 6}
-	if !IsIn8(cmdList, cue.InfoSection.SpliceCommandType) {
-		return false
+	cmd, ok := CmdMap[cue.InfoSection.SpliceCommandType]
+	if ok {
+		cue.Command = cmd
+		cue.Command.Decode(&bitn)
+		cue.InfoSection.DescriptorLoopLength = bitn.AsUInt64(16)
+		cue.DscptrLoop(&bitn)
+		return true
 	}
-	if cue.InfoSection.SpliceCommandType == 0 {
-		cue.Command = &SpliceNull{}
-	}
-	if cue.InfoSection.SpliceCommandType == 5 {
-		cue.Command = &SpliceInsert{}
-	}
-	if cue.InfoSection.SpliceCommandType == 6 {
-		cue.Command = &TimeSignal{}
-	}
-	cue.Command.Decode(&bitn)
-	cue.InfoSection.DescriptorLoopLength = bitn.AsUInt64(16)
-	cue.DscptrLoop(&bitn)
-	return true
+	return false
 }
 
 // DscptrLoop loops over any splice descriptors
@@ -54,15 +46,15 @@ func (cue *Cue) DscptrLoop(bitn *bitter.Bitn) {
 		if id != "0x43554549" {
 			return
 		}
-        sd, ok := DscptrMap[tag]
+		sd, ok := DscptrMap[tag]
 		if ok {
-                var Dscptr Descriptor
-                Dscptr = sd
-                Dscptr.MetaData(tag, length, id)
-                Dscptr.Decode(bitn)
-                i += uint64(length) + 2
-                cue.Descriptors = append(cue.Descriptors, Dscptr)
-        }
+			var Dscptr Descriptor
+			Dscptr = sd
+			Dscptr.MetaData(tag, length, id)
+			Dscptr.Decode(bitn)
+			i += uint64(length) + 2
+			cue.Descriptors = append(cue.Descriptors, Dscptr)
+		}
 	}
 }
 

@@ -10,16 +10,10 @@ type Descriptor interface {
 
 // DscptrMap maps Splice Descriptor Tags to a Descriptor interface
 var DscptrMap = map[uint8]Descriptor{
-        0: &AvailDscptr{},
-        1: &DTMFDscptr{},
-        2: &SegmentDscptr{},
-        3: &TimeDscptr{}}
-      
-// SegCmpt Segmentation Descriptor Component
-type SegCmpt struct {
-	ComponentTag uint8
-	PtsOffset    float64
-}
+	0: &AvailDscptr{},
+	1: &DTMFDscptr{},
+	2: &SegmentDscptr{},
+	3: &TimeDscptr{}}
 
 // SpliceDscptr is embedded in all Splice Descriptor structs
 type SpliceDscptr struct {
@@ -86,6 +80,12 @@ func (dscptr *TimeDscptr) Decode(bitn *bitter.Bitn) {
 	dscptr.TAISeconds = bitn.AsUInt64(48)
 	dscptr.TAINano = bitn.AsUInt64(32)
 	dscptr.UTCOffset = bitn.AsUInt64(16)
+}
+
+// SegCmpt Segmentation Descriptor Component
+type SegCmpt struct {
+	ComponentTag uint8
+	PtsOffset    float64
 }
 
 // SegmentDscptr Segmentation Descriptor
