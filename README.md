@@ -31,11 +31,13 @@ ___
      *  [__Cue__ Class](#cue-class)       
      *  [__Stream__ Class](#stream-class)
 *  [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples) 
-      *  [DTMF __Descriptor__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/dtmf) 
+       * [__Upids__ with Custom Output](https://github.com/futzu/threefive/blob/master/examples/upid/upid_custom_output.py)
+       *  [__SCTE-35__ from __MPEG-TS__ video over __HTTPS__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/stream/decode_http.py)
+       * [__Multiple__ Segmentation __Descriptors__](https://github.com/futzu/threefive/blob/master/examples/upid/multi_upid.py)
      *   [Parsing __HLS Manifests__ with threefive](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
      *  [__SCTE-35__ from a __Multicast__ Stream](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/README.txt)      
-     *  [__SCTE-35__ from __MPEG-TS__ video over __HTTPS__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/stream/decode_http.py)
-     *  [Show __SCTE-35 preroll__](https://github.com/futzu/threefive/blob/master/examples/stream/preroll.py)
+     * [__Time Signal__ Program Start End](https://github.com/futzu/threefive/blob/master/examples/timesignal/time_signal_blackout_override_program_end.py)
+
      * [__All Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)   
 * [__threefive Spotted in The Wild__](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 * [__ffmpeg__ and __SCTE35__ and __Stream Type__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
@@ -45,11 +47,11 @@ ___
 ## Issues and Bugs and Feature Requests
 ---
 
-> If threefive doesn't work as expected, 
+> __If threefive__ doesn't work as expected, 
 > 
-> or if you find a bug , 
+> __or__ if you find a bug , 
 > 
-> or if you have feature request, 
+> __or__ if you have feature request, 
 > 
 > __please open an issue__. 
 
@@ -58,9 +60,9 @@ ___
 ## Versions and Releases
 ---
 
-> Odd numbered versions are releases.
+> __Odd__ numbered __versions__ are __releases__.
 > 
-> Even numbered versions are testing builds between versions
+> __Even__ numbered __versions__ are __testing builds__ and may be __unstable__.
 > 
 ```python3
 a@fumatica:~/threefive$ pypy3
@@ -126,7 +128,7 @@ import threefive
 threefive.decode('/path/to/mpegwithscte35.ts') 
 
 ```
- *  New in __v.2.2.69__ threefive.decode can parse __MpegTS__ over __http and https__
+ * __MpegTS__ over __http and https__
  
  ```python3
 import threefive
@@ -164,11 +166,11 @@ decode('cue.dat')
 
 ___
 
-##  __Advanced__ threefive
+##  Advanced threefive
 
 ___
 
-###  __Cue__ Class
+###  Cue Class
 
    *  src [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
@@ -182,8 +184,6 @@ b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAA
 cue = Cue(b64)
 cue.decode()
 ```
-___https://github.com/futzu/threefive/blob/master/README.md#social-injustice-and-stuff
-
 
 * A decoded __Cue__ instance contains: 
 
