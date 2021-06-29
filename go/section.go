@@ -2,7 +2,7 @@ package threefive
 
 import "github.com/futzu/bitter"
 
-// SpInfo is the splice info section of the SCTE 35 cue.
+// InfoSection is the splice info section of the SCTE 35 cue.
 type InfoSection struct {
 	Name                   string
 	TableID                string
