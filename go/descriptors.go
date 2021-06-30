@@ -13,7 +13,8 @@ var DscptrMap = map[uint8]Descriptor{
 	0: &AvailDscptr{},
 	1: &DTMFDscptr{},
 	2: &SegmentDscptr{},
-	3: &TimeDscptr{}}
+	3: &TimeDscptr{},
+	4: &AudioDscptr{}}
 
 // SpliceDscptr is embedded in all Splice Descriptor structs
 type SpliceDscptr struct {
@@ -28,6 +29,37 @@ func (dscptr *SpliceDscptr) MetaData(t uint8, l uint8, i string) {
 	dscptr.Tag = t
 	dscptr.Length = l
 	dscptr.Identifier = i
+}
+
+// AudioCmpt is a struct for AudioDscptr Components
+type AudioCmpt struct {
+	ComponentTag  uint8
+	ISOCode       uint64
+	BitstreamMode uint8
+	NumChannels   uint8
+	FullSrvcAudio bool
+}
+
+// AudioDscptr Audio Splice Descriptor
+type AudioDscptr struct {
+	SpliceDscptr
+	Name       string
+	Components []AudioCmpt `json:",omitempty"`
+}
+
+// Decode for the Descriptor interface
+func (dscptr *AudioDscptr) Decode(bitn *bitter.Bitn) {
+	ccount := bitn.AsUInt8(4)
+	bitn.Forward(4)
+	for ccount > 0 {
+		ccount--
+		ct := bitn.AsUInt8(8)
+		iso := bitn.AsUInt64(24)
+		bsm := bitn.AsUInt8(3)
+		nc := bitn.AsUInt8(4)
+		fsa := bitn.AsBool()
+		dscptr.Components = append(dscptr.Components, AudioCmpt{ct, iso, bsm, nc, fsa})
+	}
 }
 
 // AvailDscptr Avail Splice Descriptor
