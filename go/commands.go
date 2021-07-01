@@ -7,6 +7,12 @@ type Command interface {
 	Decode(bitn *bitter.Bitn)
 }
 
+// CmdMap maps Splice Command Types to the Command interface
+var CmdMap = map[uint8]Command{
+	0: &SpliceNull{},
+	5: &SpliceInsert{},
+	6: &TimeSignal{}}
+
 // SpliceNull is the Splice Null Command
 type SpliceNull struct {
 	Name string
@@ -30,8 +36,8 @@ type SpliceInsert struct {
 	BreakDuration              float64
 	SpliceImmediateFlag        bool
 	TimeSignal
-	ComponentCount  uint8
-	Components      []uint8
+	ComponentCount  uint8   `json:",omitempty"`
+	Components      []uint8 `json:",omitempty"`
 	UniqueProgramID uint64
 	AvailNum        uint8
 	AvailExpected   uint8

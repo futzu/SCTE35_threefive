@@ -7,16 +7,11 @@ import (
 	"fmt"
 )
 
-// PktSz is the size of an MPEG-TS packet in bytes.
-const PktSz = 188
-
-// BufferSize is the size of a read when parsing files.
-const BufferSize = 13000 * PktSz
-
 //Chk generic catchall error checking
 func Chk(e error) {
 	if e != nil {
 		fmt.Println(e)
+
 	}
 }
 
@@ -36,6 +31,16 @@ func DeB64(b64 string) []byte {
 
 // IsIn16 is a test for slice membership
 func IsIn16(slice []uint16, val uint16) bool {
+	for _, item := range slice {
+		if item == val {
+			return true
+		}
+	}
+	return false
+}
+
+// IsIn8 is a test for slice membership
+func IsIn8(slice []uint8, val uint8) bool {
 	for _, item := range slice {
 		if item == val {
 			return true

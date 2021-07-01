@@ -2,8 +2,8 @@ package threefive
 
 import "github.com/futzu/bitter"
 
-// SpInfo is the splice info section of the SCTE 35 cue.
-type SpInfo struct {
+// InfoSection is the splice info section of the SCTE 35 cue.
+type InfoSection struct {
 	Name                   string
 	TableID                string
 	SectionSyntaxIndicator bool
@@ -22,29 +22,29 @@ type SpInfo struct {
 }
 
 // Decode splice info section values.
-func (spi *SpInfo) Decode(bitn *bitter.Bitn) bool {
-	spi.Name = "Splice Info Section"
-	spi.TableID = bitn.AsHex(8)
-	if spi.TableID != "0xfc" {
+func (infosec *InfoSection) Decode(bitn *bitter.Bitn) bool {
+	infosec.Name = "Splice Info Section"
+	infosec.TableID = bitn.AsHex(8)
+	if infosec.TableID != "0xfc" {
 		return false
 	}
-	spi.SectionSyntaxIndicator = bitn.AsBool()
-	if spi.SectionSyntaxIndicator {
+	infosec.SectionSyntaxIndicator = bitn.AsBool()
+	if infosec.SectionSyntaxIndicator {
 		return false
 	}
-	spi.Private = bitn.AsBool()
-	spi.Reserved = bitn.AsHex(2)
-	spi.SectionLength = bitn.AsUInt64(12)
-	spi.ProtocolVersion = bitn.AsUInt8(8)
-	if spi.ProtocolVersion != 0 {
+	infosec.Private = bitn.AsBool()
+	infosec.Reserved = bitn.AsHex(2)
+	infosec.SectionLength = bitn.AsUInt64(12)
+	infosec.ProtocolVersion = bitn.AsUInt8(8)
+	if infosec.ProtocolVersion != 0 {
 		return false
 	}
-	spi.EncryptedPacket = bitn.AsBool()
-	spi.EncryptionAlgorithm = bitn.AsUInt8(6)
-	spi.PtsAdjustment = bitn.As90k(33)
-	spi.CwIndex = bitn.AsHex(8)
-	spi.Tier = bitn.AsHex(12)
-	spi.SpliceCommandLength = bitn.AsUInt64(12)
-	spi.SpliceCommandType = bitn.AsUInt8(8)
+	infosec.EncryptedPacket = bitn.AsBool()
+	infosec.EncryptionAlgorithm = bitn.AsUInt8(6)
+	infosec.PtsAdjustment = bitn.As90k(33)
+	infosec.CwIndex = bitn.AsHex(8)
+	infosec.Tier = bitn.AsHex(12)
+	infosec.SpliceCommandLength = bitn.AsUInt64(12)
+	infosec.SpliceCommandType = bitn.AsUInt8(8)
 	return true
 }
