@@ -1,8 +1,39 @@
 """
 decode.py
 
-contains the all purpose
-threefive.decode() function
+Usage:
+
+* Base64:
+
+    Bee64='/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
+    threefive.decode(Bee64)
+
+
+* Hex String:
+
+    hexed = '0XFC301100000000000000FFFFFF0000004F253396'
+    threefive.decode(hexed)
+
+
+* Hex Value:
+
+    threefive.decode(0XFC301100000000000000FFFFFF0000004F253396)
+
+
+* Int
+    big_int = 1439737590925997869941740173214217318917816529814
+    threefive.decode(big_int)
+
+
+* Mpegts File:
+
+    threefive.decode('/path/to/mpegts')
+
+
+* Mpegts over Http / Https
+
+    threefive.decode('https://futzu.com/xaa.ts')
+
 """
 
 import sys
@@ -19,12 +50,12 @@ def _read_stdin():
     """
     handles piped in data
     """
+    # mpegts data via stdin
     try:
-        # mpegts
         Stream(sys.stdin.buffer).decode()
     except Exception:
+        # base64 or hex encoded string or raw bytes via stdin
         try:
-            # base64, binary, bytes or hex
             stuff = sys.stdin.buffer.read()
             cue = Cue(stuff)
             cue.decode()
@@ -37,29 +68,26 @@ def _read_stuff(stuff):
     """
     reads filename or a string
     """
+    # base64, binary, bytes or hex in a file
     try:
-        # base64, binary, bytes or hex in a file
         with open(stuff, "rb") as tsdata:
             tsd = tsdata.read(_MAX_CUE_SIZE)
             cue = Cue(tsd)
             cue.decode()
             cue.show()
     except Exception:
-        pass
-    try:
-        # mpegts
-        with open(stuff, "rb") as tsdata:
-            strm = Stream(tsdata)
-            strm.decode()
-    except Exception:
-        pass
-    try:
-        # base64, binary, bytes or hex
-        cue = Cue(stuff)
-        cue.decode()
-        cue.show()
-    except Exception:
-        pass
+        # mpegts video file
+        try:
+            with open(stuff, "rb") as tsdata:
+                strm = Stream(tsdata)
+                strm.decode()
+        except Exception:
+            try:
+                cue = Cue(stuff)
+                cue.decode()
+                cue.show()
+            except Exception:
+                pass
 
 
 def _read_http(stuff):
@@ -73,35 +101,8 @@ def _read_http(stuff):
 
 
 def decode(stuff=None):
-
     """
     All purpose SCTE 35 decoder function
-
-    # for a mpegts video
-
-        import threefive
-        threefive.decode('/path/to/mpegts')
-
-
-    # for a base64 encoded string
-
-        import threefive
-        Bee64='/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
-        threefive.decode(Bee64)
-
-
-    # mpegts over http / https
-
-        from threefive import decode
-        decode('https://futzu.com/xaa.ts')
-
-
-    # hex, base64, binary, bytes, or mpegts from sys.stdin.buffer
-
-        from threefive import decode
-        decode()
-
-
     """
     if stuff in [None, sys.stdin.buffer]:
         _read_stdin()
@@ -114,5 +115,9 @@ def decode(stuff=None):
         if stuff.startswith(b"http"):
             _read_http(stuff.decode())
             return
+    # Handles big ints and hex values
+
+    if isinstance(stuff, int):
+        _read_stuff(hex(stuff))
     _read_stuff(stuff)
     return
