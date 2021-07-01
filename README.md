@@ -120,37 +120,42 @@ ___
  *   src [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)   
  * __threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.
  
+ ```python3
+import threefive
+```
  *   __MpegTS__
  
 ```python3
-import threefive
 threefive.decode('/path/to/mpegwithscte35.ts') 
-
 ```
  * __MpegTS__ over __http and https__
  
  ```python3
-import threefive
 threefive.decode('https://futzu.com/xaa.ts') 
-
 ```
-
 * __Base64__ 
 
 ```python3
 mesg='/DA4AAAAAAAA///wBQb+AAAAAAAiAiBDVUVJAAAAA3//AAApPWwDDEFCQ0QwMTIzNDU2SBAAAGgCL9A='
 threefive.decode(mesg)
 ```
-
-* __Hex__
+* __Hex String__
 
 ```python3
 hexed = "0xFC301100000000000000FFFFFF0000004F253396"
 threefive.decode(hexed)
 ```
-
+* __Hex Values( New! )__ 
+```python3
+raw_hex = 0XFC301100000000000000FFFFFF0000004F253396
+threefive.decode(raw_hex)
+```
+* __Integers ( New! )__ 
+```python3
+big_int = 1439737590925997869941740173214217318917816529814
+threefive.decode(big_int)
+```
 * __Read a string directly from a file__ encoded in __Base64__, __Binary__ or  __Hex__
-
 ```bash
 $ cat cue.dat
    /DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAABl/nwgIAAAAACyk26AQAACZcuND
