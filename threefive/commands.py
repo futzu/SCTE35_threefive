@@ -14,8 +14,6 @@ class SpliceCommand(SCTE35Base):
         self.calculated_length = None
         self.name = None
         self.identifier = None
-        self.time_specified_flag = None
-        self.pts_time = None
         self.splices = None
         self.bites = bites
 
@@ -77,6 +75,10 @@ class TimeSignal(SpliceCommand):
     """
     Table 10 - time_signal()
     """
+    def __init__(self, bites=None):
+        super().__init__(bites)
+        self.time_specified_flag = None
+        self.pts_time = None
 
     def decode(self):
         """
@@ -124,39 +126,22 @@ class SpliceInsert(TimeSignal):
         self.avail_expected = None
 
     def _decode_break(self, bitbin):
-        """
-        SpliceInsert._decode_break(bitbin) is called
-        if SpliceInsert.duration_flag is set
-        """
         if self.duration_flag:
             self.break_auto_return = bitbin.as_flag(1)
             bitbin.forward(6)
             self.break_duration = bitbin.as_90k(33)
 
     def _decode_event(self, bitbin):
-        """
-        _decode_event sets splice_event_id
-        and splice_event_cancel_indicator
-        """
         self.splice_event_id = bitbin.as_int(32)
         self.splice_event_cancel_indicator = bitbin.as_flag(1)
         bitbin.forward(7)
 
     def _decode_flags(self, bitbin):
-        """
-        SpliceInsert._decode_flags set four flags
-        and is called from SpliceInsert.decode()
-        """
         self.out_of_network_indicator = bitbin.as_flag(1)
         self.program_splice_flag = bitbin.as_flag(1)
         self.duration_flag = bitbin.as_flag(1)
 
     def _decode_components(self, bitbin):
-        """
-        SpliceInsert._decode_components loops
-        over SpliceInsert.components,
-        and is called from SpliceInsert.decode()
-        """
         component_count = bitbin.as_int(8)
         self.components = []
         for i in range(0, component_count):

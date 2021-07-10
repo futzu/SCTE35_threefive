@@ -60,9 +60,6 @@ class Stream:
         return str(vars(self))
 
     def _find_start(self):
-        """
-        handles partial packets
-        """
         sync_byte = b"G"
         while self._tsdata:
             one = self._tsdata.read(1)
@@ -150,30 +147,17 @@ class Stream:
 
     @staticmethod
     def _mk_timestamp(seconds):
-        """
-        90khtz clock applied and rounded
-        """
         return round((seconds / 90000.0), 6)
 
     def _mk_pcr(self, prgm):
-        """
-        make pcr timestamp
-        """
         pcrb = self._prgm_pcr[prgm]
         return self._mk_timestamp(pcrb)
 
     def _mk_pts(self, prgm):
-        """
-        make pts timestamp
-        """
         pts = self._prgm_pts[prgm]
         return self._mk_timestamp(pts)
 
     def _mk_packet_data(self, pid):
-        """
-        creates packet_data dict
-        to pass to a threefive.Cue instance
-        """
         prgm = self._pid_prgm[pid]
         packet_data = {"pid": hex(pid), "program": prgm}
         if prgm in self._prgm_pcr:
@@ -184,10 +168,6 @@ class Stream:
 
     @staticmethod
     def _split_by_idx(payload, marker):
-        """
-        _split_by_idx splits payload at
-        first index of marker.
-        """
         try:
             return payload[payload.index(marker) :]
         except (LookupError, TypeError, ValueError):
@@ -195,11 +175,6 @@ class Stream:
 
     @staticmethod
     def _parse_payload(pkt):
-        """
-        _parse_payload checks if
-        the adaptive field control flag is set
-        and sets payload size accordingly
-        """
         head_size = 4
         afc = (pkt[3] >> 5) & 1
         if afc:
@@ -277,11 +252,10 @@ class Stream:
         if self.info:
             return None
         if pid in self._pids["pcr"]:
-            self._parse_pcr(pkt, pid)
-        else:
-            if pid in self._pid_prgm:
-                if self._parse_pusi(pkt[1]):
-                    self._parse_pts(pkt, pid)
+            return self._parse_pcr(pkt, pid)
+        if pid in self._pid_prgm:
+            if self._parse_pusi(pkt[1]):
+                self._parse_pts(pkt, pid)
         if pid in self._pids["scte35"]:
             return self._parse_scte35(pkt, pid)
 
