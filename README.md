@@ -12,21 +12,25 @@
 >  threefive is now testing a [__Golang__  version too.](https://github.com/futzu/threefive/tree/master/go).
 ___
 
-*  [__Code of Conduct__](https://github.com/futzu/threefive/blob/master/CODE_OF_CONDUCT.md).
+*  [Code of Conduct](https://github.com/futzu/threefive/blob/master/CODE_OF_CONDUCT.md).
 
-* [__Issues and Bugs and Feature Requests__](#issues-and-bugs-and-feature-requests)
+* [Issues and Bugs and Feature Requests](#issues-and-bugs-and-feature-requests)
 
-*   [__Versions and Releases__](#versions-and-releases)
+*   [Versions and Releases](#versions-and-releases)
 
-*   [__Install threefive__](#install)
+*   [Install threefive](#install)
 
-*   [__Quick Start__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+*   [Quick Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
-*   [__Easy threefive__](#the-decode-function)
-      * [Parsing __SCTE-35__ Cues from __Mpeg-TS Streams__](#the-decode-function)
-      * [Parsing __SCTE-35__ Cues from __Mpeg-TS Streams__ over __HTTPS__](#the-decode-function)
-      * [Parsing __SCTE-35__ Cue strings encoded in __Base64__, or __Hex__](#the-decode-function)
-      * [Parsing __SCTE-35__ Cues directly from a file encoded in __Base64__, __Binary__,  or __Hex__](#the-decode-function)
+
+
+*   [__Easy threefive__ (Using the decode function )](#the-decode-function)
+     * [__Mpeg-TS Streams__](#the-decode-function)
+     * [__Mpeg-TS Streams__ over __HTTPS__](#the-decode-function)
+     * [__Base64__, or __Hex__ encoded strings](#the-decode-function)
+     * [ __Hex Values__ and __Integers__](#the-decode-function)
+     * [__From a File__](#the-decode-function)
+        
 *  [__Advanced threefive__](#cue-class)         
      *  [__Cue__ Class](#cue-class)       
      *  [__Stream__ Class](#stream-class)
@@ -120,37 +124,42 @@ ___
  *   src [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)   
  * __threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.
  
+ ```python3
+import threefive
+```
  *   __MpegTS__
  
 ```python3
-import threefive
 threefive.decode('/path/to/mpegwithscte35.ts') 
-
 ```
  * __MpegTS__ over __http and https__
  
  ```python3
-import threefive
 threefive.decode('https://futzu.com/xaa.ts') 
-
 ```
-
 * __Base64__ 
 
 ```python3
 mesg='/DA4AAAAAAAA///wBQb+AAAAAAAiAiBDVUVJAAAAA3//AAApPWwDDEFCQ0QwMTIzNDU2SBAAAGgCL9A='
 threefive.decode(mesg)
 ```
-
-* __Hex__
+* __Hex String__
 
 ```python3
 hexed = "0xFC301100000000000000FFFFFF0000004F253396"
 threefive.decode(hexed)
 ```
-
+* __Hex Values( New! )__ 
+```python3
+raw_hex = 0XFC301100000000000000FFFFFF0000004F253396
+threefive.decode(raw_hex)
+```
+* __Integers ( New! )__ 
+```python3
+big_int = 1439737590925997869941740173214217318917816529814
+threefive.decode(big_int)
+```
 * __Read a string directly from a file__ encoded in __Base64__, __Binary__ or  __Hex__
-
 ```bash
 $ cat cue.dat
    /DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAABl/nwgIAAAAACyk26AQAACZcuND
