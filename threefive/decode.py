@@ -30,7 +30,7 @@ Usage:
     threefive.decode('/path/to/mpegts')
 
 
-* Mpegts over Http / Https
+* Mpegts over Http/Https
 
     threefive.decode('https://futzu.com/xaa.ts')
 
@@ -46,10 +46,13 @@ from .stream import Stream
 _MAX_CUE_SIZE = 4096
 
 
+def _decode_and_show(stuff):
+    cue = Cue(stuff)
+    cue.decode()
+    cue.show()
+
+
 def _read_stdin():
-    """
-    handles piped in data
-    """
     # mpegts data via stdin
     try:
         Stream(sys.stdin.buffer).decode()
@@ -57,24 +60,17 @@ def _read_stdin():
         # base64 or hex encoded string or raw bytes via stdin
         try:
             stuff = sys.stdin.buffer.read()
-            cue = Cue(stuff)
-            cue.decode()
-            cue.show()
+            _decode_and_show(stuff)
         except Exception:
             pass
 
 
 def _read_stuff(stuff):
-    """
-    reads filename or a string
-    """
     # base64, binary, bytes or hex in a file
     try:
         with open(stuff, "rb") as tsdata:
             tsd = tsdata.read(_MAX_CUE_SIZE)
-            cue = Cue(tsd)
-            cue.decode()
-            cue.show()
+            _decode_and_show(tsd)
     except Exception:
         # mpegts video file
         try:
@@ -83,18 +79,12 @@ def _read_stuff(stuff):
                 strm.decode()
         except Exception:
             try:
-                cue = Cue(stuff)
-                cue.decode()
-                cue.show()
+                _decode_and_show(stuff)
             except Exception:
                 pass
 
 
 def _read_http(stuff):
-    """
-    _read_http reads mpegts over http or https
-    and parses for SCTE35
-    """
     with urllib.request.urlopen(stuff) as tsdata:
         strm = Stream(tsdata)
         strm.decode()
@@ -115,8 +105,6 @@ def decode(stuff=None):
         if stuff.startswith(b"http"):
             _read_http(stuff.decode())
             return
-    # Handles big ints and hex values
-
     if isinstance(stuff, int):
         _read_stuff(hex(stuff))
     _read_stuff(stuff)

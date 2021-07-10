@@ -75,6 +75,7 @@ class TimeSignal(SpliceCommand):
     """
     Table 10 - time_signal()
     """
+
     def __init__(self, bites=None):
         super().__init__(bites)
         self.time_specified_flag = None
