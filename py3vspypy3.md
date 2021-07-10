@@ -1,12 +1,16 @@
 > threefive Performance
-## Python3 vs. Pypy3 vs threefive/go
+## Python3 vs. Pypy3 vs. threefive/go
+>
 >I've found pypy3 to be 100% compatible with threefive. Everything works.
 >
 >pypy3 is much faster than python3 at bitwise operations and just about everything else.
 >
 > pypy3 parses mpegts at (__1GB/second__).
-> 
-> threefive/go is much faster, it parses mpegts at (__3GB/second__).
+>
+>threefive/go is even faster.
+> parsing mpegts at (__3GB/second__).
+>
+>
 ___
 ### Test File
 ___
