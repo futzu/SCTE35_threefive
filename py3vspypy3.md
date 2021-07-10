@@ -93,7 +93,7 @@ func main() {
 }
 
 ```
-* version go1.15.9 linux/amd64
+* version 1.15.9 linux/amd64
 ```sh
 
 a@fu:~/$ go build cli.go
