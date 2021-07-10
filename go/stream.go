@@ -5,7 +5,6 @@ import (
 	"os"
 )
 
-
 // PktSz is the size of an MPEG-TS packet in bytes.
 const PktSz = 188
 

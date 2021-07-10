@@ -2,37 +2,48 @@ package threefive
 
 //Pids holds collections of pids by type for threefive.Stream.
 type Pids struct {
-	pmt    []uint16
-	pcr    []uint16
-	scte35 []uint16
+	PmtPids    []uint16
+	PcrPids    []uint16
+	Scte35Pids []uint16
 }
 
-func (pids *Pids) isPmt(pid uint16) bool {
-	return IsIn16(pids.pmt, pid)
+func (pids *Pids) isPmtPid(pid uint16) bool {
+	return IsIn16(pids.PmtPids, pid)
 }
 
-func (pids *Pids) addPmt(pid uint16) {
-	if !pids.isPmt(pid) {
-		pids.pmt = append(pids.pmt, pid)
+func (pids *Pids) addPmtPid(pid uint16) {
+	if !pids.isPmtPid(pid) {
+		pids.PmtPids = append(pids.PmtPids, pid)
 	}
 }
 
-func (pids *Pids) isPcr(pid uint16) bool {
-	return IsIn16(pids.pcr, pid)
+func (pids *Pids) isPcrPid(pid uint16) bool {
+	return IsIn16(pids.PcrPids, pid)
 }
 
-func (pids *Pids) addPcr(pid uint16) {
-	if !pids.isPcr(pid) {
-		pids.pcr = append(pids.pcr, pid)
+func (pids *Pids) addPcrPid(pid uint16) {
+	if !pids.isPcrPid(pid) {
+		pids.PcrPids = append(pids.PcrPids, pid)
 	}
 }
 
-func (pids *Pids) isScte35(pid uint16) bool {
-	return IsIn16(pids.scte35, pid)
+func (pids *Pids) isScte35Pid(pid uint16) bool {
+	return IsIn16(pids.Scte35Pids, pid)
 }
 
-func (pids *Pids) addScte35(pid uint16) {
-	if !(pids.isScte35(pid)) {
-		pids.scte35 = append(pids.scte35, pid)
+func (pids *Pids) addScte35Pid(pid uint16) {
+	if !(pids.isScte35Pid(pid)) {
+		pids.Scte35Pids = append(pids.Scte35Pids, pid)
 	}
+}
+func (pids *Pids) delScte35Pid(pid uint16) {
+	n := 0
+	for _, val := range pids.Scte35Pids {
+		if val != pid {
+			pids.Scte35Pids[n] = val
+			n++
+		}
+	}
+
+	pids.Scte35Pids = pids.Scte35Pids[:n]
 }
