@@ -139,8 +139,8 @@ func (stream *Stream) parsePayload(pkt []byte) []byte {
 	if hasafc == 1 {
 		afl := int(pkt[4])
 		head += afl + 1
-		afc := &AFC{}
-		afc.parseFlags(pkt[5])
+		//	afc := &AFC{}
+		//afc.parseFlags(pkt[5])
 	}
 	if head > PktSz {
 		head = PktSz
