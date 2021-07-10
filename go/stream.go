@@ -3,37 +3,7 @@ package threefive
 import (
 	"bytes"
 	"os"
-	//  "fmt"
 )
-
-/**
-type AFC struct {
-	//    DiscoInd bool
-	//    RandInd  bool
-	//   ESPI
-	//   PCRFlag
-	//   OPCRFlag
-	SpliceFlag bool
-	//    TPDFlag
-	//s    AFExtlag
-}
-
-func (afc *AFC) parseFlags(bite byte) {
-	// afc.DiscoInd = (bite & 128) == 128
-	//  afc.RandInd  = (bite & 64) == 64
-	afc.SpliceFlag = (bite & 4) == 4
-	if afc.SpliceFlag {
-		// fmt.Println(afc.SpliceFlag)
-
-	}
-	//     afc.ESPI
-	//     afc.PCRFlag
-	//    afc.OPCRFlag
-	//     afc.SplicePFlag
-	//     afc.TPDFlag
-	//     afc.AFExtlag
-}
-**/
 
 // PktSz is the size of an MPEG-TS packet in bytes.
 const PktSz = 188
@@ -139,8 +109,6 @@ func (stream *Stream) parsePayload(pkt []byte) []byte {
 	if hasafc == 1 {
 		afl := int(pkt[4])
 		head += afl + 1
-		//	afc := &AFC{}
-		//afc.parseFlags(pkt[5])
 	}
 	if head > PktSz {
 		head = PktSz
