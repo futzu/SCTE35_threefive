@@ -1,9 +1,12 @@
 > threefive Performance
-## Python3 vs. Pypy3.
+## Python3 vs. Pypy3 vs threefive/go
 >I've found pypy3 to be 100% compatible with threefive. Everything works.
 >
->Pypy3 is much faster than python3 at bitwise operations and just about everything else.
-
+>pypy3 is much faster than python3 at bitwise operations and just about everything else.
+>
+> pypy3 parses mpegts at (__1GB/second__).
+> 
+> threefive/go is much faster, it parses mpegts at (__3GB/second__).
 ___
 ### Test File
 ___
@@ -20,10 +23,9 @@ a@fu:~/$  ls -alh plp0.ts
 ```
 ___
 ### Code:
-* threefive version 2.2.90
+* threefive version 2.2.93
 ```python3
 a@fu:~/$ cat cli.py
-
 
 import sys
 from threefive import Stream, version
@@ -37,8 +39,8 @@ def do():
             strm.decode_fu()
 
 if __name__ == "__main__":
-    do()
     print(version())
+    do()
 
 ```
 ___
@@ -49,9 +51,7 @@ ___
 a@fu:~/$ time python3 cli.py plp0.ts
 ```
 
-#### real:   15.266s
-
-
+#### real:   14.367s
 
 ___
 ### pypy3 
@@ -62,7 +62,40 @@ ___
 a@fu:~/$  time pypy3 cli.py plp0.ts
 
 ```
-#### real	:   3.407s
+#### real	:   3.275s
+
+___
+### threefive/go
+
+```go
+cat cli.go
 
 
+package main
+
+import (
+	"fmt"
+	"github.com/futzu/threefive/go"
+	"os"
+)
+
+func main() {
+ args := os.Args[1:]
+	 for i := range args {
+		  fmt.Printf("\nNext File: %s\n\n", args[i])
+		  var stream threefive.Stream
+		  stream.Decode(args[i])
+	 }
+}
+
+```
+* version go1.15.9 linux/amd64
+```sh
+
+a@fu:~/$ go build cli.go
+
+a@fu:~/$  time ./cli plp0.ts
+
+```
+#### real:  1.227s
 
