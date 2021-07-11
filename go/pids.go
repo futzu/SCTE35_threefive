@@ -8,7 +8,7 @@ type Pids struct {
 }
 
 func (pids *Pids) isPmtPid(pid uint16) bool {
-	return IsIn16(pids.PmtPids, pid)
+	return isIn16(pids.PmtPids, pid)
 }
 
 func (pids *Pids) addPmtPid(pid uint16) {
@@ -18,7 +18,7 @@ func (pids *Pids) addPmtPid(pid uint16) {
 }
 
 func (pids *Pids) isPcrPid(pid uint16) bool {
-	return IsIn16(pids.PcrPids, pid)
+	return isIn16(pids.PcrPids, pid)
 }
 
 func (pids *Pids) addPcrPid(pid uint16) {
@@ -28,7 +28,7 @@ func (pids *Pids) addPcrPid(pid uint16) {
 }
 
 func (pids *Pids) isScte35Pid(pid uint16) bool {
-	return IsIn16(pids.Scte35Pids, pid)
+	return isIn16(pids.Scte35Pids, pid)
 }
 
 func (pids *Pids) addScte35Pid(pid uint16) {

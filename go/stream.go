@@ -188,7 +188,7 @@ func (stream *Stream) parsePat(pay []byte, pid uint16) {
 		for idx < end {
 			prgm := parsePrgm(pay[idx], pay[idx+1])
 			if prgm > 0 {
-				if !IsIn16(stream.Programs, prgm) {
+				if !isIn16(stream.Programs, prgm) {
 					stream.Programs = append(stream.Programs, prgm)
 				}
 				pmtpid := parsePid(pay[idx+2], pay[idx+3])

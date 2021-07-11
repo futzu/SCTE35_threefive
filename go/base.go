@@ -29,8 +29,8 @@ func DeB64(b64 string) []byte {
 	return deb64
 }
 
-// IsIn16 is a test for slice membership
-func IsIn16(slice []uint16, val uint16) bool {
+// isIn16 is a test for slice membership
+func isIn16(slice []uint16, val uint16) bool {
 	for _, item := range slice {
 		if item == val {
 			return true
@@ -39,8 +39,8 @@ func IsIn16(slice []uint16, val uint16) bool {
 	return false
 }
 
-// IsIn8 is a test for slice membership
-func IsIn8(slice []uint8, val uint8) bool {
+// isIn8 is a test for slice membership
+func isIn8(slice []uint8, val uint8) bool {
 	for _, item := range slice {
 		if item == val {
 			return true

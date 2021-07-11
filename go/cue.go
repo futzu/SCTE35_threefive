@@ -29,23 +29,20 @@ func (cue *Cue) Decode(bites []byte) bool {
 		cue.Command = cmd
 		cue.Command.Decode(&bitn)
 		cue.InfoSection.DescriptorLoopLength = bitn.AsUInt64(16)
-		cue.DscptrLoop(&bitn)
+		cue.dscptrLoop(&bitn)
 		return true
 	}
 	return false
 }
 
 // DscptrLoop loops over any splice descriptors
-func (cue *Cue) DscptrLoop(bitn *bitter.Bitn) {
+func (cue *Cue) dscptrLoop(bitn *bitter.Bitn) {
 	var i uint64
 	i = 0
 	for i < cue.InfoSection.DescriptorLoopLength {
 		tag := bitn.AsUInt8(8)
 		length := bitn.AsUInt8(8)
-		id := bitn.AsHex(32)
-		if id != "0x43554549" {
-			return
-		}
+		id := bitn.AsByteString(32)
 		sd, ok := DscptrMap[tag]
 		if ok {
 			var Dscptr Descriptor
