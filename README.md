@@ -36,22 +36,22 @@ ___
      ---
      
 *  [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples) 
-     * [__Upids__ with Custom Output](https://github.com/futzu/threefive/blob/master/examples/upid/upid_custom_output.py)
+     * [Upids_with Custom Output](https://github.com/futzu/threefive/blob/master/examples/upid/upid_custom_output.py)
       
-     * [__SCTE-35__ from __MPEG-TS__ video over __HTTPS__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/stream/decode_http.py)
+     * [SCTE-35 from MPEG-TS video over HTTPS](https://github.com/futzu/SCTE35-threefive/blob/master/examples/stream/decode_http.py)
        
-     * [__Multiple__ Segmentation __Descriptors__](https://github.com/futzu/threefive/blob/master/examples/upid/multi_upid.py)
+     * [Multiple Segmentation Descriptors](https://github.com/futzu/threefive/blob/master/examples/upid/multi_upid.py)
       
-      * [Parsing __HLS Manifests__ with threefive](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
+      * [Parsing HLS Manifests with threefive](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
         
-      * [__SCTE-35__ from a __Multicast__ Stream](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/README.txt)
+      * [SCTE-35 from a Multicast Stream](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/README.txt)
              
-      * [__Time Signal__ Program Start End](https://github.com/futzu/threefive/blob/master/examples/timesignal/time_signal_blackout_override_program_end.py)
+      * [Time Signal Program Start End](https://github.com/futzu/threefive/blob/master/examples/timesignal/time_signal_blackout_override_program_end.py)
       
-      * [__All Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
+      * [All Examples](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
      ---
  
-* [__threefive Spotted in The Wild__](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
+* [threefive Spotted in The Wild](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 
 * [__ffmpeg__ and __SCTE35__ and __Stream Type__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
