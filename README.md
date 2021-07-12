@@ -13,10 +13,6 @@
 >  
 ___
 
-*  [Code of Conduct](https://github.com/futzu/threefive/blob/master/CODE_OF_CONDUCT.md).
-
-* [Issues and Bugs and Feature Requests](#issues-and-bugs-and-feature-requests)
-
 *   [Versions and Releases](#versions-and-releases)
 
 *   [Install threefive](#install)
@@ -26,48 +22,52 @@ ___
 
 
 *   [__Easy threefive__ (Using the decode function )](#the-decode-function)
-     * [__Mpeg-TS Streams__](#the-decode-function)
-     * [__Mpeg-TS Streams__ over __HTTPS__](#the-decode-function)
-     * [__Base64__, or __Hex__ encoded strings](#the-decode-function)
-     * [ __Hex Values__ and __Integers__](#the-decode-function)
-     * [__From a File__](#the-decode-function)
-        
+
+     * [Mpeg-TS Streams](#the-decode-function) 
+     * [Mpeg-TS Streams over HTTPS](#the-decode-function) 
+     * [Base64, or Hex encoded strings](#the-decode-function) 
+     * [ Hex Values and Integers](#the-decode-function)
+    ---
+       
+       
 *  [__Advanced threefive__](#cue-class)         
-     *  [__Cue__ Class](#cue-class)       
+     *  [__Cue__ Class](#cue-class)         
      *  [__Stream__ Class](#stream-class)
+     ---
+     
 *  [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples) 
      * [__Upids__ with Custom Output](https://github.com/futzu/threefive/blob/master/examples/upid/upid_custom_output.py)
-     *  [__SCTE-35__ from __MPEG-TS__ video over __HTTPS__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/stream/decode_http.py)
+      
+     * [__SCTE-35__ from __MPEG-TS__ video over __HTTPS__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/stream/decode_http.py)
+       
      * [__Multiple__ Segmentation __Descriptors__](https://github.com/futzu/threefive/blob/master/examples/upid/multi_upid.py)
-     *   [Parsing __HLS Manifests__ with threefive](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
-     *  [__SCTE-35__ from a __Multicast__ Stream](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/README.txt)      
-     * [__Time Signal__ Program Start End](https://github.com/futzu/threefive/blob/master/examples/timesignal/time_signal_blackout_override_program_end.py)
-     * [__All Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)   
+      
+      * [Parsing __HLS Manifests__ with threefive](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
+        
+      * [__SCTE-35__ from a __Multicast__ Stream](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/README.txt)
+             
+      * [__Time Signal__ Program Start End](https://github.com/futzu/threefive/blob/master/examples/timesignal/time_signal_blackout_override_program_end.py)
+      
+      * [__All Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
+     ---
+ 
 * [__threefive Spotted in The Wild__](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
+
 * [__ffmpeg__ and __SCTE35__ and __Stream Type__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
+*  [Code of Conduct](https://github.com/futzu/threefive/blob/master/CODE_OF_CONDUCT.md).
+
+* [Issues and Bugs and Feature Requests](#issues-and-bugs-and-feature-requests)
+
 ---
 
-## Issues and Bugs and Feature Requests
----
-> __Speak up. I want to hear what you have to say__. 
->   
-> __If threefive__ doesn't work as expected, 
-> 
-> __or__ if you find a bug , 
-> 
-> __or__ if you have feature request, 
-> 
-> __please open an issue__. 
-
-> If you want help resolving a video parsing issue, __a sample of the video is required__ .
 
 ## Versions and Releases
 ---
 
-> __Odd__ numbered __versions__ are __releases__.
+> __Odd__ numbered __Versions__ are __Releases__.
 > 
-> __Even__ numbered __versions__ are __testing builds__ and may be __unstable__.
+> __Even__ numbered __Versions__ are __Testing Builds__ and may be __Unstable__.
 > 
 ```python3
 a@fumatica:~/threefive$ pypy3
@@ -417,3 +417,20 @@ with open('vid.ts','rb') as tsdata:
 $ python3 proxy.py | mplayer -
 ```
 ___
+
+
+
+
+## Issues and Bugs and Feature Requests
+---
+> __Speak up. I want to hear what you have to say__. 
+>   
+> __If threefive__ doesn't work as expected, 
+> 
+> __or__ if you find a bug , 
+> 
+> __or__ if you have feature request, 
+> 
+> __please open an issue__. 
+
+> If you want help resolving a video parsing issue, __a sample of the video is required__ .
