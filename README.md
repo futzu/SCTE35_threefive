@@ -1,5 +1,5 @@
 # threefive
-> threefive is a __SCTE-35 Decoder / Parser library in Python3__ 
+> threefive is a __SCTE-35 Decoder / Parser library in Python3__ .
 > 
 > threefive references the __2020 SCTE-35__ Specification.
 >
@@ -7,9 +7,10 @@
 >
 >threefive decodes __SCTE-35__ from __Base64, Hex, and Binary__ encoded strings.
 >
->  threefive decodes __SCTE-35__ from __ffmpeg__ [` Data: bin_data ([6][0][0][0] / 0x0006)`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) streams.
+>  threefive decodes __SCTE-35__ from streams transcoded by __ffmpeg__ as[` Data: bin_data ([6][0][0][0] / 0x0006)`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md).
 >
 >  threefive is now testing a [__Golang__  version too.](https://github.com/futzu/threefive/tree/master/go).
+>  
 ___
 
 *  [Code of Conduct](https://github.com/futzu/threefive/blob/master/CODE_OF_CONDUCT.md).
@@ -49,7 +50,8 @@ ___
 
 ## Issues and Bugs and Feature Requests
 ---
-
+> __Speak up. I want to hear what you have to say__. 
+>   
 > __If threefive__ doesn't work as expected, 
 > 
 > __or__ if you find a bug , 
