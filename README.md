@@ -86,9 +86,6 @@ Type "help", "copyright", "credits" or "license" for more information.
 * Requires python 3.6+ or pypy3
 > [threefive runs 3x Faster on pypy3  ](https://github.com/futzu/threefive/blob/master/py3vspypy3.md#threefive--python3-vs-pypy3)
 
-* To install for the system, Install as root.
-
-
 *  __install from pip__ (recommended)
    
 ```python3
@@ -101,9 +98,6 @@ $ pypy3 -mpip install threefive
 $ pypy3 -mensurepip install pip 
 ```
 ___
-
-### OR
-
 
 *  __install from git__
 
@@ -121,7 +115,6 @@ ___
 ## __Easy__ threefive
 
 ###   The __decode__ Function
-
 
  *   src [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)   
  * __threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.
