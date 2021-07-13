@@ -42,7 +42,7 @@ func (cue *Cue) dscptrLoop(bitn *bitter.Bitn) {
 	for i < cue.InfoSection.DescriptorLoopLength {
 		tag := bitn.AsUInt8(8)
 		length := bitn.AsUInt8(8)
-		id := bitn.AsByteString(32)
+		id := bitn.AsAscii(32)
 		sd, ok := DscptrMap[tag]
 		if ok {
 			var Dscptr Descriptor

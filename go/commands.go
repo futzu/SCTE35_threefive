@@ -9,9 +9,37 @@ type Command interface {
 
 // CmdMap maps Splice Command Types to the Command interface
 var CmdMap = map[uint8]Command{
-	0: &SpliceNull{},
-	5: &SpliceInsert{},
-	6: &TimeSignal{}}
+	0:   &SpliceNull{},
+	5:   &SpliceInsert{},
+	6:   &TimeSignal{},
+	7:   &BandwidthReservation{},
+	255: &PrivateCommand{},
+}
+
+// BandwidthReservation  Table 11
+type BandwidthReservation struct {
+	Name string
+}
+
+// Decode for the Command interface
+func (cmd *BandwidthReservation) Decode(bitn *bitter.Bitn) {
+	cmd.Name = "Bandwidth Reservation"
+	bitn.Forward(0)
+}
+
+// PrivateCommand  Table 12
+type PrivateCommand struct {
+	Name       string
+	Identifier uint64
+	Bites      []byte
+}
+
+// Decode for the Command interface
+func (cmd *PrivateCommand) Decode(bitn *bitter.Bitn) {
+	cmd.Name = "Private Command"
+	cmd.Identifier = bitn.AsUInt64(32)
+	cmd.Bites = bitn.AsBytes(24)
+}
 
 // SpliceNull is the Splice Null Command
 type SpliceNull struct {
