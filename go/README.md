@@ -196,24 +196,6 @@ func (cue *Cue) Show()
 
 
 ```
-
-#### Stream Struct
-```golang
-
-type Stream struct {
-	Pkts     int // packet count.
-	Programs []uint16
-	Pid2Prgm map[uint16]uint16 //lookup table for pid to program
-
-	Pids
-	// Has unexported fields.
-}
-    Stream for parsing MPEGTS for SCTE-35
-
-func (stream *Stream) Decode(fname string)
-    Decode fname (a file name) for SCTE-35
-```
-
 #### Splice Commands
 
 * Splice Commands implement the Command interface
