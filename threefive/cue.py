@@ -33,8 +33,7 @@ class Cue:
         self.descriptors = []
         self.crc = None
         if data:
-            self.data = data
-            self.bites = self._mk_bits(self.data)
+            self.bites = self._mk_bits(data)
             self.packet_data = packet_data
 
     def __repr__(self):
@@ -47,6 +46,7 @@ class Cue:
         self.descriptors = []
         # self.bites after_info section decoding
         after_info = self.mk_info_section(self.bites)
+        self.bites = self.bites[0 : self.info_section.section_length + 3]
         if after_info:
             after_cmd = self._set_splice_command(after_info)
             if after_cmd:
@@ -102,7 +102,7 @@ class Cue:
         Cue.get_json returns the Cue instance
         data in json.
         """
-        return json.dumps(self.get(), indent=4)
+        return json.dumps(self.get(), indent=6)
 
     @staticmethod
     def _mk_bits(data):

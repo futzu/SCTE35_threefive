@@ -19,26 +19,10 @@ def foundit(cue):
     cue.to_stderr()
 
 
-class StreamFu(Stream):
-    """
-    StreamFu is a subclass of threefive.Stream.
-    It prints the pts from the stream to show progress.
-    """
-
-    def decode(self, func=foundit):
-        """
-        reads MPEG-TS to find SCTE-35 packets
-        """
-        for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
-            cue = self._parser(pkt)
-            if cue:
-                func(cue)
-
-
 def read_stream(sock):
     with sock.makefile(mode="rb") as socket_file:
-        ts = StreamFu(socket_file, show_null=True)
-        ts.decode()
+        ts = Stream(socket_file, show_null=True)
+        ts.decode(func=foundit)
         # ts.show()   # will display stream types by program.
 
 

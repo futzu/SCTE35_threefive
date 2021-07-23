@@ -84,7 +84,7 @@ class Stream:
                 if not func:
                     return cue
                 func(cue)
-        return True
+        return None
 
     def _mk_pkts(self, chunk):
         return [
@@ -102,7 +102,7 @@ class Stream:
             return False
         for chunk in iter(partial(self._tsdata.read, (self._PACKET_SIZE * pkts)), b""):
             [func(cue) for cue in self._mk_pkts(chunk) if cue]
-        return True
+        return None
 
     def decode_next(self):
         """
@@ -135,7 +135,7 @@ class Stream:
             cue = self._parse(pkt)
             if cue:
                 func(cue)
-        return True
+        return None
 
     def show(self):
         """
