@@ -174,6 +174,57 @@ ___
 ___
 
 ###  Cue Class
+```py3
+class Cue(builtins.object)
+ |  The threefive.Splice class handles parsing
+ |  SCTE 35 message strings.
+ |  Example usage:
+ |  
+ |  from threefive import Cue
+ |  
+ |  Base64 = "/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g="
+ |  scte35 = Cue(Base64)
+ |  scte35.decode()
+ |  scte35.show()
+ |  
+ |  Methods defined here:
+ |  
+ |  __init__(self, data=None, packet_data=None)
+ |      data may be packet bites or encoded string
+ |      packet_data is a dict passed from a Stream instance
+ |  
+ |  __repr__(self)
+ |  
+ |  decode(self)
+ |      Cue.decode() parses for SCTE35 data
+ |  
+ |  get(self)
+ |      Cue.get returns a dict of dicts
+ |      for all three parts of a SCTE 35 message.
+ |  
+ |  get_descriptors(self)
+ |      Cue.get_descriptors returns a list of
+ |      SCTE 35 splice descriptors as dicts.
+ |  
+ |  get_json(self)
+ |      Cue.get_json returns the Cue instance
+ |      data in json.
+ |  
+ |  mk_info_section(self, bites)
+ |      Cue.mk_info_section parses the
+ |      Splice Info Section
+     of a SCTE35 cue.
+ |  
+ |  show(self)
+ |      Cue.show pretty prints the SCTE 35 message
+ |  
+ |  to_stderr(self)
+ |      Cue.to_stderr is a Wrapper
+ |      for printing to sys.stderr
+ |  
+ |  ----------------------------------------------------------------------
+```
+---
 
    *  src [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
