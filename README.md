@@ -262,6 +262,58 @@ cue_data = cue.get()
 ___
 
 ###  __Stream__ Class
+```py3
+class Stream(builtins.object)
+ |  Stream class for parsing MPEG-TS data.
+ |  
+ |  Methods defined here:
+ |  
+ |  __init__(self, tsdata, show_null=True)
+ |      tsdata is an open file handle
+ |      set show_null=False to exclude Splice Nulls
+ |      
+ |      Use like...
+ |      
+ |      from threefive import Stream
+ |      
+ |      with open("vid.ts",'rb') as tsdata:
+ |          strm = Stream(tsdata,show_null=False)
+ |          strm.decode()
+ |  
+ |  __repr__(self)
+ |  
+ |  decode(self, func=show_cue)
+ |      Stream.decode reads self.tsdata to find SCTE35 packets.
+ |      func can be set to a custom function that accepts
+ |      a threefive.Cue instance as it's only argument.
+ |  
+ |  decode_fu(self, func=show_cue)
+ |      Stream.decode_fu decodes
+ |      1000 packets at a time.
+ |  
+ |  decode_next(self)
+ |      Stream.decode_next returns the next
+ |      SCTE35 cue as a threefive.Cue instance.
+ |  
+ |  decode_program(self, the_program, func=show_cue)
+ |      Stream.decode_program limits SCTE35 parsing
+ |      to a specific MPEGTS program.
+ |  
+  decode_proxy(self, ffunc=show_cue_stderr)
+ |      Stream.decode_proxy writes all ts packets are written to stdout
+ |      for piping into another program like mplayer.
+ |      SCTE-35 cues are printed to stderr.
+ |  
+ |  show(self)
+ |      displays streams that will be
+ |      parsed for SCTE-35.
+ |  
+ |  ----------------------------------------------------------------------
+
+```
+
+---
+
 
  ```python3
   threefive.Stream(tsdata, show_null = False)
