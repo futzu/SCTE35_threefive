@@ -2,6 +2,9 @@
 > threefive is a __SCTE-35 Decoder / Parser library in Python3__ .
 > 
 > threefive references the __2020 SCTE-35__ Specification.
+
+> threefive is [__Easy__ to use.](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) Check out these [ __Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
+
 >
 >  threefive decodes __SCTE-35__ from __MPEG-TS video__ files and streams.
 >
@@ -17,7 +20,7 @@ ___
 
 *   [Install threefive](#install)
 
-*   [Quick Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+*   [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
 
 
@@ -36,18 +39,21 @@ ___
      ---
      
 *  [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples) 
+    
+    * [ Parsing SCTE35 from MPEGTS over HTTPS](https://github.com/futzu/threefive/blob/master/examples/stream/cool_decode_http.py) (__New and Improved!__)
+    
+    * [Parsing HLS Manifests with threefive](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls) (__New Code!__) 
+
+     * [Stream.__decode_proxy()__ Example](https://github.com/futzu/SCTE35-threefive/blob/master/examples/stream/decode_proxy.py)
+     
+     * [Show preroll](https://github.com/futzu/threefive/blob/master/examples/stream/preroll.py)
+
      * [Upids_with Custom Output](https://github.com/futzu/threefive/blob/master/examples/upid/upid_custom_output.py)
-      
-     * [SCTE-35 from MPEG-TS video over HTTPS](https://github.com/futzu/SCTE35-threefive/blob/master/examples/stream/decode_http.py)
-       
-     * [Multiple Segmentation Descriptors](https://github.com/futzu/threefive/blob/master/examples/upid/multi_upid.py)
-      
-      * [Parsing HLS Manifests with threefive](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
-        
-      * [SCTE-35 from a Multicast Stream](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/README.txt)
              
-      * [Time Signal Program Start End](https://github.com/futzu/threefive/blob/master/examples/timesignal/time_signal_blackout_override_program_end.py)
-      
+     * [Multiple Segmentation Descriptors](https://github.com/futzu/threefive/blob/master/examples/upid/multi_upid.py)
+           
+      * [Multicast Stream Server and Client for SCTE-35](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/README.txt)
+                   
       * [All Examples](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
      ---
  
