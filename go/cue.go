@@ -24,7 +24,7 @@ func (cue *Cue) Decode(bites []byte) bool {
 	if !cue.InfoSection.Decode(&bitn) {
 		return false
 	}
-	cmd, ok := CmdMap[cue.InfoSection.SpliceCommandType]
+	cmd, ok := cmdMap[cue.InfoSection.SpliceCommandType]
 	if ok {
 		cue.Command = cmd
 		cue.Command.Decode(&bitn)
@@ -43,7 +43,7 @@ func (cue *Cue) dscptrLoop(bitn *bitter.Bitn) {
 		tag := bitn.AsUInt8(8)
 		length := bitn.AsUInt8(8)
 		id := bitn.AsAscii(32)
-		sd, ok := DscptrMap[tag]
+		sd, ok := dscptrMap[tag]
 		if ok {
 			var Dscptr Descriptor
 			Dscptr = sd

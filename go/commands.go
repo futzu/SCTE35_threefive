@@ -7,8 +7,8 @@ type Command interface {
 	Decode(bitn *bitter.Bitn)
 }
 
-// CmdMap maps Splice Command Types to the Command interface
-var CmdMap = map[uint8]Command{
+// cmdMap maps Splice Command Types to the Command interface
+var cmdMap = map[uint8]Command{
 	0:   &SpliceNull{},
 	5:   &SpliceInsert{},
 	6:   &TimeSignal{},

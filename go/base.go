@@ -7,8 +7,8 @@ import (
 	"fmt"
 )
 
-//Chk generic catchall error checking
-func Chk(e error) {
+//chk generic catchall error checking
+func chk(e error) {
 	if e != nil {
 		fmt.Println(e)
 
@@ -18,14 +18,14 @@ func Chk(e error) {
 // MkJson structs to JSON
 func MkJson(i interface{}) string {
 	jason, err := json.MarshalIndent(&i, "", "    ")
-	Chk(err)
+	chk(err)
 	return string(jason)
 }
 
 // DeB64 decodes base64 strings.
 func DeB64(b64 string) []byte {
 	deb64, err := base64.StdEncoding.DecodeString(b64)
-	Chk(err)
+	chk(err)
 	return deb64
 }
 

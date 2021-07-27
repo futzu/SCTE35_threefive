@@ -9,7 +9,7 @@ type Descriptor interface {
 }
 
 // DscptrMap maps Splice Descriptor Tags to a Descriptor interface
-var DscptrMap = map[uint8]Descriptor{
+var dscptrMap = map[uint8]Descriptor{
 	0: &AvailDscptr{},
 	1: &DTMFDscptr{},
 	2: &SegmentDscptr{},

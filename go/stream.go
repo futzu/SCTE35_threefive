@@ -5,17 +5,17 @@ import (
 	"os"
 )
 
-// PktSz is the size of an MPEG-TS packet in bytes.
-const PktSz = 188
+// pktSz is the size of an MPEG-TS packet in bytes.
+const pktSz = 188
 
-// BufferSize is the size of a read when parsing files.
-const BufferSize = 13000 * PktSz
+// bufSz is the size of a read when parsing files.
+const bufSz = 13000 * pktSz
 
 //Stream for parsing MPEGTS for SCTE-35
 type Stream struct {
-	Pkts     int // packet count.
-	Programs []uint16
-	Pid2Prgm map[uint16]uint16 //lookup table for pid to program
+	pktNum   int // packet count.
+	programs []uint16
+	pid2Prgm map[uint16]uint16 //lookup table for pid to program
 	prgm2pcr map[uint16]uint64 //lookup table for program to pcr
 	prgm2pts map[uint16]uint64 //lookup table for program to pts
 	partial  map[uint16][]byte // partial manages tables spread across multiple packets by pid
@@ -24,7 +24,7 @@ type Stream struct {
 }
 
 func (stream *Stream) mkMaps() {
-	stream.Pid2Prgm = make(map[uint16]uint16)
+	stream.pid2Prgm = make(map[uint16]uint16)
 	stream.last = make(map[uint16][]byte)
 	stream.partial = make(map[uint16][]byte)
 	stream.prgm2pcr = make(map[uint16]uint64)
@@ -34,22 +34,22 @@ func (stream *Stream) mkMaps() {
 // Decode fname (a file name) for SCTE-35
 func (stream *Stream) Decode(fname string) {
 	stream.mkMaps()
-	stream.Pkts = 0
+	stream.pktNum = 0
 	file, err := os.Open(fname)
-	Chk(err)
+	chk(err)
 	defer file.Close()
-	buffer := make([]byte, BufferSize)
+	buffer := make([]byte, bufSz)
 	for {
 		bytesread, err := file.Read(buffer)
 		if err != nil {
 			break
 		}
-		for i := 1; i <= (bytesread / PktSz); i++ {
-			end := i * PktSz
-			start := end - PktSz
+		for i := 1; i <= (bytesread / pktSz); i++ {
+			end := i * pktSz
+			start := end - pktSz
 			p := buffer[start:end]
 			pkt := &p
-			stream.Pkts++
+			stream.pktNum++
 			stream.parse(*pkt)
 		}
 	}
@@ -76,7 +76,7 @@ func (stream *Stream) parsePusi(pkt []byte) bool {
 
 func (stream *Stream) parsePts(pkt []byte, pid uint16) {
 	if stream.parsePusi(pkt) {
-		prgm, ok := stream.Pid2Prgm[pid]
+		prgm, ok := stream.pid2Prgm[pid]
 		if ok {
 			pts := (uint64(pkt[13]) >> 1 & 7) << 30
 			pts |= uint64(pkt[14]) << 22
@@ -97,7 +97,7 @@ func (stream *Stream) parsePcr(pkt []byte, pid uint16) {
 			pcr |= (uint64(pkt[8]) << 9)
 			pcr |= (uint64(pkt[9]) << 1)
 			pcr |= uint64(pkt[10]) >> 7
-			prgm := stream.Pid2Prgm[pid]
+			prgm := stream.pid2Prgm[pid]
 			stream.prgm2pcr[prgm] = pcr
 		}
 	}
@@ -111,8 +111,8 @@ func (stream *Stream) parsePayload(pkt []byte) []byte {
 		afl := int(pkt[4])
 		head += afl + 1
 	}
-	if head > PktSz {
-		head = PktSz
+	if head > pktSz {
+		head = pktSz
 	}
 	return pkt[head:]
 }
@@ -188,8 +188,8 @@ func (stream *Stream) parsePat(pay []byte, pid uint16) {
 		for idx < end {
 			prgm := parsePrgm(pay[idx], pay[idx+1])
 			if prgm > 0 {
-				if !isIn16(stream.Programs, prgm) {
-					stream.Programs = append(stream.Programs, prgm)
+				if !isIn16(stream.programs, prgm) {
+					stream.programs = append(stream.programs, prgm)
 				}
 				pmtpid := parsePid(pay[idx+2], pay[idx+3])
 				stream.addPmtPid(pmtpid)
@@ -230,7 +230,7 @@ func (stream *Stream) parseStreams(silen uint16, pay []byte, idx uint16, prgm ui
 		eilen := parseLen(pay[idx+3], pay[idx+4])
 		idx += chunksize
 		idx += eilen
-		stream.Pid2Prgm[elpid] = prgm
+		stream.pid2Prgm[elpid] = prgm
 		stream.vrfyStreamType(elpid, streamtype)
 	}
 }
@@ -261,11 +261,11 @@ func (stream *Stream) parseScte35(pay []byte, pid uint16) {
 func (stream *Stream) mkCue(pid uint16) Cue {
 	var cue Cue
 	cue.Pid = pid
-	p := stream.Pid2Prgm[pid]
+	p := stream.pid2Prgm[pid]
 	prgm := &p
 	cue.Program = *prgm
 	cue.Pcr = stream.mkPcr(*prgm)
 	cue.Pts = stream.mkPts(*prgm)
-	cue.PacketNumber = stream.Pkts
+	cue.PacketNumber = stream.pktNum
 	return cue
 }
