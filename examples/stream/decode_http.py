@@ -1,7 +1,13 @@
 #!/usr/bin/env pypy3
 """
+An example using urllib3.
+
+Check out cool_decode_http.py,
+for a urllib.request example.
+
 Parse a mpegts video over http or https
 without downloading first.
+
 """
 import urllib3
 from threefive import Stream
