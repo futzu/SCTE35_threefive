@@ -6,7 +6,8 @@
  ---
 
  * __Stream__
-      * [__New and Improved__ Parsing SCTE35 from MPEGTS over HTTPS](https://github.com/futzu/threefive/blob/master/examples/stream/cool_decode_http.py)
+      * [Return a list of SCTE-35 Cues from an MPEGTS file](https://github.com/futzu/threefive/blob/master/examples/stream/cue_list.py) __New!__
+      * [Parsing SCTE35 from MPEGTS over HTTPS](https://github.com/futzu/threefive/blob/master/examples/stream/cool_decode_http.py) __Improved!__ 
       * [Parsing SCTE3 from MPEGTS over HTTPS](https://github.com/futzu/threefive/blob/master/examples/stream/decode_http.py)
       * [Stream.__decode_proxy()__ Example](https://github.com/futzu/SCTE35-threefive/blob/master/examples/stream/decode_proxy.py)
       * [Show preroll](https://github.com/futzu/threefive/blob/master/examples/stream/preroll.py)
