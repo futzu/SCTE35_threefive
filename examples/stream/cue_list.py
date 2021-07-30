@@ -7,7 +7,7 @@ to return a list of cues from a video
 
 Usage:
 
-pypy3 cuelist.py video.ts
+pypy3 cue_list.py video.ts
 
 """
 
