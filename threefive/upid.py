@@ -17,6 +17,7 @@ def upid_decoder(bitbin, upid_type, upid_length):
     Used by the SegmentationDescriptor class.
     """
     upid_map = {
+        0x01: ["Deprecated", _decode_uri],
         0x02: ["Deprecated", _decode_uri],
         0x03: ["AdID", _decode_uri],
         0x04: ["UMID", _decode_umid],
@@ -32,10 +33,11 @@ def upid_decoder(bitbin, upid_type, upid_length):
         0x0E: ["ADS Info", _decode_uri],
         0x0F: ["URI", _decode_uri],
         0x10: ["UUID", _decode_uri],
+        0xFD: ["Unknown", _decode_uri],
     }
-    if upid_type in upid_map.keys():
-        return upid_map[upid_type][0], upid_map[upid_type][1](bitbin, upid_length)
-    return False
+    if upid_type not in upid_map.keys():
+        upid_type = 0xFD
+    return upid_map[upid_type][0], upid_map[upid_type][1](bitbin, upid_length)
 
 
 def _decode_air_id(bitbin, upid_length):
@@ -92,7 +94,7 @@ def _decode_mpu(bitbin, upid_length):
     ulbits = upid_length << 3
     mpu_data = {
         "format_identifier": bitbin.as_hex(32),
-        "private_data": bitbin.as_hex(ulbits - 32),
+        "private_data": bitbin.as_ascii(ulbits - 32),
     }
     return mpu_data
 

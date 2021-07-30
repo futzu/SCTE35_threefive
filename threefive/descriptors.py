@@ -220,8 +220,8 @@ class SegmentationDescriptor(SpliceDescriptor):
             if bitbin.idx > 16:
                 self.sub_segment_num = bitbin.as_int(8)  # 1 byte
                 self.sub_segments_expected = bitbin.as_int(8)  # 1 byte
-            else:
-                self.sub_segment_num = self.sub_segments_expected = 0
+            # else:
+            self.sub_segment_num = self.sub_segments_expected = 0
 
 
 # map of known descriptors and associated classes
