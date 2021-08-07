@@ -11,10 +11,11 @@ pypy3 cue_list.py video.ts
 
 """
 
+
 def do():
     CUES = []
     arg = sys.argv[1]
-    with open(arg,'rb') as vid:
+    with open(arg, "rb") as vid:
         while True:
             strm = Stream(vid)
             cue = strm.decode_next()
@@ -24,5 +25,6 @@ def do():
                 CUES.append(cue)
         return CUES
 
+
 if __name__ == "__main__":
-    [print(f'SCTE-35 Cue @ {cue.packet_data["pcr"]}' ) for cue in do()]
+    [print(f'SCTE-35 Cue @ {cue.packet_data["pcr"]}') for cue in do()]

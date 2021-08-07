@@ -26,7 +26,7 @@ class Cue:
     def __init__(self, data=None, packet_data=None):
         """
         data may be packet bites or encoded string
-        packet_data is a dict passed from a Stream instance
+        packet_data is a instance passed from a Stream instance
         """
         self.info_section = SpliceInfoSection()
         self.command = None
@@ -86,7 +86,7 @@ class Cue:
                 "crc": self.crc,
             }
             if self.packet_data is not None:
-                scte35.update(self.packet_data)
+                scte35.update(self.packet_data.get())
             return scte35
         return False
 

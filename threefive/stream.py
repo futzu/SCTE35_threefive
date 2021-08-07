@@ -5,6 +5,7 @@ Mpeg-TS Stream parsing class Stream
 import sys
 from functools import partial
 from .cue import Cue
+from .packetdata import PacketData
 
 
 def show_cue(cue):
@@ -76,14 +77,13 @@ class Stream:
         func can be set to a custom function that accepts
         a threefive.Cue instance as it's only argument.
         """
-        if not self._find_start():
-            return False
-        for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
-            cue = self._parse(pkt)
-            if cue:
-                if not func:
-                    return cue
-                func(cue)
+        if self._find_start():
+            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
+                cue = self._parse(pkt)
+                if cue:
+                    if not func:
+                        return cue
+                    func(cue)
         return None
 
     def _mk_pkts(self, chunk):
@@ -98,11 +98,11 @@ class Stream:
         1000 packets at a time.
         """
         pkts = 1384
-        if not self._find_start():
-            return False
-        for chunk in iter(partial(self._tsdata.read, (self._PACKET_SIZE * pkts)), b""):
-            [func(cue) for cue in self._mk_pkts(chunk) if cue]
-        return None
+        if self._find_start():
+            for chunk in iter(
+                partial(self._tsdata.read, (self._PACKET_SIZE * pkts)), b""
+            ):
+                [func(cue) for cue in self._mk_pkts(chunk) if cue]
 
     def decode_next(self):
         """
@@ -128,14 +128,12 @@ class Stream:
         for piping into another program like mplayer.
         SCTE-35 cues are printed to stderr.
         """
-        if not self._find_start():
-            return False
-        for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
-            sys.stdout.buffer.write(pkt)
-            cue = self._parse(pkt)
-            if cue:
-                func(cue)
-        return None
+        if self._find_start():
+            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
+                cue = self._parse(pkt)
+                if cue:
+                    func(cue)
+                sys.stdout.buffer.write(pkt)
 
     def show(self):
         """
@@ -145,26 +143,12 @@ class Stream:
         self.info = True
         self.decode()
 
-    @staticmethod
-    def _mk_timestamp(seconds):
-        return round((seconds / 90000.0), 6)
-
-    def _mk_pcr(self, prgm):
-        pcrb = self._prgm_pcr[prgm]
-        return self._mk_timestamp(pcrb)
-
-    def _mk_pts(self, prgm):
-        pts = self._prgm_pts[prgm]
-        return self._mk_timestamp(pts)
-
     def _mk_packet_data(self, pid):
         prgm = self._pid_prgm[pid]
-        packet_data = {"pid": hex(pid), "program": prgm}
-        if prgm in self._prgm_pcr:
-            packet_data["pcr"] = self._mk_pcr(prgm)
-        if prgm in self._prgm_pts:
-            packet_data["pts"] = self._mk_pts(prgm)
-        return packet_data
+        pdata = PacketData(pid, prgm)
+        pdata.mk_pcr(self._prgm_pcr)
+        pdata.mk_pts(self._prgm_pts)
+        return pdata
 
     @staticmethod
     def _split_by_idx(payload, marker):
@@ -256,12 +240,11 @@ class Stream:
         if pid in self._pid_prgm:
             if self._parse_pusi(pkt[1]):
                 self._parse_pts(pkt, pid)
-        if pid in self._pids["scte35"]:
-            return self._parse_scte35(pkt, pid)
+            if pid in self._pids["scte35"]:
+                return self._parse_scte35(pkt, pid)
 
     def _chk_partial(self, payload, pid):
         if pid in self._partial:
-            # Handle tables split over multiple packets
             payload = self._partial.pop(pid) + payload
         return payload
 
@@ -272,21 +255,11 @@ class Stream:
         return False
 
     def _chk_pat_payload(self, pkt, pid):
-        """
-        Compare PAT packet payload
-        to the last PAT packet payload
-        before parsing
-        """
         payload = self._parse_payload(pkt)
         if not self._chk_last(payload, pid):
             self._program_association_table(payload)
 
     def _chk_pmt_payload(self, pkt, pid):
-        """
-        Use pid to compare PMT packet payloads
-        to the last PMT packet payload
-        before parsing
-        """
         payload = self._parse_payload(pkt)
         if not self._chk_last(payload, pid):
             self._program_map_table(payload, pid)
@@ -307,7 +280,6 @@ class Stream:
             if not payload:
                 self._pids["scte35"].remove(pid)
                 return None
-            # if 0 == False:
             if payload[13] == self.show_null:
                 return None
             self._parse_cue(payload, pid)
@@ -330,8 +302,6 @@ class Stream:
         """
         pid = 0
         payload = self._chk_partial(payload, pid)
-        # pointer_field = payload[0]
-        # table_id  = payload[1]
         section_length = self._parse_length(payload[2], payload[3])
         if section_length + 3 > len(payload):
             self._partial[pid] = payload
@@ -355,9 +325,8 @@ class Stream:
         payload = self._split_by_idx(payload, b"\x02")
         if not payload:
             return
-        # table_id = payload[0]
         sectioninfolen = self._parse_length(payload[1], payload[2])
-        if sectioninfolen + 3 > len(payload):  # +3 for bytes before sectioninfolen
+        if sectioninfolen + 3 > len(payload):
             self._partial[pid] = payload
             return
         program_number = self._parse_program(payload[3], payload[4])
@@ -393,9 +362,9 @@ class Stream:
         """
         extract stream pid and type
         """
-        stream_type = hex(payload[idx])  # 1 byte
-        el_pid = self._parse_pid(payload[idx + 1], payload[idx + 2])  # 2 bytes
-        ei_len = self._parse_length(payload[idx + 3], payload[idx + 4])  # 2 bytes
+        stream_type = hex(payload[idx])
+        el_pid = self._parse_pid(payload[idx + 1], payload[idx + 2])
+        ei_len = self._parse_length(payload[idx + 3], payload[idx + 4])
         return stream_type, el_pid, ei_len
 
     def _chk_pid_stream_type(self, pid, stream_type):
