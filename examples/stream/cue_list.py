@@ -23,8 +23,9 @@ def do():
                 return CUES
             if cue:
                 CUES.append(cue)
+                print(cue)
         return CUES
 
 
 if __name__ == "__main__":
-    [print(f'SCTE-35 Cue @ {cue.packet_data["pcr"]}') for cue in do()]
+    [print(f"SCTE-35 Cue @ {cue.packet_data.pts}") for cue in do()]

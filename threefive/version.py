@@ -8,10 +8,9 @@ Used to set version in setup.py
 and as an easy way to check which
 version you have installed.
 """
-version_tuple = (
-    "2.2.98",
-    "Two Two ninety-eight",
-)
+MAJOR = 2
+MINOR = 2
+MAINTAINENCE = 98
 
 
 def version():
@@ -19,11 +18,11 @@ def version():
     version is set in the version_tuple
     to make it immutable.
     """
-    return version_tuple[0]
+    return f"{MAJOR}.{MINOR}.{MAINTAINENCE}"
 
 
-def full_version():
+def version_tuple():
     """
-    returns full version tuple
+    returns MAJOR,MINOR,MAINTAINENCE tuple
     """
-    return version_tuple
+    return MAJOR, MINOR, MAINTAINENCE

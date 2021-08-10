@@ -199,14 +199,15 @@ class Stream:
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
-        if pkt[6] & 1:
-            pts = ((pkt[13] >> 1) & 7) << 30
-            pts |= pkt[14] << 22
-            pts |= (pkt[15] >> 1) << 15
-            pts |= pkt[16] << 7
-            pts |= pkt[17] >> 1
-            prgm = self._pid_prgm[pid]
-            self._prgm_pts[prgm] = pts
+        if self._parse_pusi(pkt[1]):
+            if pkt[6] & 1:
+                pts = ((pkt[13] >> 1) & 7) << 30
+                pts |= pkt[14] << 22
+                pts |= (pkt[15] >> 1) << 15
+                pts |= pkt[16] << 7
+                pts |= pkt[17] >> 1
+                prgm = self._pid_prgm[pid]
+                self._prgm_pts[prgm] = pts
 
     def _parse_pcr(self, pkt, pid):
         """
@@ -224,24 +225,19 @@ class Stream:
                 self._prgm_pcr[prgm] = pcr
 
     def _parse(self, pkt):
-        """
-        parse pid from pkt and
-        route it appropriately.
-        """
         pid = self._parse_pid(pkt[1], pkt[2])
         if pid == 0:
-            return self._chk_pat_payload(pkt, pid)
+            self._chk_pat_payload(pkt, pid)
         if pid in self._pids["pmt"]:
-            return self._chk_pmt_payload(pkt, pid)
+            self._chk_pmt_payload(pkt, pid)
         if self.info:
             return None
         if pid in self._pids["pcr"]:
             return self._parse_pcr(pkt, pid)
         if pid in self._pid_prgm:
-            if self._parse_pusi(pkt[1]):
-                self._parse_pts(pkt, pid)
-            if pid in self._pids["scte35"]:
-                return self._parse_scte35(pkt, pid)
+            self._parse_pts(pkt, pid)
+        if pid in self._pids["scte35"]:
+            return self._parse_scte35(pkt, pid)
 
     def _chk_partial(self, payload, pid):
         if pid in self._partial:
