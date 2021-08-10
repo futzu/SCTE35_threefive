@@ -16,6 +16,8 @@
 >  
 ___
 
+* [ Little Help? ](
+
 *   [Versions and Releases](#versions-and-releases)
 
 *   [Install threefive](#install)
@@ -538,5 +540,12 @@ ___
 > If you want help resolving a video parsing issue, __a sample of the video is required__ .
 
 
+### I could use some help.....
+
+1. Someone with some DASH skills, threefive needs some DASH examples. 
+
+2. Anybody want to write some tests for threefive?
+
+3. Docker folks. I have some really cool stuff, I want to deploy.    
 
 > [Jimmy?](http://runjimmyrunrunyoufuckerrun.com/rc/)
