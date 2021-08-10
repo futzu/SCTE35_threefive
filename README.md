@@ -16,7 +16,7 @@
 >  
 ___
 
-* [ Little Help? ](
+* [ Little Help? ](#i-could-use-some-help)
 
 *   [Versions and Releases](#versions-and-releases)
 
