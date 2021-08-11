@@ -1,5 +1,7 @@
 package threefive
 
+import "github.com/futzu/bitter"
+
 /**
 def upid_decoder(bitbin, upid_type, upid_length):
     """
@@ -35,7 +37,7 @@ def upid_decoder(bitbin, upid_type, upid_length):
 
 // Upid is the interface for Segmentation Upida
 type Upid interface {
-	Decode(bitn *bitter.Bitn, upidtype string, name string, upidlen int)
+	Decode(bitn *bitter.Bitn, upidtype string, name string, upidlen uint)
 }
 
 // AirId Segmentation Upid
@@ -46,9 +48,9 @@ type AirID struct {
 }
 
 // Decode for AirId struct
-func (upid *AirID) Decode(bitn *bitter.Bitn, upidtype string, name string, upidlen int) {
+func (upid *AirID) Decode(bitn *bitter.Bitn, upidtype string, name string, upidlen uint) {
 	upid.UpidType = upidtype
-	upid.Name = Name
+	upid.Name = name
 	upid.Value = bitn.AsHex(upidlen << 3)
 }
 
@@ -60,9 +62,9 @@ type Isan struct {
 }
 
 // Decode for Isan Upid struct
-func (upid *Isan) Decode(bitn *bitter.Bitn, upidtype string, name string, upidlen int) {
+func (upid *Isan) Decode(bitn *bitter.Bitn, upidtype string, name string, upidlen uint) {
 	upid.UpidType = upidtype
-	upid.Name = Name
+	upid.Name = name
 	upid.Value = bitn.AsAscii(upidlen << 3)
 }
 
@@ -74,9 +76,9 @@ type URI struct {
 }
 
 // Decode for URI struct
-func (upid *URI) Decode(bitn *bitter.Bitn, upidtype string, name string, upidlen int) {
+func (upid *URI) Decode(bitn *bitter.Bitn, upidtype string, name string, upidlen uint) {
 	upid.UpidType = upidtype
-	upid.Name = Name
+	upid.Name = name
 	upid.Value = bitn.AsHex(upidlen << 3)
 }
 
