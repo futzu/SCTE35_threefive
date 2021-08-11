@@ -40,7 +40,7 @@ type Upid interface {
 	Decode(bitn *bitter.Bitn, upidtype string, name string, upidlen uint)
 }
 
-// AirId Segmentation Upid
+// AirID Segmentation Upid
 type AirID struct {
 	UpidType string
 	Name     string
