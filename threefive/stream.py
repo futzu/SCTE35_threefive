@@ -135,6 +135,22 @@ class Stream:
                     func(cue)
                 sys.stdout.buffer.write(pkt)
 
+
+    def strip_scte35(self, func=show_cue_stderr):
+        """
+        Stream.strip_scte35 works just likle Stream.decode_proxy,
+        except that SCTE-35 packets are not written to stdout.
+        SCTE-35 cues are printed to stderr.
+        """
+        if self._find_start():
+            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
+                cue = self._parse(pkt)
+                if cue:
+                    func(cue)
+                else:
+                    sys.stdout.buffer.write(pkt)
+
+
     def show(self):
         """
         displays streams that will be
