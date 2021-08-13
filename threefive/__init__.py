@@ -5,7 +5,7 @@ from .cue import Cue
 from .decode import decode
 from .section import SpliceInfoSection
 from .stream import Stream
-from .version import version, version_tuple
+from .version import version, version_number
 
 from .commands import (
     TimeSignal,
