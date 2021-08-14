@@ -120,64 +120,83 @@ $ make pypy3
 ```
 ___
 
-## __Easy__ threefive
+# __Easy__ threefive
 
-###   The __decode__ Function
+>  "Give the people what they want"  ~ __Ray Davies__ 
+>
+##\   The __decode__ Function
 
  *   src [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)   
  * __threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.
  
- ```python3
-import threefive
-```
- *   __MpegTS__
+
+> ```py3
+> 
+> from threefive import decode
+>   
+> ```
+
+
+ *  MpegTS
  
 ```python3
-threefive.decode('/path/to/mpegwithscte35.ts') 
+
+decode('/path/to/mpegwithscte35.ts') 
+
 ```
- * __MpegTS__ over __http and https__
+ * Http / Https
  
- ```python3
-threefive.decode('https://futzu.com/xaa.ts') 
-```
-* __Base64__ 
+ ```python3 
+ decode('https://futzu.com/xaa.ts') 
+ ```
+ 
+ 
+* Base64 
 
 ```python3
+
 mesg='/DA4AAAAAAAA///wBQb+AAAAAAAiAiBDVUVJAAAAA3//AAApPWwDDEFCQ0QwMTIzNDU2SBAAAGgCL9A='
-threefive.decode(mesg)
+
+decode(mesg)
+
 ```
-* __Hex String__
+* Hex String
 
 ```python3
+
 hexed = "0xFC301100000000000000FFFFFF0000004F253396"
-threefive.decode(hexed)
-```
-* __Hex Values( New! )__ 
-```python3
-raw_hex = 0XFC301100000000000000FFFFFF0000004F253396
-threefive.decode(raw_hex)
-```
-* __Integers ( New! )__ 
-```python3
-big_int = 1439737590925997869941740173214217318917816529814
-threefive.decode(big_int)
-```
-* __Read a string directly from a file__ encoded in __Base64__, __Binary__ or  __Hex__
-```bash
-$ cat cue.dat
-   /DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAABl/nwgIAAAAACyk26AQAACZcuND
-```
-*
-```python3
-from threefive import decode
 
-decode('cue.dat')
+decode(hexed)
+
+```
+* Hex Values
+ 
+```python3
+
+raw_hex = 0XFC301100000000000000FFFFFF0000004F253396
+
+decode(raw_hex)
+
+```
+* Integers
+```python3
+
+big_int = 1439737590925997869941740173214217318917816529814
+
+decode(big_int)
+
+```
+* Read a string directly from a file [cue.txt](https://github.com/futzu/threefive/files/6986120/cue.txt)
+
+```python3
+
+decode('cue.txt')
 
 ```
 
 ___
 
-##  Advanced threefive
+#  Advanced threefive
 
 ___
 
