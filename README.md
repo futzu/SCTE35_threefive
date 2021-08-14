@@ -17,13 +17,6 @@ ___
 
 
 
-*   [__Easy threefive__ (Using the decode function )](#the-decode-function)
-
-     * [Mpeg-TS Streams](#the-decode-function) 
-     * [Mpeg-TS Streams over HTTPS](#the-decode-function) 
-     * [Base64, or Hex encoded strings](#the-decode-function) 
-     * [ Hex Values and Integers](#the-decode-function)
-    ---
        
        
 *  [__Advanced threefive__](#cue-class)         
