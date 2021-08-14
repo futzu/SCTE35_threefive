@@ -16,8 +16,7 @@ ___
 *   [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
 
-
-       
+*   [__Easy threefive__ (Using the decode function )](#the-decode-function)
        
 *  [__Advanced threefive__](#cue-class)         
      *  [__Cue__ Class](#cue-class)         
@@ -103,8 +102,41 @@ ___
 >
 ##   The __decode__ Function
 
- *  [__threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)   
+ > __threefive.decode__ is an all purpose function to decode SCTE 35 Cues.
  
+|     Input Type    | Function Call                                             |
+|-------------------|-----------------------------------------------------------|
+|  __MpegTS__       |  ```  decode('/path/to/mpegwithscte35.ts')  ```           |
+| __Http/Https__    |  ```decode('https://futzu.com/xaa.ts')  ```               |
+| __Base64 Encoded__|  ```decode('/DA4AAAAAAAA///wBQb+AAAAAAAiAiBDVUVJAAAAA3//AAApPWwDDEFCQ0QwMTIzNDU2SBAAAGgCL9A=')```                               |
+| __Hex String__    | ```decode("0xFC301100000000000000FFFFFF0000004F253396")```|
+|                   |                                                           |
+|                   |                                                           |
+|                   |                                                           |
+|                   |                                                           |
+
+
+
+######  threefive.decode Supports:
+
+
+* ```Mpeg-TS Video```       
+     
+* * From Files  
+* * Over HTTP/HTTPS  
+* * Piped to  STDIN
+     
+* ```Base64, Hex Strings, and Bytes```
+
+* * As Strings
+* * from Files
+* * Piped to STDIN
+     
+* ```Hex and Integer Values```
+* * As Numerical Values
+* * From Files,
+* * Piped to STDIN 
+
 > ```py3
 > 
 > from threefive import decode
@@ -112,21 +144,21 @@ ___
 > ```
 
 
- *  MpegTS
+ >  MpegTS
  
 ```python3
 
 decode('/path/to/mpegwithscte35.ts') 
 
 ```
- * Http / Https
+ > Http / Https
  
  ```python3 
  decode('https://futzu.com/xaa.ts') 
  ```
  
  
-* Base64 
+> Base64 
 
 ```python3
 
@@ -176,57 +208,7 @@ ___
 ___
 
 ###  Cue Class
-```py3
-class Cue(builtins.object)
- |  The threefive.Splice class handles parsing
- |  SCTE 35 message strings.
- |  Example usage:
- |  
- |  from threefive import Cue
- |  
- |  Base64 = "/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g="
- |  scte35 = Cue(Base64)
- |  scte35.decode()
- |  scte35.show()
- |  
- |  Methods defined here:
- |  
- |  __init__(self, data=None, packet_data=None)
- |      data may be packet bites or encoded string
- |      packet_data is a dict passed from a Stream instance
- |  
- |  __repr__(self)
- |  
- |  decode(self)
- |      Cue.decode() parses for SCTE35 data
- |  
- |  get(self)
- |      Cue.get returns a dict of dicts
- |      for all three parts of a SCTE 35 message.
- |  
- |  get_descriptors(self)
- |      Cue.get_descriptors returns a list of
- |      SCTE 35 splice descriptors as dicts.
- |  
- |  get_json(self)
- |      Cue.get_json returns the Cue instance
- |      data in json.
- |  
- |  mk_info_section(self, bites)
- |      Cue.mk_info_section parses the
- |      Splice Info Section
-     of a SCTE35 cue.
- |  
- |  show(self)
- |      Cue.show pretty prints the SCTE 35 message
- |  
- |  to_stderr(self)
- |      Cue.to_stderr is a Wrapper
- |      for printing to sys.stderr
- |  
- |  ----------------------------------------------------------------------
-```
----
+
 
    *  src [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
@@ -259,21 +241,13 @@ cue.decode()
      * **cue.descriptors**  
         * a list of 0 or more of these descriptors :   
          
-          * [ threefive.**AudioDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L48)  
-          * [ threefive.**AvailDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L80)  
-          * [ threefive.**DtmfDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L94)  
-          * [ threefive.**SegmentationDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L137)  
-          * [threefive.**TimeDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L115)
+        [ threefive.**AudioDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L48) |  [ threefive.**AvailDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L80)  |  [ threefive.**DtmfDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L94)  | [ threefive.**SegmentationDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L137)  |  [threefive.**TimeDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L115)
 
      *  __crc__
      
      * 'When parsing SCTE35 Cues from MPEGTS streams, 
        threefive attempts to include as many of the 
-       following as possible.'   	
-       *  __pid__ of the packet  
-       *  __program__ of the pid 
-       *  __pts__ of the packet 
-       *  __pcr__ of the packet 
+       following as possible.'   	         __pid__ of the packet  *  __program__ of the pid   *  __pts__ of the packet   *  __pcr__ of the packet 
 ___
 
 
@@ -315,57 +289,6 @@ cue_data = cue.get()
 ___
 
 ###  __Stream__ Class
-```py3
-class Stream(builtins.object)
- |  Stream class for parsing MPEG-TS data.
- |  
- |  Methods defined here:
- |  
- |  __init__(self, tsdata, show_null=True)
- |      tsdata is an open file handle
- |      set show_null=False to exclude Splice Nulls
- |      
- |      Use like...
- |      
- |      from threefive import Stream
- |      
- |      with open("vid.ts",'rb') as tsdata:
- |          strm = Stream(tsdata,show_null=False)
- |          strm.decode()
- |  
- |  __repr__(self)
- |  
- |  decode(self, func=show_cue)
- |      Stream.decode reads self.tsdata to find SCTE35 packets.
- |      func can be set to a custom function that accepts
- |      a threefive.Cue instance as it's only argument.
- |  
- |  decode_fu(self, func=show_cue)
- |      Stream.decode_fu decodes
- |      1000 packets at a time.
- |  
- |  decode_next(self)
- |      Stream.decode_next returns the next
- |      SCTE35 cue as a threefive.Cue instance.
- |  
- |  decode_program(self, the_program, func=show_cue)
- |      Stream.decode_program limits SCTE35 parsing
- |      to a specific MPEGTS program.
- |  
-  decode_proxy(self, ffunc=show_cue_stderr)
- |      Stream.decode_proxy writes all ts packets are written to stdout
- |      for piping into another program like mplayer.
- |      SCTE-35 cues are printed to stderr.
- |  
- |  show(self)
- |      displays streams that will be
- |      parsed for SCTE-35.
- |  
- |  ----------------------------------------------------------------------
-
-```
-
----
 
 
  ```python3
