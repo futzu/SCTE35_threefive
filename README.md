@@ -16,7 +16,8 @@ ___
 *   [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
 
-*   [__Easy threefive__ (Using the decode function )](#the-decode-function)
+*   [__Easy threefive__ ](#the-decode-function)
+* *   [__threefive.decode__](#the-decode-function)
        
 *  [__Advanced threefive__](#cue-class)         
      *  [__Cue__ Class](#cue-class)         
@@ -104,9 +105,19 @@ ___
 
  > __threefive.decode__ is an all purpose function to decode SCTE 35 Cues.
  
+* __Import__ 
+
+> ```py3
+> 
+> from threefive import decode
+>   
+> ```
+
+ 
 |     Input Type    | Function Call                                             |
 |-------------------|-----------------------------------------------------------|
-|  __MpegTS__       |  ```  decode('/path/to/mpegwithscte35.ts')  ```           |
+|  __MpegTS__       |  ```js  decode('/path/to/mpegwithscte35.ts')  ```   
+|
 | __Http/Https__    |  ```decode('https://futzu.com/xaa.ts')  ```               |
 | __Base64 Encoded__|  ```decode('/DA4AAAAAAAA///wBQb+AAAAAAAiAiBDVUVJAAAAA3//AAApPWwDDEFCQ0QwMTIzNDU2SBAAAGgCL9A=')```                               |
 | __Hex String__    | ```decode("0xFC301100000000000000FFFFFF0000004F253396")```|
@@ -114,34 +125,6 @@ ___
 |                   |                                                           |
 |                   |                                                           |
 |                   |                                                           |
-
-
-
-######  threefive.decode Supports:
-
-
-* ```Mpeg-TS Video```       
-     
-* * From Files  
-* * Over HTTP/HTTPS  
-* * Piped to  STDIN
-     
-* ```Base64, Hex Strings, and Bytes```
-
-* * As Strings
-* * from Files
-* * Piped to STDIN
-     
-* ```Hex and Integer Values```
-* * As Numerical Values
-* * From Files,
-* * Piped to STDIN 
-
-> ```py3
-> 
-> from threefive import decode
->   
-> ```
 
 
  >  MpegTS
