@@ -1,4 +1,4 @@
-# threefive
+
 > threefive is a __SCTE-35 Decoder / Parser library in Python3__ .
 > 
 > threefive references the __2020 SCTE-35__ Specification.
@@ -7,7 +7,6 @@
 
 ___
 
-* [ Little Help? ](#i-could-use-some-help)
 
 *   [Versions and Releases](#versions-and-releases)
 
@@ -17,28 +16,14 @@ ___
 
 
 *   [__Easy threefive__ ](#the-decode-function)
-* *   [__threefive.decode__](#the-decode-function)
+      *   [threefive.__decode()__](#the-decode-function)
        
 *  [__Advanced threefive__](#cue-class)         
-     *  [__Cue__ Class](#cue-class)         
-     *  [__Stream__ Class](#stream-class)
+     *  [threefive.__Cue__](#cue-class)         
+     *  [threefive.__Stream__ Class](#stream-class)
      ---
      
-*  [__Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples) 
-    
-    * [ Parsing SCTE35 from MPEGTS over HTTPS](https://github.com/futzu/threefive/blob/master/examples/stream/cool_decode_http.py) (__New and Improved!__)
-    
-    * [Parsing HLS Manifests with threefive](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls) (__New Code!__) 
 
-     * [Stream.__decode_proxy()__ Example](https://github.com/futzu/SCTE35-threefive/blob/master/examples/stream/decode_proxy.py)
-     
-     * [Show preroll](https://github.com/futzu/threefive/blob/master/examples/stream/preroll.py)
-
-     * [Upids_with Custom Output](https://github.com/futzu/threefive/blob/master/examples/upid/upid_custom_output.py)
-                        
-      * [Multicast Stream Server and Client for SCTE-35](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/README.txt)
-                   
-     ---
  
 * [threefive Spotted in The Wild](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 
@@ -99,32 +84,16 @@ ___
 
 # __Easy__ threefive
 
->  "Give the people what they want"  ~ __Ray Davies__ 
->
 ##   The __decode__ Function
 
  > __threefive.decode__ is an all purpose function to decode SCTE 35 Cues.
  
-* __Import__ 
 
 > ```py3
 > 
 > from threefive import decode
 >   
 > ```
-
- 
-|     Input Type    | Function Call                                             |
-|-------------------|-----------------------------------------------------------|
-|  __MpegTS__       |  ```js  decode('/path/to/mpegwithscte35.ts')  ```   
-|
-| __Http/Https__    |  ```decode('https://futzu.com/xaa.ts')  ```               |
-| __Base64 Encoded__|  ```decode('/DA4AAAAAAAA///wBQb+AAAAAAAiAiBDVUVJAAAAA3//AAApPWwDDEFCQ0QwMTIzNDU2SBAAAGgCL9A=')```                               |
-| __Hex String__    | ```decode("0xFC301100000000000000FFFFFF0000004F253396")```|
-|                   |                                                           |
-|                   |                                                           |
-|                   |                                                           |
-|                   |                                                           |
 
 
  >  MpegTS
@@ -206,31 +175,13 @@ cue = Cue(b64)
 cue.decode()
 ```
 
-* A decoded __Cue__ instance contains: 
-
-     * **cue.info_section** 
-       * 1 [threefive.**SpliceInfoSection()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)
-
-     * **cue.command** 	 
-       * 1 of these commands:
-       
-         *  [ threefive.**BandwidthReservation()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L35)    
-         *  [ threefive.**PrivateCommand()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L47 )
-         *  [ threefive.**SpliceInsert()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L105)
-         * [ threefive.**SpliceNull()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L63) 
-         *  [ threefive.**TimeSignal()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L76)
-
-
-     * **cue.descriptors**  
-        * a list of 0 or more of these descriptors :   
-         
-        [ threefive.**AudioDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L48) |  [ threefive.**AvailDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L80)  |  [ threefive.**DtmfDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L94)  | [ threefive.**SegmentationDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L137)  |  [threefive.**TimeDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L115)
-
-     *  __crc__
-     
      * 'When parsing SCTE35 Cues from MPEGTS streams, 
        threefive attempts to include as many of the 
-       following as possible.'   	         __pid__ of the packet  *  __program__ of the pid   *  __pts__ of the packet   *  __pcr__ of the packet 
+       following as possible.'   	        
+* *  __pid__ of the packet  
+* *  __program__ of the pid   
+* *  __pts__ of the packet   
+* *  __pcr__ of the packet 
 ___
 
 
@@ -439,15 +390,4 @@ ___
 
 > If you want help resolving a video parsing issue, __a sample of the video is required__ .
 
----
 
-# I could use some help.....
-
-1. Someone with some DASH skills, threefive needs some DASH examples. 
----
-2. Anybody want to write some tests for threefive?
----
-3. Docker folks. I have some really cool stuff, I want to deploy. 
----   
-
-> [Jimmy?](http://runjimmyrunrunyoufuckerrun.com/rc/)
