@@ -1,18 +1,11 @@
 
-> threefive is a __SCTE-35 Decoder / Parser library in Python3__ .
-> 
-> threefive references the __2020 SCTE-35__ Specification.
+> threefive is a __SCTE-35 Decoder__ / Parser library in Python3.
 
-> threefive is [__Easy__ to use.](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) Check out these [ __Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
-
-___
-
-
-*   [Versions and Releases](#versions-and-releases)
-
-*   [Install threefive](#install)
-
-*   [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+* [Requirements](#requirements)
+* [Install threefive](#install)
+* [Versions and Releases](#versions-and-releases)
+* [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+* [Super Cool Examples ](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
 
 
 *   [__Easy threefive__ ](#the-decode-function)
@@ -23,7 +16,6 @@ ___
      *  [threefive.__Stream__ Class](#stream-class)
      ---
      
-
  
 * [threefive Spotted in The Wild](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 
@@ -33,58 +25,36 @@ ___
 
 * [Issues and Bugs and Feature Requests](#issues-and-bugs-and-feature-requests)
 
----
 
 
-## Versions and Releases
----
-
-> __Odd__ numbered __Versions__ are __Releases__.
-> 
-> __Even__ numbered __Versions__ are __Testing Builds__ and may be __Unstable__.
-> 
-```python3
->>>> from threefive import version
->>>> version()
-'2.2.98'
-
-# the version_number function returns an int for easy version comparisons
-
-version_number()
-2298
-```
+### Requirements
+threefive requires python 3.6+ or [pypy3](https://pypy.org)
 
 ### Install
----
-
-* Requires python 3.6+ or pypy3
-> [threefive runs 3x Faster on pypy3  ](https://github.com/futzu/threefive/blob/master/py3vspypy3.md#threefive--python3-vs-pypy3)
-
-*  Pip Install
    
-```python3
-$ pip3 install threefive
+```sh
+pip3 install threefive
 
 # for pypy3
-$ pypy3 -mpip install threefive
+pypy3 -m pip install threefive
 ```
 
-*  Git Install
+### Versions and Releases
 
-```python3
-$ git clone https://github.com/futzu/threefive.git
+ >  __Release__ versions are  __odd__.
+  
+  > __Unstable__ testing versions are __even__.
 
-$ cd threefive
-$ make install
+> ```threefive.version()```   returns the version as a string.
 
-# for pypy3 
-$ make pypy3
-```
-___
+> ```threefive.version_number()``` returns an int for easy version comparisons.
 
-# __Easy__ threefive
+---
 
-##   The __decode__ Function
+
+### __Easy__ threefive
+
+####   The __decode__ Function
 
  > __threefive.decode__ is an all purpose function to decode SCTE 35 Cues.
  
