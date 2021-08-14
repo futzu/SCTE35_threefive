@@ -124,7 +124,7 @@ ___
 
 >  "Give the people what they want"  ~ __Ray Davies__ 
 >
-##\   The __decode__ Function
+##   The __decode__ Function
 
  *   src [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)   
  * __threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.
