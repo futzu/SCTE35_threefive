@@ -5,15 +5,6 @@
 
 > threefive is [__Easy__ to use.](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) Check out these [ __Examples__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
 
->
->  threefive decodes __SCTE-35__ from __MPEG-TS video__ files and streams.
->
-> threefive decodes __SCTE-35__ from __Base64, Hex, and Binary__ encoded strings.
->
->  threefive decodes __SCTE-35__ from streams transcoded by __ffmpeg__ as[` Data: bin_data ([6][0][0][0] / 0x0006)`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md).
->
->  threefive is now testing a [__Golang__  version too.](https://github.com/futzu/threefive/tree/master/go).
->  
 ___
 
 * [ Little Help? ](#i-could-use-some-help)
@@ -51,12 +42,9 @@ ___
      * [Show preroll](https://github.com/futzu/threefive/blob/master/examples/stream/preroll.py)
 
      * [Upids_with Custom Output](https://github.com/futzu/threefive/blob/master/examples/upid/upid_custom_output.py)
-             
-     * [Multiple Segmentation Descriptors](https://github.com/futzu/threefive/blob/master/examples/upid/multi_upid.py)
-           
+                        
       * [Multicast Stream Server and Client for SCTE-35](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/README.txt)
                    
-      * [All Examples](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
      ---
  
 * [threefive Spotted in The Wild](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
@@ -78,14 +66,14 @@ ___
 > __Even__ numbered __Versions__ are __Testing Builds__ and may be __Unstable__.
 > 
 ```python3
-a@fumatica:~/threefive$ pypy3
-
-Python 3.6.12 (7.3.3+dfsg-3, Feb 25 2021, 22:28:03)
-[PyPy 7.3.3 with GCC 10.2.1 20210110] on linux
-Type "help", "copyright", "credits" or "license" for more information.
 >>>> from threefive import version
 >>>> version()
-'2.2.82'
+'2.2.98'
+
+# the version_number function returns an int for easy version comparisons
+
+version_number()
+2298
 ```
 
 ### Install
@@ -94,20 +82,16 @@ Type "help", "copyright", "credits" or "license" for more information.
 * Requires python 3.6+ or pypy3
 > [threefive runs 3x Faster on pypy3  ](https://github.com/futzu/threefive/blob/master/py3vspypy3.md#threefive--python3-vs-pypy3)
 
-*  __install from pip__ (recommended)
+*  Pip Install
    
 ```python3
 $ pip3 install threefive
 
 # for pypy3
 $ pypy3 -mpip install threefive
-
-#If you don't have pip installed, try this.
-$ pypy3 -mensurepip install pip 
 ```
-___
 
-*  __install from git__
+*  Git Install
 
 ```python3
 $ git clone https://github.com/futzu/threefive.git
@@ -126,10 +110,8 @@ ___
 >
 ##   The __decode__ Function
 
- *   src [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)   
- * __threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.
+ *  [__threefive.decode__ is an all purpose function to decode SCTE 35 messages from a file or string.](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)   
  
-
 > ```py3
 > 
 > from threefive import decode
