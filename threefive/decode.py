@@ -1,38 +1,7 @@
 """
 decode.py
 
-Usage:
-
-* Base64:
-
-    Bee64='/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
-    threefive.decode(Bee64)
-
-
-* Hex String:
-
-    hexed = '0XFC301100000000000000FFFFFF0000004F253396'
-    threefive.decode(hexed)
-
-
-* Hex Value:
-
-    threefive.decode(0XFC301100000000000000FFFFFF0000004F253396)
-
-
-* Int
-    big_int = 1439737590925997869941740173214217318917816529814
-    threefive.decode(big_int)
-
-
-* Mpegts File:
-
-    threefive.decode('/path/to/mpegts')
-
-
-* Mpegts over Http/Https
-
-    threefive.decode('https://futzu.com/xaa.ts')
+Home of the decode function.
 
 """
 
@@ -92,7 +61,71 @@ def _read_http(stuff):
 
 def decode(stuff=None):
     """
-    All purpose SCTE 35 decoder function
+        decode is a SCTE-35 decoder function
+        with input type auto-detection.
+        SCTE-35 data can be parsed with just
+        one function call.
+
+        the arg stuff is the input.
+        if stuff is not set, decode will attempt
+        to read from sys.stdin.buffer.
+
+        if stuff is a file, the file data
+        will be read and the type of the data
+        will be autodetected and decoded.
+
+        SCTE-35 data is printed in JSON format.
+
+        For more parsing and output control,
+        see the Cue and Stream classes.
+
+    Supported inputs:
+
+    [ Base64 ]
+
+            import threefive
+
+            Bee64='/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
+            threefive.decode(Bee64)
+
+
+    [ Hex String ]
+
+            import threefive
+
+            hexed = '0XFC301100000000000000FFFFFF0000004F253396'
+            threefive.decode(hexed)
+
+
+    [ Hex Literal ]
+
+            import threefive
+
+            threefive.decode(0XFC301100000000000000FFFFFF0000004F253396)
+
+
+    [ Integer ]
+
+            import threefive
+
+            big_int = 1439737590925997869941740173214217318917816529814
+            threefive.decode(big_int)
+
+
+    [ Mpegts File ]
+
+            import threefive
+
+            threefive.decode('/path/to/mpegts')
+
+
+    [ Mpegts HTTP/HTTPS Streams ]
+
+            import threefive
+
+            threefive.decode('https://futzu.com/xaa.ts')
+
+
     """
     if stuff in [None, sys.stdin.buffer]:
         _read_stdin()
@@ -107,5 +140,6 @@ def decode(stuff=None):
             return
     if isinstance(stuff, int):
         _read_stuff(hex(stuff))
+        return
     _read_stuff(stuff)
     return
