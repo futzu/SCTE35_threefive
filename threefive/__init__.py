@@ -4,6 +4,7 @@ threefive.__init__.py
 from .cue import Cue
 from .decode import decode
 from .section import SpliceInfoSection
+from .smoketest import smoke_test
 from .stream import Stream
 from .version import version, version_number
 
