@@ -13,8 +13,6 @@ class SpliceCommand(SCTE35Base):
     def __init__(self, bites=None):
         self.calculated_length = None
         self.name = None
-        self.identifier = None
-        self.splices = None
         self.bites = bites
 
     def decode(self):
