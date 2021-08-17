@@ -59,59 +59,57 @@ def _read_http(stuff):
 
 def decode(stuff=None):
     """
+decode is a SCTE-35 decoder function
+with input type auto-detection.
+SCTE-35 data can be parsed with just
+one function call.
 
+the arg stuff is the input.
+if stuff is not set, decode will attempt
+to read from sys.stdin.buffer.
 
-    decode is a SCTE-35 decoder function
-    with input type auto-detection.
-    SCTE-35 data can be parsed with just
-    one function call.
+if stuff is a file, the file data
+will be read and the type of the data
+will be autodetected and decoded.
 
-    the arg stuff is the input.
-    if stuff is not set, decode will attempt
-    to read from sys.stdin.buffer.
+SCTE-35 data is printed in JSON format.
 
-    if stuff is a file, the file data
-    will be read and the type of the data
-    will be autodetected and decoded.
+For more parsing and output control,
+see the Cue and Stream classes.
 
-    SCTE-35 data is printed in JSON format.
+Supported inputs:
 
-    For more parsing and output control,
-    see the Cue and Stream classes.
+# Base64
 
-    Supported inputs:
+stuff = '/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
+threefive.decode(stuff)
 
-    # Base64
+# Bytes
 
-    stuff = '/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
-    threefive.decode(stuff)
+payload = b'\xfc0\x11\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00\x00\x00O%3\x96'
+threefive.decode(payload)
 
-    # Bytes
+# Hex String
 
-    payload = b'\xfc0\x11\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00\x00\x00O%3\x96'
-    threefive.decode(payload)
+stuff = '0XFC301100000000000000FFFFFF0000004F253396'
+threefive.decode(stuff)
 
-    # Hex String
+# Hex Literal
 
-    stuff = '0XFC301100000000000000FFFFFF0000004F253396'
-    threefive.decode(stuff)
+threefive.decode(0XFC301100000000000000FFFFFF0000004F253396)
 
-    # Hex Literal
+# Integer
 
-    threefive.decode(0XFC301100000000000000FFFFFF0000004F253396)
+big_int = 1439737590925997869941740173214217318917816529814
+threefive.decode(big_int)
 
-    # Integer
+# Mpegts File
 
-    big_int = 1439737590925997869941740173214217318917816529814
-    threefive.decode(big_int)
+threefive.decode('/path/to/mpegts')
 
-    # Mpegts File
+# Mpegts HTTP/HTTPS Streams
 
-    threefive.decode('/path/to/mpegts')
-
-    # Mpegts HTTP/HTTPS Streams
-
-    threefive.decode('https://futzu.com/xaa.ts')
+threefive.decode('https://futzu.com/xaa.ts')
 
     """
     if stuff in [None, sys.stdin.buffer]:
