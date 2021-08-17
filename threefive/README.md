@@ -6,6 +6,7 @@
 * [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)   The Cue class.
 * [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)   The decode function.
 * [descriptors.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)   All Splice Descriptor classes.
+* [packetdata.py](https://github.com/futzu/threefive/blob/master/threefive/packetdata.py) The PacketData class.
 * [section.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)   The SpliceInfoSection class.
 * [segmentation.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/segmentation.py)   The lookup tables for SegmentationDescriptor class values.
 * [smoketest.py](https://github.com/futzu/threefive/blob/master/threefive/smoketest.py) The threefive.smoke_test() function.
