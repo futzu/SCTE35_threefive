@@ -66,7 +66,9 @@ class Cue:
             if after_cmd:
                 after_dscrptrs = self._mk_descriptors(after_cmd)
                 if after_dscrptrs:
-                    self.info_section.crc = hex(int.from_bytes(after_dscrptrs[0:4], byteorder="big"))
+                    self.info_section.crc = hex(
+                        int.from_bytes(after_dscrptrs[0:4], byteorder="big")
+                    )
                     return True
         return False
 
