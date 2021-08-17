@@ -8,8 +8,8 @@ Home of the decode function.
 import sys
 import urllib.request
 
-from .cue import Cue
-from .stream import Stream
+from threefive.cue import Cue
+from threefive.stream import Stream
 
 # Maximum size for a SCTE35 cue.
 _MAX_CUE_SIZE = 4096
@@ -17,8 +17,8 @@ _MAX_CUE_SIZE = 4096
 
 def _decode_and_show(stuff):
     cue = Cue(stuff)
-    cue.decode()
-    cue.show()
+    if cue.decode():
+        cue.show()
 
 
 def _read_stdin():
@@ -27,11 +27,9 @@ def _read_stdin():
         Stream(sys.stdin.buffer).decode()
     except Exception:
         # base64 or hex encoded string or raw bytes via stdin
-        try:
-            stuff = sys.stdin.buffer.read()
-            _decode_and_show(stuff)
-        except Exception:
-            pass
+        stuff = sys.stdin.buffer.read()
+        if stuff:
+            return _decode_and_show(stuff)
 
 
 def _read_stuff(stuff):
@@ -47,20 +45,22 @@ def _read_stuff(stuff):
                 strm = Stream(tsdata)
                 strm.decode()
         except Exception:
-            try:
-                _decode_and_show(stuff)
-            except Exception:
-                pass
+            return _decode_and_show(stuff)
 
 
 def _read_http(stuff):
     with urllib.request.urlopen(stuff) as tsdata:
-        strm = Stream(tsdata)
-        strm.decode()
+        try:
+            strm = Stream(tsdata)
+            strm.decode()
+        except:
+            return False
 
 
 def decode(stuff=None):
     """
+
+
     decode is a SCTE-35 decoder function
     with input type auto-detection.
     SCTE-35 data can be parsed with just
@@ -83,51 +83,42 @@ def decode(stuff=None):
 
     # Base64
 
-    Bee64='/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
-    threefive.decode(Bee64)
+    stuff = '/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
+    threefive.decode(stuff)
 
+    # Bytes
+
+    payload = b'\xfc0\x11\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00\x00\x00O%3\x96'
+    threefive.decode(payload)
 
     # Hex String
 
-    hexed = '0XFC301100000000000000FFFFFF0000004F253396'
-    threefive.decode(hexed)
-
+    stuff = '0XFC301100000000000000FFFFFF0000004F253396'
+    threefive.decode(stuff)
 
     # Hex Literal
 
     threefive.decode(0XFC301100000000000000FFFFFF0000004F253396)
-
 
     # Integer
 
     big_int = 1439737590925997869941740173214217318917816529814
     threefive.decode(big_int)
 
-
     # Mpegts File
 
     threefive.decode('/path/to/mpegts')
-
 
     # Mpegts HTTP/HTTPS Streams
 
     threefive.decode('https://futzu.com/xaa.ts')
 
-
     """
     if stuff in [None, sys.stdin.buffer]:
-        _read_stdin()
-        return
+        return  _read_stdin()
     if isinstance(stuff, str):
         if stuff.startswith("http"):
-            _read_http(stuff)
-            return
-    if isinstance(stuff, bytes):
-        if stuff.startswith(b"http"):
-            _read_http(stuff.decode())
-            return
+            return _read_http(stuff)
     if isinstance(stuff, int):
-        _read_stuff(hex(stuff))
-        return
-    _read_stuff(stuff)
-    return
+        return  _read_stuff(hex(stuff))
+    return _read_stuff(stuff)
