@@ -7,11 +7,11 @@
 
 * [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
-*   [Easy threefive_](#the-decode-function)
-      *   [threefive.decode()](#the-decode-function)       
+*   [Easy threefive](#the-decode-function) __sou desu!__
+      *   [threefive.decode()](#the-decode-function)      
 
 *  [Advanced threefive](#)     
-     *  [threefive.__Cue__](#cue-class)         
+     *  [threefive.__Cue__ Class](#cue-class)         
      *  [threefive.__Stream__ Class](#stream-class)
      
 * [Super Cool Examples ](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
