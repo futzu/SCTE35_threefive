@@ -56,74 +56,83 @@ pypy3 -m pip install threefive
 
 ####   The __decode__ Function
 
- > __threefive.decode__ is an all purpose function to decode SCTE 35 Cues.
- 
-
-> ```py3
-> 
-> from threefive import decode
->   
-> ```
 
 
- >  MpegTS
- 
+> __threefive.decode__ is a SCTE-35 decoder function
+> with input type __auto-detection__.
+
+> __SCTE-35__ data can be __parsed__ 
+> with just __one function call__.
+    
+> the arg __stuff__ is the input.
+> if __stuff is not set__, 
+> decode will attempt to __read__ from __sys.stdin.buffer__.
+
+> if __stuff is a file__, the file data
+> will be read and the type of the data
+> will be autodetected and decoded.
+
+> SCTE-35 data is __printed in JSON__ format.
+
+
+#### threefive.decode Examples:
+
+##### Base64
 ```python3
+import threefive 
 
-decode('/path/to/mpegwithscte35.ts') 
-
+stuff = '/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
+threefive.decode(stuff)
 ```
- > Http / Https
- 
- ```python3 
- decode('https://futzu.com/xaa.ts') 
- ```
- 
- 
-> Base64 
-
+##### Bytes
 ```python3
+import threefive 
 
-mesg='/DA4AAAAAAAA///wBQb+AAAAAAAiAiBDVUVJAAAAA3//AAApPWwDDEFCQ0QwMTIzNDU2SBAAAGgCL9A='
-
-decode(mesg)
-
+payload = b'\xfc0\x11\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00\x00\x00O%3\x96'
+threefive.decode(payload)
 ```
-* Hex String
-
+##### Hex String
 ```python3
+import threefive 
 
-hexed = "0xFC301100000000000000FFFFFF0000004F253396"
-
-decode(hexed)
-
+stuff = '0XFC301100000000000000FFFFFF0000004F253396'
+threefive.decode(stuff)
 ```
-* Hex Values
- 
+##### Hex Literal
 ```python3
+import threefive 
 
-raw_hex = 0XFC301100000000000000FFFFFF0000004F253396
-
-decode(raw_hex)
-
+threefive.decode(0XFC301100000000000000FFFFFF0000004F253396)
 ```
-* Integers
+##### Integer
 ```python3
-
 big_int = 1439737590925997869941740173214217318917816529814
-
-decode(big_int)
-
+threefive.decode(big_int)
 ```
-* Read a string directly from a file [cue.txt](https://github.com/futzu/threefive/files/6986120/cue.txt)
+##### Mpegts File
+```python3
+import threefive 
+
+threefive.decode('/path/to/mpegts')
+```
+##### Mpegts HTTP/HTTPS Streams
+```python3
+import threefive 
+
+threefive.decode('https://futzu.com/xaa.ts')
+````
+
+##### Read from File [cue.txt](https://github.com/futzu/threefive/files/6986120/cue.txt)
 
 ```python3
+from threefive import decode
 
 decode('cue.txt')
 
 ```
 
 ___
+
 
 #  Advanced threefive
 
