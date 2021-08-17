@@ -37,6 +37,7 @@ class SpliceInfoSection(SCTE35Base):
         self.splice_command_length = None
         self.splice_command_type = None
         self.descriptor_loop_length = 0
+        self.crc = None
 
     def decode(self, bites):
         """
