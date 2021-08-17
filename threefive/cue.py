@@ -15,12 +15,27 @@ class Cue:
     SCTE 35 message strings.
     Example usage:
 
-    from threefive import Cue
+    >>>> import threefive
+    >>>> Base64 = "/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g="
+    >>>> cue = threefive.Cue(Base64)
 
-    Base64 = "/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g="
-    scte35 = Cue(Base64)
-    scte35.decode()
-    scte35.show()
+    # cue.decode() returns True on success,or False if decoding failed
+
+    >>>> cue.decode()
+    True
+
+    # After Calling cue.decode() the instance variables can be accessed via dot notation.
+
+    >>>> cue.command
+    {'calculated_length': 5, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 21695.740089}
+
+    >>>> cue.command.pts_time
+    21695.740089
+
+    >>>> cue.info_section.table_id
+
+    '0xfc'
+
     """
 
     def __init__(self, data=None, packet_data=None):
@@ -31,7 +46,6 @@ class Cue:
         self.info_section = SpliceInfoSection()
         self.command = None
         self.descriptors = []
-        self.crc = None
         if data:
             self.bites = self._mk_bits(data)
             self.packet_data = packet_data
@@ -52,7 +66,7 @@ class Cue:
             if after_cmd:
                 after_dscrptrs = self._mk_descriptors(after_cmd)
                 if after_dscrptrs:
-                    self.crc = hex(int.from_bytes(after_dscrptrs[0:4], byteorder="big"))
+                    self.info_section.crc = hex(int.from_bytes(after_dscrptrs[0:4], byteorder="big"))
                     return True
         return False
 
@@ -75,22 +89,21 @@ class Cue:
 
     def get(self):
         """
-        Cue.get returns a dict of dicts
-        for all three parts of a SCTE 35 message.
+        Cue.get returns the SCTE-35 Cue
+        data as a dict of dicts.
         """
         if self.command and self.info_section:
             scte35 = {
                 "info_section": self.info_section.get(),
                 "command": self.command.get(),
-                "descriptors": self.get_descriptors(),
-                "crc": self.crc,
+                "descriptors": self._get_descriptors(),
             }
             if self.packet_data is not None:
-                scte35.update(self.packet_data.get())
+                scte35["packet_data"] = self.packet_data.get()
             return scte35
         return False
 
-    def get_descriptors(self):
+    def _get_descriptors(self):
         """
         Cue.get_descriptors returns a list of
         SCTE 35 splice descriptors as dicts.
@@ -178,13 +191,13 @@ class Cue:
 
     def show(self):
         """
-        Cue.show pretty prints the SCTE 35 message
+        Cue.show prints the Cue as JSON
         """
         print(self.get_json())
 
     def to_stderr(self):
         """
-        Cue.to_stderr is a Wrapper
-        for printing to sys.stderr
+        Cue.to_stderr prints the Cue
+        as JSON to sys.stderr
         """
         print(self.get_json(), file=stderr)
