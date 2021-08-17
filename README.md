@@ -4,22 +4,21 @@
 * [Requirements](#requirements)
 * [Install threefive](#install)
 * [Versions and Releases](#versions-and-releases)
+
 * [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
-* [Super Cool Examples ](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
 
+*   [Easy threefive_](#the-decode-function)
+      *   [threefive.decode()](#the-decode-function)       
 
-*   [__Easy threefive__ ](#the-decode-function)
-      *   [threefive.__decode()__](#the-decode-function)
-       
-*  [__Advanced threefive__](#cue-class)         
+*  [Advanced threefive](#)     
      *  [threefive.__Cue__](#cue-class)         
      *  [threefive.__Stream__ Class](#stream-class)
-     ---
      
+* [Super Cool Examples ](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
+
+* [__ffmpeg__ and __SCTE35__ and __Stream Type__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)   
  
 * [threefive Spotted in The Wild](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
-
-* [__ffmpeg__ and __SCTE35__ and __Stream Type__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
 *  [Code of Conduct](https://github.com/futzu/threefive/blob/master/CODE_OF_CONDUCT.md).
 
