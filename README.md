@@ -163,39 +163,41 @@ ___
    *  src [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
    *  __threefive.Cue__ provides several methods to access the parsed data.
-
+   
 ```python3
-from threefive import Cue
-
-b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAABl/nwgIAAAAACyk26AQAACZcuND"
-
-cue = Cue(b64)
-cue.decode()
+    >>>> import threefive
+    >>>> Base64 = "/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g="
+    >>>> cue = threefive.Cue(Base64)
 ```
 
-     * 'When parsing SCTE35 Cues from MPEGTS streams, 
-       threefive attempts to include as many of the 
-       following as possible.'   	        
-* *  __pid__ of the packet  
-* *  __program__ of the pid   
-* *  __pts__ of the packet   
-* *  __pcr__ of the packet 
+> cue.decode() returns True on success,or False if decoding failed
+```python3
+    >>>> cue.decode()
+    True
+```
+> After Calling cue.decode() the instance variables can be accessed via dot notation.
+```python3
+
+    >>>> cue.command
+    {'calculated_length': 5, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 21695.740089}
+
+    >>>> cue.command.pts_time
+    21695.740089
+
+    >>>> cue.info_section.table_id
+
+    '0xfc'
+```
+
+> When parsing SCTE35 Cues from MPEGTS streams, 
+> threefive attempts to include as many of the 
+> following as possible.'   	        
+*   __pid__ of the packet  
+*  __program__ of the pid   
+*  __pts__ of the packet   
+*  __pcr__ of the packet 
 ___
 
-
-* All instance vars can be accessed via dot notation.
-
-```python3
->>>> from threefive import Cue
->>>> cue = Cue(b64)
->>>> cue.decode()
-True
->>>> cue.command
-{'command_length': 5, 'command_type': 6, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 22798.906911}
->>>> cue.command.pts_time
-22798.906911
->>>> 
-```
 
 * call one or more of these methods after decode.
 
@@ -206,18 +208,6 @@ True
 | cue.**show()**             | prints **cue as JSON**                         |
 |                            |                                                |
 
-___
-
-
-* Full Example 
-```python3
-
-from threefive import Cue
-b64 = "/DBIAAAAAAAA///wBQb+ek2ItgAyAhdDVUVJSAAAGH+fCAgAAAAALMvDRBEAAAIXQ1VFSUgAABl/nwgIAAAAACyk26AQAACZcuND"
-cue.decode(b64)
-cue_data = cue.get()
-
-```
 ___
 
 ###  __Stream__ Class
