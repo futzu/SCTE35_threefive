@@ -1,5 +1,25 @@
 
 > threefive is a __SCTE-35 Decoder__ / Parser library in Python3.
+> If you need to parse SCTE-35, this is probably what you want to use.
+
+> threefive can parse SCTE-35 from Base64, Binary,Hex Strings, Hex literals, Integers, Mpegts files, and Mpegts HTTP/HTTPS Streams... in one function call.
+
+> Mpegts is well supported in threefive. 
+* Multiple Programs
+* Multiple SCTE35 Streams
+* Multi-Packet PAT, PMT, and SCTE35 tables
+* PCR and PTS to the microsecond. 
+
+> Multicast?  HLS?  Custom Upid Handling?  Frame Accurate Preroll timings? [Oh yeah.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
+
+
+> You feedback is welcome and encouraged. __The best parts of threefive
+> have come from other people__. 
+> 
+> If you have something to say, I want to hear it. If you have a question, ask it. If it's a stupid question, thats okay,
+> I ask stupid questions all the time. 
+> 
+---
 
 * [Requirements](#requirements)
 * [Install threefive](#install)
