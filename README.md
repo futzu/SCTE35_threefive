@@ -18,7 +18,7 @@
 > 
 > If you have something to say, I want to hear it. 
 > 
-> If you have a question, ask it. If it's a stupid question, thats okay, 
+> If you have a question, ask it. If it's a stupid question, that's okay, 
 > I ask stupid questions all the time. 
 > 
 
