@@ -22,8 +22,4 @@ def version():
 
 
 def version_number():
-    """
-    version_number returns threefives version
-    as an int for easy checking.
-    """
     return (MAJOR * 1000) + (MINOR * 100) + MAINTAINENCE
