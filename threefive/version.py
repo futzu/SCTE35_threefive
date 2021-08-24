@@ -16,7 +16,7 @@ MAINTAINENCE = 99
 
 def version():
     """
-    version prints threefive's version as a string
+    version prints threefives version as a string
     """
     print(f"{MAJOR}.{MINOR}.{MAINTAINENCE}")
 
