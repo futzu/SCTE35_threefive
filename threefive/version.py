@@ -18,7 +18,7 @@ def version():
     """
     version prints threefives version as a string
     """
-    print(f"{MAJOR}.{MINOR}.{MAINTAINENCE}")
+    return f"{MAJOR}.{MINOR}.{MAINTAINENCE}"
 
 
 def version_number():
