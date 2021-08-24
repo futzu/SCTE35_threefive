@@ -94,7 +94,7 @@ def _decode_mpu(bitbin, upid_length):
     ulbits = upid_length << 3
     mpu_data = {
         "format_identifier": bitbin.as_hex(32),
-        "private_data": bitbin.as_ascii(ulbits - 32),
+        "private_data": bitbin.as_hex(ulbits - 32),
     }
     return mpu_data
 
