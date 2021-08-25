@@ -1,7 +1,7 @@
 
 > threefive is a __SCTE-35 Decoder__ / Parser library in Python3.
 > If you need to parse SCTE-35, this is probably what you want to use.
-
+> 
 > threefive can parse SCTE-35 from __Base64, Binary, Hex Strings, Hex literals, Integers, Mpegts files, and Mpegts HTTP/HTTPS Streams__ in one function call.
 
 > __Mpegts is well supported__ in threefive. 
@@ -51,6 +51,9 @@
 
 ### Requirements
 threefive requires python 3.6+ or [pypy3](https://pypy.org)
+
+ [__pypy3__ runs threefive __Four Times Faster__ than __python3__](https://github.com/futzu/threefive/blob/master/py3vspypy3.md)
+
 
 ### Install
    
