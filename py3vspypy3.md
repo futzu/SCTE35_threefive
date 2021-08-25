@@ -27,7 +27,7 @@ a@fu:~/$  ls -alh plp0.ts
 ```
 ___
 ### Code:
-* threefive version 2.3.0
+> threefive version __2.3.0__
 ```python3
 a@fu:~/$ cat cli.py
 
@@ -56,7 +56,7 @@ ___
 a@fu:~/$ time python3 cli.py plp0.ts
 ```
 
-#### real:   14.367s
+#### real:   14.17s
 
 ___
 ### pypy3 
