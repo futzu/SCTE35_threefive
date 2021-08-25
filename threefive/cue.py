@@ -4,12 +4,13 @@ threefive.Cue Class
 from base64 import b64decode
 import json
 from sys import stderr
+from .base import SCTE35Base
 from .section import SpliceInfoSection
 from .commands import command_map
 from .descriptors import splice_descriptor
 
 
-class Cue:
+class Cue(SCTE35Base):
     """
     The threefive.Splice class handles parsing
     SCTE 35 message strings.
@@ -27,7 +28,8 @@ class Cue:
     # After Calling cue.decode() the instance variables can be accessed via dot notation.
 
     >>>> cue.command
-    {'calculated_length': 5, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 21695.740089}
+    {'calculated_length': 5, 'name': 'Time Signal', 'time_specified_flag': True,
+    'pts_time': 21695.740089}
 
     >>>> cue.command.pts_time
     21695.740089
@@ -117,7 +119,7 @@ class Cue:
         Cue.get_json returns the Cue instance
         data in json.
         """
-        return json.dumps(self.get(), indent=6)
+        return json.dumps(self.get(), indent=4)
 
     @staticmethod
     def _mk_bits(data):

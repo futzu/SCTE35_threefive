@@ -135,7 +135,6 @@ class Stream:
                     func(cue)
                 sys.stdout.buffer.write(pkt)
 
-
     def strip_scte35(self, func=show_cue_stderr):
         """
         Stream.strip_scte35 works just likle Stream.decode_proxy,
@@ -149,7 +148,6 @@ class Stream:
                     func(cue)
                 else:
                     sys.stdout.buffer.write(pkt)
-
 
     def show(self):
         """

@@ -45,6 +45,10 @@ class PrivateCommand(SpliceCommand):
     Table 12 - private_command
     """
 
+    def __init__(self, bites=None):
+        self.identifier = None
+        super().__init__(bites)
+
     def decode(self):
         """
         PrivateCommand.decode method
@@ -181,16 +185,22 @@ class SpliceSchedule(SpliceCommand):
 
     class SpliceEvent(SpliceInsert):
         """
-        SpliceSchedule is comprised
-        of SpliceEvent instances
+        SpliceEvent is a class declared in
+        the SpliceSchedule class.
         """
 
         def __init__(self):
+            """
+            SpliceEvent
+            """
             super().__init__(None)
             self.name = None
             self.utc_splice_time = None
 
         def _decode_components(self, bitbin):
+            """
+            SpliceEvent._decode_components
+            """
             component_count = bitbin.as_int(8)
             self.components = []
             for j in range(0, component_count):
@@ -200,6 +210,9 @@ class SpliceSchedule(SpliceCommand):
                 }
 
         def decode(self, bitbin):
+            """
+            SpliceEvent.decode
+            """
             self._decode_event(bitbin)
             if not self.splice_event_cancel_indicator:
                 self._decode_flags(bitbin)
@@ -211,12 +224,18 @@ class SpliceSchedule(SpliceCommand):
                 self._decode_break(bitbin)
                 self._decode_unique_avail(bitbin)
 
+    def __init__(self, bites=None):
+        """
+        SpliceSchedule.__init__
+        """
+        self.splices = []
+        super().__init__(bites)
+
     def decode(self):
         """
         SpliceSchedule.decode
         """
         self.name = "Splice Schedule"
-        self.splices = []
         bitbin = BitBin(self.bites)
         start = bitbin.idx
         splice_count = bitbin.as_int(8)

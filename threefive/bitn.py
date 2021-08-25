@@ -51,7 +51,16 @@ class BitBin:
         """
         stuff = self.as_int(num_bits)
         wide = num_bits >> 3
-        return int.to_bytes(stuff, wide, byteorder="big").decode("utf-8")
+        return int.to_bytes(stuff, wide, byteorder="big").decode()
+
+    def as_raw(self, num_bits):
+        """
+        Returns num_bits of bits
+        as bytes
+        """
+        stuff = self.as_int(num_bits)
+        wide = num_bits >> 3
+        return int.to_bytes(stuff, wide, byteorder="big")
 
     def as_flag(self, num_bits=1):
         """
@@ -73,5 +82,9 @@ class BitBin:
         """
         print(
             f"{num_bits} bits requested, but only {self.idx} bits left.",
+            file=sys.stderr,
+        )
+        print(
+            f"\n bytes remaining: {self.as_raw(self.idx)} ",
             file=sys.stderr,
         )
