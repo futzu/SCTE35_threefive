@@ -27,25 +27,26 @@ a@fu:~/$  ls -alh plp0.ts
 ```
 ___
 ### Code:
-* threefive version 2.2.93
+* threefive version 2.3.0
 ```python3
 a@fu:~/$ cat cli.py
 
-import sys
-from threefive import Stream, version
-
-def do():
-    args = sys.argv[1:]
-    for arg in args:
-        print(f'next file: {arg}')
-        with open(arg,'rb') as vid:
-            strm = Stream(vid)
-            strm.decode_fu()
-
-if __name__ == "__main__":
-    print(version())
+import sys 
+from threefive import Stream, version 
+ 
+ 
+def do(): 
+    print(version()) 
+    args = sys.argv[1:] 
+    for arg in args: 
+        print(f'next file: {arg}') 
+        with open(arg,'rb') as vid: 
+            Stream(vid).decode_fu() 
+ 
+ 
+if __name__ == "__main__": 
     do()
-
+ 
 ```
 ___
 ### Python3 
@@ -66,7 +67,7 @@ ___
 a@fu:~/$  time pypy3 cli.py plp0.ts
 
 ```
-#### real	:   3.275s
+### real	:   2.89s
 
 ___
 ### threefive/go
@@ -101,5 +102,5 @@ a@fu:~/$ go build cli.go
 a@fu:~/$  time ./cli plp0.ts
 
 ```
-#### real:  1.227s
+### real:  1.03s
 
