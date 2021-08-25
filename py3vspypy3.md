@@ -67,7 +67,7 @@ a@fu:~/$  time pypy3 cli.py plp0.ts
 ### real	:   2.89s
 
 ___
-### threefive/go
+### threefive/go ```version go1.15.9 linux/amd64```
 
 ```go
 cat cli.go
