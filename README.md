@@ -30,7 +30,7 @@
 
 * [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
-*   [Easy threefive](#the-decode-function) __sou desu!__
+*   [Easy threefive](#the-decode-function) 
       *   [threefive.decode()](#the-decode-function)      
 
 *  [Advanced threefive](#)     
@@ -76,6 +76,7 @@ pypy3 -m pip install threefive
 
 ---
 
+![SCTE-35-mpu-upid](https://user-images.githubusercontent.com/52701496/130988849-dd57f548-2b96-406c-a2b9-b291e53760c4.png)
 
 ### __Easy__ threefive
 
