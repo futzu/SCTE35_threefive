@@ -78,9 +78,10 @@ pypy3 -m pip install threefive
 
 
 ### __Easy__ threefive
-
-####   The __decode__ Function
-
+> threefive.decode() parses SCTE-35 out of  
+```Base64```, ```Binary```, 
+> ```Hex Strings```,```Hex literals```, ```Integers```, ```Mpegts files``` and ```Mpegts HTTP/HTTPS Streams```
+> 
 
 
 > __threefive.decode__ is a SCTE-35 decoder function
@@ -213,6 +214,61 @@ ___
 | cue.**get_json()**         | returns **cue as a JSON** string               |
 | cue.**show()**             | prints **cue as JSON**                         |
 |                            |                                                |
+
+```
+{
+    "info_section": {
+        "table_id": "0xfc",
+        "section_syntax_indicator": false,
+        "private": false,
+        "sap_type": "0x3",
+        "sap_details": "No Sap Type",
+        "section_length": 47,
+        "protocol_version": 0,
+        "encrypted_packet": false,
+        "encryption_algorithm": 0,
+        "pts_adjustment": 0.0,
+        "cw_index": "0x0",
+        "tier": "0xfff",
+        "splice_command_length": 4095,
+        "splice_command_type": 5,
+        "descriptor_loop_length": 10,
+        "crc": "0x10fa4d9e"
+    },
+    "command": {
+        "calculated_length": 20,
+        "name": "Splice Insert",
+        "time_specified_flag": true,
+        "pts_time": 89742.161689,
+        "break_auto_return": false,
+        "break_duration": 242.0,
+        "splice_event_id": 662,
+        "splice_event_cancel_indicator": false,
+        "out_of_network_indicator": true,
+        "program_splice_flag": true,
+        "duration_flag": true,
+        "splice_immediate_flag": false,
+        "unique_program_id": 1,
+        "avail_num": 0,
+        "avail_expected": 0
+    },
+    "descriptors": [
+        {
+            "tag": 0,
+            "descriptor_length": 8,
+            "name": "Avail Descriptor",
+            "identifier": "CUEI",
+            "provider_avail_id": 0
+        }
+    ],
+    "packet_data": {
+        "pid": "0x135",
+        "program": 1,
+        "pcr": 89730.281789,
+        "pts": 89730.289522
+    }
+}
+```
 
 ___
 
