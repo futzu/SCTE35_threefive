@@ -1,18 +1,18 @@
 ### [threefive](https://github.com/futzu/SCTE35-threefive/) 
 
-* [base.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/base.py)   SCTE35Base class for all Splice Commands and Descriptors. 
-* [bitn.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/bitn.py)   bitn.BitBin class for bitslicing. 
-* [commands.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py)  All Splice Command classes.
-* [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)   The Cue class.
-* [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)   The decode function.
-* [descriptors.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)   All Splice Descriptor classes.
-* [packetdata.py](https://github.com/futzu/threefive/blob/master/threefive/packetdata.py) The PacketData class.
-* [section.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)   The SpliceInfoSection class.
+* [base.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/base.py)   __SCTE35Base__ class is the __Super__ class for all __Splice Commands and Descriptors__. 
+* [bitn.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/bitn.py)   Thr __threefive.bitn.BitBin__ class for bitslicing. 
+* [commands.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py)  All __Splice Command__ classes.
+* [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)   The __threefive.Cue__ class.
+* [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)   The __threefive.decode()__ function.
+* [descriptors.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)   All __Splice Descriptor__ classes.
+* [packetdata.py](https://github.com/futzu/threefive/blob/master/threefive/packetdata.py) The __threefive.PacketData__ class.
+* [section.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)   The __SpliceInfoSection__ class.
 * [segmentation.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/segmentation.py)   The lookup tables for SegmentationDescriptor class values.
-* [smoketest.py](https://github.com/futzu/threefive/blob/master/threefive/smoketest.py) The threefive.smoke() function. smoke() runs ten quick tests  to verify   threefive is working correctly.
-* [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)   The Stream class.
-* [upid.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upid.py)   Upid functions used by the SegmentationDescriptor class.  
-* [version.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/version.py)   The threefive version.
+* [smoketest.py](https://github.com/futzu/threefive/blob/master/threefive/smoketest.py) The __threefive.smoke()__ function runs ten quick tests to verify threefive is working correctly.
+* [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)   The __threefive.Stream__ class.
+* [upid.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upid.py)   __Segmentation Upid__ functions used by the SegmentationDescriptor class.  
+* [version.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/version.py)  __threefive.version__ and __threefive.version_number__.
 
 
 
