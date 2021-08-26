@@ -428,10 +428,7 @@ $ python3 proxy.py | mplayer -
 ___
 
 
-#### Joe Strummer is one of my heroes. 
-
-https://user-images.githubusercontent.com/52701496/130991821-5e5b60d4-ef02-4701-a4df-3fc50ae53326.mp4
----
+#### [Joe Strummer is one of my heroes. ](https://user-images.githubusercontent.com/52701496/130991821-5e5b60d4-ef02-4701-a4df-3fc50ae53326.mp4)
 
 
 ## Issues and Bugs and Feature Requests
