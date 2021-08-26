@@ -78,14 +78,14 @@ pypy3 -m pip install threefive
 
 
 ### __Easy__ threefive
-> threefive.decode() parses SCTE-35 out of  
+
+> __threefive.decode__ is a SCTE-35 decoder function
+> with input type __auto-detection__. 
 ```Base64```, ```Binary```, 
 > ```Hex Strings```,```Hex literals```, ```Integers```, ```Mpegts files``` and ```Mpegts HTTP/HTTPS Streams```
 > 
 
 
-> __threefive.decode__ is a SCTE-35 decoder function
-> with input type __auto-detection__.
 
 > __SCTE-35__ data can be __parsed__ 
 > with just __one function call__.
