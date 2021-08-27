@@ -1,8 +1,7 @@
 
 
 
-> threefive is a __SCTE-35 Decoder__ / Parser library in Python3.
-> 
+> threefive is a __SCTE-35 Decoder__ / Parser library in Python3. makes 
 > If you need to parse SCTE-35, this is probably what you want.
 > 
 > __threefive__ can parse SCTE-35 from ```Base64```, ```Binary```, 
@@ -21,7 +20,8 @@
 > 
 > If you have a question, ask it. If it's a stupid question, that's okay, 
 > I ask stupid questions all the time. 
-> 
+>
+
 
 
 
