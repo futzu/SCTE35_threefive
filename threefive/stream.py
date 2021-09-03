@@ -158,7 +158,7 @@ class Stream:
         self.info = True
         self.decode()
 
-    def show_start(self):
+    def decode_start_time(self):
         """
         displays streams that will be
         parsed for SCTE-35.

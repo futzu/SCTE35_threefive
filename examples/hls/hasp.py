@@ -84,7 +84,7 @@ class HASP:
     def _get_pcr_start(self, tmp):
         with open(tmp, "rb") as tsdata:
             strm = threefive.Stream(tsdata)
-            self.start = strm.show_start()
+            self.start = strm.decode_start_time()
             self.hls_time += self.start
             os.unlink(tmp)
 
@@ -130,10 +130,7 @@ class HASP:
 
 def chk_version():
     min_version = 2300
-    vn = threefive.version().replace(".", "")
-    if len(vn) < 4:
-        vn = int(vn) * 10
-    print(vn)
+    vn = int(threefive.version().replace(".", ""))
     if vn < min_version:
         print(f"this script requires threefive.version {min_version} or higher. ")
         sys.exit()

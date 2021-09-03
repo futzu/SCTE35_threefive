@@ -19,6 +19,8 @@ def _decode_and_show(stuff):
     cue = Cue(stuff)
     if cue.decode():
         cue.show()
+        return True
+    return False
 
 
 def _read_stdin():
@@ -38,15 +40,20 @@ def _read_stuff(stuff):
         with open(stuff, "rb") as tsdata:
             tsd = tsdata.read(_MAX_CUE_SIZE)
             _decode_and_show(tsd)
+            return True
     except Exception:
         # mpegts video file
         try:
             with open(stuff, "rb") as tsdata:
                 strm = Stream(tsdata)
                 strm.decode()
+                return True
         except Exception:
-            # return _decode_and_show(stuff)
-            pass
+            try:
+                _decode_and_show(stuff)
+                return True
+            except:
+                return False
 
 
 def _read_http(stuff):
@@ -54,6 +61,7 @@ def _read_http(stuff):
         try:
             strm = Stream(tsdata)
             strm.decode()
+            return True
         except:
             return False
 

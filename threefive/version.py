@@ -9,9 +9,9 @@ and as an easy way to check which
 version you have installed.
 """
 
-MAJOR = 2
-MINOR = 3
-MAINTAINENCE = 00
+MAJOR = "2"
+MINOR = "3"
+MAINTAINENCE = "01"
 
 
 def version():
@@ -27,4 +27,4 @@ def version_number():
     if version() returns 2.3.01
     version_number will return 2301
     """
-    return (MAJOR * 1000) + (MINOR * 100) + MAINTAINENCE
+    return int(f"{MAJOR}{MINOR}{MAINTAINENCE}")

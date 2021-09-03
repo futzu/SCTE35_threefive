@@ -24,11 +24,9 @@ def _decode_test(test_name, test_data):
     passed = "✔"
     failed = "✘"
     print(f"testing {test_name}\n Data: {test_data}\n")
-    try:
-        decode(test_data)
+    if decode(test_data):
         return passed
-    except:
-        return failed
+    return failed
 
 
 def smoke(tests=None):

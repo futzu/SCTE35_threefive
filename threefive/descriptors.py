@@ -40,8 +40,12 @@ class SpliceDescriptor(SCTE35Base):
         parse splice descriptor identifier
         """
         self.identifier = self.bites[:4].decode()
+        """
+        disabled for ffmv30
+
         if self.identifier != "CUEI":
             raise Exception('Identifier Is Not "CUEI"')
+        """
         self.bites = self.bites[4:]
 
 
