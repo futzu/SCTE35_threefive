@@ -47,6 +47,7 @@ class Stream:
         """
         self._tsdata = tsdata
         self.show_null = show_null
+        self._start = False
         self.info = None
         self.the_program = None
         self._pids = {"pcr": set(), "pmt": set(), "scte35": set()}
@@ -157,6 +158,17 @@ class Stream:
         self.info = True
         self.decode()
 
+    def show_start(self):
+        """
+        displays streams that will be
+        parsed for SCTE-35.
+        """
+        self._start = True
+        start = self.decode(func=False)
+        if start:
+            return start
+        return None
+
     def _mk_packet_data(self, pid):
         prgm = self._pid_prgm[pid]
         pdata = PacketData(pid, prgm)
@@ -235,8 +247,16 @@ class Stream:
                 pcr |= pkt[8] << 9
                 pcr |= pkt[9] << 1
                 pcr |= pkt[10] >> 7
-                prgm = self._pid_prgm[pid]
+                if pid in self._pid_prgm:
+                    prgm = self._pid_prgm[pid]
+                else:
+                    prgm = 1
+                    self._pid_prgm[pid] = prgm
                 self._prgm_pcr[prgm] = pcr
+                if self._start:
+                    packet_data = self._mk_packet_data(pid)
+                    return packet_data.pcr
+                return None
 
     def _parse(self, pkt):
         pid = self._parse_pid(pkt[1], pkt[2])
@@ -247,7 +267,9 @@ class Stream:
         if self.info:
             return None
         if pid in self._pids["pcr"]:
-            return self._parse_pcr(pkt, pid)
+            out = self._parse_pcr(pkt, pid)
+            if out:
+                return out
         if pid in self._pid_prgm:
             self._parse_pts(pkt, pid)
         if pid in self._pids["scte35"]:

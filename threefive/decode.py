@@ -45,7 +45,8 @@ def _read_stuff(stuff):
                 strm = Stream(tsdata)
                 strm.decode()
         except Exception:
-            return _decode_and_show(stuff)
+            # return _decode_and_show(stuff)
+            pass
 
 
 def _read_http(stuff):
