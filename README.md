@@ -39,7 +39,7 @@
      *  [threefive.__Cue__ Class](#cue-class)         
      *  [threefive.__Stream__ Class](#stream-class)
      
-* [Super Cool Examples ](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
+* [Sweet Examples ](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
 
 * [__ffmpeg__ and __SCTE35__ and __Stream Type__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)   
  
