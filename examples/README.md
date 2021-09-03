@@ -15,6 +15,7 @@
  * __HLS__
  
       * [Using threefive with HLS Manifests](https://github.com/futzu/SCTE35-threefive/tree/master/examples/hls)
+      * [HASP __Hls Aes Scte-35 Parser__](https://github.com/futzu/threefive/blob/master/examples/hls/hasp.py)
  ---
  * __Multicast__
  
