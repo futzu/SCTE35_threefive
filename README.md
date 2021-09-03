@@ -12,7 +12,8 @@
 
 >  ```Multicast?```  ```HLS?```  ```Custom Upid Handling?```  ```Frame Accurate Preroll timings?```    [__Oh Yeah.__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 
-
+> This is new and super cool.  [HLS AES SCTE-35 Parser](https://github.com/futzu/threefive/blob/master/examples/hls/hasp.py)
+> 
 > You feedback is welcome and encouraged. __The best parts of threefive
 > have come from other people__. 
 > 
