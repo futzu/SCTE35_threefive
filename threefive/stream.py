@@ -266,10 +266,9 @@ class Stream:
             self._chk_pmt_payload(pkt, pid)
         if self.info:
             return None
-        if pid in self._pids["pcr"]:
-            out = self._parse_pcr(pkt, pid)
-            if out:
-                return out
+        pcr = self._parse_pcr(pkt, pid)
+        if pcr:
+            return pcr
         if pid in self._pid_prgm:
             self._parse_pts(pkt, pid)
         if pid in self._pids["scte35"]:
