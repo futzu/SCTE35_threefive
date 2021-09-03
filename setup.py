@@ -8,7 +8,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="threefive",
-    version="2.2.99",
+    version=threefive.version(),
     author="fu-corp",
     author_email="spam@so.slo.me",
     description="threefive, Pythonic SCTE-35.",
