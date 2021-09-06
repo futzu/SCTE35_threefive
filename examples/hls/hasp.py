@@ -18,7 +18,7 @@ class HASP:
     """
 
     def __init__(self, arg):
-        self.last_time = 0
+        self.m3u8 = arg
         self.hls_time = 0
         self.seg_list = []
         self.cue_list = []
@@ -36,19 +36,19 @@ class HASP:
         line = line.replace(" ", "").replace('"', "")
         return line
 
-    def decode(self, manifest):
-        self.manifest = manifest
-        while self.manifest:
-            line = self._get_line()
-            if not line:
-                break
-            if not self.start:
-                print(line)
-                self._aes_start(line)
-            else:
-                self._extinf(line)
-                self._ext_x_scte35(line)
-                self._ext_x_daterange(line)
+    def decode(self):
+        while True:
+            with urllib.request.urlopen(self.m3u8) as self.manifest:
+                while self.manifest:
+                    line = self._get_line()
+                    if not line:
+                        break
+                    if not self.start:
+                        #    print(line)
+                        self._aes_start(line)
+                    self._extinf(line)
+                    self._ext_x_scte35(line)
+                    self._ext_x_daterange(line)
 
     def _aes_start(self, line):
         # #EXT-X-KEY:METHOD=AES-128,
@@ -70,7 +70,7 @@ class HASP:
         return mode
 
     def _aes_decrypt(self, mode, vid_uri):
-        tmp = "tmp.ts"
+        tmp = vid_uri.rsplit("/", 1)[1]
         with urllib.request.urlopen(vid_uri) as infile:
             with open(tmp, "wb") as outfile:
                 pyaes.decrypt_stream(mode, infile, outfile)
@@ -85,7 +85,9 @@ class HASP:
         with open(tmp, "rb") as tsdata:
             strm = threefive.Stream(tsdata)
             self.start = strm.decode_start_time()
+            print(f"Segment:  {tmp} @ {self.start}")  # ,end="\r")
             self.hls_time += self.start
+            self.hls_time = round(self.hls_time, 6)
             os.unlink(tmp)
 
     def _extinf(self, line):
@@ -95,20 +97,21 @@ class HASP:
             t = float(t)
             next_segment = self._get_line()[:-1]
             if next_segment not in self.seg_list:
-                print(f"Segment:  {next_segment} @ {self.hls_time}")  # , end = '\r')
+                if self.start:
+                    print(f"Segment:  {next_segment} @ {self.hls_time}")  # ,end="\r")
                 self.seg_list.append(next_segment)
                 self.seg_list = self.seg_list[-500:]
-                self.hls_time += t
+                self.hls_time = round(self.hls_time + t, 6)
                 return next_segment
 
     def _ext_x_scte35(self, line):
         # EXT-X-SCTE35:CUE=
         if line.startswith("#EXT-X-SCTE35"):
             mesg = line.split("CUE=")[1].split(",")[0]
-            self._do_cue(f"{mesg}")
+            self._do_cue(mesg)
         if line.startswith("#EXT-OATCLS-SCTE35:"):
             mesg = line.split("#EXT-OATCLS-SCTE35:")[1]
-            self._do_cue(f"{mesg}")
+            self._do_cue(mesg)
 
     def _ext_x_daterange(self, line):
         ##EXT-X-DATERANGE
@@ -120,9 +123,9 @@ class HASP:
 
     def _do_cue(self, mesg):
         if mesg not in self.cue_list:
-            print(f"cue: {mesg}")
+            print("Cue: ", mesg)
             self.cue_list.append(mesg)
-            self.cue_list = self.cue_list[-10:]
+            self.cue_list = self.cue_list[-30:]
             tf = threefive.Cue(mesg)
             tf.decode()
             tf.show()
@@ -140,6 +143,4 @@ if __name__ == "__main__":
     chk_version()
     arg = sys.argv[1]
     hasp = HASP(arg)
-    while True:
-        with urllib.request.urlopen(arg) as manifest:
-            hasp.decode(manifest)
+    hasp.decode()
