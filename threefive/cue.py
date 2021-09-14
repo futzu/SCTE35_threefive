@@ -100,14 +100,14 @@ class Cue(SCTE35Base):
             scte35 = {
                 "info_section": self.info_section.get(),
                 "command": self.command.get(),
-                "descriptors": self._get_descriptors(),
+                "descriptors": self.get_descriptors(),
             }
             if self.packet_data is not None:
                 scte35["packet_data"] = self.packet_data.get()
             return scte35
         return False
 
-    def _get_descriptors(self):
+    def get_descriptors(self):
         """
         Cue.get_descriptors returns a list of
         SCTE 35 splice descriptors as dicts.

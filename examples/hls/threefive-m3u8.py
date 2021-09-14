@@ -13,6 +13,7 @@ pl = m3u8.load(sys.argv[1])
 last_scte35 = None
 for seg in pl.segments:
     vseg = vars(seg)
+    print(vseg)
     if "scte35" in vseg:
         if vseg["cue_in"]:
             print(vseg)

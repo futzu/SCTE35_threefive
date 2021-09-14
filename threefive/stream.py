@@ -234,6 +234,8 @@ class Stream:
                 pts |= pkt[17] >> 1
                 prgm = self._pid_prgm[pid]
                 self._prgm_pts[prgm] = pts
+                if self._start:
+                    return round((pts / 90000.0), 6)
 
     def _parse_pcr(self, pkt, pid):
         """
@@ -247,16 +249,13 @@ class Stream:
                 pcr |= pkt[8] << 9
                 pcr |= pkt[9] << 1
                 pcr |= pkt[10] >> 7
+                prgm = 1
                 if pid in self._pid_prgm:
                     prgm = self._pid_prgm[pid]
-                else:
-                    prgm = 1
-                    self._pid_prgm[pid] = prgm
                 self._prgm_pcr[prgm] = pcr
                 if self._start:
-                    packet_data = self._mk_packet_data(pid)
-                    return packet_data.pcr
-                return None
+                    return round((pcr / 90000.0), 6)
+        # return None
 
     def _parse(self, pkt):
         pid = self._parse_pid(pkt[1], pkt[2])
@@ -270,7 +269,9 @@ class Stream:
         if pcr:
             return pcr
         if pid in self._pid_prgm:
-            self._parse_pts(pkt, pid)
+            pts = self._parse_pts(pkt, pid)
+            if pts:
+                return pts
         if pid in self._pids["scte35"]:
             return self._parse_scte35(pkt, pid)
 
