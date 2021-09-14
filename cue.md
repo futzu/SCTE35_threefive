@@ -2,8 +2,6 @@
 
 > __1__ ```info_section``` (__Required__)
 ```
-
-{
     "info_section": {
         "table_id": "0xfc",
         "section_syntax_indicator": false,
@@ -107,7 +105,3 @@
         "pts": 21940.713289
     }
 ``` 
-```
-}
-
-```
