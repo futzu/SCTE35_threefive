@@ -13,6 +13,10 @@ class Stanza:
         self.start = start
         self.duration = 0
         self.cue = False
+        self.iv = None
+        self.key = None
+        self.key_uri = None
+        self.mode = None
 
     def _aes_start(self, line):
         # #EXT-X-KEY:METHOD=AES-128,
@@ -44,7 +48,7 @@ class Stanza:
         with open(tmp, "rb") as tsdata:
             strm = threefive.Stream(tsdata)
             self.start = strm.decode_start_time()
-            # os.unlink(tmp)
+            os.unlink(tmp)
 
     def _extinf(self, line):
         ##EXTINF:4.000000,
