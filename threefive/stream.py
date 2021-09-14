@@ -96,7 +96,7 @@ class Stream:
     def decode_fu(self, func=show_cue):
         """
         Stream.decode_fu decodes
-        1000 packets at a time.
+        1384 packets at a time.
         """
         pkts = 1384
         if self._find_start():
@@ -156,7 +156,7 @@ class Stream:
         parsed for SCTE-35.
         """
         self.info = True
-        self.decode()
+        stuff = self.decode(func=False)
 
     def decode_start_time(self):
         """
@@ -264,8 +264,8 @@ class Stream:
             self._chk_pat_payload(pkt, pid)
         if pid in self._pids["pmt"]:
             self._chk_pmt_payload(pkt, pid)
-        if self.info:
-            return None
+        # if self.info:
+        #   return None
         pcr = self._parse_pcr(pkt, pid)
         if pcr:
             return pcr
