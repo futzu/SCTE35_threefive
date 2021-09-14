@@ -7,6 +7,21 @@ import threefive
 
 
 class Stanza:
+    """
+    The Stanza class represents a segment
+    and associated data
+
+    ex.
+
+    #EXT-X-KEY:METHOD=AES-128,URI="example.com/keys/027a0d992ff6a49a484e6d9b58cfcd0531df924d.key",IV=0x92B99B3F257801E616D08261E3078B19
+    #EXT-X-ASSET:CAID=0x00000000381B85CE
+    #EXT-X-CUE-OUT:250.133
+    #EXT-X-SCTE35:CUE="/DA2AAAAAAAAAAAABQaAUH4T/gAgAh5DVUVJQAVCawDAAAFXgYsICAAAAAA4G4XONAAAAADqLWsS",ID="1074086507"
+    #EXTINF:6.006,
+    1630520255_video_480p-30fps-1836kbps/video_185222.ts
+
+    """
+
     def __init__(self, lines, segment, start):
         self.lines = lines
         self.segment = segment
