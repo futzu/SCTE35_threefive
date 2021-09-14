@@ -19,9 +19,6 @@ class Stanza:
         self.mode = None
 
     def _aes_start(self, line):
-        # #EXT-X-KEY:METHOD=AES-128,
-        # URI="https://example.com/the.key
-        # IV=0xD011E56BB500F70E18A59B42E496EE8E
         if line.startswith("#EXT-X-KEY:METHOD=AES-128"):
             self._aes_mode(line)
             self._aes_decrypt()
@@ -51,21 +48,18 @@ class Stanza:
             os.unlink(tmp)
 
     def _extinf(self, line):
-        ##EXTINF:4.000000,
         if line.startswith("#EXTINF"):
             t = line.split(":")[1].split(",")[0]
             t = float(t)
             self.duration = round(t, 6)
 
     def _ext_x_scte35(self, line):
-        # EXT-X-SCTE35:CUE=
         if line.startswith("#EXT-X-SCTE35"):
             self.cue = line.split("CUE=")[1].split(",")[0]
         if line.startswith("#EXT-OATCLS-SCTE35:"):
             self.cue = line.split("#EXT-OATCLS-SCTE35:")[1]
 
     def _ext_x_daterange(self, line):
-        ##EXT-X-DATERANGE
         if line.startswith("#EXT-X-DATERANGE:"):
             for chunk in line.split(","):
                 k, v = chunk.split("=")
@@ -73,6 +67,10 @@ class Stanza:
                     self.cue = v
 
     def do_cue(self):
+        """
+        do_cue parses a SCTE-35 encoded string
+        via the threefive.Cue class
+        """
         print(f"Cue: {self.cue}")
         tf = threefive.Cue(self.cue)
         tf.decode()
