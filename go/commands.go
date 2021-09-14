@@ -1,8 +1,8 @@
 package threefive
 
-
-import "github.com/futzu/bitter"
-
+import (
+	"github.com/futzu/bitter"
+)
 
 // Command is an interface for Splice Commands
 type Command interface {
