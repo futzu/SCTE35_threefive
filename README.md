@@ -32,6 +32,8 @@
 
 * [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
+* [__A threefive SCTE-35 Cue Diagram__](https://github.com/futzu/threefive/blob/master/cue.md)
+
 *   [Easy threefive](#the-decode-function) 
       *   [threefive.decode()](#the-decode-function)      
 
@@ -78,7 +80,6 @@ pypy3 -m pip install threefive
 
 ---
 
-![internet](https://user-images.githubusercontent.com/52701496/130989169-9a46eb2f-45cc-4618-940b-331f4c4d34f1.jpg)
 
 ### __Easy__ threefive
 
