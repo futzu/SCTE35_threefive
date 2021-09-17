@@ -1,7 +1,6 @@
 import os
 import sys
 import urllib.request
-
 import pyaes
 import threefive
 
@@ -86,10 +85,10 @@ class Stanza:
         do_cue parses a SCTE-35 encoded string
         via the threefive.Cue class
         """
-        print(f"Cue: {self.cue}")
-        tf = threefive.Cue(self.cue)
-        tf.decode()
-        tf.show()
+        if self.cue:
+            tf = threefive.Cue(self.cue)
+            tf.decode()
+            tf.show()
 
     def decode(self):
         for line in self.lines:
@@ -132,7 +131,9 @@ class HASP:
         return line
 
     def decode(self):
-
+        rev_text = "\033[7m \033[1m"
+        reset_text = "\033[00m"
+        pre = rev_text
         while True:
             with urllib.request.urlopen(self.m3u8) as self.manifest:
                 while self.manifest:
@@ -149,13 +150,15 @@ class HASP:
                             hold = stanza.decode()
                             if not self._start:
                                 self.hls_time = self._start = hold
-                            print(
-                                f"\033[7m \033[1m{line}\033[00m\nStart: {round(self.hls_time,6)}\nDuration:{stanza.duration}"
-                            )
+                            tail = ""
+                            if stanza.cue:
+                                tail = f" {rev_text}Cue:{reset_text} {stanza.cue}"
+                            effed = f"{line}  {rev_text}Start:{reset_text}  {round(self.hls_time,6)} {rev_text}Duration:{reset_text} {stanza.duration} {tail}"
+                            print(effed)
                             if stanza.cue:
                                 stanza.do_cue()
                             self.hls_time += stanza.duration
-                            print()
+                            # print()
                         self.chunk = []
 
 
@@ -164,11 +167,11 @@ def chk_version():
     vn = int(threefive.version().replace(".", ""))
     if vn < min_version:
         print(f"this script requires threefive.version {min_version} or higher. ")
+
         sys.exit()
 
 
 if __name__ == "__main__":
     chk_version()
     arg = sys.argv[1]
-    hasp = HASP(arg)
-    hasp.decode()
+    HASP(arg).decode()

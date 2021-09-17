@@ -139,7 +139,8 @@ class Stream:
     def strip_scte35(self, func=show_cue_stderr):
         """
         Stream.strip_scte35 works just likle Stream.decode_proxy,
-        except that SCTE-35 packets are not written to stdout.
+        MPEGTS packets, ( Except the SCTE-35 packets) ,
+        are written to stdout after being parsed.
         SCTE-35 cues are printed to stderr.
         """
         if self._find_start():
