@@ -1,11 +1,7 @@
-### New Cool Stuff
+## ```New Cool Stuff```
+When new features are added to threefive. I wait at least a release before I announce them.
 
-> I've quietly added some cool stuff that I've used for work.
-> 
-> threefive has help docs.
-> use them. 
-> 
-> New stuff is always there first.
+threefive has help docs. new stuff is always there first.
 
 ```py3
 a@fumatica:~/threefive$ pypy3
@@ -14,9 +10,11 @@ Python 3.7.10 (7.3.5+dfsg-2, Jun 03 2021, 20:39:46)
 Type "help", "copyright", "credits" or "license" for more information.
 >>>> from threefive import smoke, Stream, decode
 ```
-####  __threefive.Stream.strip_scte35()__
+___
+##  ```threefive.Stream.strip_scte35()```
 
-Folks have been asking for a way to strip out SCTE-35 Cues in realtime.  
+##### Folks have been asking for a way to strip out SCTE-35 Cues in realtime. 
+
 
 ```py3
 >>>> help(Stream.strip_scte35)
@@ -32,7 +30,7 @@ strip_scte35(self, func=show_cue_stder)
         SCTE-35 cues are printed to stderr
 ```
 
-> Example:
+###### Example:
 
 > make strip.py like this:
 
@@ -49,11 +47,11 @@ def do():
 if __name__ == "__main__":
     do()
 ```
-> Use like this:
+###### Use:
 ```sh
 pypy3 strip.py ../mpegts/udp.livetv.ts | mplayer - 
 ```
-> Or
+
 ```sh 
 pypy3 strip.py ../mpegts/udp.livetv.ts > stripped.ts 
 ```
@@ -61,7 +59,7 @@ pypy3 strip.py ../mpegts/udp.livetv.ts > stripped.ts
 
 
 #### ``` threefive.smoke()```  
-* A quick sanity check for threefive
+A quick sanity check for threefive
 >  
 ```py3
 >>>> help(smoke)
@@ -83,7 +81,7 @@ smoke(tests=None)
     threefive.smoke_test(my_tests)
 
 ```
-> threefive.smoke runs ten tests that verify core functionality.
+#### threefive.smoke runs ten tests that verify core functionality.
 
 ```py3
 ten_tests = {
@@ -102,9 +100,14 @@ ten_tests = {
     " Bad String": "your momma",
 }
 ```
-> smoke takes about 10 seconds to run. 
-> this is what you want as the output, six  ✔, four ✘
+###### __threefive.smoke()__ takes about 10 seconds to run.
+
+###### this is what you want as the output,
+* six  __✔__
+* four __✘__
+
 ```py3
+
 
 Smoke Test
 
