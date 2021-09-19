@@ -1,35 +1,31 @@
 
 
 
-> threefive is a __SCTE-35 Decoder__ / Parser library in Python3. makes 
-> If you need to parse SCTE-35, this is probably what you want.
-> 
-> __threefive__ can parse SCTE-35 from ```Base64```, ```Binary```, 
-> ```Hex Strings```,```Hex literals```, ```Integers```, ```Mpegts files``` and ```Mpegts HTTP/HTTPS Streams```
-> with __just one function call__.
----
+ If you need to parse SCTE-35, __threefive is probably what you want__.
+
+ 
+Inputs supported by threefive:  
+
+* Base64
+* Binary
+* Hex Strings
+*  Hex literals
+* Integers
+*  Mpegts files
+*  Mpegts HTTP/HTTPS Streams
+
+threrfive supports __All 2020 SCTE-35__ Commands, Descriptors, and Upids.
 
 
->  ```Multicast?```  ```HLS?```  ```Custom Upid Handling?```  ```Frame Accurate Preroll timings?```    [__Oh Yeah.__](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
-
-> This is __New__ and __Super Cool__.  [HLS AES SCTE-35 Parser](https://github.com/futzu/threefive/blob/master/examples/hls/hasp.py)
-> 
-> You feedback is welcome and encouraged. __The best parts of threefive
-> have come from other people__. 
-> 
-> If you have something to say, I want to hear it. 
-> 
-> If you have a question, ask it. If it's a stupid question, that's okay, 
-> I ask stupid questions all the time. 
->
----
-
-
- [__BREAKING NEWS!__ ...](https://github.com/futzu/threefive/blob/master/new_stuff.md) 
+  ```Multicast?```  ```HLS?```  ```Custom Upid Handling?```  ```Frame Accurate Preroll timings?```    [Oh Yeah.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 
 
 
----
+
+ * [Your feedback is welcome and encouraged.](https://github.com/futzu/threefive/issues)
+ 
+* [Breaking News!...](https://github.com/futzu/threefive/blob/master/new_stuff.md) 
+
 * [Requirements](#requirements)
 * [Install threefive](#install)
 * [Versions and Releases](#versions-and-releases)
