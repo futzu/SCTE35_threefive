@@ -1,7 +1,7 @@
 
 
 
-## If you need a SCTE-35 parser, __threefive__ is probably what you want.
+If you need a SCTE-35 parser, threefive is probably what you want.
 
 * All 2020 SCTE-35 [Commands](https://github.com/futzu/threefive/blob/master/threefive/commands.py), [Descriptors](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py),and [Upids](https://github.com/futzu/threefive/blob/master/threefive/upid.py) are fully supported.
 
@@ -93,9 +93,9 @@ pypy3 -m pip install threefive
 > SCTE-35 data is __printed in JSON__ format.
 
 
-#### threefive.decode Examples:
+#### Examples:
 
-##### Base64
+###### Base64
 ```python3
 import threefive 
 
