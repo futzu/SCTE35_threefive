@@ -1,26 +1,15 @@
 
 
 
- If you need to parse SCTE-35, __threefive is probably what you want__.
+## If you need a SCTE-35 parser, __threefive__ is probably what you want.
 
- 
-Inputs supported by threefive:  
+* All 2020 SCTE-35 [Commands](https://github.com/futzu/threefive/blob/master/threefive/commands.py), [Descriptors](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py),and [Upids](https://github.com/futzu/threefive/blob/master/threefive/upid.py) are fully supported.
 
-* Base64
-* Binary
-* Hex Strings
-*  Hex literals
-* Integers
-*  Mpegts files
-*  Mpegts HTTP/HTTPS Streams
-
-threrfive supports __All 2020 SCTE-35__ Commands, Descriptors, and Upids.
+* [Mpegts is Well Supported](#stream-class) in the Stream class.
 
 
-  ```Multicast?```  ```HLS?```  ```Custom Upid Handling?```  ```Frame Accurate Preroll timings?```    [Oh Yeah.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
-
-
-
+*  ```Multicast?```   ```HLS?```  ```Custom Upid Handling?```  ```Frame Accurate Preroll timings?``` [... Oh Yeah.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
+___
 
  * [Your feedback is welcome and encouraged.](https://github.com/futzu/threefive/issues)
  
@@ -32,19 +21,18 @@ threrfive supports __All 2020 SCTE-35__ Commands, Descriptors, and Upids.
 
 * [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
-* [__A threefive SCTE-35 Cue Diagram__](https://github.com/futzu/threefive/blob/master/cue.md)
+* [A threefive SCTE-35 Cue Diagram](https://github.com/futzu/threefive/blob/master/cue.md)
 
-*   [Easy threefive](#the-decode-function) 
-      *   [threefive.decode()](#the-decode-function)      
+*   [Easy threefive](#easy-threefive) 
+      *   [threefive.__decode__()](#easy-threefive)      
 
-*  [Advanced threefive](#)     
+*  [Advanced threefive](#advanced-threefive)     
      *  [threefive.__Cue__ Class](#cue-class)         
      *  [threefive.__Stream__ Class](#stream-class)
      
 * [Sweet Examples ](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
+* [ffmpeg and SCTE35 and Stream Type and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)   
 
-* [__ffmpeg__ and __SCTE35__ and __Stream Type__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)   
- 
 * [threefive Spotted in The Wild](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 
 *  [Code of Conduct](https://github.com/futzu/threefive/blob/master/CODE_OF_CONDUCT.md).
@@ -56,7 +44,7 @@ threrfive supports __All 2020 SCTE-35__ Commands, Descriptors, and Upids.
 ### Requirements
 threefive requires python 3.6+ or [pypy3](https://pypy.org)
 
- [__pypy3__ runs threefive __Four Times Faster__ than __python3__](https://github.com/futzu/threefive/blob/master/py3vspypy3.md)
+ [__pypy3__ runs threefive Four Times Faster than python3](https://github.com/futzu/threefive/blob/master/py3vspypy3.md)
 
 
 ### Install
