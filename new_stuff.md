@@ -14,15 +14,9 @@ Python 3.7.10 (7.3.5+dfsg-2, Jun 03 2021, 20:39:46)
 Type "help", "copyright", "credits" or "license" for more information.
 >>>> from threefive import smoke, Stream, decode
 ```
-> __threefive.Stream.strip_scte35()__
+####  __threefive.Stream.strip_scte35()__
 
-> this was not my idea. 
-> 
-> Folks have been asking 
-> 
-> for a way to strip out SCTE-35 Cues in realtime,
-> 
->  immediately after they are parsed.
+Folks have been asking for a way to strip out SCTE-35 Cues in realtime.  
 
 ```py3
 >>>> help(Stream.strip_scte35)
@@ -64,7 +58,10 @@ pypy3 strip.py ../mpegts/udp.livetv.ts | mplayer -
 pypy3 strip.py ../mpegts/udp.livetv.ts > stripped.ts 
 ```
 
->  __threefive.smoke()__  A quick sanity check for threefive
+
+
+#### ``` threefive.smoke()```  
+* A quick sanity check for threefive
 >  
 ```py3
 >>>> help(smoke)
