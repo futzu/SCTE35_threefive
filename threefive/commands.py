@@ -155,37 +155,94 @@ class SpliceInsert(TimeSignal):
         self.program_splice_flag = None
         self.duration_flag = None
         self.splice_immediate_flag = None
+        self.component_count = None
         self.components = None
         self.unique_program_id = None
         self.avail_num = None
         self.avail_expected = None
 
     def _decode_break(self, bitbin):
+        """
+        SpliceInsert._decode_break(bitbin) is called
+        if SpliceInsert.duration_flag is set
+        """
         if self.duration_flag:
             self.break_auto_return = bitbin.as_flag(1)
             bitbin.forward(6)
             self.break_duration = bitbin.as_90k(33)
 
+    def _encode_break(self, nbin):
+        """
+        SpliceInsert._encode_break(nbin) is called
+        if SpliceInsert.duration_flag is set
+        """
+        if self.duration_flag:
+            self._chk_var(bool, nbin.add_flag, "break_auto_return", 1)
+            nbin.forward(6)
+            self._chk_var(float, nbin.add_90k, "break_duration", 33)
+
     def _decode_event(self, bitbin):
+        """
+        SpliceInsert._decode_flags set four flags
+        and is called from SpliceInsert.decode()
+        """
         self.splice_event_id = bitbin.as_int(32)
         self.splice_event_cancel_indicator = bitbin.as_flag(1)
         bitbin.forward(7)
+
+    def _encode_event(self, nbin):
+        self._chk_var(int, nbin.add_int, "splice_event_id", 32)
+        self._chk_var(bool, nbin.add_flag, "splice_event_cancel_indicator", 1)
+        nbin.forward(7)
 
     def _decode_flags(self, bitbin):
         self.out_of_network_indicator = bitbin.as_flag(1)
         self.program_splice_flag = bitbin.as_flag(1)
         self.duration_flag = bitbin.as_flag(1)
+        self.splice_immediate_flag = bitbin.as_flag(1)
+        bitbin.forward(4)
+
+    def _encode_flags(self, nbin):
+        """
+        SpliceInsert._encode_flags converts four flags
+        to bits
+        """
+        self._chk_var(bool, nbin.add_flag, "out_of_network_indicator", 1)
+        self._chk_var(bool, nbin.add_flag, "program_splice_flag", 1)
+        self._chk_var(bool, nbin.add_flag, "duration_flag", 1)
+        self._chk_var(bool, nbin.add_flag, "splice_immediate_flag", 1)
+        nbin.forward(4)
 
     def _decode_components(self, bitbin):
-        component_count = bitbin.as_int(8)
+        """
+        SpliceInsert._decode_components loops
+        over SpliceInsert.components,
+        and is called from SpliceInsert.decode()
+        """
+        self.component_count = bitbin.as_int(8)
         self.components = []
-        for i in range(0, component_count):
+        for i in range(0, self.component_count):
             self.components[i] = bitbin.as_int(8)
+
+    def _encode_components(self, nbin):
+        """
+        SpliceInsert._encode_components loops
+        over SpliceInsert.components,
+        and is called from SpliceInsert.encode()
+        """
+        nbin.add_int(self.component_count, 8)
+        for i in range(0, self.component_count):
+            nbin.add_int(self.components[i], 8)
 
     def _decode_unique_avail(self, bitbin):
         self.unique_program_id = bitbin.as_int(16)
         self.avail_num = bitbin.as_int(8)
         self.avail_expected = bitbin.as_int(8)
+
+    def _encode_unique_avail(self, nbin):
+        self._chk_var(int, nbin.add_int, "unique_program_id", 16)
+        self._chk_var(int, nbin.add_int, "avail_num", 8)
+        self._chk_var(int, nbin.add_int, "avail_expected", 8)
 
     def decode(self):
         """
@@ -196,8 +253,6 @@ class SpliceInsert(TimeSignal):
         self._decode_event(bitbin)
         if not self.splice_event_cancel_indicator:
             self._decode_flags(bitbin)
-            self.splice_immediate_flag = bitbin.as_flag(1)
-            bitbin.forward(4)
             if self.program_splice_flag:
                 if not self.splice_immediate_flag:
                     self._splice_time(bitbin)
@@ -208,6 +263,25 @@ class SpliceInsert(TimeSignal):
             self._decode_break(bitbin)
             self._decode_unique_avail(bitbin)
         self._set_len(start, bitbin.idx)
+
+    def encode(self, nbin=None):
+        """
+        SpliceInsert.encode
+        """
+        nbin = self._chk_nbin(nbin)
+        self._encode_event(nbin)
+        if not self.splice_event_cancel_indicator:
+            self._encode_flags(nbin)
+            if self.program_splice_flag:
+                if not self.splice_immediate_flag:
+                    self._encode_splice_time(nbin)
+            else:
+                self._encode_components(nbin)
+                if not self.splice_immediate_flag:
+                    self._encode_splice_time(nbin)
+            self._encode_break(nbin)
+            self._encode_unique_avail(nbin)
+        return nbin.bites
 
 
 class SpliceSchedule(SpliceCommand):
