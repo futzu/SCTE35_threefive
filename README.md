@@ -14,10 +14,7 @@ ___
  * [Your feedback is welcome and encouraged.](https://github.com/futzu/threefive/issues)
  
 
-* [Breaking News!...](https://github.com/futzu/threefive/blob/master/new_stuff.md) 
-* check out [Flavio's](https://github.com/flavioribeiro) slack site  [video-dev](https://video-dev.slack.com). There are some serious video folks hanging out.
-
- 
+* [Breaking News!...](https://github.com/futzu/threefive/blob/master/new_stuff.md)  
 * [Requirements](#requirements)
 * [Install threefive](#install)
 * [Versions and Releases](#versions-and-releases)
@@ -35,6 +32,7 @@ ___
      
 * [Sweet Examples ](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
 * [ffmpeg and SCTE35 and Stream Type and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)   
+* check out [Flavio's](https://github.com/flavioribeiro) slack site  [video-dev](https://video-dev.slack.com). Serious video talent.
 
 * [threefive Spotted in The Wild](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 
