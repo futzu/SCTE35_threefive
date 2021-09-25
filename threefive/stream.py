@@ -62,12 +62,12 @@ class Stream:
         return str(vars(self))
 
     def _find_start(self):
-        sync_byte = b"G"
+        sync_byte = 0x47
         while self._tsdata:
             one = self._tsdata.read(1)
             if not one:
                 return False
-            if one == sync_byte:
+            if one[0] == sync_byte:
                 if self._tsdata.read(self._PACKET_SIZE - 1):
                     return True
         return False
@@ -256,7 +256,6 @@ class Stream:
                 self._prgm_pcr[prgm] = pcr
                 if self._start:
                     return round((pcr / 90000.0), 6)
-        # return None
 
     def _parse(self, pkt):
         pid = self._parse_pid(pkt[1], pkt[2])

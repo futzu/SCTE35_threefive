@@ -152,8 +152,8 @@ class HASP:
                                 self.hls_time = self._start = hold
                             tail = ""
                             if stanza.cue:
-                                tail = f" {rev_text}Cue:{reset_text} {stanza.cue}"
-                            effed = f"{line}  {rev_text}Start:{reset_text}  {round(self.hls_time,6)} {rev_text}Duration:{reset_text} {stanza.duration} {tail}"
+                                tail = f"{rev_text}Cue:{reset_text} {stanza.cue}"
+                            effed = f"{line}  {rev_text}Start:{reset_text}  {round(self.hls_time,6)} {rev_text}Duration:{reset_text} {stanza.duration}\n{tail}"
                             print(effed)
                             if stanza.cue:
                                 stanza.do_cue()
