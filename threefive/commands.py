@@ -27,6 +27,13 @@ class SpliceCommand(SCTE35Base):
         """
         self.calculated_length = (start - end) >> 3
 
+    def encode(self, nbin=None):
+        """
+        encode
+        """
+        nbin = self._chk_nbin(nbin)
+        return nbin.bites
+
 
 class BandwidthReservation(SpliceCommand):
     """
@@ -58,6 +65,14 @@ class PrivateCommand(SpliceCommand):
             self.bites[0:3], byteorder="big"
         )  # 3 bytes = 24 bits
         self.bites = self.bites[3:]
+
+    def encode(self, nbin=None):
+        """
+        encode private command
+        """
+        nbin = self._chk_nbin(nbin)
+        self._chk_var(int, nbin.add_int, "identifier", 24)  # 3 bytes = 24 bits
+        return nbin.bites
 
 
 class SpliceNull(SpliceCommand):
@@ -93,6 +108,15 @@ class TimeSignal(SpliceCommand):
         self._splice_time(bitbin)
         self._set_len(start, bitbin.idx)
 
+    def encode(self, nbin=None):
+        """
+        encode converts TimeSignal vars
+        to bytes
+        """
+        nbin = self._chk_nbin(nbin)
+        self._encode_splice_time(nbin)
+        return nbin.bites
+
     def _splice_time(self, bitbin):
         """
         parse_pts is called by either a
@@ -105,6 +129,14 @@ class TimeSignal(SpliceCommand):
             self.pts_time = bitbin.as_90k(33)
         else:
             bitbin.forward(7)
+
+    def _encode_splice_time(self, nbin):
+        self._chk_var(bool, nbin.add_flag, "time_specified_flag", 1)
+        if self.time_specified_flag:
+            nbin.reserve(6)
+            self._chk_var(float, nbin.add_90k, "pts_time", 33)
+        else:
+            nbin.reserve(7)
 
 
 class SpliceInsert(TimeSignal):
