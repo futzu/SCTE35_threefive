@@ -13,7 +13,7 @@ ___
 
  * [Your feedback is welcome and encouraged.](https://github.com/futzu/threefive/issues)
  
- * If Video is your thing, check out [Flavio's ](https://github.com/flavioribeiro) [video-dev](https://video-dev.slack.com). __There are some serious video folks hanging out, real talent.__
+ * If Video is your thing, check out [Flavio's ] slack site (https://github.com/flavioribeiro) [video-dev](https://video-dev.slack.com). __There are some serious video folks hanging out, real talent.__
 
  
 * [Breaking News!...](https://github.com/futzu/threefive/blob/master/new_stuff.md) 
