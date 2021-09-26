@@ -48,6 +48,21 @@ class SpliceDescriptor(SCTE35Base):
         """
         self.bites = self.bites[4:]
 
+    def encode(self, nbin=None):
+        """
+        SpliceDescriptor.encode
+        """
+        nbin = self._chk_nbin(nbin)
+        self._encode_id(nbin)
+        return nbin
+
+    def _encode_id(self, nbin):
+        """
+        parse splice descriptor identifier
+        """
+        # self.identifier = "CUEI"
+        nbin.add_bites(self.identifier)
+
 
 class AudioDescriptor(SpliceDescriptor):
     """
@@ -94,6 +109,14 @@ class AvailDescriptor(SpliceDescriptor):
         bitbin = BitBin(self.bites)
         self.provider_avail_id = bitbin.as_int(32)
 
+    def encode(self, nbin=None):
+        """
+        encode SCTE35 Avail Descriptor
+        """
+        nbin = super().encode(nbin)
+        self._chk_var(int, nbin.add_int, "provider_avail_id", 32)
+        return nbin.bites
+
 
 class DtmfDescriptor(SpliceDescriptor):
     """
@@ -103,6 +126,7 @@ class DtmfDescriptor(SpliceDescriptor):
     def __init__(self, bites):
         super().__init__(bites)
         self.preroll = None
+        self.dtmf_count = None
         self.dtmf_chars = None
 
     def decode(self):
@@ -114,6 +138,20 @@ class DtmfDescriptor(SpliceDescriptor):
         dtmf_count = self.bites[1] >> 5
         self.bites = self.bites[2:]
         self.dtmf_chars = list(self.bites[:dtmf_count].decode())
+
+    def encode(self, nbin=None):
+        """
+        encode SCTE35 Dtmf Descriptor
+        """
+        nbin = super().encode(nbin)
+        self._chk_var(int, nbin.add_int, "preroll", 8)
+        d_c = 0
+        self._chk_var(int, nbin.add_int, "dtmf_count", 3)
+        nbin.forward(5)
+        while d_c < self.dtmf_count:
+            nbin.add_int(ord(self.dtmf_chars[d_c]), 8)
+            d_c += 1
+        return nbin.bites
 
 
 class TimeDescriptor(SpliceDescriptor):
@@ -136,6 +174,16 @@ class TimeDescriptor(SpliceDescriptor):
         self.tai_seconds = bitbin.as_int(48)
         self.tai_ns = bitbin.as_int(32)
         self.utc_offset = bitbin.as_int(16)
+
+    def encode(self, nbin=None):
+        """
+        encode SCTE35 Avail Descriptor
+        """
+        nbin = super().encode(nbin)
+        self._chk_var(int, nbin.add_int, "tai_seconds", 48)
+        self._chk_var(int, nbin.add_int, "tai_ns", 32)
+        self._chk_var(int, nbin.add_int, "utc_offset", 16)
+        return nbin.bites
 
 
 class SegmentationDescriptor(SpliceDescriptor):
