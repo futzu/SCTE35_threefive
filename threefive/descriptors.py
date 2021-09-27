@@ -61,18 +61,15 @@ class SpliceDescriptor(SCTE35Base):
         SpliceDescriptor.encode
         """
         nbin = self._chk_nbin(nbin)
-        # self.encode_tag_and_len(nbin)
         self._encode_id(nbin)
-        print(nbin.bites)
         return nbin
 
     def _encode_id(self, nbin):
         """
         parse splice descriptor identifier
         """
-        self.identifier = "CUEI"
+        # self.identifier = "CUEI"
         id_int = int.from_bytes(self.identifier.encode(), byteorder="big")
-        print(id_int)
         nbin.add_int(id_int, 32)
 
 
