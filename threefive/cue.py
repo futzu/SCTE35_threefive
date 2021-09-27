@@ -50,6 +50,7 @@ class Cue(SCTE35Base):
         self.info_section = SpliceInfoSection()
         self.command = None
         self.descriptors = []
+        self.crc = None
         if data:
             self.bites = self._mk_bits(data)
         self.packet_data = packet_data
@@ -70,9 +71,7 @@ class Cue(SCTE35Base):
             if after_cmd:
                 after_dscrptrs = self._mk_descriptors(after_cmd)
                 if after_dscrptrs:
-                    self.info_section.crc = hex(
-                        int.from_bytes(after_dscrptrs[0:4], byteorder="big")
-                    )
+                    self.crc = hex(int.from_bytes(after_dscrptrs[0:4], byteorder="big"))
                     return True
         return False
 
@@ -82,8 +81,10 @@ class Cue(SCTE35Base):
         to a base64 encoded string.
         """
         dscptr_bites = self._unloop_descriptors()
+        print(dscptr_bites)
         dll = len(dscptr_bites)
         self.info_section.descriptor_loop_length = dll
+        print("DLL", self.info_section.descriptor_loop_length)
         if not self.command:
             raise Exception("A splice command is required")
         cmd_bites = self.command.encode()
@@ -94,18 +95,25 @@ class Cue(SCTE35Base):
         # + descriptor loop + 4 for crc
         self.info_section.section_length = 11 + cmdl + 2 + dll + 4
         self.bites = self.info_section.encode()
+        print(self.bites)
         self.bites += cmd_bites
+        print(self.bites)
+
         self.bites += int.to_bytes(
-            self.info_section.descriptor_loop_length, 16, byteorder="big"
+            self.info_section.descriptor_loop_length, 2, byteorder="big"
         )
+        print(self.bites)
+
         self.bites += dscptr_bites
+        print(self.bites)
+
         self._encode_crc()
         return b64encode(self.bites)
 
     def _encode_crc(self):
         crc32_func = crcmod.predefined.mkCrcFun("crc-32-mpeg")
         crc_int = crc32_func(self.bites)
-        self.info_section.crc = hex(crc_int)
+        self.crc = hex(crc_int)
         self.bites += int.to_bytes(crc_int, 32, byteorder="big")
 
     def load_info_section(self, isec):

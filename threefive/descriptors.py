@@ -49,31 +49,35 @@ class SpliceDescriptor(SCTE35Base):
         """
         parse splice descriptor identifier
         """
-        self.identifier = self.bites[:4].decode()
-        # disabled for ffmv30
-        #      if self.identifier != "CUEI":
-        #          raise Exception('Identifier Is Not "CUEI"')
-        self.bites = self.bites[4:]
+        if self.bites:
+            self.identifier = self.bites[:4].decode()
+            # disabled for ffmv30
+            #      if self.identifier != "CUEI":
+            #          raise Exception('Identifier Is Not "CUEI"')
+            self.bites = self.bites[4:]
 
     def encode(self, nbin=None):
         """
         SpliceDescriptor.encode
         """
         nbin = self._chk_nbin(nbin)
+        # self.encode_tag_and_len(nbin)
         self._encode_id(nbin)
+        print(nbin.bites)
         return nbin
 
     def _encode_id(self, nbin):
         """
         parse splice descriptor identifier
         """
-        # self.identifier = "CUEI"
+        self.identifier = "CUEI"
         id_int = int.from_bytes(self.identifier.encode(), byteorder="big")
+        print(id_int)
         nbin.add_int(id_int, 32)
 
 
 class AudioDescriptor(SpliceDescriptor):
-    """
+    """q
     Table 26 - audio_descriptor()
     """
 
