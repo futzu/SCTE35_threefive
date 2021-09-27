@@ -61,7 +61,8 @@ class SpliceDescriptor(SCTE35Base):
         parse splice descriptor identifier
         """
         # self.identifier = "CUEI"
-        nbin.add_bites(self.identifier)
+        ii = int.from_bytes(self.identifier.encode(), byteorder="big")
+        nbin.add_int(ii, 32)
 
 
 class AudioDescriptor(SpliceDescriptor):
