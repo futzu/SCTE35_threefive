@@ -81,10 +81,8 @@ class Cue(SCTE35Base):
         to a base64 encoded string.
         """
         dscptr_bites = self._unloop_descriptors()
-        print(dscptr_bites)
         dll = len(dscptr_bites)
         self.info_section.descriptor_loop_length = dll
-        print("DLL", self.info_section.descriptor_loop_length)
         if not self.command:
             raise Exception("A splice command is required")
         cmd_bites = self.command.encode()
@@ -95,18 +93,11 @@ class Cue(SCTE35Base):
         # + descriptor loop + 4 for crc
         self.info_section.section_length = 11 + cmdl + 2 + dll + 4
         self.bites = self.info_section.encode()
-        print(self.bites)
         self.bites += cmd_bites
-        print(self.bites)
-
         self.bites += int.to_bytes(
             self.info_section.descriptor_loop_length, 2, byteorder="big"
         )
-        print(self.bites)
-
         self.bites += dscptr_bites
-        print(self.bites)
-
         self._encode_crc()
         return b64encode(self.bites)
 
