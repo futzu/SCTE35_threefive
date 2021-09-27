@@ -43,7 +43,8 @@ ___
 
 
 ### Requirements
-threefive requires python 3.6+ or [pypy3](https://pypy.org)
+* threefive requires [pypy3](https://pypy.org) or python 3.6+
+* threefive 2.3.02+ requires crcmod for encoding.
 
  [__pypy3__ runs threefive Four Times Faster than python3](https://github.com/futzu/threefive/blob/master/py3vspypy3.md)
 
