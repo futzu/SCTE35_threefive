@@ -13,7 +13,7 @@ class SCTE35Base:
     """
 
     def __repr__(self):
-        return str(self.get())
+        return str(vars(self))
 
     @staticmethod
     def _chk_nbin(nbin):

@@ -52,7 +52,7 @@ class Cue(SCTE35Base):
         self.descriptors = []
         if data:
             self.bites = self._mk_bits(data)
-            self.packet_data = packet_data
+        self.packet_data = packet_data
 
     def __repr__(self):
         return str(vars(self))

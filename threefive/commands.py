@@ -12,6 +12,7 @@ class SpliceCommand(SCTE35Base):
 
     def __init__(self, bites=None):
         self.calculated_length = None
+        self.command_type = None
         self.name = None
         self.bites = bites
 
@@ -40,11 +41,15 @@ class BandwidthReservation(SpliceCommand):
     Table 11 - bandwidth_reservation()
     """
 
+    def __init__(self, bites=None):
+        super().__init__(bites)
+        self.command_type = 7
+        self.name = "Bandwidth Reservation"
+
     def decode(self):
         """
         BandwidthReservation.decode method
         """
-        self.name = "Bandwidth Reservation"
 
 
 class PrivateCommand(SpliceCommand):
@@ -53,14 +58,15 @@ class PrivateCommand(SpliceCommand):
     """
 
     def __init__(self, bites=None):
-        self.identifier = None
         super().__init__(bites)
+        self.command_type = 255
+        self.name = "Private Command"
+        self.identifier = None
 
     def decode(self):
         """
         PrivateCommand.decode method
         """
-        self.name = "Private Command"
         self.identifier = int.from_bytes(
             self.bites[0:3], byteorder="big"
         )  # 3 bytes = 24 bits
@@ -80,11 +86,9 @@ class SpliceNull(SpliceCommand):
     Table 7 - splice_null()
     """
 
-    def decode(self):
-        """
-        SpliceNull.decode method
-        """
-        self.calculated_length = 0
+    def __init__(self, bites=None):
+        super().__init__(bites)
+        self.command_type = 0
         self.name = "Splice Null"
 
 
@@ -95,6 +99,8 @@ class TimeSignal(SpliceCommand):
 
     def __init__(self, bites=None):
         super().__init__(bites)
+        self.command_type = 6
+        self.name = "Time Signal"
         self.time_specified_flag = None
         self.pts_time = None
 
@@ -102,7 +108,6 @@ class TimeSignal(SpliceCommand):
         """
         TimeSignal.decode method
         """
-        self.name = "Time Signal"
         bitbin = BitBin(self.bites)
         start = bitbin.idx
         self._splice_time(bitbin)
@@ -146,6 +151,7 @@ class SpliceInsert(TimeSignal):
 
     def __init__(self, bites=None):
         super().__init__(bites)
+        self.command_type = 5
         self.name = "Splice Insert"
         self.break_auto_return = None
         self.break_duration = None
@@ -334,14 +340,15 @@ class SpliceSchedule(SpliceCommand):
         """
         SpliceSchedule.__init__
         """
-        self.splices = []
         super().__init__(bites)
+        self.command_type = 4
+        self.name = "Splice Schedule"
+        self.splices = []
 
     def decode(self):
         """
         SpliceSchedule.decode
         """
-        self.name = "Splice Schedule"
         bitbin = BitBin(self.bites)
         start = bitbin.idx
         splice_count = bitbin.as_int(8)
