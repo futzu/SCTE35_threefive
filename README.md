@@ -13,8 +13,9 @@ ___
 
  * [Your feedback is welcome and encouraged.](https://github.com/futzu/threefive/issues)
  
-* [...Cue Encoding](https://github.com/futzu/threefive/blob/master/Encoding.md)
-* [Breaking News!...](https://github.com/futzu/threefive/blob/master/new_stuff.md)  
+* [Cue Encoding is Up and Running](https://github.com/futzu/threefive/blob/master/Encoding.md)
+* Packet Injection (Coming Soon)
+* [Breaking News...](https://github.com/futzu/threefive/blob/master/new_stuff.md)  
 * [Requirements](#requirements)
 * [Install threefive](#install)
 * [Versions and Releases](#versions-and-releases)
