@@ -1,7 +1,10 @@
 
  
 
-If you need a SCTE-35 parser, threefive is probably what you want.
+#### If you need a SCTE-35 parser / decoder, 
+#### threefive is probably what you want. 
+
+( *Boom goes the dynamite* )
 
 * All 2020 SCTE-35 [Commands](https://github.com/futzu/threefive/blob/master/threefive/commands.py), [Descriptors](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py),and [Upids](https://github.com/futzu/threefive/blob/master/threefive/upid.py) are fully supported.
 
