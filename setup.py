@@ -9,12 +9,15 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="threefive",
     version=threefive.version(),
-    author="fu-corp",
+    author="Adrian Thiele, Vlad Doster, James Fining, Richard Van Dijk and my dog, Jesse",
     author_email="spam@so.slo.me",
-    description="threefive, Pythonic SCTE-35.",
+    description="Southern Fried SCTE-35.",
     long_description=readme,
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/threefive",
+    install_requires=[
+        "crcmod",
+    ],
     packages=setuptools.find_packages(),
     classifiers=[
         "License :: OSI Approved :: MIT License",
