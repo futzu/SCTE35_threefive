@@ -57,7 +57,7 @@ def upid_encoder(nbin, upid_type, upid_length, seg_upid):
         0x0B: ["ATSC", _encode_atsc],
         0x09: ["ADI", _encode_uri],
         0x0A: ["EIDR", _encode_eidr],
-        #  0x0D: ["MID", _encode_mid],
+        0x0D: ["MID", _encode_mid],
         0x0E: ["ADS Info", _encode_uri],
         0x0F: ["URI", _encode_uri],
         0x10: ["UUID", _encode_uri],
@@ -149,7 +149,6 @@ def _decode_mid(bitbin, upid_length):
     return upids
 
 
-"""
 def _encode_mid(nbin, seg_upid):
     for mid_upid in seg_upid:
         nbin.add_hex(mid_upid["upid_type"], 8)
@@ -160,7 +159,6 @@ def _encode_mid(nbin, seg_upid):
             mid_upid["upid_length"],
             mid_upid["segmentation_upid"],
         )
-"""
 
 
 def _decode_mpu(bitbin, upid_length):

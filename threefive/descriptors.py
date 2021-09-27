@@ -4,7 +4,7 @@ SCTE35 Splice Descriptors
 from .bitn import BitBin
 from .base import SCTE35Base
 from .segmentation import table20, table22
-from .upid import upid_decoder
+from .upid import upid_decoder, upid_encoder
 
 
 def k_by_v(adict, avalue):
@@ -50,12 +50,9 @@ class SpliceDescriptor(SCTE35Base):
         parse splice descriptor identifier
         """
         self.identifier = self.bites[:4].decode()
-        """
-        disabled for ffmv30
-
-        if self.identifier != "CUEI":
-            raise Exception('Identifier Is Not "CUEI"')
-        """
+        # disabled for ffmv30
+        #      if self.identifier != "CUEI":
+        #          raise Exception('Identifier Is Not "CUEI"')
         self.bites = self.bites[4:]
 
     def encode(self, nbin=None):
@@ -71,8 +68,8 @@ class SpliceDescriptor(SCTE35Base):
         parse splice descriptor identifier
         """
         # self.identifier = "CUEI"
-        ii = int.from_bytes(self.identifier.encode(), byteorder="big")
-        nbin.add_int(ii, 32)
+        id_int = int.from_bytes(self.identifier.encode(), byteorder="big")
+        nbin.add_int(id_int, 32)
 
 
 class AudioDescriptor(SpliceDescriptor):
