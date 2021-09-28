@@ -71,7 +71,8 @@ class Cue(SCTE35Base):
             if after_cmd:
                 after_dscrptrs = self._mk_descriptors(after_cmd)
                 if after_dscrptrs:
-                    self.crc = hex(int.from_bytes(after_dscrptrs[0:4], byteorder="big"))
+                    crc = hex(int.from_bytes(after_dscrptrs[0:4], byteorder="big"))
+                    self.info_section.crc = crc
                     return True
         return False
 
@@ -104,7 +105,7 @@ class Cue(SCTE35Base):
     def _encode_crc(self):
         crc32_func = crcmod.predefined.mkCrcFun("crc-32-mpeg")
         crc_int = crc32_func(self.bites)
-        self.crc = hex(crc_int)
+        self.info_section.crc = hex(crc_int)
         self.bites += int.to_bytes(crc_int, 4, byteorder="big")
 
     def load_info_section(self, isec):
@@ -209,7 +210,6 @@ class Cue(SCTE35Base):
                 "info_section": self.info_section.get(),
                 "command": self.command.get(),
                 "descriptors": self.get_descriptors(),
-                "crc": self.crc,
             }
             if self.packet_data is not None:
                 scte35["packet_data"] = self.packet_data.get()

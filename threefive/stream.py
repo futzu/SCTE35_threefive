@@ -157,7 +157,7 @@ class Stream:
         parsed for SCTE-35.
         """
         self.info = True
-        stuff = self.decode(func=False)
+        self.decode(func=False)
 
     def decode_start_time(self):
         """
@@ -235,8 +235,6 @@ class Stream:
                 pts |= pkt[17] >> 1
                 prgm = self._pid_prgm[pid]
                 self._prgm_pts[prgm] = pts
-                if self._start:
-                    return round((pts / 90000.0), 6)
 
     def _parse_pcr(self, pkt, pid):
         """
@@ -265,15 +263,14 @@ class Stream:
             self._chk_pmt_payload(pkt, pid)
         # if self.info:
         #   return None
-        pcr = self._parse_pcr(pkt, pid)
-        if pcr:
-            return pcr
         if pid in self._pid_prgm:
-            pts = self._parse_pts(pkt, pid)
-            if pts:
-                return pts
-        if pid in self._pids["scte35"]:
-            return self._parse_scte35(pkt, pid)
+            pcr = self._parse_pcr(pkt, pid)
+            if pcr:
+                return pcr
+            if self._parse_pusi(pkt[1]):
+                self._parse_pts(pkt, pid)
+            if pid in self._pids["scte35"]:
+                return self._parse_scte35(pkt, pid)
 
     def _chk_partial(self, payload, pid):
         if pid in self._partial:
@@ -364,9 +361,9 @@ class Stream:
         program_number = self._parse_program(payload[3], payload[4])
         if self.the_program and (program_number != self.the_program):
             return
-        if self.info:
-            print(f"\nProgram:{program_number}")
         pcr_pid = self._parse_pid(payload[8], payload[9])
+        if self.info:
+            print(f"\nProgram:{program_number}\n")
         self._pids["pcr"].add(pcr_pid)
         proginfolen = self._parse_length(payload[10], payload[11])
         idx = 12
@@ -407,7 +404,9 @@ class Stream:
         if stream_type in ["0x6", "0x86"]:
             self._pids["scte35"].add(pid)
         if self.info:
+            stream_stuff = ""
             if stream_type == "0x86":
-                print(f"\tPID: {pid}({hex(pid)}) Type: {stream_type} SCTE35")
-            else:
-                print(f"\tPID: {pid}({hex(pid)}) Type: {stream_type}")
+                stream_stuff += " SCTE35 "
+            if pid in self._pids["pcr"]:
+                stream_stuff += " PCR "
+            print(f"   {pid} [{hex(pid)}] Type: {stream_type}  {stream_stuff}")
