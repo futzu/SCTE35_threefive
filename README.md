@@ -10,10 +10,7 @@
 
 *  ```Multicast?```   ```HLS?```  ```Custom Upid Handling?```  ```Frame Accurate Preroll timings?``` [... Oh Yeah.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 
-* [threefive now has SCTE35 Cue Encoding](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) 
-
-( _I've been shaking out the last few encoding bugs, expect a release soon._ )
-
+* [threefive now has SCTE35 Cue Encoding](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)  _expect a release soon._ 
 
  * [Your feedback is welcome and encouraged.](https://github.com/futzu/threefive/issues)
  
