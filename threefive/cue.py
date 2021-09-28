@@ -100,7 +100,15 @@ class Cue(SCTE35Base):
         )
         self.bites += dscptr_bites
         self._encode_crc()
-        return b64encode(self.bites)
+        return b64encode(self.bites).decode()
+
+    def encode_as_hex(self):
+        """
+        encode_as_hex returns self.bites as
+        a hex string
+        """
+        self.encode()
+        return hex(int.from_bytes(self.bites, byteorder="big"))
 
     def _encode_crc(self):
         crc32_func = crcmod.predefined.mkCrcFun("crc-32-mpeg")
