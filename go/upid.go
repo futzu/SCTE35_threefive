@@ -1,7 +1,7 @@
 package threefive
 
 import "github.com/futzu/bitter"
-      
+      /**
     upid_map = map[uint8]map[string]Upid{
         0x01: ["Deprecated",&URI{}],
         0x02: ["Deprecated",&URI{}],
@@ -21,6 +21,7 @@ import "github.com/futzu/bitter"
         0x10: ["UUID", &URI{},
         0xFD: ["Unknown", &URI{}],
     }
+    **/
 	       /**
     if upid_type not in upid_map.keys():
         upid_type = 0xFD
@@ -101,7 +102,7 @@ func (upid *ATSC) Decode(bitn *bitter.Bitn, upidtype string, name string, upidle
 	upid.ContentID = bitn.AsAscii(((upid_length - 4) << 3))
 }
 
-Type EIDR struct {
+type EIDR struct {
 	UpidType  string
 	Name      string
 	Value    string
@@ -119,7 +120,7 @@ def _decode_eidr(bitbin, upid_length):
         post.append(bitbin.as_hex(16)[2:])
     return f"10.{pre}/{'-'.join(post)}"
 **/
-Type ISAN struct {
+type ISAN struct {
 	UpidType  string
 	Name      string
 	Value    string
