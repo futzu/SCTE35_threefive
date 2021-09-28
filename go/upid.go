@@ -11,33 +11,33 @@ def upid_decoder(bitbin, upid_type, upid_length):
 
     Used by the SegmentationDescriptor class.
     """
-     
- **/     
- var   upid_map = map[uint8]map[string]Upid{
-        0x01: {"Deprecated":&URI{}},
-        0x02: {"Deprecated":&URI{}},
-        0x03: {"AdID": &URI{}},
-      //0x04: ["UMID", _decode_umid],
-        0x05: {"ISAN": &Isan{}},
-        0x06: {"ISAN": &Isan{}},
-        0x07: {"TID" :&URI{}},
-        0x08: {"AiringID": &AirID{}},
-        0x09: {"ADI":&URI{}},
-     // 0x0A: ["EIDR", _decode_eidr],
-        0x0B: {"ATSC": &ATSC{}},
-        0x0C: {"MPU": &MPU{}},
-    //  0x0D: ["MID", _decode_mid],
-        0x0E: {"ADS Info": &URI{}},
-        0x0F: {"URI": &URI{}},
-        0x10: {"UUID" : &URI{}},
-        0xFD: {"Unknown" :&URI{}},
-    }
-     /**
+
+ **/
+var upid_map = map[uint8]map[string]Upid{
+	0x01: {"Deprecated": &URI{}},
+	0x02: {"Deprecated": &URI{}},
+	0x03: {"AdID": &URI{}},
+	//  0x04: ["UMID", _decode_umid],
+	0x05: {"ISAN": &Isan{}},
+	0x06: {"ISAN": &Isan{}},
+	0x07: {"TID": &URI{}},
+	0x08: {"AiringID": &AirID{}},
+	0x09: {"ADI": &URI{}},
+	//   0x0A: ["EIDR", _decode_eidr],
+	0x0B: {"ATSC": &ATSC{}},
+	0x0C: {"MPU": &MPU{}},
+	//    0x0D: ["MID", _decode_mid],
+	0x0E: {"ADS Info": &URI{}},
+	0x0F: {"URI": &URI{}},
+	0x10: {"UUID": &URI{}},
+	0xFD: {"Unknown": &URI{}},
+}
+
+/**
     if upid_type not in upid_map.keys():
         upid_type = 0xFD
     return upid_map[upid_type][0], upid_map[upid_type][1](bitbin, upid_length)
 **/
-
 
 // Upid is the interface for Segmentation Upida
 type Upid interface {
@@ -108,13 +108,12 @@ func (upid *ATSC) Decode(bitn *bitter.Bitn, upidtype string, name string, upidle
 	upid.ContentID = bitn.AsAscii(((upidlen - 4) << 3))
 }
 
-
 type EIDR struct {
-	UpidType  string
-	Name      string
+	UpidType string
+	Name     string
 	Value    string
-
 }
+
 /**
 def _decode_eidr(bitbin, upid_length):
     if upid_length < 12:
@@ -128,20 +127,19 @@ def _decode_eidr(bitbin, upid_length):
     return f"10.{pre}/{'-'.join(post)}"
 **/
 
- 
 type MPU struct {
-UpidType  string
-Name      string 
-FormatIdentifier string
-PrivateData    string   
-} 
+	UpidType         string
+	Name             string
+	FormatIdentifier string
+	PrivateData      string
+}
 
 func (upid *MPU) Decode(bitn *bitter.Bitn, upidtype string, name string, upidlen uint) {
-    upid.UpidType = upidtype
+	upid.UpidType = upidtype
 	upid.Name = name
-    ulb := upidlen << 3
-    upid.FormatIdentifier = bitn.AsHex(32)
-    upid.PrivateData = bitn.AsAscii(ulb-32)
+	ulb := upidlen << 3
+	upid.FormatIdentifier = bitn.AsHex(32)
+	upid.PrivateData = bitn.AsAscii(ulb - 32)
 
 }
 
