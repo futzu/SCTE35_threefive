@@ -1,36 +1,42 @@
 package threefive
 
 import "github.com/futzu/bitter"
-      /**
-    upid_map = map[uint8]map[string]Upid{
-        0x01: ["Deprecated",&URI{}],
-        0x02: ["Deprecated",&URI{}],
-        0x03: ["AdID", &URI{}],
-       // 0x04: ["UMID", _decode_umid],
-     //   0x05: ["ISAN", Isan],
-     //   0x06: ["ISAN", Isan],
-        0x07: ["TID",&URI{}],
-	0x08: ["AiringID", &AirID{}],
-        0x09: ["ADI",&URI{}],
-   //     0x0A: ["EIDR", _decode_eidr],
-    //    0x0B: ["ATSC", _decode_atsc],
-    //    0x0C: ["MPU", _decode_mpu],
-    //    0x0D: ["MID", _decode_mid],
-        0x0E: ["ADS Info", &URI{}],
-        0x0F: ["URI", &URI{}],
-        0x10: ["UUID", &URI{},
-        0xFD: ["Unknown", &URI{}],
+
+/**
+def upid_decoder(bitbin, upid_type, upid_length):
+    """
+    upid_decoder
+    decodes segmentation_upids by type,
+    from a bitbin instance.
+
+    Used by the SegmentationDescriptor class.
+    """
+     
+ **/     
+ var   upid_map = map[uint8]map[string]Upid{
+        0x01: {"Deprecated":&URI{}},
+        0x02: {"Deprecated":&URI{}},
+        0x03: {"AdID": &URI{}},
+      //0x04: ["UMID", _decode_umid],
+        0x05: {"ISAN": &Isan{}},
+        0x06: {"ISAN": &Isan{}},
+        0x07: {"TID" :&URI{}},
+        0x08: {"AiringID": &AirID{}},
+        0x09: {"ADI":&URI{}},
+     // 0x0A: ["EIDR", _decode_eidr],
+        0x0B: {"ATSC": &ATSC{}},
+        0x0C: {"MPU": &MPU{}},
+    //  0x0D: ["MID", _decode_mid],
+        0x0E: {"ADS Info": &URI{}},
+        0x0F: {"URI": &URI{}},
+        0x10: {"UUID" : &URI{}},
+        0xFD: {"Unknown" :&URI{}},
     }
-    **/
-	       /**
+     /**
     if upid_type not in upid_map.keys():
         upid_type = 0xFD
     return upid_map[upid_type][0], upid_map[upid_type][1](bitbin, upid_length)
 **/
-
-type UpidDetails struct {
-    Name
-}
 
 
 // Upid is the interface for Segmentation Upida
@@ -99,8 +105,9 @@ func (upid *ATSC) Decode(bitn *bitter.Bitn, upidtype string, name string, upidle
 	upid.Reserved = bitn.AsUInt8(2)
 	upid.EndOfDay = bitn.AsUInt8(5)
 	upid.UniqueFor = bitn.AsUInt64(9)
-	upid.ContentID = bitn.AsAscii(((upid_length - 4) << 3))
+	upid.ContentID = bitn.AsAscii(((upidlen - 4) << 3))
 }
+
 
 type EIDR struct {
 	UpidType  string
@@ -120,42 +127,7 @@ def _decode_eidr(bitbin, upid_length):
         post.append(bitbin.as_hex(16)[2:])
     return f"10.{pre}/{'-'.join(post)}"
 **/
-type ISAN struct {
-	UpidType  string
-	Name      string
-	Value    string
 
-}
-
-/**
-
-func (upid *ISAN) Decode(bitn *bitter.Bitn, upidtype string, name string, upidlen uint) {
-
-
-def _decode_isan(bitbin, upid_length):
-    return bitbin.as_hex(upid_length << 3)
-    
-def _decode_mid(bitbin, upid_length):
-    upids = []
-    ulb = upid_length << 3
-    while ulb:
-        upid_type = bitbin.as_int(8)  # 1 byte
-        ulb -= 8
-        upid_length = bitbin.as_int(8)
-        ulb -= 8
-        upid_type_name, segmentation_upid = upid_decoder(bitbin, upid_type, upid_length)
-        mid_upid = {
-            "upid_type": hex(upid_type),
-            "upid_type_name": upid_type_name,
-            "upid_length": upid_length,
-            "segmentation_upid": segmentation_upid,
-        }
-        ulb -= upid_length << 3
-        upids.append(mid_upid)
-    return upids
-
-
- **/
  
 type MPU struct {
 UpidType  string
