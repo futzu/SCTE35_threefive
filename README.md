@@ -1,10 +1,7 @@
 
  
 
-#### If you need a SCTE-35 parser / decoder, 
-#### threefive is probably what you want. 
-
-( *Boom goes the dynamite* )
+#### threefive is the #1 SCTE35 Parser in the World. 
 
 * All 2020 SCTE-35 [Commands](https://github.com/futzu/threefive/blob/master/threefive/commands.py), [Descriptors](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py),and [Upids](https://github.com/futzu/threefive/blob/master/threefive/upid.py) are fully supported.
 
@@ -13,13 +10,18 @@
 
 *  ```Multicast?```   ```HLS?```  ```Custom Upid Handling?```  ```Frame Accurate Preroll timings?``` [... Oh Yeah.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 
-* [threefive now has SCTE35 Cue Encoding](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
-* SCTE35 Packet Injection, Soon. 
-___
+* [threefive now has SCTE35 Cue Encoding](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md) ( _I've been shaking out the last few encoding bugs, expect a release soon._ )
+
 
  * [Your feedback is welcome and encouraged.](https://github.com/futzu/threefive/issues)
  
 * [Breaking News...](https://github.com/futzu/threefive/blob/master/new_stuff.md)  
+
+
+
+  `Welcome to The Show.`
+
+
 * [Requirements](#requirements)
 * [Install threefive](#install)
 * [Versions and Releases](#versions-and-releases)
