@@ -172,8 +172,8 @@ def _decode_mpu(bitbin, upid_length):
 
 def _encode_mpu(nbin, seg_upid, upid_length):
     ulbits = upid_length << 3
-    nbin.add_hex(seg_upid["format_identifier"], 32)
-    nbin.add_hex(seg_upid["private_data"], (ulbits - 32))
+    nbin.add_int(seg_upid["format_identifier"], 32)
+    nbin.add_bites(seg_upid["private_data"])  # , (ulbits - 32))
 
 
 def _decode_umid(bitbin, upid_length):

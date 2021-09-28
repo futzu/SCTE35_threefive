@@ -345,7 +345,7 @@ class SegmentationDescriptor(SpliceDescriptor):
 
     def _encode_segmentation(self, nbin):
         if self.segmentation_duration_flag:
-            self._chk_var(int, nbin.add_90k, "segmentation_duration", 40)  # 5 bytes
+            self._chk_var(float, nbin.add_90k, "segmentation_duration", 40)  # 5 bytes
         self._chk_var(int, nbin.add_int, "segmentation_upid_type", 8)  # 1 byte
         self._chk_var(int, nbin.add_int, "segmentation_upid_length", 8)  # 1 byte
         upid_encoder(
