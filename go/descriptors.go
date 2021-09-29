@@ -1,5 +1,4 @@
 package threefive
-
 import "github.com/futzu/bitter"
 
 // Descriptor is the interface for all Splice Descriptors
@@ -137,9 +136,8 @@ type SegmentDscptr struct {
 	SegmentationDuration             float64
 	SegmentationMessage              string
 	SegmentationUpidType             uint8
-	SegmentationUpidTypeName         string
 	SegmentationUpidLength           uint8
-	SegmentationUpid                 string
+	SegmentationUpid                 Upid
 	SegmentationTypeID               uint8
 	SegmentNum                       uint64
 	SegmentsExpected                 uint64 `json:",omitempty"`
@@ -193,12 +191,11 @@ func (dscptr *SegmentDscptr) decodeSegmentation(bitn *bitter.Bitn) {
 	}
 	dscptr.SegmentationUpidType = bitn.AsUInt8(8)
 	dscptr.SegmentationUpidLength = bitn.AsUInt8(8)
-	/**
-			        dscptr.SegmentationUpidTypeName, dscptr.SegmentationUpid = UpidDecoder(
-			            bitn, dscptr.SegmentationUpidType, dscptr.SegmentationUpidLength
-			        )
-
-	**/
+	upid, ok := upidMap[dscptr.SegmentationUpidType]
+	if ok {
+		dscptr.SegmentationUpid = upid
+		dscptr.SegmentationUpid.Decode(bitn, dscptr.SegmentationUpidLength)
+	}
 	dscptr.SegmentationTypeID = bitn.AsUInt8(8)
 
 	mesg, ok := table22[dscptr.SegmentationTypeID]
