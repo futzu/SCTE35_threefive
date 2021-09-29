@@ -2,93 +2,67 @@ package threefive
 
 import "github.com/futzu/bitter"
 
-/**
-def upid_decoder(bitbin, upid_type, upid_length):
-    """
-    upid_decoder
-    decodes segmentation_upids by type,
-    from a bitbin instance.
 
-    Used by the SegmentationDescriptor class.
-    """
-
- **/
-var upid_map = map[uint8]map[string]Upid{
-	0x01: {"Deprecated": &URI{}},
-	0x02: {"Deprecated": &URI{}},
-	0x03: {"AdID": &URI{}},
-	//  0x04: ["UMID", _decode_umid],
-	0x05: {"ISAN": &Isan{}},
-	0x06: {"ISAN": &Isan{}},
-	0x07: {"TID": &URI{}},
-	0x08: {"AiringID": &AirID{}},
-	0x09: {"ADI": &URI{}},
-	//   0x0A: ["EIDR", _decode_eidr],
-	0x0B: {"ATSC": &ATSC{}},
-	0x0C: {"MPU": &MPU{}},
-	//    0x0D: ["MID", _decode_mid],
-	0x0E: {"ADS Info": &URI{}},
-	0x0F: {"URI": &URI{}},
-	0x10: {"UUID": &URI{}},
-	0xFD: {"Unknown": &URI{}},
+var upidMap = map[uint8]Upid{
+	0x01: &URI{Name: "Deprecated"},
+	0x02: &URI{Name: "Deprecated"},
+	0x03: &URI{Name: "AdID"},
+	// 0x04: ["UMID", _decode_umid],
+	0x05: &Isan{Name: "ISAN"},
+	0x06: &Isan{Name: "ISAN"},
+	0x07: &URI{Name: "TID"},
+	0x08: &AirID{Name: "AiringID"},
+	0x09: &URI{Name: "ADI"},
+	// 0x0A: ["EIDR", _decode_eidr],
+	0x0B: &ATSC{Name: "ATSC"},
+	0x0C: &MPU{Name: "MPU"},
+	//  0x0D: ["MID", _decode_mid],
+	0x0E: &URI{Name: "ADS Info"},
+	0x0F: &URI{Name: "URI"},
+	0x10: &URI{Name: "UUID"},
+	0xFD: &URI{Name: "Unknown"},
 }
-
-/**
-    if upid_type not in upid_map.keys():
-        upid_type = 0xFD
-    return upid_map[upid_type][0], upid_map[upid_type][1](bitbin, upid_length)
-**/
 
 // Upid is the interface for Segmentation Upida
 type Upid interface {
-	Decode(bitn *bitter.Bitn, upidtype string, name string, upidlen uint)
+	Decode(bitn *bitter.Bitn, upidlen uint8)
 }
 
 // AirID Segmentation Upid
 type AirID struct {
-	UpidType string
-	Name     string
-	Value    string
+	Name  string
+	Value string
 }
 
 // Decode for AirId struct
-func (upid *AirID) Decode(bitn *bitter.Bitn, upidtype string, name string, upidlen uint) {
-	upid.UpidType = upidtype
-	upid.Name = name
-	upid.Value = bitn.AsHex(upidlen << 3)
+func (upid *AirID) Decode(bitn *bitter.Bitn, upidlen uint8) {
+	upid.Value = bitn.AsHex(uint(upidlen << 3))
 }
 
 // Isan Segmentation Upid
 type Isan struct {
-	UpidType string
-	Name     string
-	Value    string
+	Name  string
+	Value string
 }
 
 // Decode for Isan Upid struct
-func (upid *Isan) Decode(bitn *bitter.Bitn, upidtype string, name string, upidlen uint) {
-	upid.UpidType = upidtype
-	upid.Name = name
-	upid.Value = bitn.AsAscii(upidlen << 3)
+func (upid *Isan) Decode(bitn *bitter.Bitn, upidlen uint8) {
+	upid.Value = bitn.AsAscii(uint(upidlen << 3))
 }
 
 // URI Segmentation Upid
 type URI struct {
-	UpidType string
-	Name     string
-	Value    string
+	Name  string
+	Value string
 }
 
 // Decode for URI struct
-func (upid *URI) Decode(bitn *bitter.Bitn, upidtype string, name string, upidlen uint) {
-	upid.UpidType = upidtype
-	upid.Name = name
-	upid.Value = bitn.AsAscii(upidlen << 3)
+func (upid *URI) Decode(bitn *bitter.Bitn, upidlen uint8) {
+	upid.Value = bitn.AsAscii(uint(upidlen << 3))
 }
 
 // ATSC Segmentation Upid
 type ATSC struct {
-	UpidType  string
 	Name      string
 	TSID      uint64
 	Reserved  uint8
@@ -98,20 +72,18 @@ type ATSC struct {
 }
 
 // Decode for ATSC struct
-func (upid *ATSC) Decode(bitn *bitter.Bitn, upidtype string, name string, upidlen uint) {
-	upid.UpidType = upidtype
-	upid.Name = name
+func (upid *ATSC) Decode(bitn *bitter.Bitn, upidlen uint8) {
 	upid.TSID = bitn.AsUInt64(16)
 	upid.Reserved = bitn.AsUInt8(2)
 	upid.EndOfDay = bitn.AsUInt8(5)
 	upid.UniqueFor = bitn.AsUInt64(9)
-	upid.ContentID = bitn.AsAscii(((upidlen - 4) << 3))
+	upid.ContentID = bitn.AsAscii(uint((upidlen - 4) << 3))
 }
 
+// EIDR Segmentation Upid
 type EIDR struct {
-	UpidType string
-	Name     string
-	Value    string
+	Name  string
+	Value string
 }
 
 /**
@@ -127,19 +99,18 @@ def _decode_eidr(bitbin, upid_length):
     return f"10.{pre}/{'-'.join(post)}"
 **/
 
+// MPU Segmentation Upid
 type MPU struct {
-	UpidType         string
 	Name             string
 	FormatIdentifier string
 	PrivateData      string
 }
 
-func (upid *MPU) Decode(bitn *bitter.Bitn, upidtype string, name string, upidlen uint) {
-	upid.UpidType = upidtype
-	upid.Name = name
+// Decode interface for MPU
+func (upid *MPU) Decode(bitn *bitter.Bitn, upidlen uint8) {
 	ulb := upidlen << 3
 	upid.FormatIdentifier = bitn.AsHex(32)
-	upid.PrivateData = bitn.AsAscii(ulb - 32)
+	upid.PrivateData = bitn.AsAscii(uint(ulb - 32))
 
 }
 
