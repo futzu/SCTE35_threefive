@@ -33,7 +33,6 @@ var upidMap = map[uint8]Upid{
 	0xFD: &URI{Name: "Unknown"},
 }
 
-
 // Upid is the interface for Segmentation Upida
 type Upid interface {
 	Decode(bitn *bitter.Bitn, upidlen uint8)
@@ -96,7 +95,6 @@ type EIDR struct {
 	Name  string
 	Value string
 }
-
 
 // MPU Segmentation Upid
 type MPU struct {
