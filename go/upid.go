@@ -2,7 +2,17 @@ package threefive
 
 import "github.com/futzu/bitter"
 
+/**
+def upid_decoder(bitbin, upid_type, upid_length):
+    """
+    upid_decoder
+    decodes segmentation_upids by type,
+    from a bitbin instance.
 
+    Used by the SegmentationDescriptor class.
+    """
+
+ **/
 var upidMap = map[uint8]Upid{
 	0x01: &URI{Name: "Deprecated"},
 	0x02: &URI{Name: "Deprecated"},
@@ -22,6 +32,7 @@ var upidMap = map[uint8]Upid{
 	0x10: &URI{Name: "UUID"},
 	0xFD: &URI{Name: "Unknown"},
 }
+
 
 // Upid is the interface for Segmentation Upida
 type Upid interface {
@@ -58,7 +69,7 @@ type URI struct {
 
 // Decode for URI struct
 func (upid *URI) Decode(bitn *bitter.Bitn, upidlen uint8) {
-	upid.Value = bitn.AsAscii(uint(upidlen << 3))
+	upid.Value = bitn.AsAscii(uint(upidlen) << 3)
 }
 
 // ATSC Segmentation Upid
@@ -86,18 +97,6 @@ type EIDR struct {
 	Value string
 }
 
-/**
-def _decode_eidr(bitbin, upid_length):
-    if upid_length < 12:
-        raise Exception(f"upid_length is {upid_length} should be 12 bytes")
-    pre = bitbin.as_int(16)
-    post = []
-    bit_count = 80
-    while bit_count:
-        bit_count -= 16
-        post.append(bitbin.as_hex(16)[2:])
-    return f"10.{pre}/{'-'.join(post)}"
-**/
 
 // MPU Segmentation Upid
 type MPU struct {
@@ -108,19 +107,8 @@ type MPU struct {
 
 // Decode interface for MPU
 func (upid *MPU) Decode(bitn *bitter.Bitn, upidlen uint8) {
-	ulb := upidlen << 3
+	ulb := uint(upidlen) << 3
 	upid.FormatIdentifier = bitn.AsHex(32)
-	upid.PrivateData = bitn.AsAscii(uint(ulb - 32))
+	upid.PrivateData = bitn.AsAscii(ulb - 32)
 
 }
-
-/**
-def _decode_umid(bitbin, upid_length):
-    chunks = []
-    ulb = upid_length << 3
-    while ulb:
-        chunks.append(bitbin.as_hex(32).split("x", 1)[1])
-        ulb -= 32
-    return ".".join(chunks)
-
-**/
