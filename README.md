@@ -3,6 +3,7 @@
 
 ##### threefive is the #1 SCTE35 Parser in the World. 
 
+
 * All 2020 SCTE-35 [Commands](https://github.com/futzu/threefive/blob/master/threefive/commands.py), [Descriptors](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py),and [Upids](https://github.com/futzu/threefive/blob/master/threefive/upid.py) are fully supported.
 
 * [Mpegts is Well Supported](#stream-class) in the Stream class.
@@ -67,7 +68,6 @@ pypy3 -m pip install threefive
 ### Versions and Releases
 
  >  __Release__ versions are  __odd__.
-  
   > __Unstable__ testing versions are __even__.
 
 > ```threefive.version()```   returns the version as a string.
@@ -84,8 +84,6 @@ pypy3 -m pip install threefive
 ```Base64```, ```Binary```, 
 > ```Hex Strings```,```Hex literals```, ```Integers```, ```Mpegts files``` and ```Mpegts HTTP/HTTPS Streams```
 > 
-
-
 
 > __SCTE-35__ data can be __parsed__ 
 > with just __one function call__.
