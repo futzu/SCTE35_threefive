@@ -40,17 +40,19 @@ func (cue *Cue) dscptrLoop(bitn *bitter.Bitn) {
 	var i uint64
 	i = 0
 	for i < cue.InfoSection.DescriptorLoopLength {
+        fmt.Printf("%v %v", i, cue.InfoSection.DescriptorLoopLength)
+
 		tag := bitn.AsUInt8(8)
-		length := bitn.AsUInt8(8)
-		id := bitn.AsAscii(32)
+		length := bitn.AsUInt64(8)
+        i += length+2
+
+        var sd Descriptor
 		sd, ok := dscptrMap[tag]
 		if ok {
-			var Dscptr Descriptor
-			Dscptr = sd
-			Dscptr.MetaData(tag, length, id)
-			Dscptr.Decode(bitn)
-			i += uint64(length) + 2
-			cue.Descriptors = append(cue.Descriptors, Dscptr)
+			//var Dscptr Descriptor
+			//Dscptr = sd
+			sd.Decode(bitn,tag,uint8(length))
+			cue.Descriptors = append(cue.Descriptors, sd)
 		}
 	}
 }
