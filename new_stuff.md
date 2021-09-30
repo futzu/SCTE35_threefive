@@ -1,5 +1,5 @@
 ## ```New Cool Stuff```
-When new features are added to threefive. I wait at least a release before I announce them.
+* New stuff in threefive
 
 ```py3
 a@fumatica:~/threefive$ pypy3
