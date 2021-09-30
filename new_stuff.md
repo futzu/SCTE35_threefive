@@ -1,13 +1,75 @@
 ## ```New Cool Stuff```
 When new features are added to threefive. I wait at least a release before I announce them.
+
 ```py3
 a@fumatica:~/threefive$ pypy3
 Python 3.7.10 (7.3.5+dfsg-2, Jun 03 2021, 20:39:46)
 [PyPy 7.3.5 with GCC 10.2.1 20210110] on linux
 Type "help", "copyright", "credits" or "license" for more information.
->>>> from threefive import smoke, Stream, decode
+>>>> from threefive import Segment, Stream, decode, smoke
 ```
 ___
+
+#### ```threefive.Segment class```
+```py3
+
+>>>> help(Segment)
+
+class Segment(builtins.object)
+ |  Segment(seg_uri, key_uri=None, iv=None)
+ |  
+ |  The Segment class is used to process
+ |  hls mpegts segments for segment start time
+ |  and SCTE35 cues.
+ |  local and http(s) segments are supported
+ |  aes encoded segments are decrypted.
+ |  Segment.start is the first timestamp found
+ |  in the segment.
+ |  Segment.cues is a list of Base64 encoded
+ |  SCTE35 cues found in the segment.
+ |  
+ |  Methods defined here:
+ |  
+ |  __init__(self, seg_uri, key_uri=None, iv=None)
+ |  
+ |  add_cue(self, cue)
+ |      add_cue is passed to a Stream instance
+ |      to collect SCTE35 cues.
+ |  
+ |  decode(self)
+ |      decode a mpegts hls segment for start time
+ |      and scte35 cues.
+ |  
+ |  ----------------------------------------------------------------------
+
+from threefive import Segment
+
+>>>> uri = "https://example.com/1.ts"
+>>>> seg = Segment(uri)
+>>>> seg.decode()
+>>>> seg.start
+89715.976944
+>>>> seg.cues
+['/DARAAAAAAAAAP/wAAAAAHpPv/8=', '/DAvAAAAAAAAAP/wFAUAAAKWf+//4WoauH4BTFYgAAEAAAAKAAhDVUVJAAAAAOv1oqc=']
+
+# For aes encrypted files
+
+>>>> key = "https://example.com/aes.key"
+>>>> IV="0x998C575D24F514AEC84EDC5CABCCDB81"
+>>>> uri = "https://example.com/aes-1.ts"
+
+>>>> seg = Segment(uri,key_uri=key, iv=IV)
+>>>> seg.decode()
+>>>> seg.start
+89715.976944
+>>>> seg.cues
+['/DARAAAAAAAAAP/wAAAAAHpPv/8=', '/DAvAAAAAAAAAP/wFAUAAAKWf+//4WoauH4BTFYgAAEAAAAKAAhDVUVJAAAAAOv1oqc=']
+
+
+```
+
+___
+
 ####  ```threefive.Stream.strip_scte35()```
 
 Folks have been asking for a way to strip out SCTE-35 Cues in realtime. 
