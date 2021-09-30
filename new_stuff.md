@@ -41,6 +41,8 @@ class Segment(builtins.object)
  |      and scte35 cues.
  |  
  |  ----------------------------------------------------------------------
+ |   Example:
+ |
  |      from threefive import Segment
  |  
  |      >>>> uri = "https://example.com/1.ts"
