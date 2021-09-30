@@ -47,7 +47,7 @@ class Stream:
         """
         self._tsdata = tsdata
         self.show_null = show_null
-        self._start = False
+        self.show_start = False
         self.info = None
         self.the_program = None
         self._pids = {"pcr": set(), "pmt": set(), "scte35": set()}
@@ -164,7 +164,7 @@ class Stream:
         displays streams that will be
         parsed for SCTE-35.
         """
-        self._start = True
+        self.show_start = True
         start = self.decode(func=False)
         if start:
             return start
@@ -252,7 +252,7 @@ class Stream:
                 if pid in self._pid_prgm:
                     prgm = self._pid_prgm[pid]
                 self._prgm_pcr[prgm] = pcr
-                if self._start:
+                if self.show_start:
                     return round((pcr / 90000.0), 6)
 
     def _parse(self, pkt):
