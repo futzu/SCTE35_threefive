@@ -11,6 +11,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 ___
 
 #### ```threefive.Segment class```
+* Requires threefive version 2.3.02+
 ```py3
 
 >>>> help(Segment)
