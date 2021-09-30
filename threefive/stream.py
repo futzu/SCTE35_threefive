@@ -261,8 +261,6 @@ class Stream:
             self._chk_pat_payload(pkt, pid)
         if pid in self._pids["pmt"]:
             self._chk_pmt_payload(pkt, pid)
-        # if self.info:
-        #   return None
         if pid in self._pid_prgm:
             pcr = self._parse_pcr(pkt, pid)
             if pcr:
