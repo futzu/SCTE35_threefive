@@ -15,7 +15,7 @@
 
  * [Your feedback is welcome and encouraged.](https://github.com/futzu/threefive/issues)
  
-* [Breaking News...](https://github.com/futzu/threefive/blob/master/new_stuff.md)  
+* [New Stuff in threefive...](https://github.com/futzu/threefive/blob/master/new_stuff.md)  
 
 
 
