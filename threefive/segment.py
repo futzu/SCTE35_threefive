@@ -18,7 +18,7 @@ class Segment:
     aes encoded segments are decrypted.
     Segment.start is the first timestamp found
     in the segment.
-    Segment.cues is a list of Base64 encoded
+    Segment.cues is a list of
     SCTE35 cues found in the segment.
 
     Example:
@@ -30,7 +30,7 @@ class Segment:
         >>>> seg.decode()
         >>>> seg.start
         89715.976944
-        >>>> seg.cues
+        >>>> [cue.encode() for cue in cues]
         ['/DARAAAAAAAAAP/wAAAAAHpPv/8=', '/DAvAAAAAAAAAP/wFAUAAAKWf+//4WoauH4BTFYgAAEAAAAKAAhDVUVJAAAAAOv1oqc=']
 
         # For aes encrypted files
@@ -43,9 +43,10 @@ class Segment:
         >>>> seg.decode()
         >>>> seg.start
         89715.976944
-        >>>> seg.cues
-        ['/DARAAAAAAAAAP/wAAAAAHpPv/8=', '/DAvAAAAAAAAAP/wFAUAAAKWf+//4WoauH4BTFYgAAEAAAAKAAhDVUVJAAAAAOv1oqc=']
+        >>>> {cue.packet_data.pcr:cue.encode() for cue in seg.cues}
 
+       { 89718.451333: '/DARAAAAAAAAAP/wAAAAAHpPv/8=',
+       89730.281789: '/DAvAAAAAAAAAP/wFAUAAAKWf+//4WoauH4BTFYgAAEAAAAKAAhDVUVJAAAAAOv1oqc='}
 
     """
 
@@ -86,7 +87,7 @@ class Segment:
         add_cue is passed to a Stream instance
         to collect SCTE35 cues.
         """
-        self.cues.append(cue.encode())
+        self.cues.append(cue)
 
     def decode(self):
         """
