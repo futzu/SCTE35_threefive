@@ -41,29 +41,30 @@ class Segment(builtins.object)
  |      and scte35 cues.
  |  
  |  ----------------------------------------------------------------------
-
-from threefive import Segment
-
->>>> uri = "https://example.com/1.ts"
->>>> seg = Segment(uri)
->>>> seg.decode()
->>>> seg.start
-89715.976944
->>>> seg.cues
-['/DARAAAAAAAAAP/wAAAAAHpPv/8=', '/DAvAAAAAAAAAP/wFAUAAAKWf+//4WoauH4BTFYgAAEAAAAKAAhDVUVJAAAAAOv1oqc=']
-
-# For aes encrypted files
-
->>>> key = "https://example.com/aes.key"
->>>> IV="0x998C575D24F514AEC84EDC5CABCCDB81"
->>>> uri = "https://example.com/aes-1.ts"
-
->>>> seg = Segment(uri,key_uri=key, iv=IV)
->>>> seg.decode()
->>>> seg.start
-89715.976944
->>>> seg.cues
-['/DARAAAAAAAAAP/wAAAAAHpPv/8=', '/DAvAAAAAAAAAP/wFAUAAAKWf+//4WoauH4BTFYgAAEAAAAKAAhDVUVJAAAAAOv1oqc=']
+ |      from threefive import Segment
+ |  
+ |      >>>> uri = "https://example.com/1.ts"
+ |      >>>> seg = Segment(uri)
+ |      >>>> seg.decode()
+ |      >>>> seg.start
+ |      89715.976944
+ |      >>>> [cue.encode() for cue in cues]
+ |      ['/DARAAAAAAAAAP/wAAAAAHpPv/8=', '/DAvAAAAAAAAAP/wFAUAAAKWf+//4WoauH4BTFYgAAEAAAAKAAhDVUVJAAAAAOv1oqc=']
+ |  
+ |      # For aes encrypted files
+ |  
+ |      >>>> key = "https://example.com/aes.key"
+ |      >>>> IV="0x998C575D24F514AEC84EDC5CABCCDB81"
+ |      >>>> uri = "https://example.com/aes-1.ts"
+ |  
+ |      >>>> seg = Segment(uri,key_uri=key, iv=IV)
+ |      >>>> seg.decode()
+ |      >>>> seg.start
+ |      89715.976944
+ |      >>>> {cue.packet_data.pcr:cue.encode() for cue in seg.cues}
+ |     
+ |     { 89718.451333: '/DARAAAAAAAAAP/wAAAAAHpPv/8=',
+ |     89730.281789: '/DAvAAAAAAAAAP/wFAUAAAKWf+//4WoauH4BTFYgAAEAAAAKAAhDVUVJAAAAAOv1oqc='}
 
 
 ```
