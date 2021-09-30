@@ -1,13 +1,14 @@
 ### [threefive](https://github.com/futzu/SCTE35-threefive/) 
 
 * [base.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/base.py)   __SCTE35Base__ class is the __Super__ class for all __Splice Commands and Descriptors__. 
-* [bitn.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/bitn.py)   Thr __threefive.bitn.BitBin__ class for bitslicing. 
+* [bitn.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/bitn.py)   The __threefive.bitn.BitBin and threefive.bitn.NBin__ class for bitslicing. 
 * [commands.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py)  All __Splice Command__ classes.
 * [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)   The __threefive.Cue__ class.
 * [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)   The __threefive.decode()__ function.
 * [descriptors.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)   All __Splice Descriptor__ classes.
 * [packetdata.py](https://github.com/futzu/threefive/blob/master/threefive/packetdata.py) The __threefive.PacketData__ class.
-* [section.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)   The __SpliceInfoSection__ class.
+* [section.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)   The __threefive.SpliceInfoSection__ class.
+* [segment.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/segment.py) The __threefive.Segment__ class.
 * [segmentation.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/segmentation.py)   The lookup tables for SegmentationDescriptor class values.
 * [smoketest.py](https://github.com/futzu/threefive/blob/master/threefive/smoketest.py) The __threefive.smoke()__ function runs ten quick tests to verify threefive is working correctly.
 * [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)   The __threefive.Stream__ class.
