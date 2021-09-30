@@ -26,7 +26,7 @@ class Segment(builtins.object)
  |  aes encoded segments are decrypted.
  |  Segment.start is the first timestamp found
  |  in the segment.
- |  Segment.cues is a list of Base64 encoded
+ |  Segment.cues is a list of 
  |  SCTE35 cues found in the segment.
  |  
  |  Methods defined here:
