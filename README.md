@@ -439,8 +439,36 @@ ___
 > 
 > __please open an issue__. 
 
-> If you want help resolving a video parsing issue, __a sample of the video is required__ .
+---
 
+
+
+
+
+
+*
+*
+*
+*
+*
+
+*
+*
+*
+*
+*
+
+*
+*
+*
+*
+*
+
+*
+*
+*
+*
+*
 
 
 
