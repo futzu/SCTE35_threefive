@@ -9,9 +9,9 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="threefive",
     version=threefive.version(),
-    author="Adrian Thiele, Vlad Doster, James Fining, Richard Van Dijk and my dog, Jesse",
+    author="Adrian Thiele, Vlad Doster, James Fining, Richard Van Dijk",
     author_email="spam@so.slo.me",
-    description="Southern Fried SCTE-35.",
+    description="Pythonic SCTE-35.",
     long_description=readme,
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/threefive",
