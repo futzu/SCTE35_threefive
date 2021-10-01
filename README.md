@@ -3,14 +3,13 @@
 
 ### threefive is the [#1 SCTE35 Parser in the World.](https://github.com/futzu/scte35-threefive/blob/master/README.md#according-to-my-mom-and-my-girlfriend) 
 
+* threefive is a python3 SCTE35 lib. 
+
 
 * All 2020 SCTE-35 [Commands](https://github.com/futzu/threefive/blob/master/threefive/commands.py), [Descriptors](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py),and [Upids](https://github.com/futzu/threefive/blob/master/threefive/upid.py) are fully supported.
 
 * [Mpegts is Well Supported](#stream-class) in the Stream class.
-
-* Code so clean, you could eat off of it. 
-     * Cyclomatic Complexity Score: __A__ (1.9723502304147464)
-     * Pylint Score:  __9.84/10__ 
+ 
 
 *  ```Multicast?```   ```HLS?```  ```Custom Upid Handling?```  ```Frame Accurate Preroll timings?``` [... Oh Yeah.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 
