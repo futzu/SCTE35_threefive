@@ -139,7 +139,7 @@ def _decode_mid(bitbin, upid_length):
         ulb -= 8
         upid_type_name, segmentation_upid = upid_decoder(bitbin, upid_type, upid_length)
         mid_upid = {
-            "upid_type": hex(upid_type),
+            "upid_type": upid_type,
             "upid_type_name": upid_type_name,
             "upid_length": upid_length,
             "segmentation_upid": segmentation_upid,
@@ -151,7 +151,7 @@ def _decode_mid(bitbin, upid_length):
 
 def _encode_mid(nbin, seg_upid):
     for mid_upid in seg_upid:
-        nbin.add_hex(mid_upid["upid_type"], 8)
+        nbin.add_int(mid_upid["upid_type"], 8)
         nbin.add_int(mid_upid["upid_length"], 8)
         upid_encoder(
             nbin,

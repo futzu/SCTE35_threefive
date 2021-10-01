@@ -65,7 +65,7 @@ class Cue(SCTE35Base):
         self.descriptors = []
         # self.bites after_info section decoding
         after_info = self.mk_info_section(self.bites)
-        self.bites = self.bites[0 : self.info_section.section_length + 3]
+        # self.bites = self.bites[0 : self.info_section.section_length + 3]
         if after_info:
             after_cmd = self._set_splice_command(after_info)
             if after_cmd:

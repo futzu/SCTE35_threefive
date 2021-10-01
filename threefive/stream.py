@@ -260,9 +260,7 @@ class Stream:
                 pcr |= pkt[8] << 9
                 pcr |= pkt[9] << 1
                 pcr |= pkt[10] >> 7
-                prgm = 1
-                if pid in self._pid_prgm:
-                    prgm = self._pid_prgm[pid]
+                prgm = self._pid_prgm[pid]
                 self._prgm_pcr[prgm] = pcr
                 if self.show_start:
                     return round((pcr / 90000.0), 6)
@@ -277,8 +275,7 @@ class Stream:
             pcr = self._parse_pcr(pkt, pid)
             if pcr:
                 return pcr
-            if self._parse_pusi(pkt[1]):
-                self._parse_pts(pkt, pid)
+            self._parse_pts(pkt, pid)
             if pid in self._pids["scte35"]:
                 return self._parse_scte35(pkt, pid)
 
