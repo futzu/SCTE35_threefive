@@ -1,7 +1,7 @@
 
  
 
-##### threefive is the #1 SCTE35 Parser in the World. [***](#-according-to-my-mom-and-my-girlfriend) 
+### threefive is the [#1 SCTE35 Parser in the World.](#-according-to-my-mom-and-my-girlfriend) 
 
 
 * All 2020 SCTE-35 [Commands](https://github.com/futzu/threefive/blob/master/threefive/commands.py), [Descriptors](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py),and [Upids](https://github.com/futzu/threefive/blob/master/threefive/upid.py) are fully supported.
@@ -442,4 +442,52 @@ ___
 > If you want help resolving a video parsing issue, __a sample of the video is required__ .
 
 
-###### *** (According to my mom and my girlfriend)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+######  (According to my mom and my girlfriend)
