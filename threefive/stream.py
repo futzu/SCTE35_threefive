@@ -4,6 +4,7 @@ Mpeg-TS Stream parsing class Stream
 
 import sys
 from functools import partial
+import urllib
 from .cue import Cue
 from .packetdata import PacketData
 
@@ -33,19 +34,20 @@ class Stream:
 
     def __init__(self, tsdata, show_null=True):
         """
-        tsdata is an open file handle
+        tsdata is an file or http/https url
         set show_null=False to exclude Splice Nulls
 
         Use like...
 
         from threefive import Stream
-
-        with open("vid.ts",'rb') as tsdata:
-            strm = Stream(tsdata,show_null=False)
-            strm.decode()
+        strm = Stream("vid.ts",show_null=False)
+        strm.decode()
 
         """
-        self._tsdata = tsdata
+        if isinstance(tsdata, str):
+            self._tsdata = self._reader(tsdata)
+        else:
+            self._tsdata = tsdata
         self.show_null = show_null
         self.show_start = False
         self.info = None
@@ -60,6 +62,12 @@ class Stream:
 
     def __repr__(self):
         return str(vars(self))
+
+    @staticmethod
+    def _reader(uri):
+        if uri.startswith("http"):
+            return urllib.request.urlopen(uri)
+        return open(uri, "rb")
 
     def _find_start(self):
         sync_byte = 0x47
@@ -85,6 +93,7 @@ class Stream:
                     if not func:
                         return cue
                     func(cue)
+        self._tsdata.close()
         return None
 
     def _mk_pkts(self, chunk):
@@ -104,6 +113,7 @@ class Stream:
                 partial(self._tsdata.read, (self._PACKET_SIZE * pkts)), b""
             ):
                 [func(cue) for cue in self._mk_pkts(chunk) if cue]
+        self._tsdata.close()
 
     def decode_next(self):
         """
@@ -135,6 +145,7 @@ class Stream:
                 if cue:
                     func(cue)
                 sys.stdout.buffer.write(pkt)
+        self._tsdata.close()
 
     def strip_scte35(self, func=show_cue_stderr):
         """
@@ -150,6 +161,7 @@ class Stream:
                     func(cue)
                 else:
                     sys.stdout.buffer.write(pkt)
+        self._tsdata.close()
 
     def show(self):
         """
