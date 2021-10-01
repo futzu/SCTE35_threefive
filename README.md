@@ -8,6 +8,9 @@
 
 * [Mpegts is Well Supported](#stream-class) in the Stream class.
 
+* Code so clean, you could eat off of it. 
+     * Cyclomatic Complexity Score: __A__ (1.9723502304147464)
+     * Pylint Score:  __9.84/10__ 
 
 *  ```Multicast?```   ```HLS?```  ```Custom Upid Handling?```  ```Frame Accurate Preroll timings?``` [... Oh Yeah.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 
