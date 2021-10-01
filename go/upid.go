@@ -2,46 +2,33 @@ package threefive
 
 import "github.com/futzu/bitter"
 
-/**
-def upid_decoder(bitbin, upid_type, upid_length):
-    """
-    upid_decoder
-    decodes segmentation_upids by type,
-    from a bitbin instance.
-
-    Used by the SegmentationDescriptor class.
-    """
-
- **/
 
 func UpidDecoder(upidType uint8) Upid {
 
-	var u Upid
 	switch upidType {
 	case 0x01, 0x02:
-		u = &URI{Name: "Deprecated"}
+		return &URI{Name: "Deprecated"}
 	case 0x03:
-		u = &URI{Name: "AdID"}
+		return &URI{Name: "AdID"}
 	case 0x05, 0x06:
-		u = &Isan{Name: "ISAN"}
+		return &Isan{Name: "ISAN"}
 	case 0x07:
-		u = &URI{Name: "TID"}
+		return &URI{Name: "TID"}
 	case 0x08:
-		u = &AirID{Name: "AiringID"}
+		return &AirID{Name: "AiringID"}
 	case 0x09:
-		u = &URI{Name: "ADI"}
+		return &URI{Name: "ADI"}
 	case 0x0b:
-		u = &ATSC{Name: "ATSC"}
+		return  &ATSC{Name: "ATSC"}
 	case 0x0c:
-		u = &MPU{Name: "MPU"}
+		return &MPU{Name: "MPU"}
 	case 0x0e:
-		u = &URI{Name: "ADS Info"}
+		return &URI{Name: "ADS Info"}
 	case 0x0f:
-		u = &URI{Name: "URI"}
+		return &URI{Name: "URI"}
 	case 0x10:
-		u = &URI{Name: "UUID"}
+		return &URI{Name: "UUID"}
 	}
-	return u
 }
 
 // Upid is the interface for Segmentation Upida
