@@ -37,20 +37,39 @@ func (cue *Cue) Decode(bites []byte) bool {
 
 // DscptrLoop loops over any splice descriptors
 func (cue *Cue) dscptrLoop(bitn *bitter.Bitn) {
+	dtags := []uint8{0, 1, 2, 3, 4}
 	var i uint64
 	i = 0
-	for i < cue.InfoSection.DescriptorLoopLength {
-		fmt.Printf("%v %v", i, cue.InfoSection.DescriptorLoopLength)
+	l := cue.InfoSection.DescriptorLoopLength
+	for i < l {
+		//fmt.Printf("%v -- %v\n", i, cue.InfoSection.DescriptorLoopLength)
 
 		tag := bitn.AsUInt8(8)
+		i += 1
 		length := bitn.AsUInt64(8)
-		i += length + 2
+		i += 1
+		i += length
+		if isIn8(dtags, tag) {
 
-		var sd Descriptor
-		sd, ok := dscptrMap[tag]
-		if ok {
-			//var Dscptr Descriptor
-			//Dscptr = sd
+			var sd Descriptor
+
+			if tag == 0 {
+				sd = &AvailDscptr{}
+			}
+			if tag == 1 {
+				sd = &DTMFDscptr{}
+			}
+			if tag == 2 {
+				sd = &SegmentDscptr{}
+			}
+			if tag == 3 {
+				sd = &TimeDscptr{}
+			}
+			if tag == 4 {
+				sd = &AudioDscptr{}
+
+			}
+
 			sd.Decode(bitn, tag, uint8(length))
 			cue.Descriptors = append(cue.Descriptors, sd)
 		}

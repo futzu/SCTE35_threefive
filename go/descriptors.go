@@ -7,14 +7,6 @@ type Descriptor interface {
 	Decode(bitn *bitter.Bitn, tag uint8, length uint8)
 }
 
-// DscptrMap maps Splice Descriptor Tags to a Descriptor interface
-var dscptrMap = map[uint8]Descriptor{
-	0: &AvailDscptr{},
-	1: &DTMFDscptr{},
-	2: &SegmentDscptr{},
-	3: &TimeDscptr{},
-	4: &AudioDscptr{}}
-
 // AudioCmpt is a struct for AudioDscptr Components
 type AudioCmpt struct {
 	ComponentTag  uint8
@@ -203,9 +195,9 @@ func (dscptr *SegmentDscptr) decodeSegmentation(bitn *bitter.Bitn) {
 	}
 	dscptr.SegmentationUpidType = bitn.AsUInt8(8)
 	dscptr.SegmentationUpidLength = bitn.AsUInt8(8)
-	upid, ok := upidMap[dscptr.SegmentationUpidType]
-	if ok {
-		dscptr.SegmentationUpid = upid
+	utypes := []uint8{0x01, 0x02, 0x03, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0b, 0x0c, 0x0e, 0x0f, 0x10}
+	if isIn8(utypes, dscptr.SegmentationUpidType) {
+		dscptr.SegmentationUpid = UpidDecoder(dscptr.SegmentationUpidType)
 		dscptr.SegmentationUpid.Decode(bitn, dscptr.SegmentationUpidLength)
 	}
 	dscptr.SegmentationTypeID = bitn.AsUInt8(8)
@@ -215,5 +207,6 @@ func (dscptr *SegmentDscptr) decodeSegmentation(bitn *bitter.Bitn) {
 		dscptr.SegmentationMessage = mesg
 
 	}
+	bitn.Forward(16)
 
 }

@@ -13,24 +13,35 @@ def upid_decoder(bitbin, upid_type, upid_length):
     """
 
  **/
-var upidMap = map[uint8]Upid{
-	0x01: &URI{Name: "Deprecated"},
-	0x02: &URI{Name: "Deprecated"},
-	0x03: &URI{Name: "AdID"},
-	// 0x04: ["UMID", _decode_umid],
-	0x05: &Isan{Name: "ISAN"},
-	0x06: &Isan{Name: "ISAN"},
-	0x07: &URI{Name: "TID"},
-	0x08: &AirID{Name: "AiringID"},
-	0x09: &URI{Name: "ADI"},
-	// 0x0A: ["EIDR", _decode_eidr],
-	0x0B: &ATSC{Name: "ATSC"},
-	0x0C: &MPU{Name: "MPU"},
-	//  0x0D: ["MID", _decode_mid],
-	0x0E: &URI{Name: "ADS Info"},
-	0x0F: &URI{Name: "URI"},
-	0x10: &URI{Name: "UUID"},
-	0xFD: &URI{Name: "Unknown"},
+
+func UpidDecoder(upidType uint8) Upid {
+
+	var u Upid
+	switch upidType {
+	case 0x01, 0x02:
+		u = &URI{Name: "Deprecated"}
+	case 0x03:
+		u = &URI{Name: "AdID"}
+	case 0x05, 0x06:
+		u = &Isan{Name: "ISAN"}
+	case 0x07:
+		u = &URI{Name: "TID"}
+	case 0x08:
+		u = &AirID{Name: "AiringID"}
+	case 0x09:
+		u = &URI{Name: "ADI"}
+	case 0x0b:
+		u = &ATSC{Name: "ATSC"}
+	case 0x0c:
+		u = &MPU{Name: "MPU"}
+	case 0x0e:
+		u = &URI{Name: "ADS Info"}
+	case 0x0f:
+		u = &URI{Name: "URI"}
+	case 0x10:
+		u = &URI{Name: "UUID"}
+	}
+	return u
 }
 
 // Upid is the interface for Segmentation Upida
