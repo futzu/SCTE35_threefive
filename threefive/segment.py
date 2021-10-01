@@ -1,7 +1,7 @@
 """
 The threefive.Segment class
 """
-
+import os
 import urllib
 
 import pyaes
@@ -31,7 +31,8 @@ class Segment:
         >>>> seg.start
         89715.976944
         >>>> [cue.encode() for cue in cues]
-        ['/DARAAAAAAAAAP/wAAAAAHpPv/8=', '/DAvAAAAAAAAAP/wFAUAAAKWf+//4WoauH4BTFYgAAEAAAAKAAhDVUVJAAAAAOv1oqc=']
+        ['/DARAAAAAAAAAP/wAAAAAHpPv/8=',
+        '/DAvAAAAAAAAAP/wFAUAAAKWf+//4WoauH4BTFYgAAEAAAAKAAhDVUVJAAAAAOv1oqc=']
 
         # For aes encrypted files
 
@@ -52,7 +53,6 @@ class Segment:
 
     def __init__(self, seg_uri, key_uri=None, iv=None):
         self.seg_uri = seg_uri
-        self.seg_bites = None
         self.key_uri = key_uri
         self.key = None
         self.iv = None
@@ -63,6 +63,7 @@ class Segment:
             self._aes_decrypt()
         self.cues = []
         self.start = None
+        self.tmp = "tmp"
 
     @staticmethod
     def _reader(uri):
@@ -76,11 +77,10 @@ class Segment:
 
     def _aes_decrypt(self):
         mode = pyaes.AESModeOfOperationCBC(self.key, iv=self.iv)
-        tmp = "tmp"
-        with open(tmp, "wb") as outfile:
+        with open(self.tmp, "wb") as outfile:
             with self._reader(self.seg_uri) as infile:
                 pyaes.decrypt_stream(mode, infile, outfile)
-            self.seg_uri = tmp
+            self.seg_uri = self.tmp
 
     def add_cue(self, cue):
         """
@@ -99,3 +99,4 @@ class Segment:
             self.start = strm.decode_start_time()
             strm.show_start = False
             strm.decode(func=self.add_cue)
+            os.unlink(self.tmp)

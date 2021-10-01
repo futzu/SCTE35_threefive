@@ -57,6 +57,7 @@ def upid_encoder(nbin, upid_type, upid_length, seg_upid):
         0x0B: ["ATSC", _encode_atsc],
         0x09: ["ADI", _encode_uri],
         0x0A: ["EIDR", _encode_eidr],
+        0x0C: ["MPU", _encode_mpu],
         0x0D: ["MID", _encode_mid],
         0x0E: ["ADS Info", _encode_uri],
         0x0F: ["URI", _encode_uri],
@@ -67,7 +68,6 @@ def upid_encoder(nbin, upid_type, upid_length, seg_upid):
         0x05: ["ISAN", _encode_isan],
         0x06: ["ISAN", _encode_isan],
         0x08: ["AiringID", _encode_air_id],
-        0x0C: ["MPU", _encode_mpu],
     }
 
     if upid_type in upid_map:
@@ -170,10 +170,9 @@ def _decode_mpu(bitbin, upid_length):
     return mpu_data
 
 
-def _encode_mpu(nbin, seg_upid, upid_length):
-    ulbits = upid_length << 3
+def _encode_mpu(nbin, seg_upid):
     nbin.add_int(seg_upid["format_identifier"], 32)
-    nbin.add_bites(seg_upid["private_data"])  # , (ulbits - 32))
+    nbin.add_bites(seg_upid["private_data"])
 
 
 def _decode_umid(bitbin, upid_length):

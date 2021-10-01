@@ -26,9 +26,8 @@ def do():
     args = sys.argv[1:]
     for arg in args:
         print(f"file: {arg}")
-        with open(arg, "rb") as vid:
-            strm = Stream(vid, show_null=True)
-            strm.decode_fu(func=show_preroll)
+        strm = Stream(arg, show_null=False)
+        strm.decode_fu(func=show_preroll)
 
 
 if __name__ == "__main__":

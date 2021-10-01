@@ -99,7 +99,6 @@ class AudioDescriptor(SpliceDescriptor):
         self.components.append(comp)
 
     def _encode_comp(self, comp, nbin):
-
         nbin.add_int(comp["component_tag"], 8)
         nbin.add_int(comp["ISO_code="], 24)
         nbin.add_int(comp["bit_stream_mode"], 3)
