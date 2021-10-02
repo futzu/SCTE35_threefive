@@ -283,7 +283,8 @@ ___
 
   * src [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
   * The threefive.__Stream__ class parses SCTE35 messages from a file or stream.
-  * Supports 
+  * Supports
+   * __file and http(s) URIs directly. 
   	* __Multiple Programs__.
   	* __Multiple SCTE35 Streams__.
   	* __Multi-Packet PAT, PMT, and SCTE35 tables__. 
@@ -304,24 +305,29 @@ Method                              | Description
  *  List programs and streams that will be checked for SCTE35 data.
 
 ```python3
->>>> from threefive import Stream, version
->>>> version()
-'2.2.69'
->>>> with open('video.ts','rb') as tsdata:
-....     strm = Stream(tsdata)
-....     strm.show()
-....     
+>>>> from threefive import Stream
+>>>> Stream('https://slo.me/plp0.ts').show()
 
 Program:1030
-        PID: 1034(0x40a) Type: 0x6
-        PID: 1035(0x40b) Type: 0x86 SCTE35
+
+   1031 [0x407] Type: 0x1b   PCR 
+   1032 [0x408] Type: 0x3  
+   1034 [0x40a] Type: 0x6  
+   1035 [0x40b] Type: 0x86   SCTE35 
 
 Program:1100
-        PID: 1104(0x450) Type: 0x6
-        PID: 1105(0x451) Type: 0x86 SCTE35
+
+   1101 [0x44d] Type: 0x1b   PCR 
+   1102 [0x44e] Type: 0x3  
+   1104 [0x450] Type: 0x6  
+   1105 [0x451] Type: 0x86   SCTE35 
 
 Program:1080
-        PID: 1084(0x43c) Type: 0x6
+
+   1081 [0x439] Type: 0x1b   PCR 
+   1082 [0x43a] Type: 0x3  
+   1084 [0x43c] Type: 0x6  
+
 
 ```
 ___
@@ -332,11 +338,7 @@ ___
  ```python3
  import sys
  from threefive import Stream
- 
- if __name__ =='__main__':
-    with open(sys.argv[1],'rb') as tsdata:
-        sp = Stream(tsdata)
-        sp.decode()
+ >>>> Stream('plp0.ts').decode()
 
 ```
 
@@ -355,9 +357,8 @@ def display(cue):
    print(f'{cue.command.name}')
 
 def do():
-   with open(sys.argv[1],'rb') as tsdata:
-    sp = threefive.Stream(tsdata)
-    sp.decode(func = display)       
+   sp = threefive.Stream(tsdata)
+   sp.decode(func = display)       
 
 if __name__ == '__main__':
     do()
@@ -397,9 +398,7 @@ to decode SCTE-35 from packets where program == __the_program__
 
 ```python3
 import threefive
-
-with open('../35.ts','rb') as tsdata:
-    threefive.Stream(tsdata).decode_program(1)
+threefive.Stream('35.ts').decode_program(1)
 ```
 ___
 
@@ -413,10 +412,8 @@ ___
 ```python3
 
 import threefive
-
-with open('vid.ts','rb') as tsdata:
-    sp = threefive.Stream(tsdata)
-    sp.proxy_decode()
+sp = threefive.Stream('https://futzu.com/xaa.ts')
+sp.proxy_decode()
 ```
 
 * Pipe to __mplayer__
@@ -426,7 +423,6 @@ $ python3 proxy.py | mplayer -
 ___
 
 
-#### [Joe Strummer is one of my heroes. ](https://user-images.githubusercontent.com/52701496/130991821-5e5b60d4-ef02-4701-a4df-3fc50ae53326.mp4)
 
 
 ## Issues and Bugs and Feature Requests
