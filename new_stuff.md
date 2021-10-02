@@ -57,7 +57,7 @@ class Segment(builtins.object)
  |      # For aes encrypted files
  |  
  |      >>>> key = "https://example.com/aes.key"
- |      >>>> IV="0x998C575D24F514AEC84EDC5CABCCDB81"
+ |      >>>> IV=0x998C575D24F514AEC84EDC5CABCCDB81   # IV is a Hex Literal or Int.  not Hex String
  |      >>>> uri = "https://example.com/aes-1.ts"
  |  
  |      >>>> seg = Segment(uri,key_uri=key, iv=IV)
@@ -104,8 +104,7 @@ from threefive import Stream
 
 def do():
     arg = sys.argv[1]
-    with open(arg,'rb') as vid:
-        Stream(vid).strip_scte35()
+    Stream(arg).strip_scte35()
 
 if __name__ == "__main__":
     do()
