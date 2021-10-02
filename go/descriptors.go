@@ -2,6 +2,29 @@ package threefive
 
 import "github.com/futzu/bitter"
 
+var DescriptorTags = []uint8{0, 1, 2, 3, 4}
+
+func DescriptorIsValid(tag uint8) bool {
+	return isIn8(DescriptorTags, tag)
+}
+
+func DescriptorDecoder(tag uint8) Descriptor {
+	var sd Descriptor
+	switch tag {
+	case 0:
+		sd = &AvailDscptr{}
+	case 1:
+		sd = &DTMFDscptr{}
+	case 2:
+		sd = &SegmentDscptr{}
+	case 3:
+		sd = &TimeDscptr{}
+	case 4:
+		sd = &AudioDscptr{}
+	}
+	return sd
+}
+
 // Descriptor is the interface for all Splice Descriptors
 type Descriptor interface {
 	Decode(bitn *bitter.Bitn, tag uint8, length uint8)
@@ -195,8 +218,7 @@ func (dscptr *SegmentDscptr) decodeSegmentation(bitn *bitter.Bitn) {
 	}
 	dscptr.SegmentationUpidType = bitn.AsUInt8(8)
 	dscptr.SegmentationUpidLength = bitn.AsUInt8(8)
-	utypes := []uint8{0x01, 0x02, 0x03, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0b, 0x0c, 0x0e, 0x0f, 0x10}
-	if isIn8(utypes, dscptr.SegmentationUpidType) {
+	if UpidIsValid(dscptr.SegmentationUpidType) {
 		dscptr.SegmentationUpid = UpidDecoder(dscptr.SegmentationUpidType)
 		dscptr.SegmentationUpid.Decode(bitn, dscptr.SegmentationUpidLength)
 	}

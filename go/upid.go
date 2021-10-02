@@ -14,6 +14,12 @@ def upid_decoder(bitbin, upid_type, upid_length):
 
  **/
 
+var UpidTypes = []uint8{1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 14, 15, 16}
+
+func UpidIsValid(upidtype uint8) bool {
+	return isIn8(UpidTypes, upidtype)
+}
+
 func UpidDecoder(upidType uint8) Upid {
 
 	var u Upid
