@@ -4,7 +4,8 @@ The threefive Parser in Go.
 
 ##### Heads up, work in progress. Not yet ready for production.
 
-* Segmentation Descriptors and Upids are __not__ complete. 
+*  3 Segmentation Upids are __not__ complete. 
+*  Everything else should be working. 
 
 #### Installation
 ---
