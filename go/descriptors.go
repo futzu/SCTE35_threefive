@@ -2,12 +2,15 @@ package threefive
 
 import "github.com/futzu/bitter"
 
+// DescriptorTags array of valid descriptor tags
 var DescriptorTags = []uint8{0, 1, 2, 3, 4}
 
+//DescriptorIsValid checks if tag is in DescriptorTags
 func DescriptorIsValid(tag uint8) bool {
 	return isIn8(DescriptorTags, tag)
 }
 
+// DescriptorDecoder returns a Descriptor by tag
 func DescriptorDecoder(tag uint8) Descriptor {
 	var sd Descriptor
 	switch tag {

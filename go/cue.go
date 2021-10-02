@@ -45,9 +45,9 @@ func (cue *Cue) dscptrLoop(bitn *bitter.Bitn) {
 		//fmt.Printf("%v -- %v\n", i, cue.InfoSection.DescriptorLoopLength)
 
 		tag := bitn.AsUInt8(8)
-		i += 1
+		i++
 		length := bitn.AsUInt64(8)
-		i += 1
+		i++
 		i += length
 		if DescriptorIsValid(tag) {
 			sdr := DescriptorDecoder(tag)
