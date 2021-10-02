@@ -6,6 +6,7 @@ import urllib
 
 import pyaes
 
+from .reader import reader
 from .stream import Stream
 
 
@@ -37,7 +38,7 @@ class Segment:
         # For aes encrypted files
 
         >>>> key = "https://example.com/aes.key"
-        >>>> IV="0x998C575D24F514AEC84EDC5CABCCDB81"
+        >>>> IV=0x998C575D24F514AEC84EDC5CABCCDB81
         >>>> uri = "https://example.com/aes-1.ts"
 
         >>>> seg = Segment(uri,key_uri=key, iv=IV)
@@ -56,29 +57,35 @@ class Segment:
         self.key_uri = key_uri
         self.key = None
         self.iv = None
+        self.cues = []
+        self.start = None
+        self.tmp = None
         if iv:
-            self.iv = bytes.fromhex(iv)
+            self.iv = int.to_bytes(int(iv), 16, byteorder="big")
         if self.key_uri:
             self._aes_get_key()
             self._aes_decrypt()
-        self.cues = []
-        self.start = None
-        self.tmp = "tmp"
 
-    @staticmethod
-    def _reader(uri):
-        if uri.startswith("http"):
-            return urllib.request.urlopen(uri)
-        return open(uri, "rb")
+    def __repr__(self):
+        return str(vars(self))
+
+    def _mk_tmp(self):
+        self.tmp = "tf-"
+        tmplist = self.seg_uri.rsplit("/", 1)
+        if len(tmplist) == 2:
+            self.tmp += tmplist[1]
+        else:
+            self.tmp += tmplist[0]
 
     def _aes_get_key(self):
-        with self._reader(self.key_uri) as quay:
+        with reader(self.key_uri) as quay:
             self.key = quay.read()
 
     def _aes_decrypt(self):
         mode = pyaes.AESModeOfOperationCBC(self.key, iv=self.iv)
+        self._mk_tmp()
         with open(self.tmp, "wb") as outfile:
-            with self._reader(self.seg_uri) as infile:
+            with reader(self.seg_uri) as infile:
                 pyaes.decrypt_stream(mode, infile, outfile)
             self.seg_uri = self.tmp
 
@@ -94,7 +101,7 @@ class Segment:
         decode a mpegts hls segment for start time
         and scte35 cues.
         """
-        with self._reader(self.seg_uri) as seg:
+        with reader(self.seg_uri) as seg:
             strm = Stream(seg)
             self.start = strm.decode_start_time()
             strm.show_start = False

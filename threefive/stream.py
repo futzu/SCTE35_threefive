@@ -7,6 +7,7 @@ from functools import partial
 import urllib
 from .cue import Cue
 from .packetdata import PacketData
+from .reader import reader
 
 
 def show_cue(cue):
@@ -45,7 +46,7 @@ class Stream:
 
         """
         if isinstance(tsdata, str):
-            self._tsdata = self._reader(tsdata)
+            self._tsdata = reader(tsdata)
         else:
             self._tsdata = tsdata
         self.show_null = show_null
@@ -62,12 +63,6 @@ class Stream:
 
     def __repr__(self):
         return str(vars(self))
-
-    @staticmethod
-    def _reader(uri):
-        if uri.startswith("http"):
-            return urllib.request.urlopen(uri)
-        return open(uri, "rb")
 
     def _find_start(self):
         sync_byte = 0x47

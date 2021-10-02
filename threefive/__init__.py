@@ -4,6 +4,7 @@ threefive.__init__.py
 
 from .cue import Cue
 from .decode import decode
+from .reader import reader
 from .section import SpliceInfoSection
 from .segment import Segment
 from .smoketest import smoke
