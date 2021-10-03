@@ -66,15 +66,11 @@ class Segment:
             self._aes_decrypt()
 
     def __repr__(self):
-        return str(vars(self))
+        return str(self.__dict__)
 
     def _mk_tmp(self):
         self.tmp = "tf-"
-        tmplist = self.seg_uri.rsplit("/", 1)
-        if len(tmplist) == 2:
-            self.tmp += tmplist[1]
-        else:
-            self.tmp += tmplist[0]
+        self.tmp += self.seg_uri.rsplit("/", 1)[-1]
 
     def _aes_get_key(self):
         with reader(self.key_uri) as quay:
