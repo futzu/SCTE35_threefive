@@ -4,7 +4,7 @@ Mpeg-TS Stream parsing class Stream
 
 import sys
 from functools import partial
-import urllib
+
 from .cue import Cue
 from .packetdata import PacketData
 from .reader import reader
@@ -259,6 +259,7 @@ class Stream:
                 self._prgm_pcr[prgm] = pcr
                 if self.show_start:
                     return round((pcr / 90000.0), 6)
+        return None
 
     def _parse(self, pkt):
         pid = self._parse_pid(pkt[1], pkt[2])
@@ -273,6 +274,7 @@ class Stream:
             self._parse_pts(pkt, pid)
             if pid in self._pids["scte35"]:
                 return self._parse_scte35(pkt, pid)
+        return None
 
     def _chk_partial(self, payload, pid):
         if pid in self._partial:

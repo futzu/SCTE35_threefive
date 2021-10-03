@@ -32,6 +32,7 @@ def _read_stdin():
         stuff = sys.stdin.buffer.read()
         if stuff:
             return _decode_and_show(stuff)
+    return False
 
 
 def _read_stuff(stuff):

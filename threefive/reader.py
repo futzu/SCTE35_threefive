@@ -1,5 +1,5 @@
 """
-The reader function 
+The reader function
 """
 
 

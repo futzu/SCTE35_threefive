@@ -2,7 +2,6 @@
 The threefive.Segment class
 """
 import os
-import urllib
 
 import pyaes
 

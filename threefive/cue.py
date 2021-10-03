@@ -50,7 +50,6 @@ class Cue(SCTE35Base):
         self.info_section = SpliceInfoSection()
         self.command = None
         self.descriptors = []
-        self.crc = None
         if data:
             self.bites = self._mk_bits(data)
         self.packet_data = packet_data
