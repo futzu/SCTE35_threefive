@@ -88,7 +88,9 @@ class Stream:
                     if not func:
                         return cue
                     func(cue)
+        print(sorted(list(self._prgm_pcr.values()))[-1] / 90000.0)
         self._tsdata.close()
+
         return None
 
     def _mk_pkts(self, chunk):

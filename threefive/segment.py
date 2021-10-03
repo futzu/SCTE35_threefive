@@ -105,4 +105,5 @@ class Segment:
             self.start = strm.decode_start_time()
             strm.show_start = False
             strm.decode(func=self.add_cue)
-            os.unlink(self.tmp)
+            if self.tmp:
+                os.unlink(self.tmp)
