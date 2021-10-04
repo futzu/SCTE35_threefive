@@ -50,7 +50,8 @@ class Stream:
         else:
             self._tsdata = tsdata
         self.show_null = show_null
-        self.show_start = False
+        # self.show_start = False
+        self.start = None
         self.info = None
         self.the_program = None
         self._pids = {"pcr": set(), "pmt": set(), "scte35": set()}
@@ -62,7 +63,7 @@ class Stream:
         self._last = {}
 
     def __repr__(self):
-        return str(vars(self))
+        return str(self.__dict__)
 
     def _find_start(self):
         sync_byte = 0x47
@@ -88,7 +89,7 @@ class Stream:
                     if not func:
                         return cue
                     func(cue)
-        print(sorted(list(self._prgm_pcr.values()))[-1] / 90000.0)
+        # print(sorted(list(self._prgm_pcr.values()))[-1]/90000.0)
         self._tsdata.close()
 
         return None
@@ -173,11 +174,10 @@ class Stream:
         displays streams that will be
         parsed for SCTE-35.
         """
-        self.show_start = True
-        start = self.decode(func=False)
-        if start:
-            return start
-        return None
+        # self.show_start = True
+        self.decode(func=False)
+        # if start:
+        return self.start
 
     def _mk_packet_data(self, pid):
         prgm = self._pid_prgm[pid]
@@ -259,23 +259,21 @@ class Stream:
                 pcr |= pkt[10] >> 7
                 prgm = self._pid_prgm[pid]
                 self._prgm_pcr[prgm] = pcr
-                if self.show_start:
-                    return round((pcr / 90000.0), 6)
-        return None
+                if not self.start:
+                    self.start = round((pcr / 90000.0), 6)
 
     def _parse(self, pkt):
         pid = self._parse_pid(pkt[1], pkt[2])
         if pid == 0:
-            self._chk_pat_payload(pkt, pid)
+            return self._chk_pat_payload(pkt, pid)
         if pid in self._pids["pmt"]:
-            self._chk_pmt_payload(pkt, pid)
+            return self._chk_pmt_payload(pkt, pid)
+        if pid in self._pids["pcr"]:
+            return self._parse_pcr(pkt, pid)
         if pid in self._pid_prgm:
-            pcr = self._parse_pcr(pkt, pid)
-            if pcr:
-                return pcr
             self._parse_pts(pkt, pid)
-            if pid in self._pids["scte35"]:
-                return self._parse_scte35(pkt, pid)
+        if pid in self._pids["scte35"]:
+            return self._parse_scte35(pkt, pid)
         return None
 
     def _chk_partial(self, payload, pid):
@@ -299,6 +297,25 @@ class Stream:
         if not self._chk_last(payload, pid):
             self._program_map_table(payload, pid)
 
+    def _chk_scte35_payload(self, pkt, pid):
+        payload = self._parse_payload(pkt)
+        if not self._cue:
+            payload = self._split_by_idx(payload, b"\xfc0")
+            if not payload:
+                self._pids["scte35"].remove(pid)
+                return False
+            if payload[13] == self.show_null:
+                return False
+            self._parse_cue(payload, pid)
+        else:
+            self._cue.bites = self._chk_partial(payload, pid)
+        # + 3 for the bytes before section starts
+        if (self._cue.info_section.section_length + 3) > len(self._cue.bites):
+            self._partial[pid] = payload
+            return False
+        self._cue.bites = payload[: self._cue.info_section.section_length + 3]
+        return True
+
     def _parse_cue(self, payload, pid):
         packet_data = self._mk_packet_data(pid)
         self._cue = Cue(payload, packet_data)
@@ -309,20 +326,7 @@ class Stream:
         """
         parse a scte35 cue from one or more packets
         """
-        payload = self._parse_payload(pkt)
-        if not self._cue:
-            payload = self._split_by_idx(payload, b"\xfc0")
-            if not payload:
-                self._pids["scte35"].remove(pid)
-                return None
-            if payload[13] == self.show_null:
-                return None
-            self._parse_cue(payload, pid)
-        else:
-            self._cue.bites = self._chk_partial(payload, pid)
-        # + 3 for the bytes before section starts
-        if (self._cue.info_section.section_length + 3) > len(self._cue.bites):
-            self._partial[pid] = payload
+        if not self._chk_scte35_payload(pkt, pid):
             return None
         if not self._cue.decode():
             self._pids["scte35"].remove(pid)

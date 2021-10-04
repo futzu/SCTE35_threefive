@@ -27,7 +27,7 @@ def _read_stdin():
     # mpegts data via stdin
     try:
         Stream(sys.stdin.buffer).decode()
-    except Exception:
+    except (FileNotFoundError, LookupError, TypeError, ValueError):
         # base64 or hex encoded string or raw bytes via stdin
         stuff = sys.stdin.buffer.read()
         if stuff:
@@ -42,18 +42,18 @@ def _read_stuff(stuff):
             tsd = tsdata.read(_MAX_CUE_SIZE)
             _decode_and_show(tsd)
             return True
-    except Exception:
+    except (FileNotFoundError, LookupError, TypeError, ValueError):
         # mpegts video file
         try:
             with open(stuff, "rb") as tsdata:
                 strm = Stream(tsdata)
                 strm.decode()
                 return True
-        except Exception:
+        except (FileNotFoundError, LookupError, TypeError, ValueError):
             try:
                 _decode_and_show(stuff)
                 return True
-            except:
+            except (LookupError, TypeError, ValueError):
                 return False
 
 
@@ -63,7 +63,7 @@ def _read_http(stuff):
             strm = Stream(tsdata)
             strm.decode()
             return True
-        except:
+        except (LookupError, TypeError, ValueError):
             return False
 
 

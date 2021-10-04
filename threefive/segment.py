@@ -98,8 +98,8 @@ class Segment:
         """
         with reader(self.seg_uri) as seg:
             strm = Stream(seg)
-            self.start = strm.decode_start_time()
-            strm.show_start = False
+            # strm.show_start = False
             strm.decode(func=self.add_cue)
+            self.start = strm.start
             if self.tmp:
                 os.unlink(self.tmp)
