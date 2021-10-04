@@ -24,9 +24,8 @@ func (cue *Cue) Decode(bites []byte) bool {
 	if !cue.InfoSection.Decode(&bitn) {
 		return false
 	}
-	cmd, ok := cmdMap[cue.InfoSection.SpliceCommandType]
-	if ok {
-		cue.Command = cmd
+	if CommandIsValid(cue.InfoSection.SpliceCommandType){
+        cue.Command = CommandDecoder(cue.InfoSection.SpliceCommandType)
 		cue.Command.Decode(&bitn)
 		cue.InfoSection.DescriptorLoopLength = bitn.AsUInt64(16)
 		cue.dscptrLoop(&bitn)

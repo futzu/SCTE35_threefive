@@ -7,14 +7,32 @@ type Command interface {
 	Decode(bitn *bitter.Bitn)
 }
 
-// cmdMap maps Splice Command Types to the Command interface
-var cmdMap = map[uint8]Command{
-	0:   &SpliceNull{},
-	5:   &SpliceInsert{},
-	6:   &TimeSignal{},
-	7:   &BandwidthReservation{},
-	255: &PrivateCommand{},
+// CommandTypes array of valid command types
+var CommandTypes = []uint8{0, 5, 6, 7, 255}
+
+//CommandIsValid checks if cmdtype is in CommandTypes
+func CommandIsValid(cmdtype uint8) bool {
+	return isIn8(CommandTypes, cmdtype)
 }
+
+// CommandDecoder returns a Command by cmdtype
+func CommandDecoder(cmdtype uint8) Command {
+	var sc Command
+	switch cmdtype {
+	case 0:
+		sc = &SpliceNull{}
+	case 5:
+		sc = &SpliceInsert{}
+	case 6:
+		sc = &TimeSignal{}
+	case 7:
+		sc = &BandwidthReservation{}
+	case 255:
+		sc = &PrivateCommand{}
+	}
+	return sc 
+}
+
 
 // BandwidthReservation  Table 11
 type BandwidthReservation struct {
