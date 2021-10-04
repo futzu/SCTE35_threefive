@@ -84,7 +84,7 @@ func (cmd *SpliceInsert) Decode(bitn *bitter.Bitn) {
 		cmd.SpliceImmediateFlag = bitn.AsBool()
 		bitn.Forward(4)
 	}
-	if cmd.ProgramSpliceFlag {
+	if cmd.ProgramSpliceFlag == true {
 		if !cmd.SpliceImmediateFlag {
 			cmd.spliceTime(bitn)
 		}
@@ -99,7 +99,7 @@ func (cmd *SpliceInsert) Decode(bitn *bitter.Bitn) {
 			cmd.spliceTime(bitn)
 		}
 	}
-	if cmd.DurationFlag {
+	if cmd.DurationFlag == true {
 		cmd.parseBreak(bitn)
 	}
 	cmd.UniqueProgramID = bitn.AsUInt64(16)
