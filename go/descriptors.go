@@ -221,10 +221,10 @@ func (dscptr *SegmentDscptr) decodeSegmentation(bitn *bitter.Bitn) {
 	}
 	dscptr.SegmentationUpidType = bitn.AsUInt8(8)
 	dscptr.SegmentationUpidLength = bitn.AsUInt8(8)
-	if UpidIsValid(dscptr.SegmentationUpidType) {
-		dscptr.SegmentationUpid = UpidDecoder(dscptr.SegmentationUpidType)
-		dscptr.SegmentationUpid.Decode(bitn, dscptr.SegmentationUpidLength)
-	}
+	//if UpidIsValid(dscptr.SegmentationUpidType) {
+	dscptr.SegmentationUpid = UpidDecoder(dscptr.SegmentationUpidType)
+	dscptr.SegmentationUpid.Decode(bitn, dscptr.SegmentationUpidLength)
+	//}
 	dscptr.SegmentationTypeID = bitn.AsUInt8(8)
 
 	mesg, ok := table22[dscptr.SegmentationTypeID]

@@ -236,7 +236,7 @@ func (stream *Stream) parseStreams(silen uint16, pay []byte, idx uint16, prgm ui
 }
 
 func (stream *Stream) vrfyStreamType(pid uint16, streamtype uint8) {
-	if streamtype == 6 || streamtype == 134 {
+	if streamtype == 6 || streamtype == 0x86 {
 		stream.addScte35Pid(pid)
 	}
 }
