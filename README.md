@@ -41,19 +41,15 @@
      
 * [Sweet Examples ](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
 * [ffmpeg and SCTE35 and Stream Type and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)   
-* check out [Flavio's](https://github.com/flavioribeiro) slack site  [video-dev](https://video-dev.slack.com). Serious video talent.
-
 * [threefive Spotted in The Wild](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
-
 *  [Code of Conduct](https://github.com/futzu/threefive/blob/master/CODE_OF_CONDUCT.md).
-
 * [Issues and Bugs and Feature Requests](#issues-and-bugs-and-feature-requests)
 
 
 
 ### Requirements
 * threefive requires [pypy3](https://pypy.org) or python 3.6+
-* threefive 2.3.02+ requires crcmod for encoding.
+* threefive 2.3.02+ requires crcmod for encoding and pyaes for decrypting.
 
  [__pypy3__ runs threefive Four Times Faster than python3](https://github.com/futzu/threefive/blob/master/py3vspypy3.md)
 
