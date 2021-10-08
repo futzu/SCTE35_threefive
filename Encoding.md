@@ -31,25 +31,70 @@
 
 ### Edit the Splice Insert Command in a Cue 
 ```python3
+a@fumatica:~/threefive$ pypy3
+Python 3.7.10 (7.3.5+dfsg-2, Jun 03 2021, 20:39:46)
+[PyPy 7.3.5 with GCC 10.2.1 20210110] on linux
+Type "help", "copyright", "credits" or "license" for more information.
 >>>> import threefive
 >>>> Base64 = "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
 >>>> cue = threefive.Cue(Base64)
 >>>> cue.decode()
 True
 >>>> cue.command
-{'command_length': 20, 'command_type': 5, 'name': 'Splice Insert', 'time_specified_flag': True, 'pts_time': 21514.559089, 'break_auto_return': True, 'break_duration': 60.293567, 'splice_event_id': 1207959695, 'splice_event_cancel_indicator': False, 'out_of_network_indicator': True, 'program_splice_flag': True, 'duration_flag': True, 'splice_immediate_flag': False, 'components': None, 'component_count': None, 'unique_program_id': 0, 'avail_num': 0, 'avail_expected': 0}
+{'calculated_length': 20, 'command_type': 5, 'name': 'Splice Insert', 'time_specified_flag': True, 'pts_time': 21514.559089, 'break_auto_return': True, 'break_duration': 60.293567, 'splice_event_id': 1207959695, 'splice_event_cancel_indicator': False, 'out_of_network_indicator': True, 'program_splice_flag': True, 'duration_flag': True, 'splice_immediate_flag': False, 'component_count': None, 'components': None, 'unique_program_id': 0, 'avail_num': 0, 'avail_expected': 0}
+>>>> cue.command.break_duration= 90.0
 
-    # use dot notation to access values 
-    
->>>> cue.command.break_duration = 90.0
-
-   # Run cue.encode to generate new base64 string
-      
 >>>> cue.encode()
-b'/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4Ae5igAAAAAAAKAAhDVUVJAAABNVB2fJs='
-
-
+'/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4Ae5igAAAAAAAKAAhDVUVJAAABNVB2fJs='
+>>>> 
 >>>> cue.show()
+{
+    "info_section": {
+        "table_id": "0xfc",
+        "section_syntax_indicator": false,
+        "private": false,
+        "sap_type": "0x3",
+        "sap_details": "No Sap Type",
+        "section_length": 47,
+        "protocol_version": 0,
+        "encrypted_packet": false,
+        "encryption_algorithm": 0,
+        "pts_adjustment": 0.0,
+        "cw_index": "0xff",
+        "tier": "0xfff",
+        "splice_command_length": 20,
+        "splice_command_type": 5,
+        "descriptor_loop_length": 10,
+        "crc": "0x62dba30a"
+    },
+    "command": {
+        "calculated_length": 20,
+        "command_type": 5,
+        "name": "Splice Insert",
+        "time_specified_flag": true,
+        "pts_time": 21514.559089,
+        "break_auto_return": true,
+        "break_duration": 90.0,
+        "splice_event_id": 1207959695,
+        "splice_event_cancel_indicator": false,
+        "out_of_network_indicator": true,
+        "program_splice_flag": true,
+        "duration_flag": true,
+        "splice_immediate_flag": false,
+        "unique_program_id": 0,
+        "avail_num": 0,
+        "avail_expected": 0
+    },
+    "descriptors": [
+        {
+            "tag": 0,
+            "descriptor_length": 8,
+            "name": "Avail Descriptor",
+            "identifier": "CUEI",
+            "provider_avail_id": 309
+        }
+    ]
+}
 ```
 ### Remove a Splice Descriptor in a Cue
 ```python3
@@ -59,15 +104,52 @@ b'/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4Ae5igAAAAAAAKAAhDVUVJAAABNVB2fJs='
 >>>> cue.decode()
 True
 >>>> cue.descriptors
-[{'tag': 0, 'descriptor_length': 8, 'identifier': 'CUEI', 'name': 'Avail Descriptor', 'provider_avail_id': 309}]
-
-   # cue.descriptors is a list
-
+[{'tag': 0, 'descriptor_length': 8, 'name': 'Avail Descriptor', 'identifier': 'CUEI', 'provider_avail_id': 309, 'components': None}]
 >>>> del cue.descriptors[0]
->>>> cue.descriptors
-[]
 >>>> cue.encode()
-b'/DAlAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAAYinJUA=='
+'/DAlAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAAYinJUA=='
+>>>> cue.show()
+{
+    "info_section": {
+        "table_id": "0xfc",
+        "section_syntax_indicator": false,
+        "private": false,
+        "sap_type": "0x3",
+        "sap_details": "No Sap Type",
+        "section_length": 37,
+        "protocol_version": 0,
+        "encrypted_packet": false,
+        "encryption_algorithm": 0,
+        "pts_adjustment": 0.0,
+        "cw_index": "0xff",
+        "tier": "0xfff",
+        "splice_command_length": 20,
+        "splice_command_type": 5,
+        "descriptor_loop_length": 0,
+        "crc": "0x6229c950"
+    },
+    "command": {
+        "calculated_length": 20,
+        "command_type": 5,
+        "name": "Splice Insert",
+        "time_specified_flag": true,
+        "pts_time": 21514.559089,
+        "break_auto_return": true,
+        "break_duration": 60.293567,
+        "splice_event_id": 1207959695,
+        "splice_event_cancel_indicator": false,
+        "out_of_network_indicator": true,
+        "program_splice_flag": true,
+        "duration_flag": true,
+        "splice_immediate_flag": false,
+        "unique_program_id": 0,
+        "avail_num": 0,
+        "avail_expected": 0,
+        "command_length": 20
+    },
+    "descriptors": []
+}
+
 ```
 ### Add a Dtmf Descriptor to an existing Cue
 ```python3
