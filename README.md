@@ -18,7 +18,7 @@
  
 * [New Stuff in threefive...](https://github.com/futzu/threefive/blob/master/new_stuff.md)  
 
-
+* Check out the Super Fast [threefive/go parser ](https://github.com/futzu/scte35-threefive/tree/master/go)
 
   `Welcome to The Show.`
 
