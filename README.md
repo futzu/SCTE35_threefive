@@ -1,10 +1,8 @@
 
  
 
-### threefive is the [#1 SCTE35 Parser in the World.](https://github.com/futzu/scte35-threefive/blob/master/README.md#according-to-my-mom-and-my-girlfriend) 
-
-* threefive is a python3 SCTE35 lib. 
-
+#### threefive is a SCTE35 Decoder and Encoder python3 lib. 
+* [threefive is super easy to use](#easy-threefive) One function call decodes SCTE35 cues.
 
 * All 2020 SCTE-35 [Commands](https://github.com/futzu/threefive/blob/master/threefive/commands.py), [Descriptors](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py),and [Upids](https://github.com/futzu/threefive/blob/master/threefive/upid.py) are fully supported.
 
@@ -437,80 +435,3 @@ ___
 ---
 
 
-
-
-
-
-*
-*
-*
-*
-*
-
-*
-*
-*
-*
-*
-
-*
-*
-*
-*
-*
-
-*
-*
-*
-*
-*
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-######  (According to my mom and my girlfriend)
