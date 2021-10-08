@@ -21,19 +21,6 @@
 
 ###### All instance vars can be accessed via dot notation.
 
-```python3
-from threefive import Cue
-cue = Cue(b64)
->>>> cue.decode()
-
-True
->>>> cue.command
-{'command_length': 5, 'command_type': 6, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 22798.906911}
->>>> cue.command.pts_time
-22798.906911
->>>> 
-```
-
 ### Automatic Features
 
 * Splice Info Section of the Cue is automatically generated. 
