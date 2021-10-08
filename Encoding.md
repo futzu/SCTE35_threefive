@@ -249,7 +249,13 @@ b'/DA7AAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAWAAhDVUVJAAABNQEKQ1VFSbGfMTIxI5
 >>>> import threefive
 >>>> cue = threefive.Cue()
 >>>> cue
-{'info_section': {'table_id': None, 'section_syntax_indicator': None, 'private': None, 'sap_type': None, 'sap_details': None, 'section_length': None, 'protocol_version': None, 'encrypted_packet': None, 'encryption_algorithm': None, 'pts_adjustment': None, 'cw_index': None, 'tier': None, 'splice_command_length': None, 'splice_command_type': None, 'descriptor_loop_length': 0, 'crc': None}, 'command': None, 'descriptors': [], 'packet_data': None}
+{'info_section': {'table_id': None, 'section_syntax_indicator': None, 'private': None, 'sap_type': None, 'sap_details': None, 'section_length': None,
+'protocol_version': None, 'encrypted_packet': None, 'encryption_algorithm': None, 'pts_adjustment': None, 'cw_index': None, 'tier': None,
+'splice_command_length': None, 'splice_command_type': None, 'descriptor_loop_length': 0, 'crc': None},
+'command': None, 
+'descriptors': [], 
+'packet_data': None}
+
 >>>> cmd=threefive.TimeSignal()
 >>>> cmd
 {'calculated_length': None, 'command_type': 6, 'name': 'Time Signal', 'bites': None, 'time_specified_flag': None, 'pts_time': None}
@@ -257,11 +263,15 @@ b'/DA7AAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAWAAhDVUVJAAABNQEKQ1VFSbGfMTIxI5
 >>>> cmd.pts_time=20.004350
 >>>> cue.command=cmd
 >>>> cue
-{'info_section': {'table_id': None, 'section_syntax_indicator': None, 'private': None, 'sap_type': None, 'sap_details': None, 'section_length': None, 'protocol_version': None, 'encrypted_packet': None, 'encryption_algorithm': None, 'pts_adjustment': None, 'cw_index': None, 'tier': None, 'splice_command_length': None, 'splice_command_type': None, 'descriptor_loop_length': 0, 'crc': None}, 'command': {'calculated_length': None, 'command_type': 6, 'name': 'Time Signal', 'bites': None, 'time_specified_flag': True, 'pts_time': 20.00435}, 'descriptors': [], 'packet_data': None}
+{'info_section': {'table_id': None, 'section_syntax_indicator': None, 'private': None, 'sap_type': None, 'sap_details': None, 'section_length': None,
+'protocol_version': None, 'encrypted_packet': None, 'encryption_algorithm': None, 'pts_adjustment': None, 'cw_index': None, 'tier': None,
+'splice_command_length': None, 'splice_command_type': None, 'descriptor_loop_length': 0, 'crc': None}, 
+'command': {'calculated_length': None, 'command_type': 6, 'name': 'Time Signal', 'bites': None, 'time_specified_flag': True, 'pts_time': 20.00435},
+'descriptors': [], 'packet_data': None}
+
 >>>> cue.encode()
 '/DAWAAAAAAAAAP/wBQb+ABt4xwAAwhCGHw=='
->>>> cue
-{'info_section': {'table_id': '0xfc', 'section_syntax_indicator': False, 'private': False, 'sap_type': '0x3', 'sap_details': 'No Sap Type', 'section_length': 22, 'protocol_version': 0, 'encrypted_packet': False, 'encryption_algorithm': 0, 'pts_adjustment': 0.0, 'cw_index': '0x0', 'tier': '0xfff', 'splice_command_length': 5, 'splice_command_type': 6, 'descriptor_loop_length': 0, 'crc': '0xc210861f'}, 'command': {'calculated_length': None, 'command_type': 6, 'name': 'Time Signal', 'bites': None, 'time_specified_flag': True, 'pts_time': 20.00435, 'command_length': 5}, 'descriptors': [], 'bites': b'\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00\x1bx\xc7\x00\x00\xc2\x10\x86\x1f', 'packet_data': None}
+
 >>>> cue.show()
 
 # Splice Info Section is Automatically calculated 
