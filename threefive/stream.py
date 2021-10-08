@@ -103,14 +103,16 @@ class Stream:
     def decode_fu(self, func=show_cue):
         """
         Stream.decode_fu decodes
-        1384 packets at a time.
+        1880 packets at a time.
         """
-        pkts = 1384
+        pkts = 1880
         if self._find_start():
             for chunk in iter(
                 partial(self._tsdata.read, (self._PACKET_SIZE * pkts)), b""
             ):
-                [func(cue) for cue in self._mk_pkts(chunk) if cue]
+                for cue in self._mk_pkts(chunk):
+                    if cue:
+                        func(cue)
         self._tsdata.close()
 
     def decode_next(self):

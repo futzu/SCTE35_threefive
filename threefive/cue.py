@@ -302,7 +302,7 @@ class Cue(SCTE35Base):
         self.command = command_map[sct](bites)
         self.command.decode()
         del self.command.bites
-        bites = bites[self.command.calculated_length :]
+        bites = bites[self.command.command_length :]
         self._set_pts()
         return bites
 

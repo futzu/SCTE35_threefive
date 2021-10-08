@@ -11,7 +11,7 @@ class SpliceCommand(SCTE35Base):
     """
 
     def __init__(self, bites=None):
-        self.calculated_length = None
+        self.command_length = None
         self.command_type = None
         self.name = None
         self.bites = bites
@@ -26,7 +26,7 @@ class SpliceCommand(SCTE35Base):
         _set_len sets
         self.calculated_length
         """
-        self.calculated_length = (start - end) >> 3
+        self.command_length = (start - end) >> 3
 
     def encode(self, nbin=None):
         """

@@ -50,7 +50,8 @@ def smoke(tests=None):
         tests = ten_tests
     results = {k: _decode_test(k, v) for k, v in tests.items()}
     print("Smoke Test\n")
-    {print(f"{k}  {v}") for k, v in results.items()}
+    for kay, vee in results.items():
+        print(f"{kay}  {vee}")
 
 
 if __name__ == "__main__":
