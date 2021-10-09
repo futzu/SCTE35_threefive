@@ -1,8 +1,9 @@
+"""
+Segmentation Upid Examples
+"""
+
 import threefive
 
-"""
-tons of segmentation upid examples
-"""
 
 ADID = (
     "/DA4AAAAAAAA///wBQb+AAAAAAAiAiBDVUVJAAAAA3//AAApPWwDDEFCQ0QwMTIzNDU2SBAAAGgCL9A="
