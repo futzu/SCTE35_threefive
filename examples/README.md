@@ -1,9 +1,13 @@
 ## [threefive](https://github.com/futzu/SCTE35-threefive/) Examples:
 
-* __Cli__
 
-  * [command line tool for threefive](https://github.com/futzu/SCTE35-threefive/blob/master/examples/cli.py)
- ---
+ * [__Cli__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/cli.py)
+
+---
+ 
+ * [__Encode__](https://github.com/futzu/scte35-threefive/tree/master/examples/encode) 
+
+---
 
  * __Stream__
       * [Return a list of SCTE-35 Cues from an MPEGTS file](https://github.com/futzu/threefive/blob/master/examples/stream/cue_list.py) __New!__
@@ -43,8 +47,5 @@
        * [Combination __Upid__ Segmentation Descriptor](https://github.com/futzu/threefive/blob/master/examples/upid/upid_combo.py)
        * [Custom Handling __MPU Upid__ data](https://github.com/futzu/threefive/blob/master/examples/upid/custom_upid_handling.py)
 ---
-* __DTMF__
-
-     * [DTMF Descriptor](https://github.com/futzu/SCTE35-threefive/blob/master/examples/dtmf)
+* [__DTMF Descriptor__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/dtmf)
 ---
-![threefive-china](https://user-images.githubusercontent.com/52701496/132002727-5dc5d28c-2d8f-4b49-8b0e-92aca6289ff1.png)
