@@ -1,5 +1,4 @@
 """
-
 Accepts one or more urls to parse for SCTE-35 over http/https.
 
 Usage:
@@ -13,5 +12,7 @@ from threefive import Stream
 
 
 if __name__ == "__main__":
-    urls = sys.argv[1:]
-    [Stream(url).decode() for url in urls]
+    Urls = sys.argv[1:]
+    streams = [Stream(url) for url in Urls]
+    for stream in streams:
+        stream.decode()

@@ -1,6 +1,3 @@
-import sys
-from threefive import Stream
-
 """
 Stream.proxy example.
 writes SCTE-35 data to stderr
@@ -9,15 +6,20 @@ so you can pipe it.
 
 Example:
 
-python3 proxydemo.py video.ts | mplayer -
+python3 decode_proxy.py video.ts | mplayer -
 
 """
+import sys
+from threefive import Stream
 
 
 def do():
-    with open(sys.argv[1], "rb") as tsdata:
-        st = Stream(tsdata)
-        st.decode_proxy()
+    """
+    do creates a  Stream instance with sys.argv[1]
+    and then calls Stream.decode_proxy()
+    """
+    strm = Stream(sys.argv[1])
+    strm.decode_proxy()
 
 
 if __name__ == "__main__":
