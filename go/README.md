@@ -192,11 +192,7 @@ type Cue struct {
     Cue a SCTE35 cue.
 
 func (cue *Cue) Decode(bites []byte) bool
-    Decode extracts bits for the Cue values.
-
 func (cue *Cue) Show()
-    Show display SCTE-35 data as JSON.
-
 
 ```
 #### Splice Commands
@@ -224,11 +220,10 @@ type Command interface {
 * Splice Descriptors implement the Descriptor interface
 ```golang
 
+// Descriptor is the interface for all Splice Descriptors
 type Descriptor interface {
-	MetaData(t uint8, l uint8, i string)
-	Decode(bitn *bitter.Bitn)
+	Decode(bitn *bitter.Bitn, tag uint8, length uint8)
 }
-    Descriptor is the interface for all Splice Descriptors
 ```
 
 * Audio Descriptor
