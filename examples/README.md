@@ -6,7 +6,8 @@
 ---
  
  * [__Encode__](https://github.com/futzu/scte35-threefive/tree/master/examples/encode) 
-
+ 
+   * [Edit Break Duration](https://github.com/futzu/scte35-threefive/blob/master/examples/encode/edit_break_duration.py)
 ---
 
  * __Stream__
