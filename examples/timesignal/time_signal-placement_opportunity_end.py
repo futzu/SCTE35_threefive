@@ -7,6 +7,6 @@ Example from the specification
 
 from threefive import decode
 
-be_six_four = "/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g="
+B64 = "/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g="
 
-decode(be_six_four)
+decode(B64)
