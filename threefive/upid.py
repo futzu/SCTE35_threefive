@@ -179,7 +179,7 @@ def _decode_umid(bitbin, upid_length):
     chunks = []
     ulb = upid_length << 3
     while ulb:
-        chunks.append(bitbin.as_hex(32).split("x", 1)[1])
+        chunks.append(bitbin.as_hex(32)[2:])
         ulb -= 32
     return ".".join(chunks)
 

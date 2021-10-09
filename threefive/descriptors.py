@@ -365,18 +365,16 @@ class SegmentationDescriptor(SpliceDescriptor):
             if bitbin.idx > 16:
                 self.sub_segment_num = bitbin.as_int(8)  # 1 byte
                 self.sub_segments_expected = bitbin.as_int(8)  # 1 byte
-            self.sub_segment_num = self.sub_segments_expected = 0
+        else:
+            self.sub_segment_num = 0
+            self.sub_segments_expected = 0
 
     def _encode_segments(self, nbin):
         self._chk_var(int, nbin.add_int, "segment_num", 8)  # 1 byte
         self._chk_var(int, nbin.add_int, "segments_expected", 8)  # 1 byte
         if self.segmentation_type_id in [0x34, 0x36, 0x38, 0x3A]:
-            if self.segment_num and self.segment_num > 0:
-                if self.sub_segments_expected and self.sub_segments_expected > 0:
-                    self._chk_var(int, nbin.add_int, "sub_segment_num", 8)  # 1 byte
-                    self._chk_var(
-                        int, nbin.add_int, "sub_segments_expected", 8
-                    )  # 1 byte
+            self._chk_var(int, nbin.add_int, "sub_segment_num", 8)  # 1 byte
+            self._chk_var(int, nbin.add_int, "sub_segments_expected", 8)  # 1 byte
 
 
 # map of known descriptors and associated classes
