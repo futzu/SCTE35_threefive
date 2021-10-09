@@ -24,7 +24,7 @@ class SpliceCommand(SCTE35Base):
     def _set_len(self, start, end):
         """
         _set_len sets
-        self.calculated_length
+        self.command_length
         """
         self.command_length = (start - end) >> 3
 

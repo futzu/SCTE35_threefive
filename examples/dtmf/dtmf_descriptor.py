@@ -9,6 +9,6 @@ Usage:
 
 from threefive import decode
 
-dtmf = b"/DAsAAAAAAAAAP/wDwUAAABef0/+zPACTQAAAAAADAEKQ1VFSbGfMTIxIxGolm3/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
-
-decode(dtmf)
+if __name__ == "__main__":
+    DTMF = "/DAsAAAAAAAAAP/wDwUAAABef0/+zPACTQAAAAAADAEKQ1VFSbGfMTIxIxGolm0="
+    decode(DTMF)

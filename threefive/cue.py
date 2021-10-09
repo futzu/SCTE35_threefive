@@ -30,7 +30,7 @@ class Cue(SCTE35Base):
     # After Calling cue.decode() the instance variables can be accessed via dot notation.
 
     >>>> cue.command
-    {'calculated_length': 5, 'name': 'Time Signal', 'time_specified_flag': True,
+    {'command_length': 5, 'name': 'Time Signal', 'time_specified_flag': True,
     'pts_time': 21695.740089}
 
     >>>> cue.command.pts_time
