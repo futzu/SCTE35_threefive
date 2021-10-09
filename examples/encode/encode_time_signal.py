@@ -1,3 +1,6 @@
+"""
+Example of Encoding a Time Signal Command from Scratch
+"""
 import threefive
 
 cmd = threefive.TimeSignal()
@@ -14,7 +17,7 @@ cue = threefive.Cue()
 cue.command = cmd
 
 print(cue.encode())
-# b'/DAWAAAAAAAAAP/wBQb+e2KfxwAAN6nTrw=='
+#  '/DAWAAAAAAAAAP/wBQb+e2KfxwAAN6nTrw=='
 
 #  run cue.show() to check values.
 cue.show()

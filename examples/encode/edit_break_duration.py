@@ -1,8 +1,12 @@
+"""
+Example of Editing a Cue.Command and re-encoding
+"""
+
 import threefive
 
-base_six_four = "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
+BE64 = "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
 
-cue = threefive.Cue(base_six_four)
+cue = threefive.Cue(BE64)
 cue.decode()
 cue.show()
 # use dot notation to access values and change them
@@ -12,7 +16,7 @@ cue.command.break_duration = 9000.0
 print(cue.encode())
 
 # returns
-# b'/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4Ae5igAAAAAAAKAAhDVUVJAAABNVB2fJs='
+#  '/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4Ae5igAAAAAAAKAAhDVUVJAAABNVB2fJs='
 
 
 cue.show()

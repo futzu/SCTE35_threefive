@@ -5,11 +5,15 @@
 Shows preroll using PCR and PTS
 for the time of the SCTE-35 packet.
 """
+
 import sys
 from threefive import Stream
 
 
 def show_preroll(cue):
+    """
+    show_preroll shows preroll times with pcr and pts.
+    """
     if cue.command.pts_time:
         if cue.packet_data:
             two = f" Splice Time: {cue.command.pts_time} Preroll:"
@@ -23,6 +27,9 @@ def show_preroll(cue):
 
 
 def do():
+    """
+    do processes multiple command line args
+    """
     args = sys.argv[1:]
     for arg in args:
         print(f"file: {arg}")
