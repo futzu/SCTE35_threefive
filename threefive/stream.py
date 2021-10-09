@@ -176,9 +176,7 @@ class Stream:
         displays streams that will be
         parsed for SCTE-35.
         """
-        # self.show_start = True
         self.decode(func=False)
-        # if start:
         return self.start
 
     def _mk_packet_data(self, pid):
