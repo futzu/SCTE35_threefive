@@ -200,7 +200,6 @@ func (cue *Cue) Show()
 ```
 #### Splice Commands
 
-* Splice Commands implement the Command interface
 ```golang
 
 type Command interface {
@@ -220,13 +219,14 @@ type Command interface {
 
 #### Splice Descriptors
 
-* Splice Descriptors implement the Descriptor interface
 ```golang
 
-// Descriptor is the interface for all Splice Descriptors
 type Descriptor interface {
 	Decode(bitn *bitter.Bitn, tag uint8, length uint8)
 }
+    Descriptor is the interface for all Splice Descriptors
+
+
 ```
 
 * Audio Descriptor
