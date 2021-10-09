@@ -1,12 +1,12 @@
+"""
+HLS example using the m3u8 lib to parse the m3u8 file
+and threefive to parse Scte-35 Cues.
+"""
+
+
 import sys
 import m3u8  # pypy3 -mpip install m3u8
 from threefive import Cue  # pypy3 -mpip install threefive
-
-
-"""
-HLS example using the m3u8 lib to parse the m3u8 file
-and threefive to parse Scte-35 Cues. 
-"""
 
 
 pl = m3u8.load(sys.argv[1])
