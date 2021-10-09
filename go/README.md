@@ -192,7 +192,10 @@ type Cue struct {
     Cue a SCTE35 cue.
 
 func (cue *Cue) Decode(bites []byte) bool
+    Decode extracts bits for the Cue values.
+
 func (cue *Cue) Show()
+    Show display SCTE-35 data as JSON.
 
 ```
 #### Splice Commands
