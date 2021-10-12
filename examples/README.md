@@ -10,6 +10,7 @@ Examples:
  * Encode
    * [Edit Break Duration](https://github.com/futzu/scte35-threefive/blob/master/examples/encode/edit_break_duration.py)
    * [Encode Time Signal](https://github.com/futzu/scte35-threefive/blob/master/examples/encode/encode_time_signal.py)
+   * [MPEGTS pass-through SCTE35 Cue Re-Encoding](https://github.com/futzu/scte35-threefive/blob/master/examples/encode/streamedit.py)
 
 
  * HLS
