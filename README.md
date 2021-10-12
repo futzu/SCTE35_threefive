@@ -1,48 +1,59 @@
 
  
 
-#### threefive is a SCTE35 Decoder and Encoder python3 lib. 
-* [threefive is super easy to use](#easy-threefive) One function call decodes SCTE35 cues.
+#### `threefive` is a `SCTE35` Decoder and Encoder python3 lib. 
+* [threefive is Super Easy to Use](#easy-threefive) One function call decodes SCTE35 cues.
 
-* All 2020 SCTE-35 [Commands](https://github.com/futzu/threefive/blob/master/threefive/commands.py), [Descriptors](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py),and [Upids](https://github.com/futzu/threefive/blob/master/threefive/upid.py) are fully supported.
+* All 2020 SCTE-35 [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py), [`Descriptors`](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py),and [`Upids`](https://github.com/futzu/threefive/blob/master/threefive/upid.py) are fully supported.
 
-* [Mpegts is Well Supported](#stream-class) in the Stream class.
+* [`Mpegts is Well Supported`](#stream-class) in the Stream class.
  
 
 *  ```Multicast?```   ```HLS?```  ```Custom Upid Handling?```  ```Frame Accurate Preroll timings?``` [... Oh Yeah.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 
 * [threefive has SCTE35 Cue Encoding](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
-* [threefive supports Decrypting AES in the Segment Class](https://github.com/futzu/scte35-threefive/blob/901456089d369e8cd81c0dc3c2bd6600e303562e/threefive/segment.py#L37)
-
- * [Your feedback is welcome and encouraged.](https://github.com/futzu/threefive/issues)
+    * [`MPEGTS pass-through SCTE35 Cue Re-Encoding`](https://github.com/futzu/scte35-threefive/blob/master/examples/encode/streamedit.py)
  
-* [New Stuff in threefive...](https://github.com/futzu/threefive/blob/master/new_stuff.md)  
+* [threefive supports `Decrypting AES` in the Segment Class](https://github.com/futzu/scte35-threefive/blob/901456089d369e8cd81c0dc3c2bd6600e303562e/threefive/segment.py#L37)
 
-* Check out the Super Fast [threefive/go parser ](https://github.com/futzu/scte35-threefive/tree/master/go)
+ * [Your `feedback` is Welcome and Encouraged.](https://github.com/futzu/threefive/issues)
+ 
+* [`New Stuff` in threefive...](https://github.com/futzu/threefive/blob/master/new_stuff.md)  
 
-  `Welcome to The Show.`
+* [`threefive/go parser` ](https://github.com/futzu/scte35-threefive/tree/master/go)
 
 
-* [Requirements](#requirements)
-* [Install threefive](#install)
-* [Versions and Releases](#versions-and-releases)
 
-* [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+* [`Requirements`](#requirements)
+* [__Install threefive__](#install)
+* [`Versions and Releases`](#versions-and-releases)
 
-* [A threefive SCTE-35 Cue Diagram](https://github.com/futzu/threefive/blob/master/cue.md)
+* [`Fast Start`](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
-*   [Easy threefive](#easy-threefive) 
-      *   [threefive.__decode__()](#easy-threefive)      
+* [`A threefive SCTE-35 Cue Diagram`](https://github.com/futzu/threefive/blob/master/cue.md)
 
-*  [Advanced threefive](#advanced-threefive)     
-     *  [threefive.__Cue__ Class](#cue-class)         
-     *  [threefive.__Stream__ Class](#stream-class)
+*   [`Easy` threefive](#easy-threefive) 
+      *   [threefive.`__decode__()`](#easy-threefive)      
+
+*  [`Advanced threefive`](#advanced-threefive)     
+     *  [threefive.`__Cue__` Class](#cue-class)         
+     *  [threefive.`__Stream__` Class](#stream-class)
      
-* [Sweet Examples ](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
-* [ffmpeg and SCTE35 and Stream Type and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)   
-* [threefive Spotted in The Wild](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
-*  [Code of Conduct](https://github.com/futzu/threefive/blob/master/CODE_OF_CONDUCT.md).
-* [Issues and Bugs and Feature Requests](#issues-and-bugs-and-feature-requests)
+* [Several `Cool` Examples ](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
+>  
+* [`ffmpeg and SCTE35 and Stream Type and threefive`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) 
+>   
+* [threefive Spotted `in The Wild`](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
+
+
+* [`Issues` and `Bugs` and `Feature` Requests](#issues-and-bugs-and-feature-requests)
+ *No forms man, just open an issue.*  
+
+
+
+*  [Code of Conduct](https://github.com/futzu/threefive/blob/master/CODE_OF_CONDUCT.md).  
+  *I thought this was a joke.*
+
 
 
 
