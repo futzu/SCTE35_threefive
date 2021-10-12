@@ -1,7 +1,7 @@
 
  
 
-#### `threefive` is a `SCTE35` Decoder and Encoder python3 lib. 
+__threefive__` is a SCTE35 Decoder and Encoder python3 lib. 
 * [threefive is Super Easy to Use](#easy-threefive) One function call decodes SCTE35 cues.
 
 * All 2020 SCTE-35 [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py), [`Descriptors`](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py),and [`Upids`](https://github.com/futzu/threefive/blob/master/threefive/upid.py) are fully supported.
@@ -28,20 +28,20 @@
 * [__Install threefive__](#install)
 * [`Versions and Releases`](#versions-and-releases)
 
-* [`Fast Start`](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+* [__Fast Start__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
 * [`A threefive SCTE-35 Cue Diagram`](https://github.com/futzu/threefive/blob/master/cue.md)
 
 *   [`Easy` threefive](#easy-threefive) 
       *   [threefive.`__decode__()`](#easy-threefive)      
 
-*  [`Advanced threefive`](#advanced-threefive)     
+*  [`Advanced` threefive](#advanced-threefive)     
      *  [threefive.`__Cue__` Class](#cue-class)         
      *  [threefive.`__Stream__` Class](#stream-class)
      
 * [Several `Cool` Examples ](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
 >  
-* [`ffmpeg and SCTE35 and Stream Type and threefive`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) 
+* [`ffmpeg` and `SCTE35` and `Stream Type 0x6 bin data` and `threefive`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) 
 >   
 * [threefive Spotted `in The Wild`](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 
