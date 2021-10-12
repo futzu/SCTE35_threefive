@@ -58,7 +58,7 @@ class Stream:
         self._pid_prgm = {}
         self._prgm_pcr = {}
         self._prgm_pts = {}
-        self._cue = None
+        self.the_cue = None
         self._partial = {}
         self._last = {}
 
@@ -299,7 +299,7 @@ class Stream:
 
     def _chk_scte35_payload(self, pkt, pid):
         payload = self._parse_payload(pkt)
-        if not self._cue:
+        if not self.the_cue:
             payload = self._split_by_idx(payload, b"\xfc0")
             if not payload:
                 self._pids["scte35"].remove(pid)
@@ -308,19 +308,19 @@ class Stream:
                 return False
             self._parse_cue(payload, pid)
         else:
-            self._cue.bites = self._chk_partial(payload, pid)
+            self.the_cue.bites = self._chk_partial(payload, pid)
         # + 3 for the bytes before section starts
-        if (self._cue.info_section.section_length + 3) > len(self._cue.bites):
+        if (self.the_cue.info_section.section_length + 3) > len(self.the_cue.bites):
             self._partial[pid] = payload
             return False
-        self._cue.bites = payload[: self._cue.info_section.section_length + 3]
+        self.the_cue.bites = payload[: self.the_cue.info_section.section_length + 3]
         return True
 
     def _parse_cue(self, payload, pid):
         packet_data = self._mk_packet_data(pid)
-        self._cue = Cue(payload, packet_data)
-        self._cue.info_section.decode(payload)
-        self._cue.bites = payload
+        self.the_cue = Cue(payload, packet_data)
+        self.the_cue.info_section.decode(payload)
+        self.the_cue.bites = payload
 
     def _parse_scte35(self, pkt, pid):
         """
@@ -328,10 +328,10 @@ class Stream:
         """
         if not self._chk_scte35_payload(pkt, pid):
             return None
-        if not self._cue.decode():
+        if not self.the_cue.decode():
             self._pids["scte35"].remove(pid)
             return None
-        cue, self._cue = self._cue, None
+        cue, self.the_cue = self.the_cue, None
         return cue
 
     def _program_association_table(self, payload):

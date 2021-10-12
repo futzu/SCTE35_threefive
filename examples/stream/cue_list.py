@@ -32,4 +32,10 @@ def do():
 
 if __name__ == "__main__":
     for cue in do():
-        print(f"{cue.command.name} @ {cue.packet_data.pts}")
+        cue2 = Cue(cue.encode())
+        cue2.decode()
+        cue2.info_section.pts_adjustment = 109.55
+        cue2.encode()
+        print(
+            f"{cue.info_section.pts_adjustment} @ {cue2.info_section.pts_adjustment} "
+        )
