@@ -115,7 +115,11 @@ pypy3 strip.py ../mpegts/udp.livetv.ts | mplayer -
 ```
 
 ```sh 
-pypy3 strip.py ../mpegts/udp.livetv.ts > stripped.ts 
+# make sure to use '>>' or stripped.ts will only be the last packet.
+
+pypy3 strip.py ../mpegts/udp.livetv.ts >> stripped.ts 
+
+
 ```
 ---
 
