@@ -1,3 +1,9 @@
+"""
+hasp.py  take three.
+
+"""
+
+
 import os
 import sys
 import urllib.request
@@ -34,8 +40,11 @@ class Stanza:
 
     def _aes_start(self, line):
         if line.startswith("#EXT-X-KEY:METHOD=AES-128"):
-            self._aes_mode(line)
-            self._aes_decrypt()
+            try:
+                self._aes_mode(line)
+                self._aes_decrypt()
+            except:
+                self.start = 0.0
 
     def _aes_mode(self, line):
         self.key_uri = line.split("URI=")[1].split(",")[0]
@@ -46,20 +55,19 @@ class Stanza:
 
     def _aes_decrypt(self):
         tmp = self.segment.rsplit("/", 1)[1]
-        with urllib.request.urlopen(self.segment) as infile:
+        with threefive.reader(self.segment) as infile:
             with open(tmp, "wb") as outfile:
                 pyaes.decrypt_stream(self.mode, infile, outfile)
         self._get_pcr_start(tmp)
 
     def _aes_get_key(self):
-        with urllib.request.urlopen(self.key_uri) as quay:
+        with threefive.reader(self.key_uri) as quay:
             self.key = quay.read()
 
     def _get_pcr_start(self, tmp):
-        with open(tmp, "rb") as tsdata:
-            strm = threefive.Stream(tsdata)
-            self.start = strm.decode_start_time()
-            os.unlink(tmp)
+        strm = threefive.Stream(tmp)
+        self.start = strm.decode_start_time()
+        os.unlink(tmp)
 
     def _extinf(self, line):
         if line.startswith("#EXTINF"):
@@ -121,10 +129,8 @@ class HASP:
             self.base_uri = arg[: arg.rindex("/") + 1]
         self.manifest = None
 
-    def _get_line(self):
-        line = self.manifest.readline()
-        if not line:
-            return False
+    @staticmethod
+    def _clean_line(line):
         if isinstance(line, bytes):
             line = line.decode()
         line = line.replace(" ", "").replace('"', "").replace("\n", "")
@@ -135,11 +141,12 @@ class HASP:
         reset_text = "\033[00m"
         pre = rev_text
         while True:
-            with urllib.request.urlopen(self.m3u8) as self.manifest:
+            with threefive.reader(self.m3u8) as self.manifest:
                 while self.manifest:
-                    line = self._get_line()
+                    line = self.manifest.readline()
                     if not line:
                         break
+                    line = self._clean_line(line)
                     self.chunk.append(line)
                     if not (line.startswith("#")):
                         segment = line
@@ -149,13 +156,11 @@ class HASP:
                             self.seg_list.append(segment)
                             self.seg_list = self.seg_list[-200:]
                             stanza = Stanza(self.chunk, segment, self._start)
-                            hold = stanza.decode()
-                            if not self._start:
-                                self.hls_time = self._start = hold
+                            self._start = stanza.decode()
                             tail = ""
                             if stanza.cue:
                                 tail = f"{rev_text}Cue:{reset_text} {stanza.cue}"
-                            effed = f"{line}  {rev_text}Start:{reset_text}  {round(self.hls_time,6)} {rev_text}Duration:{reset_text} {stanza.duration}\n{tail}"
+                            effed = f"{line}\t{rev_text}Start:{reset_text} {round(self.hls_time,6)}\t{rev_text}Duration:{reset_text} {stanza.duration}\n{tail}"
                             print(effed)
                             if stanza.cue:
                                 stanza.do_cue()
