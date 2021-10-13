@@ -142,7 +142,9 @@ class HASP:
                         break
                     self.chunk.append(line)
                     if not (line.startswith("#")):
-                        segment = self.base_uri + line
+                        segment = line
+                        if not (line.startswith("http")):
+                            segment = self.base_uri + line
                         if segment not in self.seg_list:
                             self.seg_list.append(segment)
                             self.seg_list = self.seg_list[-200:]
@@ -158,7 +160,6 @@ class HASP:
                             if stanza.cue:
                                 stanza.do_cue()
                             self.hls_time += stanza.duration
-                            # print()
                         self.chunk = []
 
 
