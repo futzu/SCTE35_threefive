@@ -6,7 +6,7 @@ hasp.py  take three.
 
 import os
 import sys
-import urllib.request
+import time
 import pyaes
 import threefive
 
@@ -128,6 +128,7 @@ class HASP:
         if arg.startswith("http"):
             self.base_uri = arg[: arg.rindex("/") + 1]
         self.manifest = None
+        self.target_duration = 0
 
     @staticmethod
     def _clean_line(line):
@@ -139,18 +140,22 @@ class HASP:
     def decode(self):
         rev_text = "\033[7m \033[1m"
         reset_text = "\033[00m"
-        pre = rev_text
         while True:
             with threefive.reader(self.m3u8) as self.manifest:
+                print("parsing manifest")
                 while self.manifest:
                     line = self.manifest.readline()
                     if not line:
                         break
                     line = self._clean_line(line)
+                    if "TARGETDURATION" in line:
+                        self.target_duration = int(line.split(":")[1]) >> 1
+                    if "ENDLIST" in line:
+                        break
                     self.chunk.append(line)
-                    if not (line.startswith("#")):
+                    if not line.startswith("#"):
                         segment = line
-                        if not (line.startswith("http")):
+                        if not line.startswith("http"):
                             segment = self.base_uri + line
                         if segment not in self.seg_list:
                             self.seg_list.append(segment)
@@ -166,10 +171,11 @@ class HASP:
                                 stanza.do_cue()
                             self.hls_time += stanza.duration
                         self.chunk = []
+                time.sleep(self.target_duration)
 
 
 def chk_version():
-    min_version = 2300
+    min_version = 2304
     vn = int(threefive.version().replace(".", ""))
     if vn < min_version:
         print(f"this script requires threefive.version {min_version} or higher. ")
