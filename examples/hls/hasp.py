@@ -1,5 +1,5 @@
 """
-hasp.py  take three.
+hasp.py  take five.
 
 """
 
