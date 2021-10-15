@@ -142,7 +142,6 @@ class HASP:
         reset_text = "\033[00m"
         while True:
             with threefive.reader(self.m3u8) as self.manifest:
-                print("parsing manifest")
                 while self.manifest:
                     line = self.manifest.readline()
                     if not line:
