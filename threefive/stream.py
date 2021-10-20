@@ -4,7 +4,6 @@ Mpeg-TS Stream parsing class Stream
 
 import sys
 from functools import partial
-
 from .cue import Cue
 from .packetdata import PacketData
 from .reader import reader
@@ -24,6 +23,28 @@ def show_cue_stderr(cue):
     for Stream.decode_proxy
     """
     cue.to_stderr()
+
+
+class ProgramInfo:
+    def __init__(self):
+        self.Pid = None
+        self.Descriptors = None
+        self.Pcr_Pid = None
+        self.Provider = None
+        self.Service = None
+        self.Streams = {}  # pid to stream_type mapping
+
+    def show(self):
+        empty = [None, b"\x00"]
+        if self.Service in empty:
+            self.Service = " ✔ "
+        if self.Provider in empty:
+            self.Provider = "✔ "
+        print(f" Service { self.Service}\n Provider: {str(self.Provider)}")
+        for k, v in self.Streams.items():
+            print(f"\tStream:\tPid:{k}[{hex(k)}]\tType:{v}")
+        print()
+        print()
 
 
 class Stream:
@@ -58,6 +79,7 @@ class Stream:
         self._pid_prgm = {}
         self._prgm_pcr = {}
         self._prgm_pts = {}
+        self._prgm = {}
         self.the_cue = None
         self._partial = {}
         self._last = {}
@@ -170,6 +192,9 @@ class Stream:
         """
         self.info = True
         self.decode(func=False)
+        for k, v in self._prgm.items():
+            print(f"Program: {k}")
+            v.show()
 
     def decode_start_time(self):
         """
@@ -266,6 +291,9 @@ class Stream:
         pid = self._parse_pid(pkt[1], pkt[2])
         if pid == 0:
             return self._chk_pat_payload(pkt, pid)
+        if self.info:
+            if pid == 0x0011:
+                return self._chk_sdt_payload(pkt, pid)
         if pid in self._pids["pmt"]:
             return self._chk_pmt_payload(pkt, pid)
         if pid in self._pids["pcr"]:
@@ -286,6 +314,11 @@ class Stream:
             return payload == self._last[pid]
         self._last[pid] = payload
         return False
+
+    def _chk_sdt_payload(self, pkt, pid):
+        payload = self._parse_payload(pkt)
+        if not self._chk_last(payload, pid):
+            self._stream_descriptor_table(payload)
 
     def _chk_pat_payload(self, pkt, pid):
         payload = self._parse_payload(pkt)
@@ -334,6 +367,50 @@ class Stream:
         cue, self.the_cue = self.the_cue, None
         return cue
 
+    def _stream_descriptor_table(self, payload):
+        pid = 0x011
+        payload = self._chk_partial(payload, pid)
+        # table_id =payload[1]
+        # ssi = payload[2] >> 7 &1
+        section_length = self._parse_length(payload[2], payload[3])
+        if section_length + 3 > len(payload):
+            self._partial[pid] = payload
+            return None
+        # transport_stream_id = self._parse_program(payload[4],payload[5])
+        # on_id = self._parse_program(payload[9],payload[10])
+        idx = 12
+        while idx < section_length + 3:
+            service_id = self._parse_program(payload[idx], payload[idx + 1])
+            idx += 2
+            idx += 1
+            dloop_len = self._parse_length(payload[idx], payload[idx + 1])
+            idx += 2
+            dll = dloop_len
+            i = 0
+            while i < dll:
+                if payload[idx] == 0x48:
+                    i += 1
+                    # dl=payload[idx+i]
+                    i += 1
+                    # service_type=payload[idx+i]
+                    i += 1
+                    spnl = payload[idx + i]
+                    i += 1
+                    service_provider_name = payload[idx + i : idx + i + spnl]
+                    i += spnl
+                    snl = payload[idx + i]
+                    i += 1
+                    service_name = payload[idx + i : idx + i + snl]
+                    i += snl
+                    if self.info:
+                        if service_id not in self._prgm:
+                            self._prgm[service_id] = ProgramInfo()
+                        pinfo = self._prgm[service_id]
+                        pinfo.Provider = service_provider_name
+                        pinfo.Service = service_name
+                i = dll
+                idx += i
+
     def _program_association_table(self, payload):
         """
         parse program association table ( pid 0 )
@@ -373,10 +450,18 @@ class Stream:
             return
         pcr_pid = self._parse_pid(payload[8], payload[9])
         if self.info:
-            print(f"\nProgram:{program_number}\n")
+            if program_number not in self._prgm:
+                pinfo = ProgramInfo()
+                pinfo.Pid = pid
+                pinfo.Pcr_Pid = pcr_pid
+                self._prgm[program_number] = pinfo
+            # print(f"\nProgram:{program_number}\n")
+        # self._prgm[program_number]['pcr']=pcr_pid
         self._pids["pcr"].add(pcr_pid)
         proginfolen = self._parse_length(payload[10], payload[11])
         idx = 12
+        # if self.info:
+        # print('Descriptors: ', payload[idx:idx+proginfolen])
         idx += proginfolen
         si_len = sectioninfolen - 9
         si_len -= proginfolen
@@ -387,11 +472,15 @@ class Stream:
         parse the elementary streams
         from a program
         """
+
         # 5 bytes for stream_type info
         chunk_size = 5
         end_idx = (idx + si_len) - chunk_size
         while idx < end_idx:
             stream_type, pid, ei_len = self._parse_stream_type(payload, idx)
+            if self.info:
+                pinfo = self._prgm[program_number]
+                pinfo.Streams[pid] = stream_type
             idx += chunk_size
             idx += ei_len
             self._pid_prgm[pid] = program_number
@@ -419,4 +508,6 @@ class Stream:
                 stream_stuff += " SCTE35 "
             if pid in self._pids["pcr"]:
                 stream_stuff += " PCR "
-            print(f"   {pid} [{hex(pid)}] Type: {stream_type}  {stream_stuff}")
+
+
+#         print(f"   {pid} [{hex(pid)}] Type: {stream_type}  {stream_stuff}")
