@@ -48,9 +48,9 @@ class ProgramInfo:
             self.service = " ✔ "
         if self.provider in empty:
             self.provider = "✔ "
-        print(f" Service { self.service}\n Provider: {str(self.provider)}")
+        print(f"\n    Service { self.service}    Provider: {str(self.provider)}\n")
         for k, vee in self.streams.items():
-            print(f"    stream:    pid:{k}[{hex(k)}]\ttype:{vee}\n\n")
+            print(f"    Stream:  pid:{k}[{hex(k)}]\ttype:{vee}")
 
 
 class Stream:
@@ -398,12 +398,11 @@ class Stream:
                     i += 1
                     service_name = payload[idx + i : idx + i + snl]
                     i += snl
-                    if self.info:
-                        if service_id not in self._prgm:
-                            self._prgm[service_id] = ProgramInfo()
-                        pinfo = self._prgm[service_id]
-                        pinfo.provider = service_provider_name
-                        pinfo.service = service_name
+                    if service_id not in self._prgm:
+                        self._prgm[service_id] = ProgramInfo()
+                    pinfo = self._prgm[service_id]
+                    pinfo.provider = service_provider_name
+                    pinfo.service = service_name
                 i = dloop_len
                 idx += i
 
