@@ -26,25 +26,31 @@ def show_cue_stderr(cue):
 
 
 class ProgramInfo:
+    """
+    ProgramInfo is a class to
+    hold Program information
+    for use with Stream.show()
+    """
+
     def __init__(self):
-        self.Pid = None
-        self.Descriptors = None
-        self.Pcr_Pid = None
-        self.Provider = None
-        self.Service = None
-        self.Streams = {}  # pid to stream_type mapping
+        self.pid = None
+        self.provider = None
+        self.service = None
+        self.streams = {}  # pid to stream_type mapping
 
     def show(self):
+        """
+        show print the Program Infomation
+        in a familiar format.
+        """
         empty = [None, b"\x00"]
-        if self.Service in empty:
-            self.Service = " ✔ "
-        if self.Provider in empty:
-            self.Provider = "✔ "
-        print(f" Service { self.Service}\n Provider: {str(self.Provider)}")
-        for k, v in self.Streams.items():
-            print(f"\tStream:\tPid:{k}[{hex(k)}]\tType:{v}")
-        print()
-        print()
+        if self.service in empty:
+            self.service = " ✔ "
+        if self.provider in empty:
+            self.provider = "✔ "
+        print(f" Service { self.service}\n Provider: {str(self.provider)}")
+        for k, vee in self.streams.items():
+            print(f"    stream:    pid:{k}[{hex(k)}]\ttype:{vee}\n\n")
 
 
 class Stream:
@@ -192,9 +198,9 @@ class Stream:
         """
         self.info = True
         self.decode(func=False)
-        for k, v in self._prgm.items():
+        for k, vee in self._prgm.items():
             print(f"Program: {k}")
-            v.show()
+            vee.show()
 
     def decode_start_time(self):
         """
@@ -370,30 +376,20 @@ class Stream:
     def _stream_descriptor_table(self, payload):
         pid = 0x011
         payload = self._chk_partial(payload, pid)
-        # table_id =payload[1]
-        # ssi = payload[2] >> 7 &1
         section_length = self._parse_length(payload[2], payload[3])
         if section_length + 3 > len(payload):
             self._partial[pid] = payload
             return None
-        # transport_stream_id = self._parse_program(payload[4],payload[5])
-        # on_id = self._parse_program(payload[9],payload[10])
         idx = 12
         while idx < section_length + 3:
             service_id = self._parse_program(payload[idx], payload[idx + 1])
-            idx += 2
-            idx += 1
+            idx += 3
             dloop_len = self._parse_length(payload[idx], payload[idx + 1])
             idx += 2
-            dll = dloop_len
             i = 0
-            while i < dll:
+            while i < dloop_len:
                 if payload[idx] == 0x48:
-                    i += 1
-                    # dl=payload[idx+i]
-                    i += 1
-                    # service_type=payload[idx+i]
-                    i += 1
+                    i += 3
                     spnl = payload[idx + i]
                     i += 1
                     service_provider_name = payload[idx + i : idx + i + spnl]
@@ -406,9 +402,9 @@ class Stream:
                         if service_id not in self._prgm:
                             self._prgm[service_id] = ProgramInfo()
                         pinfo = self._prgm[service_id]
-                        pinfo.Provider = service_provider_name
-                        pinfo.Service = service_name
-                i = dll
+                        pinfo.provider = service_provider_name
+                        pinfo.service = service_name
+                i = dloop_len
                 idx += i
 
     def _program_association_table(self, payload):
@@ -452,16 +448,11 @@ class Stream:
         if self.info:
             if program_number not in self._prgm:
                 pinfo = ProgramInfo()
-                pinfo.Pid = pid
-                pinfo.Pcr_Pid = pcr_pid
+                pinfo.pid = pid
                 self._prgm[program_number] = pinfo
-            # print(f"\nProgram:{program_number}\n")
-        # self._prgm[program_number]['pcr']=pcr_pid
         self._pids["pcr"].add(pcr_pid)
         proginfolen = self._parse_length(payload[10], payload[11])
         idx = 12
-        # if self.info:
-        # print('Descriptors: ', payload[idx:idx+proginfolen])
         idx += proginfolen
         si_len = sectioninfolen - 9
         si_len -= proginfolen
@@ -480,7 +471,7 @@ class Stream:
             stream_type, pid, ei_len = self._parse_stream_type(payload, idx)
             if self.info:
                 pinfo = self._prgm[program_number]
-                pinfo.Streams[pid] = stream_type
+                pinfo.streams[pid] = stream_type
             idx += chunk_size
             idx += ei_len
             self._pid_prgm[pid] = program_number
