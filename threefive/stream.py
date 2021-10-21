@@ -1,7 +1,6 @@
 """
 Mpeg-TS Stream parsing class Stream
 """
-
 import sys
 from functools import partial
 from .cue import Cue
@@ -34,8 +33,8 @@ class ProgramInfo:
 
     def __init__(self):
         self.pid = None
-        self.provider = None
-        self.service = None
+        self.provider = b""
+        self.service = b""
         self.streams = {}  # pid to stream_type mapping
 
     def show(self):
@@ -43,14 +42,12 @@ class ProgramInfo:
         show print the Program Infomation
         in a familiar format.
         """
-        empty = [None, b"\x00"]
-        if self.service in empty:
-            self.service = " ✔ "
-        if self.provider in empty:
-            self.provider = "✔ "
-        print(f"\n    Service { self.service}    Provider: {str(self.provider)}\n")
+        serv = self.service.decode(errors="ignore")
+        prov = self.provider.decode(errors="ignore")
+        print(f"\n    Service: { serv}\n    Provider: {prov}\n")
         for k, vee in self.streams.items():
             print(f"    Stream:  pid:{k}[{hex(k)}]\ttype:{vee}")
+        print()
 
 
 class Stream:
@@ -138,7 +135,7 @@ class Stream:
             for chunk in iter(
                 partial(self._tsdata.read, (self._PACKET_SIZE * pkts)), b""
             ):
-                for cue in self._mk_pkts(chunk):
+                for cue in self._mk_pkts(bytearray(chunk)):
                     if cue:
                         func(cue)
         self._tsdata.close()
