@@ -1,5 +1,5 @@
 """
-hasp.py  take five.
+hasp.py  take three.
 
 """
 
@@ -44,7 +44,7 @@ class Stanza:
                 self._aes_mode(line)
                 self._aes_decrypt()
             except:
-                self.start = 0.0
+                self.start = 30000.0
 
     def _aes_mode(self, line):
         self.key_uri = line.split("URI=")[1].split(",")[0]
@@ -58,7 +58,7 @@ class Stanza:
         with threefive.reader(self.segment) as infile:
             with open(tmp, "wb") as outfile:
                 pyaes.decrypt_stream(self.mode, infile, outfile)
-        self._get_pcr_start(tmp)
+                self._get_pcr_start(tmp)
 
     def _aes_get_key(self):
         with threefive.reader(self.key_uri) as quay:
@@ -125,6 +125,7 @@ class HASP:
         self.seg_list = []
         self._start = False
         self.chunk = []
+        self.base_uri = ""
         if arg.startswith("http"):
             self.base_uri = arg[: arg.rindex("/") + 1]
         self.manifest = None
@@ -142,6 +143,7 @@ class HASP:
         reset_text = "\033[00m"
         while True:
             with threefive.reader(self.m3u8) as self.manifest:
+                print("parsing manifest")
                 while self.manifest:
                     line = self.manifest.readline()
                     if not line:
@@ -160,11 +162,12 @@ class HASP:
                             self.seg_list.append(segment)
                             self.seg_list = self.seg_list[-200:]
                             stanza = Stanza(self.chunk, segment, self._start)
-                            self._start = stanza.decode()
+                            stanza.decode()
+                            self._start = stanza.start
                             tail = ""
                             if stanza.cue:
                                 tail = f"{rev_text}Cue:{reset_text} {stanza.cue}"
-                            effed = f"{line}\t{rev_text}Start:{reset_text} {round(self.hls_time,6)}\t{rev_text}Duration:{reset_text} {stanza.duration}\n{tail}"
+                            effed = f"{line}\t{rev_text}Start:{reset_text} {round(self.hls_time+self._start,6)}\t{rev_text}Duration:{reset_text} {stanza.duration}\n{tail}"
                             print(effed)
                             if stanza.cue:
                                 stanza.do_cue()

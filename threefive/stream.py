@@ -135,7 +135,7 @@ class Stream:
             for chunk in iter(
                 partial(self._tsdata.read, (self._PACKET_SIZE * pkts)), b""
             ):
-                for cue in self._mk_pkts(bytearray(chunk)):
+                for cue in self._mk_pkts(chunk):
                     if cue:
                         func(cue)
         self._tsdata.close()
