@@ -2,7 +2,7 @@
 Mpeg-TS Stream parsing class Stream
 """
 import sys
-from functools import partial
+from functools import partial, lru_cache
 from .cue import Cue
 from .packetdata import PacketData
 from .reader import reader
@@ -64,8 +64,8 @@ class Stream:
     """
 
     _PACKET_SIZE = 188
-    _SDT_PID = 0x0011
-    _PAT_PID = 0x00
+    _SDT_PID = 0x0011  # Stream Descriptor Table Pid
+    _PAT_PID = 0x00  # Program Association Pid
 
     def __init__(self, tsdata, show_null=True):
         """
@@ -215,7 +215,8 @@ class Stream:
         parsed for SCTE-35.
         """
         self.decode(func=no_op)
-        return self._prgm_pcr
+        for k, v in self.start.items():
+            return v
 
     def _mk_packet_data(self, pid):
         prgm = self._pid_prgm[pid]
@@ -274,7 +275,7 @@ class Stream:
         in the dict Stream._pid_pts
         """
         if self._parse_pusi(pkt[1]):
-            if pkt[6] & 1:
+            if pkt[11] & 128:
                 pts = ((pkt[13] >> 1) & 7) << 30
                 pts |= pkt[14] << 22
                 pts |= (pkt[15] >> 1) << 15
@@ -306,24 +307,26 @@ class Stream:
         PAT, PMT,  and SDT tables
         based on pid of the pkt
         """
-        if pid == self._PAT_PID:
-            self._chk_pat_payload(pkt, pid)
-        elif pid == self._SDT_PID:
-            if self.info:
-                self._chk_sdt_payload(pkt, pid)
-        else:
-            self._chk_pmt_payload(pkt, pid)
+        payload = self._parse_payload(pkt)
+        if not self._chk_last(payload, pid):
+            if pid == self._PAT_PID:
+                self._program_association_table(payload)
+            elif pid == self._SDT_PID:
+                if self.info:
+                    self._stream_descriptor_table(payload)
+            else:
+                self._program_map_table(payload, pid)
 
     def _parse(self, pkt):
         pid = self._parse_pid(pkt[1], pkt[2])
         if pid in self._pids["tables"]:
-            self._parse_tables(pkt, pid)
+            return self._parse_tables(pkt, pid)
         if pid in self._pids["pcr"]:
-            self._parse_pcr(pkt, pid)
-        if pid in self._pid_prgm:
-            self._parse_pts(pkt, pid)
+            return self._parse_pcr(pkt, pid)
         if pid in self._pids["scte35"]:
             return self._parse_scte35(pkt, pid)
+        if pid in self._pid_prgm:
+            return self._parse_pts(pkt, pid)
         return None
 
     def _chk_partial(self, payload, pid):
@@ -336,21 +339,6 @@ class Stream:
             return payload == self._last[pid]
         self._last[pid] = payload
         return False
-
-    def _chk_sdt_payload(self, pkt, pid):
-        payload = self._parse_payload(pkt)
-        if not self._chk_last(payload, pid):
-            self._stream_descriptor_table(payload)
-
-    def _chk_pat_payload(self, pkt, pid):
-        payload = self._parse_payload(pkt)
-        if not self._chk_last(payload, pid):
-            self._program_association_table(payload)
-
-    def _chk_pmt_payload(self, pkt, pid):
-        payload = self._parse_payload(pkt)
-        if not self._chk_last(payload, pid):
-            self._program_map_table(payload, pid)
 
     def _chk_scte35_payload(self, pkt, pid):
         payload = self._parse_payload(pkt)
@@ -460,7 +448,6 @@ class Stream:
         if self.the_program and (program_number != self.the_program):
             return
         pcr_pid = self._parse_pid(payload[8], payload[9])
-        #       if self.info:
         if program_number not in self._prgm:
             pinfo = ProgramInfo()
             pinfo.pid = pid
@@ -478,7 +465,6 @@ class Stream:
         parse the elementary streams
         from a program
         """
-
         # 5 bytes for stream_type info
         chunk_size = 5
         end_idx = (idx + si_len) - chunk_size
