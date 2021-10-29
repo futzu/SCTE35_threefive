@@ -215,8 +215,7 @@ class Stream:
         parsed for SCTE-35.
         """
         self.decode(func=no_op)
-        for k, v in self.start.items():
-            return v
+        return self.start.popitem()[1]
 
     def _mk_packet_data(self, pid):
         prgm = self._pid_prgm[pid]

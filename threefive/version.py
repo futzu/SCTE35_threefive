@@ -11,7 +11,7 @@ version you have installed.
 
 MAJOR = "2"
 MINOR = "3"
-MAINTAINENCE = "04"
+MAINTAINENCE = "05"
 
 
 def version():
