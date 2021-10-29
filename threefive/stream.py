@@ -2,7 +2,7 @@
 Mpeg-TS Stream parsing class Stream
 """
 import sys
-from functools import partial, lru_cache
+from functools import partial
 from .cue import Cue
 from .packetdata import PacketData
 from .reader import reader

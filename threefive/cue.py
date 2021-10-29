@@ -282,15 +282,6 @@ class Cue(SCTE35Base):
         self.info_section.decode(info_bites)
         return bites[info_size:]
 
-    def _set_pts(self):
-        """
-        Cue._set_pts applies pts adjustment
-        and calculates preroll if needed.
-        """
-        if self.command.name in ["Splice Insert", "Time Signal"]:
-            if self.command.pts_time:
-                self.command.pts_time += self.info_section.pts_adjustment
-
     def _set_splice_command(self, bites):
         """
         Cue._set_splice_command parses
@@ -303,7 +294,6 @@ class Cue(SCTE35Base):
         self.command.decode()
         del self.command.bites
         bites = bites[self.command.command_length :]
-        self._set_pts()
         return bites
 
     def show(self):
