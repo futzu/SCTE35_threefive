@@ -110,7 +110,6 @@ class Stream:
             if one[0] == sync_byte:
                 tail = self._tsdata.read(self._PACKET_SIZE - 1)
                 if tail:
-                    print(tail)
                     self._parse(one + tail)
                     return True
         return False
