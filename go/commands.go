@@ -30,9 +30,8 @@ func CommandDecoder(cmdtype uint8) Command {
 	case 255:
 		sc = &PrivateCommand{}
 	}
-	return sc 
+	return sc
 }
-
 
 // BandwidthReservation  Table 11
 type BandwidthReservation struct {

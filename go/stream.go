@@ -76,14 +76,16 @@ func (stream *Stream) parsePusi(pkt []byte) bool {
 
 func (stream *Stream) parsePts(pkt []byte, pid uint16) {
 	if stream.parsePusi(pkt) {
-		prgm, ok := stream.pid2Prgm[pid]
-		if ok {
-			pts := (uint64(pkt[13]) >> 1 & 7) << 30
-			pts |= uint64(pkt[14]) << 22
-			pts |= (uint64(pkt[15]) >> 1) << 15
-			pts |= uint64(pkt[16]) << 7
-			pts |= uint64(pkt[17]) >> 1
-			stream.prgm2pts[prgm] = pts
+		if pkt[11]&128 == 128 {
+			prgm, ok := stream.pid2Prgm[pid]
+			if ok {
+				pts := (uint64(pkt[13]) >> 1 & 7) << 30
+				pts |= uint64(pkt[14]) << 22
+				pts |= (uint64(pkt[15]) >> 1) << 15
+				pts |= uint64(pkt[16]) << 7
+				pts |= uint64(pkt[17]) >> 1
+				stream.prgm2pts[prgm] = pts
+			}
 		}
 	}
 }

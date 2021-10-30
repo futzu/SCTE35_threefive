@@ -108,7 +108,10 @@ class Stream:
             if not one:
                 return False
             if one[0] == sync_byte:
-                if self._tsdata.read(self._PACKET_SIZE - 1):
+                tail = self._tsdata.read(self._PACKET_SIZE - 1)
+                if tail:
+                    print(tail)
+                    self._parse(one + tail)
                     return True
         return False
 
@@ -118,16 +121,16 @@ class Stream:
         func can be set to a custom function that accepts
         a threefive.Cue instance as it's only argument.
         """
-        if self._find_start():
-            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
-                cue = self._parse(pkt)
-                if cue:
-                    if not func:
-                        return cue
-                    func(cue)
+        if not self._find_start():
+            return
+        for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
+            cue = self._parse(pkt)
+            if cue:
+                if not func:
+                    return cue
+                func(cue)
         self._tsdata.close()
-
-        return None
+        return
 
     def _mk_pkts(self, chunk):
         return [
@@ -141,13 +144,12 @@ class Stream:
         1880 packets at a time.
         """
         pkts = 1880
-        if self._find_start():
-            for chunk in iter(
-                partial(self._tsdata.read, (self._PACKET_SIZE * pkts)), b""
-            ):
-                for cue in self._mk_pkts(chunk):
-                    if cue:
-                        func(cue)
+        if not self._find_start():
+            return
+        for chunk in iter(partial(self._tsdata.read, (self._PACKET_SIZE * pkts)), b""):
+            for cue in self._mk_pkts(chunk):
+                if cue:
+                    func(cue)
         self._tsdata.close()
 
     def decode_next(self):
