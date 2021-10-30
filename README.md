@@ -1,10 +1,12 @@
 
  
 
-__threefive__` is a SCTE35 Decoder and Encoder python3 lib. 
+__threefive__` is a SCTE35 Decoder and Encoder python3 lib.
+* [threefive is Best](https://github.com/futzu/threefive/blob/master/py3vspypy3.md) with [`pypy3`](https://www.pypy.org/) 
 * [threefive is Super Easy to Use](#easy-threefive) One function call decodes SCTE35 cues.
 
-* All 2020 SCTE-35 [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py), [`Descriptors`](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py),and [`Upids`](https://github.com/futzu/threefive/blob/master/threefive/upid.py) are fully supported.
+* All 2020 SCTE-35 [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py), [`Descriptors`](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py),and [`Upids`](https://github.com/futzu/threefive/blob/master/threefive/upid.py) are fully supported .
+ [`A threefive SCTE-35 Cue`](https://github.com/futzu/threefive/blob/master/cue.md)
 
 * [`Mpegts is Well Supported`](#stream-class) in the Stream class.
  
@@ -30,7 +32,6 @@ __threefive__` is a SCTE35 Decoder and Encoder python3 lib.
 
 * [__Fast Start__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
-* [`A threefive SCTE-35 Cue Diagram`](https://github.com/futzu/threefive/blob/master/cue.md)
 
 *   [`Easy` threefive](#easy-threefive) 
       *   [threefive.`__decode__()`](#easy-threefive)      
@@ -52,7 +53,6 @@ __threefive__` is a SCTE35 Decoder and Encoder python3 lib.
 
 
 *  [Code of Conduct](https://github.com/futzu/threefive/blob/master/CODE_OF_CONDUCT.md).  
-  *I thought this was a joke.*
 
 
 
