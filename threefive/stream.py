@@ -121,7 +121,7 @@ class Stream:
         a threefive.Cue instance as it's only argument.
         """
         if not self._find_start():
-            return
+            return False
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
             cue = self._parse(pkt)
             if cue:
@@ -129,7 +129,7 @@ class Stream:
                     return cue
                 func(cue)
         self._tsdata.close()
-        return
+        return True
 
     def _mk_pkts(self, chunk):
         return [
@@ -216,7 +216,9 @@ class Stream:
         parsed for SCTE-35.
         """
         self.decode(func=no_op)
-        return self.start.popitem()[1]
+        if len(self.start.values()) > 0:
+            return self.start.popitem()[1]
+        return None
 
     def _mk_packet_data(self, pid):
         prgm = self._pid_prgm[pid]
@@ -274,15 +276,17 @@ class Stream:
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
-        if self._parse_pusi(pkt[1]):
-            if pkt[11] & 128:
-                pts = ((pkt[13] >> 1) & 7) << 30
-                pts |= pkt[14] << 22
-                pts |= (pkt[15] >> 1) << 15
-                pts |= pkt[16] << 7
-                pts |= pkt[17] >> 1
-                prgm = self._pid_prgm[pid]
-                self._prgm_pts[prgm] = pts
+        # if self._parse_pusi(pkt[1]):
+        if pkt[11] & 128:
+            pts = ((pkt[13] >> 1) & 7) << 30
+            pts |= pkt[14] << 22
+            pts |= (pkt[15] >> 1) << 15
+            pts |= pkt[16] << 7
+            pts |= pkt[17] >> 1
+            prgm = self._pid_prgm[pid]
+            self._prgm_pts[prgm] = pts
+        # if prgm not in self.start:
+        #         self.start[prgm] = pts
 
     def _parse_pcr(self, pkt, pid):
         """
@@ -321,12 +325,13 @@ class Stream:
         pid = self._parse_pid(pkt[1], pkt[2])
         if pid in self._pids["tables"]:
             return self._parse_tables(pkt, pid)
-        if pid in self._pids["pcr"]:
-            return self._parse_pcr(pkt, pid)
         if pid in self._pids["scte35"]:
             return self._parse_scte35(pkt, pid)
+        if pid in self._pids["pcr"]:
+            return self._parse_pcr(pkt, pid)
         if pid in self._pid_prgm:
-            return self._parse_pts(pkt, pid)
+            if self._parse_pusi(pkt[1]):
+                return self._parse_pts(pkt, pid)
         return None
 
     def _chk_partial(self, payload, pid):

@@ -6,7 +6,6 @@ hasp.py  take three.
 
 import os
 import sys
-import time
 import pyaes
 import threefive
 
@@ -30,6 +29,8 @@ class Stanza:
     def __init__(self, lines, segment, start):
         self.lines = lines
         self.segment = segment
+        self.decoded_seg = None
+        self.pcr = None
         self.start = start
         self.duration = 0
         self.cue = False
@@ -43,8 +44,9 @@ class Stanza:
             try:
                 self._aes_mode(line)
                 self._aes_decrypt()
+                return True
             except:
-                self.start = 30000.0
+                return False
 
     def _aes_mode(self, line):
         self.key_uri = line.split("URI=")[1].split(",")[0]
@@ -54,20 +56,33 @@ class Stanza:
         self.mode = pyaes.AESModeOfOperationCBC(self.key, iv=self.iv)
 
     def _aes_decrypt(self):
-        tmp = self.segment.rsplit("/", 1)[1]
-        with threefive.reader(self.segment) as infile:
-            with open(tmp, "wb") as outfile:
-                pyaes.decrypt_stream(self.mode, infile, outfile)
-                self._get_pcr_start(tmp)
+        try:
+            tmp = self.segment.rsplit("/", 1)[1]
+            with threefive.reader(self.segment) as infile:
+                with open(tmp, "wb") as outfile:
+                    pyaes.decrypt_stream(self.mode, infile, outfile)
+                    self._get_pcr_start(tmp)
+            os.unlink(tmp)
+        except:
+            pass
 
     def _aes_get_key(self):
+        if not self.key_uri.startswith("http"):
+            head = self.segment[: self.segment.rindex("/") + 1]
+            self.key_uri = head + self.key_uri
         with threefive.reader(self.key_uri) as quay:
             self.key = quay.read()
 
-    def _get_pcr_start(self, tmp):
-        strm = threefive.Stream(tmp)
-        self.start = strm.decode_start_time()
-        os.unlink(tmp)
+    def _get_pcr_start(self, seg):
+        if not self.start:
+            try:
+                strm = threefive.Stream(seg)
+                strm.decode()
+                if len(strm.start.values()) > 0:
+                    pcr_start = strm.start.popitem()[1]
+            except:
+                pcr_start = 0.0
+            self.start = self.pcr = round(pcr_start / 90000.0, 6)
 
     def _extinf(self, line):
         if line.startswith("#EXTINF"):
@@ -105,6 +120,8 @@ class Stanza:
             self._ext_x_scte35(line)
             self._extinf(line)
             self._ext_x_daterange(line)
+        if not self.pcr:
+            self._get_pcr_start(self.segment)
         return self.start
 
 
@@ -116,68 +133,83 @@ class HASP:
     Try it with a stream like this
 
     python3 hasp.py https://turnerlive.warnermediacdn.com/hls/live/586495/cnngo/cnn_slate/VIDEO_2_1964000.m3u8
-
     """
 
     def __init__(self, arg):
         self.m3u8 = arg
-        self.hls_time = 0
+        self.hls_time = 0.0
         self.seg_list = []
-        self._start = False
+        self._start = None
         self.chunk = []
         self.base_uri = ""
         if arg.startswith("http"):
             self.base_uri = arg[: arg.rindex("/") + 1]
         self.manifest = None
         self.target_duration = 0
+        self.next_expected = 0
 
     @staticmethod
     def _clean_line(line):
         if isinstance(line, bytes):
-            line = line.decode()
-        line = line.replace(" ", "").replace('"', "").replace("\n", "")
+            line = line.decode(errors="ignore")
+        line = (
+            line.replace(" ", "").replace('"', "").replace("\n", "").replace("\r", "")
+        )
         return line
 
-    def decode(self):
+    def show_segment_times(self, stanza):
         rev_text = "\033[7m \033[1m"
         reset_text = "\033[00m"
+        print(f"{rev_text}Segment :{reset_text} {stanza.segment}")
+        print(f"{rev_text}Base Time       :{reset_text} {round(self._start,6)}")
+        print(f"{rev_text}HLS Time        :{reset_text} {round(self.hls_time,6)}")
+        print(
+            f"{rev_text}Segment Start   :{reset_text} {round(self.next_expected,6)}\t "
+            + f"{rev_text}Segment Duration  :{reset_text} {stanza.duration}"
+        )
+        if stanza.pcr:
+            print(f"{rev_text}PCR Time        :{reset_text} {stanza.pcr}\n")
+        if stanza.cue:
+            print(f"{rev_text}Cue:{reset_text}\n")
+            stanza.do_cue()
+        print("\n")
+
+    def do_segment(self, line):
+        segment = line
+        if not line.startswith("http"):
+            segment = self.base_uri + line
+        if segment not in self.seg_list:
+            self.seg_list.append(segment)
+            self.seg_list = self.seg_list[-200:]
+            stanza = Stanza(self.chunk, segment, self._start)
+            stanza.decode()
+            if not self._start:
+                self._start = stanza.start
+            self.next_expected = self._start + self.hls_time
+            self.show_segment_times(stanza)
+            self.next_expected += round(stanza.duration, 6)
+            self.hls_time += stanza.duration
+        self.chunk = []
+
+    def decode(self):
         while True:
             with threefive.reader(self.m3u8) as self.manifest:
-                print("parsing manifest")
                 while self.manifest:
                     line = self.manifest.readline()
                     if not line:
                         break
                     line = self._clean_line(line)
+                    if "ENDLIST" in line:
+                        return False
                     if "TARGETDURATION" in line:
                         self.target_duration = int(line.split(":")[1]) >> 1
-                    if "ENDLIST" in line:
-                        break
                     self.chunk.append(line)
                     if not line.startswith("#"):
-                        segment = line
-                        if not line.startswith("http"):
-                            segment = self.base_uri + line
-                        if segment not in self.seg_list:
-                            self.seg_list.append(segment)
-                            self.seg_list = self.seg_list[-200:]
-                            stanza = Stanza(self.chunk, segment, self._start)
-                            stanza.decode()
-                            self._start = stanza.start
-                            tail = ""
-                            if stanza.cue:
-                                tail = f"{rev_text}Cue:{reset_text} {stanza.cue}"
-                            effed = f"{line}\t{rev_text}Start:{reset_text} {round(self.hls_time+self._start,6)}\t{rev_text}Duration:{reset_text} {stanza.duration}\n{tail}"
-                            print(effed)
-                            if stanza.cue:
-                                stanza.do_cue()
-                            self.hls_time += stanza.duration
-                        self.chunk = []
-                time.sleep(self.target_duration)
+                        self.do_segment(line)
 
 
 def chk_version():
-    min_version = 2304
+    min_version = 2305
     vn = int(threefive.version().replace(".", ""))
     if vn < min_version:
         print(f"this script requires threefive.version {min_version} or higher. ")
