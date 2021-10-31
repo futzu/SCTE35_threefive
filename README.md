@@ -35,7 +35,7 @@ __threefive__` is a SCTE35 Decoder and Encoder python3 lib.
 
 
 *   [`Easy` threefive](#easy-threefive) 
-      *   [threefive.`__decode__()`](#easy-threefive)      
+      *   [threefive.__decode__()](#easy-threefive)      
 
 *  [`Advanced` threefive](#advanced-threefive)     
      *  [threefive.`__Cue__` Class](#cue-class)         
