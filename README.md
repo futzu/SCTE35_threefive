@@ -6,8 +6,8 @@ __threefive__` is a SCTE35 Decoder and Encoder python3 lib.
 * [threefive is Super Easy to Use](#easy-threefive) One function call decodes SCTE35 cues.
 
 * All 2020 SCTE-35 [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py), [`Descriptors`](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py),and [`Upids`](https://github.com/futzu/threefive/blob/master/threefive/upid.py) are fully supported .
-* 
- [`Diagram of a threefive SCTE-35 Cue`](https://github.com/futzu/threefive/blob/master/cue.md)
+
+* [Diagram of a threefive SCTE-35 Cue](https://github.com/futzu/threefive/blob/master/cue.md)
 
 * [`Mpegts is Well Supported`](#stream-class) in the Stream class.
  
