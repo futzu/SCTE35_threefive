@@ -1,5 +1,14 @@
 """
-hasp.py  take three.
+hasp.py
+
+    HASP stands for HLS AES SCTE-35 Parser
+    HASP decodes AES encrypted segments for the
+    start time of the first segment read.
+
+    Try it with a stream like this:
+
+    pypy3 hasp.py https://phls-vod.cdn.turner.com/cnnngtv/cnn/hls/2018/12/03/urn:ngtv-show:115615/index_1.m3u8
+    
 
 """
 
@@ -132,7 +141,7 @@ class HASP:
     start time of the first segment read.
     Try it with a stream like this
 
-    python3 hasp.py https://turnerlive.warnermediacdn.com/hls/live/586495/cnngo/cnn_slate/VIDEO_2_1964000.m3u8
+    python3 hasp.py https://phls-vod.cdn.turner.com/cnnngtv/cnn/hls/2018/12/03/urn:ngtv-show:115615/index_1.m3u8
     """
 
     def __init__(self, arg):
