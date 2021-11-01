@@ -48,7 +48,7 @@ def parse_sbsb(pdata):
     }
 
 
-def do(cue):
+def do_descriptors(cue):
     """
     do - process cue.descriptors
     """
@@ -63,7 +63,7 @@ def do_cue(scte35):
     """
     mpu_cue = Cue(scte35)
     mpu_cue.decode()
-    do(mpu_cue)
+    do_descriptors(mpu_cue)
 
 
 def do_stream():
@@ -74,7 +74,7 @@ def do_stream():
     for arg in args:
         print(f"Next File: {arg}")
         strm = Stream(arg)
-        strm.decode(func=do)
+        strm.decode(func=do_descriptors)
 
 
 if __name__ == "__main__":

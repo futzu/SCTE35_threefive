@@ -276,7 +276,6 @@ class Stream:
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
-        # if self._parse_pusi(pkt[1]):
         if pkt[11] & 128:
             pts = ((pkt[13] >> 1) & 7) << 30
             pts |= pkt[14] << 22
@@ -285,8 +284,6 @@ class Stream:
             pts |= pkt[17] >> 1
             prgm = self._pid_prgm[pid]
             self._prgm_pts[prgm] = pts
-        # if prgm not in self.start:
-        #         self.start[prgm] = pts
 
     def _parse_pcr(self, pkt, pid):
         """
@@ -323,12 +320,12 @@ class Stream:
 
     def _parse(self, pkt):
         pid = self._parse_pid(pkt[1], pkt[2])
-        if pid in self._pids["tables"]:
-            return self._parse_tables(pkt, pid)
         if pid in self._pids["scte35"]:
             return self._parse_scte35(pkt, pid)
         if pid in self._pids["pcr"]:
             return self._parse_pcr(pkt, pid)
+        if pid in self._pids["tables"]:
+            return self._parse_tables(pkt, pid)
         if pid in self._pid_prgm:
             if self._parse_pusi(pkt[1]):
                 return self._parse_pts(pkt, pid)
@@ -346,17 +343,14 @@ class Stream:
         return False
 
     def _chk_scte35_payload(self, pkt, pid):
-        payload = self._parse_payload(pkt)
-        if not self.the_cue:
-            payload = self._split_by_idx(payload, b"\xfc0")
-            if not payload:
-                self._pids["scte35"].remove(pid)
-                return False
-            if payload[13] == self.show_null:
-                return False
-            self._parse_cue(payload, pid)
-        else:
-            self.the_cue.bites = self._chk_partial(payload, pid)
+        payload = self._chk_partial(self._parse_payload(pkt), pid)
+        payload = self._split_by_idx(payload, b"\xfc0")
+        if not payload:
+            self._pids["scte35"].remove(pid)
+            return False
+        if payload[13] == self.show_null:
+            return False
+        self._parse_cue(payload, pid)
         # + 3 for the bytes before section starts
         if (self.the_cue.info_section.section_length + 3) > len(self.the_cue.bites):
             self._partial[pid] = payload
