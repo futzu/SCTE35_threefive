@@ -297,7 +297,9 @@ class Stream:
                 pcr |= pkt[8] << 9
                 pcr |= pkt[9] << 1
                 pcr |= pkt[10] >> 7
-                prgm = self._pid_prgm[pid]
+                prgm = 1
+                if pid in self._pid_prgm:
+                    prgm = self._pid_prgm[pid]
                 self._prgm_pcr[prgm] = pcr
                 if prgm not in self.start:
                     self.start[prgm] = pcr
