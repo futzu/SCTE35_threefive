@@ -454,6 +454,7 @@ class Stream:
             pinfo.pid = pid
             self._prgm[program_number] = pinfo
         self._pids["pcr"].add(pcr_pid)
+        self._pid_prgm[pid] = program_number
         proginfolen = self._parse_length(payload[10], payload[11])
         idx = 12
         idx += proginfolen
