@@ -287,8 +287,8 @@ class Stream:
 
     def _parse_pcr(self, pkt, pid):
         """
-        Parse PCR base and ext from
-        PCR PID packets
+        parse pcr and store by program key
+        in the dict Stream._pid_pcr
         """
         if (pkt[3] >> 5) & 1:
             if (pkt[5] >> 4) & 1:
