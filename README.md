@@ -10,8 +10,6 @@ __threefive__` is a SCTE35 Decoder and Encoder python3 lib.
 
 * [`Mpegts is Well Supported`](#stream-class) in the Stream class.
 
-* `I Need MPEGTS Samples` If you want your implementation to be Supported, I need a Sample.  
-
 
 *  ```Multicast?```   ```HLS?```  ```Custom Upid Handling?```  ```Frame Accurate Preroll timings?``` [... Oh Yeah.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 
