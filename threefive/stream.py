@@ -41,6 +41,7 @@ class ProgramInfo:
 
     def __init__(self):
         self.pid = None
+        self.pcr_pid = None
         self.provider = b""
         self.service = b""
         self.streams = {}  # pid to stream_type mapping
@@ -52,9 +53,12 @@ class ProgramInfo:
         """
         serv = self.service.decode(errors="ignore")
         prov = self.provider.decode(errors="ignore")
-        print(f"\n    Service: { serv}\n    Provider: {prov}\n")
+        print(
+            f"    Service: { serv}\n    Provider: {prov}\n    Pcr Pid: {self.pcr_pid}[{hex(self.pcr_pid)}]"
+        )
+        print(f"    Streams:")
         for k, vee in self.streams.items():
-            print(f"    Stream:  pid:{k}[{hex(k)}]\ttype:{vee}")
+            print(f"\t    Pid: {k}[{hex(k)}]    Type: {vee}")
         print()
 
 
@@ -206,9 +210,11 @@ class Stream:
         """
         self.info = True
         self.decode(func=False)
-        for k, vee in self._prgm.items():
-            print(f"Program: {k}")
-            vee.show()
+        sp = sorted(self._prgm.items())
+        for k, vee in sp:
+            if len(vee.streams.items()) > 0:
+                print(f"Program: {k}")
+                vee.show()
 
     def decode_start_time(self):
         """
@@ -322,15 +328,15 @@ class Stream:
 
     def _parse(self, pkt):
         pid = self._parse_pid(pkt[1], pkt[2])
-        if pid in self._pids["scte35"]:
-            return self._parse_scte35(pkt, pid)
         if pid in self._pids["pcr"]:
-            return self._parse_pcr(pkt, pid)
+            self._parse_pcr(pkt, pid)
         if pid in self._pids["tables"]:
-            return self._parse_tables(pkt, pid)
+            self._parse_tables(pkt, pid)
         if pid in self._pid_prgm:
             if self._parse_pusi(pkt[1]):
-                return self._parse_pts(pkt, pid)
+                self._parse_pts(pkt, pid)
+        if pid in self._pids["scte35"]:
+            return self._parse_scte35(pkt, pid)
         return None
 
     def _chk_partial(self, payload, pid):
@@ -416,7 +422,7 @@ class Stream:
         parse program association table ( pid 0 )
         for program to pmt_pid mappings.
         """
-        pid = 0
+        pid = self._PAT_PID
         payload = self._chk_partial(payload, pid)
         section_length = self._parse_length(payload[2], payload[3])
         if section_length + 3 > len(payload):
@@ -450,9 +456,11 @@ class Stream:
             return
         pcr_pid = self._parse_pid(payload[8], payload[9])
         if program_number not in self._prgm:
-            pinfo = ProgramInfo()
-            pinfo.pid = pid
-            self._prgm[program_number] = pinfo
+            self._prgm[program_number] = ProgramInfo()
+        pinfo = self._prgm[program_number]
+        pinfo.pid = pid
+        pinfo.pcr_pid = pcr_pid
+        self._prgm[program_number] = pinfo
         self._pids["pcr"].add(pcr_pid)
         self._pid_prgm[pcr_pid] = program_number
         proginfolen = self._parse_length(payload[10], payload[11])
@@ -472,9 +480,8 @@ class Stream:
         end_idx = (idx + si_len) - chunk_size
         while idx < end_idx:
             stream_type, pid, ei_len = self._parse_stream_type(payload, idx)
-            if self.info:
-                pinfo = self._prgm[program_number]
-                pinfo.streams[pid] = stream_type
+            pinfo = self._prgm[program_number]
+            pinfo.streams[pid] = stream_type
             idx += chunk_size
             idx += ei_len
             self._pid_prgm[pid] = program_number
