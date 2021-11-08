@@ -228,6 +228,7 @@ func (stream *Stream) parseStreams(silen uint16, pay []byte, idx uint16, prgm ui
 		streamtype := pay[idx]
 		elpid := parsePid(pay[idx+1], pay[idx+2])
 		eilen := parseLen(pay[idx+3], pay[idx+4])
+
 		idx += chunksize
 		idx += eilen
 		stream.pid2Prgm[elpid] = prgm

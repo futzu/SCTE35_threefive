@@ -4,12 +4,13 @@ PYPY3 = pypy3
 
 default: install
 
-black:
+fmt:
 	black threefive/
 	black examples/
 	black setup.py
+	gofmt -s -w go/
 
-commit: black
+commit: fmt
 	git pull
 	git commit -a
 	git push	
