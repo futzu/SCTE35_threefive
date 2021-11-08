@@ -9,17 +9,17 @@ from .reader import reader
 from .stream import Stream
 
 
-class Segment:
+class Segment(Stream):
     """
-    The Segment class is used to process
-    hls mpegts segments for segment start time
-    and SCTE35 cues.
-    local and http(s) segments are supported
-    aes encoded segments are decrypted.
-    Segment.start is the first timestamp found
-    in the segment.
-    Segment.cues is a list of
-    SCTE35 cues found in the segment.
+    The Segment class is a Sub Class of threefive.Stream
+    made for small, fixed size MPEGTS files,like HLS segments.
+
+    Segment Class Specific Features:
+
+    * Decryption of AES Encrypted MPEGTS.
+
+    * Segment.cues  a list of SCTE35 cues found in the segment.
+
 
     Example:
 
@@ -28,8 +28,6 @@ class Segment:
         >>>> uri = "https://example.com/1.ts"
         >>>> seg = Segment(uri)
         >>>> seg.decode()
-        >>>> seg.start
-        89715.976944
         >>>> [cue.encode() for cue in cues]
         ['/DARAAAAAAAAAP/wAAAAAHpPv/8=',
         '/DAvAAAAAAAAAP/wFAUAAAKWf+//4WoauH4BTFYgAAEAAAAKAAhDVUVJAAAAAOv1oqc=']
@@ -42,8 +40,6 @@ class Segment:
 
         >>>> seg = Segment(uri,key_uri=key, iv=IV)
         >>>> seg.decode()
-        >>>> seg.start
-        89715.976944
         >>>> {cue.packet_data.pcr:cue.encode() for cue in seg.cues}
 
        { 89718.451333: '/DARAAAAAAAAAP/wAAAAAHpPv/8=',
@@ -64,6 +60,7 @@ class Segment:
         if self.key_uri:
             self._aes_get_key()
             self._aes_decrypt()
+        super().__init__(self.seg_uri)
 
     def __repr__(self):
         return str(self.__dict__)
@@ -91,15 +88,19 @@ class Segment:
         """
         self.cues.append(cue)
 
+    def show_cue(self, cue):
+        """
+        show_cue prints SCTE35 Cue data
+        and calls add_cue to append the cue to
+        the Segment,cues list.
+        """
+        cue.show()
+        self.add_cue(cue)
+
     def decode(self):
         """
-        decode a mpegts hls segment for start time
-        and scte35 cues.
+        decode a mpegts segment.
         """
-        with reader(self.seg_uri) as seg:
-            strm = Stream(seg)
-            # strm.show_start = False
-            strm.decode(func=self.add_cue)
-            self.start = strm.start
-            if self.tmp:
-                os.unlink(self.tmp)
+        super().decode(func=self.show_cue)
+        if self.tmp:
+            os.unlink(self.tmp)

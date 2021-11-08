@@ -53,10 +53,9 @@ class ProgramInfo:
         """
         serv = self.service.decode(errors="ignore")
         prov = self.provider.decode(errors="ignore")
-        print(
-            f"    Service: { serv}\n    Provider: {prov}\n    Pcr Pid: {self.pcr_pid}[{hex(self.pcr_pid)}]"
-        )
-        print(f"    Streams:")
+        print(f"    Service: { serv}\n    Provider: {prov}\n")
+        print(f"    Pcr Pid: {self.pcr_pid}[{hex(self.pcr_pid)}]")
+        print("    Streams:")
         for k, vee in self.streams.items():
             print(f"\t    Pid: {k}[{hex(k)}]    Type: {vee}")
         print()
@@ -282,14 +281,15 @@ class Stream:
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
-        if pkt[11] & 128:
-            pts = ((pkt[13] >> 1) & 7) << 30
-            pts |= pkt[14] << 22
-            pts |= (pkt[15] >> 1) << 15
-            pts |= pkt[16] << 7
-            pts |= pkt[17] >> 1
-            prgm = self._pid_prgm[pid]
-            self._prgm_pts[prgm] = pts
+        if pid in self._pid_prgm:
+            if pkt[11] & 128:
+                pts = ((pkt[13] >> 1) & 7) << 30
+                pts |= pkt[14] << 22
+                pts |= (pkt[15] >> 1) << 15
+                pts |= pkt[16] << 7
+                pts |= pkt[17] >> 1
+                prgm = self._pid_prgm[pid]
+                self._prgm_pts[prgm] = pts
 
     def _parse_pcr(self, pkt, pid):
         """
@@ -332,9 +332,8 @@ class Stream:
             self._parse_pcr(pkt, pid)
         if pid in self._pids["tables"]:
             self._parse_tables(pkt, pid)
-        if pid in self._pid_prgm:
-            if self._parse_pusi(pkt[1]):
-                self._parse_pts(pkt, pid)
+        if self._parse_pusi(pkt[1]):
+            self._parse_pts(pkt, pid)
         if pid in self._pids["scte35"]:
             return self._parse_scte35(pkt, pid)
         return None
