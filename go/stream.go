@@ -157,20 +157,16 @@ func (stream *Stream) parse(pkt []byte) {
 
 	if *pid == 0 {
 		stream.parsePat(*pay, *pid)
-		return
 	}
 	if stream.isPmtPid(*pid) {
 		stream.parsePmt(*pay, *pid)
-		return
 	}
 	if stream.isPcrPid(*pid) {
 		stream.parsePcr(pkt, *pid)
-		return
 	}
 
 	if stream.isScte35Pid(*pid) {
 		stream.parseScte35(*pay, *pid)
-		return
 	}
 	stream.parsePts(pkt, *pid)
 }
@@ -179,7 +175,7 @@ func (stream *Stream) parsePat(pay []byte, pid uint16) {
 	if stream.sameAsLast(pay, pid) {
 		return
 	}
-	pay = stream.chkPartial(pay, pid, []byte("\x00\x00"))
+	pay = stream.chkPartial(pay, pid, []byte(""))
 	if len(pay) < 1 {
 		return
 	}
@@ -207,17 +203,17 @@ func (stream *Stream) parsePmt(pay []byte, pid uint16) {
 	if stream.sameAsLast(pay, pid) {
 		return
 	}
-	pay = stream.chkPartial(pay, pid, []byte("\x00\x02"))
+	pay = stream.chkPartial(pay, pid, []byte("\x02"))
 	if len(pay) < 1 {
 		return
 	}
-	secinfolen := parseLen(pay[2], pay[3])
+	secinfolen := parseLen(pay[1], pay[2])
 	if stream.sectionDone(pay, pid, secinfolen) {
-		prgm := parsePrgm(pay[4], pay[5])
-		pcrpid := parsePid(pay[9], pay[10])
+		prgm := parsePrgm(pay[3], pay[4])
+		pcrpid := parsePid(pay[8], pay[9])
 		stream.addPcrPid(pcrpid)
-		proginfolen := parseLen(pay[11], pay[12])
-		idx := uint16(13)
+		proginfolen := parseLen(pay[10], pay[11])
+		idx := uint16(12)
 		idx += proginfolen
 		silen := secinfolen - 9
 		silen -= proginfolen
@@ -246,12 +242,12 @@ func (stream *Stream) vrfyStreamType(pid uint16, streamtype uint8) {
 }
 
 func (stream *Stream) parseScte35(pay []byte, pid uint16) {
-	pay = stream.chkPartial(pay, pid, []byte("\x00\xfc0"))
+	pay = stream.chkPartial(pay, pid, []byte("\xfc0"))
 	if len(pay) == 0 {
 		stream.Pids.delScte35Pid(pid)
 		return
 	}
-	seclen := parseLen(pay[2], pay[3])
+	seclen := parseLen(pay[1], pay[2])
 	if stream.sectionDone(pay, pid, seclen) {
 		cue := stream.mkCue(pid)
 		if cue.Decode(pay) {
