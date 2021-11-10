@@ -331,11 +331,11 @@ class Stream:
         if pid in self._pids["pcr"]:
             self._parse_pcr(pkt, pid)
         if pid in self._pids["tables"]:
-            self._parse_tables(pkt, pid)
-        if self._parse_pusi(pkt[1]):
-            self._parse_pts(pkt, pid)
+            return self._parse_tables(pkt, pid)
         if pid in self._pids["scte35"]:
             return self._parse_scte35(pkt, pid)
+        if self._parse_pusi(pkt[1]):
+            self._parse_pts(pkt, pid)
         return None
 
     def _chk_partial(self, payload, pid):
