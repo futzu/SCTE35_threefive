@@ -1,28 +1,28 @@
  
 
-__threefive__` is a SCTE35 Decoder and Encoder python3 lib.
-* [threefive is Best](https://github.com/futzu/threefive/blob/master/py3vspypy3.md) with [`pypy3`](https://www.pypy.org/) 
-* [threefive is Super Easy to Use](#easy-threefive) One function call decodes SCTE35 cues.
+* threefive 
+   * `Is` The Most Advanced SCTE35 Parser lib Available.  .
+   * `Is` [Super Easy](#easy-threefive) to Use.
+   * `Parses` [Mpegts](#stream-class) in the Stream class.
+   * `Has` [SCTE35 Cue Encoding](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
+   * `Decrypts` [AES ](https://github.com/futzu/scte35-threefive/blob/901456089d369e8cd81c0dc3c2bd6600e303562e/threefive/segment.py#L37) in the Segment Class
+   * `Supports` All 2020 SCTE-35: 
+     * [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py)
+     * [`Descriptors`](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py)
+     * [`Upids`](https://github.com/futzu/threefive/blob/master/threefive/upid.py)
 
-* All 2020 SCTE-35 [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py), [`Descriptors`](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py),and [`Upids`](https://github.com/futzu/threefive/blob/master/threefive/upid.py) are fully supported .
-
-* [Diagram](https://github.com/futzu/threefive/blob/master/cue.md)  of a threefive SCTE-35 Cue
-
-* [Mpegts is Well Supported](#stream-class) in the Stream class.
-
+* threefive / go [ Boom goes the Dyno. ](https://github.com/futzu/scte35-threefive/tree/master/go)
 
 *  ```Multicast?```   ```HLS?```  ```Custom Upid Handling?```  ```Frame Accurate Preroll timings?``` [... Oh Yeah.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 
-* threefive has [SCTE35 Cue Encoding](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
     * MPEGTS pass-through [SCTE35 Cue Re-Encoding](https://github.com/futzu/scte35-threefive/blob/master/examples/encode/streamedit.py)
- 
-* threefive supports [Decrypting AES in the Segment Class](https://github.com/futzu/scte35-threefive/blob/901456089d369e8cd81c0dc3c2bd6600e303562e/threefive/segment.py#L37)
+
+
+* [Diagram](https://github.com/futzu/threefive/blob/master/cue.md)  of a threefive SCTE-35 Cue
 
  * [Your Feedback](https://github.com/futzu/threefive/issues) is Welcome and Encouraged.
  
 * [New Stuff](https://github.com/futzu/threefive/blob/master/new_stuff.md) in threefive...
-
-* [threefive/go](https://github.com/futzu/scte35-threefive/tree/master/go) Boom goes the Dyno. 
 
 ___
 ### Documentation
@@ -39,10 +39,10 @@ ___
       *   [threefive.__decode__()](#easy-threefive)      
 
 *  [`Advanced` threefive](#advanced-threefive)     
-     *  [threefive.`__Cue__` Class](#cue-class)         
-     *  [threefive.`__Stream__` Class](#stream-class)
+     *  [threefive.__Cue__ Class](#cue-class)         
+     *  [threefive.__Stream__ Class](#stream-class)
      
-* [Several `Cool` Examples ](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
+* [Tons of Examples ](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)  
 >  
 * [`ffmpeg` and `SCTE35` and `Stream Type 0x6 bin data` and `threefive`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) 
 >   
