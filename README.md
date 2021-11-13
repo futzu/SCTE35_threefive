@@ -22,7 +22,7 @@ __threefive__` is a SCTE35 Decoder and Encoder python3 lib.
  
 * [New Stuff](https://github.com/futzu/threefive/blob/master/new_stuff.md) in threefive...
 
-* Super Fast. Super Clean. [threefive/go](https://github.com/futzu/scte35-threefive/tree/master/go) Boom goes the Dyno. 
+* [threefive/go](https://github.com/futzu/scte35-threefive/tree/master/go) Boom goes the Dyno. 
 
 ___
 ### Documentation
