@@ -127,6 +127,7 @@ func (stream *Stream) chkPartial(pay []byte, pid uint16, sep []byte) []byte {
 }
 
 // sameAsLast compares the current packet to the last packet by pid.
+// Skip parsing identical PAT or PMT tables
 func (stream *Stream) sameAsLast(pay []byte, pid uint16) bool {
 	val, ok := stream.last[pid]
 	if ok {
@@ -164,7 +165,6 @@ func (stream *Stream) parse(pkt []byte) {
 	if stream.isPcrPid(*pid) {
 		stream.parsePcr(pkt, *pid)
 	}
-
 	if stream.isScte35Pid(*pid) {
 		stream.parseScte35(*pay, *pid)
 	}
@@ -221,6 +221,7 @@ func (stream *Stream) parsePmt(pay []byte, pid uint16) {
 	}
 }
 
+// parseStreams parses stream data for the Program in the PMT.
 func (stream *Stream) parseStreams(silen uint16, pay []byte, idx uint16, prgm uint16) {
 	chunksize := uint16(5)
 	endidx := (idx + silen) - chunksize
@@ -228,7 +229,6 @@ func (stream *Stream) parseStreams(silen uint16, pay []byte, idx uint16, prgm ui
 		streamtype := pay[idx]
 		elpid := parsePid(pay[idx+1], pay[idx+2])
 		eilen := parseLen(pay[idx+3], pay[idx+4])
-
 		idx += chunksize
 		idx += eilen
 		stream.pid2Prgm[elpid] = prgm
@@ -236,6 +236,7 @@ func (stream *Stream) parseStreams(silen uint16, pay []byte, idx uint16, prgm ui
 	}
 }
 
+// vrfyStreamType add pid for streamtypes 6 and 0x86 to Scte35Pids
 func (stream *Stream) vrfyStreamType(pid uint16, streamtype uint8) {
 	if streamtype == 6 || streamtype == 0x86 {
 		stream.addScte35Pid(pid)

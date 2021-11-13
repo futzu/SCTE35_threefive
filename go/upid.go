@@ -2,14 +2,6 @@ package threefive
 
 import "github.com/futzu/bitter"
 
-// UpidTypes valid Upid types
-//var UpidTypes = []uint8{0x01, 0x02, 0x03, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0b, 0x0c, 0x0e, 0x0f, 0x10}
-
-// UpidIsValid checks if upidtype is in UpidTypes
-//func UpidIsValid(upidtype uint8) bool {
-//	return isIn8(UpidTypes, upidtype)
-//}
-
 // UpidDecoder returns a upid from upidType value
 func UpidDecoder(upidType uint8) Upid {
 

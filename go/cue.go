@@ -36,13 +36,10 @@ func (cue *Cue) Decode(bites []byte) bool {
 
 // DscptrLoop loops over any splice descriptors
 func (cue *Cue) dscptrLoop(bitn *bitter.Bitn) {
-
 	var i uint64
 	i = 0
 	l := cue.InfoSection.DescriptorLoopLength
 	for i < l {
-		//fmt.Printf("%v -- %v\n", i, cue.InfoSection.DescriptorLoopLength)
-
 		tag := bitn.AsUInt8(8)
 		i++
 		length := bitn.AsUInt64(8)
