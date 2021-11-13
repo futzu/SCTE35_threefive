@@ -1,6 +1,6 @@
  
 
-### threefive Is The Most Advanced SCTE35 Parser lib Available. 
+### threefive Is The Most Advanced SCTE35 Parser lib Available, probably.
    * [Super Easy](#easy-threefive) to Use.
    * Parses [Mpegts](#stream-class) in the Stream class.
    * [SCTE35 Cue Encoding](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
