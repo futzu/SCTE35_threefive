@@ -8,27 +8,29 @@ __threefive__` is a SCTE35 Decoder and Encoder python3 lib.
 
 * [Diagram of a threefive SCTE-35 Cue](https://github.com/futzu/threefive/blob/master/cue.md)
 
-* [`Mpegts is Well Supported`](#stream-class) in the Stream class.
+* [Mpegts is Well Supported](#stream-class) in the Stream class.
 
 
 *  ```Multicast?```   ```HLS?```  ```Custom Upid Handling?```  ```Frame Accurate Preroll timings?``` [... Oh Yeah.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 
-* [threefive has SCTE35 Cue Encoding](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
-    * [`MPEGTS pass-through SCTE35 Cue Re-Encoding`](https://github.com/futzu/scte35-threefive/blob/master/examples/encode/streamedit.py)
+* threefive has [SCTE35 Cue Encoding](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
+    * MPEGTS pass-through [SCTE35 Cue Re-Encoding](https://github.com/futzu/scte35-threefive/blob/master/examples/encode/streamedit.py)
  
-* [threefive supports `Decrypting AES` in the Segment Class](https://github.com/futzu/scte35-threefive/blob/901456089d369e8cd81c0dc3c2bd6600e303562e/threefive/segment.py#L37)
+* threefive supports [Decrypting AES in the Segment Class](https://github.com/futzu/scte35-threefive/blob/901456089d369e8cd81c0dc3c2bd6600e303562e/threefive/segment.py#L37)
 
- * [Your `feedback` is Welcome and Encouraged.](https://github.com/futzu/threefive/issues)
+ * [Your Feedback](https://github.com/futzu/threefive/issues) is Welcome and Encouraged.
  
-* [`New Stuff` in threefive...](https://github.com/futzu/threefive/blob/master/new_stuff.md)  
+* [New Stuff](https://github.com/futzu/threefive/blob/master/new_stuff.md) in threefive...
 
-* [`threefive/go parser` ](https://github.com/futzu/scte35-threefive/tree/master/go)
+* Super Fast. Super Clean. [threefive/go](https://github.com/futzu/scte35-threefive/tree/master/go) Boom goes the Dyno. 
 
+___
+### Documentation
+___
 
-
-* [`Requirements`](#requirements)
+* [Requirements](#requirements)
 * [__Install threefive__](#install)
-* [`Versions and Releases`](#versions-and-releases)
+* [Versions and Releases](#versions-and-releases)
 
 * [__Fast Start__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 
