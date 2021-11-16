@@ -1,28 +1,20 @@
- 
-
 ### threefive Is The Most Advanced SCTE35 Parser lib Available, probably.
    * [Super Easy](#easy-threefive) to Use.
-   * Parses [Mpegts](#stream-class) in the Stream class.
-   * [SCTE35 Cue Encoding](https://github.com/futzu/SCTE35-threefive/blob/master/Encoding.md)
-   * Decrypt [AES ](https://github.com/futzu/scte35-threefive/blob/901456089d369e8cd81c0dc3c2bd6600e303562e/threefive/segment.py#L37) in the Segment Class
    * Supports All 2020 SCTE-35: 
-     * [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py)
-     * [`Descriptors`](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py)
-     * [`Upids`](https://github.com/futzu/threefive/blob/master/threefive/upid.py)
-
+      [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py)
+     [`Descriptors`](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py)
+     [`Upids`](https://github.com/futzu/threefive/blob/master/threefive/upid.py)
+   * Parses [Mpegts](#stream-class) in the Stream class.
+   * Decrypt [AES ](https://github.com/futzu/scte35-threefive/blob/901456089d369e8cd81c0dc3c2bd6600e303562e/threefive/segment.py#L37) in the Segment Class.
+   * New Examples: 
+      * [Display SCTE35 info via Webvtt Subtitles](https://github.com/futzu/threefive/blob/master/examples/stream/cue2vtt.py)
+      * MPEGTS pass-through [SCTE35 Cue Re-Encoding](https://github.com/futzu/scte35-threefive/blob/master/examples/encode/streamedit.py)
 *  ```Multicast?```   ```HLS?```  ```Custom Upid Handling?```  ```Frame Accurate Preroll timings?``` [... Oh Yeah.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
-
-    * MPEGTS pass-through [SCTE35 Cue Re-Encoding](https://github.com/futzu/scte35-threefive/blob/master/examples/encode/streamedit.py)
-
-
-### threefive / go [ Boom goes the Dyno. ](https://github.com/futzu/scte35-threefive/tree/master/go)
-
+* [threefive / go](https://github.com/futzu/scte35-threefive/tree/master/go)
 
 * [Diagram](https://github.com/futzu/threefive/blob/master/cue.md)  of a threefive SCTE-35 Cue
-
- * [Your Feedback](https://github.com/futzu/threefive/issues) is Welcome and Encouraged.
  
-* [New Stuff](https://github.com/futzu/threefive/blob/master/new_stuff.md) in threefive...
+* [| more ](https://github.com/futzu/threefive/blob/master/new_stuff.md) 
 
 ___
 ### Documentation
