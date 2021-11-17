@@ -10,7 +10,7 @@ type Cue struct {
 	InfoSection
 	Command
 	Descriptors []Descriptor `json:",omitempty"`
-	PacketData  `json:",omitempty"`
+	Packet      PacketData   `json:",omitempty"`
 }
 
 // Decode extracts bits for the Cue values.
