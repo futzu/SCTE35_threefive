@@ -270,12 +270,12 @@ func (stream *Stream) parseScte35(pay []byte, pid uint16) {
 
 func (stream *Stream) mkCue(pid uint16) Cue {
 	var cue Cue
-	cue.PacketData.Pid = pid
+	cue.Packet.Pid = pid
 	p := stream.pid2Prgm[pid]
 	prgm := &p
-	cue.PacketData.Program = *prgm
-	cue.PacketData.Pcr = stream.mkPcr(*prgm)
-	cue.PacketData.Pts = stream.mkPts(*prgm)
-	cue.PacketData.PacketNumber = stream.pktNum
+	cue.Packet.Program = *prgm
+	cue.Packet.Pcr = stream.mkPcr(*prgm)
+	cue.Packet.Pts = stream.mkPts(*prgm)
+	cue.Packet.PacketNumber = stream.pktNum
 	return cue
 }
