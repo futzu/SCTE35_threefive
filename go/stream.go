@@ -11,6 +11,14 @@ const pktSz = 188
 // bufSz is the size of a read when parsing files.
 const bufSz = 13000 * pktSz
 
+type PacketData struct {
+	PacketNumber int     `json:",omitempty"`
+	Pid          uint16  `json:",omitempty"`
+	Program      uint16  `json:",omitempty"`
+	Pcr          float64 `json:",omitempty"`
+	Pts          float64 `json:",omitempty"`
+}
+
 //Stream for parsing MPEGTS for SCTE-35
 type Stream struct {
 	pktNum   int // packet count.
@@ -262,12 +270,12 @@ func (stream *Stream) parseScte35(pay []byte, pid uint16) {
 
 func (stream *Stream) mkCue(pid uint16) Cue {
 	var cue Cue
-	cue.Pid = pid
+	cue.PacketData.Pid = pid
 	p := stream.pid2Prgm[pid]
 	prgm := &p
-	cue.Program = *prgm
-	cue.Pcr = stream.mkPcr(*prgm)
-	cue.Pts = stream.mkPts(*prgm)
-	cue.PacketNumber = stream.pktNum
+	cue.PacketData.Program = *prgm
+	cue.PacketData.Pcr = stream.mkPcr(*prgm)
+	cue.PacketData.Pts = stream.mkPts(*prgm)
+	cue.PacketData.PacketNumber = stream.pktNum
 	return cue
 }

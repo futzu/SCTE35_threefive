@@ -9,12 +9,8 @@ import (
 type Cue struct {
 	InfoSection
 	Command
-	Descriptors  []Descriptor `json:",omitempty"`
-	PacketNumber int          `json:",omitempty"`
-	Pid          uint16       `json:",omitempty"`
-	Program      uint16       `json:",omitempty"`
-	Pcr          float64      `json:",omitempty"`
-	Pts          float64      `json:",omitempty"`
+	Descriptors []Descriptor `json:",omitempty"`
+	PacketData  `json:",omitempty"`
 }
 
 // Decode extracts bits for the Cue values.

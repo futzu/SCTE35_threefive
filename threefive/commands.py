@@ -189,7 +189,8 @@ class SpliceInsert(TimeSignal):
 
     def _decode_event(self, bitbin):
         """
-        SpliceInsert._decode_flags set four flags
+        SpliceInsert._decode_event parses
+        self.splice_event_id and self.splice_event_cancel_indicator
         and is called from SpliceInsert.decode()
         """
         self.splice_event_id = bitbin.as_int(32)
@@ -197,11 +198,19 @@ class SpliceInsert(TimeSignal):
         bitbin.forward(7)
 
     def _encode_event(self, nbin):
+        """
+        SpliceInsert._encode_event encodes
+        self.splice_event_id and self.splice_event_cancel_indicator
+        and is called from SpliceInsert.encode()
+        """
         self._chk_var(int, nbin.add_int, "splice_event_id", 32)
         self._chk_var(bool, nbin.add_flag, "splice_event_cancel_indicator", 1)
         nbin.forward(7)
 
     def _decode_flags(self, bitbin):
+        """
+        SpliceInsert._decode_flags parses four bit flags
+        """
         self.out_of_network_indicator = bitbin.as_flag(1)
         self.program_splice_flag = bitbin.as_flag(1)
         self.duration_flag = bitbin.as_flag(1)
