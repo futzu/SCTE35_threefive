@@ -1,6 +1,9 @@
 package threefive
 
-import "github.com/futzu/bitter"
+import (
+	"fmt"
+	"github.com/futzu/bitter"
+)
 
 // UpidDecoder returns a upid from upidType value
 func UpidDecoder(upidType uint8) Upid {
@@ -19,6 +22,8 @@ func UpidDecoder(upidType uint8) Upid {
 		u = &AirID{Name: "AiringID"}
 	case 0x09:
 		u = &URI{Name: "ADI"}
+	case 0x0a:
+		u = &EIDR{Name: "EIDR"}
 	case 0x0b:
 		u = &ATSC{Name: "ATSC"}
 	case 0x0c:
@@ -99,6 +104,15 @@ type EIDR struct {
 	Value string
 }
 
+// Decode interface for EIDR
+func (upid *EIDR) Decode(bitn *bitter.Bitn, upidlen uint8) {
+	if upidlen == 12 {
+		head := bitn.AsUInt64(16)
+		tail := bitn.AsHex(80)
+		upid.Value = fmt.Sprintf("10%v/%v", head, tail)
+	}
+}
+
 // MPU Segmentation Upid
 type MPU struct {
 	Name             string
@@ -112,4 +126,11 @@ func (upid *MPU) Decode(bitn *bitter.Bitn, upidlen uint8) {
 	upid.FormatIdentifier = bitn.AsHex(32)
 	upid.PrivateData = bitn.AsAscii(ulb - 32)
 
+}
+
+type MidUpid struct {
+	UpidType uint8
+	Name     string
+	Length   uint8
+	Upid
 }
