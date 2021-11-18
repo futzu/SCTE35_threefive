@@ -2,9 +2,8 @@
 		
 The threefive Parser in Go.
 
-##### Heads up, work in progress. Not yet ready for production.
-
-*  3 Segmentation Upids are __not__ complete. 
+##### Heads up.
+* MID Segmentation Upid not yet implemented. . 
 *  Everything else should be working. 
 
 #### Installation
@@ -176,65 +175,3 @@ func main(){
     ]
 }
 ```
-#### Cue Struct
-```golang
-
-type Cue struct {
-	InfoSection
-	Command
-	Descriptors  []Descriptor `json:",omitempty"`
-	PacketNumber int          `json:",omitempty"`
-	Pid          uint16       `json:",omitempty"`
-	Program      uint16       `json:",omitempty"`
-	Pcr          float64      `json:",omitempty"`
-	Pts          float64      `json:",omitempty"`
-}
-    Cue a SCTE35 cue.
-
-func (cue *Cue) Decode(bites []byte) bool
-    Decode extracts bits for the Cue values.
-
-func (cue *Cue) Show()
-    Show display SCTE-35 data as JSON.
-
-```
-#### Splice Commands
-
-```golang
-
-type Command interface {
-	Decode(bitn *bitter.Bitn)
-}
-    Command is an interface for Splice Commands
-```
-* Bandwidth Reservation
-
-* Splice Insert
-
-* Splice Null
-
-* Private Command
-
-* Time Signal
-
-#### Splice Descriptors
-
-```golang
-
-type Descriptor interface {
-	Decode(bitn *bitter.Bitn, tag uint8, length uint8)
-}
-    Descriptor is the interface for all Splice Descriptors
-
-
-```
-
-* Audio Descriptor
-
-* Avail Descriptor
-
-* DTMF Descriptor
-
-* Segmentation Descriptor
-
-* Time Descriptor 
