@@ -10,7 +10,7 @@
   * [`ffmpeg` and `SCTE35` and `Stream Type 0x6 bin data` and `threefive`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
 *  ```Multicast?```   ```HLS?```  ```Custom Upid Handling?```  ```Frame Accurate Preroll timings?``` [... Oh Yeah.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
-* [threefive / go](https://github.com/futzu/scte35-threefive/tree/master/go) 
+* [threefive / go](https://github.com/futzu/scte35-threefive/tree/master/go) The Fastest SCTE35 Decoder Available.
 
 
 ![Untitled](https://user-images.githubusercontent.com/52701496/141930032-2e319b0e-3ac1-4bf5-8eb2-fa59145351b6.png) 
