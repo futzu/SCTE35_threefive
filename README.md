@@ -77,11 +77,11 @@
 
 
 ### Requirements
-* threefive requires [pypy3](https://pypy.org) or python 3.6+
+* threefive requires [pypy3](https://pypy.org) or python 3.6+ 
+    * (pypy3 runs threefive 4x Faster than python3)
 * threefive 2.3.02+ requires crcmod for encoding and pyaes for decrypting.
 
- [__pypy3__ runs threefive Four Times Faster than python3](https://github.com/futzu/threefive/blob/master/py3vspypy3.md)
-
+ 
 
 ### Install
    
