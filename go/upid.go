@@ -28,6 +28,8 @@ func UpidDecoder(upidType uint8) Upid {
 		u = &ATSC{Name: "ATSC"}
 	case 0x0c:
 		u = &MPU{Name: "MPU"}
+	case 0x0d:
+		u = &MID{Name: "MID"}
 	case 0x0e:
 		u = &URI{Name: "ADS Info"}
 	case 0x0f:
