@@ -128,9 +128,24 @@ func (upid *MPU) Decode(bitn *bitter.Bitn, upidlen uint8) {
 
 }
 
-type MidUpid struct {
-	UpidType uint8
-	Name     string
-	Length   uint8
-	Upid
+type MID struct {
+	Name  string
+	Upids []Upid
+}
+
+// Decode interface for MID
+func (upid *MID) Decode(bitn *bitter.Bitn, upidlen uint8) {
+	var i uint8
+	i = 0
+	for i < upidlen {
+		utype := bitn.AsUInt8(8)
+		i++
+		ulen := bitn.AsUInt8(8)
+		i++
+		i += ulen
+		mupid := UpidDecoder(utype)
+		mupid.Decode(bitn, ulen)
+		upid.Upids = append(upid.Upids, mupid)
+
+	}
 }
