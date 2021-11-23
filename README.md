@@ -1,8 +1,4 @@
 ### threefive Is The Most Advanced SCTE35 Parser lib Available, probably.
- * __New__
-     * [Display SCTE35 info via Webvtt Subtitles](https://github.com/futzu/threefive/blob/master/examples/stream/cue2vtt.py)
-
-
 
    * Supports All 2020 SCTE-35: 
       [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py)
@@ -35,6 +31,8 @@
      *  [threefive.__Stream__ Class](#stream-class)
      
 * [Super Cool Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
+   * New
+     * [Display SCTE35 info via Webvtt Subtitles](https://github.com/futzu/threefive/blob/master/examples/stream/cue2vtt.py)
     * CLI
       * [Cli](https://github.com/futzu/SCTE35-threefive/blob/master/examples/cli.py)
     * DTMF
