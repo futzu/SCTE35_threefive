@@ -1,17 +1,16 @@
 ### threefive Is The Most Advanced SCTE35 Parser lib Available, probably.
 
-   * Supports All 2020 SCTE-35: 
+   * __Supports All 2020 SCTE-35: 
       [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py)
      [`Descriptors`](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py)
      [`Upids`](https://github.com/futzu/threefive/blob/master/threefive/upid.py)
  
-   * Parses [Mpegts](#stream-class)
-   * Decrypts [AES ](https://github.com/futzu/scte35-threefive/blob/901456089d369e8cd81c0dc3c2bd6600e303562e/threefive/segment.py#L37) 
-  * [`ffmpeg` and `SCTE35` and `Stream Type 0x6 bin data` and `threefive`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
+   * Parses [__Mpegts__](#stream-class)
+   * Decrypts [__AES__ ](https://github.com/futzu/scte35-threefive/blob/901456089d369e8cd81c0dc3c2bd6600e303562e/threefive/segment.py#L37) 
+  * [__ffmpeg__ and __SCTE35__ and __Stream Type 0x6__ bin data and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
 *  ```Multicast?```   ```HLS?```  ```Custom Upid Handling?```  ```Frame Accurate Preroll timings?``` [... Oh Yeah.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
-* [threefive / go](https://github.com/futzu/scte35-threefive/tree/master/go)
-
+* [__threefive /go__ ....`Boom goes the Dyno`, this is Super Fast.](https://github.com/futzu/scte35-threefive/tree/master/go)
 
 ![Untitled](https://user-images.githubusercontent.com/52701496/141930032-2e319b0e-3ac1-4bf5-8eb2-fa59145351b6.png) 
 
