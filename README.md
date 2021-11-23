@@ -30,7 +30,7 @@
      *  [threefive.__Cue__ Class](#cue-class)         
      *  [threefive.__Stream__ Class](#stream-class)
      
-* Examples
+* [Super Cool Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
     * CLI
       * [Cli](https://github.com/futzu/SCTE35-threefive/blob/master/examples/cli.py)
     * DTMF
