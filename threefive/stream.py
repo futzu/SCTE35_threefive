@@ -66,12 +66,12 @@ class Stream:
     Stream class for parsing MPEG-TS data.
     """
 
-    _PACKET_SIZE = 188
-    _SYNC_BYTE = 0x47
+    _PACKET_SIZE = 188  # Mpegts packet size in bytes
+    _SYNC_BYTE = 0x47  # Mpegts sync byte
     _SDT_PID = 0x0011  # Stream Descriptor Table Pid
     _PAT_PID = 0x00  # Program Association Pid
-    _PMT_TID = b"\x02"
-    _SCTE35_TID = b"\xFC0"
+    _PMT_TID = b"\x02"  # PMT Table Id as bytes
+    _SCTE35_TID = b"\xFC0"  # SCTE35 Table Id as bytes
 
     def __init__(self, tsdata, show_null=True):
         """
@@ -100,7 +100,6 @@ class Stream:
         self._prgm_pcr = {}
         self._prgm_pts = {}
         self._prgm = {}
-        self.the_cue = None
         self._partial = {}
         self._last = {}
 
@@ -275,9 +274,8 @@ class Stream:
         """
         used to determine if pts data is available.
         """
-        if pid in self._pid_prgm:
-            if (pkt[1] >> 6) & 1:
-                self._parse_pts(pkt, pid)
+        if (pkt[1] >> 6) & 1:
+            self._parse_pts(pkt, pid)
 
     def _parse_pts(self, pkt, pid):
         """
@@ -336,7 +334,8 @@ class Stream:
             return self._parse_tables(pkt, pid)
         if pid in self._pids["scte35"]:
             return self._parse_scte35(pkt, pid)
-        self._parse_pusi(pkt, pid)
+        if pid in self._pid_prgm:
+            self._parse_pusi(pkt, pid)
         return None
 
     def _chk_partial(self, payload, pid, sep):
@@ -350,39 +349,32 @@ class Stream:
         self._last[pid] = payload
         return False
 
-    def _chk_scte35_payload(self, pkt, pid):
+    def _parse_cue(self, payload, pid):
+        packet_data = None
+        packet_data = self._mk_packet_data(pid)
+        cue = Cue(payload, packet_data)
+        cue.bites = payload  # Why?
+        if cue.decode():
+            return cue
+        return None
+
+    def _parse_scte35(self, pkt, pid):
+        """
+        parse a scte35 cue from one or more packets
+        """
         payload = self._chk_partial(self._parse_payload(pkt), pid, self._SCTE35_TID)
         if not payload:
             self._pids["scte35"].remove(pid)
             return False
         if payload[13] == self.show_null:
             return False
-        self._parse_cue(payload, pid)
+        seclen = self._parse_length(payload[1], payload[2])
         # + 3 for the bytes before section starts
-        if (self.the_cue.info_section.section_length + 3) > len(self.the_cue.bites):
+        if (seclen + 3) > len(payload):
             self._partial[pid] = payload
             return False
-        self.the_cue.bites = payload[: self.the_cue.info_section.section_length + 3]
-        return True
-
-    def _parse_cue(self, payload, pid):
-        packet_data = None
-        packet_data = self._mk_packet_data(pid)
-        self.the_cue = Cue(payload, packet_data)
-        self.the_cue.info_section.decode(payload)
-        self.the_cue.bites = payload
-
-    def _parse_scte35(self, pkt, pid):
-        """
-        parse a scte35 cue from one or more packets
-        """
-        if not self._chk_scte35_payload(pkt, pid):
-            return None
-        if not self.the_cue.decode():
-            self._pids["scte35"].remove(pid)
-            self.the_cue = None
-            return None
-        cue, self.the_cue = self.the_cue, None
+        payload = payload[: seclen + 3]
+        cue = self._parse_cue(payload, pid)
         return cue
 
     def _stream_descriptor_table(self, payload):
