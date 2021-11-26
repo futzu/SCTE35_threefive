@@ -386,7 +386,7 @@ class Stream:
         return cue
 
     def _stream_descriptor_table(self, payload):
-        payload = self._chk_partial(payload, self._SDT_PID)
+        payload = self._chk_partial(payload, self._SDT_PID, b"")
         section_length = self._parse_length(payload[2], payload[3])
         if section_length + 3 > len(payload):
             self._partial[self._SDT_PID] = payload
