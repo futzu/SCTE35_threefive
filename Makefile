@@ -38,3 +38,6 @@ upload: clean pkg
 upgrade:
 	$(PIP3) install --upgrade threefive
 	
+cli:
+	install 35decode /usr/local/bin
+

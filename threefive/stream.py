@@ -67,8 +67,11 @@ class Stream:
     """
 
     _PACKET_SIZE = 188
+    _SYNC_BYTE = 0x47
     _SDT_PID = 0x0011  # Stream Descriptor Table Pid
     _PAT_PID = 0x00  # Program Association Pid
+    _PMT_TID = b"\x02"
+    _SCTE35_TID = b"\xFC0"
 
     def __init__(self, tsdata, show_null=True):
         """
@@ -105,12 +108,11 @@ class Stream:
         return str(self.__dict__)
 
     def _find_start(self):
-        sync_byte = 0x47
         while self._tsdata:
             one = self._tsdata.read(1)
             if not one:
                 return False
-            if one[0] == sync_byte:
+            if one[0] == self._SYNC_BYTE:
                 tail = self._tsdata.read(self._PACKET_SIZE - 1)
                 if tail:
                     self._parse(one + tail)
@@ -123,14 +125,13 @@ class Stream:
         func can be set to a custom function that accepts
         a threefive.Cue instance as it's only argument.
         """
-        if not self._find_start():
-            return False
-        for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
-            cue = self._parse(pkt)
-            if cue:
-                if not func:
-                    return cue
-                func(cue)
+        if self._find_start():
+            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
+                cue = self._parse(pkt)
+                if cue:
+                    if not func:
+                        return cue
+                    func(cue)
         self._tsdata.close()
         return True
 
@@ -146,12 +147,13 @@ class Stream:
         1880 packets at a time.
         """
         pkts = 1880
-        if not self._find_start():
-            return
-        for chunk in iter(partial(self._tsdata.read, (self._PACKET_SIZE * pkts)), b""):
-            for cue in self._mk_pkts(chunk):
-                if cue:
-                    func(cue)
+        if self._find_start():
+            for chunk in iter(
+                partial(self._tsdata.read, (self._PACKET_SIZE * pkts)), b""
+            ):
+                for cue in self._mk_pkts(chunk):
+                    if cue:
+                        func(cue)
         self._tsdata.close()
 
     def decode_next(self):
@@ -209,8 +211,8 @@ class Stream:
         """
         self.info = True
         self.decode(func=False)
-        sp = sorted(self._prgm.items())
-        for k, vee in sp:
+        sopro = sorted(self._prgm.items())
+        for k, vee in sopro:
             if len(vee.streams.items()) > 0:
                 print(f"Program: {k}")
                 vee.show()
@@ -269,35 +271,35 @@ class Stream:
         """
         return (byte1 << 8) | byte2
 
-    @staticmethod
-    def _parse_pusi(byte1):
+    def _parse_pusi(self, pkt, pid):
         """
         used to determine if pts data is available.
         """
-        return (byte1 >> 6) & 1
+        if pid in self._pid_prgm:
+            if (pkt[1] >> 6) & 1:
+                self._parse_pts(pkt, pid)
 
     def _parse_pts(self, pkt, pid):
         """
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
-        if pid in self._pid_prgm:
-            if pkt[11] & 128:
-                pts = ((pkt[13] >> 1) & 7) << 30
-                pts |= pkt[14] << 22
-                pts |= (pkt[15] >> 1) << 15
-                pts |= pkt[16] << 7
-                pts |= pkt[17] >> 1
-                prgm = self._pid_prgm[pid]
-                self._prgm_pts[prgm] = pts
+        if pkt[11] & 0x80:
+            pts = ((pkt[13] >> 1) & 7) << 30
+            pts |= pkt[14] << 22
+            pts |= (pkt[15] >> 1) << 15
+            pts |= pkt[16] << 7
+            pts |= pkt[17] >> 1
+            prgm = self._pid_prgm[pid]
+            self._prgm_pts[prgm] = pts
 
     def _parse_pcr(self, pkt, pid):
         """
         parse pcr and store by program key
         in the dict Stream._pid_pcr
         """
-        if (pkt[3] >> 5) & 1:
-            if (pkt[5] >> 4) & 1:
+        if pkt[3] & 0x20:
+            if pkt[5] & 0x10:
                 pcr = pkt[6] << 25
                 pcr |= pkt[7] << 17
                 pcr |= pkt[8] << 9
@@ -334,14 +336,13 @@ class Stream:
             return self._parse_tables(pkt, pid)
         if pid in self._pids["scte35"]:
             return self._parse_scte35(pkt, pid)
-        if self._parse_pusi(pkt[1]):
-            self._parse_pts(pkt, pid)
+        self._parse_pusi(pkt, pid)
         return None
 
-    def _chk_partial(self, payload, pid):
+    def _chk_partial(self, payload, pid, sep):
         if pid in self._partial:
             payload = self._partial.pop(pid) + payload
-        return payload
+        return self._split_by_idx(payload, sep)
 
     def _chk_last(self, payload, pid):
         if pid in self._last:
@@ -350,8 +351,7 @@ class Stream:
         return False
 
     def _chk_scte35_payload(self, pkt, pid):
-        payload = self._chk_partial(self._parse_payload(pkt), pid)
-        payload = self._split_by_idx(payload, b"\xfc0")
+        payload = self._chk_partial(self._parse_payload(pkt), pid, self._SCTE35_TID)
         if not payload:
             self._pids["scte35"].remove(pid)
             return False
@@ -380,6 +380,7 @@ class Stream:
             return None
         if not self.the_cue.decode():
             self._pids["scte35"].remove(pid)
+            self.the_cue = None
             return None
         cue, self.the_cue = self.the_cue, None
         return cue
@@ -422,7 +423,7 @@ class Stream:
         for program to pmt_pid mappings.
         """
         pid = self._PAT_PID
-        payload = self._chk_partial(payload, pid)
+        payload = self._chk_partial(payload, pid, b"")
         section_length = self._parse_length(payload[2], payload[3])
         if section_length + 3 > len(payload):
             self._partial[pid] = payload
@@ -442,8 +443,7 @@ class Stream:
         """
         parse program maps for streams
         """
-        payload = self._chk_partial(payload, pid)
-        payload = self._split_by_idx(payload, b"\x02")
+        payload = self._chk_partial(payload, pid, self._PMT_TID)
         if not payload:
             return
         sectioninfolen = self._parse_length(payload[1], payload[2])
