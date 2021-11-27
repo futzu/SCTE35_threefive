@@ -47,11 +47,11 @@ class Cue(SCTE35Base):
         data may be packet bites or encoded string
         packet_data is a instance passed from a Stream instance
         """
+        if data:
+            self.bites = self._mk_bits(data)
         self.info_section = SpliceInfoSection()
         self.command = None
         self.descriptors = []
-        if data:
-            self.bites = self._mk_bits(data)
         self.packet_data = packet_data
 
     def decode(self):
@@ -240,6 +240,11 @@ class Cue(SCTE35Base):
         cue._mk_bits Converts
         Hex and Base64 strings into bytes.
         """
+        if isinstance(data, bytes):
+            if data[0] == 0x0:
+                data = data[1:]
+            if data[0] == 0xFC:
+                return data
         try:
             # Handles hex byte strings
             i = int(data, 16)

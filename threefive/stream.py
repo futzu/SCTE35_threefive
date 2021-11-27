@@ -234,13 +234,6 @@ class Stream:
         return pdata
 
     @staticmethod
-    def _split_by_idx(payload, marker):
-        try:
-            return payload[payload.index(marker) :]
-        except (LookupError, TypeError, ValueError):
-            return False
-
-    @staticmethod
     def _parse_payload(pkt):
         head_size = 4
         afc = pkt[3] & 0x20
@@ -254,7 +247,7 @@ class Stream:
         """
         parse a 12 bit length value
         """
-        return ((byte1 & 0xF) << 8) | byte2
+        return (byte1 << 8 | byte2) & 0x0FFF
 
     @staticmethod
     def _parse_pid(byte1, byte2):
@@ -271,25 +264,26 @@ class Stream:
         return (byte1 << 8) | byte2
 
     @staticmethod
-    def _parse_pusi(pkt_one):
+    def _parse_pusi(byte1):
         """
         used to determine if pts data is available.
         """
-        return pkt_one & 0x40
+        return byte1 & 0x40
 
     def _parse_pts(self, pkt, pid):
         """
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
-        if pkt[11] & 0x80:
-            pts = ((pkt[13] >> 1) & 7) << 30
-            pts |= pkt[14] << 22
-            pts |= (pkt[15] >> 1) << 15
-            pts |= pkt[16] << 7
-            pts |= pkt[17] >> 1
-            prgm = self._pid_prgm[pid]
-            self._prgm_pts[prgm] = pts
+        if pid in self._pid_prgm:
+            if pkt[11] & 0x80:
+                pts = ((pkt[13] >> 1) & 7) << 30
+                pts |= pkt[14] << 22
+                pts |= (pkt[15] >> 1) << 15
+                pts |= pkt[16] << 7
+                pts |= pkt[17] >> 1
+                prgm = self._pid_prgm[pid]
+                self._prgm_pts[prgm] = pts
 
     def _parse_pcr(self, pkt, pid):
         """
@@ -309,6 +303,13 @@ class Stream:
                 self._prgm_pcr[prgm] = pcr
                 if prgm not in self.start:
                     self.start[prgm] = pcr
+
+    @staticmethod
+    def _split_by_idx(payload, marker):
+        try:
+            return payload[payload.index(marker) :]
+        except (LookupError, TypeError, ValueError):
+            return False
 
     def _parse_tables(self, pkt, pid):
         """
@@ -335,8 +336,7 @@ class Stream:
         if pid in self._pids["scte35"]:
             return self._parse_scte35(pkt, pid)
         if self._parse_pusi(pkt[1]):
-            if pid in self._pid_prgm:
-                self._parse_pts(pkt, pid)
+            self._parse_pts(pkt, pid)
         return None
 
     def _chk_partial(self, payload, pid, sep):
@@ -361,7 +361,6 @@ class Stream:
         packet_data = None
         packet_data = self._mk_packet_data(pid)
         cue = Cue(payload, packet_data)
-        cue.bites = payload  # Why?
         if cue.decode():
             return cue
         return None
@@ -384,9 +383,12 @@ class Stream:
         return cue
 
     def _stream_descriptor_table(self, payload):
+        """
+        _stream_descriptor_table parses the SDT for program metadata
+        """
         payload = self._chk_partial(payload, self._SDT_PID, b"")
         seclen = self._parse_length(payload[2], payload[3])
-        if not self._section_done(payload, pid, seclen):
+        if not self._section_done(payload, self._SDT_PID, seclen):
             return False
         idx = 12
         while idx < seclen + 3:
@@ -416,13 +418,12 @@ class Stream:
 
     def _program_association_table(self, payload):
         """
-        parse program association table ( pid 0 )
+        parse program association table
         for program to pmt_pid mappings.
         """
-        pid = self._PAT_PID
-        payload = self._chk_partial(payload, pid, b"")
+        payload = self._chk_partial(payload, self._PAT_PID, b"")
         seclen = self._parse_length(payload[2], payload[3])
-        if not self._section_done(payload, pid, seclen):
+        if not self._section_done(payload, self._PAT_PID, seclen):
             return False
         seclen -= 5  # payload bytes 4,5,6,7,8
         idx = 9
