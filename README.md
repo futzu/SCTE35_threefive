@@ -9,7 +9,7 @@
   * [__ffmpeg__ and __SCTE35__ and __Stream Type 0x6__ bin data and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
 *  [Multicast?    __HLS?__   Custom Upid Handling?     __Frame Accurate__ Preroll timings?`... __Yes__.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
-* [__threefive /go__ `this code is cleaner than your dishes`.](https://github.com/futzu/scte35-threefive/tree/master/go)
+* [__threefive /go__ this code is cleaner than your dishes.](https://github.com/futzu/scte35-threefive/tree/master/go)
 
 
 ---
