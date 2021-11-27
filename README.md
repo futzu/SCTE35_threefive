@@ -4,12 +4,12 @@
       [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py)
      [`Descriptors`](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py)
      [`Upids`](https://github.com/futzu/threefive/blob/master/threefive/upid.py)
-   * Parses [__Mpegts__](#stream-class)
-   * Decrypts [__AES__ ](https://github.com/futzu/scte35-threefive/blob/901456089d369e8cd81c0dc3c2bd6600e303562e/threefive/segment.py#L37) 
+   * Parses [Mpegts](#stream-class)
+   * Decrypts [AES ](https://github.com/futzu/scte35-threefive/blob/901456089d369e8cd81c0dc3c2bd6600e303562e/threefive/segment.py#L37) 
   * [__ffmpeg__ and __SCTE35__ and __Stream Type 0x6__ bin data and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
 *  [Multicast?    __HLS?__   Custom Upid Handling?     __Frame Accurate__ Preroll timings?`... __Yes__.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
-* [__threefive /go__ this code is cleaner than your dishes.](https://github.com/futzu/scte35-threefive/tree/master/go)
+* [This code is cleaner than your dishes.   __threefive /go__](https://github.com/futzu/scte35-threefive/tree/master/go)
 * [`Issues` and `Bugs` and `Feature Requests`](#issues-and-bugs-and-feature-requests)
  *No forms man, just open an issue and tell me what you need.* 
 
