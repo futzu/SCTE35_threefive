@@ -350,6 +350,13 @@ class Stream:
         self._last[pid] = payload
         return False
 
+    def _section_done(self, payload, pid, seclen):
+        # + 3 for the bytes before section starts
+        if (seclen + 3) > len(payload):
+            self._partial[pid] = payload
+            return False
+        return True
+
     def _parse_cue(self, payload, pid):
         packet_data = None
         packet_data = self._mk_packet_data(pid)
@@ -370,9 +377,7 @@ class Stream:
         if payload[13] == self.show_null:
             return False
         seclen = self._parse_length(payload[1], payload[2])
-        # + 3 for the bytes before section starts
-        if (seclen + 3) > len(payload):
-            self._partial[pid] = payload
+        if not self._section_done(payload, pid, seclen):
             return False
         payload = payload[: seclen + 3]
         cue = self._parse_cue(payload, pid)
@@ -380,12 +385,11 @@ class Stream:
 
     def _stream_descriptor_table(self, payload):
         payload = self._chk_partial(payload, self._SDT_PID, b"")
-        section_length = self._parse_length(payload[2], payload[3])
-        if section_length + 3 > len(payload):
-            self._partial[self._SDT_PID] = payload
-            return None
+        seclen = self._parse_length(payload[2], payload[3])
+        if not self._section_done(payload, pid, seclen):
+            return False
         idx = 12
-        while idx < section_length + 3:
+        while idx < seclen + 3:
             service_id = self._parse_program(payload[idx], payload[idx + 1])
             idx += 3
             dloop_len = self._parse_length(payload[idx], payload[idx + 1])
@@ -417,19 +421,18 @@ class Stream:
         """
         pid = self._PAT_PID
         payload = self._chk_partial(payload, pid, b"")
-        section_length = self._parse_length(payload[2], payload[3])
-        if section_length + 3 > len(payload):
-            self._partial[pid] = payload
-            return None
-        section_length -= 5  # payload bytes 4,5,6,7,8
+        seclen = self._parse_length(payload[2], payload[3])
+        if not self._section_done(payload, pid, seclen):
+            return False
+        seclen -= 5  # payload bytes 4,5,6,7,8
         idx = 9
         chunk_size = 4
-        while section_length > 4:  #  4 bytes for crc
+        while seclen > 4:  #  4 bytes for crc
             program_number = self._parse_program(payload[idx], payload[idx + 1])
             if program_number > 0:
                 pmt_pid = self._parse_pid(payload[idx + 2], payload[idx + 3])
                 self._pids["tables"].add(pmt_pid)
-            section_length -= chunk_size
+            seclen -= chunk_size
             idx += chunk_size
 
     def _program_map_table(self, payload, pid):
@@ -438,14 +441,13 @@ class Stream:
         """
         payload = self._chk_partial(payload, pid, self._PMT_TID)
         if not payload:
-            return
-        sectioninfolen = self._parse_length(payload[1], payload[2])
-        if sectioninfolen + 3 > len(payload):
-            self._partial[pid] = payload
-            return
+            return False
+        seclen = self._parse_length(payload[1], payload[2])
+        if not self._section_done(payload, pid, seclen):
+            return False
         program_number = self._parse_program(payload[3], payload[4])
         if self.the_program and (program_number != self.the_program):
-            return
+            return False
         pcr_pid = self._parse_pid(payload[8], payload[9])
         if program_number not in self._prgm:
             self._prgm[program_number] = ProgramInfo()
@@ -458,7 +460,7 @@ class Stream:
         proginfolen = self._parse_length(payload[10], payload[11])
         idx = 12
         idx += proginfolen
-        si_len = sectioninfolen - 9
+        si_len = seclen - 9
         si_len -= proginfolen
         self._parse_program_streams(si_len, payload, idx, program_number)
 
