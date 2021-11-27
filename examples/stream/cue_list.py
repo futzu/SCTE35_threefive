@@ -1,6 +1,6 @@
 """
 Example using Stream.decode_next()
-to return a list of cues from a video
+Return a list of cues from a video
 
 Usage:
 
@@ -10,12 +10,12 @@ pypy3 cue_list.py video.ts
 
 
 import sys
-from threefive import Stream
+from threefive import Cue, Stream
 
 
 def do():
     """
-    do collects a list of Cues  from a Stream
+    collects a list of Cues from a Stream
     """
     CUES = []
     arg = sys.argv[1]
@@ -37,5 +37,5 @@ if __name__ == "__main__":
         cue2.info_section.pts_adjustment = 109.55
         cue2.encode()
         print(
-            f"{cue.info_section.pts_adjustment} @ {cue2.info_section.pts_adjustment} "
+            f"{cue.info_section.pts_adjustment} @ {cue2.info_section.pts_adjustment}"
         )
