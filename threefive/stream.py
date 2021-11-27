@@ -243,7 +243,7 @@ class Stream:
     @staticmethod
     def _parse_payload(pkt):
         head_size = 4
-        afc = (pkt[3] >> 5) & 1
+        afc = pkt[3] & 0x20
         if afc:
             afl = pkt[4]
             head_size += afl + 1  # +1 for afl byte
@@ -274,7 +274,7 @@ class Stream:
         """
         used to determine if pts data is available.
         """
-        if (pkt[1] >> 6) & 1:
+        if pkt[1] & 0x40:
             self._parse_pts(pkt, pid)
 
     def _parse_pts(self, pkt, pid):
