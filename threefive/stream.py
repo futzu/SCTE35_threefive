@@ -386,7 +386,7 @@ class Stream:
     def _stream_descriptor_table(self, payload):
         payload = self._chk_partial(payload, self._SDT_PID, b"")
         seclen = self._parse_length(payload[2], payload[3])
-        if not self._section_done(payload, pid, seclen):
+        if not self._section_done(payload, self._SDT_PID, seclen):
             return False
         idx = 12
         while idx < seclen + 3:
