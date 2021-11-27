@@ -1,4 +1,4 @@
-### threefive Is The Most Advanced SCTE35 Parser lib Available, probably.
+ threefive is the most advanced SCTE35 parser lib available, probably.
 
    * Supports All 2020 SCTE-35: 
       [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py)
@@ -10,9 +10,12 @@
 
 *  [Multicast?    __HLS?__   Custom Upid Handling?     __Frame Accurate__ Preroll timings?`... __Yes__.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 * [__threefive /go__ this code is cleaner than your dishes.](https://github.com/futzu/scte35-threefive/tree/master/go)
+* [`Issues` and `Bugs` and `Feature Requests`](#issues-and-bugs-and-feature-requests)
+ *No forms man, just open an issue and tell me what you need.* 
 
 
 ---
+### Welcome to the show.
 
 * [Requirements](#requirements)
 * [__Install threefive__](#install)
