@@ -270,12 +270,12 @@ class Stream:
         """
         return (byte1 << 8) | byte2
 
-    def _parse_pusi(self, pkt, pid):
+    @staticmethod
+    def _parse_pusi(pkt_one):
         """
         used to determine if pts data is available.
         """
-        if pkt[1] & 0x40:
-            self._parse_pts(pkt, pid)
+        return pkt_one & 0x40
 
     def _parse_pts(self, pkt, pid):
         """
@@ -334,8 +334,9 @@ class Stream:
             return self._parse_tables(pkt, pid)
         if pid in self._pids["scte35"]:
             return self._parse_scte35(pkt, pid)
-        if pid in self._pid_prgm:
-            self._parse_pusi(pkt, pid)
+        if self._parse_pusi(pkt[1]):
+            if pid in self._pid_prgm:
+                self._parse_pts(pkt, pid)
         return None
 
     def _chk_partial(self, payload, pid, sep):
