@@ -30,7 +30,7 @@ with open(sys.argv[1], "r") as manifest:
             hls_time += t
             next_line = manifest.readline()[:-1]
             if not (next_line.startswith("#")):
-                print(f"Segment:  {next_segment} @ {hls_time}")
+                print(f"Segment: {next_line} @ {hls_time}")
             # EXT-X-SCTE35:CUE=
         if l.startswith("#EXT-X-SCTE35"):
             mesg = l.split("CUE=")[1]
