@@ -464,6 +464,7 @@ class Stream:
         si_len = seclen - 9
         si_len -= proginfolen
         self._parse_program_streams(si_len, payload, idx, program_number)
+        return True
 
     def _parse_program_streams(self, si_len, payload, idx, program_number):
         """
