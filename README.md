@@ -8,8 +8,8 @@
   * [__ffmpeg__ and __SCTE35__ and Stream Type 0x6 bin data and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
 *  [Multicast?    __HLS?__   Custom Upid Handling?     __Frame Accurate__ Preroll timings?`... __Yes__ .](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
-* [Encoding too](https://github.com/futzu/scte35-threefive/blob/master/Encoding.md) with [examples](https://github.com/futzu/scte35-threefive/blob/master/examples/encode)
-* [This code is cleaner than your dishes.   __threefive /go__](https://github.com/futzu/scte35-threefive/tree/master/go)
+* [Encoding too](https://github.com/futzu/scte35-threefive/blob/master/Encoding.md) with [Examples](https://github.com/futzu/scte35-threefive/blob/master/examples/encode)
+* [`This code is cleaner than your dishes.`   __threefive /go__](https://github.com/futzu/scte35-threefive/tree/master/go)
 * [`Issues` and `Bugs` and `Feature Requests`](#issues-and-bugs-and-feature-requests)
  *No forms man, just open an issue and tell me what you need.* 
 
