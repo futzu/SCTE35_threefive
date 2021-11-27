@@ -14,7 +14,7 @@
 
 
 ---
-* [Acme Jet Propelled Unicycle](https://www.ebay.com/itm/124520782156?chn=ps&mkevt=1&mkcid=28)
+ [`Acme Jet Propelled Unicycle`](https://www.ebay.com/itm/124520782156?chn=ps&mkevt=1&mkcid=28)
 ---
 
 * [Requirements](#requirements)
