@@ -1,15 +1,15 @@
 # threefive is the most advanced SCTE35 parser lib available, probably.
 
-   * Supports All 2020 SCTE-35: 
-      [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py)
-     [`Descriptors`](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py)
-     [`Upids`](https://github.com/futzu/threefive/blob/master/threefive/upid.py)
-   * Parses [__Mpegts__](#stream-class)  and Decrypts [__AES__ ](https://github.com/futzu/scte35-threefive/blob/901456089d369e8cd81c0dc3c2bd6600e303562e/threefive/segment.py#L37) 
-  * [__ffmpeg__ and __SCTE35__ and Stream Type 0x6 bin data and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
+   * Supports All __2020 SCTE-35__
+      [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py) and
+     [`Descriptors`](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py) and
+     [`Upids`](https://github.com/futzu/threefive/blob/master/threefive/upid.py).
+   * [Parses`Mpegts`](#stream-class)  and [Decrypts `AES` ](https://github.com/futzu/scte35-threefive/blob/901456089d369e8cd81c0dc3c2bd6600e303562e/threefive/segment.py#L37) 
+  * [`ffmpeg` and `SCTE35` and `Stream Type 0x6 bin data` and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
-*  [Multicast?    __HLS?__   Custom Upid Handling?     __Frame Accurate__ Preroll timings?`... __Yes__ .](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
-* [Encoding too](https://github.com/futzu/scte35-threefive/blob/master/Encoding.md) with [Examples](https://github.com/futzu/scte35-threefive/blob/master/examples/encode)
-* [`This code is cleaner than your dishes.`   __threefive /go__](https://github.com/futzu/scte35-threefive/tree/master/go)
+*  [`Multicast?`    `HLS?`   `Custom Upid Handling?`     `Frame Accurate Preroll timings?`... Yes.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
+* [`Encoding` too](https://github.com/futzu/scte35-threefive/blob/master/Encoding.md) with [`Examples`](https://github.com/futzu/scte35-threefive/blob/master/examples/encode)
+* [`This code is cleaner than your dishes.`   threefive /go](https://github.com/futzu/scte35-threefive/tree/master/go)
 * [`Issues` and `Bugs` and `Feature Requests`](#issues-and-bugs-and-feature-requests)
  *No forms man, just open an issue and tell me what you need.* 
 
