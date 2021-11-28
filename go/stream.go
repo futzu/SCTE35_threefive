@@ -74,10 +74,7 @@ func (stream *Stream) mkPts(prgm uint16) float64 {
 }
 
 func (stream *Stream) parsePusi(pkt []byte) bool {
-	if (pkt[1]>>6)&1 == 1 {
-		return true
-	}
-	return false
+	return (pkt[1]>>6)&1 == 1
 }
 
 func (stream *Stream) parsePts(pkt []byte, pid uint16) {
@@ -139,7 +136,7 @@ func (stream *Stream) chkPartial(pay []byte, pid uint16, sep []byte) []byte {
 func (stream *Stream) sameAsLast(pay []byte, pid uint16) bool {
 	val, ok := stream.last[pid]
 	if ok {
-		if bytes.Compare(pay, val) == 0 {
+		if bytes.Equal(pay, val) {
 			return true
 		}
 	}

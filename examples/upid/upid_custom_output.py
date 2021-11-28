@@ -1,9 +1,8 @@
+import threefive
+
 """
 Segmentation Upid Examples
 """
-
-import threefive
-
 
 ADID = (
     "/DA4AAAAAAAA///wBQb+AAAAAAAiAiBDVUVJAAAAA3//AAApPWwDDEFCQ0QwMTIzNDU2SBAAAGgCL9A="
@@ -26,9 +25,7 @@ MID = "/DA9AAAAAAAAAACABQb+0fha8wAnAiVDVUVJSAAAv3/PAAD4+mMNEQ4FTEEzMDkICAAAAAAuU
 ADS2 = "/DBUAAAAAAAA///wBQb+AAAAAAA+AjxDVUVJAAAAC3+/Di1BRFMtVVBJRDphYTg1YmJiNi01YzQzLTRiNmEtYmViYi1lZTNiMTNlYjc5OTkRAACV15uV"
 URI = "/DBZAAAAAAAA///wBQb+AAAAAABDAkFDVUVJAAAACn//AAApMuAPLXVybjp1dWlkOmFhODViYmI2LTVjNDMtNGI2YS1iZWJiLWVlM2IxM2ViNzk5ORAAAFz7UQA="
 
-dmesg = [ADS2, MID, MPU, ATSC, AIRID]
-
-ids = []
+dmesg, ids = [ADS2, MID, MPU, ATSC, AIRID], []
 
 
 def stuff(t, upid):
@@ -41,4 +38,4 @@ for m in dmesg:
     tf = threefive.Cue(m)
     tf.decode()
     tf.encode()
-    [stuff(d.segmentation_upid_type, d.segmentation_upid) for d in tf.descriptors]
+    map(lambda d: stuff(d.segmentation_upid_type, d.segmentation_upid), tf.descriptors)

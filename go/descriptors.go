@@ -194,7 +194,7 @@ func (dscptr *SegmentDscptr) decodeSegFlags(bitn *bitter.Bitn) {
 	dscptr.ProgramSegmentationFlag = bitn.AsBool()
 	dscptr.SegmentationDurationFlag = bitn.AsBool()
 	dscptr.DeliveryNotRestrictedFlag = bitn.AsBool()
-	if dscptr.DeliveryNotRestrictedFlag == false {
+	if !dscptr.DeliveryNotRestrictedFlag {
 		dscptr.WebDeliveryAllowedFlag = bitn.AsBool()
 		dscptr.NoRegionalBlackoutFlag = bitn.AsBool()
 		dscptr.ArchiveAllowedFlag = bitn.AsBool()
@@ -216,7 +216,7 @@ func (dscptr *SegmentDscptr) decodeSegCmpnts(bitn *bitter.Bitn) {
 }
 
 func (dscptr *SegmentDscptr) decodeSegmentation(bitn *bitter.Bitn) {
-	if dscptr.SegmentationDurationFlag == true {
+	if dscptr.SegmentationDurationFlag {
 		dscptr.SegmentationDuration = bitn.As90k(40)
 	}
 	dscptr.SegmentationUpidType = bitn.AsUInt8(8)
