@@ -9,7 +9,7 @@ import (
 const pktSz = 188
 
 // bufSz is the size of a read when parsing files.
-const bufSz = 1300 * pktSz
+const bufSz = 13000 * pktSz
 
 type PacketData struct {
 	PacketNumber int     `json:",omitempty"`
@@ -74,7 +74,7 @@ func (stream *Stream) mkPts(prgm uint16) float64 {
 }
 
 func (stream *Stream) parsePusi(pkt []byte) bool {
-	if (pkt[1]>>6)&1 == 1 {
+	if pkt[1]&0x40 == 1 {
 		return true
 	}
 	return false
@@ -82,7 +82,7 @@ func (stream *Stream) parsePusi(pkt []byte) bool {
 
 func (stream *Stream) parsePts(pkt []byte, pid uint16) {
 	if stream.parsePusi(pkt) {
-		if pkt[11]&128 == 128 {
+		if pkt[11]&0x80 == 0x80 {
 			prgm, ok := stream.pid2Prgm[pid]
 			if ok {
 				pts := (uint64(pkt[13]) >> 1 & 7) << 30
