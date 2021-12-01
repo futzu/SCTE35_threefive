@@ -11,6 +11,9 @@ const pktSz = 188
 // bufSz is the size of a read when parsing files.
 const bufSz = 13000 * pktSz
 
+// badPts aka 95443.717678
+const badPts = 8589934591
+
 type PacketData struct {
 	PacketNumber int     `json:",omitempty"`
 	Pid          uint16  `json:",omitempty"`
@@ -74,15 +77,15 @@ func (stream *Stream) mkPts(prgm uint16) float64 {
 }
 
 func (stream *Stream) parsePusi(pkt []byte) bool {
-	if pkt[1]&0x40 == 1 {
+	if pkt[1]&0x40 == 0x40 {
 		return true
 	}
 	return false
 }
 
 func (stream *Stream) parsePts(pkt []byte, pid uint16) {
-	if stream.parsePusi(pkt) {
-		if pkt[11]&0x80 == 0x80 {
+	if pkt[11]&0x80 == 0x80 {
+		if stream.parsePusi(pkt) {
 			prgm, ok := stream.pid2Prgm[pid]
 			if ok {
 				pts := (uint64(pkt[13]) >> 1 & 7) << 30
@@ -90,7 +93,10 @@ func (stream *Stream) parsePts(pkt []byte, pid uint16) {
 				pts |= (uint64(pkt[15]) >> 1) << 15
 				pts |= uint64(pkt[16]) << 7
 				pts |= uint64(pkt[17]) >> 1
-				stream.prgm2pts[prgm] = pts
+				if pts != badPts {
+					stream.prgm2pts[prgm] = pts
+
+				}
 			}
 		}
 	}

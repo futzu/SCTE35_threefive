@@ -72,6 +72,7 @@ class Stream:
     _PAT_PID = 0x00  # Program Association Pid
     _PMT_TID = b"\x02"  # PMT Table Id as bytes
     _SCTE35_TID = b"\xFC0"  # SCTE35 Table Id as bytes
+    _BAD_PTS = 8589934591  # 95443.717678
 
     def __init__(self, tsdata, show_null=True):
         """
@@ -154,6 +155,7 @@ class Stream:
                     if cue:
                         func(cue)
         self._tsdata.close()
+        return True
 
     def decode_next(self):
         """
@@ -163,7 +165,7 @@ class Stream:
         cue = self.decode(func=False)
         if cue:
             return cue
-        return None
+        return False
 
     def decode_program(self, the_program, func=show_cue):
         """
@@ -224,7 +226,7 @@ class Stream:
         self.decode(func=no_op)
         if len(self.start.values()) > 0:
             return self.start.popitem()[1]
-        return None
+        return False
 
     def _mk_packet_data(self, pid):
         prgm = self._pid_prgm[pid]
@@ -282,8 +284,9 @@ class Stream:
                 pts |= (pkt[15] >> 1) << 15
                 pts |= pkt[16] << 7
                 pts |= pkt[17] >> 1
-                prgm = self._pid_prgm[pid]
-                self._prgm_pts[prgm] = pts
+                if pts != self._BAD_PTS:
+                    prgm = self._pid_prgm[pid]
+                    self._prgm_pts[prgm] = pts
 
     def _parse_pcr(self, pkt, pid):
         """
@@ -337,7 +340,7 @@ class Stream:
             return self._parse_scte35(pkt, pid)
         if self._parse_pusi(pkt[1]):
             self._parse_pts(pkt, pid)
-        return None
+        return False
 
     def _chk_partial(self, payload, pid, sep):
         if pid in self._partial:
@@ -363,7 +366,7 @@ class Stream:
         cue = Cue(payload, packet_data)
         if cue.decode():
             return cue
-        return None
+        return False
 
     def _parse_scte35(self, pkt, pid):
         """
