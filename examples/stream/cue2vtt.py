@@ -28,24 +28,18 @@ def scte35_to_vtt(cue):
     """
     scte35_to_vtt prints splice insert cue out and cue in via webvtt
     """
+
     ts = 0
     if cue.packet_data.pcr is not None:
         ts = cue.packet_data.pcr
     else:
         if cue.packet_data.pts is not None:
             ts = cue.packet_data.pts
-    try:
-
-        start = ts
-        end = start + 5
-        if cue.command.pts_time:
-            start = cue.command.pts_time
-        if cue.command.break_duration:
-            end = start + cue.command.break_duration
-        print(f"{ts_to_vtt(start)} --> {ts_to_vtt(end-1)}\nCue Out\n\n")
-        print(f"{ts_to_vtt(end)} --> {ts_to_vtt(end+1)}\nCue In\n\n")
-    except:
-        print(f"{ts_to_vtt(ts)} --> {ts_to_vtt(ts+1)}\n{cue.command.name}\n\n")
+    start = ts
+    end = start + 5
+    print(f"{ts_to_vtt(start)} --> {ts_to_vtt(end)}")
+    print(cue.command)
+    print()
 
 
 if __name__ == "__main__":
