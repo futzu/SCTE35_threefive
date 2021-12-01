@@ -29,6 +29,7 @@ def _read_stdin():
         Stream(sys.stdin.buffer).decode()
     except (FileNotFoundError, LookupError, TypeError, ValueError):
         # base64 or hex encoded string or raw bytes via stdin
+        print("_read_stdin failed first try")
         stuff = sys.stdin.buffer.read()
         if stuff:
             return _decode_and_show(stuff)

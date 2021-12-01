@@ -114,8 +114,7 @@ func (stream *Stream) parsePcr(pkt []byte, pid uint16) {
 //parsePay packet payload starts after header and afc (if present)
 func (stream *Stream) parsePayload(pkt []byte) []byte {
 	head := 4
-	hasafc := (pkt[3] >> 5) & 1
-	if hasafc == 1 {
+	if pkt[3]&0x20 == 0x20 {
 		afl := int(pkt[4])
 		head += afl + 1
 	}
@@ -172,9 +171,11 @@ func (stream *Stream) parse(pkt []byte) {
 	}
 	if stream.isPcrPid(*pid) {
 		stream.parsePcr(pkt, *pid)
+		return
 	}
 	if stream.isScte35Pid(*pid) {
 		stream.parseScte35(*pay, *pid)
+		return
 	}
 	stream.parsePts(pkt, *pid)
 }
