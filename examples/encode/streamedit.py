@@ -5,7 +5,7 @@ An example of how to edit SCTE35 data
 in MPEGTS packets on the fly and pass
 the modifiied stream to stdout.
 
-Example use:
+Use like:
 
 pypy3 streamedit.py https://futzu.com/xaa.ts | pypy3 -c 'import threefive; threefive.decode()'
 
@@ -22,6 +22,128 @@ class Stream2(Stream):
     """
     Stream2 is a subclass of threefive.Stream
     to demonstrate editing SCTE35 Cues in a MPEGTS stream.
+
+    Use like:
+
+    pypy3 streamedit.py myvideo.ts >> myvideoedited.ts
+
+
+
+
+            BEFORE:
+        {
+            "info_section": {
+                "table_id": "0xfc",
+                "section_syntax_indicator": false,
+                "private": false,
+                "sap_type": "0x3",
+                "sap_details": "No Sap Type",
+                "section_length": 42,
+                "protocol_version": 0,
+                "encrypted_packet": false,
+                "encryption_algorithm": 0,
+                "pts_adjustment": 0.0,
+                "cw_index": "0xff",
+                "tier": "0xfff",
+                "splice_command_length": 15,
+                "splice_command_type": 5,
+                "descriptor_loop_length": 10,
+                "crc": "0xd7165c79"
+            },
+            "command": {
+                "command_length": 15,
+                "command_type": 5,
+                "name": "Splice Insert",
+                "time_specified_flag": true,
+                "pts_time": 23683.480033,
+                "splice_event_id": 5690,
+                "splice_event_cancel_indicator": false,
+                "out_of_network_indicator": true,
+                "program_splice_flag": true,
+                "duration_flag": false,
+                "splice_immediate_flag": false,
+                "unique_program_id": 0,
+                "avail_num": 0,
+                "avail_expected": 0
+            },
+            "descriptors": [
+                {
+                    "tag": 0,
+                    "descriptor_length": 8,
+                    "name": "Avail Descriptor",
+                    "identifier": "CUEI",
+                    "provider_avail_id": 0
+                }
+            ],
+            "packet_data": {
+                "pid": "0x40b",
+                "program": 1030,
+                "pcr": 23677.003267,
+                "pts": 23677.030189
+            }
+        }
+        AFTER:
+
+        {
+            "info_section": {
+                "table_id": "0xfc",
+                "section_syntax_indicator": false,
+                "private": false,
+                "sap_type": "0x3",
+                "sap_details": "No Sap Type",
+                "section_length": 42,
+                "protocol_version": 0,
+                "encrypted_packet": false,
+                "encryption_algorithm": 0,
+                "pts_adjustment"                          # <-- Changed
+                "cw_index": "0xff",
+                "tier": "0xfff",
+                "splice_command_length": 15,
+                "splice_command_type": 5,
+                "descriptor_loop_length": 10,
+                "crc": "0x82fd33d9"
+            },
+            "command": {
+                "command_length": 15,
+                "command_type": 5,
+                "name": "Splice Insert",
+                "time_specified_flag": true,
+                "pts_time": 23683.480033,
+                "splice_event_id": 5690,
+                "splice_event_cancel_indicator": false,
+                "out_of_network_indicator": true,
+                "program_splice_flag": true,
+                "duration_flag": false,
+                "splice_immediate_flag": false,
+                "unique_program_id": 999,            # <-- Changed
+                "avail_num": 0,
+                "avail_expected": 0
+            },
+            "descriptors": [
+                {
+                    "tag": 0,
+                    "descriptor_length": 8,
+                    "name": "Avail Descriptor",
+                    "identifier": "FUEI",                     # <-- Changed
+                    "provider_avail_id": 0
+                }
+            ],
+            "packet_data": {
+                "pid": "0x40b",
+                "program": 1030,
+                "pcr": 23677.003267,
+                "pts": 23677.030189
+            }
+        }
+
+        #    The Changed cues will be in myvideoedited.ts,
+        #     Check it like this:
+
+    from threefive import decode
+
+     decode('myvideoedited.ts')
+
+
     """
 
     _PAD = b"\xff"
@@ -34,9 +156,12 @@ class Stream2(Stream):
         """
         print("BEFORE:", file=sys.stderr)
         cue.to_stderr()
-        cue.info_section.pts_adjustment = 109.55
+        cue.info_section.pts_adjustment = 109.55  # Changed
+        cue.command.unique_program_id = 999  # Changed
+        cue.descriptors[0].identifier = "FUEI"  # Changed
         cue.encode()
-        print("AFTER:", file=sys.stderr)
+        print("AFTER:\n", file=sys.stderr)
+        cue.to_stderr()
 
     def repack_pkt(self, pkt, cue):
         """

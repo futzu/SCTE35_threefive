@@ -37,8 +37,9 @@ def scte35_to_vtt(cue):
             ts = cue.packet_data.pts
     start = ts
     end = start + 5
-    print(f"{ts_to_vtt(start)} --> {ts_to_vtt(end)}")
-    print(cue.command)
+    print(f"{ts_to_vtt(start)} --> {ts_to_vtt(end)} align:left")
+    for k, v in cue.command.items():
+        print(k, " : ", v)
     print()
 
 
