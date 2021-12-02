@@ -158,7 +158,8 @@ class Stream2(Stream):
         cue.to_stderr()
         cue.info_section.pts_adjustment = 109.55  # Changed
         cue.command.unique_program_id = 999  # Changed
-        cue.descriptors[0].identifier = "FUEI"  # Changed
+        if cue.descriptors:
+            cue.descriptors[0].identifier = "FUEI"  # Changed
         cue.encode()
         print("AFTER:\n", file=sys.stderr)
         cue.to_stderr()
