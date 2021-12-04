@@ -13,6 +13,27 @@
 * [`Issues` and `Bugs` and `Feature Requests`](#issues-and-bugs-and-feature-requests)
  *No forms man, just open an issue and tell me what you need.* 
 
+* `New Output for threefive.Stream.show() just added.`
+```
+Program: 1040
+    Service:    fumatic
+    Provider:   fu-labs
+    Pcr Pid:    1041[0x411]
+    Streams:
+                Pid: 1041[0x411]        Type: 0x1b AVC Video
+                Pid: 1042[0x412]        Type: 0x3 MP2 Audio
+                Pid: 1044[0x414]        Type: 0x6 PES Packets/Private Data
+                Pid: 1045[0x415]        Type: 0x86 SCTE35 Data
+
+Program: 1050
+    Service:    fancy ˹ 
+    Provider:   fu-corp
+    Pcr Pid:    1051[0x41b]
+    Streams:
+                Pid: 1051[0x41b]        Type: 0x1b AVC Video
+                Pid: 1052[0x41c]        Type: 0x3 MP2 Audio
+                Pid: 1054[0x41e]        Type: 0x6 PES Packets/Private Data
+                Pid: 1055[0x41f]        Type: 0x86 SCTE35 Data
 
 ---
 ### Welcome to the show.
