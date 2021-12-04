@@ -13,8 +13,8 @@
 * [`Issues` and `Bugs` and `Feature Requests`](#issues-and-bugs-and-feature-requests)
  *No forms man, just open an issue and tell me what you need.* 
 
-* `New Output for threefive.Stream.show() just added.`
-```
+* __Heads Up__. New output for __threefive.Stream.show()__ just added.
+```js
 Program: 1040
     Service:    fumatic
     Provider:   fu-labs
