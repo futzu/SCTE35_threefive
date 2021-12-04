@@ -7,6 +7,18 @@ from .cue import Cue
 from .packetdata import PacketData
 from .reader import reader
 
+streamtype_map = {
+    "0x2": "MP2 Video",
+    "0x3": "MP2 Audio",
+    "0x4": "MP2 Audio",
+    "0x6": "PES Packets/Private Data",
+    "0xf": "AAC Audio",
+    "0x1b": "AVC Video",
+    "0x81": "AC3 Audio ",
+    "0x86": "SCTE35 Data",
+    "0xc0": "Unknown",
+}
+
 
 def no_op(cue):
     """
@@ -53,11 +65,18 @@ class ProgramInfo:
         """
         serv = self.service.decode(errors="ignore")
         prov = self.provider.decode(errors="ignore")
-        print(f"    Service: { serv}\n    Provider: {prov}\n")
-        print(f"    Pcr Pid: {self.pcr_pid}[{hex(self.pcr_pid)}]")
+        print(f"    Service:\t{ serv}\n    Provider:\t{prov}")
+        print(f"    Pcr Pid:\t{self.pcr_pid}[{hex(self.pcr_pid)}]")
         print("    Streams:")
-        for k, vee in self.streams.items():
-            print(f"\t    Pid: {k}[{hex(k)}]    Type: {vee}")
+        # sorted_dict = {k:my_dict[k] for k in sorted(my_dict)})
+        keys = sorted(self.streams)
+        for k in keys:
+            vee = self.streams[k]
+            if vee in streamtype_map:
+                vee = f"{vee} {streamtype_map[vee]}"
+            else:
+                vee = f"{vee} Unknown"
+            print(f"\t\tPid: {k}[{hex(k)}]\tType: {vee}")
         print()
 
 
@@ -73,6 +92,7 @@ class Stream:
     _PMT_TID = b"\x02"  # PMT Table Id as bytes
     _SCTE35_TID = b"\xFC0"  # SCTE35 Table Id as bytes
     _BAD_PTS = 8589934591  # 95443.717678
+    _NO_PTS_PIDS = [188, 190, 191, 240, 241, 242, 248]  # pids that dont have pts.
 
     def __init__(self, tsdata, show_null=True):
         """
@@ -278,15 +298,18 @@ class Stream:
         in the dict Stream._pid_pts
         """
         if pkt[11] & 0x80:
-            if pid in self._pid_prgm:
-                pts = ((pkt[13] >> 1) & 7) << 30
-                pts |= pkt[14] << 22
-                pts |= (pkt[15] >> 1) << 15
-                pts |= pkt[16] << 7
-                pts |= pkt[17] >> 1
-                if pts != self._BAD_PTS:
-                    prgm = self._pid_prgm[pid]
-                    self._prgm_pts[prgm] = pts
+            if pid in self._NO_PTS_PIDS:
+                return
+            if pid not in self._pid_prgm:
+                return
+            pts = ((pkt[13] >> 1) & 7) << 30
+            pts |= pkt[14] << 22
+            pts |= (pkt[15] >> 1) << 15
+            pts |= pkt[16] << 7
+            pts |= pkt[17] >> 1
+            if pts != self._BAD_PTS:
+                prgm = self._pid_prgm[pid]
+                self._prgm_pts[prgm] = pts
 
     def _parse_pcr(self, pkt, pid):
         """
@@ -325,8 +348,8 @@ class Stream:
             if pid == self._PAT_PID:
                 self._program_association_table(payload)
             elif pid == self._SDT_PID:
-                if self.info:
-                    self._stream_descriptor_table(payload)
+                # if self.info:
+                self._stream_descriptor_table(payload)
             else:
                 self._program_map_table(payload, pid)
 
@@ -389,11 +412,13 @@ class Stream:
         """
         _stream_descriptor_table parses the SDT for program metadata
         """
-        payload = self._chk_partial(payload, self._SDT_PID, b"")
-        seclen = self._parse_length(payload[2], payload[3])
+        payload = self._chk_partial(payload, self._SDT_PID, b"\x42")
+        if not payload:
+            return False
+        seclen = self._parse_length(payload[1], payload[2])
         if not self._section_done(payload, self._SDT_PID, seclen):
             return False
-        idx = 12
+        idx = 11
         while idx < seclen + 3:
             service_id = self._parse_program(payload[idx], payload[idx + 1])
             idx += 3
