@@ -13,7 +13,7 @@
 * [`Issues` and `Bugs` and `Feature Requests`](#issues-and-bugs-and-feature-requests)
  *No forms man, just open an issue and tell me what you need.* 
 
-* __Heads Up__. New output for __threefive.Stream.show()__ just added.
+* [`Heads Up`. New output for `threefive.Stream.show()`](#stream-class) just added.
 ```js
 Program: 1040
     Service:    fumatic
@@ -54,6 +54,10 @@ Program: 1050
 * [Super Cool Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
    * New
      * [Display SCTE35 info via Webvtt Subtitles](https://github.com/futzu/threefive/blob/master/examples/stream/cue2vtt.py)
+   * Updated
+     * [MPEGTS pass-through SCTE35 Cue Re-Encoding](https://github.com/futzu/scte35-threefive/blob/master/examples/encode/streamedit.py)
+     * [HASP Hls Aes Scte-35 Parser](https://github.com/futzu/threefive/blob/master/examples/hls/hasp.py)
+
     * CLI
       * [Cli](https://github.com/futzu/SCTE35-threefive/blob/master/examples/cli.py)
     * DTMF
@@ -358,27 +362,28 @@ Method                              | Description
 ```python3
 >>>> from threefive import Stream
 >>>> Stream('https://slo.me/plp0.ts').show()
+```
 
-Program:1030
+```js
+Program: 1040
+    Service:    fumatic
+    Provider:   fu-labs
+    Pcr Pid:    1041[0x411]
+    Streams:
+                Pid: 1041[0x411]        Type: 0x1b AVC Video
+                Pid: 1042[0x412]        Type: 0x3 MP2 Audio
+                Pid: 1044[0x414]        Type: 0x6 PES Packets/Private Data
+                Pid: 1045[0x415]        Type: 0x86 SCTE35 Data
 
-   1031 [0x407] Type: 0x1b   PCR 
-   1032 [0x408] Type: 0x3  
-   1034 [0x40a] Type: 0x6  
-   1035 [0x40b] Type: 0x86   SCTE35 
-
-Program:1100
-
-   1101 [0x44d] Type: 0x1b   PCR 
-   1102 [0x44e] Type: 0x3  
-   1104 [0x450] Type: 0x6  
-   1105 [0x451] Type: 0x86   SCTE35 
-
-Program:1080
-
-   1081 [0x439] Type: 0x1b   PCR 
-   1082 [0x43a] Type: 0x3  
-   1084 [0x43c] Type: 0x6  
-
+Program: 1050
+    Service:    fancy ˹ 
+    Provider:   fu-corp
+    Pcr Pid:    1051[0x41b]
+    Streams:
+                Pid: 1051[0x41b]        Type: 0x1b AVC Video
+                Pid: 1052[0x41c]        Type: 0x3 MP2 Audio
+                Pid: 1054[0x41e]        Type: 0x6 PES Packets/Private Data
+                Pid: 1055[0x41f]        Type: 0x86 SCTE35 Data
 
 ```
 ___
