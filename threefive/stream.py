@@ -7,6 +7,9 @@ from .cue import Cue
 from .packetdata import PacketData
 from .reader import reader
 
+"""
+stream types for program streams.
+"""
 streamtype_map = {
     "0x2": "MP2 Video",
     "0x3": "MP2 Audio",
