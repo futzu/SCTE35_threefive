@@ -26,12 +26,12 @@ import sys
 
 from threefive import Segment
 
-if __name__=='__main__':
+if __name__ == "__main__":
 
-    seg=Segment(sys.argv[1])
+    seg = Segment(sys.argv[1])
     seg.decode()
 
-    print('\n\nPCR -> Cue')
-    pcr_cue_map = {cue.packet_data.pcr:cue.encode() for cue in seg.cues}
+    print("\n\nPCR -> Cue")
+    pcr_cue_map = {cue.packet_data.pcr: cue.encode() for cue in seg.cues}
     for ts in sorted(pcr_cue_map):
-        print(ts,' : ',pcr_cue_map[ts])
+        print(ts, " : ", pcr_cue_map[ts])
