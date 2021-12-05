@@ -1,8 +1,6 @@
 """
 decode.py
 
-Home of the decode function.
-
 decode is a SCTE-35 decoder function
 with input type auto-detection.
 
