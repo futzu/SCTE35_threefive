@@ -39,5 +39,10 @@ upgrade:
 	$(PIP3) install --upgrade threefive
 	
 cli:
+	sed -i s/pypy3/python3/ 35decode
 	install 35decode /usr/local/bin
+pypy3-cli:
+	sed -i s/python3/pypy3/ 35decode
+	install 35decode /usr/local/bin
+
 

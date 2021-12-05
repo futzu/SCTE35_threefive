@@ -149,13 +149,14 @@ class Stream:
         func can be set to a custom function that accepts
         a threefive.Cue instance as it's only argument.
         """
-        if self._find_start():
-            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
-                cue = self._parse(pkt)
-                if cue:
-                    if not func:
-                        return cue
-                    func(cue)
+        if not self._find_start():
+            return False
+        for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
+            cue = self._parse(pkt)
+            if cue:
+                if not func:
+                    return cue
+                func(cue)
         self._tsdata.close()
         return True
 
@@ -171,12 +172,13 @@ class Stream:
         num_pkts packets at a time.
         """
         num_pkts = 2016
-        if self._find_start():
-            for chunk in iter(
-                partial(self._tsdata.read, (self._PACKET_SIZE * num_pkts)), b""
-            ):
-                _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
-                del _
+        if not self._find_start():
+            return False
+        for chunk in iter(
+            partial(self._tsdata.read, (self._PACKET_SIZE * num_pkts)), b""
+        ):
+            _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
+            del _
         self._tsdata.close()
         return True
 
