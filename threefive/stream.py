@@ -51,9 +51,9 @@ class ProgramInfo:
     for use with Stream.show()
     """
 
-    def __init__(self):
-        self.pid = None
-        self.pcr_pid = None
+    def __init__(self, pid=None, pcr_pid=None):
+        self.pid = pid
+        self.pcr_pid = pcr_pid
         self.provider = b""
         self.service = b""
         self.streams = {}  # pid to stream_type mapping
@@ -87,10 +87,14 @@ class Stream:
 
     _PACKET_SIZE = 188  # Mpegts packet size in bytes
     _SYNC_BYTE = 0x47  # Mpegts sync byte
-    _SDT_PID = 0x0011  # Stream Descriptor Table Pid
+    # pids
+    _SDT_PID = 0x11  # Stream Descriptor Table Pid
     _PAT_PID = 0x00  # Program Association Pid
+    # tids
     _PMT_TID = b"\x02"  # PMT Table Id as bytes
     _SCTE35_TID = b"\xFC0"  # SCTE35 Table Id as bytes
+    _SDT_TID = b"\x42"  # SDT Table Id as bytes
+    # pts
     _BAD_PTS = 8589934591  # 95443.717678
     _NO_PTS_PIDS = [188, 190, 191, 240, 241, 242, 248]  # pids that dont have pts.
 
@@ -131,13 +135,13 @@ class Stream:
         while self._tsdata:
             one = self._tsdata.read(1)
             if not one:
+                print("\nNo Stream Found.\n")
                 return False
             if one[0] == self._SYNC_BYTE:
                 tail = self._tsdata.read(self._PACKET_SIZE - 1)
                 if tail:
                     self._parse(one + tail)
                     return True
-        return False
 
     def decode(self, func=show_cue):
         """
@@ -164,16 +168,15 @@ class Stream:
     def decode_fu(self, func=show_cue):
         """
         Stream.decode_fu decodes
-        1880 packets at a time.
+        num_pkts packets at a time.
         """
-        pkts = 1880
+        num_pkts = 2016
         if self._find_start():
             for chunk in iter(
-                partial(self._tsdata.read, (self._PACKET_SIZE * pkts)), b""
+                partial(self._tsdata.read, (self._PACKET_SIZE * num_pkts)), b""
             ):
-                for cue in self._mk_pkts(chunk):
-                    if cue:
-                        func(cue)
+                _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
+                del _
         self._tsdata.close()
         return True
 
@@ -207,7 +210,7 @@ class Stream:
                 if cue:
                     func(cue)
                 sys.stdout.buffer.write(pkt)
-        self._tsdata.close()
+            self._tsdata.close()
 
     def strip_scte35(self, func=show_cue_stderr):
         """
@@ -224,6 +227,7 @@ class Stream:
                 else:
                     sys.stdout.buffer.write(pkt)
         self._tsdata.close()
+        return True
 
     def show(self):
         """
@@ -237,6 +241,7 @@ class Stream:
             if len(vee.streams.items()) > 0:
                 print(f"Program: {k}")
                 vee.show()
+        return True
 
     def decode_start_time(self):
         """
@@ -269,14 +274,14 @@ class Stream:
         """
         parse a 12 bit length value
         """
-        return (byte1 << 8 | byte2) & 0x0FFF
+        return (byte1 & 0x0F) << 8 | byte2
 
     @staticmethod
     def _parse_pid(byte1, byte2):
         """
         parse a 13 bit pid value
         """
-        return (byte1 << 8 | byte2) & 0x01FFF
+        return (byte1 & 0x01F) << 8 | byte2
 
     @staticmethod
     def _parse_program(byte1, byte2):
@@ -323,9 +328,7 @@ class Stream:
                 pcr |= pkt[8] << 9
                 pcr |= pkt[9] << 1
                 pcr |= pkt[10] >> 7
-                prgm = 1
-                if pid in self._pid_prgm:
-                    prgm = self._pid_prgm[pid]
+                prgm = self._pid_prgm[pid]
                 self._prgm_pcr[prgm] = pcr
                 if prgm not in self.start:
                     self.start[prgm] = pcr
@@ -348,8 +351,8 @@ class Stream:
             if pid == self._PAT_PID:
                 self._program_association_table(payload)
             elif pid == self._SDT_PID:
-                # if self.info:
-                self._stream_descriptor_table(payload)
+                if self.info:
+                    self._stream_descriptor_table(payload)
             else:
                 self._program_map_table(payload, pid)
 
@@ -412,7 +415,7 @@ class Stream:
         """
         _stream_descriptor_table parses the SDT for program metadata
         """
-        payload = self._chk_partial(payload, self._SDT_PID, b"\x42")
+        payload = self._chk_partial(payload, self._SDT_PID, self._SDT_TID)
         if not payload:
             return False
         seclen = self._parse_length(payload[1], payload[2])
@@ -479,11 +482,7 @@ class Stream:
             return False
         pcr_pid = self._parse_pid(payload[8], payload[9])
         if program_number not in self._prgm:
-            self._prgm[program_number] = ProgramInfo()
-        pinfo = self._prgm[program_number]
-        pinfo.pid = pid
-        pinfo.pcr_pid = pcr_pid
-        self._prgm[program_number] = pinfo
+            self._prgm[program_number] = ProgramInfo(pid=pid, pcr_pid=pcr_pid)
         self._pids["pcr"].add(pcr_pid)
         self._pid_prgm[pcr_pid] = program_number
         proginfolen = self._parse_length(payload[10], payload[11])

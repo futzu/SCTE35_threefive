@@ -67,10 +67,9 @@ class Stanza:
     def _aes_decrypt(self):
         try:
             tmp = self.segment.rsplit("/", 1)[1]
-            with threefive.reader(self.segment) as infile:
-                with open(tmp, "wb") as outfile:
-                    pyaes.decrypt_stream(self.mode, infile, outfile)
-                    self._get_pcr_start(tmp)
+            with threefive.reader(self.segment) as infile, open(tmp, "wb") as outfile:
+                pyaes.decrypt_stream(self.mode, infile, outfile)
+                self._get_pcr_start(tmp)
             os.unlink(tmp)
         except:
             pass

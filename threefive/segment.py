@@ -76,10 +76,9 @@ class Segment(Stream):
     def _aes_decrypt(self):
         mode = pyaes.AESModeOfOperationCBC(self.key, iv=self.iv)
         self._mk_tmp()
-        with open(self.tmp, "wb") as outfile:
-            with reader(self.seg_uri) as infile:
-                pyaes.decrypt_stream(mode, infile, outfile)
-            self.seg_uri = self.tmp
+        with open(self.tmp, "wb") as outfile, reader(self.seg_uri) as infile:
+            pyaes.decrypt_stream(mode, infile, outfile)
+        self.seg_uri = self.tmp
 
     def add_cue(self, cue):
         """
