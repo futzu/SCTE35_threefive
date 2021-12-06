@@ -11,10 +11,6 @@ the arg stuff is the input.
 if stuff is not set, decode will attempt
 to read mpegts video from sys.stdin.buffer.
 
-if stuff is a file, the file data
-will be read and the type of the data
-will be autodetected and decoded.
-
 SCTE-35 data is printed in JSON format.
 
 For more parsing and output control,
@@ -26,41 +22,22 @@ import sys
 
 from .cue import Cue
 from .stream import Stream
-from .reader import reader
-
-# Maximum size for a SCTE35 cue.
-_MAX_CUE_SIZE = 4096
-
-
-def _decode_and_show(stuff):
-    cue = Cue(stuff)
-    if cue.decode():
-        cue.show()
-        return True
-    return False
 
 
 def _read_stuff(stuff):
-
     try:
-        # Base64, Hex, Bytes, or Int Cues in a File
-        with reader(stuff) as tsdata:
-            tsd = tsdata.read(_MAX_CUE_SIZE)
-            _decode_and_show(tsd)
-            return True
+        # Mpegts Video
+        strm = Stream(stuff)
+        strm.decode()
+        return True
     except:
         try:
-            # Mpegts Video
-            strm = Stream(stuff)
-            strm.decode()
+            cue = Cue(stuff)
+            cue.decode()
+            cue.show()
             return True
         except:
-            try:
-                # Base64, Hex, Bytes, or Int Cue Strings
-                _decode_and_show(stuff)
-                return True
-            except:
-                return False
+            return False
 
 
 def decode(stuff=None):

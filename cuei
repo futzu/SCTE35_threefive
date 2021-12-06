@@ -8,15 +8,15 @@ to install to /usr/local/bin )
 
 use like:
 
-    cat myvideo.ts | 35decode
+    cat myvideo.ts | cuei
 
-    35decode https://futzu.com/xaa.ts
+    cuei https://futzu.com/xaa.ts
 
-    35decode myvideo.ts yourvideo.ts someothervideo.ts
+    cuei myvideo.ts yourvideo.ts someothervideo.ts
 
-    35decode mpegts_dir/*.ts
+    cuei mpegts_dir/*.ts
 
-    35decode '/DBZAAAAAAAA///wBQb+AAAAAABDAkFDVUVJAAAACn//AAApMuAPLXVybjp1dWlkOmFhODViYmI2LTVjNDMtNGI2YS1iZWJiLWVlM2IxM2ViNzk5ORAAAFz7UQA='
+    cuei '/DBZAAAAAAAA///wBQb+AAAAAABDAkFDVUVJAAAACn//AAApMuAPLXVybjp1dWlkOmFhODViYmI2LTVjNDMtNGI2YS1iZWJiLWVlM2IxM2ViNzk5ORAAAFz7UQA='
 """
 
 
