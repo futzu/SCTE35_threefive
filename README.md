@@ -136,18 +136,9 @@ pypy3 -m pip install threefive
 ```Base64```, ```Binary```, 
 > ```Hex Strings```,```Hex literals```, ```Integers```, ```Mpegts files``` and ```Mpegts HTTP/HTTPS Streams```
 > 
-
 > __SCTE-35__ data can be __parsed__ 
 > with just __one function call__.
-    
-> the arg __stuff__ is the input.
-> if __stuff is not set__, 
-> decode will attempt to __read__ from __sys.stdin.buffer__.
-
-> if __stuff is a file__, the file data
-> will be read and the type of the data
-> will be autodetected and decoded.
-
+  
 > SCTE-35 data is __printed in JSON__ format.
 
 
@@ -198,14 +189,6 @@ import threefive
 threefive.decode('https://futzu.com/xaa.ts')
 ````
 
-##### Read from File [cue.txt](https://github.com/futzu/threefive/files/6986120/cue.txt)
-
-```python3
-from threefive import decode
-
-decode('cue.txt')
-
-```
 
 ```  A threefive SCTE-35 Cue```
 ```js
