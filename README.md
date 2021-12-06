@@ -8,6 +8,7 @@
   * [`ffmpeg` and `SCTE35` and `Stream Type 0x6 bin data` and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
 *  [`Multicast?`    `HLS?`   `Custom Upid Handling?`     `Frame Accurate Preroll timings?`... Yes.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
+*  [Check out `35decode`](https://github.com/futzu/scte35-threefive/blob/master/35decode)
 * [`Encoding` too](https://github.com/futzu/scte35-threefive/blob/master/Encoding.md) with [`Examples`](https://github.com/futzu/scte35-threefive/blob/master/examples/encode)
 * [`This code is cleaner than your dishes.`   threefive /go](https://github.com/futzu/scte35-threefive/tree/master/go)
 * [`Issues` and `Bugs` and `Feature Requests`](#issues-and-bugs-and-feature-requests)
