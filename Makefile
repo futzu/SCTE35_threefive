@@ -39,11 +39,11 @@ upgrade:
 	$(PIP3) install --upgrade threefive
 	
 cli:
-	sed -i s/$(PYPY3)/$(PY3)/ 35decode
-	install 35decode /usr/local/bin
+	sed -i s/$(PYPY3)/$(PY3)/ cuei
+	install cuei /usr/local/bin
 	
 pypy3-cli:
-	sed -i s/$(PY3)/$(PYPY3)/ 35decode
-	install 35decode /usr/local/bin
+	sed -i s/$(PY3)/$(PYPY3)/ cuei
+	install cuei /usr/local/bin
 
 
