@@ -1,13 +1,32 @@
 #!/usr/bin/env pypy3
 
+"""
+35 decode, command line SCTE35 decoder.
+
+( type 'make cli' or 'make pypy3-cli' as root
+to install to /usr/local/bin )
+
+use like:
+
+    cat myvideo.ts | 35decode
+
+    35decode https://futzu.com/xaa.ts
+
+    35decode myvideo.ts yourvideo.ts someothervideo.ts
+
+    35decode mpegts_dir/*.ts
+
+    35decode '/DBZAAAAAAAA///wBQb+AAAAAABDAkFDVUVJAAAACn//AAApMuAPLXVybjp1dWlkOmFhODViYmI2LTVjNDMtNGI2YS1iZWJiLWVlM2IxM2ViNzk5ORAAAFz7UQA='
+"""
+
+
 import sys
 import threefive
 
-try:
-    threefive.decode(sys.argv[1])
-	
-except:
-    try:
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        for arg in sys.argv[1:]:
+            threefive.decode(arg)
+
+    else:
         threefive.decode(sys.stdin.buffer)
-    except:
-        pass
