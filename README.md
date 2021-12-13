@@ -14,6 +14,7 @@
 * [`Issues` and `Bugs` and `Feature Requests`](#issues-and-bugs-and-feature-requests)
  *No forms man, just open an issue and tell me what you need.* 
 
+*  Direct Multicast Support Now Included. ( udp://@224.0.0.1:1234)
 * [`Heads Up`. New output format for `threefive.Stream.show()`](#streamshow) just pushed.
 
 ---
