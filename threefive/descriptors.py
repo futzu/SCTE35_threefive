@@ -216,7 +216,7 @@ class TimeDescriptor(SpliceDescriptor):
 
     def encode(self, nbin=None):
         """
-        encode SCTE35 Avail Descriptor
+        encode SCTE35 Time Descriptor
         """
         nbin = super().encode(nbin)
         self._chk_var(int, nbin.add_int, "tai_seconds", 48)
@@ -246,6 +246,7 @@ class SegmentationDescriptor(SpliceDescriptor):
         self.archive_allowed_flag = None
         self.device_restrictions = None
         self.segmentation_duration = None
+        self.segmentation_duration_raw = None
         self.segmentation_message = None
         self.segmentation_upid_type = None
         self.segmentation_upid_type_name = None
@@ -333,7 +334,8 @@ class SegmentationDescriptor(SpliceDescriptor):
 
     def _decode_segmentation(self, bitbin):
         if self.segmentation_duration_flag:
-            self.segmentation_duration = bitbin.as_90k(40)  # 5 bytes
+            self.segmentation_duration_raw = bitbin.as_int(40)  # 5 bytes
+            self.segmentation_duration = self.as_90k(self.segmentation_duration_raw)
         self.segmentation_upid_type = bitbin.as_int(8)  # 1 byte
         self.segmentation_upid_length = bitbin.as_int(8)  # 1 byte
         self.segmentation_upid_type_name, self.segmentation_upid = upid_decoder(

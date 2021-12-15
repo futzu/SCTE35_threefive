@@ -12,7 +12,7 @@ fmt:
 
 commit: fmt
 	git pull
-	git commit -a
+	git commit $1
 	git push	
 
 clean:

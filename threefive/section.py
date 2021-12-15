@@ -31,6 +31,7 @@ class SpliceInfoSection(SCTE35Base):
         self.protocol_version = None
         self.encrypted_packet = None
         self.encryption_algorithm = None
+        self.pts_adjustment_raw = None
         self.pts_adjustment = None
         self.cw_index = None
         self.tier = None
@@ -61,7 +62,8 @@ class SpliceInfoSection(SCTE35Base):
             raise ValueError("splice_info_section.protocol_version should be 0")
         self.encrypted_packet = bitbin.as_flag(1)
         self.encryption_algorithm = bitbin.as_int(6)
-        self.pts_adjustment = bitbin.as_90k(33)
+        self.pts_adjustment_raw = bitbin.as_int(33)
+        self.pts_adjustment = self.as_90k(self.pts_adjustment_raw)
         self.cw_index = bitbin.as_hex(8)
         self.tier = bitbin.as_hex(12)
         self.splice_command_length = bitbin.as_int(12)

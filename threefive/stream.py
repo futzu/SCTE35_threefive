@@ -302,24 +302,26 @@ class Stream:
         """
         return byte1 & 0x40
 
-    def _parse_pts(self, pkt, pid):
+    def _parse_pts(self, payload, pid):
         """
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
-        if pkt[11] & 0x80:
-            if pid in self._NO_PTS_PIDS:
-                return
-            if pid not in self._pid_prgm:
-                return
-            pts = ((pkt[13] >> 1) & 7) << 30
-            pts |= pkt[14] << 22
-            pts |= (pkt[15] >> 1) << 15
-            pts |= pkt[16] << 7
-            pts |= pkt[17] >> 1
-            if pts != self._BAD_PTS:
+        # payload = self._parse_payload(pkt)
+        if payload[7] & 0x80:
+            pts = ((payload[9] >> 1) & 7) << 30
+            pts |= payload[10] << 22
+            pts |= (payload[11] >> 1) << 15
+            pts |= payload[12] << 7
+            pts |= payload[13] >> 1
+            prgm = 1
+            if pid in self._pid_prgm:
                 prgm = self._pid_prgm[pid]
-                self._prgm_pts[prgm] = pts
+            if prgm in self._prgm_pts:
+                if pts < self._prgm_pts[prgm]:
+                    pts = self._prgm_pts[prgm]
+            self._prgm_pts[prgm] = pts
+        # print('pts ',pts /90000.0)
 
     def _parse_pcr(self, pkt, pid):
         """
@@ -333,7 +335,12 @@ class Stream:
                 pcr |= pkt[8] << 9
                 pcr |= pkt[9] << 1
                 pcr |= pkt[10] >> 7
-                prgm = self._pid_prgm[pid]
+                prgm = 1
+                if pid in self._pid_prgm:
+                    prgm = self._pid_prgm[pid]
+                if prgm in self._prgm_pcr:
+                    if pcr < self._prgm_pcr[prgm]:
+                        pcr = self._prgm_pcr[prgm]
                 self._prgm_pcr[prgm] = pcr
                 if prgm not in self.start:
                     self.start[prgm] = pcr
@@ -345,13 +352,13 @@ class Stream:
         except (LookupError, TypeError, ValueError):
             return False
 
-    def _parse_tables(self, pkt, pid):
+    def _parse_tables(self, payload, pid):
         """
         _parse_tables parse for
         PAT, PMT,  and SDT tables
         based on pid of the pkt
         """
-        payload = self._parse_payload(pkt)
+        #   payload = self._parse_payload(pkt)
         if not self._chk_last(payload, pid):
             if pid == self._PAT_PID:
                 self._program_association_table(payload)
@@ -362,16 +369,18 @@ class Stream:
                 self._program_map_table(payload, pid)
 
     def _parse(self, pkt):
+        cue = False
         pid = self._parse_pid(pkt[1], pkt[2])
+        payload = self._parse_payload(pkt)
         if pid in self._pids["tables"]:
-            self._parse_tables(pkt, pid)
+            self._parse_tables(payload, pid)
         if pid in self._pids["pcr"]:
-            return self._parse_pcr(pkt, pid)
+            self._parse_pcr(pkt, pid)
         if pid in self._pids["scte35"]:
-            return self._parse_scte35(pkt, pid)
+            cue = self._parse_scte35(pkt, pid)
         if self._parse_pusi(pkt[1]):
-            self._parse_pts(pkt, pid)
-        return False
+            self._parse_pts(payload, pid)
+        return cue
 
     def _chk_partial(self, payload, pid, sep):
         if pid in self._partial:

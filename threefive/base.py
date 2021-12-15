@@ -21,6 +21,10 @@ class SCTE35Base:
             nbin = NBin()
         return nbin
 
+    @staticmethod
+    def as_90k(int_time):
+        return round((int_time / 90000.0), 6)
+
     def get(self):
         """
         Returns instance as a dict

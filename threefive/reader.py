@@ -15,7 +15,7 @@ def reader(uri):
     http(s) urls:       "https://example.com/vid.ts"
     udp urls:           "udp://1.2.3.4:5555"
     multicast urls:     "udp://@227.1.3.10:4310"
-    
+
     """
     if uri.startswith("udp://"):
         return open_udp(uri)

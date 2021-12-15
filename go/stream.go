@@ -286,4 +286,3 @@ func (stream *Stream) mkCue(pid uint16) Cue {
 	cue.Packet.PacketNumber = stream.pktNum
 	return cue
 }
-
