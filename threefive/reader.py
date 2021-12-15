@@ -16,6 +16,22 @@ def reader(uri):
     udp urls:           "udp://1.2.3.4:5555"
     multicast urls:     "udp://@227.1.3.10:4310"
 
+
+
+    Use like:
+
+    with reader("udp://@227.1.3.10:4310") as data:
+        data.read(8192)
+
+    with reader("/home/you/video.ts") as data:
+        fu = data.read()
+
+    udp_data =reader("udp://1.2.3.4:5555")
+    chunks = [udp_data.read(188) for i in range(0,1024)]
+    udp_data.close()
+
+
+
     """
     # Multicast
     if uri.startswith("udp://@"):
