@@ -17,12 +17,16 @@ def reader(uri):
     multicast urls:     "udp://@227.1.3.10:4310"
 
     """
-    if uri.startswith("udp://"):
-        return open_udp(uri)
+    # Multicast
     if uri.startswith("udp://@"):
         return open_mcast(uri)
+    # Udp
+    if uri.startswith("udp://"):
+        return open_udp(uri)
+    # Http(s)
     if uri.startswith("http"):
         return urllib.request.urlopen(uri)
+    # File
     return open(uri, "rb")
 
 
