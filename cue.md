@@ -1,7 +1,7 @@
 ### A threefive SCTE-35 Cue
 
 > __1__ ```info_section``` (__Required__)
-```
+```js
     "info_section": {
         "table_id": "0xfc",
         "section_syntax_indicator": false,
@@ -24,7 +24,7 @@
 
 ```
 > __1__ ```command``` (__Required__)
-```
+```js
     "command": {
         "command_length": 15,
         "command_type": 5,
@@ -46,7 +46,7 @@
 ```
 
 > __0 or more__ ```descriptors``` (__Optional__)
-```
+```go
      "descriptors": [
         {
             "tag": 2,
@@ -100,7 +100,7 @@
 
  ```
  > ```packet_data``` (__Optional__)
- ```
+ ```js
     "packet_data": {
         "pid": "0x40b",
         "program": 1030,
