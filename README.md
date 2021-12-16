@@ -10,12 +10,12 @@ strm = Stream('https://example.com/vid.ts')
 strm.decode()
 ```
 
-| Supported |                         |
+|  Supported  |  Format                 |
 |-----------|-------------------------|
-| Files     |"/home/you/vid.ts"       |
-| Http(s)   |"https://example.com"    |
-| Udp       |"udp://1.2.3.4:5555"     |
-| Multicast | "udp://@227.1.3.10:4310"|
+|   Files       |  "/home/you/vid.ts"       |
+|   Http(s)     |  "https://example.com"    |
+|   Udp         |  "udp://1.2.3.4:5555"     |
+|   Multicast  |  "udp://@227.1.3.10:4310" |
 
 ---
 
