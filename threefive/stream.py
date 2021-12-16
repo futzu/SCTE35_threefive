@@ -307,7 +307,6 @@ class Stream:
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
-        # payload = self._parse_payload(pkt)
         if payload[7] & 0x80:
             pts = ((payload[9] >> 1) & 7) << 30
             pts |= payload[10] << 22
@@ -317,11 +316,7 @@ class Stream:
             prgm = 1
             if pid in self._pid_prgm:
                 prgm = self._pid_prgm[pid]
-            if prgm in self._prgm_pts:
-                if pts < self._prgm_pts[prgm]:
-                    pts = self._prgm_pts[prgm]
             self._prgm_pts[prgm] = pts
-        # print('pts ',pts /90000.0)
 
     def _parse_pcr(self, pkt, pid):
         """
@@ -338,9 +333,6 @@ class Stream:
                 prgm = 1
                 if pid in self._pid_prgm:
                     prgm = self._pid_prgm[pid]
-                if prgm in self._prgm_pcr:
-                    if pcr < self._prgm_pcr[prgm]:
-                        pcr = self._prgm_pcr[prgm]
                 self._prgm_pcr[prgm] = pcr
                 if prgm not in self.start:
                     self.start[prgm] = pcr
@@ -358,7 +350,6 @@ class Stream:
         PAT, PMT,  and SDT tables
         based on pid of the pkt
         """
-        #   payload = self._parse_payload(pkt)
         if not self._chk_last(payload, pid):
             if pid == self._PAT_PID:
                 self._program_association_table(payload)
