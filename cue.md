@@ -98,10 +98,12 @@
  ```
  > ```packet_data``` (__Optional__)
  ```
-    "packet_data": {
-        "pid": "0x41f",
-        "program": 1050,
-        "pcr": 21940.651167,
-        "pts": 21940.713289
+     "packet_data": {
+        "PacketNumber": 20005033,
+        "Pid": 1015,
+        "Program": 1010,
+        "Pcr": 23688.363755,
+        "Pts": 23688.393066
     }
+
 ``` 
