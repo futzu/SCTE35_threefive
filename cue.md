@@ -24,6 +24,7 @@
 
 ```
 > __1__ ```command``` (__Required__)
+```
     "command": {
         "command_length": 15,
         "command_type": 5,
