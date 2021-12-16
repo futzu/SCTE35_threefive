@@ -1,5 +1,26 @@
 # threefive is the most advanced SCTE35 parser lib available, probably.
 
+#### Q. How much code to parse SCTE35 from mpegts?
+
+#### A.
+```python3
+from threefive import Stream
+
+strm = Stream('https://example.com/vid.ts')
+strm.decode()
+```
+
+| Supported |                         |
+|-----------|-------------------------|
+| Files     |"/home/you/vid.ts"       |
+| Http(s)   |"https://example.com"    |
+| Udp       |"udp://1.2.3.4:5555"     |
+| Multicast | "udp://@227.1.3.10:4310"|
+
+---
+
+
+
    * Supports All __2020 SCTE-35__
       [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py) and
      [`Descriptors`](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py) and
@@ -18,7 +39,6 @@
 * [`Heads Up`. New output format for `threefive.Stream.show()`](#streamshow) just pushed.
 
 ---
-### Welcome to the show.
 
 * [Requirements](#requirements)
 * [__Install threefive__](#install)
