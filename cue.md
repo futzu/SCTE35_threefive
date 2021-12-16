@@ -8,38 +8,40 @@
         "private": false,
         "sap_type": "0x3",
         "sap_details": "No Sap Type",
-        "section_length": 47,
+        "section_length": 42,
         "protocol_version": 0,
         "encrypted_packet": false,
         "encryption_algorithm": 0,
+        "pts_adjustment_raw": 0,
         "pts_adjustment": 0.0,
         "cw_index": "0xff",
         "tier": "0xfff",
-        "splice_command_length": 20,
+        "splice_command_length": 15,
         "splice_command_type": 5,
         "descriptor_loop_length": 10,
-        "crc": "0xeaa8473f"
+        "crc": "0xd7165c79"
     },
+
 ```
 > __1__ ```command``` (__Required__)
-```
     "command": {
-        "calculated_length": 20,
+        "command_length": 15,
+        "command_type": 5,
         "name": "Splice Insert",
         "time_specified_flag": true,
-        "pts_time": 21951.133267,
-        "break_auto_return": false,
-        "break_duration": 75.0,
-        "splice_event_id": 18,
+        "pts_time": 23683.480033,
+        "pts_raw": 2131513203,
+        "splice_event_id": 5690,
         "splice_event_cancel_indicator": false,
         "out_of_network_indicator": true,
         "program_splice_flag": true,
-        "duration_flag": true,
+        "duration_flag": false,
         "splice_immediate_flag": false,
-        "unique_program_id": 1,
-        "avail_num": 18,
-        "avail_expected": 255
-    }
+        "unique_program_id": 0,
+        "avail_num": 0,
+        "avail_expected": 0
+    },
+
 ```
 
 > __0 or more__ ```descriptors``` (__Optional__)
@@ -98,12 +100,13 @@
  ```
  > ```packet_data``` (__Optional__)
  ```
-     "packet_data": {
-        "PacketNumber": 20005033,
-        "Pid": 1015,
-        "Program": 1010,
-        "Pcr": 23688.363755,
-        "Pts": 23688.393066
+    "packet_data": {
+        "pid": "0x40b",
+        "program": 1030,
+        "pcr_raw": 8534428819,
+        "pcr": 94826.986878,
+        "pts_raw": 2131027203,
+        "pts": 23678.080033
     }
 
 ``` 
