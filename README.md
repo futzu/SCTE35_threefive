@@ -1,8 +1,8 @@
 # threefive is the most advanced SCTE35 parser lib available, probably.
 
-#### Q. How much code to parse SCTE35 from mpegts?
+#### Q. How many lines of code doe it take to parse SCTE35 from Mpegts?
 
-#### A.
+#### A. Three.
 ```python3
 from threefive import Stream
 
