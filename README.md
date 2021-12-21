@@ -15,7 +15,7 @@ decode("https://futzu.com/xaa.ts")
 |-----------|-------------------------|
 |   Files       |  "/home/you/vid.ts"       |
 |   Http(s)     |  "https://example.com/vid.ts"    |
-|   [Udp](#mpegts-udp)         |  "udp://1.2.3.4:5555"     |
+|   [Udp](#mpegts-udp-streams)         |  "udp://1.2.3.4:5555"     |
 | [Multicast](#mpegts-multicast)  |  "udp://@227.1.3.10:4310" |
 
 ---
