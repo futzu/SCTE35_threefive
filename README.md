@@ -10,15 +10,11 @@ from threefive import decode
 decode("https://futzu.com/xaa.ts")
 
 ```
+| ✓    |  ✓   | ✓    | ✓    |
+|-----|-----|-----|-----|
+| [Files](#mpegts-files)|[Https](#mpegts-httphttps-streams)  |[Udp](#mpegts-udp-streams)   |[Multicast](#mpegts-multicast)   |
 
-|  Supported  |  
-|-----------|
-|   [Files](#mpegtss-files)       |  
-|   Http(s)     |  
-|   [Udp](#mpegts-udp-streams)         |  
-| [Multicast](#mpegts-multicast)  | 
 ---
-
 
 
    * Supports All __2020 SCTE-35__
