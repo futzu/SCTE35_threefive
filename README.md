@@ -10,9 +10,11 @@ from threefive import decode
 decode("https://futzu.com/xaa.ts")
 
 ```
-| ✓    |  ✓   | ✓    | ✓    |
-|-----|-----|-----|-----|
-| [Files](#mpegts-file)|[Https](#mpegts-httphttps-streams)  |[Udp](#mpegts-udp-streams)   |[Multicast](#mpegts-multicast)   |
+
+ - [x] [Files](#mpegts-file)  
+ - [x] [Https](#mpegts-httphttps-streams)  
+ - [x] [Udp](#mpegts-udp-streams) 
+ - [x] [Multicast](#mpegts-multicast) 
 
 ---
 
