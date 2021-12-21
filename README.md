@@ -2,18 +2,19 @@
 
 #### Q. How many lines of code doe it take to parse SCTE35 from Mpegts?
 
-#### A. Three.
+#### A. Two. 
 ```python3
-from threefive import Stream
 
-strm = Stream('https://example.com/vid.ts')
-strm.decode()
+from threefive import decode
+
+decode("https://futzu.com/xaa.ts")
+
 ```
 
 |  Supported  |  Format                 |
 |-----------|-------------------------|
 |   Files       |  "/home/you/vid.ts"       |
-|   Http(s)     |  "https://example.com"    |
+|   Http(s)     |  "https://example.com/vid.ts"    |
 |   Udp         |  "udp://1.2.3.4:5555"     |
 |   Multicast  |  "udp://@227.1.3.10:4310" |
 
@@ -28,10 +29,13 @@ strm.decode()
    * [Parses`Mpegts`](#stream-class)  and [Decrypts `AES` ](https://github.com/futzu/scte35-threefive/blob/901456089d369e8cd81c0dc3c2bd6600e303562e/threefive/segment.py#L37) 
   * [`ffmpeg` and `SCTE35` and `Stream Type 0x6 bin data` and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
-*  [`Multicast?`    `HLS?`   `Custom Upid Handling?`     `Frame Accurate Preroll timings?`... Yes.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
+*  Direct Multicast Support Now Included. ( udp://@224.0.0.1:1234)
+* [`Heads Up`. New output format for `threefive.Stream.show()`](#streamshow) just pushed.
+
+*  [`HLS?`   `Custom Upid Handling?`     `Frame Accurate Preroll timings?`... Yes.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 *  [Check out `cuei`](https://github.com/futzu/scte35-threefive/blob/master/cuei) cli tool.
 * [`Encoding` too](https://github.com/futzu/scte35-threefive/blob/master/Encoding.md) with [`Examples`](https://github.com/futzu/scte35-threefive/blob/master/examples/encode)
-* [`This code is cleaner than your dishes.`   threefive /go](https://github.com/futzu/scte35-threefive/tree/master/go)
+* [threefive/__go__](https://github.com/futzu/scte35-threefive/tree/master/go)
 * [`Issues` and `Bugs` and `Feature Requests`](#issues-and-bugs-and-feature-requests)
  *No forms man, just open an issue and tell me what you need.* 
 
@@ -151,7 +155,20 @@ import threefive
 
 threefive.decode('https://futzu.com/xaa.ts')
 ````
+#### Mpegts UDP streams
+```python3
+import threefive 
 
+threefive.decode('udp://10.0.0.1:555')
+````
+#### Mpegts Multicast
+```python3
+import threefive 
+
+threefive.decode('udp://@239.35.0.35:1234')
+````
+
+---
 
 ```  A threefive SCTE-35 Cue```
 ```js
