@@ -1,8 +1,8 @@
 ### threefive is the most advanced SCTE35 parser / decoder / encoder lib available.  Maybe.
 
-#### Q. How many lines of code doe it take to parse SCTE35 from Mpegts?
+> Q. How many lines of code doe it take to parse SCTE35 from Mpegts?
 
-#### A. Two. 
+> A. __Two__. 
 ```python3
 
 from threefive import decode
@@ -24,9 +24,9 @@ decode("https://futzu.com/xaa.ts")
    * [Parses`Mpegts`](#stream-class)  and [Decrypts `AES` ](https://github.com/futzu/scte35-threefive/blob/901456089d369e8cd81c0dc3c2bd6600e303562e/threefive/segment.py#L37) 
   * [`ffmpeg` and `SCTE35` and `Stream Type 0x6 bin data` and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
-* [__A threefive SCTE-35 Cue__](https://github.com/futzu/threefive/blob/master/cue.md).What's included.
+* [A threefive SCTE-35 Cue](https://github.com/futzu/threefive/blob/master/cue.md).What's included.
 
-*  Direct Multicast Support Now Included. (#mpegts-multicast)
+*  [Direct Multicast Support Now Included](#mpegts-multicast)
 * [`Heads Up`. New output format for `threefive.Stream.show()`](#streamshow) just pushed.
 
 *  [`HLS?`   `Custom Upid Handling?`     `Frame Accurate Preroll timings?`... Yes.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
