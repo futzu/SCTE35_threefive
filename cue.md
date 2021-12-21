@@ -12,7 +12,7 @@
         "protocol_version": 0,
         "encrypted_packet": false,
         "encryption_algorithm": 0,
-        "pts_adjustment_raw": 0,
+        "pts_adjustment_raw": 0,            <-- New! 
         "pts_adjustment": 0.0,
         "cw_index": "0xff",
         "tier": "0xfff",
@@ -31,7 +31,7 @@
         "name": "Splice Insert",
         "time_specified_flag": true,
         "pts_time": 23683.480033,
-        "pts_raw": 2131513203,
+        "pts_raw": 2131513203,                <-- New!
         "splice_event_id": 5690,
         "splice_event_cancel_indicator": false,
         "out_of_network_indicator": true,
@@ -104,9 +104,9 @@
     "packet_data": {
         "pid": "0x40b",
         "program": 1030,
-        "pcr_raw": 8534428819,
+        "pcr_raw": 8534428819,               <-- New!
         "pcr": 94826.986878,
-        "pts_raw": 2131027203,
+        "pts_raw": 2131027203,               <-- New!
         "pts": 23678.080033
     }
 
