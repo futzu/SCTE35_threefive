@@ -1,4 +1,5 @@
-# threefive is the most advanced SCTE35 parser lib available, probably.
+## threefive is the most advanced SCTE35 parser/decoder/encoder lib available.
+##### Probably.
 
 #### Q. How many lines of code doe it take to parse SCTE35 from Mpegts?
 
@@ -12,7 +13,7 @@ decode("https://futzu.com/xaa.ts")
 ```
 | ✓    |  ✓   | ✓    | ✓    |
 |-----|-----|-----|-----|
-| [Files](#mpegts-files)|[Https](#mpegts-httphttps-streams)  |[Udp](#mpegts-udp-streams)   |[Multicast](#mpegts-multicast)   |
+| [Files](#mpegts-file)|[Https](#mpegts-httphttps-streams)  |[Udp](#mpegts-udp-streams)   |[Multicast](#mpegts-multicast)   |
 
 ---
 
@@ -164,11 +165,9 @@ import threefive
 
 threefive.decode('udp://@239.35.0.35:1234')
 ````
-[__A threefive SCTE-35 Cue__](https://github.com/futzu/threefive/blob/master/cue.md)
----
+* [__A threefive SCTE-35 Cue__](https://github.com/futzu/threefive/blob/master/cue.md)
 
 ___
-
 
 #  Advanced threefive
 
