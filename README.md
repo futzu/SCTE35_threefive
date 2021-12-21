@@ -29,7 +29,7 @@ decode("https://futzu.com/xaa.ts")
    * [Parses`Mpegts`](#stream-class)  and [Decrypts `AES` ](https://github.com/futzu/scte35-threefive/blob/901456089d369e8cd81c0dc3c2bd6600e303562e/threefive/segment.py#L37) 
   * [`ffmpeg` and `SCTE35` and `Stream Type 0x6 bin data` and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
-* [threefive SCTE-35 Cue](https://github.com/futzu/threefive/blob/master/cue.md) in JSON.
+* [__A threefive SCTE-35 Cue__](https://github.com/futzu/threefive/blob/master/cue.md).What's included.
 
 *  Direct Multicast Support Now Included. ( udp://@224.0.0.1:1234)
 * [`Heads Up`. New output format for `threefive.Stream.show()`](#streamshow) just pushed.
