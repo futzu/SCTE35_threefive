@@ -15,8 +15,8 @@ decode("https://futzu.com/xaa.ts")
 |-----------|-------------------------|
 |   Files       |  "/home/you/vid.ts"       |
 |   Http(s)     |  "https://example.com/vid.ts"    |
-|   Udp         |  "udp://1.2.3.4:5555"     |
-|   Multicast  |  "udp://@227.1.3.10:4310" |
+|   [Udp](#mpegts-udp)         |  "udp://1.2.3.4:5555"     |
+| [Multicast](#mpegts-multicast)  |  "udp://@227.1.3.10:4310" |
 
 ---
 
@@ -31,7 +31,7 @@ decode("https://futzu.com/xaa.ts")
 
 * [__A threefive SCTE-35 Cue__](https://github.com/futzu/threefive/blob/master/cue.md).What's included.
 
-*  Direct Multicast Support Now Included. ( udp://@224.0.0.1:1234)
+*  Direct Multicast Support Now Included. (#mpegts-multicast)
 * [`Heads Up`. New output format for `threefive.Stream.show()`](#streamshow) just pushed.
 
 *  [`HLS?`   `Custom Upid Handling?`     `Frame Accurate Preroll timings?`... Yes.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
