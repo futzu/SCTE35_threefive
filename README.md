@@ -235,13 +235,13 @@ ___
   ```
 
   * src [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
-  * The threefive.__Stream__ class parses SCTE35 messages from a file or stream.
-  * Supports
-   * __file and http(s) URIs directly. 
-  	* __Multiple Programs__.
-  	* __Multiple SCTE35 Streams__.
-  	* __Multi-Packet PAT, PMT, and SCTE35 tables__. 
-  	* __Constant Data Parsing__.
+  * The threefive.__Stream__ class parses __SCTE35__ from __Mpegts__.
+  * Supports:
+     *  __File__ and __Http(s)__ and __Udp__ and __Multicast__ protocols. 
+  	  * __Multiple Programs__.
+  	  * __Multiple SCTE35 Streams__.
+  	  * __Multi-Packet PAT, PMT, and SCTE35 tables__. 
+  	  * __Constant Data Parsing__.
   	     * threefive.Stream is designed to __run continuously__ 
   	     
 Method                              | Description
