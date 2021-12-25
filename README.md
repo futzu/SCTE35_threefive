@@ -28,7 +28,7 @@ decode("https://futzu.com/xaa.ts")
 
 * [A threefive SCTE-35 Cue](https://github.com/futzu/threefive/blob/master/cue.md).What's included.
 
-*  [Direct Multicast Support Now Included](#mpegts-multicast)
+*  [Direct Multicast Support ](#mpegts-multicast)
 * [`Heads Up`. New output format for `threefive.Stream.show()`](#streamshow) just pushed.
 
 *  [`HLS?`   `Custom Upid Handling?`     `Frame Accurate Preroll timings?`... Yes.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
