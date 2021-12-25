@@ -367,10 +367,10 @@ class Stream:
             self._parse_tables(payload, pid)
         if pid in self._pids["pcr"]:
             self._parse_pcr(pkt, pid)
-        if pid in self._pids["scte35"]:
-            cue = self._parse_scte35(pkt, pid)
         if self._parse_pusi(pkt[1]):
             self._parse_pts(payload, pid)
+        if pid in self._pids["scte35"]:
+            cue = self._parse_scte35(pkt, pid)
         return cue
 
     def _chk_partial(self, payload, pid, sep):
