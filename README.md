@@ -32,13 +32,11 @@ decode("https://futzu.com/xaa.ts")
 * [`Heads Up`. New output format for `threefive.Stream.show()`](#streamshow) just pushed.
 
 *  [`HLS?`   `Custom Upid Handling?`     `Frame Accurate Preroll timings?`... Yes.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
-*  [Check out `cuei`](https://github.com/futzu/scte35-threefive/blob/master/cuei) cli tool.
 * [`Encoding` too](https://github.com/futzu/scte35-threefive/blob/master/Encoding.md) with [`Examples`](https://github.com/futzu/scte35-threefive/blob/master/examples/encode)
 * [threefive/__go__](https://github.com/futzu/scte35-threefive/tree/master/go)
 * [`Issues` and `Bugs` and `Feature Requests`](#issues-and-bugs-and-feature-requests)
  *No forms man, just open an issue and tell me what you need.* 
 
-*  Direct Multicast Support Now Included. ( udp://@224.0.0.1:1234)
 * [`Heads Up`. New output format for `threefive.Stream.show()`](#streamshow) just pushed.
 
 ---
