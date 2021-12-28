@@ -4,7 +4,12 @@ threefive.Cue Class
 from base64 import b64decode, b64encode
 import json
 from sys import stderr
-import crcmod.predefined
+
+ENCODE = True
+try:
+    import crcmod.predefined
+except:
+    ENCODE = False
 from .bitn import NBin
 from .base import SCTE35Base
 from .section import SpliceInfoSection
@@ -77,6 +82,9 @@ class Cue(SCTE35Base):
         Cue.encode() converts SCTE35 data
         to a base64 encoded string.
         """
+        if not ENCODE:
+            print("crcmod.predefined is required for encoding")
+            return False
         dscptr_bites = self._unloop_descriptors()
         dll = len(dscptr_bites)
         self.info_section.descriptor_loop_length = dll

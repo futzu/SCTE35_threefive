@@ -3,7 +3,11 @@ The threefive.Segment class
 """
 import os
 
-import pyaes
+AES = True
+try:
+    import pyaes
+except:
+    AES = False
 
 from .reader import reader
 from .stream import Stream
@@ -55,11 +59,12 @@ class Segment(Stream):
         self.cues = []
         self.start = None
         self.tmp = None
-        if iv:
-            self.iv = int.to_bytes(int(iv), 16, byteorder="big")
-        if self.key_uri:
-            self._aes_get_key()
-            self._aes_decrypt()
+        if AES:
+            if iv:
+                self.iv = int.to_bytes(int(iv), 16, byteorder="big")
+            if self.key_uri:
+                self._aes_get_key()
+                self._aes_decrypt()
         super().__init__(self.seg_uri)
 
     def __repr__(self):
