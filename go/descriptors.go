@@ -2,37 +2,6 @@ package threefive
 
 import "github.com/futzu/bitter"
 
-// DescriptorTags array of valid descriptor tags
-var DescriptorTags = []uint8{0, 1, 2, 3, 4}
-
-//DescriptorIsValid checks if tag is in DescriptorTags
-func DescriptorIsValid(tag uint8) bool {
-	return isIn8(DescriptorTags, tag)
-}
-
-// DescriptorDecoder returns a Descriptor by tag
-func DescriptorDecoder(tag uint8) Descriptor {
-	var sd Descriptor
-	switch tag {
-	case 0:
-		sd = &AvailDscptr{}
-	case 1:
-		sd = &DTMFDscptr{}
-	case 2:
-		sd = &SegmentDscptr{}
-	case 3:
-		sd = &TimeDscptr{}
-	case 4:
-		sd = &AudioDscptr{}
-	}
-	return sd
-}
-
-// Descriptor is the interface for all Splice Descriptors
-type Descriptor interface {
-	Decode(bitn *bitter.Bitn, tag uint8, length uint8)
-}
-
 // AudioCmpt is a struct for AudioDscptr Components
 type AudioCmpt struct {
 	ComponentTag  uint8
@@ -42,18 +11,69 @@ type AudioCmpt struct {
 	FullSrvcAudio bool
 }
 
-// AudioDscptr Audio Splice Descriptor
-type AudioDscptr struct {
-	Tag    uint8 `json:",omitempty"`
-	Length uint8 `json:",omitempty"`
-	// identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
-	Identifier string
-	Name       string
-	Components []AudioCmpt `json:",omitempty"`
+// SegCmpt Segmentation Descriptor Component
+type SegCmpt struct {
+	ComponentTag uint8
+	PtsOffset    float64
 }
 
-// Decode for the Descriptor interface
-func (dscptr *AudioDscptr) Decode(bitn *bitter.Bitn, tag uint8, length uint8) {
+type SpliceDescriptor struct {
+	Tag                              uint8
+	Length                           uint8
+	Identifier                       string
+	Name                             string
+	AudioComponents                  []AudioCmpt `json:",omitempty"`
+	ProviderAvailID                  uint64      `json:",omitempty"`
+	PreRoll                          uint8       `json:",omitempty"`
+	DTMFCount                        uint8       `json:",omitempty"`
+	DTMFChars                        uint64      `json:",omitempty"`
+	TAISeconds                       uint64      `json:",omitempty"`
+	TAINano                          uint64      `json:",omitempty"`
+	UTCOffset                        uint64      `json:",omitempty"`
+	SegmentationEventID              string      `json:",omitempty"`
+	SegmentationEventCancelIndicator bool        `json:",omitempty"`
+	ProgramSegmentationFlag          bool        `json:",omitempty"`
+	SegmentationDurationFlag         bool        `json:",omitempty"`
+	DeliveryNotRestrictedFlag        bool        `json:",omitempty"`
+	WebDeliveryAllowedFlag           bool        `json:",omitempty"`
+	NoRegionalBlackoutFlag           bool        `json:",omitempty"`
+	ArchiveAllowedFlag               bool        `json:",omitempty"`
+	DeviceRestrictions               string      `json:",omitempty"`
+	Components                       []SegCmpt   `json:",omitempty"`
+	SegmentationDuration             float64     `json:",omitempty"`
+	SegmentationMessage              string      `json:",omitempty"`
+	SegmentationUpidType             uint8       `json:",omitempty"`
+	SegmentationUpidLength           uint8       `json:",omitempty"`
+	SegmentationUpid                 Upid        `json:",omitempty"`
+	SegmentationTypeID               uint8       `json:",omitempty"`
+	SegmentNum                       uint64      `json:",omitempty"`
+	SegmentsExpected                 uint64      `json:",omitempty"`
+	SubSegmentNum                    uint64      `json:",omitempty"`
+	SubSegmentsExpected              uint64      `json:",omitempty"`
+}
+
+// DescriptorDecoder returns a Descriptor by tag
+func (dscptr *SpliceDescriptor) Decoder(bitn *bitter.Bitn, tag uint8, length uint8) {
+	switch tag {
+	case 0:
+		dscptr.Tag = 0
+		dscptr.Avail(bitn, tag, length)
+	case 1:
+		dscptr.Tag = 1
+		dscptr.DTMF(bitn, tag, length)
+	case 2:
+		dscptr.Tag = 2
+		dscptr.Segmentation(bitn, tag, length)
+	case 3:
+		dscptr.Tag = 3
+		dscptr.Time(bitn, tag, length)
+	case 4:
+		dscptr.Tag = 4
+		dscptr.Audio(bitn, tag, length)
+	}
+}
+
+func (dscptr *SpliceDescriptor) Audio(bitn *bitter.Bitn, tag uint8, length uint8) {
 	dscptr.Tag = tag
 	dscptr.Length = length
 	dscptr.Identifier = bitn.AsAscii(32)
@@ -66,22 +86,12 @@ func (dscptr *AudioDscptr) Decode(bitn *bitter.Bitn, tag uint8, length uint8) {
 		bsm := bitn.AsUInt8(3)
 		nc := bitn.AsUInt8(4)
 		fsa := bitn.AsBool()
-		dscptr.Components = append(dscptr.Components, AudioCmpt{ct, iso, bsm, nc, fsa})
+		dscptr.AudioComponents = append(dscptr.AudioComponents, AudioCmpt{ct, iso, bsm, nc, fsa})
 	}
 }
 
-// AvailDscptr Avail Splice Descriptor
-type AvailDscptr struct {
-	Tag    uint8 `json:",omitempty"`
-	Length uint8 `json:",omitempty"`
-	// identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
-	Identifier      string
-	Name            string
-	ProviderAvailID uint64
-}
-
-// Decode for the Descriptor interface
-func (dscptr *AvailDscptr) Decode(bitn *bitter.Bitn, tag uint8, length uint8) {
+// Decode for the Avail
+func (dscptr *SpliceDescriptor) Avail(bitn *bitter.Bitn, tag uint8, length uint8) {
 	dscptr.Tag = tag
 	dscptr.Length = length
 	dscptr.Identifier = bitn.AsAscii(32)
@@ -89,20 +99,8 @@ func (dscptr *AvailDscptr) Decode(bitn *bitter.Bitn, tag uint8, length uint8) {
 	dscptr.ProviderAvailID = bitn.AsUInt64(32)
 }
 
-// DTMFDscptr DTMF Splice Descriptor
-type DTMFDscptr struct {
-	Tag    uint8 `json:",omitempty"`
-	Length uint8 `json:",omitempty"`
-	// identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
-	Identifier string
-	Name       string
-	PreRoll    uint8
-	DTMFCount  uint8
-	DTMFChars  uint64 `json:",omitempty"`
-}
-
-// Decode for the Descriptor interface
-func (dscptr *DTMFDscptr) Decode(bitn *bitter.Bitn, tag uint8, length uint8) {
+//  DTMF Splice Descriptor
+func (dscptr *SpliceDescriptor) DTMF(bitn *bitter.Bitn, tag uint8, length uint8) {
 	dscptr.Tag = tag
 	dscptr.Length = length
 	dscptr.Identifier = bitn.AsAscii(32)
@@ -114,20 +112,8 @@ func (dscptr *DTMFDscptr) Decode(bitn *bitter.Bitn, tag uint8, length uint8) {
 
 }
 
-// TimeDscptr Time Splice DSescriptor
-type TimeDscptr struct {
-	Tag    uint8 `json:",omitempty"`
-	Length uint8 `json:",omitempty"`
-	// identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
-	Identifier string
-	Name       string
-	TAISeconds uint64
-	TAINano    uint64
-	UTCOffset  uint64
-}
-
-// Decode for the Descriptor interface
-func (dscptr *TimeDscptr) Decode(bitn *bitter.Bitn, tag uint8, length uint8) {
+// Decode for the Time Descriptor
+func (dscptr *SpliceDescriptor) Time(bitn *bitter.Bitn, tag uint8, length uint8) {
 	dscptr.Tag = tag
 	dscptr.Length = length
 	dscptr.Identifier = bitn.AsAscii(32)
@@ -137,43 +123,8 @@ func (dscptr *TimeDscptr) Decode(bitn *bitter.Bitn, tag uint8, length uint8) {
 	dscptr.UTCOffset = bitn.AsUInt64(16)
 }
 
-// SegCmpt Segmentation Descriptor Component
-type SegCmpt struct {
-	ComponentTag uint8
-	PtsOffset    float64
-}
-
-// SegmentDscptr Segmentation Descriptor
-type SegmentDscptr struct {
-	Tag    uint8 `json:",omitempty"`
-	Length uint8 `json:",omitempty"`
-	// identiﬁer 32 uimsbf == 0x43554549 (ASCII “CUEI”)
-	Identifier                       string
-	Name                             string
-	SegmentationEventID              string
-	SegmentationEventCancelIndicator bool
-	ProgramSegmentationFlag          bool
-	SegmentationDurationFlag         bool
-	DeliveryNotRestrictedFlag        bool
-	WebDeliveryAllowedFlag           bool
-	NoRegionalBlackoutFlag           bool
-	ArchiveAllowedFlag               bool
-	DeviceRestrictions               string    `json:",omitempty"`
-	Components                       []SegCmpt `json:",omitempty"`
-	SegmentationDuration             float64   `json:",omitempty"`
-	SegmentationMessage              string
-	SegmentationUpidType             uint8
-	SegmentationUpidLength           uint8
-	SegmentationUpid                 Upid
-	SegmentationTypeID               uint8
-	SegmentNum                       uint64
-	SegmentsExpected                 uint64 `json:",omitempty"`
-	SubSegmentNum                    uint64 `json:",omitempty"`
-	SubSegmentsExpected              uint64 `json:",omitempty"`
-}
-
-// Decode for the Descriptor interface
-func (dscptr *SegmentDscptr) Decode(bitn *bitter.Bitn, tag uint8, length uint8) {
+// Decode for the Segmentation Descriptor
+func (dscptr *SpliceDescriptor) Segmentation(bitn *bitter.Bitn, tag uint8, length uint8) {
 	dscptr.Tag = tag
 	dscptr.Length = length
 	dscptr.Identifier = bitn.AsAscii(32)
@@ -190,7 +141,7 @@ func (dscptr *SegmentDscptr) Decode(bitn *bitter.Bitn, tag uint8, length uint8) 
 	}
 }
 
-func (dscptr *SegmentDscptr) decodeSegFlags(bitn *bitter.Bitn) {
+func (dscptr *SpliceDescriptor) decodeSegFlags(bitn *bitter.Bitn) {
 	dscptr.ProgramSegmentationFlag = bitn.AsBool()
 	dscptr.SegmentationDurationFlag = bitn.AsBool()
 	dscptr.DeliveryNotRestrictedFlag = bitn.AsBool()
@@ -204,7 +155,7 @@ func (dscptr *SegmentDscptr) decodeSegFlags(bitn *bitter.Bitn) {
 	bitn.Forward(5)
 }
 
-func (dscptr *SegmentDscptr) decodeSegCmpnts(bitn *bitter.Bitn) {
+func (dscptr *SpliceDescriptor) decodeSegCmpnts(bitn *bitter.Bitn) {
 	ccount := bitn.AsUInt8(8)
 	for ccount > 0 { // 6 bytes each
 		ccount--
@@ -215,7 +166,7 @@ func (dscptr *SegmentDscptr) decodeSegCmpnts(bitn *bitter.Bitn) {
 	}
 }
 
-func (dscptr *SegmentDscptr) decodeSegmentation(bitn *bitter.Bitn) {
+func (dscptr *SpliceDescriptor) decodeSegmentation(bitn *bitter.Bitn) {
 	if dscptr.SegmentationDurationFlag == true {
 		dscptr.SegmentationDuration = bitn.As90k(40)
 	}
@@ -228,8 +179,6 @@ func (dscptr *SegmentDscptr) decodeSegmentation(bitn *bitter.Bitn) {
 	mesg, ok := table22[dscptr.SegmentationTypeID]
 	if ok {
 		dscptr.SegmentationMessage = mesg
-
 	}
 	bitn.Forward(16)
-
 }

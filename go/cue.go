@@ -8,9 +8,9 @@ import (
 // Cue a SCTE35 cue.
 type Cue struct {
 	InfoSection
-	Command
-	Descriptors []Descriptor `json:",omitempty"`
-	Packet      PacketData   `json:",omitempty"`
+	Command     SpliceCommand
+	Descriptors []SpliceDescriptor `json:",omitempty"`
+	Packet      PacketData         `json:",omitempty"`
 }
 
 // Decode extracts bits for the Cue values.
@@ -20,13 +20,10 @@ func (cue *Cue) Decode(bites []byte) bool {
 	if !cue.InfoSection.Decode(&bitn) {
 		return false
 	}
-	if CommandIsValid(cue.InfoSection.SpliceCommandType) {
-		cue.Command = CommandDecoder(cue.InfoSection.SpliceCommandType)
-		cue.Command.Decode(&bitn)
-		cue.InfoSection.DescriptorLoopLength = bitn.AsUInt64(16)
-		cue.dscptrLoop(&bitn)
-		return true
-	}
+	cue.Command.Decoder(cue.InfoSection.SpliceCommandType, &bitn)
+	cue.InfoSection.DescriptorLoopLength = bitn.AsUInt64(16)
+	cue.dscptrLoop(&bitn)
+	return true
 	return false
 }
 
@@ -41,11 +38,9 @@ func (cue *Cue) dscptrLoop(bitn *bitter.Bitn) {
 		length := bitn.AsUInt64(8)
 		i++
 		i += length
-		if DescriptorIsValid(tag) {
-			sdr := DescriptorDecoder(tag)
-			sdr.Decode(bitn, tag, uint8(length))
-			cue.Descriptors = append(cue.Descriptors, sdr)
-		}
+		var sdr SpliceDescriptor
+		sdr.Decoder(bitn, tag, uint8(length))
+		cue.Descriptors = append(cue.Descriptors, sdr)
 	}
 }
 

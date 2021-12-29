@@ -124,6 +124,7 @@ class Stream:
         self._pids = {"pcr": set(), "tables": set(), "scte35": set()}
         self._pids["tables"].add(self._PAT_PID)
         self._pids["tables"].add(self._SDT_PID)
+        self.pid_cc = {}
         self._pid_prgm = {}
         self._prgm_pcr = {}
         self._prgm_pts = {}
@@ -265,6 +266,18 @@ class Stream:
         pdata.mk_pts(self._prgm_pts)
         return pdata
 
+    def _parse_cc(self, pkt, pid):
+        pid = self._parse_pid(pkt[1], pkt[2])
+        if pid == 8191:
+            return
+        cc = pkt[3] & 0xF
+        if pid in self.pid_cc:
+            last_cc = self.pid_cc[pid]
+            if cc not in (last_cc, last_cc + 1):
+                if last_cc != 15 and cc != 0:
+                    print(f" pid: {hex(pid)} last cc: {last_cc} cc: {cc}")
+        self.pid_cc[pid] = cc
+
     @staticmethod
     def _parse_payload(pkt):
         head_size = 4
@@ -302,11 +315,12 @@ class Stream:
         """
         return byte1 & 0x40
 
-    def _parse_pts(self, payload, pid):
+    def _parse_pts(self, pkt, pid):
         """
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
+        payload = self._parse_payload(pkt)
         if payload[7] & 0x80:
             pts = ((payload[9] >> 1) & 7) << 30
             pts |= payload[10] << 22
@@ -344,12 +358,13 @@ class Stream:
         except (LookupError, TypeError, ValueError):
             return False
 
-    def _parse_tables(self, payload, pid):
+    def _parse_tables(self, pkt, pid):
         """
         _parse_tables parse for
         PAT, PMT,  and SDT tables
         based on pid of the pkt
         """
+        payload = self._parse_payload(pkt)
         if not self._chk_last(payload, pid):
             if pid == self._PAT_PID:
                 self._program_association_table(payload)
@@ -362,13 +377,13 @@ class Stream:
     def _parse(self, pkt):
         cue = False
         pid = self._parse_pid(pkt[1], pkt[2])
-        payload = self._parse_payload(pkt)
+        self._parse_cc(pkt, pid)
         if pid in self._pids["tables"]:
-            self._parse_tables(payload, pid)
+            self._parse_tables(pkt, pid)
         if pid in self._pids["pcr"]:
             self._parse_pcr(pkt, pid)
         if self._parse_pusi(pkt[1]):
-            self._parse_pts(payload, pid)
+            self._parse_pts(pkt, pid)
         if pid in self._pids["scte35"]:
             cue = self._parse_scte35(pkt, pid)
         return cue
