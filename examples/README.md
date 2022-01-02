@@ -20,10 +20,6 @@
       * [HASP Hls Aes Scte-35 Parser](https://github.com/futzu/threefive/blob/master/examples/hls/hasp.py)
       
 
-* Multicast
-
-  * [Parsing SCTE-35 from a Multicast_Source](https://github.com/futzu/SCTE35-threefive/blob/master/examples/multicast/README.txt)
-
 * Splice Insert
   * [Splice Insert](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/splice_insert.py)
   * [Splice Insert Too](https://github.com/futzu/SCTE35-threefive/blob/master/examples/spliceinsert/splice_insert_too.py)
