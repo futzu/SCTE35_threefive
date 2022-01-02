@@ -124,7 +124,7 @@ class Stream:
         self._pids = {"pcr": set(), "tables": set(), "scte35": set()}
         self._pids["tables"].add(self._PAT_PID)
         self._pids["tables"].add(self._SDT_PID)
-        self.pid_cc = {}
+        self._pid_cc = {}
         self._pid_prgm = {}
         self._prgm_pcr = {}
         self._prgm_pts = {}
@@ -169,6 +169,17 @@ class Stream:
             self._parse(chunk[i : i + self._PACKET_SIZE])
             for i in range(0, len(chunk), self._PACKET_SIZE)
         ]
+
+    def dump(self,fname):
+        """
+        Stream.dump dumps all the packets to a file.
+        Useful for live streams.
+        """
+        if not self._find_start():
+            return False
+        with open(fname, "wb") as dumpfile:
+            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE * 7), b""):
+                dumpfile.write(pkt)
 
     def decode_fu(self, func=show_cue):
         """
@@ -267,22 +278,41 @@ class Stream:
         return pdata
 
     def _parse_cc(self, pkt, pid):
-        pid = self._parse_pid(pkt[1], pkt[2])
-        if pid == 8191:
-            return
+        """
+        Continuity Counter check.
+        """
         cc = pkt[3] & 0xF
-        if pid in self.pid_cc:
-            last_cc = self.pid_cc[pid]
+        if pid in self._pid_cc:
+            last_cc = self._pid_cc[pid]
             if cc not in (last_cc, last_cc + 1):
                 if last_cc != 15 and cc != 0:
                     print(f" pid: {hex(pid)} last cc: {last_cc} cc: {cc}")
-        self.pid_cc[pid] = cc
+        self._pid_cc[pid] = cc
 
     @staticmethod
-    def _parse_payload(pkt):
+    def _afc_flag(pkt):
+        return pkt[3] & 0x20
+
+    @staticmethod
+    def _pcr_flag(pkt):
+        return pkt[5] & 0x10
+
+    @staticmethod
+    def _pts_flag(pay):
+        # uses pay not pkt
+        return pay[7] & 0x80
+
+    @staticmethod
+    def _pusi_flag(pkt):
+        return pkt[1] & 0x40
+
+    @staticmethod
+    def _spi_flag(pkt):
+        return pkt[5] & 0x20
+    
+    def _parse_payload(self,pkt):
         head_size = 4
-        afc = pkt[3] & 0x20
-        if afc:
+        if self._afc_flag(pkt):
             afl = pkt[4]
             head_size += afl + 1  # +1 for afl byte
         return pkt[head_size:]
@@ -308,20 +338,13 @@ class Stream:
         """
         return (byte1 << 8) | byte2
 
-    @staticmethod
-    def _parse_pusi(byte1):
-        """
-        used to determine if pts data is available.
-        """
-        return byte1 & 0x40
-
     def _parse_pts(self, pkt, pid):
         """
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
         payload = self._parse_payload(pkt)
-        if payload[7] & 0x80:
+        if self._pts_flag(payload):
             pts = ((payload[9] >> 1) & 7) << 30
             pts |= payload[10] << 22
             pts |= (payload[11] >> 1) << 15
@@ -337,8 +360,8 @@ class Stream:
         parse pcr and store by program key
         in the dict Stream._pid_pcr
         """
-        if pkt[3] & 0x20:
-            if pkt[5] & 0x10:
+        if self._afc_flag(pkt):
+            if self._pcr_flag(pkt):
                 pcr = pkt[6] << 25
                 pcr |= pkt[7] << 17
                 pcr |= pkt[8] << 9
@@ -377,12 +400,14 @@ class Stream:
     def _parse(self, pkt):
         cue = False
         pid = self._parse_pid(pkt[1], pkt[2])
+        if pid ==8191:
+            return
         self._parse_cc(pkt, pid)
         if pid in self._pids["tables"]:
             self._parse_tables(pkt, pid)
         if pid in self._pids["pcr"]:
             self._parse_pcr(pkt, pid)
-        if self._parse_pusi(pkt[1]):
+        if self._pusi_flag(pkt):
             self._parse_pts(pkt, pid)
         if pid in self._pids["scte35"]:
             cue = self._parse_scte35(pkt, pid)

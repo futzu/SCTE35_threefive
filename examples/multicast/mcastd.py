@@ -5,10 +5,10 @@ import sys
 See README.txt
 """
 
-mcast_ip = "225.255.0.35"
+mcast_ip = "239.255.0.35"
 mcast_port = 35555
 ttl = b"\x1f"
-packet_size = 188
+packet_size = 188*7
 multicast_group = (mcast_ip, mcast_port)
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

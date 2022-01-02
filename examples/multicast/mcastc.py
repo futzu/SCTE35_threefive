@@ -43,7 +43,7 @@ def mk_sock(mcast_host, mcast_ip, mcast_port):
 
 if __name__ == "__main__":
     mcast_host = "0.0.0.0"
-    mcast_ip = "225.255.0.35"
+    mcast_ip = "239.255.0.35"
     mcast_port = 35555
     mcast_sock = mk_sock(mcast_host, mcast_ip, mcast_port)
     read_stream(mcast_sock)
