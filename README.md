@@ -1,6 +1,6 @@
->  I used to love `pypy3`, but for a long running process, it `really sucks`. I just spent a month learning that lesson.
 
-### threefive is the most advanced SCTE35 parser / decoder / encoder lib available.  Maybe.
+# threefive is the most advanced SCTE35 parser python3 lib, I swear.
+
 
 > Q. How many lines of code doe it take to parse SCTE35 from Mpegts?
 
@@ -35,7 +35,6 @@ decode("https://futzu.com/xaa.ts")
 
 *  [`HLS?`   `Custom Upid Handling?`     `Frame Accurate Preroll timings?`... Yes.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 * [`Encoding` too](https://github.com/futzu/scte35-threefive/blob/master/Encoding.md) with [`Examples`](https://github.com/futzu/scte35-threefive/blob/master/examples/encode)
-* [threefive/__go__](https://github.com/futzu/scte35-threefive/tree/master/go)
 * [`Issues` and `Bugs` and `Feature Requests`](#issues-and-bugs-and-feature-requests)
  *No forms man, just open an issue and tell me what you need.* 
 
