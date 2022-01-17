@@ -1,5 +1,5 @@
 
-# threefive is the most advanced SCTE35 parser python3 lib, I swear.
+# threefive is the highest rated SCTE35 python3 lib. ( Boom Goes the Dynamite! )
 
 
 > Q. How many lines of code doe it take to parse SCTE35 from Mpegts?
@@ -65,8 +65,8 @@ decode("https://futzu.com/xaa.ts")
 
 ### Requirements
 * threefive requires [pypy3](https://pypy.org) or python 3.6+ 
-    * (pypy3 runs threefive 4x Faster than python3)
-* threefive 2.3.02+ requires crcmod for encoding and pyaes for decrypting.
+    * (pypy3 runs threefive 4x Faster than python3 but uses a lot more memory)
+* threefive 2.3.02+ requires __crcmod__ for encoding and __pyaes__ for decrypting.
 
  
 
