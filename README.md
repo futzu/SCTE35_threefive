@@ -1,3 +1,5 @@
+>  I used to love `pypy3`, but for a long running process, it `really sucks`. I just spent a month learning that lesson.
+
 ### threefive is the most advanced SCTE35 parser / decoder / encoder lib available.  Maybe.
 
 > Q. How many lines of code doe it take to parse SCTE35 from Mpegts?
