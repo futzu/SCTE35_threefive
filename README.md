@@ -1,7 +1,5 @@
 
-### threefive is the highest rated SCTE35 python3 lib.
-
-
+### threefive is the highest rated SCTE35 python3 decoder/parser/encoder lib on the planet.
  
 > Q. How many lines of code doe it take to parse SCTE35 from Mpegts?
 
