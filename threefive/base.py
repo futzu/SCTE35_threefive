@@ -5,25 +5,34 @@ the class SCTE35Base.
 import json
 from .bitn import NBin
 
-
 class SCTE35Base:
     """
     SCTE35Base is a base class for
     SpliceCommand and SpliceDescriptor classes
     """
 
+    ROLLOVER = 8589934591
+
     def __repr__(self):
         return str(self.__dict__)
 
     @staticmethod
-    def _chk_nbin(nbin):
-        if not nbin:
-            nbin = NBin()
-        return nbin
-
-    @staticmethod
     def as_90k(int_time):
         return round((int_time / 90000.0), 6)
+
+    @staticmethod
+    def as_hms(secs_of_time):
+        """
+        as_hms converts timestamp to
+        00:00:00.000 format
+        """
+        hours, seconds = divmod(secs_of_time, 3600)
+        mins, seconds = divmod(seconds, 60)
+        seconds = round(seconds, 3)
+        output = f"{int(hours):02}:{int(mins):02}:{seconds:02}"
+        if len(output.split(".")[1]) < 2:
+            output += "0"
+        return output
 
     def get(self):
         """
@@ -48,6 +57,13 @@ class SCTE35Base:
             return val
 
         return {k: b2l(v) for k, v in vars(self).items() if v is not None}
+
+    @staticmethod
+    def _chk_nbin(nbin):
+        if not nbin:
+            nbin = NBin()
+        return nbin
+
 
     def load(self, stuff):
         """
