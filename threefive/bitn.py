@@ -53,7 +53,7 @@ class BitBin:
         wide = num_bits >> 3
         return int.to_bytes(stuff, wide, byteorder="big").decode()
 
-    def as_raw(self, num_bits):
+    def as_ticks(self, num_bits):
         """
         Returns num_bits of bits
         as bytes
@@ -85,7 +85,7 @@ class BitBin:
             file=sys.stderr,
         )
         print(
-            f"\n bytes remaining: {self.as_raw(self.idx)} ",
+            f"\n bytes remaining: {self.as_ticks(self.idx)} ",
             file=sys.stderr,
         )
 

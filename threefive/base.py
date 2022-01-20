@@ -5,6 +5,7 @@ the class SCTE35Base.
 import json
 from .bitn import NBin
 
+
 class SCTE35Base:
     """
     SCTE35Base is a base class for
@@ -63,7 +64,6 @@ class SCTE35Base:
         if not nbin:
             nbin = NBin()
         return nbin
-
 
     def load(self, stuff):
         """

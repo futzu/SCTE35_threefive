@@ -15,9 +15,9 @@ class PacketData(SCTE35Base):
     def __init__(self, pid, prgm):
         self.pid = hex(pid)
         self.program = prgm
-        self.pcr_raw = None
+        self.pcr_ticks = None
         self.pcr = None
-        self.pts_raw = None
+        self.pts_ticks = None
         self.pts = None
 
     @staticmethod
@@ -30,12 +30,15 @@ class PacketData(SCTE35Base):
         """
         calculates and formats pcr
         """
-        self.pcr_raw = table[self.program]
-        self.pcr = self._mk_timestamp(self.pcr_raw)
-
+        try:
+            self.pcr_ticks = table[self.program]
+            self.pcr = self._mk_timestamp(self.pcr_ticks)
+        except:
+            pass
+        
     def mk_pts(self, table):
         """
         mk_pts calculates and formats pts
         """
-        self.pts_raw = table[self.program]
-        self.pts = self._mk_timestamp(self.pts_raw)
+        self.pts_ticks = table[self.program]
+        self.pts = self._mk_timestamp(self.pts_ticks)
