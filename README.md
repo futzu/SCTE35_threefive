@@ -1,5 +1,6 @@
+> the tsduck users manual is longer than threefive's source code.
 
-> "If you say SCTE-35 one more time, I am going to punch you in the face"   ~Monica
+
 # threefive..... SCTE-35 doesn't have to suck. 
 
  
