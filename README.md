@@ -1,5 +1,3 @@
-> the tsduck user's manual is longer than threefive's source code.
-
 
 # threefive..... SCTE-35 doesn't have to suck. 
 
@@ -98,6 +96,9 @@ pypy3 -m pip install threefive
 
 ### __Easy__ threefive
 
+> the tsduck user's manual is longer than threefive's source code.
+
+>
 > __threefive.decode__ is a SCTE-35 decoder function
 > with input type __auto-detection__. 
 ```Base64```, ```Binary```, 
