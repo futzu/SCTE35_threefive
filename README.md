@@ -1,4 +1,4 @@
-> the tsduck users manual is longer than threefive's source code.
+> the tsduck user's manual is longer than threefive's source code.
 
 
 # threefive..... SCTE-35 doesn't have to suck. 
