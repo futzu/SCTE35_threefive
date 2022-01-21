@@ -1,10 +1,5 @@
 
-
-
-> "threefive does multicast, better than you." 
-> 
-> ~ Leroy Scandal 
-
+> "If you say SCTE-35 one more time, I am going to punch you in the face"   ~Monica
 # threefive..... SCTE-35 doesn't have to suck. 
 
  
