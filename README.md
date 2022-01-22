@@ -1,7 +1,7 @@
 
 # threefive, boom goes the dynamite.
 
-> Q. How many lines of code doe it take to parse SCTE35 from Mpegts?
+> Q. __How many lines of code doe it take to parse SCTE35 from Mpegts__?
 
 > A. __Two__. 
 ```python3
