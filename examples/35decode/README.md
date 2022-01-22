@@ -1,7 +1,7 @@
 
 ### 35 decode, command line SCTE35 decoder.
 
->( type 'make cli' or 'make pypy3-cli' as root to install to /usr/local/bin )
+>type 'make cli' or 'make pypy3-cli' as root to install to /usr/local/bin
 
 #### use like:
 ```fortran
