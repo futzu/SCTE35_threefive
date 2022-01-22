@@ -1,4 +1,5 @@
 * __New__
+     * [35decode, a classy cli tool](https://github.com/futzu/threefive/blob/master/examples/35decode)
      * [Display SCTE35 info via Webvtt Subtitles](https://github.com/futzu/threefive/blob/master/examples/stream/cue2vtt.py)
      * [Return a dict of PCR timestamps and SCTE-35 cue strings from MPEGTS](https://github.com/futzu/scte35-threefive/blob/master/examples/stream/cue_list_too.py)
 
