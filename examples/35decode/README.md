@@ -18,9 +18,9 @@ cat myvideo.ts | 35decode
 ```
  ```fortran
 35decode '/DBZAAAAAAAA///wBQb+AAAAAABDAkFDVUVJAAAACn//AAApMuAPLXVybjp1dWlkOmFhODViYmI2LTVjNDMtNGI2YS1iZWJiLWVlM2IxM2ViNzk5ORAAAFz7UQA='
-    ```
+ ```
 #### Output:
-```
+```fortran
 {
     "info_section": {
         "table_id": "0xfc",
