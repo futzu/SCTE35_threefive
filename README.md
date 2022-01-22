@@ -1,7 +1,6 @@
 
-# threefive..... SCTE-35 doesn't have to suck. 
+# threefive. 
 
- 
 > Q. How many lines of code doe it take to parse SCTE35 from Mpegts?
 
 > A. __Two__. 
