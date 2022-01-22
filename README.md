@@ -17,6 +17,8 @@ decode("https://futzu.com/xaa.ts")
  - [x] [Udp](#mpegts-udp-streams) 
  - [x] [Multicast](#mpegts-multicast) 
 
+     * [__35decode__, a classy cli tool](https://github.com/futzu/threefive/blob/master/examples/35decode)
+
 ---
 
 
