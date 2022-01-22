@@ -1,5 +1,5 @@
 
-# threefive. 
+# threefive, boom goes the dynamite.
 
 > Q. How many lines of code doe it take to parse SCTE35 from Mpegts?
 
@@ -12,13 +12,6 @@ decode("https://futzu.com/xaa.ts")
 
 ```
 
- - [x] [Files](#mpegts-file)  
- - [x] [Https](#mpegts-httphttps-streams)  
- - [x] [Udp](#mpegts-udp-streams) 
- - [x] [Multicast](#mpegts-multicast) 
-
-     * [__35decode__, a classy cli tool](https://github.com/futzu/threefive/blob/master/examples/35decode)
-
 ---
 
 
@@ -30,6 +23,9 @@ decode("https://futzu.com/xaa.ts")
   * [`ffmpeg` and `SCTE35` and `Stream Type 0x6 bin data` and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
 * [A threefive SCTE-35 Cue](https://github.com/futzu/threefive/blob/master/cue.md).What's included.
+* [__35decode__
+
+35decode https://futzu.com/xaa.ts, a `classy` cli tool](https://github.com/futzu/threefive/blob/master/examples/35decode)
 
 *  [Direct Multicast Support ](#mpegts-multicast)
 * [`Heads Up`. New output format for `threefive.Stream.show()`](#streamshow) just pushed.
