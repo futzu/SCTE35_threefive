@@ -35,7 +35,7 @@ class PacketData(SCTE35Base):
             self.pcr = self._mk_timestamp(self.pcr_ticks)
         except:
             pass
-        
+
     def mk_pts(self, table):
         """
         mk_pts calculates and formats pts

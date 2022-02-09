@@ -2,7 +2,7 @@
 threefive.base contains
 the class SCTE35Base.
 """
-import json
+# import json
 from .bitn import NBin
 
 
@@ -70,8 +70,8 @@ class SCTE35Base:
         load is used to load
         data from a dict or json string
         """
-        if isinstance(stuff, str):
-            stuff = json.loads(stuff)
+        #        if isinstance(stuff, str):
+        #            stuff = json.loads(stuff)
         if isinstance(stuff, dict):
             self.__dict__.update(stuff)
 

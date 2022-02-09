@@ -366,15 +366,23 @@ class Stream:
                     self.start[prgm] = pcr
 
     def _parse_cc(self, pkt, pid):
-        if pid == 8191:
+        if pid == 0x1FFF:
             return
         cc = pkt[3] & 0xF
         if pid in self._pid_cc:
             last_cc = self._pid_cc[pid]
-            if last_cc > cc:
+            valid = (last_cc, last_cc + 1)
+            if cc not in valid:
                 if last_cc != 15 and cc != 0:
                     print(f" pid: {hex(pid)} last cc: {last_cc} cc: {cc}")
+                # new_cc = last_cc +1
+                # if new_cc ==16:
+                #    new_cc = 0
+                # p3 = bytes( [(pkt[3] -cc + new_cc)])
+                # pkt= pkt[:3]+bytes([p3])+pkt[4:]
+                # cc = new_cc
         self._pid_cc[pid] = cc
+        # return pkt
 
     @staticmethod
     def _parse_payload(pkt):
