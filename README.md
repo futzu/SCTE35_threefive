@@ -1,4 +1,4 @@
-# `threefive is the #1 SCTE-35 parser on the planet`
+# `threefive `
 
 
 > Q. __How many lines of code doe it take to parse SCTE35 from Mpegts__?
