@@ -1,6 +1,7 @@
 """
 Mpeg-TS Stream parsing class Stream
 """
+import io
 import sys
 from functools import partial
 from .cue import Cue
@@ -237,9 +238,11 @@ class Stream:
         """
         if self._find_start():
             for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
-                pid = self._parse_pid(pkt[1], pkt[2])
-                pkt = self._set_cc(pkt, pid)
+                pkt = self._set_cc(pkt)
                 sys.stdout.buffer.write(pkt)
+
+        self._tsdata.close()
+        return True
 
     def strip_scte35(self, func=show_cue_stderr):
         """
@@ -378,19 +381,20 @@ class Stream:
                 if prgm not in self.start:
                     self.start[prgm] = pcr
 
-    def _set_cc(self, pkt, pid):
+    def _set_cc(self, pkt):
+        pid = self._parse_pid(pkt[1], pkt[2])
+        new_pkt = bytearray(pkt)
         if pid != 0x1FFF:
-            cc = 0
-            old = pkt[3] & 0xF
+            new_cc = 0
             if pid in self._pid_cc:
-                last_cc = self._pid_cc[pid]
-                cc = last_cc + 1
-                if cc == 16:
-                    cc = 0
-            p3 = pkt[3] - old + cc
-            pkt = pkt[:3] + bytes([p3]) + pkt[4:]
-            self._pid_cc[pid] = cc
-        return pkt
+                new_cc = self._pid_cc[pid] + 1
+                if new_cc == 16:
+                    new_cc = 0
+            # shift off cc from pkt[3] and add new_cc
+            p3 = ((pkt[3] >> 4) << 4) + new_cc
+            new_pkt[3:4] = bytes([p3])
+            self._pid_cc[pid] = new_cc
+        return new_pkt
 
     def _parse_cc(self, pkt, pid):
         if pid == 0x1FFF:
