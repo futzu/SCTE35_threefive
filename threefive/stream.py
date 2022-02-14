@@ -230,9 +230,20 @@ class Stream:
                 sys.stdout.buffer.write(pkt)
             self._tsdata.close()
 
+    def re_cc(self):
+        """
+        Stream.re_cc resets the continuity counters.
+        MPEGTS packets are written to stdout for piping.
+        """
+        if self._find_start():
+            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
+                pid = self._parse_pid(pkt[1], pkt[2])
+                pkt = self._set_cc(pkt, pid)
+                sys.stdout.buffer.write(pkt)
+
     def strip_scte35(self, func=show_cue_stderr):
         """
-        Stream.strip_scte35 works just likle Stream.decode_proxy,
+        Stream.strip_scte35 works just like Stream.decode_proxy,
         MPEGTS packets, ( Except the SCTE-35 packets) ,
         are written to stdout after being parsed.
         SCTE-35 cues are printed to stderr.
@@ -335,6 +346,8 @@ class Stream:
         in the dict Stream._pid_pts
         """
         pay = self._parse_payload(pkt)
+        if len(pay) < 14:
+            return
         if self._pts_flag(pay):
             pts = ((pay[9] >> 1) & 7) << 30
             pts |= pay[10] << 22
@@ -365,6 +378,20 @@ class Stream:
                 if prgm not in self.start:
                     self.start[prgm] = pcr
 
+    def _set_cc(self, pkt, pid):
+        if pid != 0x1FFF:
+            cc = 0
+            old = pkt[3] & 0xF
+            if pid in self._pid_cc:
+                last_cc = self._pid_cc[pid]
+                cc = last_cc + 1
+                if cc == 16:
+                    cc = 0
+            p3 = pkt[3] - old + cc
+            pkt = pkt[:3] + bytes([p3]) + pkt[4:]
+            self._pid_cc[pid] = cc
+        return pkt
+
     def _parse_cc(self, pkt, pid):
         if pid == 0x1FFF:
             return
@@ -375,14 +402,7 @@ class Stream:
             if cc not in valid:
                 if last_cc != 15 and cc != 0:
                     print(f" pid: {hex(pid)} last cc: {last_cc} cc: {cc}")
-                # new_cc = last_cc +1
-                # if new_cc ==16:
-                #    new_cc = 0
-                # p3 = bytes( [(pkt[3] -cc + new_cc)])
-                # pkt= pkt[:3]+bytes([p3])+pkt[4:]
-                # cc = new_cc
         self._pid_cc[pid] = cc
-        # return pkt
 
     @staticmethod
     def _parse_payload(pkt):
