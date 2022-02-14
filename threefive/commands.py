@@ -103,7 +103,7 @@ class TimeSignal(SpliceCommand):
         self.name = "Time Signal"
         self.time_specified_flag = None
         self.pts_time = None
-        self.pts_ticks = None
+        self.pts_time_ticks = None
 
     def decode(self):
         """
@@ -132,8 +132,8 @@ class TimeSignal(SpliceCommand):
         self.time_specified_flag = bitbin.as_flag(1)
         if self.time_specified_flag:
             bitbin.forward(6)
-            self.pts_ticks = bitbin.as_int(33)
-            self.pts_time = self.as_90k(self.pts_ticks)
+            self.pts_time_ticks = bitbin.as_int(33)
+            self.pts_time = self.as_90k(self.pts_time_ticks)
         else:
             bitbin.forward(7)
 
@@ -156,8 +156,8 @@ class SpliceInsert(TimeSignal):
         self.command_type = 5
         self.name = "Splice Insert"
         self.break_auto_return = None
-        self.break_ticks = None
         self.break_duration = None
+        self.break_duration_ticks = None
         self.splice_event_id = None
         self.splice_event_cancel_indicator = None
         self.out_of_network_indicator = None
@@ -178,8 +178,8 @@ class SpliceInsert(TimeSignal):
         if self.duration_flag:
             self.break_auto_return = bitbin.as_flag(1)
             bitbin.forward(6)
-            self.break_ticks = bitbin.as_int(33)
-            self.break_duration = self.as_90k(self.break_ticks)
+            self.break_duration_ticks = bitbin.as_int(33)
+            self.break_duration = self.as_90k(self.break_duration_ticks)
 
     def _encode_break(self, nbin):
         """
