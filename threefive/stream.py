@@ -139,13 +139,15 @@ class Stream:
         while self._tsdata:
             one = self._tsdata.read(1)
             if not one:
-                print("\nNo Stream Found.    ❌ \n")
+                sys.stderr.buffer.write(
+                    b"\nNo Stream Found\n",
+                )
                 return False
             if one[0] == self._SYNC_BYTE:
                 tail = self._tsdata.read(self._PACKET_SIZE - 1)
                 if tail:
                     self._parse(one + tail)
-                    print("Parsing Packets   ✔")
+                    sys.stderr.buffer.write(b"Parsing Packets")
                     return True
 
     def decode(self, func=show_cue):
@@ -269,7 +271,7 @@ class Stream:
             sopro = sorted(self._prgm.items())
             for k, vee in sopro:
                 if len(vee.streams.items()) > 0:
-                    print(f"Program: {k}")
+                    sys.stderr.buffer.write(f"Program: {k}")
                     vee.show()
         return True
 
@@ -395,15 +397,13 @@ class Stream:
         self._pid_cc[pid] = new_cc
 
     def _parse_cc(self, pkt, pid):
-        if pid == 0x1FFF:
-            return
         cc = pkt[3] & 0xF
         if pid in self._pid_cc:
             last_cc = self._pid_cc[pid]
-            valid = (last_cc, last_cc + 1)
-            if cc not in valid:
-                if last_cc != 15 and cc != 0:
-                    print(f" pid: {hex(pid)} last cc: {last_cc} cc: {cc}")
+            if last_cc == 15:
+                last_cc = -1
+            if cc not in (last_cc, last_cc + 1):
+                sys.stderr.buffer.write(f" pid: {hex(pid)} last cc: {last_cc} cc: {cc}")
         self._pid_cc[pid] = cc
 
     @staticmethod
@@ -439,7 +439,13 @@ class Stream:
 
     def _parse(self, pkt):
         cue = False
-        pid = self._parse_info(pkt)
+        # pid = self._parse_info(pkt)
+        pid = self._parse_pid(pkt[1], pkt[2])
+        if pid == 8191:
+            return
+        self._parse_cc(pkt, pid)
+        if pid in self._pids["tables"]:
+            self._parse_tables(pkt, pid)
         if pid in self._pids["pcr"]:
             self._parse_pcr(pkt, pid)
         if self._pusi_flag(pkt):
