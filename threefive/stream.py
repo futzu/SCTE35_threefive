@@ -1,6 +1,7 @@
 """
 Mpeg-TS Stream parsing class Stream
 """
+import io
 import sys
 from functools import partial
 from .cue import Cue
@@ -390,20 +391,17 @@ class Stream:
             new_cc = self._pid_cc[pid] + 1
             if new_cc == 16:
                 new_cc = 0
-        # shift off cc from pkt[3] and add new_cc
-        p3 = ((pkt[3] >> 4) << 4) + new_cc
-        new_pkt[3:4] = bytes([p3])
+        p3 = (pkt[3] & 0xF0) + new_cc
+        new_pkt[3] = p3
         sys.stdout.buffer.write(new_pkt)
         self._pid_cc[pid] = new_cc
 
     def _parse_cc(self, pkt, pid):
         cc = pkt[3] & 0xF
-        if pid in self._pid_cc:
-            last_cc = self._pid_cc[pid]
-            if last_cc == 15:
-                last_cc = -1
-            if cc not in (last_cc, last_cc + 1):
-                sys.stderr.buffer.write(f" pid: {hex(pid)} last cc: {last_cc} cc: {cc}")
+        last_cc = self._pid_cc[pid]
+        if last_cc:
+            if cc not in (0, last_cc, last_cc + 1):
+                print(f" pid: {hex(pid)} last cc: {last_cc} cc: {cc}")
         self._pid_cc[pid] = cc
 
     @staticmethod
@@ -432,26 +430,20 @@ class Stream:
 
     def _parse_info(self, pkt):
         pid = self._parse_pid(pkt[1], pkt[2])
-        self._parse_cc(pkt, pid)
         if pid in self._pids["tables"]:
             self._parse_tables(pkt, pid)
         return pid
 
     def _parse(self, pkt):
         cue = False
-        # pid = self._parse_info(pkt)
-        pid = self._parse_pid(pkt[1], pkt[2])
-        if pid == 8191:
-            return
-        self._parse_cc(pkt, pid)
-        if pid in self._pids["tables"]:
-            self._parse_tables(pkt, pid)
+        pid = self._parse_info(pkt)
         if pid in self._pids["pcr"]:
+            self._parse_cc(pkt, pid)
             self._parse_pcr(pkt, pid)
-        if self._pusi_flag(pkt):
+        elif self._pusi_flag(pkt):
             self._parse_pts(pkt, pid)
-        if pid in self._pids["scte35"]:
-            cue = self._parse_scte35(pkt, pid)
+            if pid in self._pids["scte35"]:
+                cue = self._parse_scte35(pkt, pid)
         return cue
 
     def _chk_partial(self, pay, pid, sep):
@@ -567,6 +559,7 @@ class Stream:
         if self.the_program and (program_number != self.the_program):
             return False
         pcr_pid = self._parse_pid(pay[8], pay[9])
+        self._pid_cc[pcr_pid] = None
         if program_number not in self._prgm:
             self._prgm[program_number] = ProgramInfo(pid=pid, pcr_pid=pcr_pid)
         self._pids["pcr"].add(pcr_pid)
