@@ -139,9 +139,7 @@ class Stream:
         while self._tsdata:
             one = self._tsdata.read(1)
             if not one:
-                sys.stderr.buffer.write(
-                    b"\nNo Stream Found\n",
-                )
+                sys.stderr.buffer.write(b"\nNo Stream Found\n",)
                 return False
             if one[0] == self._SYNC_BYTE:
                 tail = self._tsdata.read(self._PACKET_SIZE - 1)
@@ -244,6 +242,7 @@ class Stream:
             chunky = memoryview(bytearray(chunk))
             for i in range(0, len(chunky), self._PACKET_SIZE):
                 self._set_cc(chunky[i : i + self._PACKET_SIZE])
+            chunky.release()
             del chunky
         self._tsdata.close()
 
@@ -352,7 +351,7 @@ class Stream:
         in the dict Stream._pid_pts
         """
         pay = self._parse_payload(pkt)
-        if len(pay) < 14:
+        if len(pay)< 14:
             return
         if self._pts_flag(pay):
             pts = ((pay[9] >> 1) & 7) << 30
@@ -384,7 +383,7 @@ class Stream:
                 if prgm not in self.start:
                     self.start[prgm] = pcr
 
-    def _set_cc(self, pkt):
+    def _set_cc(self,pkt):
         pid = self._parse_pid(pkt[1], pkt[2])
         if pid == 0x1FFF:
             sys.stdout.buffer.write(pkt)
@@ -392,19 +391,20 @@ class Stream:
         new_cc = 0
         if pid in self._pid_cc:
             last_cc = self._pid_cc[pid]
-            if last_cc != 15:
-                new_cc = last_cc + 1
-        p3 = (pkt[3] & 0xF0) + new_cc
-        pkt[3] = p3
-        sys.stdout.buffer.write(pkt)
+            if  last_cc !=15:
+                new_cc = last_cc +1
+        pkt[3] = (pkt[3] & 0xF0) + new_cc
+        sys.stdout.buffer.write(pkt)    
         self._pid_cc[pid] = new_cc
+
+    
 
     def _parse_cc(self, pkt, pid):
         cc = pkt[3] & 0xF
         if pid in self._pid_cc:
             last_cc = self._pid_cc[pid]
-            if cc not in (0, last_cc, last_cc + 1):
-                print(f" pid: {hex(pid)} last cc: {last_cc} cc: {cc}")
+            if cc not in(0,last_cc, last_cc+1):
+                print(f" pid: {hex(pid)} last cc: {last_cc} cc: {cc}")           
         self._pid_cc[pid] = cc
 
     @staticmethod
