@@ -1,7 +1,6 @@
 """
 Mpeg-TS Stream parsing class Stream
 """
-import io
 import sys
 from functools import partial
 from .cue import Cue
@@ -238,9 +237,14 @@ class Stream:
         Stream.re_cc resets the continuity counters.
         MPEGTS packets are written to stdout for piping.
         """
-        if self._find_start():
-            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
-                self._set_cc(pkt)
+        if not self._find_start():
+            return False
+        pcount = 300
+        for chunk in iter(partial(self._tsdata.read, self._PACKET_SIZE * pcount), b""):
+            chunky = memoryview(bytearray(chunk))
+            for i in range(0, len(chunky), self._PACKET_SIZE):
+                self._set_cc(chunky[i : i + self._PACKET_SIZE])
+            del chunky
         self._tsdata.close()
 
     def strip_scte35(self, func=show_cue_stderr):
@@ -385,21 +389,20 @@ class Stream:
         if pid == 0x1FFF:
             sys.stdout.buffer.write(pkt)
             return
-        new_pkt = bytearray(pkt)
         new_cc = 0
         if pid in self._pid_cc:
-            new_cc = self._pid_cc[pid] + 1
-            if new_cc == 16:
-                new_cc = 0
+            last_cc = self._pid_cc[pid]
+            if last_cc != 15:
+                new_cc = last_cc + 1
         p3 = (pkt[3] & 0xF0) + new_cc
-        new_pkt[3] = p3
-        sys.stdout.buffer.write(new_pkt)
+        pkt[3] = p3
+        sys.stdout.buffer.write(pkt)
         self._pid_cc[pid] = new_cc
 
     def _parse_cc(self, pkt, pid):
         cc = pkt[3] & 0xF
-        last_cc = self._pid_cc[pid]
-        if last_cc:
+        if pid in self._pid_cc:
+            last_cc = self._pid_cc[pid]
             if cc not in (0, last_cc, last_cc + 1):
                 print(f" pid: {hex(pid)} last cc: {last_cc} cc: {cc}")
         self._pid_cc[pid] = cc
@@ -437,8 +440,8 @@ class Stream:
     def _parse(self, pkt):
         cue = False
         pid = self._parse_info(pkt)
+        self._parse_cc(pkt, pid)
         if pid in self._pids["pcr"]:
-            self._parse_cc(pkt, pid)
             self._parse_pcr(pkt, pid)
         elif self._pusi_flag(pkt):
             self._parse_pts(pkt, pid)
@@ -559,7 +562,6 @@ class Stream:
         if self.the_program and (program_number != self.the_program):
             return False
         pcr_pid = self._parse_pid(pay[8], pay[9])
-        self._pid_cc[pcr_pid] = None
         if program_number not in self._prgm:
             self._prgm[program_number] = ProgramInfo(pid=pid, pcr_pid=pcr_pid)
         self._pids["pcr"].add(pcr_pid)
