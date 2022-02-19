@@ -10,15 +10,14 @@ setuptools.setup(
     name="threefive",
     version=threefive.version(),
     author="Adrian",
-    author_email="spam@so.slo.me",
-    description="The World Wide Leader in SCTE35",
+    author_email="spam@iodisco.com",
+    description="Pythonic SCTE35",
     long_description=readme,
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/threefive",
-    extra_requires=[
-        "crcmod",
-        "pyaes",
-    ],
+    extras_require={
+        "all": ["crcmod", "pyaes"],
+    }, 
     packages=setuptools.find_packages(),
     classifiers=[
         "License :: OSI Approved :: MIT License",

@@ -122,7 +122,7 @@ class Stream:
         self.start = {}
         self.info = None
         self.the_program = None
-        self._pids = {"pcr": set(), "tables": set(), "scte35": set()}
+        self._pids = {"pcr": set(), "tables": set(), "pmt": set(), "scte35": set()}
         self._pids["tables"].add(self._PAT_PID)
         self._pids["tables"].add(self._SDT_PID)
         self._pid_cc = {}
@@ -241,14 +241,18 @@ class Stream:
         """
         if not self._find_start():
             return False
-        pcount = 600
-        for chunk in iter(partial(self._tsdata.read, self._PACKET_SIZE * pcount), b""):
-            chunky = memoryview(bytearray(chunk))
-            chunks = [
-                self._set_cc(chunky[i : i + self._PACKET_SIZE])
-                for i in range(0, len(chunky), self._PACKET_SIZE)
-            ]
-            sys.stdout.buffer.write(b"".join(chunks))
+        pcount = 300
+        with open("re_cc.tmp", "wb+") as outfile:
+            for chunk in iter(
+                partial(self._tsdata.read, self._PACKET_SIZE * pcount), b""
+            ):
+                chunky = memoryview(bytearray(chunk))
+                chunks = [
+                    self._set_cc(chunky[i : i + self._PACKET_SIZE])
+                    for i in range(0, len(chunky), self._PACKET_SIZE)
+                ]
+                outfile.write(b"".join(chunks))
+                # sys.stdout.buffer.write(b"".join(chunks))
             chunky.release()
             del chunks
         self._tsdata.close()
@@ -358,9 +362,6 @@ class Stream:
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
-        # pay = self._parse_payload(pkt)
-        # if len(pay) < 14:
-        #   return
         if pkt[11] & 0x80:
             pts = ((pkt[13] >> 1) & 7) << 30
             pts |= pkt[14] << 22
@@ -431,10 +432,11 @@ class Stream:
         if not self._chk_last(pay, pid):
             if pid == self._PAT_PID:
                 return self._program_association_table(pay)
-            if pid == self._SDT_PID:
+            elif pid == self._SDT_PID:
                 if self.info:
                     return self._stream_descriptor_table(pay)
-            return self._program_map_table(pay, pid)
+            elif pid in self._pids["pmt"]:
+                return self._program_map_table(pay, pid)
         return False
 
     def _parse_info(self, pkt):
@@ -464,11 +466,10 @@ class Stream:
         return self._split_by_idx(pay, sep)
 
     def _chk_last(self, pay, pid):
-        trim = pay.split(b"\xff")[0]
         if pid in self._last:
-            if trim == self._last[pid]:
+            if pay == self._last[pid]:
                 return True
-        self._last[pid] = trim
+        self._last[pid] = pay
         return False
 
     def _section_done(self, pay, pid, seclen):
@@ -556,6 +557,8 @@ class Stream:
             if program_number > 0:
                 pmt_pid = self._parse_pid(pay[idx + 2], pay[idx + 3])
                 self._pids["tables"].add(pmt_pid)
+                self._pids["pmt"].add(pmt_pid)
+
             seclen -= chunk_size
             idx += chunk_size
 

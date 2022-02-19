@@ -249,10 +249,7 @@ class Cue(SCTE35Base):
         Hex and Base64 strings into bytes.
         """
         if isinstance(data, bytes):
-            if data[0] == 0x0:
-                data = data[1:]
-            if data[0] == 0xFC:
-                return data
+            return data[data.index(0xFC) :]
         try:
             # Handles hex byte strings
             i = int(data, 16)

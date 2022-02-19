@@ -21,5 +21,4 @@ if __name__ == "__main__":
     for arg in args:
         strm = Stream(arg)
         strm.re_cc()
-        os.rename("re_cc.tmp",arg)
-
+        os.rename("re_cc.tmp", arg)
