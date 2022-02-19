@@ -243,11 +243,10 @@ class Stream:
         for chunk in iter(partial(self._tsdata.read, self._PACKET_SIZE * pcount), b""):
             chunky = memoryview(bytearray(chunk))
             chunks = [
-                chunky[i : i + self._PACKET_SIZE]
+                self._set_cc(chunky[i : i + self._PACKET_SIZE])
                 for i in range(0, len(chunky), self._PACKET_SIZE)
             ]
-            map(self._set_cc, chunks)
-            sys.stdout.buffer.write(chunky)
+            sys.stdout.buffer.write(b"".join(chunks))
             chunky.release()
             del chunks
         self._tsdata.close()
@@ -392,15 +391,17 @@ class Stream:
     def _set_cc(self, pkt):
         pid = self._parse_pid(pkt[1], pkt[2])
         if pid == 0x1FFF:
-            return
+            return pkt
         new_cc = 0
         if pid in self._pid_cc:
             last_cc = self._pid_cc[pid]
             if last_cc != 15:
                 new_cc = last_cc + 1
-        pkt[3] = (pkt[3] & 0xF0) + new_cc
+        pkt[3] &= 0xF0
+        pkt[3] += new_cc
         self._pid_cc[pid] = new_cc
-
+        return pkt
+    
     def _parse_cc(self, pkt, pid):
         cc = pkt[3] & 0xF
         if pid in self._pid_cc:
