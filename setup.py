@@ -15,7 +15,7 @@ setuptools.setup(
     long_description=readme,
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/threefive",
-    install_requires=[
+    extra_requires=[
         "crcmod",
         "pyaes",
     ],

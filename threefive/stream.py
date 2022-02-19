@@ -401,7 +401,7 @@ class Stream:
         pkt[3] += new_cc
         self._pid_cc[pid] = new_cc
         return pkt
-    
+
     def _parse_cc(self, pkt, pid):
         cc = pkt[3] & 0xF
         if pid in self._pid_cc:
