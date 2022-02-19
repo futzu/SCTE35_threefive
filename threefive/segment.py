@@ -2,15 +2,14 @@
 The threefive.Segment class
 """
 import os
+from .reader import reader
+from .stream import Stream
 
 AES = True
 try:
     import pyaes
 except:
     AES = False
-
-from .reader import reader
-from .stream import Stream
 
 
 class Segment(Stream):

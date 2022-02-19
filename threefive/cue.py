@@ -4,17 +4,17 @@ threefive.Cue Class
 from base64 import b64decode, b64encode
 import json
 from sys import stderr
+from .bitn import NBin
+from .base import SCTE35Base
+from .section import SpliceInfoSection
+from .commands import command_map
+from .descriptors import splice_descriptor, descriptor_map
 
 ENCODE = True
 try:
     import crcmod.predefined
 except:
     ENCODE = False
-from .bitn import NBin
-from .base import SCTE35Base
-from .section import SpliceInfoSection
-from .commands import command_map
-from .descriptors import splice_descriptor, descriptor_map
 
 
 class Cue(SCTE35Base):
