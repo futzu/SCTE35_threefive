@@ -1,4 +1,13 @@
-# `threefive is SCTE-35 Parsing`
+
+```
+  "I do not know of a better SCTE-35 parser, 
+  if I did, I would just go and steal their code"
+                                                  ~ Adrian
+```
+#### `threefive is Cool SCTE-35 Parsing. 
+#### A fast, accurate, non-validating SCTE-35 python3 lib. 
+
+___
 
 
 > Q. __How many lines of code doe it take to parse SCTE35 from Mpegts__?
@@ -11,9 +20,9 @@ from threefive import decode
 decode("https://futzu.com/xaa.ts")
 
 ```
-
+#### If the question is about SCTE-35 parsing threefive is probably the answer.
+ 
 ---
-
 
    * Supports All __2020 SCTE-35__
       [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py) and
