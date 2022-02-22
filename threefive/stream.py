@@ -148,7 +148,6 @@ class Stream:
                 tail = self._tsdata.read(self._PACKET_SIZE - 1)
                 if tail:
                     self._parse(one + tail)
-                    sys.stderr.buffer.write(b"Parsing Packets")
                     return True
 
     def decode(self, func=show_cue):
@@ -159,6 +158,7 @@ class Stream:
         """
         if not self._find_start():
             return False
+        sys.stdout.buffer.write(b"Parsing Packets")
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
             cue = self._parse(pkt)
             if cue:
@@ -242,19 +242,16 @@ class Stream:
         if not self._find_start():
             return False
         pcount = 300
-        with open("re_cc.tmp", "wb+") as outfile:
-            for chunk in iter(
-                partial(self._tsdata.read, self._PACKET_SIZE * pcount), b""
-            ):
-                chunky = memoryview(bytearray(chunk))
-                chunks = [
-                    self._set_cc(chunky[i : i + self._PACKET_SIZE])
-                    for i in range(0, len(chunky), self._PACKET_SIZE)
-                ]
-                outfile.write(b"".join(chunks))
-                # sys.stdout.buffer.write(b"".join(chunks))
+        for chunk in iter(
+            partial(self._tsdata.read, self._PACKET_SIZE * pcount), b""
+        ):
+            chunky = memoryview(bytearray(chunk))
+            chunks = [
+                self._set_cc(chunky[i : i + self._PACKET_SIZE])
+                for i in range(0, len(chunky), self._PACKET_SIZE)
+            ]
+            sys.stdout.buffer.write(b"".join(chunks))
             chunky.release()
-            del chunks
         self._tsdata.close()
         return True
 
