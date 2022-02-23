@@ -242,9 +242,7 @@ class Stream:
         if not self._find_start():
             return False
         pcount = 300
-        for chunk in iter(
-            partial(self._tsdata.read, self._PACKET_SIZE * pcount), b""
-        ):
+        for chunk in iter(partial(self._tsdata.read, self._PACKET_SIZE * pcount), b""):
             chunky = memoryview(bytearray(chunk))
             chunks = [
                 self._set_cc(chunky[i : i + self._PACKET_SIZE])

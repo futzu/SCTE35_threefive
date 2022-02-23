@@ -8,7 +8,7 @@ hasp.py
     Try it with a stream like this:
 
     pypy3 hasp.py https://phls-vod.cdn.turner.com/cnnngtv/cnn/hls/2018/12/03/urn:ngtv-show:115615/index_1.m3u8
-
+    
 
 """
 
@@ -67,9 +67,10 @@ class Stanza:
     def _aes_decrypt(self):
         try:
             tmp = self.segment.rsplit("/", 1)[1]
-            with threefive.reader(self.segment) as infile, open(tmp, "wb") as outfile:
-                pyaes.decrypt_stream(self.mode, infile, outfile)
-                self._get_pcr_start(tmp)
+            with threefive.reader(self.segment) as infile:
+                with open(tmp, "wb") as outfile:
+                    pyaes.decrypt_stream(self.mode, infile, outfile)
+                    self._get_pcr_start(tmp)
             os.unlink(tmp)
         except:
             pass
@@ -82,15 +83,17 @@ class Stanza:
             self.key = quay.read()
 
     def _get_pcr_start(self, seg):
-        if not self.start:
-            try:
-                strm = threefive.Stream(seg)
-                strm.decode()
-                if len(strm.start.values()) > 0:
-                    pcr_start = strm.start.popitem()[1]
-            except:
-                pcr_start = 0.0
-            self.start = self.pcr = round(pcr_start / 90000.0, 6)
+        # if not self.start:
+        pcr_start = 0.0
+        try:
+            strm = threefive.Stream(seg)
+            strm.decode()
+            if len(strm.start.values()) > 0:
+                pcr_start = strm.start.popitem()[1]
+                self.pcr = round(pcr_start / 90000.0, 6)
+        except:
+            pass
+        self.start = self.pcr = pcr_start
 
     def _extinf(self, line):
         if line.startswith("#EXTINF"):
@@ -128,8 +131,10 @@ class Stanza:
             self._ext_x_scte35(line)
             self._extinf(line)
             self._ext_x_daterange(line)
-        if not self.pcr:
-            self._get_pcr_start(self.segment)
+            if not self.pcr:
+                self._get_pcr_start(self.segment)
+        if not self.start:
+            self.start = 0.0
         return self.start
 
 
