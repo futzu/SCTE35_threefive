@@ -128,6 +128,8 @@ class Stanza:
         for line in self.lines:
             if not self.start:
                 self._aes_start(line)
+
+            print(line)
             self._ext_x_scte35(line)
             self._extinf(line)
             self._ext_x_daterange(line)

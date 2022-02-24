@@ -158,7 +158,6 @@ class Stream:
         """
         if not self._find_start():
             return False
-        sys.stdout.buffer.write(b"Parsing Packets")
         for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
             cue = self._parse(pkt)
             if cue:
@@ -282,7 +281,7 @@ class Stream:
             sopro = sorted(self._prgm.items())
             for k, vee in sopro:
                 if len(vee.streams.items()) > 0:
-                    sys.stderr.buffer.write(f"Program: {k}")
+                    print(f"Program: {k}")
                     vee.show()
         return True
 

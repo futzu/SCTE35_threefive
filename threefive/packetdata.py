@@ -40,5 +40,8 @@ class PacketData(SCTE35Base):
         """
         mk_pts calculates and formats pts
         """
-        self.pts_ticks = table[self.program]
-        self.pts = self._mk_timestamp(self.pts_ticks)
+        try:
+            self.pts_ticks = table[self.program]
+            self.pts = self._mk_timestamp(self.pts_ticks)
+        except:
+            pass
