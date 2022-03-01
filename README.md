@@ -250,8 +250,6 @@ class Stream(builtins.object)
  |  Stream(tsdata, show_null=True)
  |  
  |  Stream class for parsing MPEG-TS data.
- |  
- |  Methods defined here:
  ```
  ```js
  |  __init__(self, tsdata, show_null=True)
@@ -302,7 +300,7 @@ class Stream(builtins.object)
  |      parsed for SCTE-35.
  ```
  ```js
- |  strip_scte35(self, func=<function show_cue_stderr at 0x7fb043863c10>)
+ |  strip_scte35(self, func=show_cue_stderr)
  |      Stream.strip_scte35 works just like Stream.decode_proxy,
  |      MPEGTS packets, ( Except the SCTE-35 packets) ,
  |      are written to stdout after being parsed.
