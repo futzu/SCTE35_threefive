@@ -1,11 +1,5 @@
 
-```
-  "I do not know of a better SCTE-35 parser, 
-  if I did, I would just go and steal their code"
-                                                  ~ Adrian
-```
-#### `threefive is Cool SCTE-35 Parsing. 
-#### A fast, accurate, non-validating SCTE-35 python3 lib. 
+## `threefive` is a fast, accurate, non-validating SCTE-35 python3 lib. 
 
 ___
 
