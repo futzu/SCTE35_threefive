@@ -233,25 +233,6 @@ class Stream:
                 sys.stdout.buffer.write(pkt)
             self._tsdata.close()
 
-    def re_cc(self):
-        """
-        Stream.re_cc resets the continuity counters.
-        MPEGTS packets are written to stdout for piping.
-        """
-        if not self._find_start():
-            return False
-        pcount = 300
-        for chunk in iter(partial(self._tsdata.read, self._PACKET_SIZE * pcount), b""):
-            chunky = memoryview(bytearray(chunk))
-            chunks = [
-                self._set_cc(chunky[i : i + self._PACKET_SIZE])
-                for i in range(0, len(chunky), self._PACKET_SIZE)
-            ]
-            sys.stdout.buffer.write(b"".join(chunks))
-            chunky.release()
-        self._tsdata.close()
-        return True
-
     def strip_scte35(self, func=show_cue_stderr):
         """
         Stream.strip_scte35 works just like Stream.decode_proxy,
@@ -386,20 +367,6 @@ class Stream:
                 if prgm not in self.start:
                     self.start[prgm] = pcr
 
-    def _set_cc(self, pkt):
-        pid = self._parse_pid(pkt[1], pkt[2])
-        if pid == 0x1FFF:
-            return pkt
-        new_cc = 0
-        if pid in self._pid_cc:
-            last_cc = self._pid_cc[pid]
-            if last_cc != 15:
-                new_cc = last_cc + 1
-        pkt[3] &= 0xF0
-        pkt[3] += new_cc
-        self._pid_cc[pid] = new_cc
-        return pkt
-
     def _parse_cc(self, pkt, pid):
         c_c = pkt[3] & 0xF
         if pid in self._pid_cc:
@@ -426,10 +393,10 @@ class Stream:
         if not self._chk_last(pay, pid):
             if pid == self._PAT_PID:
                 return self._program_association_table(pay)
-            elif pid == self._SDT_PID:
+            if pid == self._SDT_PID:
                 if self.info:
                     return self._stream_descriptor_table(pay)
-            elif pid in self._pids["pmt"]:
+            if pid in self._pids["pmt"]:
                 return self._program_map_table(pay, pid)
         return False
 

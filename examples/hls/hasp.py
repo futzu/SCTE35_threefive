@@ -8,7 +8,7 @@ hasp.py
     Try it with a stream like this:
 
     pypy3 hasp.py https://phls-vod.cdn.turner.com/cnnngtv/cnn/hls/2018/12/03/urn:ngtv-show:115615/index_1.m3u8
-    
+
 
 """
 
