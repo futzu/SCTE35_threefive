@@ -1,5 +1,5 @@
 
-## `threefive` is a fast, accurate, non-validating SCTE-35 python3 lib. 
+### threefive is a fast and accurate and non-validating SCTE-35 parser python3 lib. 
 
 ___
 
