@@ -1,11 +1,5 @@
 
-```
-  "I do not know of a better SCTE-35 parser, 
-  if I did, I would just go and steal their code"
-                                                  ~ Adrian
-```
-#### `threefive is Cool SCTE-35 Parsing. 
-#### A fast, accurate, non-validating SCTE-35 python3 lib. 
+### threefive is a fast and accurate and non-validating SCTE-35 parser python3 lib. 
 
 ___
 
@@ -251,48 +245,67 @@ ___
   	  * __Multi-Packet PAT, PMT, and SCTE35 tables__. 
   	  * __Constant Data Parsing__.
   	     * threefive.Stream is designed to __run continuously__ 
-  	     
-Method                              | Description
-------------------------------------| -------------------------------------
-[Stream.__show__()](#streamshow)                 |__Prints__ Streams that will be checked for SCTE35 
- [Stream.__decode__(func=show_cue)](#streamdecodefuncshow_cue)                                                                             | __Prints__ SCTE-35 __cues__ for SCTE-35 packets. Accepts an optional function, func, as arg.
-[Stream.__decode_next__()](#streamdecode_next)|__Returns__ the next SCTE35 cue as a threefive.Cue instance. 
-[Stream.__decode_program__(the_program=None, func=show_cue)](#streamdecode_programthe_program-func--show_cue) |Same as Stream.__decode__ except only packets where program == __the_program__
-[Stream.__decode_proxy__(func=show_cue)](#streamdecode_proxyfunc--show_cue)      |Same as Stream.__decode__ except raw packets are written to stdout for piping to another program.
-
-
-#### Stream.show()
-
- *  List programs and streams that will be checked for SCTE35 data.
-
-```python3
->>>> from threefive import Stream
->>>> Stream('https://slo.me/plp0.ts').show()
-```
-
 ```js
-Program: 1040
-    Service:    fumatic
-    Provider:   fu-labs
-    Pcr Pid:    1041[0x411]
-    Streams:
-                Pid: 1041[0x411]        Type: 0x1b AVC Video
-                Pid: 1042[0x412]        Type: 0x3 MP2 Audio
-                Pid: 1044[0x414]        Type: 0x6 PES Packets/Private Data
-                Pid: 1045[0x415]        Type: 0x86 SCTE35 Data
-
-Program: 1050
-    Service:    fancy ˹ 
-    Provider:   fu-corp
-    Pcr Pid:    1051[0x41b]
-    Streams:
-                Pid: 1051[0x41b]        Type: 0x1b AVC Video
-                Pid: 1052[0x41c]        Type: 0x3 MP2 Audio
-                Pid: 1054[0x41e]        Type: 0x6 PES Packets/Private Data
-                Pid: 1055[0x41f]        Type: 0x86 SCTE35 Data
-
+class Stream(builtins.object)
+ |  Stream(tsdata, show_null=True)
+ |  
+ |  Stream class for parsing MPEG-TS data.
+ ```
+ ```js
+ |  __init__(self, tsdata, show_null=True)
+ |      tsdata is an file or http/https url
+ |      set show_null=False to exclude Splice Nulls
+ |      
+ |      Use like...
+ |      
+ |      from threefive import Stream
+ |      strm = Stream("vid.ts",show_null=False)
+ |      strm.decode()
+ ```
+ ```js
+ |  decode(self, func=show_cue)
+ |      Stream.decode reads self.tsdata to find SCTE35 packets.
+ |      func can be set to a custom function that accepts
+ |      a threefive.Cue instance as it's only argument.
+ ```
+ ```js
+ |  decode_fu(self, func=show_cue)
+ |      Stream.decode_fu decodes
+ |      2016 packets at a time.
+ ```
+ ```js
+ |  decode_next(self)
+ |      Stream.decode_next returns the next
+ |      SCTE35 cue as a threefive.Cue instance.
+ ```
+ ```js
+ |  decode_program(self, the_program, func=show_cue)
+ |      Stream.decode_program limits SCTE35 parsing
+ |      to a specific MPEGTS program.
+ ```
+ ```js
+ |  decode_proxy(self, func=show_cue_stderr)
+ |      Stream.decode_proxy writes all ts packets are written to stdout
+ |      for piping into another program like mplayer.
+ |      SCTE-35 cues are printed to stderr.
+ ```
+ ```js
+ |  dump(self, fname)
+ |      Stream.dump dumps all the packets to a file.
+ |      Useful for live streams.
+ ```
+ ```js
+ |  show(self)
+ |      displays streams that will be
+ |      parsed for SCTE-35.
+ ```
+ ```js
+ |  strip_scte35(self, func=show_cue_stderr)
+ |      Stream.strip_scte35 works just like Stream.decode_proxy,
+ |      MPEGTS packets, ( Except the SCTE-35 packets) ,
+ |      are written to stdout after being parsed.
+ |      SCTE-35 cues are printed to stderr.
 ```
-___
 
 
 #### Stream.decode(func=show_cue)
@@ -325,8 +338,8 @@ def do():
 if __name__ == '__main__':
     do()
 ```
-___
 
+___
 
 #### Stream.decode_next()
 
@@ -384,7 +397,38 @@ $ python3 proxy.py | mplayer -
 ```
 ___
 
+#### Stream.show()
 
+ *  List programs and streams that will be checked for SCTE35 data.
+
+```python3
+>>>> from threefive import Stream
+>>>> Stream('https://slo.me/plp0.ts').show()
+```
+
+```js
+Program: 1040
+    Service:    fumatic
+    Provider:   fu-labs
+    Pcr Pid:    1041[0x411]
+    Streams:
+                Pid: 1041[0x411]        Type: 0x1b AVC Video
+                Pid: 1042[0x412]        Type: 0x3 MP2 Audio
+                Pid: 1044[0x414]        Type: 0x6 PES Packets/Private Data
+                Pid: 1045[0x415]        Type: 0x86 SCTE35 Data
+
+Program: 1050
+    Service:    fancy ˹ 
+    Provider:   fu-corp
+    Pcr Pid:    1051[0x41b]
+    Streams:
+                Pid: 1051[0x41b]        Type: 0x1b AVC Video
+                Pid: 1052[0x41c]        Type: 0x3 MP2 Audio
+                Pid: 1054[0x41e]        Type: 0x6 PES Packets/Private Data
+                Pid: 1055[0x41f]        Type: 0x86 SCTE35 Data
+
+```
+___
 
 
 ## Issues and Bugs and Feature Requests
