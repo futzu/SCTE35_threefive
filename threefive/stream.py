@@ -181,7 +181,7 @@ class Stream:
         if not self._find_start():
             return False
         with open(fname, "wb") as dumpfile:
-            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE * 7), b""):
+            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE * 300), b""):
                 dumpfile.write(pkt)
         return True
 
@@ -337,12 +337,15 @@ class Stream:
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
-        if pkt[11] & 0x80:
-            pts = ((pkt[13] >> 1) & 7) << 30
-            pts |= pkt[14] << 22
-            pts |= (pkt[15] >> 1) << 15
-            pts |= pkt[16] << 7
-            pts |= pkt[17] >> 1
+        payload = self._parse_payload(pkt)
+        if len(payload) < 14:
+            return
+        if payload[7] & 0x80:
+            pts = ((payload[9] >> 1) & 7) << 30
+            pts |= payload[10] << 22
+            pts |= (payload[11] >> 1) << 15
+            pts |= payload[12] << 7
+            pts |= payload[13] >> 1
             prgm = 1
             if pid in self._pid_prgm:
                 prgm = self._pid_prgm[pid]
@@ -415,7 +418,7 @@ class Stream:
             self._parse_cc(pkt, pid)
         if pid in self._pids["pcr"]:
             self._parse_pcr(pkt, pid)
-        if pkt[1] & 0x40:
+        if self._pusi_flag(pkt):
             self._parse_pts(pkt, pid)
         if pid in self._pids["scte35"]:
             cue = self._parse_scte35(pkt, pid)
