@@ -2,20 +2,7 @@
 ### threefive is a fast and accurate and non-validating SCTE-35 parser python3 lib. 
 
 ___
-
-
-> Q. __How many lines of code doe it take to parse SCTE35 from Mpegts__?
-
-> A. __Two__. 
-```python3
-
-from threefive import decode
-
-decode("https://futzu.com/xaa.ts")
-
-```
-#### If the question is about SCTE-35 parsing threefive is probably the answer.
- 
+![image](https://user-images.githubusercontent.com/52701496/157540055-63ffa54b-2582-4486-ba89-f5d88e1ea702.png)
 ---
 
    * Supports All __2020 SCTE-35__
