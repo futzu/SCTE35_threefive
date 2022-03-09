@@ -2,6 +2,10 @@
 ### threefive is a fast and accurate and non-validating SCTE-35 parser python3 lib. 
 
 ___
+
+`(full disclosure via pylint)`
+
+
 ![image](https://user-images.githubusercontent.com/52701496/157540055-63ffa54b-2582-4486-ba89-f5d88e1ea702.png)
 ---
 
