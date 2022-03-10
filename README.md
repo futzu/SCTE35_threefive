@@ -1,37 +1,28 @@
 
-### threefive is a fast and accurate and non-validating SCTE-35 parser python3 lib. 
-
-___
-
-`(full disclosure via pylint)`
-
-
-![image](https://user-images.githubusercontent.com/52701496/157540055-63ffa54b-2582-4486-ba89-f5d88e1ea702.png)
----
-
+# `threefive` is a  `SCTE-35` parser lib in python3.
    * Supports All __2020 SCTE-35__
-      [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py) and
+     [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py) and
      [`Descriptors`](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py) and
      [`Upids`](https://github.com/futzu/threefive/blob/master/threefive/upid.py).
-   * [Parses`Mpegts`](#stream-class)  and [Decrypts `AES` ](https://github.com/futzu/scte35-threefive/blob/901456089d369e8cd81c0dc3c2bd6600e303562e/threefive/segment.py#L37) 
-  * [`ffmpeg` and `SCTE35` and `Stream Type 0x6 bin data` and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
+* [Parses SCTE-35 from MPEGTS Streams with Direct Multicast Support ](#mpegts-multicast).
+* [`HLS?`   `Custom Upid Handling?`     `Frame Accurate Preroll timings?`... Yes.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 
 * [A threefive SCTE-35 Cue](https://github.com/futzu/threefive/blob/master/cue.md).What's included.
-* [`35decode`, a cli tool](https://github.com/futzu/threefive/blob/master/examples/35decode)
 
-*  [Direct Multicast Support ](#mpegts-multicast)
-* [`Heads Up`. New output format for `threefive.Stream.show()`](#streamshow) just pushed.
 
-*  [`HLS?`   `Custom Upid Handling?`     `Frame Accurate Preroll timings?`... Yes.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
+* [`ffmpeg` and `SCTE35` and `Stream Type 0x6 bin data` and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
+
+
+---
+
+
+
+
 * [`Encoding` too](https://github.com/futzu/scte35-threefive/blob/master/Encoding.md) with [`Examples`](https://github.com/futzu/scte35-threefive/blob/master/examples/encode)
 * [`Issues` and `Bugs` and `Feature Requests`](#issues-and-bugs-and-feature-requests)
  *No forms man, just open an issue and tell me what you need.* 
 
-* [`Heads Up`. New output format for `threefive.Stream.show()`](#streamshow) just pushed.
-
 ---
-
-* [Requirements](#requirements)
 * [__Install threefive__](#install)
 * [Versions and Releases](#versions-and-releases)
 
@@ -49,23 +40,33 @@ ___
 * [Diagram](https://github.com/futzu/threefive/blob/master/cue.md)  of a threefive SCTE-35 Cue
 * [`Issues` and `Bugs` and `Feature` Requests](#issues-and-bugs-and-feature-requests)
  *No forms man, just open an issue.*  
-* [threefive Spotted `in The Wild`](https://gist.github.com/flavioribeiro/9b52c603c70cdb34c6910c1c5c4d240d)
 
 
 ### Requirements
 * threefive requires [pypy3](https://pypy.org) or python 3.6+ 
-    * (pypy3 runs threefive 4x Faster than python3 but uses a lot more memory)
-* threefive 2.3.02+ requires __crcmod__ for encoding and __pyaes__ for decrypting.
-
- 
+* __optional dependencies:__
+    *  __crcmod__ if you want to encode SCTE-35 cues.
+    *  __pyaes__  If you want AES decryption for HLS segments.
 
 ### Install
    
-```sh
-pip3 install threefive
+```smalltalk
+python3 -mpip  install  threefive
 
-# for pypy3
+# and / or
+
 pypy3 -m pip install threefive
+
+```
+* To install the optional dependencies.
+* 
+```lua
+python3 -mpip  install threefive[all]
+
+# and / or
+
+pypy3 -mpip  install  threefive[all]
+
 ```
 
 ### Versions and Releases
@@ -75,7 +76,6 @@ pypy3 -m pip install threefive
 
 > ```threefive.version()```   returns the version as a string.
 
-> ```threefive.version_number()``` returns an int for easy version comparisons.
 
 ---
 
