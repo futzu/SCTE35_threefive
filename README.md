@@ -19,7 +19,7 @@
 
 
 * [`Encoding` too](https://github.com/futzu/scte35-threefive/blob/master/Encoding.md) with [`Examples`](https://github.com/futzu/scte35-threefive/blob/master/examples/encode)
-* [`Issues` and `Bugs` and `Feature Requests`](#issues-and-bugs-and-feature-requests)
+* [`Issues` and `Bugs` and `Feature Requests`](https://github.com/futzu/scte35-threefive/issues)
  *No forms man, just open an issue and tell me what you need.* 
 
 ---
@@ -244,7 +244,10 @@ class Stream(builtins.object)
  ```
  ```js
  |  __init__(self, tsdata, show_null=True)
- |      tsdata is an file or http/https url
+ |      
+ |      tsdata is a file or http, https, 
+ |       udp or multicast url.
+ |       
  |      set show_null=False to exclude Splice Nulls
  |      
  |      Use like...
@@ -253,53 +256,14 @@ class Stream(builtins.object)
  |      strm = Stream("vid.ts",show_null=False)
  |      strm.decode()
  ```
+
+#### Stream.decode(func=show_cue)
  ```js
  |  decode(self, func=show_cue)
  |      Stream.decode reads self.tsdata to find SCTE35 packets.
  |      func can be set to a custom function that accepts
  |      a threefive.Cue instance as it's only argument.
  ```
- ```js
- |  decode_fu(self, func=show_cue)
- |      Stream.decode_fu decodes
- |      2016 packets at a time.
- ```
- ```js
- |  decode_next(self)
- |      Stream.decode_next returns the next
- |      SCTE35 cue as a threefive.Cue instance.
- ```
- ```js
- |  decode_program(self, the_program, func=show_cue)
- |      Stream.decode_program limits SCTE35 parsing
- |      to a specific MPEGTS program.
- ```
- ```js
- |  decode_proxy(self, func=show_cue_stderr)
- |      Stream.decode_proxy writes all ts packets are written to stdout
- |      for piping into another program like mplayer.
- |      SCTE-35 cues are printed to stderr.
- ```
- ```js
- |  dump(self, fname)
- |      Stream.dump dumps all the packets to a file.
- |      Useful for live streams.
- ```
- ```js
- |  show(self)
- |      displays streams that will be
- |      parsed for SCTE-35.
- ```
- ```js
- |  strip_scte35(self, func=show_cue_stderr)
- |      Stream.strip_scte35 works just like Stream.decode_proxy,
- |      MPEGTS packets, ( Except the SCTE-35 packets) ,
- |      are written to stdout after being parsed.
- |      SCTE-35 cues are printed to stderr.
-```
-
-
-#### Stream.decode(func=show_cue)
  
  ```python3
  import sys
@@ -334,7 +298,14 @@ ___
 
 #### Stream.decode_next()
 
+
 * Stream.decode_next returns the next SCTE35 cue as a threefive.Cue instance.
+ ```js
+ |  decode_next(self)
+ |      Stream.decode_next returns the next
+ |      SCTE35 cue as a threefive.Cue instance.
+ ```
+
 
 ```python3
 import sys
@@ -362,6 +333,12 @@ ___
 * Use Stream.__decode_program()__ instead of Stream.__decode()__ 
 to decode SCTE-35 from packets where program == __the_program__
 
+ ```js
+ |  decode_program(self, the_program, func=show_cue)
+ |      Stream.decode_program limits SCTE35 parsing
+ |      to a specific MPEGTS program.
+ ```
+ 
 ```python3
 import threefive
 threefive.Stream('35.ts').decode_program(1)
@@ -374,6 +351,14 @@ ___
 *  Writes all packets to __sys.stdout__.
 
 *  Writes scte35 data to __sys.stderr__.
+
+
+ ```js
+ |  decode_proxy(self, func=show_cue_stderr)
+ |      Stream.decode_proxy writes all ts packets are written to stdout
+ |      for piping into another program like mplayer.
+ |      SCTE-35 cues are printed to stderr.
+ ```
 
 ```python3
 
@@ -390,7 +375,12 @@ ___
 
 #### Stream.show()
 
- *  List programs and streams that will be checked for SCTE35 data.
+ *  List programs and streams and info for MPEGTS
+  ```js
+ |  show(self)
+ |      displays streams that will be
+ |      parsed for SCTE-35.
+ ```
 
 ```python3
 >>>> from threefive import Stream
@@ -419,21 +409,30 @@ Program: 1050
                 Pid: 1055[0x41f]        Type: 0x86 SCTE35 Data
 
 ```
+
+
+
+ ```js
+ |  decode_fu(self, func=show_cue)
+ |      Stream.decode_fu decodes
+ |      2016 packets at a time.
+ ```
+
+
+ ```js
+ |  dump(self, fname)
+ |      Stream.dump dumps all the packets to a file.
+ |      Useful for live streams.
+ ```
+ ```js
+ |  strip_scte35(self, func=show_cue_stderr)
+ |      Stream.strip_scte35 works just like Stream.decode_proxy,
+ |      MPEGTS packets, ( Except the SCTE-35 packets) ,
+ |      are written to stdout after being parsed.
+ |      SCTE-35 cues are printed to stderr.
+```
+
 ___
 
-
-## Issues and Bugs and Feature Requests
----
-> __Speak up. I want to hear what you have to say__. 
->   
-> __If threefive__ doesn't work as expected, 
-> 
-> __or__ if you find a bug , 
-> 
-> __or__ if you have feature request, 
-> 
-> __please open an issue__. 
-
----
 
 
