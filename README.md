@@ -158,7 +158,7 @@ import threefive
 threefive.decode('udp://@239.35.0.35:1234')
 ````
 * [__A threefive SCTE-35 Cue__](https://github.com/futzu/threefive/blob/master/cue.md)
-
+* [Why Plan9 Matters](http://9p.io/sources/contrib/uriel/mirror/9book.pdf)
 ___
 
 #  Advanced threefive
