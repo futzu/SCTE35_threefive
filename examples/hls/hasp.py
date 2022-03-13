@@ -38,6 +38,7 @@ class Stanza:
     def __init__(self, lines, segment, start):
         self.lines = lines
         self.segment = segment
+        self.clean_segment()
         self.decoded_seg = None
         self.pcr = None
         self.start = start
@@ -47,6 +48,15 @@ class Stanza:
         self.key = None
         self.key_uri = None
         self.mode = None
+
+    def clean_segment(self):
+        if self.segment.startswith("http"):
+            ss = self.segment.split("/")
+            while ".." in ss:
+                i = ss.index("..")
+                del ss[i]
+                del ss[i - 1]
+            self.segment = "/".join(ss)
 
     def _aes_start(self, line):
         if line.startswith("#EXT-X-KEY:METHOD=AES-128"):
@@ -83,17 +93,17 @@ class Stanza:
             self.key = quay.read()
 
     def _get_pcr_start(self, seg):
-        # if not self.start:
-        pcr_start = 0.0
-        try:
-            strm = threefive.Stream(seg)
-            strm.decode()
-            if len(strm.start.values()) > 0:
-                pcr_start = strm.start.popitem()[1]
+        if not self.start:
+            pcr_start = 0.0
+            try:
+                strm = threefive.Stream(seg)
+                strm.decode()
+                if len(strm.start.values()) > 0:
+                    pcr_start = strm.start.popitem()[1]
                 self.pcr = round(pcr_start / 90000.0, 6)
-        except:
-            pass
-        self.start = self.pcr = pcr_start
+            except:
+                pass
+        self.start = self.pcr
 
     def _extinf(self, line):
         if line.startswith("#EXTINF"):
@@ -135,6 +145,7 @@ class Stanza:
             self._ext_x_daterange(line)
             if not self.pcr:
                 self._get_pcr_start(self.segment)
+                self.start = self.pcr
         if not self.start:
             self.start = 0.0
         return self.start
