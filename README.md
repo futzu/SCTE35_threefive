@@ -1,4 +1,7 @@
 
+> "threefive is the cleanest SCTE-35 implementation I've ever seen."
+>     ~ S. Jones 
+
 # `threefive` is a  `SCTE-35` parser lib in python3.
    * Supports All __2020 SCTE-35__
      [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py) and
