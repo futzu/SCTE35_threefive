@@ -1,25 +1,16 @@
 
-> "threefive is the cleanest SCTE-35 implementation I've ever seen."
->     ~ S. Jones 
-
-# `threefive` is a  `SCTE-35` parser lib in python3.
+## threefive is a  SCTE-35 parser lib in python3.
    * Supports All __2020 SCTE-35__
-     [`Commands`](https://github.com/futzu/threefive/blob/master/threefive/commands.py) and
-     [`Descriptors`](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py) and
-     [`Upids`](https://github.com/futzu/threefive/blob/master/threefive/upid.py).
+     [Commands](https://github.com/futzu/threefive/blob/master/threefive/commands.py) and
+     [Descriptors](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py) and
+     [Upids](https://github.com/futzu/threefive/blob/master/threefive/upid.py).
 * [Parses SCTE-35 from MPEGTS Streams with Direct Multicast Support ](#mpegts-multicast).
 * [`HLS?`   `Custom Upid Handling?`     `Frame Accurate Preroll timings?`... Yes.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 
 * [A threefive SCTE-35 Cue](https://github.com/futzu/threefive/blob/master/cue.md).What's included.
 
-
 * [`ffmpeg` and `SCTE35` and `Stream Type 0x6 bin data` and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
-
-
 ---
-
-
-
 
 * [`Encoding` too](https://github.com/futzu/scte35-threefive/blob/master/Encoding.md) with [`Examples`](https://github.com/futzu/scte35-threefive/blob/master/examples/encode)
 * [`Issues` and `Bugs` and `Feature Requests`](https://github.com/futzu/scte35-threefive/issues)
@@ -101,7 +92,6 @@ pypy3 -mpip  install  threefive[all]
   
 > SCTE-35 data is __printed in JSON__ format.
 
-
 #### Examples:
 
 ###### Base64
@@ -118,49 +108,18 @@ import threefive
 payload = b'\xfc0\x11\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00\x00\x00O%3\x96'
 threefive.decode(payload)
 ```
-##### Hex String
-```python3
-import threefive 
-
-stuff = '0XFC301100000000000000FFFFFF0000004F253396'
-threefive.decode(stuff)
-```
 ##### Hex Literal
 ```python3
 import threefive 
 
 threefive.decode(0XFC301100000000000000FFFFFF0000004F253396)
 ```
-##### Integer
-```python3
-big_int = 1439737590925997869941740173214217318917816529814
-threefive.decode(big_int)
-```
-##### Mpegts File
-```python3
-import threefive 
-
-threefive.decode('/path/to/mpegts')
-```
-##### Mpegts HTTP/HTTPS Streams
-```python3
-import threefive 
-
-threefive.decode('https://futzu.com/xaa.ts')
-````
-#### Mpegts UDP streams
-```python3
-import threefive 
-
-threefive.decode('udp://10.0.0.1:555')
-````
 #### Mpegts Multicast
 ```python3
 import threefive 
 
 threefive.decode('udp://@239.35.0.35:1234')
 ````
-* [__A threefive SCTE-35 Cue__](https://github.com/futzu/threefive/blob/master/cue.md)
 * [Why Plan9 Matters](http://9p.io/sources/contrib/uriel/mirror/9book.pdf)
 ___
 
@@ -173,7 +132,6 @@ ___
 
    *  src [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
-   *  __threefive.Cue__ provides several methods to access the parsed data.
    
 ```python3
     >>>> import threefive
@@ -200,45 +158,117 @@ ___
     '0xfc'
 ```
 
-> When parsing SCTE35 Cues from MPEGTS streams, 
-> threefive attempts to include as many of the 
-> following as possible.'   	        
-*   __pid__ of the packet  
-*  __program__ of the pid   
-*  __pts__ of the packet   
-*  __pcr__ of the packet 
+* When parsing Cues from MPEGTS, threefive tries to include,  	        
+   *   __pid__ of the packet  
+   *  __program__ of the pid   
+   *  __pts__ of the packet   
+   *  __pcr__ of the packet 
 ___
+```js
 
-
-* call one or more of these methods after decode.
-
-|Cue Method                  | Description                                    |
-|----------------------------|------------------------------------------------|
-| cue.**get()**              | returns **cue as a dict**                      |
-| cue.**get_json()**         | returns **cue as a JSON** string               |
-| cue.**show()**             | prints **cue as JSON**                         |
-|                            |                                                |
-
-
-
+class Cue(threefive.base.SCTE35Base)
+ |  Cue(data=None, packet_data=None)
+ 
+```
+```js 
+ |  __init__(self, data=None, packet_data=None)
+ |      data may be packet bites or encoded string
+ |      packet_data is a instance passed from a Stream instance
+```
+#### Cue.decode()
+```js
+ |  decode(self)
+ |      Cue.decode() parses for SCTE35 data
+```
+#### Cue.encode()
+```js
+ |  encode(self)
+ |      Cue.encode() converts SCTE35 data
+ |      to a base64 encoded string.
+```
+#### Cue.encode_as_hex()
+```js
+ |  encode_as_hex(self)
+ |      encode_as_hex returns self.bites as
+ |      a hex string
+```
+#### Cue.get()
+```js
+ |  get(self)
+ |      Cue.get returns the SCTE-35 Cue
+ |      data as a dict of dicts.
+```
+```js
+ |  get_descriptors(self)
+ |      Cue.get_descriptors returns a list of
+ |      SCTE 35 splice descriptors as dicts.
+```
+#### Cue.get_json()
+```js 
+ |  get_json(self)
+ |      Cue.get_json returns the Cue instance
+ |      data in json.
+```
+#### Cue.load(stuff)
+```js 
+ |  load(self, stuff)
+ |      Cue.load loads SCTE35 data for encoding.
+ |      stuff is a dict or json
+ |      with any or all of these keys
+ |      stuff = {
+ |          'info_section': {dict} ,
+ |          'command': {dict},
+ |          'descriptors': [list of {dicts}],
+ |          }
+```
+#### Cue.load_command(cmd)
+```js 
+ |  load_command(self, cmd)
+ |      load_command loads data for Cue.command
+ |      cmd should be a dict.
+ |      if 'command_type' is included,
+ |      the command instance will be created.
+```
+```js  
+ |  load_descriptors(self, dlist)
+ |      Load_descriptors loads descriptor data.
+ |      dlist is a list of dicts
+ |      if 'tag' is included in each dict,
+ |      a descriptor instance will be created.
+```
+```js
+ |  load_info_section(self, isec)
+ |      load_info_section loads data for Cue.info_section
+ |      isec should be a dict.
+ |      if 'splice_command_type' is included,
+ |      an empty command instance will be created for Cue.command
+```
+```js
+ |  mk_info_section(self, bites)
+ |      Cue.mk_info_section parses the
+ |      Splice Info Section
+ |      of a SCTE35 cue.
+```
+#### Cue.show()
+```js  
+ |  show(self)
+ |      Cue.show prints the Cue as JSON
+```
+#### Cue.to_stderr()
+```js 
+ |  to_stderr(self)
+ |      Cue.to_stderr prints the Cue
+```
 ___
 
 ###  __Stream__ Class
-
-
- ```python3
-  threefive.Stream(tsdata, show_null = False)
-  ```
-
   * src [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
   * The threefive.__Stream__ class parses __SCTE35__ from __Mpegts__.
   * Supports:
      *  __File__ and __Http(s)__ and __Udp__ and __Multicast__ protocols. 
-  	  * __Multiple Programs__.
-  	  * __Multiple SCTE35 Streams__.
-  	  * __Multi-Packet PAT, PMT, and SCTE35 tables__. 
-  	  * __Constant Data Parsing__.
-  	     * threefive.Stream is designed to __run continuously__ 
+  	 * __Multiple Programs__.
+  	 * __Multi-Packet PAT, PMT, and SCTE35 tables__. 
+
 ```js
 class Stream(builtins.object)
  |  Stream(tsdata, show_null=True)
@@ -412,8 +442,7 @@ Program: 1050
                 Pid: 1055[0x41f]        Type: 0x86 SCTE35 Data
 
 ```
-
-
+#### Stream.decode_fu(func = show_cue)
 
  ```js
  |  decode_fu(self, func=show_cue)
@@ -421,12 +450,13 @@ Program: 1050
  |      2016 packets at a time.
  ```
 
-
+#### Stream.dump(fname)
  ```js
  |  dump(self, fname)
- |      Stream.dump dumps all the packets to a file.
- |      Useful for live streams.
+ |      Stream.dump dumps all the packets to a file (fname).
  ```
+#### Stream.strip_scte35(func=show_cue_stderr)
+ 
  ```js
  |  strip_scte35(self, func=show_cue_stderr)
  |      Stream.strip_scte35 works just like Stream.decode_proxy,
