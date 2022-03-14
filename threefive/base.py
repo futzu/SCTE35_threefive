@@ -2,7 +2,7 @@
 threefive.base contains
 the class SCTE35Base.
 """
-# import json
+import json
 from .bitn import NBin
 
 
@@ -40,6 +40,13 @@ class SCTE35Base:
         Returns instance as a dict
         """
         return self.kv_clean()
+
+    def get_json(self):
+        """
+        get_json returns the instance
+        data as json.
+        """
+        return json.dumps(self.get(), indent=4)
 
     def kv_clean(self):
         """

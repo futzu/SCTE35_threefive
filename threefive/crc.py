@@ -94,3 +94,7 @@ def _mkCrcFun(poly, sizeBits, initCrc, rev, xorOut):
         return fun(data, crc, table)
 
     return crcfun, tableList
+
+
+def get_crc32_func():
+    return mkCrcFun(POLY, initCrc=INIT_VALUE, rev=REVERSE, xorOut=XOR_OUT)

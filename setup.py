@@ -16,8 +16,8 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/threefive",
     extras_require={
-        "all": ["crcmod", "pyaes"],
-    }, 
+        "all": ["pyaes"],
+    },
     packages=setuptools.find_packages(),
     classifiers=[
         "License :: OSI Approved :: MIT License",

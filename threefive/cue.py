@@ -9,12 +9,7 @@ from .base import SCTE35Base
 from .section import SpliceInfoSection
 from .commands import command_map
 from .descriptors import splice_descriptor, descriptor_map
-
-ENCODE = True
-try:
-    import crcmod.predefined
-except:
-    ENCODE = False
+from .crc import get_crc32_func
 
 
 class Cue(SCTE35Base):
@@ -82,9 +77,6 @@ class Cue(SCTE35Base):
         Cue.encode() converts SCTE35 data
         to a base64 encoded string.
         """
-        if not ENCODE:
-            print("crcmod.predefined is required for encoding")
-            return False
         dscptr_bites = self._unloop_descriptors()
         dll = len(dscptr_bites)
         self.info_section.descriptor_loop_length = dll
@@ -104,6 +96,7 @@ class Cue(SCTE35Base):
         )
         self.bites += dscptr_bites
         self._encode_crc()
+        self.decode()
         return b64encode(self.bites).decode()
 
     def encode_as_hex(self):
@@ -115,7 +108,7 @@ class Cue(SCTE35Base):
         return hex(int.from_bytes(self.bites, byteorder="big"))
 
     def _encode_crc(self):
-        crc32_func = crcmod.predefined.mkCrcFun("crc-32-mpeg")
+        crc32_func = get_crc32_func()
         crc_int = crc32_func(self.bites)
         self.info_section.crc = hex(crc_int)
         self.bites += int.to_bytes(crc_int, 4, byteorder="big")
@@ -199,7 +192,8 @@ class Cue(SCTE35Base):
         """
         Cue._descriptorloop parses all splice descriptors
         """
-        tag_n_len_bites = 2  # 1 byte for descriptor tag,
+        tag_n_len_bites = 2
+        # 1 byte for descriptor tag,
         # 1 byte for descriptor length
         while dll:
             spliced = splice_descriptor(bites)
