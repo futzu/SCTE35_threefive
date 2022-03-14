@@ -39,7 +39,6 @@
 ### Requirements
 * threefive requires [pypy3](https://pypy.org) or python 3.6+ 
 * __optional dependencies:__
-    *  __crcmod__ if you want to encode SCTE-35 cues.
     *  __pyaes__  If you want AES decryption for HLS segments.
 
 ### Install
