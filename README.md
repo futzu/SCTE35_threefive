@@ -21,13 +21,9 @@
 * [Versions and Releases](#versions-and-releases)
 
 * [__Fast Start__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
-
-*   [`Easy` threefive](#easy-threefive) 
-      *   [threefive.__decode__()](#easy-threefive)      
-
-*  [`Advanced` threefive](#advanced-threefive)     
-     *  [threefive.__Cue__ Class](#cue-class)         
-     *  [threefive.__Stream__ Class](#stream-class)
+    
+*  [threefive.__Cue__ Class](#cue-class)         
+*  [threefive.__Stream__ Class](#stream-class)
      
 * [__Super Cool Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 
@@ -73,61 +69,49 @@ pypy3 -mpip  install  threefive[all]
 ---
 
 
-* [```Acme Jet Propelled Unicycle```](https://www.ebay.com/itm/124520782156?chn=ps&mkevt=1&mkcid=28)
-
-
-### __Easy__ threefive
-
-> the tsduck user's manual is longer than threefive's source code.
-
->
-> __threefive.decode__ is a SCTE-35 decoder function
-> with input type __auto-detection__. 
-```Base64```, ```Binary```, 
-> ```Hex Strings```,```Hex literals```, ```Integers```, ```Mpegts files``` and ```Mpegts HTTP/HTTPS Streams```
-> 
-> __SCTE-35__ data can be __parsed__ 
-> with just __one function call__.
-  
-> SCTE-35 data is __printed in JSON__ format.
 
 #### Examples:
 
 ###### Base64
 ```python3
-import threefive 
-
-stuff = '/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
-threefive.decode(stuff)
+>>> from threefive import Cue
+>>> stuff = '/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
+>>> cue=Cue(stuff)
+>>> cue.decode()
+True
 ```
 ##### Bytes
 ```python3
-import threefive 
+>>> import threefive 
 
-payload = b'\xfc0\x11\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00\x00\x00O%3\x96'
-threefive.decode(payload)
+>>> stuff = b'\xfc0\x11\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00\x00\x00O%3\x96'
+>>> cue=Cue(stuff)
+>>> cue.decode()
+True
+>>> cue.show()
 ```
-##### Hex Literal
+##### Hex
 ```python3
 import threefive 
 
-threefive.decode(0XFC301100000000000000FFFFFF0000004F253396)
+cue = threefive.Cue("0XFC301100000000000000FFFFFF0000004F253396")
+cue.decode()
+cue.show()
 ```
 #### Mpegts Multicast
 ```python3
 import threefive 
 
-threefive.decode('udp://@239.35.0.35:1234')
+strm = threefive.Stream('udp://@239.35.0.35:1234')
+strm.decode()
 ````
+
+___
 * [Why Plan9 Matters](http://9p.io/sources/contrib/uriel/mirror/9book.pdf)
 ___
 
-#  Advanced threefive
-
-___
 
 ###  Cue Class
-
 
    *  src [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
