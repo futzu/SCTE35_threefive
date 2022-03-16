@@ -165,7 +165,7 @@ class Stream:
                     return cue
                 func(cue)
         self._tsdata.close()
-        return True
+        # return True
 
     def _mk_pkts(self, chunk):
         return [
@@ -181,16 +181,17 @@ class Stream:
         if not self._find_start():
             return False
         with open(fname, "wb") as dumpfile:
-            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE * 300), b""):
+            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE * 30000), b""):
                 dumpfile.write(pkt)
-        return True
+
+    # return True
 
     def decode_fu(self, func=show_cue):
         """
         Stream.decode_fu decodes
         num_pkts packets at a time.
         """
-        num_pkts = 2016
+        num_pkts = 10016
         if not self._find_start():
             return False
         for chunk in iter(
@@ -199,7 +200,6 @@ class Stream:
             _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
             del _
         self._tsdata.close()
-        return True
 
     def decode_next(self):
         """
@@ -248,7 +248,6 @@ class Stream:
                 else:
                     sys.stdout.buffer.write(pkt)
         self._tsdata.close()
-        return True
 
     def show(self):
         """
@@ -264,7 +263,6 @@ class Stream:
                 if len(vee.streams.items()) > 0:
                     print(f"Program: {k}")
                     vee.show()
-        return True
 
     def decode_start_time(self):
         """
@@ -340,7 +338,7 @@ class Stream:
         payload = self._parse_payload(pkt)
         if len(payload) < 14:
             return
-        if payload[7] & 0x80:
+        if self._pts_flag(payload):
             pts = ((payload[9] >> 1) & 7) << 30
             pts |= payload[10] << 22
             pts |= (payload[11] >> 1) << 15
@@ -392,6 +390,7 @@ class Stream:
         PAT, PMT,  and SDT tables
         based on pid of the pkt
         """
+
         pay = self._parse_payload(pkt)
         if not self._chk_last(pay, pid):
             if pid == self._PAT_PID:
@@ -411,14 +410,15 @@ class Stream:
 
     def _parse(self, pkt):
         cue = False
-        pid = self._parse_pid(pkt[1], pkt[2])
+        # pid = self._parse_pid(pkt[1], pkt[2])
+        pid = (pkt[1] & 0x01F) << 8 | pkt[2]
         if pid in self._pids["tables"]:
             self._parse_tables(pkt, pid)
         if self.chk_cc:
             self._parse_cc(pkt, pid)
         if pid in self._pids["pcr"]:
             self._parse_pcr(pkt, pid)
-        if self._pusi_flag(pkt):
+        if pkt[1] & 0x40:
             self._parse_pts(pkt, pid)
         if pid in self._pids["scte35"]:
             cue = self._parse_scte35(pkt, pid)
@@ -509,7 +509,7 @@ class Stream:
         parse program association table
         for program to pmt_pid mappings.
         """
-        pay = self._chk_partial(pay, self._PAT_PID, b"")
+        pay = self._chk_partial(pay, self._PAT_PID, b"\x00")
         seclen = self._parse_length(pay[2], pay[3])
         if not self._section_done(pay, self._PAT_PID, seclen):
             return False
