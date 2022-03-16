@@ -119,12 +119,12 @@ ___
     >>>> cue = threefive.Cue(Base64)
 ```
 
-> cue.decode() returns True on success,or False if decoding failed
+*  cue.decode() returns True on success,or False if decoding failed
 ```python3
     >>>> cue.decode()
     True
 ```
-> After Calling cue.decode() the instance variables can be accessed via dot notation.
+* After Calling cue.decode() the instance variables can be accessed via dot notation.
 ```python3
 
     >>>> cue.command
