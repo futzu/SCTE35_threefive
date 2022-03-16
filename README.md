@@ -65,12 +65,9 @@ pypy3 -mpip  install  threefive[all]
 
 > ```threefive.version()```   returns the version as a string.
 
-
 ---
 
-
-
-#### Examples:
+#### Easy Examples
 
 ###### Base64
 ```python3
@@ -163,24 +160,13 @@ class Cue(threefive.base.SCTE35Base)
  |  decode(self)
  |      Cue.decode() parses for SCTE35 data
 ```
-#### Cue.encode()
-```js
- |  encode(self)
- |      Cue.encode() converts SCTE35 data
- |      to a base64 encoded string.
-```
-#### Cue.encode_as_hex()
-```js
- |  encode_as_hex(self)
- |      encode_as_hex returns self.bites as
- |      a hex string
-```
 #### Cue.get()
 ```js
  |  get(self)
  |      Cue.get returns the SCTE-35 Cue
  |      data as a dict of dicts.
 ```
+#### Cue.get_descriptors()
 ```js
  |  get_descriptors(self)
  |      Cue.get_descriptors returns a list of
@@ -191,46 +177,6 @@ class Cue(threefive.base.SCTE35Base)
  |  get_json(self)
  |      Cue.get_json returns the Cue instance
  |      data in json.
-```
-#### Cue.load(stuff)
-```js 
- |  load(self, stuff)
- |      Cue.load loads SCTE35 data for encoding.
- |      stuff is a dict or json
- |      with any or all of these keys
- |      stuff = {
- |          'info_section': {dict} ,
- |          'command': {dict},
- |          'descriptors': [list of {dicts}],
- |          }
-```
-#### Cue.load_command(cmd)
-```js 
- |  load_command(self, cmd)
- |      load_command loads data for Cue.command
- |      cmd should be a dict.
- |      if 'command_type' is included,
- |      the command instance will be created.
-```
-```js  
- |  load_descriptors(self, dlist)
- |      Load_descriptors loads descriptor data.
- |      dlist is a list of dicts
- |      if 'tag' is included in each dict,
- |      a descriptor instance will be created.
-```
-```js
- |  load_info_section(self, isec)
- |      load_info_section loads data for Cue.info_section
- |      isec should be a dict.
- |      if 'splice_command_type' is included,
- |      an empty command instance will be created for Cue.command
-```
-```js
- |  mk_info_section(self, bites)
- |      Cue.mk_info_section parses the
- |      Splice Info Section
- |      of a SCTE35 cue.
 ```
 #### Cue.show()
 ```js  
@@ -280,6 +226,7 @@ class Stream(builtins.object)
  |      func can be set to a custom function that accepts
  |      a threefive.Cue instance as it's only argument.
  ```
+ > `Stream.decode Example`
  
  ```python3
  import sys
@@ -293,7 +240,7 @@ class Stream(builtins.object)
   *  __func__ should match the interface 
   ``` func(cue)```
  
- 
+ > `Stream.decode with custom function Example`
 ```python3
 import sys
 import threefive
@@ -314,7 +261,6 @@ ___
 
 #### Stream.decode_next()
 
-
 * Stream.decode_next returns the next SCTE35 cue as a threefive.Cue instance.
  ```js
  |  decode_next(self)
@@ -322,7 +268,7 @@ ___
  |      SCTE35 cue as a threefive.Cue instance.
  ```
 
-
+> `Stream.decode_next Example`
 ```python3
 import sys
 import threefive
@@ -354,7 +300,7 @@ to decode SCTE-35 from packets where program == __the_program__
  |      Stream.decode_program limits SCTE35 parsing
  |      to a specific MPEGTS program.
  ```
- 
+ > `Stream.decode_program Example`
 ```python3
 import threefive
 threefive.Stream('35.ts').decode_program(1)
@@ -368,19 +314,18 @@ ___
 
 *  Writes scte35 data to __sys.stderr__.
 
-
  ```js
  |  decode_proxy(self, func=show_cue_stderr)
  |      Stream.decode_proxy writes all ts packets are written to stdout
  |      for piping into another program like mplayer.
  |      SCTE-35 cues are printed to stderr.
  ```
-
+> `Stream.decode_proxy Example`
 ```python3
 
 import threefive
 sp = threefive.Stream('https://futzu.com/xaa.ts')
-sp.proxy_decode()
+sp.decode_proxy()
 ```
 
 * Pipe to __mplayer__
@@ -397,7 +342,7 @@ ___
  |      displays streams that will be
  |      parsed for SCTE-35.
  ```
-
+> `Stream.show() Example`
 ```python3
 >>>> from threefive import Stream
 >>>> Stream('https://slo.me/plp0.ts').show()
