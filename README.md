@@ -166,6 +166,33 @@ class Cue(threefive.base.SCTE35Base)
  |      Cue.get returns the SCTE-35 Cue
  |      data as a dict of dicts.
 ```
+> `Cue.get() Example`
+```python3
+>>> from threefive import Cue
+>>> cue = Cue('0XFC301100000000000000FFFFFF0000004F253396')
+>>> cue.decode()
+True
+>>> cue
+{'bites': b'\xfc0\x11\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00\x00\x00O%3\x96', 
+'info_section': {'table_id': '0xfc', 'section_syntax_indicator': False, 'private': False, 'sap_type': '0x3', 
+'sap_details': 'No Sap Type', 'section_length': 17, 'protocol_version': 0, 'encrypted_packet': False, 
+'encryption_algorithm': 0, 'pts_adjustment_ticks': 0, 'pts_adjustment': 0.0, 'cw_index': '0x0', 'tier': '0xfff',
+'splice_command_length': 4095, 'splice_command_type': 0, 'descriptor_loop_length': 0, 'crc': '0x4f253396'},
+'command': {'command_length': None, 'command_type': 0, 'name': 'Splice Null'},
+'descriptors': [], 'packet_data': None}
+
+### Cue.get() omits cue.bites and empty values
+
+>>> cue.get()
+{'info_section': {'table_id': '0xfc', 'section_syntax_indicator': False,'private': False, 'sap_type': '0x3', 
+'sap_details': 'No Sap Type', 'section_length': 17, 'protocol_version': 0, 'encrypted_packet': False,
+'encryption_algorithm': 0, 'pts_adjustment_ticks': 0, 'pts_adjustment': 0.0, 'cw_index': '0x0', 'tier': '0xfff',
+'splice_command_length': 4095, 'splice_command_type': 0, 'descriptor_loop_length': 0, 'crc': '0x4f253396'},
+'command': {'command_type': 0, 'name': 'Splice Null'},
+'descriptors': []}
+```
+
+```
 #### Cue.get_descriptors()
 ```js
  |  get_descriptors(self)
