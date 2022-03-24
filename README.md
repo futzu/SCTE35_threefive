@@ -9,7 +9,7 @@
 * [`HLS?`   `Custom Upid Handling?`     `Frame Accurate Preroll timings?`... Yes.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 https://github.com/futzu/x9k3_
 
-* [__x9k3__](https://github.com/futzu/x9k3) is an __HLS Segmenter__ with __SCTE-35__ Support built with __threefive__. 
+* [__x9k3__](https://github.com/futzu/x9k3) is an __HLS Segmenter__ with __SCTE-35__ Supportpowered by __threefive__. 
 
 * [A threefive SCTE-35 Cue](https://github.com/futzu/threefive/blob/master/cue.md).What's included.
 
