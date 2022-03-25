@@ -1,6 +1,9 @@
+#### [__x9k3__](https://github.com/futzu/x9k3) is an __HLS segmenter__ with __SCTE-35__ support powered by __threefive__. 
 
 
 # threefive is a  SCTE-35 parser lib in python3.
+
+
    * Supports All __2020 SCTE-35__
      [Commands](https://github.com/futzu/threefive/blob/master/threefive/commands.py) and
      [Descriptors](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py) and
@@ -9,7 +12,6 @@
 * [`HLS?`   `Custom Upid Handling?`     `Frame Accurate Preroll timings?`... Yes.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 https://github.com/futzu/x9k3_
 
-* [__x9k3__](https://github.com/futzu/x9k3) is an __HLS Segmenter__ with __SCTE-35__ Supportpowered by __threefive__. 
 
 * [A threefive SCTE-35 Cue](https://github.com/futzu/threefive/blob/master/cue.md).What's included.
 
