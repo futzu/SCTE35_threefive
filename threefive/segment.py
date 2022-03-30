@@ -56,7 +56,7 @@ class Segment(Stream):
         self.key = None
         self.iv = None
         self.cues = []
-        self.start = None
+        self.pts_start = None
         self.tmp = None
         if AES:
             if iv:
@@ -105,5 +105,7 @@ class Segment(Stream):
         decode a mpegts segment.
         """
         super().decode(func=self.show_cue)
+        self.pts_start = self.decode_start_time()
+
         if self.tmp:
             os.unlink(self.tmp)

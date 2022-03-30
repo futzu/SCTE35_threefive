@@ -40,7 +40,7 @@ class Stanza:
         self.segment = segment
         self.clean_segment()
         self.decoded_seg = None
-        self.pcr = None
+        self.pts = None
         self.start = start
         self.duration = 0
         self.cue = False
@@ -80,7 +80,7 @@ class Stanza:
             with threefive.reader(self.segment) as infile:
                 with open(tmp, "wb") as outfile:
                     pyaes.decrypt_stream(self.mode, infile, outfile)
-                    self._get_pcr_start(tmp)
+                    self._get_pts_start(tmp)
             os.unlink(tmp)
         except:
             pass
@@ -92,18 +92,18 @@ class Stanza:
         with threefive.reader(self.key_uri) as quay:
             self.key = quay.read()
 
-    def _get_pcr_start(self, seg):
+    def _get_pts_start(self, seg):
         if not self.start:
-            pcr_start = 0.0
+            pts_start = 0.0
             try:
                 strm = threefive.Stream(seg)
                 strm.decode()
                 if len(strm.start.values()) > 0:
-                    pcr_start = strm.start.popitem()[1]
-                self.pcr = round(pcr_start / 90000.0, 6)
+                    pts_start = strm.start.popitem()[1]
+                self.pts = round(pts_start / 90000.0, 6)
             except:
                 pass
-        self.start = self.pcr
+        self.start = self.pts
 
     def _extinf(self, line):
         if line.startswith("#EXTINF"):
@@ -143,9 +143,9 @@ class Stanza:
             self._ext_x_scte35(line)
             self._extinf(line)
             self._ext_x_daterange(line)
-            if not self.pcr:
-                self._get_pcr_start(self.segment)
-                self.start = self.pcr
+            if not self.pts:
+                self._get_pts_start(self.segment)
+                self.start = self.pts
         if not self.start:
             self.start = 0.0
         return self.start
@@ -184,21 +184,18 @@ class HASP:
         return line
 
     def show_segment_times(self, stanza):
-        rev_text = "\033[7m \033[1m"
-        reset_text = "\033[00m"
-        print(f"{rev_text}Segment :{reset_text} {stanza.segment}")
-        print(f"{rev_text}Base Time       :{reset_text} {round(self._start,6)}")
-        print(f"{rev_text}HLS Time        :{reset_text} {round(self.hls_time,6)}")
-        print(
-            f"{rev_text}Segment Start   :{reset_text} {round(self.next_expected,6)}\t "
-            + f"{rev_text}Segment Duration  :{reset_text} {stanza.duration}"
-        )
-        if stanza.pcr:
-            print(f"{rev_text}PCR Time        :{reset_text} {stanza.pcr}\n")
+        print(f"Segment: {stanza.segment}")
+        print(f"Segment Duration  : {stanza.duration}")
+        print(f"Segment Start   :{round(self.next_expected,6)}")
+        print(f"HLS Time: {round(self.hls_time,6)}")
+        #   + f"Segment Duration  : {stanza.duration}"
+        # )
+        # if stanza.pts:
+        #   print(f"{rev_text}pts Time        :{reset_text} {stanza.pts}\n")
         if stanza.cue:
-            print(f"{rev_text}Cue:{reset_text}\n")
-            stanza.do_cue()
-        print("\n")
+            # print(f"Cue:\n")
+            # stanza.do_cue()
+            print("\n")
 
     def do_segment(self, line):
         segment = line
@@ -206,7 +203,7 @@ class HASP:
             segment = self.base_uri + line
         if segment not in self.seg_list:
             self.seg_list.append(segment)
-            self.seg_list = self.seg_list[-200:]
+            self.seg_list = self.seg_list[-101:]
             stanza = Stanza(self.chunk, segment, self._start)
             stanza.decode()
             if not self._start:

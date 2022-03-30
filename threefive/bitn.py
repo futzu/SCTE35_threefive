@@ -49,9 +49,10 @@ class BitBin:
         Returns num_bits of bits
         as bytes decoded to as_ascii
         """
+
         stuff = self.as_int(num_bits)
         wide = num_bits >> 3
-        return int.to_bytes(stuff, wide, byteorder="big").decode(errors="ignore")
+        return int.to_bytes(stuff, wide, byteorder="big")
 
     def as_ticks(self, num_bits):
         """
@@ -120,7 +121,9 @@ class NBin:
         to self.bites
         """
         self.bites += plus_bites
-        self.nbits2bites()
+
+    #  if self.idx % 8 == 0:
+    #     self.nbits2bites()
 
     def add_int(self, int_bits, bit_len):
         """

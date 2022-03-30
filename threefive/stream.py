@@ -156,16 +156,14 @@ class Stream:
         func can be set to a custom function that accepts
         a threefive.Cue instance as it's only argument.
         """
-        if not self._find_start():
-            return False
-        for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
-            cue = self._parse(pkt)
-            if cue:
-                if not func:
-                    return cue
-                func(cue)
+        if self._find_start():
+            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
+                cue = self._parse(pkt)
+                if cue:
+                    if not func:
+                        return cue
+                    func(cue)
         self._tsdata.close()
-        # return True
 
     def _mk_pkts(self, chunk):
         return [
@@ -183,8 +181,6 @@ class Stream:
         with open(fname, "wb") as dumpfile:
             for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE * 30000), b""):
                 dumpfile.write(pkt)
-
-    # return True
 
     def decode_fu(self, func=show_cue):
         """
@@ -269,7 +265,7 @@ class Stream:
         displays streams that will be
         parsed for SCTE-35.
         """
-        self.decode(func=no_op)
+        #     self.decode(func=no_op)
         if len(self.start.values()) > 0:
             return self.start.popitem()[1]
         return False
@@ -348,6 +344,8 @@ class Stream:
             if pid in self._pid_prgm:
                 prgm = self._pid_prgm[pid]
             self._prgm_pts[prgm] = pts
+            if prgm not in self.start:
+                self.start[prgm] = pts
 
     def _parse_pcr(self, pkt, pid):
         """
@@ -365,8 +363,6 @@ class Stream:
                 if pid in self._pid_prgm:
                     prgm = self._pid_prgm[pid]
                 self._prgm_pcr[prgm] = pcr
-                if prgm not in self.start:
-                    self.start[prgm] = pcr
 
     def _parse_cc(self, pkt, pid):
         c_c = pkt[3] & 0xF
@@ -408,6 +404,22 @@ class Stream:
             self._parse_tables(pkt, pid)
         return pid
 
+    @staticmethod
+    def as_90k(ticks):
+        """
+        as_90k returns ticks as 90k clock time
+        """
+        return round((ticks / 90000.0), 6)
+
+    def pid2pts(self, pid):
+        """
+        pid2pts give a pid, returns the pts time
+        """
+        if pid in self._pid_prgm:
+            prgm = self._pid_prgm[pid]
+            return self.as_90k(self._prgm_pts[prgm])
+        return None
+
     def _parse(self, pkt):
         cue = False
         # pid = self._parse_pid(pkt[1], pkt[2])
@@ -417,6 +429,14 @@ class Stream:
         if self.chk_cc:
             self._parse_cc(pkt, pid)
         if pid in self._pids["pcr"]:
+            # if pkt[1] & 0x40:
+            #    if b'\x00\x00\x01' in pkt:
+            # if pkt[1] & 0x40:
+            # pay = self._parse_payload(pkt)
+            # print(list(pay))
+            #     if b'\x00\x00\x00\x01' in pay:
+            #       for nal in pay.split(b'\x00\x00\x00\x01'):
+            #         print(len(nal),nal,)
             self._parse_pcr(pkt, pid)
         if pkt[1] & 0x40:
             self._parse_pts(pkt, pid)
