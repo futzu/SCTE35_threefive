@@ -100,7 +100,7 @@ class Segment(Stream):
         cue.show()
         self.add_cue(cue)
 
-    def decode(self):
+    def decode(self, func=None):
         """
         decode a mpegts segment.
         """

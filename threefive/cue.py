@@ -47,6 +47,7 @@ class Cue(SCTE35Base):
         data may be packet bites or encoded string
         packet_data is a instance passed from a Stream instance
         """
+        self.bites = None
         if data:
             self.bites = self._mk_bits(data)
         self.info_section = SpliceInfoSection()
@@ -58,6 +59,8 @@ class Cue(SCTE35Base):
         """
         Cue.decode() parses for SCTE35 data
         """
+        if not self.bites:
+            return
         self.descriptors = []
         # self.bites after_info section decoding
         after_info = self.mk_info_section(self.bites)

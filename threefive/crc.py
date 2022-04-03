@@ -6,7 +6,7 @@ I am including the crcmod authors copyright below.
 
 Thank you Raymond L. Buvel and Craig McQueen.
 
-~ Adrian 
+~ Adrian
 
 """
 # -----------------------------------------------------------------------------

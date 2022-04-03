@@ -342,7 +342,7 @@ class SegmentationDescriptor(SpliceDescriptor):
             bitbin, self.segmentation_upid_type, self.segmentation_upid_length
         )
         self.segmentation_type_id = bitbin.as_int(8)  # 1 byte
-        if self.segmentation_type_id in table22.keys():
+        if self.segmentation_type_id in table22:
             self.segmentation_message = table22[self.segmentation_type_id]
             self._decode_segments(bitbin)
 

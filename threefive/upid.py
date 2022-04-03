@@ -35,7 +35,7 @@ def upid_decoder(bitbin, upid_type, upid_length):
         0x10: ["UUID", _decode_uri],
         0xFD: ["Unknown", _decode_uri],
     }
-    if upid_type not in upid_map.keys():
+    if upid_type not in upid_map:
         upid_type = 0xFD
     return upid_map[upid_type][0], upid_map[upid_type][1](bitbin, upid_length)
 
