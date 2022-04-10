@@ -69,8 +69,12 @@ def _mk_mcast_sock(mcast_grp, mcast_port, all_grps=True):
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+<<<<<<< HEAD
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 50000000)
     # big fat buf
+=======
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 212992*4)
+>>>>>>> 683c9e0251639a2ea625f8b1bf2741e86dd94af9
 
     if all_grps:
         sock.bind(("", mcast_port))
