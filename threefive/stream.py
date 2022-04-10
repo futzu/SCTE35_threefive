@@ -187,13 +187,14 @@ class Stream:
         Stream.decode_fu decodes
         num_pkts packets at a time.
         """
-        num_pkts = 10016
+        num_pkts = 1016
         if not self._find_start():
             return False
         for chunk in iter(
             partial(self._tsdata.read, (self._PACKET_SIZE * num_pkts)), b""
         ):
             _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
+
             del _
         self._tsdata.close()
 
@@ -365,6 +366,8 @@ class Stream:
                 self._prgm_pcr[prgm] = pcr
 
     def _parse_cc(self, pkt, pid):
+
+        last_cc = None
         c_c = pkt[3] & 0xF
         if pid in self._pid_cc:
             last_cc = self._pid_cc[pid]
@@ -422,21 +425,12 @@ class Stream:
 
     def _parse(self, pkt):
         cue = False
-        # pid = self._parse_pid(pkt[1], pkt[2])
         pid = (pkt[1] & 0x01F) << 8 | pkt[2]
         if pid in self._pids["tables"]:
             self._parse_tables(pkt, pid)
-        if self.chk_cc:
-            self._parse_cc(pkt, pid)
         if pid in self._pids["pcr"]:
-            # if pkt[1] & 0x40:
-            #    if b'\x00\x00\x01' in pkt:
-            # if pkt[1] & 0x40:
-            # pay = self._parse_payload(pkt)
-            # print(list(pay))
-            #     if b'\x00\x00\x00\x01' in pay:
-            #       for nal in pay.split(b'\x00\x00\x00\x01'):
-            #         print(len(nal),nal,)
+            if self.chk_cc:
+                self._parse_cc(pkt, pid)
             self._parse_pcr(pkt, pid)
         if pkt[1] & 0x40:
             self._parse_pts(pkt, pid)
