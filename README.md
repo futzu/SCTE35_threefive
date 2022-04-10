@@ -1,4 +1,3 @@
-#### [__x9k3__](https://github.com/futzu/x9k3) is an __HLS segmenter__ with __SCTE-35__ support powered by __threefive__. 
 
 
 # threefive is a  SCTE-35 parser lib in python3.
@@ -10,10 +9,13 @@
      [Upids](https://github.com/futzu/threefive/blob/master/threefive/upid.py).
 * [Parses SCTE-35 from MPEGTS Streams with Direct Multicast Support ](#mpegts-multicast).
 * [`HLS?`   `Custom Upid Handling?`     `Frame Accurate Preroll timings?`... Yes.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
-https://github.com/futzu/x9k3_
+
+
+## [__x9k3__](https://github.com/futzu/x9k3) is powered by __threefive__. 
 
 
 * [A threefive SCTE-35 Cue](https://github.com/futzu/threefive/blob/master/cue.md).What's included.
+
 
 * [`ffmpeg` and `SCTE35` and `Stream Type 0x6 bin data` and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 ---
@@ -36,6 +38,7 @@ https://github.com/futzu/x9k3_
 * [Diagram](https://github.com/futzu/threefive/blob/master/cue.md)  of a threefive SCTE-35 Cue
 * [`Issues` and `Bugs` and `Feature` Requests](#issues-and-bugs-and-feature-requests)
  *No forms man, just open an issue.*  
+* [Why Plan9 Matters](http://9p.io/sources/contrib/uriel/mirror/9book.pdf)
 
 
 ### Requirements
@@ -102,6 +105,20 @@ cue.decode()
 cue.show()
 ```
 #### Mpegts Multicast
+* On my Debian [Sid](https://www.debian.org/releases/sid/) laptop I set the following, 
+ 
+```smalltalk
+## <dev> is the network device
+
+ifconfig <dev> -allmulti
+ethtool  -G <dev> rx 4096
+sysctl -w net.core.rmem_default=50000000
+sysctl -w net.core.rmem_max=150000000
+
+```
+* Tested stream  __bitrate: 24875 kb/s. Packet loss: 0.0__
+
+
 ```python3
 import threefive 
 
@@ -109,8 +126,6 @@ strm = threefive.Stream('udp://@239.35.0.35:1234')
 strm.decode()
 ````
 
-___
-* [Why Plan9 Matters](http://9p.io/sources/contrib/uriel/mirror/9book.pdf)
 ___
 
 
