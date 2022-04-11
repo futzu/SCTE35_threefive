@@ -110,13 +110,15 @@ cue.show()
 ```smalltalk
 ## <dev> is the network device
 
-ifconfig <dev> -allmulti
+ip link set <dev> multicast on allmulticast on
+
 ethtool  -G <dev> rx 4096
+
 sysctl -w net.core.rmem_default=50000000
+
 sysctl -w net.core.rmem_max=150000000
 
 ```
-* Tested stream  __bitrate: 24875 kb/s. Packet loss: 0.0__
 
 
 ```python3
