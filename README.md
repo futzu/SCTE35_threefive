@@ -11,7 +11,8 @@
 * [`HLS?`   `Custom Upid Handling?`     `Frame Accurate Preroll timings?`... Yes.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
 
 
-## [__x9k3__](https://github.com/futzu/x9k3) is powered by __threefive__. 
+* [__x9k3__](https://github.com/futzu/x9k3) is powered by threefive. 
+* [__mudpie__](https://github.com/futzu/mudpie) works great with threefive
 
 
 * [A threefive SCTE-35 Cue](https://github.com/futzu/threefive/blob/master/cue.md).What's included.
