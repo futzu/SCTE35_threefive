@@ -132,6 +132,8 @@ class Stream:
         self._prgm = {}
         self._partial = {}
         self._last = {}
+        self.last_pat = None
+        self.last_pmt = None
 
     def __repr__(self):
         return str(self.__dict__)
