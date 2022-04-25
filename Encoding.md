@@ -27,9 +27,96 @@
 * length vars for Cue.command and Cue.descriptors are automatically generated.  
 * Descriptor loop length and crc32 are automatically calculated 
 
-## Examples
 
-### Edit the Splice Insert Command in a Cue 
+## SCTE35 Cue with a Time Signal Command in Seven Steps
+
+```python3
+>>>> import threefive
+```
+1. __Create an empty SCTE-35 Cue__
+```smalltalk
+
+>>>> cue = threefive.Cue()
+```
+2.  __The info_section is automatically generated__
+```smalltalk
+>>>> cue
+{'info_section': {'table_id': None, 'section_syntax_indicator': None, 'private': None, 'sap_type': None, 'sap_details': None, 'section_length': None,
+'protocol_version': None, 'encrypted_packet': None, 'encryption_algorithm': None, 'pts_adjustment': None, 'cw_index': None, 'tier': None,
+'splice_command_length': None, 'splice_command_type': None, 'descriptor_loop_length': 0, 'crc': None},
+'command': None, 
+'descriptors': [], 
+'packet_data': None}
+```
+3. __Create a Time Signal Splice Command__
+```smalltalk
+>>>> cmd=threefive.TimeSignal()
+>>>> cmd
+{'calculated_length': None, 'command_type': 6, 'name': 'Time Signal', 'bites': None, 'time_specified_flag': None, 'pts_time': None}
+```
+
+4. __Edit the Time Signal__ 
+```smalltalk
+>>>> cmd.time_specified_flag=True
+>>>> cmd.pts_time=20.004350
+>>>>
+```
+5. __Add it to the SCTE35 Cue.__
+```smalltalk
+>>>> cue.command=cmd
+>>>> cue
+{'info_section': {'table_id': None, 'section_syntax_indicator': None, 'private': None, 'sap_type': None, 'sap_details': None, 'section_length': None,
+'protocol_version': None, 'encrypted_packet': None, 'encryption_algorithm': None, 'pts_adjustment': None, 'cw_index': None, 'tier': None,
+'splice_command_length': None, 'splice_command_type': None, 'descriptor_loop_length': 0, 'crc': None}, 
+
+'command': {'calculated_length': None, 'command_type': 6, 'name': 'Time Signal', 'bites': None, 'time_specified_flag': True, 'pts_time': 20.00435},
+'descriptors': [], 'packet_data': None}
+```
+6. Encode the SCTE35 Cue
+```smalltalk
+>>>> cue.encode()
+'/DAWAAAAAAAAAP/wBQb+ABt4xwAAwhCGHw=='
+```
+7. __Show the Cue data.__
+```smalltalk
+>>>> cue.show()
+
+
+{
+    "info_section": {
+        "table_id": "0xfc",
+        "section_syntax_indicator": false,
+        "private": false,
+        "sap_type": "0x3",
+        "sap_details": "No Sap Type",
+        "section_length": 22,
+        "protocol_version": 0,
+        "encrypted_packet": false,
+        "encryption_algorithm": 0,
+        "pts_adjustment": 0.0,
+        "cw_index": "0x0",
+        "tier": "0xfff",
+        "splice_command_length": 5,
+        "splice_command_type": 6,
+        "descriptor_loop_length": 0,
+        "crc": "0xc210861f"
+    },
+    "command": {
+        "command_type": 6,
+        "name": "Time Signal",
+        "time_specified_flag": true,
+        "pts_time": 20.00435,
+        "command_length": 5
+    },
+    "descriptors": []
+}
+>>>> 
+
+
+```
+
+
+### Edit A Splice Insert Command in a  SCTE35 Cue 
 ```python3
 a@fumatica:~/threefive$ pypy3
 Python 3.7.10 (7.3.5+dfsg-2, Jun 03 2021, 20:39:46)
@@ -102,7 +189,7 @@ True
     ]
 }
 ```
-### Remove a Splice Descriptor in a Cue
+### Remove a Splice Descriptor from a SCTE35 Cue
 ```python3
 >>>> import threefive
 >>>> Base64 = "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
@@ -209,7 +296,7 @@ True
 }
 
 ```
-### Add a Dtmf Descriptor to an existing Cue
+### Add a Dtmf Descriptor to an existing  SCTE35 Cue
 ```python3
 >>>> import threefive
 >>>> Base64 = "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
@@ -241,71 +328,5 @@ True
   # Run encode to generate new Base64 string
 >>>> cue.encode()
 b'/DA7AAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAWAAhDVUVJAAABNQEKQ1VFSbGfMTIxI55FecI='
-```
-
-## Cue with a Time Signal Command from scratch
-
-```python3
->>>> import threefive
->>>> cue = threefive.Cue()
->>>> cue
-{'info_section': {'table_id': None, 'section_syntax_indicator': None, 'private': None, 'sap_type': None, 'sap_details': None, 'section_length': None,
-'protocol_version': None, 'encrypted_packet': None, 'encryption_algorithm': None, 'pts_adjustment': None, 'cw_index': None, 'tier': None,
-'splice_command_length': None, 'splice_command_type': None, 'descriptor_loop_length': 0, 'crc': None},
-'command': None, 
-'descriptors': [], 
-'packet_data': None}
-
->>>> cmd=threefive.TimeSignal()
->>>> cmd
-{'calculated_length': None, 'command_type': 6, 'name': 'Time Signal', 'bites': None, 'time_specified_flag': None, 'pts_time': None}
->>>> cmd.time_specified_flag=True
->>>> cmd.pts_time=20.004350
->>>> cue.command=cmd
->>>> cue
-{'info_section': {'table_id': None, 'section_syntax_indicator': None, 'private': None, 'sap_type': None, 'sap_details': None, 'section_length': None,
-'protocol_version': None, 'encrypted_packet': None, 'encryption_algorithm': None, 'pts_adjustment': None, 'cw_index': None, 'tier': None,
-'splice_command_length': None, 'splice_command_type': None, 'descriptor_loop_length': 0, 'crc': None}, 
-'command': {'calculated_length': None, 'command_type': 6, 'name': 'Time Signal', 'bites': None, 'time_specified_flag': True, 'pts_time': 20.00435},
-'descriptors': [], 'packet_data': None}
-
->>>> cue.encode()
-'/DAWAAAAAAAAAP/wBQb+ABt4xwAAwhCGHw=='
-
->>>> cue.show()
-
-# Splice Info Section is Automatically calculated 
-
-{
-    "info_section": {
-        "table_id": "0xfc",
-        "section_syntax_indicator": false,
-        "private": false,
-        "sap_type": "0x3",
-        "sap_details": "No Sap Type",
-        "section_length": 22,
-        "protocol_version": 0,
-        "encrypted_packet": false,
-        "encryption_algorithm": 0,
-        "pts_adjustment": 0.0,
-        "cw_index": "0x0",
-        "tier": "0xfff",
-        "splice_command_length": 5,
-        "splice_command_type": 6,
-        "descriptor_loop_length": 0,
-        "crc": "0xc210861f"
-    },
-    "command": {
-        "command_type": 6,
-        "name": "Time Signal",
-        "time_specified_flag": true,
-        "pts_time": 20.00435,
-        "command_length": 5
-    },
-    "descriptors": []
-}
->>>> 
-
-
 ```
 
