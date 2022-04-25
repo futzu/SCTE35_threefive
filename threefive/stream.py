@@ -431,7 +431,7 @@ class Stream:
         if prgm not in self._prgm_pts:
             return False
         return self.as_90k(self._prgm_pts[prgm])
-    
+
     def _parse(self, pkt):
         cue = False
         pid = (pkt[1] & 0x01F) << 8 | pkt[2]

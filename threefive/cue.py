@@ -58,7 +58,6 @@ class Cue(SCTE35Base):
     def __repr__(self):
         return str(self.__dict__)
 
-
     def decode(self):
         """
         Cue.decode() parses for SCTE35 data
