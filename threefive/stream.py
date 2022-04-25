@@ -343,9 +343,7 @@ class Stream:
             pts |= (payload[11] >> 1) << 15
             pts |= payload[12] << 7
             pts |= payload[13] >> 1
-            prgm = 1
-            if pid in self._pid_prgm:
-                prgm = self._pid_prgm[pid]
+            prgm = self.pid2prgm(pid)
             self._prgm_pts[prgm] = pts
             if prgm not in self.start:
                 self.start[prgm] = pts
@@ -362,9 +360,7 @@ class Stream:
                 pcr |= pkt[8] << 9
                 pcr |= pkt[9] << 1
                 pcr |= pkt[10] >> 7
-                prgm = 1
-                if pid in self._pid_prgm:
-                    prgm = self._pid_prgm[pid]
+                prgm = self.pid2prgm(pid)
                 self._prgm_pcr[prgm] = pcr
 
     def _parse_cc(self, pkt, pid):
@@ -416,15 +412,26 @@ class Stream:
         """
         return round((ticks / 90000.0), 6)
 
-    def pid2pts(self, pid):
+    def pid2prgm(self, pid):
         """
-        pid2pts give a pid, returns the pts time
+        pid2prgm takes a pid,
+        returns the program
         """
+        prgm = 1
         if pid in self._pid_prgm:
             prgm = self._pid_prgm[pid]
-            return self.as_90k(self._prgm_pts[prgm])
-        return None
+        return prgm
 
+    def pid2pts(self, pid):
+        """
+        pid2pts takes a pid
+        returns the current pts
+        """
+        prgm = self.pid2prgm(pid)
+        if prgm not in self._prgm_pts:
+            return False
+        return self.as_90k(self._prgm_pts[prgm])
+    
     def _parse(self, pkt):
         cue = False
         pid = (pkt[1] & 0x01F) << 8 | pkt[2]

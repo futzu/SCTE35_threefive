@@ -55,6 +55,10 @@ class Cue(SCTE35Base):
         self.descriptors = []
         self.packet_data = packet_data
 
+    def __repr__(self):
+        return str(self.__dict__)
+
+
     def decode(self):
         """
         Cue.decode() parses for SCTE35 data

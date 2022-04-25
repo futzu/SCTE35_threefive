@@ -8,7 +8,6 @@ fmt:
 	black threefive/
 	black examples/
 	black setup.py
-	gofmt -s -w go/
 
 commit: fmt
 	git pull

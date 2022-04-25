@@ -86,7 +86,7 @@ class Segment(Stream):
 
     def add_cue(self, cue):
         """
-        add_cue is passed to a Stream instance
+        add_cue is called  by a segment instance
         to collect SCTE35 cues.
         """
         self.cues.append(cue)
