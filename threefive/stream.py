@@ -113,11 +113,12 @@ class Stream:
         strm.decode()
 
         """
-        if isinstance(tsdata, str):
-            self._tsdata = reader(tsdata)
-        else:
-            self._tsdata = tsdata
+        #  if isinstance(tsdata, str):
+        self._tsdata = reader(tsdata)
+        # else:
+        #   self._tsdata = tsdata
         self.show_null = show_null
+        self.show_pcr = False
         self.chk_cc = False
         self.start = {}
         self.info = None
@@ -145,12 +146,12 @@ class Stream:
                 sys.stderr.buffer.write(
                     b"\nNo Stream Found\n",
                 )
-                return False
             if one[0] == self._SYNC_BYTE:
                 tail = self._tsdata.read(self._PACKET_SIZE - 1)
                 if tail:
                     self._parse(one + tail)
                     return True
+            return False
 
     def decode(self, func=show_cue):
         """
@@ -353,15 +354,16 @@ class Stream:
         parse pcr and store by program key
         in the dict Stream._pid_pcr
         """
-        if pkt[3] & 0x20:
-            if pkt[5] & 0x10:
-                pcr = pkt[6] << 25
-                pcr |= pkt[7] << 17
-                pcr |= pkt[8] << 9
-                pcr |= pkt[9] << 1
-                pcr |= pkt[10] >> 7
-                prgm = self.pid2prgm(pid)
-                self._prgm_pcr[prgm] = pcr
+        if self.show_pcr:
+            if pkt[3] & 0x20:
+                if pkt[5] & 0x10:
+                    pcr = pkt[6] << 25
+                    pcr |= pkt[7] << 17
+                    pcr |= pkt[8] << 9
+                    pcr |= pkt[9] << 1
+                    pcr |= pkt[10] >> 7
+                    prgm = self.pid2prgm(pid)
+                    self._prgm_pcr[prgm] = pcr
 
     def _parse_cc(self, pkt, pid):
 
@@ -387,7 +389,6 @@ class Stream:
         PAT, PMT,  and SDT tables
         based on pid of the pkt
         """
-
         pay = self._parse_payload(pkt)
         if not self._chk_last(pay, pid):
             if pid == self._PAT_PID:
@@ -535,7 +536,7 @@ class Stream:
         pay = self._chk_partial(pay, self._PAT_PID, b"\x00")
         seclen = self._parse_length(pay[2], pay[3])
         if not self._section_done(pay, self._PAT_PID, seclen):
-            return False
+            return
         seclen -= 5  # pay bytes 4,5,6,7,8
         idx = 9
         chunk_size = 4

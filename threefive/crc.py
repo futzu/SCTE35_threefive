@@ -30,19 +30,19 @@ CHECK = 0x0376E6E7
 
 
 def _crc32(data, crc, table):
-    mv = memoryview(data)
+    emvee = memoryview(data)
     crc = crc & 0xFFFFFFFF
-    for x in mv.tobytes():
-        crc = table[x ^ ((crc >> 24) & 0xFF)] ^ ((crc << 8) & 0xFFFFFF00)
+    for ex in emvee.tobytes():
+        crc = table[ex ^ ((crc >> 24) & 0xFF)] ^ ((crc << 8) & 0xFFFFFF00)
     return crc
 
 
-def _bitrev(x, n):
-    y = 0
-    for i in range(n):
-        y = (y << 1) | (x & 1)
-        x = x >> 1
-    return y
+def _bitrev(ex, en):
+    why = 0
+    for i in range(en):
+        why = (why << 1) | (ex & 1)
+        ex = ex >> 1
+    return why
 
 
 def _bytecrc(crc, poly, n):

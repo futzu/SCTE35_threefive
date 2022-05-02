@@ -4,6 +4,7 @@ The reader function
 
 import socket
 import struct
+import sys
 import urllib.request
 
 
@@ -33,6 +34,9 @@ def reader(uri):
 
 
     """
+    # read from stdin
+    if uri in [None, sys.stdin.buffer]:
+        return sys.stdin.buffer
     # Multicast
     if uri.startswith("udp://@"):
         return open_mcast(uri)
@@ -69,7 +73,7 @@ def _mk_mcast_sock(mcast_grp, mcast_port, all_grps=True):
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 5000000)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 5400000)
     # big fat buf
 
     if all_grps:
