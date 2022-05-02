@@ -13,7 +13,7 @@
   * [Parses SCTE-35 from MPEGTS Streams with Direct Multicast Support ](#mpegts-multicast).
     
   
-  * [`HLS?`   `Custom Upid Handling?`     `Frame Accurate Preroll timings?`... Yes.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
+  * [Support for `Multicast`,`Custom Upid Handling`,`Frame Accurate Preroll timings`, and `a lot more`, is baked in.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
    
     
 
