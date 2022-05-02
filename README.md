@@ -7,13 +7,14 @@
      [Commands](https://github.com/futzu/threefive/blob/master/threefive/commands.py) and
      [Descriptors](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py) and
      [Upids](https://github.com/futzu/threefive/blob/master/threefive/upid.py).
+     ---
 * [Parses SCTE-35 from MPEGTS Streams with Direct Multicast Support ](#mpegts-multicast).
 * [`HLS?`   `Custom Upid Handling?`     `Frame Accurate Preroll timings?`... Yes.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
+---
 
-
-* [__x9k3__](https://github.com/futzu/x9k3) is powered by threefive. 
-* [__mudpie__](https://github.com/futzu/mudpie) works great with threefive
-
+*   [`The SCTE35 aware HLS segmenter`, __x9k3__](https://github.com/futzu/x9k3) is powered by __threefive__. 
+* __threefive__ works with [__gumd__ `multicast streams`.](https://github.com/futzu/gumd)
+---
 
 * [A threefive SCTE-35 Cue](https://github.com/futzu/threefive/blob/master/cue.md).What's included.
 
@@ -37,10 +38,11 @@
 * [__Super Cool Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 
 * [Diagram](https://github.com/futzu/threefive/blob/master/cue.md)  of a threefive SCTE-35 Cue
-* [`Issues` and `Bugs` and `Feature` Requests](#issues-and-bugs-and-feature-requests)
- *No forms man, just open an issue.*  
-* [Why Plan9 Matters](http://9p.io/sources/contrib/uriel/mirror/9book.pdf)
 
+
+---
+* [Why Plan9 Matters](http://9p.io/sources/contrib/uriel/mirror/9book.pdf)
+---
 
 ### Requirements
 * threefive requires [pypy3](https://pypy.org) or python 3.6+ 
