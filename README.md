@@ -1,4 +1,4 @@
- `threefive is used by Four of the Top Five Broadcasters. I swear.` ~Adrian
+ `threefive is used by four of the top five U.S. broadcasters. I swear.` ~Adrian
 
 
 # A SCTE-35 parser lib in python3. 
