@@ -49,11 +49,6 @@
 
 * [Diagram](https://github.com/futzu/threefive/blob/master/cue.md)  of a threefive SCTE-35 Cue
 
-
----
-* [Why Plan9 Matters](http://9p.io/sources/contrib/uriel/mirror/9book.pdf)
----
-
 ### Requirements
 * threefive requires [pypy3](https://pypy.org) or python 3.6+ 
 * __optional dependencies:__
@@ -142,6 +137,9 @@ strm.decode()
 ````
 * Need a multicast test server? Try [mudpie](https://github.com/futzu/mudpie).
 ___
+---
+* [Why Plan9 Matters](http://9p.io/sources/contrib/uriel/mirror/9book.pdf)
+---
 
 
 ###  Cue Class
@@ -321,6 +319,15 @@ if __name__ == '__main__':
 ```
 
 ___
+#### Stream.decode2(func = show_cue)
+* On my Samsung Chromebook, __pypy3 and decode2 can parse over 1.1 GB/sec__.
+
+ ```smalltalk
+ |  decode2(self, func=show_cue)
+ |  Same as Stream.decode, but optimized for pypy3. 
+ |
+ ```
+ 
 
 #### Stream.decode_next()
 
@@ -433,13 +440,6 @@ Program: 1050
                 Pid: 1055[0x41f]        Type: 0x86 SCTE35 Data
  
 ```
-#### Stream.decode_fu(func = show_cue)
-
- ```js
- |  decode_fu(self, func=show_cue)
- |      Stream.decode_fu decodes
- |      2016 packets at a time.
- ```
 
 #### Stream.dump(fname)
  ```js
@@ -458,5 +458,29 @@ Program: 1050
 
 ___
 
+* [__RFC 4122__ aka UUID](https://tools.ietf.org/html/rfc4122.html)
+> A lot of folks have been searching this repo for uuid, I'm not sure if they are looking for uuid in a upid, 
+> or a randomly generated uuid for an HLS tag or something else.
+> Heres what I know about it. 
+
+```smalltalk
+>>> from uuid import uuid4, UUID
+
+# generate a random uuid
+>>> uu= uuid4()
+>>> uu
+UUID('7ae2e37e-3018-4c4e-8a10-f69d075828b4')
+
+# uuid as bytes
+>>> uu.bytes
+b'z\xe2\xe3~0\x18LN\x8a\x10\xf6\x9d\x07X(\xb4'
+
+# bytes to uuid
+>>> UUID(bytes=uu.bytes)
+UUID('7ae2e37e-3018-4c4e-8a10-f69d075828b4')
+>>> 
+
+```
+[__python3 uuid__](https://docs.python.org/3/library/uuid.html#module-uuid)
 
 
