@@ -7,9 +7,9 @@ from .cue import Cue
 from .packetdata import PacketData
 from .reader import reader
 
-"""
-stream types for program streams.
-"""
+
+# stream types for program streams.
+
 streamtype_map = {
     "0x2": "MP2 Video",
     "0x3": "MP2 Audio",
@@ -113,10 +113,7 @@ class Stream:
         strm.decode()
 
         """
-        #  if isinstance(tsdata, str):
         self._tsdata = reader(tsdata)
-        # else:
-        #   self._tsdata = tsdata
         self.show_null = show_null
         self.show_pcr = False
         self.chk_cc = False
@@ -159,20 +156,36 @@ class Stream:
         func can be set to a custom function that accepts
         a threefive.Cue instance as it's only argument.
         """
-        if self._find_start():
-            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
+        if not self._find_start():
+            return
+        with self._tsdata as data:
+            for pkt in iter(partial(data.read, self._PACKET_SIZE), b""):
                 cue = self._parse(pkt)
                 if cue:
-                    if not func:
+                    if func:
+                        func(cue)
+                    else:
                         return cue
-                    func(cue)
-        self._tsdata.close()
 
-    def _mk_pkts(self, chunk):
-        return [
-            self._parse(chunk[i : i + self._PACKET_SIZE])
-            for i in range(0, len(chunk), self._PACKET_SIZE)
-        ]
+    def decode2(self, func=show_cue):
+        """
+        Stream.decode2 reads self.tsdata to find SCTE35 packets.
+        func can be set to a custom function that accepts
+        a threefive.Cue instance as it's only argument.
+
+        Stream.decode2 is super fast with pypy3
+
+        """
+        if not self._find_start():
+            return
+        with self._tsdata as data:
+            while data:
+                pkt = data.read(self._PACKET_SIZE)
+                if not pkt:
+                    break
+                cue = self._parse(pkt)
+                if cue:
+                    func(cue)
 
     def dump(self, fname):
         """
@@ -180,26 +193,11 @@ class Stream:
         Useful for live streams.
         """
         if not self._find_start():
-            return False
+            return
         with open(fname, "wb") as dumpfile:
-            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE * 30000), b""):
-                dumpfile.write(pkt)
-
-    def decode_fu(self, func=show_cue):
-        """
-        Stream.decode_fu decodes
-        num_pkts packets at a time.
-        """
-        num_pkts = 1016
-        if not self._find_start():
-            return False
-        for chunk in iter(
-            partial(self._tsdata.read, (self._PACKET_SIZE * num_pkts)), b""
-        ):
-            _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
-
-            del _
-        self._tsdata.close()
+            with self._tsdata as data:
+                for pkt in iter(partial(data.read, self._PACKET_SIZE * 30000), b""):
+                    dumpfile.write(pkt)
 
     def decode_next(self):
         """
@@ -226,7 +224,11 @@ class Stream:
         SCTE-35 cues are printed to stderr.
         """
         if self._find_start():
-            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
+            with self._tsdata as data:
+                while data:
+                    pkt = data.read(self._PACKET_SIZE)
+                    if not pkt:
+                        break
                 cue = self._parse(pkt)
                 if cue:
                     func(cue)
@@ -247,7 +249,7 @@ class Stream:
                     func(cue)
                 else:
                     sys.stdout.buffer.write(pkt)
-        self._tsdata.close()
+            self._tsdata.close()
 
     def show(self):
         """
@@ -269,7 +271,7 @@ class Stream:
         displays streams that will be
         parsed for SCTE-35.
         """
-        #     self.decode(func=no_op)
+        self.decode(func=no_op)
         if len(self.start.values()) > 0:
             return self.start.popitem()[1]
         return False
@@ -366,7 +368,6 @@ class Stream:
                     self._prgm_pcr[prgm] = pcr
 
     def _parse_cc(self, pkt, pid):
-
         last_cc = None
         c_c = pkt[3] & 0xF
         if pid in self._pid_cc:
@@ -375,10 +376,9 @@ class Stream:
                 print(f" pid: {hex(pid)} last cc: {last_cc} cc: {c_c}")
         self._pid_cc[pid] = c_c
 
-    @staticmethod
-    def _parse_payload(pkt):
+    def _parse_payload(self,pkt):
         head_size = 4
-        if pkt[3] & 0x20:
+        if self._afc_flag(pkt):
             afl = pkt[4]
             head_size += afl + 1  # +1 for afl byte
         return pkt[head_size:]
@@ -435,14 +435,14 @@ class Stream:
 
     def _parse(self, pkt):
         cue = False
-        pid = (pkt[1] & 0x01F) << 8 | pkt[2]
+        pid = self._parse_pid(pkt[1],pkt[2])
         if pid in self._pids["tables"]:
             self._parse_tables(pkt, pid)
-        if pid in self._pids["pcr"]:
-            if self.chk_cc:
+        if self.chk_cc:
+            if pid in self._pids["pcr"]:
                 self._parse_cc(pkt, pid)
-            self._parse_pcr(pkt, pid)
-        if pkt[1] & 0x40:
+         # self._parse_pcr(pkt, pid)
+        if self._pusi_flag(pkt):
             self._parse_pts(pkt, pid)
         if pid in self._pids["scte35"]:
             cue = self._parse_scte35(pkt, pid)
@@ -488,7 +488,7 @@ class Stream:
         seclen = self._parse_length(pay[1], pay[2])
         if not self._section_done(pay, pid, seclen):
             return False
-        pay = pay[: seclen + 3]
+        pay = pay[:seclen + 3]
         cue = self._parse_cue(pay, pid)
         return cue
 
@@ -555,8 +555,6 @@ class Stream:
         parse program maps for streams
         """
         pay = self._chk_partial(pay, pid, self._PMT_TID)
-        if not pay:
-            return False
         seclen = self._parse_length(pay[1], pay[2])
         if not self._section_done(pay, pid, seclen):
             return False
