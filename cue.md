@@ -1,7 +1,7 @@
 ### A threefive SCTE-35 Cue
 
 > __1__ ```info_section``` (__Required__)
-```js
+```smalltalk
     "info_section": {
         "table_id": "0xfc",
         "section_syntax_indicator": false,
@@ -12,7 +12,7 @@
         "protocol_version": 0,
         "encrypted_packet": false,
         "encryption_algorithm": 0,
-        "pts_adjustment_ticks": 0,            <-- New! 
+        "pts_adjustment_ticks": 0,           
         "pts_adjustment": 0.0,
         "cw_index": "0xff",
         "tier": "0xfff",
@@ -24,14 +24,14 @@
 
 ```
 > __1__ ```command``` (__Required__)
-```js
+```smalltalk
     "command": {
         "command_length": 15,
         "command_type": 5,
         "name": "Splice Insert",
         "time_specified_flag": true,
         "pts_time": 23683.480033,
-        "pts_ticks": 2131513203,                <-- New!
+        "pts_ticks": 2131513203,               
         "splice_event_id": 5690,
         "splice_event_cancel_indicator": false,
         "out_of_network_indicator": true,
@@ -46,7 +46,7 @@
 ```
 
 > __0 or more__ ```descriptors``` (__Optional__)
-```go
+```smalltalk
      "descriptors": [
         {
             "tag": 2,
@@ -100,13 +100,11 @@
 
  ```
  > ```packet_data``` (__Optional__)
- ```js
+ ```smalltalk
     "packet_data": {
         "pid": "0x40b",
         "program": 1030,
-        "pcr_ticks": 8534428819,               <-- New!
-        "pcr": 94826.986878,
-        "pts_ticks": 2131027203,               <-- New!
+        "pts_ticks": 2131027203,             
         "pts": 23678.080033
     }
 
