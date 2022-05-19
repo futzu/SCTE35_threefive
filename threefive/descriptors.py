@@ -162,7 +162,7 @@ class DtmfDescriptor(SpliceDescriptor):
     Table 18 -  DTMF_descriptor()
     """
 
-    def __init__(self, bites):
+    def __init__(self, bites=None):
         super().__init__(bites)
         self.preroll = None
         self.dtmf_count = None
@@ -198,7 +198,7 @@ class TimeDescriptor(SpliceDescriptor):
     Table 25 - time_descriptor()
     """
 
-    def __init__(self, bites):
+    def __init__(self, bites=None):
         super().__init__(bites)
         self.tai_seconds = None
         self.tai_ns = None
@@ -230,7 +230,7 @@ class SegmentationDescriptor(SpliceDescriptor):
     Table 19 - segmentation_descriptor()
     """
 
-    def __init__(self, bites):
+    def __init__(self, bites=None):
         super().__init__(bites)
         self.tag = 2
         self.name = "Segmentation Descriptor"

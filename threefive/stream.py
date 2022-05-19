@@ -118,7 +118,7 @@ class Stream:
         self.show_pcr = False
         self.chk_cc = False
         self.start = {}
-        self.info = None
+        self.info = False
         self.the_program = None
         self._pids = {"pcr": set(), "tables": set(), "pmt": set(), "scte35": set()}
         self._pids["tables"].add(self._PAT_PID)
@@ -187,18 +187,6 @@ class Stream:
                 if cue:
                     func(cue)
 
-    def dump(self, fname):
-        """
-        Stream.dump dumps all the packets to a file.
-        Useful for live streams.
-        """
-        if not self._find_start():
-            return
-        with open(fname, "wb") as dumpfile:
-            with self._tsdata as data:
-                for pkt in iter(partial(data.read, self._PACKET_SIZE * 30000), b""):
-                    dumpfile.write(pkt)
-
     def decode_next(self):
         """
         Stream.decode_next returns the next
@@ -233,22 +221,6 @@ class Stream:
                 if cue:
                     func(cue)
                 sys.stdout.buffer.write(pkt)
-            self._tsdata.close()
-
-    def strip_scte35(self, func=show_cue_stderr):
-        """
-        Stream.strip_scte35 works just like Stream.decode_proxy,
-        MPEGTS packets, ( Except the SCTE-35 packets) ,
-        are written to stdout after being parsed.
-        SCTE-35 cues are printed to stderr.
-        """
-        if self._find_start():
-            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
-                cue = self._parse(pkt)
-                if cue:
-                    func(cue)
-                else:
-                    sys.stdout.buffer.write(pkt)
             self._tsdata.close()
 
     def show(self):
@@ -376,7 +348,7 @@ class Stream:
                 print(f" pid: {hex(pid)} last cc: {last_cc} cc: {c_c}")
         self._pid_cc[pid] = c_c
 
-    def _parse_payload(self,pkt):
+    def _parse_payload(self, pkt):
         head_size = 4
         if self._afc_flag(pkt):
             afl = pkt[4]
@@ -435,13 +407,14 @@ class Stream:
 
     def _parse(self, pkt):
         cue = False
-        pid = self._parse_pid(pkt[1],pkt[2])
+        pid = self._parse_pid(pkt[1], pkt[2])
         if pid in self._pids["tables"]:
             self._parse_tables(pkt, pid)
-        if self.chk_cc:
-            if pid in self._pids["pcr"]:
+
+        if pid in self._pids["pcr"]:
+            if self.chk_cc:
                 self._parse_cc(pkt, pid)
-         # self._parse_pcr(pkt, pid)
+            self._parse_pcr(pkt, pid)
         if self._pusi_flag(pkt):
             self._parse_pts(pkt, pid)
         if pid in self._pids["scte35"]:
@@ -488,7 +461,7 @@ class Stream:
         seclen = self._parse_length(pay[1], pay[2])
         if not self._section_done(pay, pid, seclen):
             return False
-        pay = pay[:seclen + 3]
+        pay = pay[: seclen + 3]
         cue = self._parse_cue(pay, pid)
         return cue
 
@@ -508,6 +481,7 @@ class Stream:
             idx += 3
             dloop_len = self._parse_length(pay[idx], pay[idx + 1])
             idx += 2
+            self.descriptors(pay[idx : idx + dloop_len])
             i = 0
             while i < dloop_len:
                 if pay[idx] == 0x48:
@@ -550,6 +524,19 @@ class Stream:
             seclen -= chunk_size
             idx += chunk_size
 
+    @staticmethod
+    def descriptors(bites):
+        idx = 0
+        lb = len(bites)
+        while idx < lb - 2:
+            tag = bites[idx]
+            idx += 1
+            length = bites[idx]
+            idx += 1
+            de_bites = bites[idx : idx + length]
+            idx += length
+        #  print(f"Tag: {tag} Length {length} Bites: {de_bites}")
+
     def _program_map_table(self, pay, pid):
         """
         parse program maps for streams
@@ -567,8 +554,9 @@ class Stream:
                 self._prgm[program_number] = ProgramInfo(pid=pid, pcr_pid=pcr_pid)
         self._pids["pcr"].add(pcr_pid)
         self._pid_prgm[pcr_pid] = program_number
-        proginfolen = self._parse_length(pay[10], pay[11])
+        pil = proginfolen = self._parse_length(pay[10], pay[11])
         idx = 12
+        self.descriptors(pay[idx : idx + proginfolen])
         idx += proginfolen
         si_len = seclen - 9
         si_len -= proginfolen
@@ -589,6 +577,7 @@ class Stream:
                 pinfo = self._prgm[program_number]
                 pinfo.streams[pid] = stream_type
             idx += chunk_size
+            self.descriptors(pay[idx : idx + ei_len])
             idx += ei_len
             self._pid_prgm[pid] = program_number
             self._chk_pid_stream_type(pid, stream_type)
