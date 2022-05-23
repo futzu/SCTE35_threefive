@@ -508,6 +508,8 @@ class Stream:
         for program to pmt_pid mappings.
         """
         pay = self._chk_partial(pay, self._PAT_PID, b"\x00")
+        if not pay:
+            return False
         seclen = self._parse_length(pay[2], pay[3])
         if not self._section_done(pay, self._PAT_PID, seclen):
             return
@@ -542,6 +544,8 @@ class Stream:
         parse program maps for streams
         """
         pay = self._chk_partial(pay, pid, self._PMT_TID)
+        if not pay:
+            return False
         seclen = self._parse_length(pay[1], pay[2])
         if not self._section_done(pay, pid, seclen):
             return False
