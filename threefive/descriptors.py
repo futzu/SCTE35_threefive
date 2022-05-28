@@ -140,11 +140,15 @@ class AvailDescriptor(SpliceDescriptor):
     Table 17 -  avail_descriptor()
     """
 
+    def __init__(self, bites=None):
+        super().__init__(bites)
+        self.name = "Avail Descriptor"
+        self.tag = 0
+
     def decode(self):
         """
         decode SCTE35 Avail Descriptor
         """
-        self.name = "Avail Descriptor"
         bitbin = BitBin(self.bites)
         self.provider_avail_id = bitbin.as_int(32)
 
@@ -164,6 +168,7 @@ class DtmfDescriptor(SpliceDescriptor):
 
     def __init__(self, bites=None):
         super().__init__(bites)
+        self.name = "DTMF Descriptor"
         self.preroll = None
         self.dtmf_count = None
         self.dtmf_chars = None
@@ -172,7 +177,6 @@ class DtmfDescriptor(SpliceDescriptor):
         """
         decode SCTE35 Dtmf Descriptor
         """
-        self.name = "DTMF Descriptor"
         self.preroll = self.bites[0]
         self.dtmf_count = self.bites[1] >> 5
         self.bites = self.bites[2:]
@@ -200,6 +204,8 @@ class TimeDescriptor(SpliceDescriptor):
 
     def __init__(self, bites=None):
         super().__init__(bites)
+        self.tag = 3
+        self.name = "Time Descriptor"
         self.tai_seconds = None
         self.tai_ns = None
         self.utc_offset = None
@@ -208,7 +214,6 @@ class TimeDescriptor(SpliceDescriptor):
         """
         decode SCTE35 Time Descriptor
         """
-        self.name = "Time Descriptor"
         bitbin = BitBin(self.bites)
         self.tai_seconds = bitbin.as_int(48)
         self.tai_ns = bitbin.as_int(32)

@@ -90,7 +90,8 @@ class Cue(SCTE35Base):
         dll = len(dscptr_bites)
         self.info_section.descriptor_loop_length = dll
         if not self.command:
-            raise Exception("A splice command is required")
+            err_mesg = "\033[7mA splice command is required\033[27m"
+            raise ValueError(err_mesg)
         cmd_bites = self.command.encode()
         cmdl = self.command.command_length = len(cmd_bites)
         self.info_section.splice_command_length = cmdl
