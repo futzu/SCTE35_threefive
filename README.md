@@ -5,34 +5,12 @@
 
 # A SCTE-35 parser lib in python3. 
 
-
-   * Supports All __2020 SCTE-35__
-     [Commands](https://github.com/futzu/threefive/blob/master/threefive/commands.py) and
-     [Descriptors](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py) and
-     [Upids](https://github.com/futzu/threefive/blob/master/threefive/upid.py).
-     
-     
-  * [Parses SCTE-35 from MPEGTS Streams with Direct Multicast Support in 3 Lines ](#mpegts-multicast).
-
-  
-  * [Support for `Multicast`,`Custom Upid Handling`,`Frame Accurate Preroll timings`, and `a lot more`, is baked in.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
-   
-    
-
-* [A threefive SCTE-35 Cue](https://github.com/futzu/threefive/blob/master/cue.md). What's included.
-  
+ * [Parses SCTE-35 from MPEGTS Streams with Direct Multicast Support in 3 Lines ](#mpegts-multicast).
 
 * [`ffmpeg` and `SCTE35` and `Stream Type 0x6 bin data` and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
-* [`Encoding` too](https://github.com/futzu/scte35-threefive/blob/master/Encoding.md) with [`Examples`](https://github.com/futzu/scte35-threefive/blob/master/examples/encode)
 * [`Issues` and `Bugs` and `Feature Requests`](https://github.com/futzu/scte35-threefive/issues)
  *No forms man, just open an issue and tell me what you need.* 
-
-
-* [`The SCTE35 aware HLS segmenter`, __x9k3__](https://github.com/futzu/x9k3) is powered by __threefive__. 
-   
-   
-*  __threefive__ works with [__gumd__ `multicast streams`.](https://github.com/futzu/gumd)
 
 ---
 ### Welcome to the Show.
