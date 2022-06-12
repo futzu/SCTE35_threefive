@@ -110,7 +110,7 @@ import threefive
 strm = threefive.Stream('udp://@239.35.0.35:1234')
 strm.decode()
 ````
-* Need a multicast test server? Try [mudpie](https://github.com/futzu/mudpie).
+* Need a multicast test server? Try [gumd](https://github.com/futzu/gumd).
 ___
 ---
 * [Why Plan9 Matters](http://9p.io/sources/contrib/uriel/mirror/9book.pdf)
