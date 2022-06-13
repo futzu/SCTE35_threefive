@@ -167,6 +167,14 @@ class Stream:
                     else:
                         return cue
 
+    def decode_pcr(self, func=show_cue):
+        """
+        Stream.decode_pcr works just like
+        Stream.decode and also includes pcr timestamps.
+        """
+        self.show_pcr = True
+        self.decode(func)
+
     def decode2(self, func=show_cue):
         """
         Stream.decode2 reads self.tsdata to find SCTE35 packets.
