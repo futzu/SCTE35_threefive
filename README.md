@@ -1,42 +1,12 @@
+# A SCTE-35 parser lib in Python
+ * [Parse SCTE-35 from Multicast MPEGTS Streams in Three Lines. I Swear. ](#mpegts-multicast).
+
 ![image](https://user-images.githubusercontent.com/52701496/166727224-6d81c955-df98-4da1-bbfe-bb466c255eb8.png)
 
 
- `threefive is used by four of the top five U.S. broadcasters. I swear.` ~Adrian
-
-# A SCTE-35 parser lib in python3. 
-
-
-   * Supports All __2020 SCTE-35__
-     [Commands](https://github.com/futzu/threefive/blob/master/threefive/commands.py) and
-     [Descriptors](https://github.com/futzu/threefive/blob/master/threefive/descriptors.py) and
-     [Upids](https://github.com/futzu/threefive/blob/master/threefive/upid.py).
-     
-     
-  * [Parses SCTE-35 from MPEGTS Streams with Direct Multicast Support in 3 Lines ](#mpegts-multicast).
-
-  
-  * [Support for `Multicast`,`Custom Upid Handling`,`Frame Accurate Preroll timings`, and `a lot more`, is baked in.](https://github.com/futzu/SCTE35-threefive/tree/master/examples#threefive-examples)
-   
-    
-
-* [A threefive SCTE-35 Cue](https://github.com/futzu/threefive/blob/master/cue.md). What's included.
-  
-
-* [`ffmpeg` and `SCTE35` and `Stream Type 0x6 bin data` and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
-
-* [`Encoding` too](https://github.com/futzu/scte35-threefive/blob/master/Encoding.md) with [`Examples`](https://github.com/futzu/scte35-threefive/blob/master/examples/encode)
-* [`Issues` and `Bugs` and `Feature Requests`](https://github.com/futzu/scte35-threefive/issues)
- *No forms man, just open an issue and tell me what you need.* 
-
-
-* [`The SCTE35 aware HLS segmenter`, __x9k3__](https://github.com/futzu/x9k3) is powered by __threefive__. 
-   
-   
-*  __threefive__ works with [__gumd__ `multicast streams`.](https://github.com/futzu/gumd)
-
 ---
 ### Welcome to the Show.
-
+![image](https://user-images.githubusercontent.com/52701496/166299701-72ee908a-5053-45fc-a716-4b8ca4b1ef32.png)
 * [__Install threefive__](#install)
 * [Versions and Releases](#versions-and-releases)
 
@@ -46,6 +16,11 @@
 *  [threefive.__Stream__ Class](#stream-class)
      
 * [__Super Cool Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
+* [__ffmpeg__ and `SCTE35` and __Stream Type 0x6 bin data__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
+
+* [ __Issues and `Bugs and Feature Requests__ ](https://github.com/futzu/scte35-threefive/issues)
+ *No forms man, just open an issue and tell me what you need.* 
+
 
 * [Diagram](https://github.com/futzu/threefive/blob/master/cue.md)  of a threefive SCTE-35 Cue
 
@@ -135,7 +110,7 @@ import threefive
 strm = threefive.Stream('udp://@239.35.0.35:1234')
 strm.decode()
 ````
-* Need a multicast test server? Try [mudpie](https://github.com/futzu/mudpie).
+* Need a multicast test server? Try [gumd](https://github.com/futzu/gumd).
 ___
 ---
 * [Why Plan9 Matters](http://9p.io/sources/contrib/uriel/mirror/9book.pdf)
