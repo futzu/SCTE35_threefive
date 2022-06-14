@@ -1,5 +1,4 @@
 ### Up and Running in Less Than 7 Seconds.
-![image](https://user-images.githubusercontent.com/52701496/166727224-6d81c955-df98-4da1-bbfe-bb466c255eb8.png)
 
 #### Step One of Two
 
@@ -13,12 +12,21 @@ pip3 install threefive
 
 *  Estimated time to complete this step : 3.0 - 4.5 seconds 
 
-```sh
-python3 -c 'import threefive; threefive.decode("https://futzu.com/xaa.ts")' 
+```smalltalk
+a@fumatica:~$ pypy3
+Python 3.8.13 (7.3.9+dfsg-1, Apr 01 2022, 03:05:43)
+[PyPy 7.3.9 with GCC 11.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+ 
+ from threefive import Stream
+ strm = Stream("https://futzu.com/xaa.ts")`
+ strm.decode()
 ```
 
+
+
 * Ouput looks like this.
-```sh
+```lua
 {
     "info_section": {
         "table_id": "0xfc",
@@ -26,49 +34,53 @@ python3 -c 'import threefive; threefive.decode("https://futzu.com/xaa.ts")'
         "private": false,
         "sap_type": "0x3",
         "sap_details": "No Sap Type",
-        "section_length": 47,
+        "section_length": 42,
         "protocol_version": 0,
         "encrypted_packet": false,
         "encryption_algorithm": 0,
+        "pts_adjustment_ticks": 0,
         "pts_adjustment": 0.0,
-        "cw_index": "0x0",
+        "cw_index": "0xff",
         "tier": "0xfff",
-        "splice_command_length": 20,
+        "splice_command_length": 15,
         "splice_command_type": 5,
-        "descriptor_loop_length": 10
+        "descriptor_loop_length": 10,
+        "crc": "0x1ed64bdb"
     },
     "command": {
-        "command_length": 20,
+        "command_length": 15,
         "command_type": 5,
         "name": "Splice Insert",
         "time_specified_flag": true,
-        "pts_time": 89742.161689,
-        "break_auto_return": false,
-        "break_duration": 242.0,
-        "splice_event_id": 662,
+        "pts_time": 22026.133267,
+        "pts_time_ticks": 1982351994,
+        "splice_event_id": 18,
         "splice_event_cancel_indicator": false,
-        "out_of_network_indicator": true,
+        "out_of_network_indicator": false,
         "program_splice_flag": true,
-        "duration_flag": true,
+        "duration_flag": false,
         "splice_immediate_flag": false,
         "unique_program_id": 1,
-        "avail_num": 0,
-        "avail_expected": 0
+        "avail_num": 18,
+        "avail_expected": 255
     },
     "descriptors": [
         {
             "tag": 0,
             "descriptor_length": 8,
-            "identifier": "CUEI",
             "name": "Avail Descriptor",
-            "provider_avail_id": 0
+            "identifier": "CUEI",
+            "provider_avail_id": 18
         }
     ],
-    "crc": "0x10fa4d9e",
-    "pid": 309,
-    "program": 1,
-    "pts": 89730.289522
+    "packet_data": {
+        "pid": "0x41f",
+        "program": 1050,
+        "pts_ticks": 1981774196,
+        "pts": 22019.713289
+    }
 }
+
 
 
 ```
