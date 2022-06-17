@@ -57,9 +57,9 @@ pypy3 -mpip  install  threefive[all]
 
 ---
 
-#### Easy Examples
+### Easy Examples
 
-###### Base64
+##### Base64
 ```python3
 >>> from threefive import Cue
 >>> stuff = '/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
@@ -85,7 +85,7 @@ cue = threefive.Cue("0XFC301100000000000000FFFFFF0000004F253396")
 cue.decode()
 cue.show()
 ```
-#### Mpegts Multicast
+##### Mpegts Multicast
 * On my Debian [Sid](https://www.debian.org/releases/sid/) laptop I set the following, 
  
 ```smalltalk
@@ -111,7 +111,7 @@ strm.decode()
 ___
 
 
-###  Cue Class
+##  Cue Class
 
    *  src [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
@@ -158,12 +158,12 @@ class Cue(threefive.base.SCTE35Base)
  |      data may be packet bites or encoded string
  |      packet_data is a instance passed from a Stream instance
 ```
-#### Cue.decode()
+### Cue.decode()
 ```js
  |  decode(self)
  |      Cue.decode() parses for SCTE35 data
 ```
-#### Cue.get()
+### Cue.get()
 ```js
  |  get(self)
  |      Cue.get returns the SCTE-35 Cue
@@ -184,7 +184,7 @@ True
 'command': {'command_length': None, 'command_type': 0, 'name': 'Splice Null'},
 'descriptors': [], 'packet_data': None}
 ```
-##### Cue.get() omits cue.bites and empty values
+* Cue.get() omits cue.bites and empty values
 ```
 >>> cue.get()
 {'info_section': {'table_id': '0xfc', 'section_syntax_indicator': False,'private': False, 'sap_type': '0x3', 
@@ -197,32 +197,32 @@ True
 
 
 
-##### Cue.get_descriptors()
+### Cue.get_descriptors()
 
 ```js
  |  get_descriptors(self)
  |      Cue.get_descriptors returns a list of
  |      SCTE 35 splice descriptors as dicts.
 ```
-##### Cue.get_json()
+### Cue.get_json()
 ```js 
  |  get_json(self)
  |      Cue.get_json returns the Cue instance
  |      data in json.
 ```
-##### Cue.show()
+### Cue.show()
 ```js  
  |  show(self)
  |      Cue.show prints the Cue as JSON
 ```
-##### Cue.to_stderr()
+### Cue.to_stderr()
 ```js 
  |  to_stderr(self)
  |      Cue.to_stderr prints the Cue
 ```
 ___
 
-###  __Stream__ Class
+##  __Stream__ Class
   * src [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
   * The threefive.__Stream__ class parses __SCTE35__ from __Mpegts__.
   * Supports:
@@ -251,7 +251,7 @@ class Stream(builtins.object)
  |      strm.decode()
  ```
 
-##### Stream.decode(func=show_cue)
+### Stream.decode(func=show_cue)
  ```js
  |  decode(self, func=show_cue)
  |      Stream.decode reads self.tsdata to find SCTE35 packets.
@@ -290,7 +290,7 @@ if __name__ == '__main__':
 ```
 
 ___
-##### Stream.decode2(func = show_cue)
+### Stream.decode2(func = show_cue)
 
  ```smalltalk
  |  decode2(self, func=show_cue)
@@ -299,7 +299,7 @@ ___
  ```
  
 
-##### Stream.decode_next()
+### Stream.decode_next()
 
  ```js
  |  decode_next(self)
@@ -328,7 +328,7 @@ if __name__ == "__main__":
 
 ```
 
-##### Stream.decode_plus(func = show_cue)
+### Stream.decode_plus(func = show_cue)
 ```js
 ___
  |  decode_plus(self, func=<function show_cue at 0x00007f25d50f6980>)
@@ -337,7 +337,7 @@ ___
 
 ```
 
-##### Stream.decode_program(the_program, func = show_cue)
+### Stream.decode_program(the_program, func = show_cue)
 
  ```js
  |  decode_program(self, the_program, func=show_cue)
@@ -352,7 +352,7 @@ threefive.Stream('35.ts').decode_program(1)
 ___
 
 
-##### Stream.decode_proxy(func = show_cue)
+### Stream.decode_proxy(func = show_cue)
 
 *  Writes all packets to sys.stdout.
 
@@ -378,7 +378,7 @@ $ python3 proxy.py | mplayer -
 ```
 ___
 
-##### Stream.show()
+### Stream.show()
 
   ```js
  |  show(self)
@@ -413,12 +413,12 @@ Program: 1050
  
 ```
 
-##### Stream.dump(fname)
+### Stream.dump(fname)
  ```js
  |  dump(self, fname)
  |      Stream.dump dumps all the packets to a file (fname).
  ```
-##### Stream.strip_scte35(func=show_cue_stderr)
+### Stream.strip_scte35(func=show_cue_stderr)
  
  ```js
  |  strip_scte35(self, func=show_cue_stderr)
