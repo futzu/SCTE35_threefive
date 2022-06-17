@@ -2,6 +2,13 @@
  * [Parse SCTE-35 from Multicast MPEGTS Streams in Three Lines. I Swear. ](#mpegts-multicast).
 
 
+### Heads Up.
+* Please upgrade to 2.3.33 , I fixed a weird bug in the threefive.Stream class.
+```lua
+python3 -mpip install --upgrade threefive
+
+pypy3 -mpip install --upgrade threefive
+```
 
 ---
 ### Welcome to the Show.
