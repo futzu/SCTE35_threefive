@@ -290,14 +290,6 @@ if __name__ == '__main__':
 ```
 
 ___
-### Stream.decode2(func = show_cue)
-
- ```smalltalk
- |  decode2(self, func=show_cue)
- |  Same as Stream.decode, but optimized for pypy3. 
- |
- ```
- 
 
 ### Stream.decode_next()
 
@@ -328,14 +320,6 @@ if __name__ == "__main__":
 
 ```
 
-### Stream.decode_plus(func = show_cue)
-```js
-___
- |  decode_plus(self, func=<function show_cue at 0x00007f25d50f6980>)
- |      Stream.decode_plus is Stream.decode plus
- |      continuity counter checking and pcr timestamps.
-
-```
 
 ### Stream.decode_program(the_program, func = show_cue)
 
