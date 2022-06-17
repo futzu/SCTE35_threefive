@@ -240,8 +240,8 @@ class Stream:
 
     def show(self):
         """
-        displays streams that will be
-        parsed for SCTE-35.
+        
+        show programs and streams and info for mpegts
         """
         self.info = True
         if self._find_start():
