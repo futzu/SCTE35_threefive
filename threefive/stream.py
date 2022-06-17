@@ -337,25 +337,6 @@ class Stream:
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
-        pay = self._parse_payload(pkt)
-        if self._pts_flag(pay):
-            pts = ((pay[9] >> 1) & 7) << 30
-            pts |= pay[10] << 22
-            pts |= (pay[11] >> 1) << 15
-            pts |= pay[12] << 7
-            pts |= pay[13] >> 1
-            prgm = 1
-            if pid in self._pid_prgm:
-                prgm = self._pid_prgm[pid]
-            self._prgm_pts[prgm] = pts
-            if prgm not in self.start:
-                self.start[prgm] = pts
-
-    def _parse_pts(self, pkt, pid):
-        """
-        parse pts and store by program key
-        in the dict Stream._pid_pts
-        """
         payload = self._parse_payload(pkt)
         if len(payload) < 14:
             return
