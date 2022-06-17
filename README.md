@@ -95,9 +95,9 @@ ip link set <dev> multicast on allmulticast on
 
 ethtool  -G <dev> rx 4096
 
-sysctl -w net.core.rmem_default=50000000
+sysctl -w net.core.rmem_default=5000000
 
-sysctl -w net.core.rmem_max=150000000
+sysctl -w net.core.rmem_max=15000000
 
 ```
 
@@ -108,11 +108,7 @@ import threefive
 strm = threefive.Stream('udp://@239.35.0.35:1234')
 strm.decode()
 ````
-* Need a multicast test server? Try [gumd](https://github.com/futzu/gumd).
 ___
----
-* [Why Plan9 Matters](http://9p.io/sources/contrib/uriel/mirror/9book.pdf)
----
 
 
 ###  Cue Class
@@ -187,9 +183,9 @@ True
 'splice_command_length': 4095, 'splice_command_type': 0, 'descriptor_loop_length': 0, 'crc': '0x4f253396'},
 'command': {'command_length': None, 'command_type': 0, 'name': 'Splice Null'},
 'descriptors': [], 'packet_data': None}
-
-### Cue.get() omits cue.bites and empty values
-
+```
+##### Cue.get() omits cue.bites and empty values
+```
 >>> cue.get()
 {'info_section': {'table_id': '0xfc', 'section_syntax_indicator': False,'private': False, 'sap_type': '0x3', 
 'sap_details': 'No Sap Type', 'section_length': 17, 'protocol_version': 0, 'encrypted_packet': False,
@@ -199,25 +195,27 @@ True
 'descriptors': []}
 ```
 
-```
-#### Cue.get_descriptors()
+
+
+##### Cue.get_descriptors()
+
 ```js
  |  get_descriptors(self)
  |      Cue.get_descriptors returns a list of
  |      SCTE 35 splice descriptors as dicts.
 ```
-#### Cue.get_json()
+##### Cue.get_json()
 ```js 
  |  get_json(self)
  |      Cue.get_json returns the Cue instance
  |      data in json.
 ```
-#### Cue.show()
+##### Cue.show()
 ```js  
  |  show(self)
  |      Cue.show prints the Cue as JSON
 ```
-#### Cue.to_stderr()
+##### Cue.to_stderr()
 ```js 
  |  to_stderr(self)
  |      Cue.to_stderr prints the Cue
@@ -253,7 +251,7 @@ class Stream(builtins.object)
  |      strm.decode()
  ```
 
-#### Stream.decode(func=show_cue)
+##### Stream.decode(func=show_cue)
  ```js
  |  decode(self, func=show_cue)
  |      Stream.decode reads self.tsdata to find SCTE35 packets.
@@ -292,8 +290,7 @@ if __name__ == '__main__':
 ```
 
 ___
-#### Stream.decode2(func = show_cue)
-* On my Samsung Chromebook, __pypy3 and decode2 can parse over 1.1 GB/sec__.
+##### Stream.decode2(func = show_cue)
 
  ```smalltalk
  |  decode2(self, func=show_cue)
@@ -302,9 +299,8 @@ ___
  ```
  
 
-#### Stream.decode_next()
+##### Stream.decode_next()
 
-* Stream.decode_next returns the next SCTE35 cue as a threefive.Cue instance.
  ```js
  |  decode_next(self)
  |      Stream.decode_next returns the next
@@ -329,14 +325,19 @@ def do():
 
 if __name__ == "__main__":
     do()
+
 ```
+
+##### Stream.decode_plus(func = show_cue)
+```js
 ___
+ |  decode_plus(self, func=<function show_cue at 0x00007f25d50f6980>)
+ |      Stream.decode_plus is Stream.decode plus
+ |      continuity counter checking and pcr timestamps.
 
+```
 
-#### Stream.decode_program(the_program, func = show_cue)
-
-* Use Stream.__decode_program()__ instead of Stream.__decode()__ 
-to decode SCTE-35 from packets where program == __the_program__
+##### Stream.decode_program(the_program, func = show_cue)
 
  ```js
  |  decode_program(self, the_program, func=show_cue)
@@ -351,11 +352,11 @@ threefive.Stream('35.ts').decode_program(1)
 ___
 
 
-#### Stream.decode_proxy(func = show_cue)
+##### Stream.decode_proxy(func = show_cue)
 
-*  Writes all packets to __sys.stdout__.
+*  Writes all packets to sys.stdout.
 
-*  Writes scte35 data to __sys.stderr__.
+*  Writes scte35 data to sys.stderr.
 
  ```js
  |  decode_proxy(self, func=show_cue_stderr)
@@ -371,19 +372,17 @@ sp = threefive.Stream('https://futzu.com/xaa.ts')
 sp.decode_proxy()
 ```
 
-* Pipe to __mplayer__
+* Pipe to mplayer
 ```bash
 $ python3 proxy.py | mplayer -
 ```
 ___
 
-#### Stream.show()
+##### Stream.show()
 
- *  List programs and streams and info for MPEGTS
   ```js
  |  show(self)
- |      displays streams that will be
- |      parsed for SCTE-35.
+ |   List programs and streams and info for MPEGTS
  ```
 > `Stream.show() Example`
 ```python3
@@ -414,12 +413,12 @@ Program: 1050
  
 ```
 
-#### Stream.dump(fname)
+##### Stream.dump(fname)
  ```js
  |  dump(self, fname)
  |      Stream.dump dumps all the packets to a file (fname).
  ```
-#### Stream.strip_scte35(func=show_cue_stderr)
+##### Stream.strip_scte35(func=show_cue_stderr)
  
  ```js
  |  strip_scte35(self, func=show_cue_stderr)
