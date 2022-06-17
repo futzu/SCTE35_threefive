@@ -2,7 +2,7 @@
 cue_list_too.py
 Example to show how to get a
 list of SCTE-35 cues as threefive.Cue instances,
-and print a list of the pcr of the SCTE35 packet with the base64 Cue string.
+and print a list of the pts of the SCTE35 packet with the base64 Cue string.
 
 Use like:
 
@@ -10,7 +10,7 @@ python3 cue_list_too.py myvideo.ts
 
 Output:
 
-PCR -> Cue
+PTS -> Cue
 21940.651167  :  /DAvAAAAAAAA///wFAUAAAASf+/+dcFLSn4AZv8wAAES/wAKAAhDVUVJAAAAEuqoRz8=
 21942.658133  :  /DAvAAAAAAAA///wFAUAAAASf+/+dcFLSn4AZv8wAAES/wAKAAhDVUVJAAAAEuqoRz8=
 21944.665344  :  /DAvAAAAAAAA///wFAUAAAASf+/+dcFLSn4AZv8wAAES/wAKAAhDVUVJAAAAEuqoRz8=
@@ -26,12 +26,17 @@ import sys
 
 from threefive import Segment
 
+
+def no_op(cue):
+    return
+
+
 if __name__ == "__main__":
 
     seg = Segment(sys.argv[1])
     seg.decode()
 
-    print("\n\nPCR -> Cue")
-    pcr_cue_map = {cue.packet_data.pcr: cue.encode() for cue in seg.cues}
-    for ts in sorted(pcr_cue_map):
-        print(ts, " : ", pcr_cue_map[ts])
+    print("\n\nPTS -> Cue")
+    pts_cue_map = {cue.packet_data.pts: cue.encode() for cue in seg.cues}
+    for ts in sorted(pts_cue_map):
+        print(ts, " : ", pts_cue_map[ts])

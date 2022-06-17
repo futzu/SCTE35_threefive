@@ -57,12 +57,12 @@ def _bytecrc(crc, poly, n):
     return crc
 
 
-def _verifyParams(poly, initCrc, xorOut):
-    sizeBits = _verifyPoly(poly)
-    mask = (1 << sizeBits) - 1
-    initCrc = initCrc & mask
-    xorOut = xorOut & mask
-    return (sizeBits, initCrc, xorOut)
+def _verify_params(poly, init_crc, xor_out):
+    size_bits = _verifyPoly(poly)
+    mask = (1 << size_bits) - 1
+    init_crc = init_crc & mask
+    xor_out = xor_out & mask
+    return (size_bits, init_crc, xor_out)
 
 
 def _verifyPoly(poly):
@@ -73,28 +73,28 @@ def _verifyPoly(poly):
             return n
 
 
-def _mkTable(poly, n):
+def _mk_table(poly, n):
     mask = (1 << n) - 1
     poly = poly & mask
     table = [_bytecrc(i << (n - 8), poly, n) for i in range(256)]
     return table
 
 
-def mkCrcFun(poly, initCrc=~0, rev=True, xorOut=0):
-    (sizeBits, initCrc, xorOut) = _verifyParams(poly, initCrc, xorOut)
-    return _mkCrcFun(poly, sizeBits, initCrc, rev, xorOut)[0]
+def mk_crc_func(poly, init_crc=~0, xor_out=0):
+    (size_bits, init_crc, xor_out) = _verify_params(poly, init_crc, xor_out)
+    return _mk_crc_func(poly, size_bits, init_crc)[0]
 
 
-def _mkCrcFun(poly, sizeBits, initCrc, rev, xorOut):
-    tableList = _mkTable(poly, sizeBits)
+def _mk_crc_func(poly, size_bits, init_crc):
+    table_list = _mk_table(poly, size_bits)
     _fun = _crc32
-    _table = tableList
+    _table = table_list
 
-    def crcfun(data, crc=initCrc, table=_table, fun=_fun):
+    def crcfun(data, crc=init_crc, table=_table, fun=_fun):
         return fun(data, crc, table)
 
-    return crcfun, tableList
+    return crcfun, table_list
 
 
 def get_crc32_func():
-    return mkCrcFun(POLY, initCrc=INIT_VALUE, rev=REVERSE, xorOut=XOR_OUT)
+    return mk_crc_func(POLY, init_crc=INIT_VALUE, xor_out=XOR_OUT)

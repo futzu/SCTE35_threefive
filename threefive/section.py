@@ -94,7 +94,7 @@ class SpliceInfoSection(SCTE35Base):
         """
         the 3 reserved bits now map SAP
         """
-        if self.sap_type not in sap_map.keys():
+        if self.sap_type not in sap_map:
             self.sap_type = "0x3"
         self.sap_details = sap_map[self.sap_type]
         nbin.add_hex(self.sap_type, 2)

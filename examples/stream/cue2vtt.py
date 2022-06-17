@@ -38,7 +38,7 @@ def scte35_to_vtt(cue):
     start = ts
     end = start + 5
     print(f"{ts_to_vtt(start)} --> {ts_to_vtt(end)} align:left")
-    for k, v in cue.command.items():
+    for k, v in cue.command.get().items():
         print(k, " : ", v)
     print()
 
@@ -47,4 +47,4 @@ if __name__ == "__main__":
     arg = sys.argv[1]
     print("WEBVTT\n\n\n")
     strm = Stream(arg)
-    strm.decode(func=scte35_to_vtt)
+    strm.decode_plus(func=scte35_to_vtt)

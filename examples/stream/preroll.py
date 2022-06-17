@@ -34,7 +34,7 @@ def do():
     for arg in args:
         print(f"file: {arg}")
         strm = Stream(arg, show_null=False)
-        strm.decode_fu(func=show_preroll)
+        strm.decode_plus(func=show_preroll)
 
 
 if __name__ == "__main__":
