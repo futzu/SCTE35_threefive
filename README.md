@@ -121,9 +121,18 @@ cue.show()
 ```smalltalk
 ## <dev> is the network device
 
+# This is the most important
+
 ip link set <dev> multicast on allmulticast on
 
+# turn up receive buffer on ethernet cards
+
 ethtool  -G <dev> rx 4096
+
+
+# I forget what purpose these serve, 
+# I believe it is UDP receive buffer size or something similiar.
+
 
 sysctl -w net.core.rmem_default=5000000
 
