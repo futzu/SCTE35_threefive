@@ -70,9 +70,24 @@ pypy3 -mpip  install  threefive[all]
 ```
 
 ### Versions and Releases
+> I do a lot of releases. 
+> Anytime I fix a bug, 
+> or add a feature, I do a release. 
+> For best results, stay up with me.
 
  >  __Release__ versions are  __odd__.
+ 
   > __Unstable__ testing versions are __even__.
+  
+  > __The Lastest Release is the Only Supported Version__
+  > If you ask for help, I'm going to ask you to upgrade to the latest version.
+  > Im just one guy, and that's all I can handle.
+
+> I do a lot of releases. 
+> Anytime I fix a bug, 
+> or add a feature, I do a release. 
+> For best results, stay up with me.
+
 
 > ```threefive.version()```   returns the version as a string.
 
