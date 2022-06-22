@@ -57,11 +57,22 @@ def _read_stream(sock):
     return sock.makefile(mode="rb")
 
 
+def _udp_sock_opts(sock):
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 32400000)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    if hasattr(socket, "SO_REUSEPORT"):
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+    # return sock
+
+
 def _mk_udp_sock(udp_ip, udp_port):
     """
     udp socket setup
     """
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+
+    _udp_sock_opts(sock)
     sock.bind((udp_ip, udp_port))
     return sock
 
@@ -72,10 +83,7 @@ def _mk_mcast_sock(mcast_grp, mcast_port, all_grps=True):
     """
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 5400000)
-    # big fat buf
-
+    _udp_sock_opts(sock)
     if all_grps:
         sock.bind(("", mcast_port))
     else:

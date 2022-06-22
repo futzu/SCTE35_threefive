@@ -121,7 +121,7 @@ class Stream:
         self.start = {}
         self.info = None
         self.the_program = None
-        self._pids = {"pcr": set(), "tables": set(), "scte35": set()}
+        self._pids = {"pcr": set(), "tables": set(), "pmt": set(), "scte35": set()}
         self._pids["tables"].add(self._PAT_PID)
         self._pids["tables"].add(self._SDT_PID)
         self._pid_cc = {}
@@ -368,17 +368,20 @@ class Stream:
                     prgm = self._pid_prgm[pid]
                 self._prgm_pcr[prgm] = pcr
 
-
     def _parse_cc(self, pkt, pid):
         last_cc = None
         c_c = pkt[3] & 0xF
         if pid in self._pid_cc:
             last_cc = self._pid_cc[pid]
-            if last_cc ==15:
-                last_cc = 0
-            if c_c not in (last_cc, last_cc + 1):
-                print(f" pid: {hex(pid)} last cc: {last_cc} cc: {c_c}", file=sys.stderr)
-        self._pid_cc[pid] = c_c
+            good = (last_cc, last_cc + 1)
+            if last_cc == 15:
+                good = (15, 0)
+            if c_c not in good:
+                print(
+                    f"BAD --> pid: {hex(pid)} last cc: {last_cc} cc: {c_c}",
+                    file=sys.stderr,
+                )
+            self._pid_cc[pid] = c_c
 
     @staticmethod
     def as_90k(ticks):
@@ -407,11 +410,9 @@ class Stream:
             return False
         return self.as_90k(self._prgm_pts[prgm])
 
-    @staticmethod
-    def _parse_payload(pkt):
+    def _parse_payload(self, pkt):
         head_size = 4
-        afc = pkt[3] & 0x20
-        if afc:
+        if self._afc_flag(pkt):
             afl = pkt[4]
             head_size += afl + 1  # +1 for afl byte
         return pkt[head_size:]
@@ -429,19 +430,23 @@ class Stream:
             if pid == self._SDT_PID:
                 if self.info:
                     return self._stream_descriptor_table(pay)
-            return self._program_map_table(pay, pid)
+            if pid in self._pids["pmt"]:
+                return self._program_map_table(pay, pid)
+        return False
 
     def _parse_info(self, pkt):
         pid = self._parse_pid(pkt[1], pkt[2])
-        self._parse_cc(pkt, pid)
         if pid in self._pids["tables"]:
             self._parse_tables(pkt, pid)
         return pid
 
     def _parse(self, pkt):
         cue = False
-        pid = self._parse_info(pkt)
+        pid = self._parse_pid(pkt[1], pkt[2])
+        if pid in self._pids["tables"]:
+            self._parse_tables(pkt, pid)
         if pid in self._pids["pcr"]:
+            self._parse_cc(pkt, pid)
             self._parse_pcr(pkt, pid)
         if self._pusi_flag(pkt):
             self._parse_pts(pkt, pid)
@@ -544,7 +549,9 @@ class Stream:
             program_number = self._parse_program(pay[idx], pay[idx + 1])
             if program_number > 0:
                 pmt_pid = self._parse_pid(pay[idx + 2], pay[idx + 3])
+                self._pids["pmt"].add(pmt_pid)
                 self._pids["tables"].add(pmt_pid)
+
             seclen -= chunk_size
             idx += chunk_size
 
