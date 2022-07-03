@@ -438,7 +438,7 @@ ___
 * [__RFC 4122__ aka UUID](https://tools.ietf.org/html/rfc4122.html)
 > A lot of folks have been searching this repo for uuid, I'm not sure if they are looking for uuid in a upid, 
 > or a randomly generated uuid for an HLS tag or something else.
-> Heres what I know about it. 
+> Here is what I know about it. 
 
 ```smalltalk
 >>> from uuid import uuid4, UUID
@@ -456,6 +456,8 @@ b'z\xe2\xe3~0\x18LN\x8a\x10\xf6\x9d\x07X(\xb4'
 >>> UUID(bytes=uu.bytes)
 UUID('7ae2e37e-3018-4c4e-8a10-f69d075828b4')
 >>> 
+
+Adrian
 
 ```
 [__python3 uuid__](https://docs.python.org/3/library/uuid.html#module-uuid)
