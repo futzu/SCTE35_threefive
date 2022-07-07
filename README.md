@@ -1,12 +1,5 @@
-# A SCTE-35 parser lib in Python
- * [Parse SCTE-35 from Multicast MPEGTS Streams in Three Lines. I Swear. ](#mpegts-multicast).
+# Pythonic SCTE-35 
 
----
-
-![image](https://user-images.githubusercontent.com/52701496/174520851-7116b6db-6e39-408a-9366-6ad8680281ee.png)
-
----
----
 ### Welcome to the Show.
 * [__Install threefive__](#install)
 * [Versions and Releases](#versions-and-releases)
