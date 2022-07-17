@@ -15,6 +15,9 @@ setuptools.setup(
     long_description=readme,
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/threefive",
+     install_requires=[
+        "new_reader",
+    ],
     extras_require={
         "all": ["pyaes"],
     },
