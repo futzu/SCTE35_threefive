@@ -2,7 +2,7 @@
 The threefive.Segment class
 """
 import os
-from .reader import reader
+from new_reader import reader
 from .stream import Stream
 
 AES = True
