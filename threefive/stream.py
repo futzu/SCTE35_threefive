@@ -5,7 +5,7 @@ import sys
 from functools import partial
 from .cue import Cue
 from .packetdata import PacketData
-from .reader import reader
+from new_reader import reader
 
 """
 stream types for program streams.
