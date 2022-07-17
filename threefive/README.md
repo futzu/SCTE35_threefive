@@ -7,7 +7,6 @@
 * [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)   The __threefive.decode()__ function.
 * [descriptors.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)   All __Splice Descriptor__ classes.
 * [packetdata.py](https://github.com/futzu/threefive/blob/master/threefive/packetdata.py) The __threefive.PacketData__ class.
-* [reader.py](https://github.com/futzu/threefive/blob/master/threefive/reader.py) The __threefive.reader__ function.
 * [section.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)   The __threefive.SpliceInfoSection__ class.
 * [segment.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/segment.py) The __threefive.Segment__ class.
 * [segmentation.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/segmentation.py)   The lookup tables for SegmentationDescriptor class values.
