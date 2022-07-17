@@ -19,7 +19,9 @@
 * [Diagram](https://github.com/futzu/threefive/blob/master/cue.md)  of a threefive SCTE-35 Cue
 
 ### Requirements
-* threefive requires [pypy3](https://pypy.org) or python 3.6+ 
+* threefive requires 
+  * [pypy3](https://pypy.org) or python 3.6+ 
+  * [new_reader](https://github.com/futzu/new_reader)
 * __optional dependencies:__
     *  __pyaes__  If you want AES decryption for HLS segments.
 
