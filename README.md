@@ -30,11 +30,11 @@ if __name__ == "__main__":
 * [__Super Cool Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 * [__ffmpeg__ and `SCTE35` and __Stream Type 0x6 bin data__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
-* [ __Issues and `Bugs and Feature Requests__ ](https://github.com/futzu/scte35-threefive/issues)
- *No forms man, just open an issue and tell me what you need.* 
+* [ __Issues and `Bugs and Feature Requests__  *No forms man, just open an issue and tell me what you need.*  ](https://github.com/futzu/scte35-threefive/issues)
+ 
 
 
-* [Diagram](https://github.com/futzu/threefive/blob/master/cue.md)  of a threefive SCTE-35 Cue
+* [__Diagram of a threefive SCTE-35 Cue__. ](https://github.com/futzu/threefive/blob/master/cue.md)  
 * [ __x9k3__ , SCTE35 hls segmenter powered by __threefive__](https://github.com/futzu/x9k3)
 * [__m3ufu__, m3u8 parser powered by __threefive__](https://github.com/futzu/m3ufu)
 ### Requirements
