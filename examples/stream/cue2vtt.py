@@ -47,4 +47,4 @@ if __name__ == "__main__":
     arg = sys.argv[1]
     print("WEBVTT\n\n\n")
     strm = Stream(arg)
-    strm.decode_plus(func=scte35_to_vtt)
+    strm.decode(func=scte35_to_vtt)
