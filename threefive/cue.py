@@ -9,7 +9,7 @@ from .base import SCTE35Base
 from .section import SpliceInfoSection
 from .commands import command_map
 from .descriptors import splice_descriptor, descriptor_map
-from .crc import get_crc32_func
+from .crc import crc32
 
 
 class Cue(SCTE35Base):
@@ -117,8 +117,8 @@ class Cue(SCTE35Base):
         return hex(int.from_bytes(self.bites, byteorder="big"))
 
     def _encode_crc(self):
-        crc32_func = get_crc32_func()
-        crc_int = crc32_func(self.bites)
+        # crc32_func = get_crc32_func()
+        crc_int = crc32(self.bites)
         self.info_section.crc = hex(crc_int)
         self.bites += int.to_bytes(crc_int, 4, byteorder="big")
 
