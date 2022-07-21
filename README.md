@@ -1,6 +1,24 @@
-# Pythonic SCTE-35 
+# threefive
+---
+#### To me,  using a library means you shouldn't have to write a lot of code.
+```lua
+#!/usr/bin/env python3
+"""
+35.py
+    parses a stream for SCTE-35,
+    prints SCTE-35 messages
+"""
 
-### Welcome to the Show.
+import sys
+import threefive
+
+
+if __name__ == "__main__":
+    arg = sys.argv[1]
+    strm = threefive.Stream(arg)
+    strm.decode()
+```
+---
 * [__Install threefive__](#install)
 * [Versions and Releases](#versions-and-releases)
 
