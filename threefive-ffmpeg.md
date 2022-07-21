@@ -1,55 +1,73 @@
-## Working with ffmpeg. 
+## threefive works very well with ffmpeg. 
+I love ffmpeg.
+The fine folks at ffmpeg don't seem to care much about SCTE-35 though.
+Using threefive for SCTE-35 with ffmpeg is easy. 
 
- * I don't know how to __stop ffmpeg__ from __changing__ the __SCTE35__ stream __type__ to __0x6__.
+* __ffmpeg changes the SCTE-35 (0x86) stream type to bin data (0x6)__
+  * Changing the stream type __breaks every SCTE-35 parser, except for threefive__.
+  * __threefive__ checks for SCTE-35 data __in both__ SCTE-35 (__0x86__) and bin data (__0x6__) stream types.  
 
- * **It doesn't matter**.
- *  __threefive parses__ for __SCTE35__ on __streams__ of type __0x86__ and __0x6__
-
+### Example 1
+---
+* Transcode mpegts with a SCTE-35 stream and pipe it to threefive to parse SCTE-35
+  * oldvid.ts looks like this:
+```
+  Program 1 
+  Stream #0:0[0x31]: Video: h264 (High) ([27][0][0][0] / 0x001B), yuv420p(tv, bt709, progressive), 
+  1280x720 [SAR 1:1 DAR 16:9], Closed Captions, 59.94 fps, 59.94 tbr, 90k tbn
+  Stream #0:1[0x32]: Audio: mp2 ([4][0][0][0] / 0x0004), 48000 Hz, stereo, s16p, 256 kb/s
+  Stream #0:2[0x33]: Audio: mp2 ([4][0][0][0] / 0x0004), 48000 Hz, stereo, s16p, 256 kb/s
+  Stream #0:3[0x34]: Audio: mp2 ([4][0][0][0] / 0x0004), 48000 Hz, stereo, s16p, 256 kb/s
+  Stream #0:4[0x35]: Audio: mp2 ([4][0][0][0] / 0x0004), 48000 Hz, stereo, s16p, 256 kb/s
+  Stream #0:5[0x36]: Data: scte_35
+```
+* transcode
+   * `-copyts`, keep timestamps 
+   * `-map`  keep SCTE-35 stream 
 
 ```sh
-a@fuhq$ ffmpeg -hide_banner -i video.ts
-
-
-Input #0, mpegts, from 'video.ts':                                                                                            
-  Duration: 00:02:41.17, start: 38090.624111, bitrate: 7044 kb/s
-  Program 51 
-    Stream #0:0[0x1fe]: Video: h264 (High) ([27][0][0][0] / 0x001B), yuv420p(tv, bt709, top first), 1920x1080 [SAR 1:1 DAR 16:9], Closed Captions, 29.97 fps, 59.94 tbr, 90k tbn, 59.94 tbc
-    Stream #0:1[0x1ff]: Audio: ac3 ([129][0][0][0] / 0x0081), 48000 Hz, 5.1(side), fltp, 384 kb/s
-    Stream #0:2[0x200]: Audio: ac3 ([129][0][0][0] / 0x0081), 48000 Hz, stereo, fltp, 192 kb/s
-    Stream #0:3[0x203]: Data: scte_35
+ffmpeg  -copyts -i  oldvid.ts -vcodec libx265  -map 0  -y  newvid.ts
 ```
 
-* **Map and Copy Streams**
-
-```sh
-
-a@fuhq$ ffmpeg -copyts \
-        -i video.ts -c copy -map 0 \
-        -streamid 0:510  -streamid 1:511 -streamid 2:512 -streamid 3:515 -mpegts_service_id 51 \
-        -y out.ts
+* newvid.ts looks like this
 ```
-* **This Warning Pops Up**
-```
-[mpegts @ 0x55ccc4ca5480] Stream 3, codec scte_35, is muxed as a private data stream and may not be recognized upon reading.  
-
-```
-* **Stream #0:3 Is Now Type 0x6**
-```
-a@fuhq$ ffmpeg -hide_banner -i out.ts
-Input #0, mpegts, from 'out.ts':                                                                                              
-  Duration: 00:02:41.17, start: 38092.024111, bitrate: 7065 kb/s
-  Program 51 
-    Stream #0:0[0x1fe]: Video: h264 (High) ([27][0][0][0] / 0x001B), yuv420p(tv, bt709, top first), 1920x1080 [SAR 1:1 DAR 16:9], Closed Captions, 29.97 fps, 59.94 tbr, 90k tbn, 59.94 tbc
-    Stream #0:1[0x1ff]: Audio: ac3 ([129][0][0][0] / 0x0081), 48000 Hz, 5.1(side), fltp, 384 kb/s
-    Stream #0:2[0x200]: Audio: ac3 ([129][0][0][0] / 0x0081), 48000 Hz, stereo, fltp, 192 kb/s
-    Stream #0:3[0x203]: Data: bin_data ([6][0][0][0] / 0x0006)
+  Program 1 
+  Stream #0:0[0x100]: Video: hevc (Main) (HEVC / 0x43564548), yuv420p(tv, bt709), 1280x720 
+  [SAR 1:1 DAR 16:9], 59.94 fps, 59.94 tbr, 90k tbn
+  Stream #0:1[0x101]: Audio: mp2 ([3][0][0][0] / 0x0003), 48000 Hz, stereo, fltp, 384 kb/s
+  Stream #0:2[0x102]: Audio: mp2 ([3][0][0][0] / 0x0003), 48000 Hz, stereo, fltp, 384 kb/s
+  Stream #0:3[0x103]: Audio: mp2 ([3][0][0][0] / 0x0003), 48000 Hz, stereo, fltp, 384 kb/s
+  Stream #0:4[0x104]: Audio: mp2 ([3][0][0][0] / 0x0003), 48000 Hz, stereo, fltp, 384 kb/s
+  Stream #0:5[0x105]: Data: bin_data ([6][0][0][0] / 0x0006)
 ```
 
+ * Create 35.py
+ 
+ ```smalltalk
+ #!/usr/bin/env python3
+"""
+35.py
+    parses a stream for SCTE-35,
+    prints SCTE-35 messages
+"""
 
-* **Parse out.ts For SCTE35**
-```sh
-a@fuhq$ pypy3 -c 'import threefive; threefive.decode("out.ts")'
+import sys
+import threefive
 
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        arg = sys.argv[1]
+    else:
+        arg = sys.stdin.buffer
+
+    strm = threefive.Stream(arg)
+    strm.decode()
+```
+* parse newvid.ts with 35.py
+
+```smalltalk
+a@debian:~$ pypy3 35.py  newvid.ts
 {
     "info_section": {
         "table_id": "0xfc",
@@ -57,54 +75,97 @@ a@fuhq$ pypy3 -c 'import threefive; threefive.decode("out.ts")'
         "private": false,
         "sap_type": "0x3",
         "sap_details": "No Sap Type",
-        "section_length": 49,
+        "section_length": 169,
         "protocol_version": 0,
         "encrypted_packet": false,
         "encryption_algorithm": 0,
+        "pts_adjustment_ticks": 0,
         "pts_adjustment": 0.0,
         "cw_index": "0x0",
         "tier": "0xfff",
-        "splice_command_length": 20,
-        "splice_command_type": 5,
-        "descriptor_loop_length": 12
+        "splice_command_length": 5,
+        "splice_command_type": 6,
+        "descriptor_loop_length": 147,
+        "crc": "0x8c829e81"
     },
     "command": {
-        "command_length": 20,
-        "command_type": 5,
-        "name": "Splice Insert",
+        "command_length": 5,
+        "command_type": 6,
+        "name": "Time Signal",
         "time_specified_flag": true,
-        "pts_time": 38113.135578,
-        "break_auto_return": false,
-        "break_duration": 90.023267,
-        "splice_event_id": 93,
-        "splice_event_cancel_indicator": false,
-        "out_of_network_indicator": true,
-        "program_splice_flag": true,
-        "duration_flag": true,
-        "splice_immediate_flag": false,
-        "unique_program_id": 0,
-        "avail_num": 0,
-        "avail_expected": 0
+        "pts_time": 14652.879367,
+        "pts_time_ticks": 1318759143
     },
     "descriptors": [
         {
-            "tag": 1,
-            "descriptor_length": 10,
+            "tag": 2,
+            "descriptor_length": 21,
+            "name": "Segmentation Descriptor",
             "identifier": "CUEI",
-            "name": "DTMF Descriptor",
-            "preroll": 177,
-            "dtmf_count": 4,
-            "dtmf_chars": [
-                "1",
-                "2",
-                "1",
-                "*"
-            ]
-        }
+            "components": [],
+            "segmentation_event_id": "0x949d1b0",
+            "segmentation_event_cancel_indicator": false,
+            "program_segmentation_flag": true,
+            "segmentation_duration_flag": false,
+            "delivery_not_restricted_flag": false,
+            "web_delivery_allowed_flag": true,
+            "no_regional_blackout_flag": true,
+            "archive_allowed_flag": true,
+            "device_restrictions": "No Restrictions",
+            "segmentation_message": "Provider Placement Opportunity End",
+            "segmentation_upid_type": 1,
+            "segmentation_upid_type_name": "Deprecated",
+            "segmentation_upid_length": 6,
+            "segmentation_upid": "300009",
+            "segmentation_type_id": 53,
+            "segment_num": 1,
+            "segments_expected": 1
+        },
+
     ],
-    "crc": "0x2d87a625",
-    "pid": 515,
-    "program": 51,
-    "pts": 38105.259644
+    "packet_data": {
+        "pid": "0x105",
+        "program": 1,
+        "pcr_ticks": 1318822943,
+        "pcr": 14653.588256,
+        "pts_ticks": 1318890273,
+        "pts": 14654.336367
+    }
 }
+
+
 ```
+* transcode with ffmpeg and pipe directly to 35.py
+```sh
+ffmpeg  -copyts -i  oldvid.ts -vcodec libx265  -map 0  -f mpegts - | python3 35.py
+
+```
+---
+## Example 2
+* use threefive to parse for SCTE-35 and pipe to ffplay
+1. Create 35proxy.py
+```smalltalk
+#!/usr/bin/env python3
+"""
+35proxy.py
+    parses a stream for SCTE-35,
+    prints SCTE-35 messages to stderr
+    and proxies the stream to stdin
+"""
+import sys
+import threefive
+
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        arg = sys.argv[1]
+    else:
+        arg = sys.stdin.buffer
+    strm = threefive.Stream(arg)
+    strm.decode_proxy()
+```
+2. Run 35proxy.py and pipe to ffplay
+```smalltalk
+./35proxy.py vid.ts | ffplay -
+```
+---
