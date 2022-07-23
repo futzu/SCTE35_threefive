@@ -469,5 +469,3 @@ Adrian
 ```
 [__python3 uuid__](https://docs.python.org/3/library/uuid.html#module-uuid)
 
-
-![image](https://user-images.githubusercontent.com/52701496/180621190-02de8dc0-19c8-4ff0-b52f-0fb83502f9cd.png)
