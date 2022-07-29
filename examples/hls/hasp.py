@@ -17,7 +17,7 @@ import os
 import sys
 import pyaes
 import threefive
-
+from new_reader import reader
 
 class Stanza:
     """
@@ -216,7 +216,7 @@ class HASP:
 
     def decode(self):
         while True:
-            with threefive.reader(self.m3u8) as self.manifest:
+            with reader(self.m3u8) as self.manifest:
                 while self.manifest:
                     line = self.manifest.readline()
                     if not line:
