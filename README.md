@@ -1,5 +1,7 @@
 # threefive.
-## The #1 SCTE-35 parser in Lawrenceville Georgia, The Kyrgyz Republic, North Dakota, and some parts of East Texas.
+## threefive is the Industry leading SCTE-35 tool. 
+## Six of the top ten U.S. broadcasters use threefive in production, daily. 
+## Clean. Fast. Easy to Use.
 
 > To me,  using a library means you shouldn't have to write a lot of code.
 ```lua
