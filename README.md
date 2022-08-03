@@ -18,7 +18,7 @@
 
 ## threefive is Fast. 
 * The only people who say "performance doesnt matter", are people who write slow code.
-* * threefive has been extensively profiled and tuned.
+*  threefive has been extensively profiled and tuned.
 * I am the Jim Jones of fast parsing, and threefive is the koolaid. 
 
 ## I can't spell Cyclomatic Complexity without spell check, but I check it with radon.
