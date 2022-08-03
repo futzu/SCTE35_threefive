@@ -1,9 +1,38 @@
 # threefive.
-## threefive is the Industry leading SCTE-35 tool. 
-## Six of the top ten U.S. broadcasters use threefive in production, daily. 
-## Clean. Fast. Easy to Use.
+## threefive is the Industry leading SCTE-35 tool.    
 
-> To me,  using a library means you shouldn't have to write a lot of code.
+  * __All 2020 SCTE-35__ 
+    * Commands
+    *  Descriptors
+    *  Upids
+  * __Streaming Network Protocols__
+    * Multicast  
+    *  UDP 
+    *  Http(s)
+
+## threefive is written in Python3. 
+* Clean, object oriented code designed for subclassing.
+* Pep-8 Compliant
+* Formatted by black
+* Pylint score of 9.88 / 10.0
+
+## threefive is Fast. 
+* The only people who say "performance doesnt matter", are people who write slow code.
+* * threefive has been extensively profiled and tuned.
+* I am the Jim Jones of fast parsing, and threefive is the koolaid. 
+
+## I can't spell Cyclomatic Complexity without spell check, but I check it with radon.
+* I am a big believer in short, simple functions and methods. 
+
+```smalltalk
+a@debian:~/scte35-threefive$ radon cc -s -a threefive
+
+235 blocks (classes, functions, methods) analyzed.
+Average complexity: A (1.9617021276595745)
+```
+
+
+## To me,  using a library means you shouldn't have to write a lot of code.
 ```lua
 #!/usr/bin/env python3
 """
