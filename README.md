@@ -11,16 +11,6 @@
     *  Http(s)
 
 
-## I can't spell Cyclomatic Complexity without spell check, but I check it with radon.
-* I am a big believer in short, simple functions and methods. 
-
-```smalltalk
-a@debian:~/scte35-threefive$ radon cc -s -a threefive
-
-235 blocks (classes, functions, methods) analyzed.
-Average complexity: A (1.9617021276595745)
-```
-
 
 ## To me,  using a library means you shouldn't have to write a lot of code.
 ```lua
