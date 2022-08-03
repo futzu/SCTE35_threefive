@@ -10,12 +10,6 @@
     *  UDP 
     *  Http(s)
 
-## Written in Python3. 
-* Clean, object oriented code designed for subclassing.
-* Pep-8 Compliant
-* Formatted by black
-* Pylint score of 9.88 / 10.0
-
 
 ## I can't spell Cyclomatic Complexity without spell check, but I check it with radon.
 * I am a big believer in short, simple functions and methods. 
