@@ -1,5 +1,11 @@
-# threefive.
-## threefive is the Industry leading SCTE-35 tool.    
+ [Install](#install) | [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) |
+ [Cue Class](#cue-class)  |  [Stream Class](#stream-class) |
+ [Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)  |
+  [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) 
+
+
+# threefive,
+## the Industry leading SCTE-35 tool.    
 
   * __All 2020 SCTE-35__ 
     * Commands
@@ -41,7 +47,6 @@ if __name__ == "__main__":
      
 * [__Super Cool Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 * [__ffmpeg__ and `SCTE35` and __Stream Type 0x6 bin data__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
-* [Help](#help)
 * [ __Issues and `Bugs and Feature Requests__  *No forms man, just open an issue and tell me what you need.*  ](https://github.com/futzu/scte35-threefive/issues)
  
 
