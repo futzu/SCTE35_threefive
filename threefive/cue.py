@@ -108,13 +108,19 @@ class Cue(SCTE35Base):
         self._encode_crc()
         return b64encode(self.bites).decode()
 
+    def encode_as_int(self):
+        """
+        encode_as_int returns self.bites as an int.
+        """
+        self.encode()
+        return int.from_bytes(self.bites, byteorder="big")
+
     def encode_as_hex(self):
         """
         encode_as_hex returns self.bites as
         a hex string
         """
-        self.encode()
-        return hex(int.from_bytes(self.bites, byteorder="big"))
+        return hex(self.encode_as_int())
 
     def _encode_crc(self):
         # crc32_func = get_crc32_func()
@@ -141,6 +147,12 @@ class Cue(SCTE35Base):
         if 'command_type' is included,
         the command instance will be created.
         """
+        if not isinstance(cmd ,dict):
+            try:
+                cmd = cmd.get()
+            except:
+                print( f' cmd is a {type(cmd)} should be a dict,')
+                return
         if "command_type" in cmd:
             self.command = command_map[cmd["command_type"]]()
         if self.command:
@@ -156,6 +168,12 @@ class Cue(SCTE35Base):
         if not isinstance(dlist, list):
             raise Exception("descriptors should be a list")
         for dstuff in dlist:
+            if not isinstance(dstuff ,dict):
+                try:
+                    dstuff = dstuff.get()
+                except:
+                    print( f' dstuff is a {type(dstuff)} should be a dict,')
+                    return
             if "tag" in dstuff:
                 dscptr = descriptor_map[dstuff["tag"]]()
                 dscptr.load(dstuff)
@@ -174,6 +192,7 @@ class Cue(SCTE35Base):
         """
         if isinstance(stuff, str):
             stuff = json.loads(stuff)
+
         if "info_section" in stuff:
             self.load_info_section(stuff["info_section"])
         if "command" in stuff:
