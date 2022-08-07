@@ -5,7 +5,7 @@
 
 
 # threefive,
-## the Industry leading SCTE-35 tool.    
+## the Industry leading SCTE-35 Parser.    
 
   * __All 2020 SCTE-35__ 
     * Commands
