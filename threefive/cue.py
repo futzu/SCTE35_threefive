@@ -341,3 +341,5 @@ class Cue(SCTE35Base):
         as JSON to sys.stderr
         """
         print(self.get_json(), file=stderr)
+
+        
