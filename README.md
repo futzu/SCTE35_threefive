@@ -5,7 +5,7 @@
 
 
 # threefive,
-## the Industry leading SCTE-35 Parser.    
+## `A SCTE-35 Parser.`    
 
   * __All 2020 SCTE-35__ 
     * Commands
@@ -18,7 +18,7 @@
 
 
 
-## To me,  using a library means you shouldn't have to write a lot of code.
+#### `Using a library means you shouldn't have to write a lot of code.`
 ```lua
 #!/usr/bin/env python3
 """
@@ -54,14 +54,14 @@ if __name__ == "__main__":
 * [__Diagram of a threefive SCTE-35 Cue__. ](https://github.com/futzu/threefive/blob/master/cue.md)  
 * [ __x9k3__ , SCTE35 hls segmenter powered by __threefive__](https://github.com/futzu/x9k3)
 * [__m3ufu__, m3u8 parser powered by __threefive__](https://github.com/futzu/m3ufu)
-### Requirements
+### `Requirements`
 * threefive requires 
   * [pypy3](https://pypy.org) or python 3.6+ 
   * [new_reader](https://github.com/futzu/new_reader)
 * __optional dependencies:__
     *  __pyaes__  If you want AES decryption for HLS segments.
 
-### Install
+### `Install`
    
 ```smalltalk
 python3 -mpip  install  threefive
@@ -82,7 +82,7 @@ pypy3 -mpip  install  threefive[all]
 
 ```
 ---
-### Versions and Releases
+### `Versions and Releases`
 *  I do a lot of releases. 
 *  Anytime I fix a bug or add a feature, I bump the version and make a pip package. 
 
@@ -100,7 +100,7 @@ pypy3 -mpip  install  threefive[all]
 
 ---
 
-### Easy Examples
+### `Easy Examples`
 
 ##### Base64
 ```python3
@@ -110,7 +110,7 @@ pypy3 -mpip  install  threefive[all]
 >>> cue.decode()
 True
 ```
-##### Bytes
+##### `Bytes`
 ```python3
 >>> import threefive 
 
@@ -120,7 +120,7 @@ True
 True
 >>> cue.show()
 ```
-##### Hex
+##### `Hex`
 ```python3
 import threefive 
 
@@ -128,7 +128,7 @@ cue = threefive.Cue("0XFC301100000000000000FFFFFF0000004F253396")
 cue.decode()
 cue.show()
 ```
-##### Mpegts Multicast
+##### `Mpegts Multicast`
 * On my Debian [Sid](https://www.debian.org/releases/sid/) laptop I set the following, 
  
 ```smalltalk
@@ -154,7 +154,7 @@ strm.decode()
 ___
 
 
-##  Cue Class
+##  `Cue Class`
 
    *  src [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
@@ -189,8 +189,6 @@ ___
    *  __program__ of the pid   
    *  __pts__ of the packet   
    *  __pcr__ of the packet 
-___
-
 
 ```js
 
@@ -203,12 +201,12 @@ class Cue(threefive.base.SCTE35Base)
  |      data may be packet bites or encoded string
  |      packet_data is a instance passed from a Stream instance
 ```
-### Cue.decode()
+### `Cue.decode()`
 ```js
  |  decode(self)
  |      Cue.decode() parses for SCTE35 data
 ```
-### Cue.get()
+### `Cue.get()`
 ```js
  |  get(self)
  |      Cue.get returns the SCTE-35 Cue
@@ -240,34 +238,32 @@ True
 'descriptors': []}
 ```
 
-
-
-### Cue.get_descriptors()
+### `Cue.get_descriptors()`
 
 ```js
  |  get_descriptors(self)
  |      Cue.get_descriptors returns a list of
  |      SCTE 35 splice descriptors as dicts.
 ```
-### Cue.get_json()
+### `Cue.get_json()`
 ```js 
  |  get_json(self)
  |      Cue.get_json returns the Cue instance
  |      data in json.
 ```
-### Cue.show()
+### `Cue.show()`
 ```js  
  |  show(self)
  |      Cue.show prints the Cue as JSON
 ```
-### Cue.to_stderr()
+### `Cue.to_stderr()`
 ```js 
  |  to_stderr(self)
  |      Cue.to_stderr prints the Cue
 ```
 ___
 
-##  __Stream__ Class
+##  `Stream Class`
   * src [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
   * The threefive.__Stream__ class parses __SCTE35__ from __Mpegts__.
   * Supports:
@@ -296,7 +292,7 @@ class Stream(builtins.object)
  |      strm.decode()
  ```
 
-### Stream.decode(func=show_cue)
+### `Stream.decode(func=show_cue)`
  ```js
  |  decode(self, func=show_cue)
  |      Stream.decode reads self.tsdata to find SCTE35 packets.
@@ -336,7 +332,7 @@ if __name__ == '__main__':
 
 ___
 
-### Stream.decode_next()
+### `Stream.decode_next()`
 
  ```js
  |  decode_next(self)
@@ -366,7 +362,7 @@ if __name__ == "__main__":
 ```
 
 
-### Stream.decode_program(the_program, func = show_cue)
+### `Stream.decode_program(the_program, func = show_cue)`
 
  ```js
  |  decode_program(self, the_program, func=show_cue)
@@ -381,7 +377,7 @@ threefive.Stream('35.ts').decode_program(1)
 ___
 
 
-### Stream.decode_proxy(func = show_cue)
+### `Stream.decode_proxy(func = show_cue)`
 
 *  Writes all packets to sys.stdout.
 
@@ -407,7 +403,7 @@ $ python3 proxy.py | mplayer -
 ```
 ___
 
-### Stream.show()
+### `Stream.show()`
 
   ```js
  |  show(self)
@@ -442,12 +438,12 @@ Program: 1050
  
 ```
 
-### Stream.dump(fname)
+### `Stream.dump(fname)`
  ```js
  |  dump(self, fname)
  |      Stream.dump dumps all the packets to a file (fname).
  ```
-### Stream.strip_scte35(func=show_cue_stderr)
+### `Stream.strip_scte35(func=show_cue_stderr)`
  
  ```js
  |  strip_scte35(self, func=show_cue_stderr)
@@ -457,8 +453,9 @@ Program: 1050
  |      SCTE-35 cues are printed to stderr.
 ```
 
+
 ___
----lua
+## `UUID`
 * [__RFC 4122__ aka UUID](https://tools.ietf.org/html/rfc4122.html)
 > A lot of folks have been searching this repo for uuid, I'm not sure if they are looking for uuid in a upid, 
 > or a randomly generated uuid for an HLS tag or something else.
