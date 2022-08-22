@@ -569,8 +569,12 @@ class Stream:
         if self.the_program and (program_number != self.the_program):
             return False
         pcr_pid = self._parse_pid(pay[8], pay[9])
+        print("pcr_pid", pcr_pid)
         if program_number not in self._prgm:
-            self._prgm[program_number] = ProgramInfo(pid=pid, pcr_pid=pcr_pid)
+            self._prgm[program_number] = ProgramInfo()
+        pinfo = self._prgm[program_number]
+        pinfo.pid = pid
+        pinfo.pcr_pid=pcr_pid
         self._pids["pcr"].add(pcr_pid)
         self._pid_prgm[pcr_pid] = program_number
         proginfolen = self._parse_length(pay[10], pay[11])
