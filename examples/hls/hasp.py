@@ -19,6 +19,7 @@ import pyaes
 import threefive
 from new_reader import reader
 
+
 class Stanza:
     """
     The Stanza class represents a segment
