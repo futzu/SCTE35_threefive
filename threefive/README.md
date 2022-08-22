@@ -3,7 +3,7 @@
 * [base.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/base.py)   __SCTE35Base__ class is the __Super__ class for all __Splice Commands and Descriptors__. 
 * [bitn.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/bitn.py)   The __threefive.bitn.BitBin and threefive.bitn.NBin__ class for bitslicing. 
 * [commands.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py)  All __Splice Command__ classes.
-* [crc.py](https://github.com/futzu/scte35-threefive/blob/master/threefive/crc.py) __CRC__ calculation functions for encoding.
+* [crc.py](https://github.com/futzu/scte35-threefive/blob/master/threefive/crc.py) __CRC__ calculation function.
 * [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)   The __threefive.Cue__ class.
 * [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)   The __threefive.decode()__ function.
 * [descriptors.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)   All __Splice Descriptor__ classes.
