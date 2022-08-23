@@ -21,7 +21,8 @@ setuptools.setup(
     extras_require={
         "all": ["pyaes"],
     },
-    packages=setuptools.find_packages(),
+    py_modules=["threefive"],
+    scripts=['bin/cuei'],
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
