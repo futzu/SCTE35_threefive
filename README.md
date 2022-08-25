@@ -4,9 +4,9 @@
   [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) 
 
 
-# threefive is a SCTE-35 parser.    
+# threefive is a SCTE35 parser.    
 
-  * __All 2020 SCTE-35__ 
+  * __All 2020 SCTE35__ 
     * Commands
     *  Descriptors
     *  Upids
