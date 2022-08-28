@@ -187,7 +187,7 @@ class Stream2(Stream):
         """
         if self._find_start():
             for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
-                cue = self._parse_plus(pkt)
+                cue = self._parse(pkt)
                 if cue:
                     self.repack_pkt(pkt, cue)
                 else:
