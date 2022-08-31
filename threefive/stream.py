@@ -165,12 +165,6 @@ class Stream:
         self._tsdata.close()
         return True
 
-    def _mk_pkts(self, chunk):
-        return [
-            self._parse(chunk[i : i + self._PACKET_SIZE])
-            for i in range(0, len(chunk), self._PACKET_SIZE)
-        ]
-
     def dump(self, fname):
         """
         Stream.dump dumps all the packets to a file.
