@@ -82,6 +82,15 @@ pypy3 -mpip  install  threefive[all]
 ```
 ---
 ### `Versions and Releases`
+```lua
+Python 3.10.6 (main, Aug 10 2022, 11:19:32) [GCC 12.1.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from threefive import version
+>>> version()
+'2.3.45'
+>>> 
+
+```
 *  I do a lot of releases. 
 *  Anytime I fix a bug or add a feature, I bump the version and make a pip package. 
 
