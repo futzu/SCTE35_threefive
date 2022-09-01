@@ -1,7 +1,7 @@
 ## threefive works very well with ffmpeg. 
 * __ffmpeg changes the SCTE-35 (0x86) stream type to bin data (0x6)__
-  * Changing the stream type __breaks every SCTE-35 parser, except for threefive__.
-  * __threefive__ checks for SCTE-35 data __in both__ SCTE-35 (__0x86__) and bin data (__0x6__) stream types.  
+  * Changing the stream type __Breaks Every SCTE-35 parser, Except threefive__.
+  * __threefive__  parses SCTE-35 (__0x86__) and bin data (__0x6__) stream types.  
 
 ### Example 1
 ---
