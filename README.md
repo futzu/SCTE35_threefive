@@ -6,13 +6,10 @@
 
 # threefive is a SCTE35 parser.    
 
-###  __All `2022` SCTE35__  [`Commands`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py) and [`Descriptors`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py) and [`Upids`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upids.py)
----
+*  __All `2022` SCTE35__  [`Commands`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py) and [`Descriptors`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py) and [`Upids`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upids.py)
 
-
----
 * [__Install threefive__](#install)
-* [Versions and Releases](#versions-and-releases)
+* [__Versions and Releases__](#versions-and-releases)
 * [__Fast Start__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
 *  [threefive.__Cue__ Class](#cue-class)         
 *  [threefive.__Stream__ Class](#stream-class)
