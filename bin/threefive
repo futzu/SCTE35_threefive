@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+
+"""
+threefive command line SCTE35 decoder.
+
+( type 'make cli' or 'make pypy3-cli' as root
+to install to /usr/local/bin )
+
+use like:
+
+    cat myvideo.ts | threefive
+
+    threefive https://futzu.com/xaa.ts
+
+    threefive myvideo.ts yourvideo.ts someothervideo.ts
+
+    threefive mpegts_dir/*.ts
+
+    threefive '/DBZAAAAAAAA///wBQb+AAAAAABDAkFDVUVJAAAACn//AAApMuAPLXVybjp1dWlkOmFhODViYmI2LTVjNDMtNGI2YS1iZWJiLWVlM2IxM2ViNzk5ORAAAFz7UQA='
+"""
+
+
+import sys
+import threefive
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        for arg in sys.argv[1:]:
+            threefive.decode(arg)
+
+    else:
+        threefive.decode(sys.stdin.buffer)
