@@ -193,7 +193,7 @@ def _encode_umid(nbin, seg_upid):
 
 def _decode_uri(bitbin, upid_length):
 
-    return bitbin.as_ascii(upid_length << 3).decode(errors="replace")
+    return bitbin.as_ascii(upid_length << 3)
 
 
 def _encode_uri(nbin, seg_upid):
