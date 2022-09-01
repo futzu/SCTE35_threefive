@@ -6,35 +6,31 @@
 
 # threefive is a SCTE35 parser.    
 
-  * __All 2020 SCTE35__ 
-    * Commands
-    *  Descriptors
-    *  Upids
-  * __Streaming Network Protocols__
-    * Multicast  
-    *  UDP 
-    *  Http(s)
+###  __All `2022` SCTE35__  [`Commands`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py) and [`Descriptors`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py) and [`Upids`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upids.py)
+---
 
+#### `A SCTE35 Parser in Five Lines`
 
+* `35.py` 
+  * Parse a mpegts stream and prints the SCTE-35 Messages. 
+  
+  
+```smalltalk
+import sys                                
+import threefive                        
 
-#### `Using a library means you shouldn't have to write a lot of code.`
-```lua
-#!/usr/bin/env python3
-"""
-35.py
-    parses a stream for SCTE-35,
-    prints SCTE-35 messages
-"""
-
-import sys
-import threefive
-
-
-if __name__ == "__main__":
-    arg = sys.argv[1]
-    strm = threefive.Stream(arg)
-    strm.decode()
+if __name__ == "__main__":                
+    strm = threefive.Stream(sys.argv[1] ) 
+    strm.decode()                         
 ```
+    
+* use like:
+
+  * `python3 35.py video.ts`
+  * `python3 35.py https://futzu.com/xaa.ts`
+  * `python3 35.py udp://@235.35.3.5:3535`
+
+
 ---
 * [__Install threefive__](#install)
 * [Versions and Releases](#versions-and-releases)
