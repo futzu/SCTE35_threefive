@@ -9,43 +9,16 @@
 ###  __All `2022` SCTE35__  [`Commands`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py) and [`Descriptors`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py) and [`Upids`](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upids.py)
 ---
 
-#### `A SCTE35 Parser in Five Lines`
-
-* `35.py` 
-  * Parse a mpegts stream and prints the SCTE-35 Messages. 
-  
-  
-```smalltalk
-import sys                                
-import threefive                        
-
-if __name__ == "__main__":                
-    strm = threefive.Stream(sys.argv[1] ) 
-    strm.decode()                         
-```
-    
-* use like:
-
-  * `python3 35.py video.ts`
-  * `python3 35.py https://futzu.com/xaa.ts`
-  * `python3 35.py udp://@235.35.3.5:3535`
-
 
 ---
 * [__Install threefive__](#install)
 * [Versions and Releases](#versions-and-releases)
-
 * [__Fast Start__](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
-    
 *  [threefive.__Cue__ Class](#cue-class)         
 *  [threefive.__Stream__ Class](#stream-class)
-     
 * [__Super Cool Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 * [__ffmpeg__ and `SCTE35` and __Stream Type 0x6 bin data__ and __threefive__](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 * [ __Issues and `Bugs and Feature Requests__  *No forms man, just open an issue and tell me what you need.*  ](https://github.com/futzu/scte35-threefive/issues)
- 
-
-
 * [__Diagram of a threefive SCTE-35 Cue__. ](https://github.com/futzu/threefive/blob/master/cue.md)  
 * [ __x9k3__ , SCTE35 hls segmenter powered by __threefive__](https://github.com/futzu/x9k3)
 * [__m3ufu__, m3u8 parser powered by __threefive__](https://github.com/futzu/m3ufu)
@@ -85,23 +58,10 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> version()
 '2.3.45'
 >>> 
-
 ```
-*  I do a lot of releases. 
-*  Anytime I fix a bug or add a feature, I bump the version and make a pip package. 
-
-*  For best results, stay up with me.
-
+*  I do [__Rolling Releases__](https://en.wikipedia.org/wiki/Rolling_release)
 * __Release__ versions are  __odd__.
- 
 * __Unstable__ testing versions are __even__.
-  
-* __The Lastest Release is the Only Supported Version__
-  * If you ask for help, I'm going to ask you to upgrade to the latest version.
-
-
-> ```threefive.version()```   returns the version as a string.
-
 ---
 
 ### `Easy Examples`
