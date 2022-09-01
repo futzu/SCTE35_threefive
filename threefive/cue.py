@@ -65,20 +65,13 @@ class Cue(SCTE35Base):
         if not self.bites:
             return
         self.descriptors = []
-        # self.bites after_info section decoding
-        after_info = self.mk_info_section(self.bites)
-        # self.bites = self.bites[0 : self.info_section.section_length + 3]
-        if after_info:
-            # print(f'After Info: {after_info}')
-            after_cmd = self._set_splice_command(after_info)
-            if after_cmd:
-                #    print(f'After Command: {after_cmd}')
-                after_dscrptrs = self._mk_descriptors(after_cmd)
-                if after_dscrptrs:
-                    #       print(f'After Dscrptrs: {after_dscrptrs}')
-                    crc = hex(int.from_bytes(after_dscrptrs[0:4], byteorder="big"))
-                    self.info_section.crc = crc
-                    return True
+        bites = self.mk_info_section(self.bites)
+        while bites:
+            bites= self._set_splice_command(bites)
+            bites = self._mk_descriptors(bites)
+            crc = hex(int.from_bytes(bites[0:4], byteorder="big"))
+            self.info_section.crc = crc
+            return True
         return False
 
     def encode(self):
@@ -221,13 +214,10 @@ class Cue(SCTE35Base):
         Cue._descriptorloop parses all splice descriptors
         """
         tag_n_len_bites = 2
-        # 1 byte for descriptor tag,
-        # 1 byte for descriptor length
         while dll:
             spliced = splice_descriptor(bites)
             if not spliced:
                 return
-            # print(spliced)
             sdl = spliced.descriptor_length
             sd_size = tag_n_len_bites + sdl
             dll -= sd_size
