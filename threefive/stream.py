@@ -443,8 +443,8 @@ class Stream:
         if pid in self._pids["pcr"]:
             # self._parse_cc(pkt, pid)
             self._parse_pcr(pkt, pid)
-            if self._pusi_flag(pkt):
-                self._parse_pts(pkt, pid)
+        if self._pusi_flag(pkt):
+            self._parse_pts(pkt, pid)
         if pid in self._pids["scte35"]:
             cue = self._parse_scte35(pkt, pid)
         return cue
