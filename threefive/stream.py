@@ -3,9 +3,9 @@ Mpeg-TS Stream parsing class Stream
 """
 import sys
 from functools import partial
+from new_reader import reader
 from .cue import Cue
 from .packetdata import PacketData
-from new_reader import reader
 
 """
 stream types for program streams.
@@ -441,10 +441,10 @@ class Stream:
         if pid in self._pids["tables"]:
             self._parse_tables(pkt, pid)
         if pid in self._pids["pcr"]:
-            self._parse_cc(pkt, pid)
+            # self._parse_cc(pkt, pid)
             self._parse_pcr(pkt, pid)
-        if self._pusi_flag(pkt):
-            self._parse_pts(pkt, pid)
+            if self._pusi_flag(pkt):
+                self._parse_pts(pkt, pid)
         if pid in self._pids["scte35"]:
             cue = self._parse_scte35(pkt, pid)
         return cue
