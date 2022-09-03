@@ -62,11 +62,10 @@ class Cue(SCTE35Base):
         """
         Cue.decode() parses for SCTE35 data
         """
-        if not self.bites:
-            return
+        bites = self.bites
         self.descriptors = []
-        bites = self.mk_info_section(self.bites)
         while bites:
+            bites = self.mk_info_section(self.bites)
             bites= self._set_splice_command(bites)
             bites = self._mk_descriptors(bites)
             crc = hex(int.from_bytes(bites[0:4], byteorder="big"))
@@ -116,7 +115,6 @@ class Cue(SCTE35Base):
         return hex(self.encode_as_int())
 
     def _encode_crc(self):
-        # crc32_func = get_crc32_func()
         crc_int = crc32(self.bites)
         self.info_section.crc = hex(crc_int)
         self.bites += int.to_bytes(crc_int, 4, byteorder="big")
@@ -185,7 +183,6 @@ class Cue(SCTE35Base):
         """
         if isinstance(stuff, str):
             stuff = json.loads(stuff)
-
         if "info_section" in stuff:
             self.load_info_section(stuff["info_section"])
         if "command" in stuff:
@@ -209,19 +206,17 @@ class Cue(SCTE35Base):
             all_bites.add_bites(chunk)
         return all_bites.bites
 
-    def _descriptorloop(self, bites, dll):
+    def _descriptor_loop(self, loop_bites):
         """
-        Cue._descriptorloop parses all splice descriptors
+        Cue._descriptor_loop parses all splice descriptors
         """
-        tag_n_len_bites = 2
-        while dll:
-            spliced = splice_descriptor(bites)
+        tag_n_len = 2
+        while loop_bites:
+            spliced = splice_descriptor(loop_bites)
             if not spliced:
                 return
-            sdl = spliced.descriptor_length
-            sd_size = tag_n_len_bites + sdl
-            dll -= sd_size
-            bites = bites[sd_size:]
+            sd_size = tag_n_len + spliced.descriptor_length
+            loop_bites = loop_bites[sd_size:]
             del spliced.bites
             self.descriptors.append(spliced)
 
@@ -283,15 +278,12 @@ class Cue(SCTE35Base):
         """
         Cue._mk_descriptors parses
         Cue.info_section.descriptor_loop_length,
-        then call Cue._descriptorloop
+        then call Cue._descriptor_loop
         """
-        try:
-            dll = (bites[0] << 8) | bites[1]
-        except (LookupError, TypeError, ValueError):
-            return False
+        dll = (bites[0] << 8) | bites[1]
         self.info_section.descriptor_loop_length = dll
         bites = bites[2:]
-        self._descriptorloop(bites, dll)
+        self._descriptor_loop(bites[:dll])
         return bites[dll:]
 
     def mk_info_section(self, bites):
@@ -331,3 +323,4 @@ class Cue(SCTE35Base):
         as JSON to sys.stderr
         """
         print(self.get_json(), file=stderr)
+
