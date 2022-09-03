@@ -58,6 +58,8 @@ class Cue(SCTE35Base):
     def __repr__(self):
         return str(self.__dict__)
 
+    # decode
+
     def decode(self):
         """
         Cue.decode() parses for SCTE35 data
@@ -72,139 +74,6 @@ class Cue(SCTE35Base):
             self.info_section.crc = crc
             return True
         return False
-
-    def encode(self):
-        """
-        Cue.encode() converts SCTE35 data
-        to a base64 encoded string.
-        """
-        dscptr_bites = self._unloop_descriptors()
-        dll = len(dscptr_bites)
-        self.info_section.descriptor_loop_length = dll
-        if not self.command:
-            err_mesg = "\033[7mA splice command is required\033[27m"
-            raise ValueError(err_mesg)
-        cmd_bites = self.command.encode()
-        cmdl = self.command.command_length = len(cmd_bites)
-        self.info_section.splice_command_length = cmdl
-        self.info_section.splice_command_type = self.command.command_type
-        # 11 bytes for info section + command + 2 descriptor loop length
-        # + descriptor loop + 4 for crc
-        self.info_section.section_length = 11 + cmdl + 2 + dll + 4
-        self.bites = self.info_section.encode()
-        self.bites += cmd_bites
-        self.bites += int.to_bytes(
-            self.info_section.descriptor_loop_length, 2, byteorder="big"
-        )
-        self.bites += dscptr_bites
-        self._encode_crc()
-        return b64encode(self.bites).decode()
-
-    def encode_as_int(self):
-        """
-        encode_as_int returns self.bites as an int.
-        """
-        self.encode()
-        return int.from_bytes(self.bites, byteorder="big")
-
-    def encode_as_hex(self):
-        """
-        encode_as_hex returns self.bites as
-        a hex string
-        """
-        return hex(self.encode_as_int())
-
-    def _encode_crc(self):
-        crc_int = crc32(self.bites)
-        self.info_section.crc = hex(crc_int)
-        self.bites += int.to_bytes(crc_int, 4, byteorder="big")
-
-    def load_info_section(self, isec):
-        """
-        load_info_section loads data for Cue.info_section
-        isec should be a dict.
-        if 'splice_command_type' is included,
-        an empty command instance will be created for Cue.command
-        """
-        self.info_section.load(isec)
-        if "splice_command_type" in isec:
-            cmd_type = isec["splice_command_type"]
-            command_map[cmd_type]()
-
-    def load_command(self, cmd):
-        """
-        load_command loads data for Cue.command
-        cmd should be a dict.
-        if 'command_type' is included,
-        the command instance will be created.
-        """
-        if not isinstance(cmd, dict):
-            try:
-                cmd = cmd.get()
-            except:
-                print(f" cmd is a {type(cmd)} should be a dict,")
-                return
-        if "command_type" in cmd:
-            self.command = command_map[cmd["command_type"]]()
-        if self.command:
-            self.command.load(cmd)
-
-    def load_descriptors(self, dlist):
-        """
-        Load_descriptors loads descriptor data.
-        dlist is a list of dicts
-        if 'tag' is included in each dict,
-        a descriptor instance will be created.
-        """
-        if not isinstance(dlist, list):
-            raise Exception("descriptors should be a list")
-        for dstuff in dlist:
-            if not isinstance(dstuff, dict):
-                try:
-                    dstuff = dstuff.get()
-                except:
-                    print(f" dstuff is a {type(dstuff)} should be a dict,")
-                    return
-            if "tag" in dstuff:
-                dscptr = descriptor_map[dstuff["tag"]]()
-                dscptr.load(dstuff)
-                self.descriptors.append(dscptr)
-
-    def load(self, stuff):
-        """
-        Cue.load loads SCTE35 data for encoding.
-        stuff is a dict or json
-        with any or all of these keys
-        stuff = {
-            'info_section': {dict} ,
-            'command': {dict},
-            'descriptors': [list of {dicts}],
-            }
-        """
-        if isinstance(stuff, str):
-            stuff = json.loads(stuff)
-        if "info_section" in stuff:
-            self.load_info_section(stuff["info_section"])
-        if "command" in stuff:
-            self.load_command(stuff["command"])
-        if "descriptors" in stuff:
-            self.load_descriptors(stuff["descriptors"])
-
-    def _unloop_descriptors(self):
-        """
-        _unloop_descriptors
-        for each descriptor in self.descriptors
-        encode descriptor tag, descriptor length,
-        and the descriptor into all_bites.bites
-        """
-        all_bites = NBin()
-        dbite_chunks = [dsptr.encode() for dsptr in self.descriptors]
-        for chunk, dsptr in zip(dbite_chunks, self.descriptors):
-            dsptr.descriptor_length = len(chunk)
-            all_bites.add_int(dsptr.tag, 8)
-            all_bites.add_int(dsptr.descriptor_length, 8)
-            all_bites.add_bites(chunk)
-        return all_bites.bites
 
     def _descriptor_loop(self, loop_bites):
         """
@@ -308,6 +177,7 @@ class Cue(SCTE35Base):
         self.command = command_map[sct](bites)
         self.command.decode()
         del self.command.bites
+        self.info_section.splice_command_length = self.command.command_length
         bites = bites[self.command.command_length :]
         return bites
 
@@ -324,3 +194,140 @@ class Cue(SCTE35Base):
         """
         print(self.get_json(), file=stderr)
 
+    # encode related
+
+    def encode(self):
+        """
+        Cue.encode() converts SCTE35 data
+        to a base64 encoded string.
+        """
+        dscptr_bites = self._unloop_descriptors()
+        dll = len(dscptr_bites)
+        self.info_section.descriptor_loop_length = dll
+        if not self.command:
+            err_mesg = "\033[7mA splice command is required\033[27m"
+            raise ValueError(err_mesg)
+        cmd_bites = self.command.encode()
+        cmdl = self.command.command_length = len(cmd_bites)
+        self.info_section.splice_command_length = cmdl
+        self.info_section.splice_command_type = self.command.command_type
+        # 11 bytes for info section + command + 2 descriptor loop length
+        # + descriptor loop + 4 for crc
+        self.info_section.section_length = 11 + cmdl + 2 + dll + 4
+        self.bites = self.info_section.encode()
+        self.bites += cmd_bites
+        self.bites += int.to_bytes(
+            self.info_section.descriptor_loop_length, 2, byteorder="big"
+        )
+        self.bites += dscptr_bites
+        self._encode_crc()
+        return b64encode(self.bites).decode()
+
+    def encode_as_int(self):
+        """
+        encode_as_int returns self.bites as an int.
+        """
+        self.encode()
+        return int.from_bytes(self.bites, byteorder="big")
+
+    def encode_as_hex(self):
+        """
+        encode_as_hex returns self.bites as
+        a hex string
+        """
+        return hex(self.encode_as_int())
+
+    def _encode_crc(self):
+        """
+        _encode_crc encode crc32
+        """
+        crc_int = crc32(self.bites)
+        self.info_section.crc = hex(crc_int)
+        self.bites += int.to_bytes(crc_int, 4, byteorder="big")
+
+    def _unloop_descriptors(self):
+        """
+        _unloop_descriptors
+        for each descriptor in self.descriptors
+        encode descriptor tag, descriptor length,
+        and the descriptor into all_bites.bites
+        """
+        all_bites = NBin()
+        dbite_chunks = [dsptr.encode() for dsptr in self.descriptors]
+        for chunk, dsptr in zip(dbite_chunks, self.descriptors):
+            dsptr.descriptor_length = len(chunk)
+            all_bites.add_int(dsptr.tag, 8)
+            all_bites.add_int(dsptr.descriptor_length, 8)
+            all_bites.add_bites(chunk)
+        return all_bites.bites
+
+    def load(self, stuff):
+        """
+        Cue.load loads SCTE35 data for encoding.
+        stuff is a dict or json
+        with any or all of these keys
+        stuff = {
+            'info_section': {dict} ,
+            'command': {dict},
+            'descriptors': [list of {dicts}],
+            }
+        """
+        if isinstance(stuff, str):
+            stuff = json.loads(stuff)
+        if "info_section" in stuff:
+            self.load_info_section(stuff["info_section"])
+        if "command" in stuff:
+            self.load_command(stuff["command"])
+        if "descriptors" in stuff:
+            self.load_descriptors(stuff["descriptors"])
+
+    def load_info_section(self, isec):
+        """
+        load_info_section loads data for Cue.info_section
+        isec should be a dict.
+        if 'splice_command_type' is included,
+        an empty command instance will be created for Cue.command
+        """
+        self.info_section.load(isec)
+        if "splice_command_type" in isec:
+            cmd_type = isec["splice_command_type"]
+            command_map[cmd_type]()
+
+    def load_command(self, cmd):
+        """
+        load_command loads data for Cue.command
+        cmd should be a dict.
+        if 'command_type' is included,
+        the command instance will be created.
+        """
+        if not isinstance(cmd, dict):
+            try:
+                cmd = cmd.get()
+            except:
+                print(f" cmd is a {type(cmd)} should be a dict,")
+                return
+        if "command_type" in cmd:
+            self.command = command_map[cmd["command_type"]]()
+        if self.command:
+            self.command.load(cmd)
+
+    def load_descriptors(self, dlist):
+        """
+        Load_descriptors loads descriptor data.
+        dlist is a list of dicts
+        if 'tag' is included in each dict,
+        a descriptor instance will be created.
+        """
+        if not isinstance(dlist, list):
+            raise Exception("descriptors should be a list")
+        for dstuff in dlist:
+            if not isinstance(dstuff, dict):
+                try:
+                    dstuff = dstuff.get()
+                except:
+                    print(f" dstuff is a {type(dstuff)} should be a dict,")
+                    return
+            if "tag" in dstuff:
+                dscptr = descriptor_map[dstuff["tag"]]()
+                dscptr.load(dstuff)
+                self.descriptors.append(dscptr)
