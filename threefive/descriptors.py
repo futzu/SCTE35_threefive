@@ -180,7 +180,8 @@ class DtmfDescriptor(SpliceDescriptor):
         self.preroll = self.bites[0]
         self.dtmf_count = self.bites[1] >> 5
         self.bites = self.bites[2:]
-        self.dtmf_chars = list(self.bites[: self.dtmf_count].decode())
+        self.dtmf_chars = "".join(list(self.bites[: self.dtmf_count].decode()))
+        print(self.dtmf_chars[0])
 
     def encode(self, nbin=None):
         """
