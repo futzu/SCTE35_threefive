@@ -170,7 +170,7 @@ class DtmfDescriptor(SpliceDescriptor):
         super().__init__(bites)
         self.name = "DTMF Descriptor"
         self.preroll = None
-        self.dtmf_count = None
+        self.dtmf_count = 0
         self.dtmf_chars = None
 
     def decode(self):
@@ -180,8 +180,7 @@ class DtmfDescriptor(SpliceDescriptor):
         self.preroll = self.bites[0]
         self.dtmf_count = self.bites[1] >> 5
         self.bites = self.bites[2:]
-        self.dtmf_chars = "".join(list(self.bites[: self.dtmf_count].decode()))
-        print(self.dtmf_chars[0])
+        self.dtmf_chars = list(self.bites[: self.dtmf_count].decode())
 
     def encode(self, nbin=None):
         """
@@ -207,9 +206,9 @@ class TimeDescriptor(SpliceDescriptor):
         super().__init__(bites)
         self.tag = 3
         self.name = "Time Descriptor"
-        self.tai_seconds = None
-        self.tai_ns = None
-        self.utc_offset = None
+        self.tai_seconds = 0
+        self.tai_ns = 0
+        self.utc_offset = 0
 
     def decode(self):
         """
@@ -278,41 +277,6 @@ class SegmentationDescriptor(SpliceDescriptor):
                 self._decode_components(bitbin)
             self._decode_segmentation(bitbin)
 
-    def encode(self, nbin=None):
-        """
-        encode a segmentation descriptor
-        """
-        nbin = super().encode(nbin)
-        self._chk_var(str, nbin.add_hex, "segmentation_event_id", 32)  # 4 bytes
-        self._chk_var(bool, nbin.add_flag, "segmentation_event_cancel_indicator", 1)
-        nbin.forward(7)  # 1 byte
-        if not self.segmentation_event_cancel_indicator:
-            self._encode_flags(nbin)  # 1 byte
-            if not self.program_segmentation_flag:
-                self._encode_components(nbin)
-            self._encode_segmentation(nbin)
-        return nbin.bites
-
-    def _decode_components(self, bitbin):
-        self.component_count = c_c = bitbin.as_int(8)  # 1 byte
-        while c_c:  # 6 bytes each
-            c_c -= 1
-            comp = {}
-            comp["component_tag"] = bitbin.as_int(8)
-            bitbin.forward(7)
-            comp["pts_offset"] = bitbin.as_90k(33)
-            self.components.append(comp)
-
-    def _encode_components(self, nbin):
-        nbin.add_int(self.component_count, 8)  # 1 byte
-        c_c = 0
-        while c_c < self.component_count:  # 6 bytes each
-            comp = self.components[c_c]
-            nbin.add_int(comp["component_tag"], 8)
-            nbin.forward(7)
-            nbin.add_90k(comp["pts_offset"], 33)
-            c_c += 1
-
     def _decode_flags(self, bitbin):  # 1 byte for set flags
         self.program_segmentation_flag = bitbin.as_flag(1)
         self.segmentation_duration_flag = bitbin.as_flag(1)
@@ -325,18 +289,15 @@ class SegmentationDescriptor(SpliceDescriptor):
         else:
             bitbin.forward(5)
 
-    def _encode_flags(self, nbin):  # 1 byte for set flags
-        self._chk_var(bool, nbin.add_flag, "program_segmentation_flag", 1)
-        self._chk_var(bool, nbin.add_flag, "segmentation_duration_flag", 1)
-        self._chk_var(bool, nbin.add_flag, "delivery_not_restricted_flag", 1)
-        if not self.delivery_not_restricted_flag:
-            self._chk_var(bool, nbin.add_flag, "web_delivery_allowed_flag", 1)
-            self._chk_var(bool, nbin.add_flag, "no_regional_blackout_flag", 1)
-            self._chk_var(bool, nbin.add_flag, "archive_allowed_flag", 1)
-            a_key = k_by_v(table20, self.device_restrictions)
-            nbin.add_int(a_key, 2)
-        else:
-            nbin.reserve(5)
+    def _decode_components(self, bitbin):
+        self.component_count = c_c = bitbin.as_int(8)  # 1 byte
+        while c_c:  # 6 bytes each
+            c_c -= 1
+            comp = {}
+            comp["component_tag"] = bitbin.as_int(8)
+            bitbin.forward(7)
+            comp["pts_offset"] = bitbin.as_90k(33)
+            self.components.append(comp)
 
     def _decode_segmentation(self, bitbin):
         if self.segmentation_duration_flag:
@@ -352,6 +313,51 @@ class SegmentationDescriptor(SpliceDescriptor):
             self.segmentation_message = table22[self.segmentation_type_id]
             self._decode_segments(bitbin)
 
+    def _decode_segments(self, bitbin):
+        self.segment_num = bitbin.as_int(8)  # 1 byte
+        self.segments_expected = bitbin.as_int(8)  # 1 byte
+        if self.segmentation_type_id in [0x34, 0x36, 0x38, 0x3A]:
+            self.sub_segment_num = bitbin.as_int(8)  # 1 byte
+            self.sub_segments_expected = bitbin.as_int(8)  # 1 byte
+
+    def encode(self, nbin=None):
+        """
+        encode a segmentation descriptor
+        """
+        nbin = super().encode(nbin)
+        self._chk_var(str, nbin.add_hex, "segmentation_event_id", 32)  # 4 bytes
+        self._chk_var(bool, nbin.add_flag, "segmentation_event_cancel_indicator", 1)
+        nbin.forward(7)  # 1 byte
+        if not self.segmentation_event_cancel_indicator:
+            self._encode_flags(nbin)  # 1 byte
+            if not self.program_segmentation_flag:
+                self._encode_components(nbin)
+            self._encode_segmentation(nbin)
+        return nbin.bites
+
+    def _encode_components(self, nbin):
+        nbin.add_int(self.component_count, 8)  # 1 byte
+        c_c = 0
+        while c_c < self.component_count:  # 6 bytes each
+            comp = self.components[c_c]
+            nbin.add_int(comp["component_tag"], 8)
+            nbin.forward(7)
+            nbin.add_90k(comp["pts_offset"], 33)
+            c_c += 1
+
+    def _encode_flags(self, nbin):  # 1 byte for set flags
+        self._chk_var(bool, nbin.add_flag, "program_segmentation_flag", 1)
+        self._chk_var(bool, nbin.add_flag, "segmentation_duration_flag", 1)
+        self._chk_var(bool, nbin.add_flag, "delivery_not_restricted_flag", 1)
+        if not self.delivery_not_restricted_flag:
+            self._chk_var(bool, nbin.add_flag, "web_delivery_allowed_flag", 1)
+            self._chk_var(bool, nbin.add_flag, "no_regional_blackout_flag", 1)
+            self._chk_var(bool, nbin.add_flag, "archive_allowed_flag", 1)
+            a_key = k_by_v(table20, self.device_restrictions)
+            nbin.add_int(a_key, 2)
+        else:
+            nbin.reserve(5)
+
     def _encode_segmentation(self, nbin):
         if self.segmentation_duration_flag:
             self._chk_var(float, nbin.add_90k, "segmentation_duration", 40)  # 5 bytes
@@ -365,13 +371,6 @@ class SegmentationDescriptor(SpliceDescriptor):
         )
         self._chk_var(int, nbin.add_int, "segmentation_type_id", 8)  # 1 byte
         self._encode_segments(nbin)
-
-    def _decode_segments(self, bitbin):
-        self.segment_num = bitbin.as_int(8)  # 1 byte
-        self.segments_expected = bitbin.as_int(8)  # 1 byte
-        if self.segmentation_type_id in [0x34, 0x36, 0x38, 0x3A]:
-            self.sub_segment_num = bitbin.as_int(8)  # 1 byte
-            self.sub_segments_expected = bitbin.as_int(8)  # 1 byte
 
     def _encode_segments(self, nbin):
         self._chk_var(int, nbin.add_int, "segment_num", 8)  # 1 byte
@@ -397,7 +396,6 @@ def splice_descriptor(bites):
     descriptor tag and decodes and
     returns an instance self._descriptor_map[tag]
     """
-    # splice_descriptor_tag 8 uimsbf
     tag = bites[0]
     if tag not in descriptor_map:
         return False
