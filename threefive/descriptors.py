@@ -4,7 +4,7 @@ SCTE35 Splice Descriptors
 from .bitn import BitBin
 from .base import SCTE35Base
 from .segmentation import table20, table22
-from .upids import upid_decoder, upid_encoder
+from .upids import UpidDecoder, upid_encoder
 
 
 def k_by_v(adict, avalue):
@@ -305,9 +305,9 @@ class SegmentationDescriptor(SpliceDescriptor):
             self.segmentation_duration = self.as_90k(self.segmentation_duration_ticks)
         self.segmentation_upid_type = bitbin.as_int(8)  # 1 byte
         self.segmentation_upid_length = bitbin.as_int(8)  # 1 byte
-        self.segmentation_upid_type_name, self.segmentation_upid = upid_decoder(
+        self.segmentation_upid_type_name, self.segmentation_upid = UpidDecoder(
             bitbin, self.segmentation_upid_type, self.segmentation_upid_length
-        )
+        ).decode()
         self.segmentation_type_id = bitbin.as_int(8)  # 1 byte
         if self.segmentation_type_id in table22:
             self.segmentation_message = table22[self.segmentation_type_id]
