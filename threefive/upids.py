@@ -51,6 +51,7 @@ def upid_encoder(nbin, upid_type, upid_length, seg_upid):
     """
 
     upid_map = {
+        0x01: ["Deprecated", _encode_uri],
         0x02: ["Deprecated", _encode_uri],
         0x03: ["AdID", _encode_uri],
         0x04: ["UMID", _encode_umid],
@@ -63,6 +64,7 @@ def upid_encoder(nbin, upid_type, upid_length, seg_upid):
         0x0E: ["ADS Info", _encode_uri],
         0x0F: ["URI", _encode_uri],
         0x10: ["UUID", _encode_uri],
+        0x11: ["SCR", _encode_uri],
     }
 
     upid_map_too = {
