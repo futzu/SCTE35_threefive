@@ -84,6 +84,28 @@ class ProgramInfo:
         print()
 
 
+class Pids:
+    SDT_PID = 0x11
+    PAT_PID = 0x00
+    def __init__(self):
+        self.pcr= set()
+        self.pmt = set()
+        self.scte35 = set()
+        self.tables = set()
+        self.tables.add(self.PAT_PID)
+        self.tables.add(self.SDT_PID)
+
+class Maps:
+    def __init__(self):
+        self.pid_cc = {}
+        self.pid_prgm = {}
+        self.prgm_pcr = {}
+        self.prgm_pts = {}
+        self.prgm = {}
+        self.partial = {}
+        self.last = {}
+
+
 class Stream:
     """
     Stream class for parsing MPEG-TS data.
@@ -91,9 +113,6 @@ class Stream:
 
     _PACKET_SIZE = 188
     _SYNC_BYTE = 0x47
-    # pids
-    _SDT_PID = 0x11
-    _PAT_PID = 0x00
     # tids
     _PMT_TID = b"\x02"
     _SCTE35_TID = b"\xFC0"
@@ -122,16 +141,8 @@ class Stream:
         self.start = {}
         self.info = None
         self.the_program = None
-        self._pids = {"pcr": set(), "tables": set(), "pmt": set(), "scte35": set()}
-        self._pids["tables"].add(self._PAT_PID)
-        self._pids["tables"].add(self._SDT_PID)
-        self._pid_cc = {}
-        self._pid_prgm = {}
-        self._prgm_pcr = {}
-        self._prgm_pts = {}
-        self._prgm = {}
-        self._partial = {}
-        self._last = {}
+        self.pids = Pids()
+        self.maps = Maps()
 
     def __repr__(self):
         return str(self.__dict__)
@@ -165,16 +176,6 @@ class Stream:
         self._tsdata.close()
         return True
 
-    def dump(self, fname):
-        """
-        Stream.dump dumps all the packets to a file.
-        Useful for live streams.
-        """
-        if not self._find_start():
-            return False
-        with open(fname, "wb") as dumpfile:
-            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE * 7), b""):
-                dumpfile.write(pkt)
 
     def decode2(self, func=show_cue):
         """
@@ -228,23 +229,6 @@ class Stream:
                 sys.stdout.buffer.write(pkt)
             self._tsdata.close()
 
-    def strip_scte35(self, func=show_cue_stderr):
-        """
-        Stream.strip_scte35 works just likle Stream.decode_proxy,
-        MPEGTS packets, ( Except the SCTE-35 packets) ,
-        are written to stdout after being parsed.
-        SCTE-35 cues are printed to stderr.
-        """
-        if self._find_start():
-            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
-                cue = self._parse(pkt)
-                if cue:
-                    func(cue)
-                else:
-                    sys.stdout.buffer.write(pkt)
-        self._tsdata.close()
-        return True
-
     def show(self):
         """
         displays streams that will be
@@ -254,7 +238,7 @@ class Stream:
         if self._find_start():
             for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
                 self._parse_info(pkt)
-            sopro = sorted(self._prgm.items())
+            sopro = sorted(self.maps.prgm.items())
             for k, vee in sopro:
                 if len(vee.streams.items()) > 0:
                     print(f"Program: {k}")
@@ -272,10 +256,10 @@ class Stream:
         return False
 
     def _mk_packet_data(self, pid):
-        prgm = self._pid_prgm[pid]
+        prgm = self.maps.pid_prgm[pid]
         pdata = PacketData(pid, prgm)
-        pdata.mk_pcr(self._prgm_pcr)
-        pdata.mk_pts(self._prgm_pts)
+        pdata.mk_pcr(self.maps.prgm_pcr)
+        pdata.mk_pts(self.maps.prgm_pts)
         return pdata
 
     @staticmethod
@@ -342,7 +326,7 @@ class Stream:
             pts |= payload[12] << 7
             pts |= payload[13] >> 1
             prgm = self.pid2prgm(pid)
-            self._prgm_pts[prgm] = pts
+            self.maps.prgm_pts[prgm] = pts
             if prgm not in self.start:
                 self.start[prgm] = pts
 
@@ -359,15 +343,15 @@ class Stream:
                 pcr |= pkt[9] << 1
                 pcr |= pkt[10] >> 7
                 prgm = 1
-                if pid in self._pid_prgm:
-                    prgm = self._pid_prgm[pid]
-                self._prgm_pcr[prgm] = pcr
+                if pid in self.maps.pid_prgm:
+                    prgm = self.maps.pid_prgm[pid]
+                self.maps.prgm_pcr[prgm] = pcr
 
     def _parse_cc(self, pkt, pid):
         last_cc = None
         c_c = pkt[3] & 0xF
-        if pid in self._pid_cc:
-            last_cc = self._pid_cc[pid]
+        if pid in self.maps.pid_cc:
+            last_cc = self.maps.pid_cc[pid]
             good = (last_cc, last_cc + 1)
             if last_cc == 15:
                 good = (15, 0)
@@ -376,7 +360,7 @@ class Stream:
                     f"BAD --> pid: {hex(pid)} last cc: {last_cc} cc: {c_c}",
                     file=sys.stderr,
                 )
-            self._pid_cc[pid] = c_c
+            self.maps.pid_cc[pid] = c_c
 
     @staticmethod
     def as_90k(ticks):
@@ -391,8 +375,8 @@ class Stream:
         returns the program
         """
         prgm = 1
-        if pid in self._pid_prgm:
-            prgm = self._pid_prgm[pid]
+        if pid in self.maps.pid_prgm:
+            prgm =self.maps.pid_prgm[pid]
         return prgm
 
     def pid2pts(self, pid):
@@ -401,7 +385,7 @@ class Stream:
         returns the current pts
         """
         prgm = self.pid2prgm(pid)
-        if prgm not in self._prgm_pts:
+        if prgm not in sself.maps.prgm_pts:
             return False
         return self.as_90k(self._prgm_pts[prgm])
 
@@ -420,50 +404,50 @@ class Stream:
         """
         pay = self._parse_payload(pkt)
         if not self._chk_last(pay, pid):
-            if pid == self._PAT_PID:
+            if pid == self.pids.PAT_PID:
                 return self._program_association_table(pay)
-            if pid == self._SDT_PID:
+            if pid == self.pids.SDT_PID:
                 if self.info:
                     return self._stream_descriptor_table(pay)
-            if pid in self._pids["pmt"]:
+            if pid in self.pids.pmt:
                 return self._program_map_table(pay, pid)
         return False
 
     def _parse_info(self, pkt):
         pid = self._parse_pid(pkt[1], pkt[2])
-        if pid in self._pids["tables"]:
+        if pid in self.pids.tables:
             self._parse_tables(pkt, pid)
         return pid
 
     def _parse(self, pkt):
         cue = False
         pid = self._parse_pid(pkt[1], pkt[2])
-        if pid in self._pids["tables"]:
+        if pid in self.pids.tables:
             self._parse_tables(pkt, pid)
-        if pid in self._pids["pcr"]:
-            # self._parse_cc(pkt, pid)
+        if pid in self.pids.pcr:
+            self._parse_cc(pkt, pid)
             self._parse_pcr(pkt, pid)
         if self._pusi_flag(pkt):
             self._parse_pts(pkt, pid)
-        if pid in self._pids["scte35"]:
+        if pid in self.pids.scte35:
             cue = self._parse_scte35(pkt, pid)
         return cue
 
     def _chk_partial(self, pay, pid, sep):
-        if pid in self._partial:
-            pay = self._partial.pop(pid) + pay
+        if pid in self.maps.partial:
+            pay =self.maps.partial.pop(pid) + pay
         return self._split_by_idx(pay, sep)
 
     def _chk_last(self, pay, pid):
-        if pid in self._last:
-            return pay == self._last[pid]
-        self._last[pid] = pay
+        if pid in self.maps.last:
+            return pay ==self.maps.last[pid]
+        self.maps.last[pid] = pay
         return False
 
     def _section_done(self, pay, pid, seclen):
         # + 3 for the bytes before section starts
         if (seclen + 3) > len(pay):
-            self._partial[pid] = pay
+            self.maps.partial[pid] = pay
             return False
         return True
 
@@ -481,7 +465,7 @@ class Stream:
         """
         pay = self._chk_partial(self._parse_payload(pkt), pid, self._SCTE35_TID)
         if not pay:
-            self._pids["scte35"].remove(pid)
+            self.pids.scte35.remove(pid)
             return False
         if pay[13] == self.show_null:
             return False
@@ -496,11 +480,11 @@ class Stream:
         """
         _stream_descriptor_table parses the SDT for program metadata
         """
-        pay = self._chk_partial(pay, self._SDT_PID, self._SDT_TID)
+        pay = self._chk_partial(pay, self.pids.SDT_PID, self._SDT_TID)
         if not pay:
             return False
         seclen = self._parse_length(pay[1], pay[2])
-        if not self._section_done(pay, self._SDT_PID, seclen):
+        if not self._section_done(pay, self.pids.SDT_PID, seclen):
             return False
         idx = 11
         while idx < seclen + 3:
@@ -520,9 +504,9 @@ class Stream:
                     i += 1
                     service_name = pay[idx + i : idx + i + snl]
                     i += snl
-                    if service_id not in self._prgm:
-                        self._prgm[service_id] = ProgramInfo()
-                    pinfo = self._prgm[service_id]
+                    if service_id not in self.maps.prgm:
+                       self.maps.prgm[service_id] = ProgramInfo()
+                    pinfo =self.maps.prgm[service_id]
                     pinfo.provider = service_provider_name
                     pinfo.service = service_name
                 i = dloop_len
@@ -533,9 +517,9 @@ class Stream:
         parse program association table
         for program to pmt_pid mappings.
         """
-        pay = self._chk_partial(pay, self._PAT_PID, b"")
+        pay = self._chk_partial(pay, self.pids.PAT_PID, b"")
         seclen = self._parse_length(pay[2], pay[3])
-        if not self._section_done(pay, self._PAT_PID, seclen):
+        if not self._section_done(pay, self.pids.PAT_PID, seclen):
             return False
         seclen -= 5  # pay bytes 4,5,6,7,8
         idx = 9
@@ -544,8 +528,8 @@ class Stream:
             program_number = self._parse_program(pay[idx], pay[idx + 1])
             if program_number > 0:
                 pmt_pid = self._parse_pid(pay[idx + 2], pay[idx + 3])
-                self._pids["pmt"].add(pmt_pid)
-                self._pids["tables"].add(pmt_pid)
+                self.pids.pmt.add(pmt_pid)
+                self.pids.tables.add(pmt_pid)
 
             seclen -= chunk_size
             idx += chunk_size
@@ -564,13 +548,13 @@ class Stream:
         if self.the_program and (program_number != self.the_program):
             return False
         pcr_pid = self._parse_pid(pay[8], pay[9])
-        if program_number not in self._prgm:
-            self._prgm[program_number] = ProgramInfo()
-        pinfo = self._prgm[program_number]
+        if program_number not in self.maps.prgm:
+           self.maps.prgm[program_number] = ProgramInfo()
+        pinfo =self.maps.prgm[program_number]
         pinfo.pid = pid
         pinfo.pcr_pid = pcr_pid
-        self._pids["pcr"].add(pcr_pid)
-        self._pid_prgm[pcr_pid] = program_number
+        self.pids.pcr.add(pcr_pid)
+        self.maps.pid_prgm[pcr_pid] = program_number
         proginfolen = self._parse_length(pay[10], pay[11])
         idx = 12
         idx += proginfolen
@@ -589,11 +573,11 @@ class Stream:
         end_idx = (idx + si_len) - chunk_size
         while idx < end_idx:
             stream_type, pid, ei_len = self._parse_stream_type(pay, idx)
-            pinfo = self._prgm[program_number]
+            pinfo =self.maps.prgm[program_number]
             pinfo.streams[pid] = stream_type
             idx += chunk_size
             idx += ei_len
-            self._pid_prgm[pid] = program_number
+            self.maps.pid_prgm[pid] = program_number
             self._chk_pid_stream_type(pid, stream_type)
 
     def _parse_stream_type(self, pay, idx):
@@ -611,4 +595,4 @@ class Stream:
         add it to self._scte35_pids.
         """
         if stream_type in ["0x6", "0x86"]:
-            self._pids["scte35"].add(pid)
+            self.pids.scte35.add(pid)
