@@ -61,6 +61,8 @@ Type "help", "copyright", "credits" or "license" for more information.
 *  I do [__Rolling Releases__](https://en.wikipedia.org/wiki/Rolling_release)
 * __Release__ versions are  __odd__.
 * __Unstable__ testing versions are __even__.
+
+
 ---
 
 ### `Easy Examples`
@@ -447,3 +449,4 @@ Adrian
 [__python3 uuid__](https://docs.python.org/3/library/uuid.html#module-uuid)
 
    
+![image](https://user-images.githubusercontent.com/52701496/189712191-a576a240-a5f1-47d1-9975-2435ef791975.png)
