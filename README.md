@@ -2,13 +2,14 @@
  [Install](#install) | [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) |
  [Cue Class](#cue-class)  |  [Stream Class](#stream-class) |
  [Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)  |
-  [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) | [x9k3](https://github.com/futzu/) | [gumd](https://github.com/futzu/gumd) | [m3ufu](https://github.com/futzu/m3ufu)
+  [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) | [x9k3](https://github.com/futzu/) | [gumd](https://github.com/futzu/gumd) | [m3ufu](https://github.com/futzu/m3ufu)| [effbot!]([https://lwn.net/Articles/878325/](https://web.archive.org/web/20091126010309/http://effbot.org:80/zone/element-index.htm))
   
 
 
 ## threefive is a SCTE35 parser.
 
 > Before we get into all that, I have a brief statement.
+
 
   ```
   I am still looking for my Watergate, my defining scandal.
@@ -20,8 +21,6 @@
   (The first "s" is for subliminal)    
 
 ```
-# Welcome to The Show ( All Hail effbot!)[https://lwn.net/Articles/878325/)
-
 ______
 *  All __2022__ SCTE35  [Commands](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py) and [Descriptors](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py) and [Upids](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upids.py)
 
