@@ -505,7 +505,7 @@ class Stream:
                     service_name = pay[idx + i : idx + i + snl]
                     i += snl
                     if service_id not in self.maps.prgm:
-                       self.maps.prgm[service_id] = ProgramInfo()
+                        self.maps.prgm[service_id] = ProgramInfo()
                     pinfo =self.maps.prgm[service_id]
                     pinfo.provider = service_provider_name
                     pinfo.service = service_name
@@ -549,7 +549,7 @@ class Stream:
             return False
         pcr_pid = self._parse_pid(pay[8], pay[9])
         if program_number not in self.maps.prgm:
-           self.maps.prgm[program_number] = ProgramInfo()
+            self.maps.prgm[program_number] = ProgramInfo()
         pinfo =self.maps.prgm[program_number]
         pinfo.pid = pid
         pinfo.pcr_pid = pcr_pid
