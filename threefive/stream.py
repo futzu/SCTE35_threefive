@@ -387,7 +387,7 @@ class Stream:
         prgm = self.pid2prgm(pid)
         if prgm not in self.maps.prgm_pts:
             return False
-        return self.as_90k(self._prgm_pts[prgm])
+        return self.as_90k(self.maps.prgm_pts[prgm])
 
     def _parse_payload(self, pkt):
         head_size = 4
