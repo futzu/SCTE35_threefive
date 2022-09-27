@@ -7,20 +7,8 @@
 
 
 ## threefive is a SCTE35 parser.
+![image](https://user-images.githubusercontent.com/52701496/192446961-0fc23dac-4b64-402a-978a-f1a11fdf51c3.png)
 
-> Before we get into all that, I have a brief statement.
-
-
-  ```
-  I am still looking for my Watergate, my defining scandal.
-  I dont mean to keep beating the same drum, 
-  but I still say that subliminal messages 
-  will be very effective over the Internet. 
-  It will take years before we see any laws 
-  against shttps.
-  (The first "s" is for subliminal)    
-
-```
 ______
 *  All __2022__ SCTE35  [Commands](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py) and [Descriptors](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py) and [Upids](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upids.py)
 
