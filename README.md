@@ -23,6 +23,7 @@ ______
 * [Diagram of a threefive SCTE-35 Cue. ](https://github.com/futzu/threefive/blob/master/cue.md)  
 * [ __x9k3__ , SCTE35 hls segmenter powered by __threefive__](https://github.com/futzu/x9k3)
 * [__m3ufu__, m3u8 parser powered by __threefive__](https://github.com/futzu/m3ufu)
+* [__Project_Super_Kabuki__](https://github.com/futzu/threefive/blob/master/superkabuki.md) SCTE35 MPEGTS Packet Injection.
 ### `Requirements`
 * threefive requires 
   * [pypy3](https://pypy.org) or python 3.6+ 
