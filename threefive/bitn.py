@@ -52,7 +52,21 @@ class BitBin:
 
         stuff = self.as_int(num_bits)
         wide = num_bits >> 3
-        return int.to_bytes(stuff, wide, byteorder="big").decode("utf-8", errors="replace")
+        return int.to_bytes(stuff, wide, byteorder="big").decode(
+            "utf-8", errors="replace"
+        )
+
+    def as_charset(self, num_bits, charset):
+        """
+        Returns num_bits of bits
+        as bytes decoded to as_ascii
+        """
+        print(charset)
+        stuff = self.as_int(num_bits)
+        wide = num_bits >> 3
+        return int.to_bytes(stuff, wide, byteorder="big").decode(
+            charset, errors="replace"
+        )
 
     def as_ticks(self, num_bits):
         """
