@@ -4,21 +4,21 @@ threefive/upids.py
 threefve.upids
 
 """
+charset = "ascii"
 
 class UpidDecoder:
     """
     UpidDecoder for use by the
     SegmentationDescriptor class.
     """
-    def __init__(self,bitbin, upid_type, upid_length):
+
+    def __init__(self, bitbin, upid_type, upid_length):
         self.bitbin = bitbin
         self.upid_type = upid_type
         self.upid_length = upid_length
 
-
     def _decode_air_id(self):
         return self.bitbin.as_hex(self.upid_length << 3)
-
 
     def _decode_atsc(self):
         return {
@@ -51,7 +51,9 @@ class UpidDecoder:
             ulb -= 8
             upid_length = self.bitbin.as_int(8)
             ulb -= 8
-            upid_type_name, segmentation_upid = UpidDecoder(self.bitbin, upid_type, upid_length).decode()
+            upid_type_name, segmentation_upid = UpidDecoder(
+                self.bitbin, upid_type, upid_length
+            ).decode()
             mid_upid = {
                 "upid_type": upid_type,
                 "upid_type_name": upid_type_name,
@@ -79,7 +81,7 @@ class UpidDecoder:
         return ".".join(chunks)
 
     def _decode_uri(self):
-        return self.bitbin.as_ascii(self.upid_length << 3)
+        return self.bitbin.as_charset(self.upid_length << 3, charset)
 
     def decode(self):
         """
@@ -94,17 +96,17 @@ class UpidDecoder:
             0x05: ["ISAN", self._decode_isan],
             0x06: ["ISAN", self._decode_isan],
             0x07: ["TID", self._decode_uri],
-            0x08: ["AiringID",self. _decode_air_id],
+            0x08: ["AiringID", self._decode_air_id],
             0x09: ["ADI", self._decode_uri],
             0x10: ["UUID", self._decode_uri],
             0x11: ["SCR", self._decode_uri],
             0x0A: ["EIDR", self._decode_eidr],
-            0x0B: ["ATSC",self. _decode_atsc],
-            0x0C: ["MPU",self. _decode_mpu],
+            0x0B: ["ATSC", self._decode_atsc],
+            0x0C: ["MPU", self._decode_mpu],
             0x0D: ["MID", self._decode_mid],
             0x0E: ["ADS Info", self._decode_uri],
             0x0F: ["URI", self._decode_uri],
-            0xFD: ["Unknown",self. _decode_uri],
+            0xFD: ["Unknown", self._decode_uri],
         }
         if self.upid_type not in upid_map:
             self.upid_type = 0xFD
