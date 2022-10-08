@@ -66,7 +66,40 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 
 ---
+### `New Stuff`
+`Specify a charset for Upid data by setting threefive.upids.charset` [`issue #55`](https://github.com/futzu/scte35-threefive/issues/55)
+*  threefive.upids.charset applies to UPID types:
+   * `0x01` (Deprecated)
+   * `0x02` (Deprecated)
+   * `0x03` (AdID)
+   * `0x07` (TID)
+   * `0x09` (ADI)
+   * `0x10` (UUID) 
+   * `0x11` (SCR) 
+   * `0x0E` (ADS Info)
+   * `0x0F` (URI)
+   * `0xFD` (Unknown)
+```lua
+>>> from threefive import Cue,upids
+>>> i="/DBKAAAAAAAAAP/wBQb+YtC8/AA0AiZDVUVJAAAD6X/CAAD3W3ACEmJibG5kcHBobkQCAsGDpQIAAAAAAAEKQ1VFSRSAIyowMljRk9c="
 
+>>> upids.charset
+'ascii'
+>>> cue=Cue(i)
+>>> cue.decode()
+ascii
+True
+>>> cue.descriptors[0].segmentation_upid
+'bblndpphnD\x02\x02���\x02\x00\x00'
+
+>>> upids.charset="utf16"
+>>> cue.decode()
+utf16
+True
+>>> cue.descriptors[0].segmentation_upid
+'扢湬灤桰䑮Ȃ菁ʥ\x00'
+```
+---
 ### `Easy Examples`
 
 ##### Base64
