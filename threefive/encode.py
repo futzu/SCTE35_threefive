@@ -32,7 +32,7 @@ def mk_time_signal(pts=None):
 
     if pts IS set:
          time_specified_flag   True
-         pts_time                        pts
+         pts_time              pts
 
     """
     cue = Cue()
@@ -55,18 +55,18 @@ def mk_splice_insert(event_id, pts, duration=None):
 
     If duration is NOT set,
         out_of_network_indicator   False
-        time_specified_flag             False
-        duration_flag                         False
-        splice_immediate_flag       True
+        time_specified_flag        False
+        duration_flag              False
+        splice_immediate_flag      True
 
     if duration IS set:
         out_of_network_indicator   True
-        time_specified_flag             True
-        duration_flag                         True
-        splice_immediate_flag       False
-        break_auto_return               True
-        break_duration                     duration
-        pts_time                                  pts
+        time_specified_flag        True
+        duration_flag              True
+        splice_immediate_flag      False
+        break_auto_return          True
+        break_duration             duration
+        pts_time                   pts
 
     """
     pts = float(pts)
