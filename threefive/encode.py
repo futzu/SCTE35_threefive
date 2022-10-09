@@ -95,6 +95,5 @@ def mk_splice_insert(event_id, pts, duration=None):
         sin.out_of_network_indicator = True
         sin.pts_time = pts
     cue.command = sin  # Add SpliceInsert to the SCTE35 cue
-    cue_string = cue.encode()  # Use cue.encode_as_hex() for hex instead of base64
-    cue.decode()
+    cue.encode()
     return cue
