@@ -26,3 +26,9 @@ from .descriptors import (
     SegmentationDescriptor,
     TimeDescriptor,
 )
+
+from .encode import (
+    mk_splice_null,
+    mk_splice_insert,
+    mk_time_signal,
+)
