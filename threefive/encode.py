@@ -39,6 +39,7 @@ def mk_time_signal(pts=None):
     ts = TimeSignal()
     ts.time_specified_flag = False
     if pts:
+        pts = float(pts)
         ts.time_specified_flag = True
         ts.pts_time = pts
     cue.command = ts
