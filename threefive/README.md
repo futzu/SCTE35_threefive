@@ -19,16 +19,3 @@
 * [version.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/version.py)  `threefive.version`.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-[![image](https://user-images.githubusercontent.com/52701496/180621223-d570b15b-b539-43dd-acc0-403033bb8107.png)](https://github.com/futzu/scte35-threefive/blob/master/threefive/crc.py)
