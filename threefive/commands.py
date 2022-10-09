@@ -141,6 +141,8 @@ class TimeSignal(SpliceCommand):
         self._chk_var(bool, nbin.add_flag, "time_specified_flag", 1)
         if self.time_specified_flag:
             nbin.reserve(6)
+            if self.pts_time_ticks and not self.pts_time:
+                self.pts_time = self.as_90k(self.pts_time_ticks)
             self._chk_var(float, nbin.add_90k, "pts_time", 33)
         else:
             nbin.reserve(7)
