@@ -28,7 +28,7 @@ class SpliceDescriptor(SCTE35Base):
         self.tag = None
         self.descriptor_length = 0
         self.name = None
-        self.identifier = None
+        self.identifier = 'CUEI'
         self.bites = bites
         self.parse_tag_and_len()
         self.parse_id()
@@ -360,6 +360,10 @@ class SegmentationDescriptor(SpliceDescriptor):
 
     def _encode_segmentation(self, nbin):
         if self.segmentation_duration_flag:
+            if self.segmentation_duration_ticks and not self.segmentation_duration:
+                self.segmentation_duration = self.as_90k(
+                    self.segmentation_duration_ticks
+                )
             self._chk_var(float, nbin.add_90k, "segmentation_duration", 40)  # 5 bytes
         self._chk_var(int, nbin.add_int, "segmentation_upid_type", 8)  # 1 byte
         self._chk_var(int, nbin.add_int, "segmentation_upid_length", 8)  # 1 byte
@@ -371,6 +375,13 @@ class SegmentationDescriptor(SpliceDescriptor):
         )
         self._chk_var(int, nbin.add_int, "segmentation_type_id", 8)  # 1 byte
         self._encode_segments(nbin)
+
+    def _encode_segments(self, nbin):
+        self._chk_var(int, nbin.add_int, "segment_num", 8)  # 1 byte
+        self._chk_var(int, nbin.add_int, "segments_expected", 8)  # 1 byte
+        if self.segmentation_type_id in [0x34, 0x36, 0x38, 0x3A]:
+            self._chk_var(int, nbin.add_int, "sub_segment_num", 8)  # 1 byte
+            self._chk_var(int, nbin.add_int, "sub_segments_expected", 8)  # 1 byte
 
     def _encode_segments(self, nbin):
         self._chk_var(int, nbin.add_int, "segment_num", 8)  # 1 byte
