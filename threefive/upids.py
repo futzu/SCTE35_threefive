@@ -6,6 +6,7 @@ threefve.upids
 """
 charset = "ascii"
 
+
 class UpidDecoder:
     """
     UpidDecoder for use by the
