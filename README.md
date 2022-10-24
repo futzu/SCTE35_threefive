@@ -1,14 +1,12 @@
  
  [Install](#install) | [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) | | [New Stuff](#new-stuff) |
- [Cue Class](#cue-class)  |  [Stream Class](#stream-class) |
+ [Cue](#cue-class)  |  [Stream](#stream-class) |
  [Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)  |
   [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) | [x9k3](https://github.com/futzu/) | [gumd](https://github.com/futzu/gumd) | [super kabuki](https://github.com/futzu/threefive/blob/master/superkabuki.md)
  ___
-![image](https://user-images.githubusercontent.com/52701496/194988351-fe9ac4a8-2e2e-4661-a81f-f044b18f472b.png)
 
-
-  # threefive is a SCTE35 parser.
-
+  # threefive is The Highest Rated SCTE35 parser, ever.
+___
 
 
 *  All __2022__ SCTE35  [Commands](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py) and [Descriptors](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py) and [Upids](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upids.py)
@@ -26,6 +24,24 @@
 * [ __x9k3__ , SCTE35 hls segmenter powered by __threefive__](https://github.com/futzu/x9k3)
 * [__m3ufu__, m3u8 parser powered by __threefive__](https://github.com/futzu/m3ufu)
 * [__Project Super Kabuki__](https://github.com/futzu/threefive/blob/master/superkabuki.md) SCTE35 MPEGTS Packet Injection.
+
+
+---
+### `Q.` Is python fast enough to parse video?
+
+
+###  `A.` Oh, yeah. 
+
+  * `python3.10` and `threefive` can parse video at over `250MB / second.`
+  * `pypy3` and `threefive` can parse video at over `1GB / second.`
+
+      * _Tests were conducted on my $300 Samsung Chromebook running Debian / Sid._
+
+
+---
+
+
+
 ### `Requirements`
 * threefive requires 
   * [pypy3](https://pypy.org) or python 3.6+ 
@@ -71,7 +87,9 @@ Type "help", "copyright", "credits" or "license" for more information.
 ---
 ### `New Stuff`
 `Specify a charset for Upid data by setting threefive.upids.charset` [`issue #55`](https://github.com/futzu/scte35-threefive/issues/55)
-*  threefive.upids.charset applies to UPID types:
+
+*  `threefive.upids.charset` will set a charset for the following upid types:
+
    * `0x01` (Deprecated)
    * `0x02` (Deprecated)
    * `0x03` (AdID)
@@ -82,6 +100,8 @@ Type "help", "copyright", "credits" or "license" for more information.
    * `0x0E` (ADS Info)
    * `0x0F` (URI)
    * `0xFD` (Unknown)
+   
+#### Example Usage:   
 ```lua
 >>> from threefive import Cue,upids
 >>> i="/DBKAAAAAAAAAP/wBQb+YtC8/AA0AiZDVUVJAAAD6X/CAAD3W3ACEmJibG5kcHBobkQCAsGDpQIAAAAAAAEKQ1VFSRSAIyowMljRk9c="
@@ -102,8 +122,31 @@ True
 >>> cue.descriptors[0].segmentation_upid
 '扢湬灤桰䑮Ȃ菁ʥ\x00'
 ```
+
+
 ---
 ### `Easy Examples`
+> threefive is a library. 
+>
+> A library means you dont have to write a lot of code. 
+>
+> Most SCTE-35 parsing can be done in a few lines.
+___
+##### `Mpegts Multicast`
+
+```python3
+import threefive 
+
+strm = threefive.Stream('udp://@239.35.0.35:1234')
+strm.decode()
+````
+#### Mpegts over Https
+```python3
+import threefive
+strm = threefive.Stream('https://iodisco.com/ch1/ready.ts')
+strm.decode()
+
+```
 
 ##### Base64
 ```python3
@@ -131,29 +174,7 @@ cue = threefive.Cue("0XFC301100000000000000FFFFFF0000004F253396")
 cue.decode()
 cue.show()
 ```
-##### `Mpegts Multicast`
-* On my Debian [Sid](https://www.debian.org/releases/sid/) laptop I set the following, 
- 
-```smalltalk
-## <dev> is the network device
 
-ip link set <dev> multicast on allmulticast on
-
-ethtool  -G <dev> rx 4096
-
-sysctl -w net.core.rmem_default=5000000
-
-sysctl -w net.core.rmem_max=15000000
-
-```
-
-
-```python3
-import threefive 
-
-strm = threefive.Stream('udp://@239.35.0.35:1234')
-strm.decode()
-````
 ___
 
 
