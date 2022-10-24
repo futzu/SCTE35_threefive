@@ -32,12 +32,6 @@ ___
 
 ###  `A.` Oh, yeah. 
 
-  * `python3.10` and `threefive` can parse video at over `250MB / second.`
-  * `pypy3` and `threefive` can parse video at over `1GB / second.`
-
-      * _Tests were conducted on my $300 Samsung Chromebook running Debian / Sid._
-
-
 ---
 
 
@@ -177,6 +171,8 @@ cue.show()
 
 ___
 
+# Documentation for classes and methods 
+
 
 ##  `Cue Class`
 
@@ -208,12 +204,6 @@ ___
     '0xfc'
 ```
 
-* When parsing Cues from MPEGTS, threefive tries to include,  	        
-   *   __pid__ of the packet  
-   *  __program__ of the pid   
-   *  __pts__ of the packet   
-   *  __pcr__ of the packet 
-
 ```js
 
 class Cue(threefive.base.SCTE35Base)
@@ -225,12 +215,12 @@ class Cue(threefive.base.SCTE35Base)
  |      data may be packet bites or encoded string
  |      packet_data is a instance passed from a Stream instance
 ```
-### `Cue.decode()`
+* `Cue.decode()`
 ```js
  |  decode(self)
  |      Cue.decode() parses for SCTE35 data
 ```
-### `Cue.get()`
+* `Cue.get()`
 ```js
  |  get(self)
  |      Cue.get returns the SCTE-35 Cue
@@ -262,25 +252,25 @@ True
 'descriptors': []}
 ```
 
-### `Cue.get_descriptors()`
+* `Cue.get_descriptors()`
 
 ```js
  |  get_descriptors(self)
  |      Cue.get_descriptors returns a list of
  |      SCTE 35 splice descriptors as dicts.
 ```
-### `Cue.get_json()`
+* `Cue.get_json()`
 ```js 
  |  get_json(self)
  |      Cue.get_json returns the Cue instance
  |      data in json.
 ```
-### `Cue.show()`
+* `Cue.show()`
 ```js  
  |  show(self)
  |      Cue.show prints the Cue as JSON
 ```
-### `Cue.to_stderr()`
+* `Cue.to_stderr()`
 ```js 
  |  to_stderr(self)
  |      Cue.to_stderr prints the Cue
@@ -294,6 +284,10 @@ ___
      *  __File__ and __Http(s)__ and __Udp__ and __Multicast__ protocols. 
   	 * __Multiple Programs__.
   	 * __Multi-Packet PAT, PMT, and SCTE35 tables__. 
+ 
+* threefive tries to include __pid__, __program__,  __pts__, and __pcr__ of the SCTE-35 packet.
+
+  
 
 ```js
 class Stream(builtins.object)
@@ -316,7 +310,7 @@ class Stream(builtins.object)
  |      strm.decode()
  ```
 
-### `Stream.decode(func=show_cue)`
+* `Stream.decode(func=show_cue)`
  ```js
  |  decode(self, func=show_cue)
  |      Stream.decode reads self.tsdata to find SCTE35 packets.
@@ -332,9 +326,9 @@ class Stream(builtins.object)
 
 ```
 
-  *   Pass in custom function 
+   *   Pass in custom function 
 
-  *  __func__ should match the interface 
+   *  __func__ should match the interface 
   ``` func(cue)```
  
  > `Stream.decode with custom function Example`
@@ -356,7 +350,7 @@ if __name__ == '__main__':
 
 ___
 
-### `Stream.decode_next()`
+* `Stream.decode_next()`
 
  ```js
  |  decode_next(self)
@@ -386,7 +380,7 @@ if __name__ == "__main__":
 ```
 
 
-### `Stream.decode_program(the_program, func = show_cue)`
+* `Stream.decode_program(the_program, func = show_cue)`
 
  ```js
  |  decode_program(self, the_program, func=show_cue)
@@ -401,11 +395,11 @@ threefive.Stream('35.ts').decode_program(1)
 ___
 
 
-### `Stream.decode_proxy(func = show_cue)`
+* `Stream.decode_proxy(func = show_cue)`
 
-*  Writes all packets to sys.stdout.
+  *  Writes all packets to sys.stdout.
 
-*  Writes scte35 data to sys.stderr.
+  *  Writes scte35 data to sys.stderr.
 
  ```js
  |  decode_proxy(self, func=show_cue_stderr)
@@ -427,12 +421,12 @@ $ python3 proxy.py | mplayer -
 ```
 ___
 
-### `Stream.show()`
+* `Stream.show()`
 
-  ```js
- |  show(self)
- |   List programs and streams and info for MPEGTS
- ```
+```js
+|  show(self)
+|   List programs and streams and info for MPEGTS
+```
 > `Stream.show() Example`
 ```python3
 >>>> from threefive import Stream
@@ -462,12 +456,12 @@ Program: 1050
  
 ```
 
-### `Stream.dump(fname)`
+* `Stream.dump(fname)`
  ```js
  |  dump(self, fname)
  |      Stream.dump dumps all the packets to a file (fname).
  ```
-### `Stream.strip_scte35(func=show_cue_stderr)`
+ * `Stream.strip_scte35(func=show_cue_stderr)`
  
  ```js
  |  strip_scte35(self, func=show_cue_stderr)
