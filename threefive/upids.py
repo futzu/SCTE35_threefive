@@ -1,10 +1,10 @@
 """
 threefive/upids.py
 
-threefve.upids
+threefive.upids
 
 """
-charset = "ascii"
+charset = "latin-1"
 
 
 class UpidDecoder:
@@ -27,7 +27,7 @@ class UpidDecoder:
             "reserved": self.bitbin.as_int(2),
             "end_of_day": self.bitbin.as_int(5),
             "unique_for": self.bitbin.as_int(9),
-            "content_id": self.bitbin.as_ascii(((self.upid_length - 4) << 3)),
+            "content_id": self.bitbin.as_charset((self.upid_length - 4) << 3, charset),
         }
 
     def _decode_eidr(self):
