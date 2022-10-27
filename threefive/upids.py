@@ -4,7 +4,7 @@ threefive/upids.py
 threefive.upids
 
 """
-charset = "latin-1"
+charset = "ascii"
 
 
 class UpidDecoder:
