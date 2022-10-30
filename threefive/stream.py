@@ -464,7 +464,7 @@ class Stream:
         parse a scte35 cue from one or more packets
         """
         pkt_pay = self._parse_payload(pkt)
-        if len(pkt_pay) == 0:
+        if not pkt_pay:
             return False
         pay = self._chk_partial(pkt_pay, pid, self._SCTE35_TID)
         if not pay:
