@@ -1,27 +1,33 @@
 # Encoding ( Requires threefive 2.3.02+ )
 
+* [SCTE35 Cue with a Time Signal Command in Seven Steps](#scte35-cue-with-a-time-signal-command-in-seven-steps) 
 
-#### threefive.**Cue()**
+* [Edit A Splice Insert Command in a SCTE35 Cue](#edit-a-splice-insert-command-in-a--scte35-cue)
 
-###### A decoded __Cue__ instance contains: 
+* [Remove a Splice Descriptor from a SCTE35 Cue](#remove-a-splice-descriptor-from-a-scte35-cue)
 
-* **cue.info_section** one [threefive.**SpliceInfoSection()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)
+* [Add a Dtmf Descriptor to an existing SCTE35 Cue](#add-a-dtmf-descriptor-to-an-existing--scte35-cue)
 
-* **cue.command**  one of the following [ threefive.**BandwidthReservation()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L32), [ threefive.**PrivateCommand()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L54), [ threefive.**SpliceInsert()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L139), [ threefive.**SpliceNull()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L43), [ threefive.**TimeSignal()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L84)
+#### `Details`
 
-* **cue.descriptors** a list of 0 or more of the following [ threefive.**AudioDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L153), 
+* A decoded __Cue__ instance contains: 
+
+     * **cue.info_section** one [threefive.**SpliceInfoSection()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py)
+
+     * **cue.command**  one of the following [ threefive.**BandwidthReservation()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L32), [ threefive.**PrivateCommand()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L54), [ threefive.**SpliceInsert()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L139), [ threefive.**SpliceNull()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L43), [ threefive.**TimeSignal()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py#L84)
+
+     * **cue.descriptors** a list of 0 or more of the following [ threefive.**AudioDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L153), 
         [ threefive.**AvailDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L50),
         [ threefive.**DtmfDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L78),
         [ threefive.**SegmentationDescriptor()** ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L201),
         [threefive.**TimeDescriptor()**](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py#L119)
 
-###### All instance vars can be accessed via dot notation.
+* All instance vars can be accessed via dot notation.
 
-### Automatic Features
-
-* Splice Info Section of the Cue is automatically generated. 
-* length vars for Cue.command and Cue.descriptors are automatically generated.  
-* Descriptor loop length and crc32 are automatically calculated 
+* Automatic Features
+    * Splice Info Section of the Cue is automatically generated. 
+    * length vars for Cue.command and Cue.descriptors are automatically generated.  
+    * Descriptor loop length and crc32 are automatically calculated 
 
 
 ## SCTE35 Cue with a Time Signal Command in Seven Steps
