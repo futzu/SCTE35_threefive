@@ -77,8 +77,8 @@ class SCTE35Base:
         load is used to load
         data from a dict or json string
         """
-        #        if isinstance(stuff, str):
-        #            stuff = json.loads(stuff)
+        if isinstance(stuff, str):
+            stuff = json.loads(stuff)
         if isinstance(stuff, dict):
             self.__dict__.update(stuff)
 
