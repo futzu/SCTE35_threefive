@@ -5,9 +5,10 @@
   [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) | [x9k3](https://github.com/futzu/) | [gumd](https://github.com/futzu/gumd) | [super kabuki](https://github.com/futzu/threefive/blob/master/superkabuki.md)
  ___
 
-  # threefive is The Highest Rated SCTE35 parser, ever.
+  # threefive is The Highest Rated SCTE35 Parser. Ever.
 ___
-
+![image](https://user-images.githubusercontent.com/52701496/198861069-54f4d803-5259-44d1-a103-80e43c8e0840.png)
+* release __2.3.53__ aka __"Richard vs. The Upids of Doom"__ is out. __Pip__ it up.
 
 *  All __2022__ SCTE35  [Commands](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py) and [Descriptors](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py) and [Upids](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upids.py)
 
