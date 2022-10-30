@@ -44,7 +44,7 @@ class BitBin:
         """
         k = self.as_int(num_bits)
         nibbles = (num_bits + 3) >> 2
-        return f"0x{k:0{nibbles}x}"
+        return "0x" + hex(k)[2:].zfill(nibbles)
 
     def as_ascii(self, num_bits):
         """
