@@ -89,10 +89,10 @@ class UpidDecoder:
             bad_data["bad_data"] = self.bitbin.as_hex(self.upid_length << 3)
         return bad_data
 
-    def _chk_length(self, min, max):
-        if self.upid_length >= min and self.upid_length <= max:
+    def _chk_length(self, min_len, max_len):
+        if self.upid_length >= min_len and self.upid_length <= max_len:
             return False
-        return f"invalid length: expected {min} .. {max} bytes"
+        return f"invalid length: expected {min_len} .. {max_len} bytes"
 
     def decode(self):
         """
@@ -123,13 +123,15 @@ class UpidDecoder:
         if self.upid_type not in upid_map:
             self.upid_type = 0xFD
 
-        min = upid_map[self.upid_type][2]
-        max = upid_map[self.upid_type][3]
-        bad = self._chk_length(min, max)
+        upid_name = upid_map[self.upid_type][0]
+        min_len = upid_map[self.upid_type][2]
+        max_len = upid_map[self.upid_type][3]
+        bad = self._chk_length(min_len, max_len)
         if bad:
-            return upid_map[self.upid_type][0], self._decode_bad(bad)
+            upid = self._decode_bad(bad)
         else:
-            return upid_map[self.upid_type][0], upid_map[self.upid_type][1]()
+            upid = upid_map[self.upid_type][1]()
+        return upid_name, upid
 
 
 def upid_encoder(nbin, upid_type, upid_length, seg_upid):
