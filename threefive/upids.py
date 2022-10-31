@@ -4,6 +4,9 @@ threefive/upids.py
 threefive.upids
 
 """
+from uuid import UUID
+
+
 charset = "ascii"
 
 
@@ -83,6 +86,9 @@ class UpidDecoder:
     def _decode_uri(self):
         return self.bitbin.as_charset(self.upid_length << 3, charset)
 
+    def _decode_uuid(self):
+        return UUID(bytes=self.bitbin.as_ticks(128)).urn
+
     def _decode_bad(self, message):
         bad_data = {"error_message": message}
         if self.upid_length:
@@ -116,7 +122,7 @@ class UpidDecoder:
             0x0D: ["MID", self._decode_mid, 2, 255],
             0x0E: ["ADS Info", self._decode_uri, 3, 255],
             0x0F: ["URI", self._decode_uri, 1, 255],
-            0x10: ["UUID", self._decode_uri, 16, 16],
+            0x10: ["UUID", self._decode_uuid, 16, 16],
             0x11: ["SCR", self._decode_uri, 3, 255],
             0xFD: ["Unknown", self._decode_uri, 1, 255],
         }
