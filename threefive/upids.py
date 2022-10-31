@@ -59,7 +59,7 @@ class UpidDecoder:
                 "upid_length": upid_length,
             }
             if segmentation_upid is not None:
-                mid.upid["segmentation_upid"] = segmentation_upid
+                mid_upid["segmentation_upid"] = segmentation_upid
             ulb -= upid_length << 3
             upids.append(mid_upid)
         return upids
