@@ -42,9 +42,7 @@ class BitBin:
         Returns the hex value
         of num_bits of bits
         """
-        k = self.as_int(num_bits)
-        nibbles = (num_bits + 3) >> 2
-        return "0x" + hex(k)[2:].zfill(nibbles)
+        return hex(self.as_int(num_bits))
 
     def as_ascii(self, num_bits):
         """
@@ -63,6 +61,7 @@ class BitBin:
         Returns num_bits of bits
         as bytes decoded to as_ascii
         """
+        print(charset)
         stuff = self.as_int(num_bits)
         wide = num_bits >> 3
         return int.to_bytes(stuff, wide, byteorder="big").decode(
