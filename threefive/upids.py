@@ -7,6 +7,15 @@ threefive.upids
 charset = "ascii"
 
 
+def calc_EIDR_check_digit(suffix):
+    alpha = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    mod = 36
+    chk = mod // 2
+    for n in suffix:
+        chk = (alpha.index(n) + ((chk or mod) * 2) % (mod + 1)) % mod
+    return alpha[(1 - ((chk or mod) * 2) % (mod + 1)) % mod]
+
+
 class UpidDecoder:
     """
     UpidDecoder for use by the
@@ -36,8 +45,13 @@ class UpidDecoder:
         bit_count = 80
         while bit_count:
             bit_count -= 16
-            post.append(self.bitbin.as_hex(16)[2:])
-        return f"10.{pre}/{'-'.join(post)}"
+            post.append(self.bitbin.as_hex(16)[2:].upper())
+        if pre != 5240:
+            del post[2:]
+            check = ""
+        else:
+            check = "-" + calc_EIDR_check_digit("".join(post))
+        return f"10.{pre}/{'-'.join(post)}{check}"
 
     def _decode_isan(self):
         return self.bitbin.as_hex(self.upid_length << 3)
