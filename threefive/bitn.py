@@ -68,7 +68,7 @@ class BitBin:
             charset, errors="replace"
         )
 
-    def as_ticks(self, num_bits):
+    def as_bites(self, num_bits):
         """
         Returns num_bits of bits
         as bytes
