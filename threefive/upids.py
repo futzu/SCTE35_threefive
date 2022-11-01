@@ -87,7 +87,7 @@ class UpidDecoder:
         return self.bitbin.as_charset(self.upid_length << 3, charset)
 
     def _decode_uuid(self):
-        return UUID(bytes=self.bitbin.as_ticks(128)).urn
+        return UUID(bytes=self.bitbin.as_bites(128)).urn
 
     def _decode_bad(self, message):
         bad_data = {"error_message": message}
@@ -161,7 +161,7 @@ def upid_encoder(nbin, upid_type, upid_length, seg_upid):
         0x0D: ["MID", _encode_mid],
         0x0E: ["ADS Info", _encode_uri],
         0x0F: ["URI", _encode_uri],
-        0x10: ["UUID", _encode_uri],
+        0x10: ["UUID", _encode_uuid],
         0x11: ["SCR", _encode_uri],
     }
     if upid_type in upid_map:
@@ -226,3 +226,7 @@ def _encode_uri(nbin, seg_upid):
         seg_upid = seg_upid.encode()
         print(seg_upid)
         nbin.add_bites(seg_upid)
+
+
+def _encode_uuid(nbin, seg_upid):
+    nbin.add_bites(UUID(seg_upid).bytes)
