@@ -3,7 +3,17 @@
  [Cue](#cue-class)  |  [Stream](#stream-class) |
  [Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)  |
   [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) | [x9k3](https://github.com/futzu/) | [gumd](https://github.com/futzu/gumd) | [super kabuki](https://github.com/futzu/threefive/blob/master/superkabuki.md)
- ___
+
+ "_As a final word, 
+ injecting SCTE 35 is clearly a professional application (who would like ads insertion as a hobbyist :))."_ 
+
+~ lelegard ( the tsduck guy )
+ 
+ 
+ __Clearly, he and I have never met.__
+
+
+___
 
   # threefive is The Highest Rated SCTE35 Parser. Ever.
 ___
@@ -25,6 +35,7 @@ ___
 * [ __x9k3__ , SCTE35 hls segmenter powered by __threefive__](https://github.com/futzu/x9k3)
 * [__m3ufu__, m3u8 parser powered by __threefive__](https://github.com/futzu/m3ufu)
 * [__Project Super Kabuki__](https://github.com/futzu/threefive/blob/master/superkabuki.md) SCTE35 MPEGTS Packet Injection.
+
 
 
 ---
