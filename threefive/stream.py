@@ -389,6 +389,16 @@ class Stream:
             return False
         return self.as_90k(self.maps.prgm_pts[prgm])
 
+    def pid2pcr(self, pid):
+        """
+        pid2pcr takes a pid
+        returns the current pcr
+        """
+        prgm = self.pid2prgm(pid)
+        if prgm not in self.maps.prgm_pcr:
+            return False
+        return self.as_90k(self.maps.prgm_pcr[prgm])
+
     def _parse_payload(self, pkt):
         head_size = 4
         if self._afc_flag(pkt):
@@ -463,10 +473,10 @@ class Stream:
         """
         parse a scte35 cue from one or more packets
         """
-        pkt_pay = self._parse_payload(pkt)
-        if not pkt_pay:
+        pay = self._parse_payload(pkt)
+        if not pay:
             return False
-        pay = self._chk_partial(pkt_pay, pid, self._SCTE35_TID)
+        pay = self._chk_partial(pay, pid, self._SCTE35_TID)
         if not pay:
             self.pids.scte35.remove(pid)
             return False
