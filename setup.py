@@ -11,16 +11,15 @@ setuptools.setup(
     version=threefive.version(),
     author="Adrian",
     author_email="spam@iodisco.com",
-    description="Pythonic SCTE35",
+    description="Southern Fried SCTE35",
     long_description=readme,
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/threefive",
     install_requires=[
-        "new_reader",
+        'new_reader >= 0.0.9',
+        "pyaes",
     ],
-    extras_require={
-        "all": ["pyaes"],
-    },
+
     scripts=['bin/threefive'],
     packages=setuptools.find_packages(),
     classifiers=[
