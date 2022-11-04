@@ -198,5 +198,4 @@ def _encode_umid(nbin, seg_upid):
 def _encode_uri(nbin, seg_upid):
     if len(seg_upid) > 0:
         seg_upid = seg_upid.encode()
-        print(seg_upid)
         nbin.add_bites(seg_upid)
