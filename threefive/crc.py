@@ -1,8 +1,6 @@
 """
 crc.py  crc32 function for encoding.
 
-Forgive me, I'm not a big math cat.
-
 """
 
 POLY = 0x104C11DB7
@@ -14,10 +12,7 @@ def _bytecrc(crc, poly, num):
     mask = 1 << (num - 1)
     i = 8
     while i:
-        if crc & mask:
-            crc = (crc << 1) ^ poly
-        else:
-            crc = crc << 1
+        crc=(crc <<1,crc << 1 ^ poly)[crc & mask !=0]
         i -= 1
     mask = (1 << num) - 1
     crc = crc & mask
