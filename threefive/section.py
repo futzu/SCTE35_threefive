@@ -51,15 +51,11 @@ class SpliceInfoSection(SCTE35Base):
                 ("splice_info_section.table_id should be 0xfc Not: ", self.table_id)
             )
         self.section_syntax_indicator = bitbin.as_flag(1)
-        if self.section_syntax_indicator != 0:
-            raise ValueError("section_syntax_indicator should be 0")
         self.private = bitbin.as_flag(1)
         self.sap_type = bitbin.as_hex(2)
         self.sap_details = sap_map[self.sap_type]
         self.section_length = bitbin.as_int(12)
         self.protocol_version = bitbin.as_int(8)
-        if self.protocol_version != 0:
-            raise ValueError("splice_info_section.protocol_version should be 0")
         self.encrypted_packet = bitbin.as_flag(1)
         self.encryption_algorithm = bitbin.as_int(6)
         self.pts_adjustment_ticks = bitbin.as_int(33)
