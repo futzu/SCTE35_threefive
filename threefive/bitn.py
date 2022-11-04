@@ -100,7 +100,7 @@ class BitBin:
             file=sys.stderr,
         )
         print(
-            f"\n bytes remaining: {self.as_ticks(self.idx)} ",
+            f"\n bytes remaining: {self.as_bytes(self.idx)} ",
             file=sys.stderr,
         )
 
