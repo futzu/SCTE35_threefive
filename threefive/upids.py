@@ -1,7 +1,7 @@
 """
 threefive/upids.py
 
-threefive.upids
+threefve.upids
 
 """
 charset = "ascii"
@@ -27,10 +27,12 @@ class UpidDecoder:
             "reserved": self.bitbin.as_int(2),
             "end_of_day": self.bitbin.as_int(5),
             "unique_for": self.bitbin.as_int(9),
-            "content_id": self.bitbin.as_charset((self.upid_length - 4) << 3, charset),
+            "content_id": self.bitbin.as_ascii(((self.upid_length - 4) << 3)),
         }
 
     def _decode_eidr(self):
+        if self.upid_length < 12:
+            raise Exception(f"upid_length is {self.upid_length} should be 12 bytes")
         pre = self.bitbin.as_int(16)
         post = []
         bit_count = 80
@@ -57,9 +59,8 @@ class UpidDecoder:
                 "upid_type": upid_type,
                 "upid_type_name": upid_type_name,
                 "upid_length": upid_length,
+                "segmentation_upid": segmentation_upid,
             }
-            if segmentation_upid is not None:
-                mid_upid["segmentation_upid"] = segmentation_upid
             ulb -= upid_length << 3
             upids.append(mid_upid)
         return upids
@@ -83,55 +84,34 @@ class UpidDecoder:
     def _decode_uri(self):
         return self.bitbin.as_charset(self.upid_length << 3, charset)
 
-    def _decode_bad(self, message):
-        bad_data = {"error_message": message}
-        if self.upid_length:
-            bad_data["bad_data"] = self.bitbin.as_hex(self.upid_length << 3)
-        return bad_data
-
-    def _chk_length(self, min_len, max_len):
-        if self.upid_length >= min_len and self.upid_length <= max_len:
-            return False
-        return f"invalid length: expected {min_len} .. {max_len} bytes"
-
     def decode(self):
         """
         decode returns a upid determined by
         self.upid_type and upid_map below.
         """
         upid_map = {
-            0x00: ["Not Used", self._decode_uri, 0, 0],
-            0x01: ["Deprecated", self._decode_uri, 0, 255],
-            0x02: ["Deprecated", self._decode_uri, 8, 8],
-            0x03: ["AdID", self._decode_uri, 12, 12],
-            0x04: ["UMID", self._decode_umid, 32, 32],
-            0x05: ["ISAN", self._decode_isan, 8, 8],
-            0x06: ["ISAN", self._decode_isan, 12, 12],
-            0x07: ["TID", self._decode_uri, 12, 12],
-            0x08: ["AiringID", self._decode_air_id, 8, 8],
-            0x09: ["ADI", self._decode_uri, 3, 255],
-            0x0A: ["EIDR", self._decode_eidr, 12, 12],
-            0x0B: ["ATSC", self._decode_atsc, 4, 246],
-            0x0C: ["MPU", self._decode_mpu, 4, 255],
-            0x0D: ["MID", self._decode_mid, 2, 255],
-            0x0E: ["ADS Info", self._decode_uri, 3, 255],
-            0x0F: ["URI", self._decode_uri, 1, 255],
-            0x10: ["UUID", self._decode_uri, 16, 16],
-            0x11: ["SCR", self._decode_uri, 3, 255],
-            0xFD: ["Unknown", self._decode_uri, 1, 255],
+            0x01: ["Deprecated", self._decode_uri],
+            0x02: ["Deprecated", self._decode_uri],
+            0x03: ["AdID", self._decode_uri],
+            0x04: ["UMID", self._decode_umid],
+            0x05: ["ISAN", self._decode_isan],
+            0x06: ["ISAN", self._decode_isan],
+            0x07: ["TID", self._decode_uri],
+            0x08: ["AiringID", self._decode_air_id],
+            0x09: ["ADI", self._decode_uri],
+            0x10: ["UUID", self._decode_uri],
+            0x11: ["SCR", self._decode_uri],
+            0x0A: ["EIDR", self._decode_eidr],
+            0x0B: ["ATSC", self._decode_atsc],
+            0x0C: ["MPU", self._decode_mpu],
+            0x0D: ["MID", self._decode_mid],
+            0x0E: ["ADS Info", self._decode_uri],
+            0x0F: ["URI", self._decode_uri],
+            0xFD: ["Unknown", self._decode_uri],
         }
         if self.upid_type not in upid_map:
             self.upid_type = 0xFD
-
-        upid_name = upid_map[self.upid_type][0]
-        min_len = upid_map[self.upid_type][2]
-        max_len = upid_map[self.upid_type][3]
-        bad = self._chk_length(min_len, max_len)
-        if bad:
-            upid = self._decode_bad(bad)
-        else:
-            upid = upid_map[self.upid_type][1]()
-        return upid_name, upid
+        return upid_map[self.upid_type][0], upid_map[self.upid_type][1]()
 
 
 def upid_encoder(nbin, upid_type, upid_length, seg_upid):
@@ -150,13 +130,13 @@ def upid_encoder(nbin, upid_type, upid_length, seg_upid):
         0x07: ["TID", _encode_uri],
         0x0B: ["ATSC", _encode_atsc],
         0x09: ["ADI", _encode_uri],
+        0x10: ["UUID", _encode_uri],
+        0x11: ["SCR", _encode_uri],
         0x0A: ["EIDR", _encode_eidr],
         0x0C: ["MPU", _encode_mpu],
         0x0D: ["MID", _encode_mid],
         0x0E: ["ADS Info", _encode_uri],
         0x0F: ["URI", _encode_uri],
-        0x10: ["UUID", _encode_uri],
-        0x11: ["SCR", _encode_uri],
     }
     if upid_type in upid_map:
         upid_map[upid_type][1](nbin, seg_upid)
