@@ -27,7 +27,7 @@ class UpidDecoder:
             "reserved": self.bitbin.as_int(2),
             "end_of_day": self.bitbin.as_int(5),
             "unique_for": self.bitbin.as_int(9),
-            "content_id": self.bitbin.as_ascii(((self.upid_length - 4) << 3)),
+            "content_id": self.bitbin.as_charset(((self.upid_length - 4) << 3)),
         }
 
     def _decode_eidr(self):
@@ -84,12 +84,16 @@ class UpidDecoder:
     def _decode_uri(self):
         return self.bitbin.as_charset(self.upid_length << 3, charset)
 
+    def _decode_no(self):
+        return None
+
     def decode(self):
         """
         decode returns a upid determined by
         self.upid_type and upid_map below.
         """
         upid_map = {
+            0x00: ["No UPID", self._decode_no],
             0x01: ["Deprecated", self._decode_uri],
             0x02: ["Deprecated", self._decode_uri],
             0x03: ["AdID", self._decode_uri],
@@ -111,7 +115,11 @@ class UpidDecoder:
         }
         if self.upid_type not in upid_map:
             self.upid_type = 0xFD
-        return upid_map[self.upid_type][0], upid_map[self.upid_type][1]()
+        if not self.upid_length:
+            self.upid_type = 0x00
+        upid_name = upid_map[self.upid_type][0]
+        upid_value = upid_map[self.upid_type][1]()
+        return upid_name, upid_value
 
 
 def upid_encoder(nbin, upid_type, upid_length, seg_upid):
@@ -123,6 +131,7 @@ def upid_encoder(nbin, upid_type, upid_length, seg_upid):
     Used by the SegmentationDescriptor class.
     """
     upid_map = {
+        0x00: ["No UPID", _encode_no],
         0x01: ["Deprecated", _encode_uri],
         0x02: ["Deprecated", _encode_uri],
         0x03: ["AdID", _encode_uri],
@@ -188,6 +197,9 @@ def _encode_mpu(nbin, seg_upid):
     nbin.add_int(seg_upid["format_identifier"], 32)
     nbin.add_hex(seg_upid["private_data"])
 
+
+def _encode_no(nbin, seg_upid):
+    nbin.forward(0)
 
 def _encode_umid(nbin, seg_upid):
     chunks = seg_upid.split(".")
