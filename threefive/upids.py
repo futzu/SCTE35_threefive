@@ -27,7 +27,7 @@ class UpidDecoder:
             "reserved": self.bitbin.as_int(2),
             "end_of_day": self.bitbin.as_int(5),
             "unique_for": self.bitbin.as_int(9),
-            "content_id": self.bitbin.as_charset(((self.upid_length - 4) << 3)),
+            "content_id": self.bitbin.as_bytes((self.upid_length - 4) << 3),
         }
 
     def _decode_eidr(self):
