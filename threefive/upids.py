@@ -17,17 +17,19 @@ class UpidDecoder:
         self.bitbin = bitbin
         self.upid_type = upid_type
         self.upid_length = upid_length
+        self.bit_length = upid_length << 3
 
     def _decode_air_id(self):
-        return self.bitbin.as_hex(self.upid_length << 3)
+        return self.bitbin.as_hex(self.bit_length)
 
     def _decode_atsc(self):
+        cont_size = self.bit_length - 32
         return {
             "TSID": self.bitbin.as_int(16),
             "reserved": self.bitbin.as_int(2),
             "end_of_day": self.bitbin.as_int(5),
             "unique_for": self.bitbin.as_int(9),
-            "content_id": self.bitbin.as_bytes((self.upid_length - 4) << 3),
+            "content_id": self.bitbin.as_bytes(cont_size)
         }
 
     def _decode_eidr(self):
@@ -42,11 +44,11 @@ class UpidDecoder:
         return f"10.{pre}/{'-'.join(post)}"
 
     def _decode_isan(self):
-        return self.bitbin.as_hex(self.upid_length << 3)
+        return self.bitbin.as_hex(self.bit_length)
 
     def _decode_mid(self):
         upids = []
-        ulb = self.upid_length << 3
+        ulb = self.bit_length
         while ulb:
             upid_type = self.bitbin.as_int(8)  # 1 byte
             ulb -= 8
@@ -66,23 +68,22 @@ class UpidDecoder:
         return upids
 
     def _decode_mpu(self):
-        ulbits = self.upid_length << 3
         mpu_data = {
             "format_identifier": self.bitbin.as_int(32),
-            "private_data": self.bitbin.as_hex(ulbits - 32),
+            "private_data": self.bitbin.as_hex(self.bit_length - 32),
         }
         return mpu_data
 
     def _decode_umid(self):
         chunks = []
-        ulb = self.upid_length << 3
+        ulb = self.bit_length
         while ulb:
             chunks.append(self.bitbin.as_hex(32)[2:])
             ulb -= 32
         return ".".join(chunks)
 
     def _decode_uri(self):
-        return self.bitbin.as_charset(self.upid_length << 3, charset)
+        return self.bitbin.as_charset(self.bit_length, charset)
 
     def _decode_no(self):
         return None
@@ -200,6 +201,7 @@ def _encode_mpu(nbin, seg_upid):
 
 def _encode_no(nbin, seg_upid):
     nbin.forward(0)
+
 
 def _encode_umid(nbin, seg_upid):
     chunks = seg_upid.split(".")
