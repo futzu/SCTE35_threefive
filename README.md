@@ -30,6 +30,7 @@ ___
 * [__Super Cool Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 * [ffmpeg and SCTE35 and Stream Type 0x6 bin data and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 *  2>&1 
+   * I don't get any sort of notification for Discussions, please just open an issue for anything so I don't miss your post. 
    * [Issues and Bugs and Feature Requests *No forms man, just open an issue and tell me what you need.*  ](https://github.com/futzu/scte35-threefive/issues)
 * [Diagram of a threefive SCTE-35 Cue. ](https://github.com/futzu/threefive/blob/master/cue.md)  
 * [ __x9k3__ , SCTE35 hls segmenter powered by __threefive__](https://github.com/futzu/x9k3)
