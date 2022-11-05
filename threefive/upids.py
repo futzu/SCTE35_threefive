@@ -17,7 +17,7 @@ class UpidDecoder:
         self.bitbin = bitbin
         self.upid_type = upid_type
         self.upid_length = upid_length
-        self.bit_length = upid_length << 3
+        self.bit_length = upid_length.bit_length()
 
     def _decode_air_id(self):
         return self.bitbin.as_hex(self.bit_length)
