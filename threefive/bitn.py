@@ -44,24 +44,13 @@ class BitBin:
         """
         return hex(self.as_int(num_bits))
 
-    def as_ascii(self, num_bits):
-        """
-        Returns num_bits of bits
-        as bytes decoded to as_ascii
-        """
-
-        stuff = self.as_int(num_bits)
-        wide = num_bits >> 3
-        return int.to_bytes(stuff, wide, byteorder="big").decode(
-            "utf-8", errors="replace"
-        )
-
     def as_charset(self, num_bits, charset='ascii'):
         """
         Returns num_bits of bits
-        as bytes decoded to as_ascii
+        as bytes decoded as charset
+        default charset is ascii.
         """
-        print(charset)
+        # print(charset)
         stuff = self.as_int(num_bits)
         wide = num_bits >> 3
         return int.to_bytes(stuff, wide, byteorder="big").decode(
