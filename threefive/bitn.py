@@ -56,7 +56,7 @@ class BitBin:
             "utf-8", errors="replace"
         )
 
-    def as_charset(self, num_bits, charset):
+    def as_charset(self, num_bits, charset='ascii'):
         """
         Returns num_bits of bits
         as bytes decoded to as_ascii
