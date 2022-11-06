@@ -17,7 +17,7 @@ class UpidDecoder:
         self.bitbin = bitbin
         self.upid_type = upid_type
         self.upid_length = upid_length
-        self.bit_length = upid_length.bit_length()
+        self.bit_length = upid_length << 3
 
     def _decode_air_id(self):
         return self.bitbin.as_hex(self.bit_length)
@@ -33,8 +33,8 @@ class UpidDecoder:
         }
 
     def _decode_eidr(self):
-        if self.upid_length < 12:
-            raise Exception(f"upid_length is {self.upid_length} should be 12 bytes")
+        if self.upid_length != 12:
+            return f"upid_length is {self.upid_length} should be 12 bytes."
         pre = self.bitbin.as_int(16)
         post = []
         bit_count = 80
@@ -83,7 +83,7 @@ class UpidDecoder:
         return ".".join(chunks)
 
     def _decode_uri(self):
-        return self.bitbin.as_charset(self.bit_length, charset)
+        return self.bitbin.as_charset(self.bit_length , charset)
 
     def _decode_no(self):
         return None
