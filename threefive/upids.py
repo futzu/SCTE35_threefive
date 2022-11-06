@@ -77,7 +77,7 @@ class UpidDecoder:
     def _decode_umid(self):
         chunks = []
         ulb = self.bit_length
-        while ulb:
+        while ulb >32:
             chunks.append(self.bitbin.as_hex(32)[2:])
             ulb -= 32
         return ".".join(chunks)
