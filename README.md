@@ -93,8 +93,12 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 
 ---
-### `New Stuff`
+### `upids.charset`
 `Specify a charset for Upid data by setting threefive.upids.charset` [`issue #55`](https://github.com/futzu/scte35-threefive/issues/55)
+
+* default charset is ascii
+* python charsets info [Here](https://docs.python.org/3/library/codecs.html)
+* setting charset to None will return raw bytes.
 
 *  `threefive.upids.charset` will set a charset for the following upid types:
 
@@ -108,7 +112,7 @@ Type "help", "copyright", "credits" or "license" for more information.
    * `0x0E` (ADS Info)
    * `0x0F` (URI)
    * `0xFD` (Unknown)
-   
+   * `0x0B` (ATSC) _only applied to_ `content_id`
 #### Example Usage:   
 ```lua
 >>> from threefive import Cue,upids
@@ -131,7 +135,21 @@ True
 '扢湬灤桰䑮Ȃ菁ʥ\x00'
 ```
 
+> Q. Why not change the default to latin-1 instead of ascii?
 
+> A. Because latin-1 and ascii are different.
+```lua
+>>>> a=b'\xfc0'
+>>>> a.decode(encoding="ascii",errors='backslashreplace')
+'\\xfc0'
+>>>> a.decode(encoding="latin-1",errors='backslashreplace')
+'ü0'
+>>>> a.decode(encoding="latin-1",errors='backslashreplace').encode()
+b'\xc3\xbc0'
+>>>> a.decode(encoding="ascii",errors='backslashreplace').encode()
+b'\\xfc0'
+>>>> 
+```
 ---
 ### `Easy Examples`
 > threefive is a library. 
