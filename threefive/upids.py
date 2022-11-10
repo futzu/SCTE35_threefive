@@ -5,7 +5,10 @@ threefve.upids
 
 """
 charset = "ascii"
-
+"""
+set charset to None to return raw bytes
+"""
+charset = "ascii"
 
 class UpidDecoder:
     """
@@ -29,7 +32,7 @@ class UpidDecoder:
             "reserved": self.bitbin.as_int(2),
             "end_of_day": self.bitbin.as_int(5),
             "unique_for": self.bitbin.as_int(9),
-            "content_id": self.bitbin.as_bytes(cont_size),
+            "content_id": self.bitbin.as_charset(cont_size,charset)
         }
 
     def _decode_eidr(self):
@@ -77,7 +80,7 @@ class UpidDecoder:
     def _decode_umid(self):
         chunks = []
         ulb = self.bit_length
-        while ulb >32:
+        while ulb > 32:
             chunks.append(self.bitbin.as_hex(32)[2:])
             ulb -= 32
         return ".".join(chunks)
