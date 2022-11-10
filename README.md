@@ -1,9 +1,8 @@
  
- [Install](#install) | [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) | | [New Stuff](#new-stuff) |
+ [Install](#install) | [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md)  | 
  [Cue](#cue-class)  |  [Stream](#stream-class) |
  [Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)  |
-  [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) | [x9k3](https://github.com/futzu/) | [gumd](https://github.com/futzu/gumd) | [super kabuki](https://github.com/futzu/threefive/blob/master/superkabuki.md)
-
+  [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) | [charsets for upids](#upidscharset) | [x9k3](https://github.com/futzu/) 
 
 ___
 
