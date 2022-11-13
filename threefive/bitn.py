@@ -53,7 +53,7 @@ class BitBin:
         # print(charset)
         stuff = self.as_int(num_bits)
         wide = num_bits >> 3
-        if charset== None:
+        if charset is None:
             return int.to_bytes(stuff, wide, byteorder="big")
         return int.to_bytes(stuff, wide, byteorder="big").decode(
             charset, errors="replace"
