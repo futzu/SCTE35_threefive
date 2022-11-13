@@ -8,12 +8,16 @@ ___
 
   # threefive is Pythonic SCTE-35. 
 ___
-![image](https://user-images.githubusercontent.com/52701496/200188208-c94464bf-7e6a-44c1-a7fe-0fab927606aa.png)
 
 #### threefive parses  All __2022__ SCTE35  
   - [x] [Commands](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py)
  - [x] [Descriptors](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)
  - [x] [Upids](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upids.py)
+
+### Latest release is `2.3.59`
+* In response to issue [#67](https://github.com/futzu/scte35-threefive/issues/67) `OSError: [Errno 55] No buffer space available`
+    * [new_reader 0.0.99](https://github.com/futzu/new_reader) now uses dynamic scaling to increase `socket.SO_RCVBUF` 
+    * pip it up. `python3 -mpip install --upgrade threefive`
 
 
 #### Be cool. 
