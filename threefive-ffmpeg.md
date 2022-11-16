@@ -1,3 +1,17 @@
+
+
+
+
+# ffmpeg changes SCTE-35 stream type from 0x86 to 0x6, [kabuki](https://github.com/futzu/kabuki) changes it back.
+
+
+
+
+
+
+
+
+
 ## threefive works very well with ffmpeg. 
 * __ffmpeg changes the SCTE-35 (0x86) stream type to bin data (0x6)__
 * __threefive is the only SCTE35 tool that parses both  SCTE-35 `(0x86)` and bin data `(0x6)` stream types__.  
