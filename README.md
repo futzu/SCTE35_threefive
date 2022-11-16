@@ -6,7 +6,7 @@
 
 ___
 
-  # threefive is Pythonic SCTE-35. 
+  # threefive is SCTE-35. 
 ___
 
 #### threefive parses  All __2022__ SCTE35  
@@ -28,7 +28,10 @@ ___
 ####  threefive is classy.
   *  [Cue Class](#cue-class)         
   *  [Stream Class](#stream-class)
+
+> futzu wrote.. "I don't know how to stop ffmpeg from changing the SCTE35 stream type to 0x6."
 #### help(threefive)
+
 * [__Super Cool Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 * [ffmpeg and SCTE35 and Stream Type 0x6 bin data and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 *  2>&1 
@@ -49,7 +52,16 @@ Is python fast enough to parse video?
 ###  `A.` 
 Oh, yeah. 
 ---
+---
+### `Q`
+How do you stop ffmpeg from changing the SCTE-35 Stream type to 0x6 bin data?
 
+### `A`
+I have no idea. It doesn't matter though, threefive parses stream types 0x6 and 0x86 for SCTE-35.
+
+ If you need to change the stream type back to 0x86(SCTE-35) use [kabuki](https://github.com/futzu/kabuki).
+---
+ 
 
 
 ### `Requirements`
