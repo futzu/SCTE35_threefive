@@ -16,7 +16,7 @@ if __name__ == "__main__":
             strm.decode()
 ```
 ### python 3.10
-```
+```lua
 a@debian:~/build/scte35-threefive$ time python3 test.py /home/a/mpegts/plp0.ts
 
 real	0m22.824s
@@ -25,7 +25,7 @@ sys	0m1.713s
 ```
 ### PyPy 7.3.9
 
-```
+```lua
 a@debian:~/build/scte35-threefive$ time pypy3 test.py /home/a/mpegts/plp0.ts
 
 real	0m2.879s          Boom << Boom
