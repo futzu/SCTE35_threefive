@@ -29,7 +29,6 @@ ___
   *  [Cue Class](#cue-class)         
   *  [Stream Class](#stream-class)
 
-> futzu wrote.. "I don't know how to stop ffmpeg from changing the SCTE35 stream type to 0x6."
 #### help(threefive)
 
 * [__Super Cool Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
