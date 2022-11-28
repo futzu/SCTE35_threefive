@@ -550,6 +550,9 @@ Adrian
 > Dear CNN, 
 > 
 > your SCTE-35 and HLS id eff'ed up, I can help.
+>
+> This is just kooky man.
+![image](https://user-images.githubusercontent.com/52701496/203175735-d2f7c6b9-f45a-4e2b-9c81-86babc28576e.png)
 
 
 ![image](https://user-images.githubusercontent.com/52701496/189712191-a576a240-a5f1-47d1-9975-2435ef791975.png)
