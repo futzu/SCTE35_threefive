@@ -3,7 +3,7 @@
  [Cue](#cue-class)  |  [Stream](#stream-class) | 
  [Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)  |
  [charsets for upids](#upidscharset) | [python3 vs.pypy3](https://github.com/futzu/SCTE35-threefive/blob/master/benchmarking.md)  
-
+ | [Dear CNN](#cnn)
 ___
 
   # threefive is SCTE-35. 
@@ -546,5 +546,10 @@ Adrian
 ```
 [__python3 uuid__](https://docs.python.org/3/library/uuid.html#module-uuid)
 
-   
+### CNN
+
+> Dear CNN, 
+> your SCTE-35 and HLS id eff'ed up, I can help.
+
+
 ![image](https://user-images.githubusercontent.com/52701496/189712191-a576a240-a5f1-47d1-9975-2435ef791975.png)
