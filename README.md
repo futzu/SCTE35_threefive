@@ -2,8 +2,7 @@
  [Install](#install) | [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md)  | 
  [Cue](#cue-class)  |  [Stream](#stream-class) | 
  [Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)  |
- [charsets for upids](#upidscharset) | [python3 vs.pypy3](https://github.com/futzu/SCTE35-threefive/blob/master/benchmarking.md)  
- | [Dear CNN](#cnn)
+ [python3 vs.pypy3](https://github.com/futzu/SCTE35-threefive/blob/master/benchmarking.md)  | [Dear CNN](#cnn)
 ___
 
   # threefive is SCTE-35. 
