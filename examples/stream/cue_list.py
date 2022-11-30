@@ -1,5 +1,5 @@
 """
-Example using Stream.decode_next()
+Example using Stream.decode() with a custom function
 to return a list of cues from a video
 
 Usage:
@@ -12,30 +12,29 @@ pypy3 cue_list.py video.ts
 import sys
 from threefive import Stream, Cue
 
+# A list to hold cues 
+CUES=[]
+
+def cue_func(cue):
+    """
+    threefive.Stream.decode cqn be passed in a
+    custom function that accepts a Cue as the only arg.
+    this is an example of a custom function.
+
+    """
+    CUES.append(cue)
+    cue.show()
+
 
 def do():
     """
     do collects a list of Cues  from a Stream
     """
-    CUES = []
     arg = sys.argv[1]
-    with open(arg, "rb") as vid:
-        while True:
-            strm = Stream(vid)
-            cue = strm.decode_next()
-            if not cue:
-                return CUES
-            if cue:
-                CUES.append(cue)
-        return CUES
+    strm = Stream(arg)
+    strm.decode(func=cue_func) # cue_func is the custom function from above
 
 
 if __name__ == "__main__":
-    for cue in do():
-        cue2 = Cue(cue.encode())
-        cue2.decode()
-        cue2.info_section.pts_adjustment = 109.55
-        cue2.encode()
-        print(
-            f"{cue.info_section.pts_adjustment} @ {cue2.info_section.pts_adjustment} "
-        )
+    do()
+    [print(cue.command.name,cue.encode()) for cue in CUES]
