@@ -1,6 +1,6 @@
 ### Project Super Kabuki is SCTE35 MPEGTS Packet Injection.
 
-_I am hesitant to release superkabuki, I fear it will be a pain for me to support._
+_I am hesitant to release superkabuki, I fear it will be a pain for me to support._  ~Adrian
 
 
 
