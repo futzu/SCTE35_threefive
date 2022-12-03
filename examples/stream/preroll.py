@@ -1,9 +1,7 @@
 """
+Pre-roll is the difference in time between when a SCTE-35 packet
+is inserted in a MPEGTS stream and the splice time of the SCTE-35 Cue.
 
-! Requires threefive 2.2.88+ !
-
-Shows preroll using PCR and PTS
-for the time of the SCTE-35 packet.
 """
 
 import sys
@@ -12,18 +10,16 @@ from threefive import Stream
 
 def show_preroll(cue):
     """
-    show_preroll shows preroll times with pcr and pts.
+    Print Splice Time, pre-roll and the base64 encoded SCTE-35 Cue.
     """
     if cue.command.pts_time:
         if cue.packet_data:
-            two = f" Splice Time: {cue.command.pts_time} Preroll:"
-            if cue.packet_data.pcr:
-                pcr_preroll = cue.command.pts_time - cue.packet_data.pcr
-                two += f" (PCR): {round(pcr_preroll,6)}"
-            if cue.packet_data.pts:
+            out = f"{cue.command.pts_time},"
+            if cue.packet_data.pts and cue.command.pts_time:
                 pts_preroll = cue.command.pts_time - cue.packet_data.pts
-                two += f" (PTS): {round(pts_preroll,6)}"
-            print(two)
+                out += f"\t{pts_preroll:.6f},"
+            out +=f"\t{cue.encode()}"
+            print(out)
 
 
 def do():
@@ -32,8 +28,22 @@ def do():
     """
     args = sys.argv[1:]
     for arg in args:
-        print(f"file: {arg}")
+        print(f"Input: {arg}")
+        print("Splice Time,\tPre-roll,\tCue")
         strm = Stream(arg, show_null=False)
+        """
+        threefive.Stream.decode accepts an optional function
+        to be used to when a Cue is found. The function must
+        meet the interface func(cue).
+
+        In this example, we are using the function show_preroll.
+        """
+        strm.decode(func=show_preroll)
+
+
+if __name__ == "__main__":
+    do()
+
         strm.decode(func=show_preroll)
 
 
