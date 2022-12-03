@@ -43,9 +43,3 @@ def do():
 
 if __name__ == "__main__":
     do()
-
-        strm.decode(func=show_preroll)
-
-
-if __name__ == "__main__":
-    do()
