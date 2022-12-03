@@ -13,7 +13,7 @@ ___
  - [x] [Descriptors](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)
  - [x] [Upids](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upids.py)
 
-### Latest release is `2.3.59`
+### Latest release is `2.3.61`
 * In response to issue [#67](https://github.com/futzu/scte35-threefive/issues/67) `OSError: [Errno 55] No buffer space available`
     * [new_reader 0.0.99](https://github.com/futzu/new_reader) now uses dynamic scaling to increase `socket.SO_RCVBUF` 
 
