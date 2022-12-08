@@ -13,9 +13,9 @@ ___
  - [x] [Descriptors](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)
  - [x] [Upids](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upids.py)
 
-### Latest release is `2.3.61`
-* In response to issue [#67](https://github.com/futzu/scte35-threefive/issues/67) `OSError: [Errno 55] No buffer space available`
-    * [new_reader 0.0.99](https://github.com/futzu/new_reader) now uses dynamic scaling to increase `socket.SO_RCVBUF` 
+### Latest release is `2.3.63`
+* In response to issue [#71](https://github.com/futzu/scte35-threefive/issues/71) Decode / encode round trip produces unexpected results
+    * Encoded time stamp values are now based on ticks to eliminate rounding differences.
 
 
 #### Be cool. 
@@ -70,7 +70,7 @@ I have no idea. It doesn't matter though, threefive parses stream types 0x6 and 
     *  __pyaes__  If you want AES decryption for HLS segments.
 
 ### `Install`
-  
+ 
 ```smalltalk
 python3 -mpip  install  threefive
 
@@ -91,12 +91,14 @@ pypy3 -mpip  install  threefive[all]
 ```
 ---
 ### `Versions and Releases`
+![image](https://user-images.githubusercontent.com/52701496/206329140-8ed1df42-78f7-4885-b37b-58090df1bc0d.png)
+
 ```lua
 Python 3.10.6 (main, Aug 10 2022, 11:19:32) [GCC 12.1.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>> from threefive import version
 >>> version()
-'2.3.45'
+'2.3.63'
 >>> 
 ```
 *  I do [__Rolling Releases__](https://en.wikipedia.org/wiki/Rolling_release)
