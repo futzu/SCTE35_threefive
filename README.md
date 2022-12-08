@@ -29,18 +29,20 @@ ___
   *  [Stream Class](#stream-class)
 
 #### help(threefive)
+* [Diagram of a threefive SCTE-35 Cue. ](https://github.com/futzu/threefive/blob/master/cue.md)  
 
 * [__Super Cool Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
+
 * [ffmpeg and SCTE35 and Stream Type 0x6 bin data and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
-*  2>&1 
-   * I don't get any sort of notification for Discussions, please just open an issue for anything so I don't miss your post. 
-   * [Issues and Bugs and Feature Requests *No forms man, just open an issue and tell me what you need.*  ](https://github.com/futzu/scte35-threefive/issues)
-* [Diagram of a threefive SCTE-35 Cue. ](https://github.com/futzu/threefive/blob/master/cue.md)  
+
+* [Issues and Bugs and Feature Requests *No forms man, just open an issue and tell me what you need.*  ](https://github.com/futzu/scte35-threefive/issues)
+
+#### threefive related projects
+* [__cuei__ is the fastest SCTE-35 parser allowed by law, writtern In Go.](https://github.com/futzu/cuei)
 * [ __x9k3__ , SCTE35 hls segmenter powered by __threefive__](https://github.com/futzu/x9k3)
 * [__m3ufu__, m3u8 parser powered by __threefive__](https://github.com/futzu/m3ufu)
 * [__Project Super Kabuki__](https://github.com/futzu/threefive/blob/master/superkabuki.md) SCTE35 MPEGTS Packet Injection.
-
-
+ 
 
 ---
 ### `Q.` 
@@ -60,8 +62,6 @@ I have no idea. It doesn't matter though, threefive parses stream types 0x6 and 
  If you need to change the stream type back to 0x86(SCTE-35) use [kabuki](https://github.com/futzu/kabuki).
 ---
  
-
-
 ### `Requirements`
 * threefive requires 
   * [pypy3](https://pypy.org) or python 3.6+ 
@@ -425,22 +425,6 @@ if __name__ == "__main__":
 
 ```
 
-
-* `Stream.decode_program(the_program, func = show_cue)`
-
- ```js
- |  decode_program(self, the_program, func=show_cue)
- |      Stream.decode_program limits SCTE35 parsing
- |      to a specific MPEGTS program.
- ```
- > `Stream.decode_program Example`
-```python3
-import threefive
-threefive.Stream('35.ts').decode_program(1)
-```
-___
-
-
 * `Stream.decode_proxy(func = show_cue)`
 
   *  Writes all packets to sys.stdout.
@@ -501,60 +485,6 @@ Program: 1050
                 Pid: 1055[0x41f]        Type: 0x86 SCTE35 Data
  
 ```
-
-* `Stream.dump(fname)`
- ```js
- |  dump(self, fname)
- |      Stream.dump dumps all the packets to a file (fname).
- ```
- * `Stream.strip_scte35(func=show_cue_stderr)`
- 
- ```js
- |  strip_scte35(self, func=show_cue_stderr)
- |      Stream.strip_scte35 works just like Stream.decode_proxy,
- |      MPEGTS packets, ( Except the SCTE-35 packets) ,
- |      are written to stdout after being parsed.
- |      SCTE-35 cues are printed to stderr.
-```
-
-
 ___
-## `UUID`
-* [__RFC 4122__ aka UUID](https://tools.ietf.org/html/rfc4122.html)
-> A lot of folks have been searching this repo for uuid, I'm not sure if they are looking for uuid in a upid, 
-> or a randomly generated uuid for an HLS tag or something else.
-> Here is what I know about it. 
-
-```smalltalk
->>> from uuid import uuid4, UUID
-
-# generate a random uuid
->>> uu= uuid4()
->>> uu
-UUID('7ae2e37e-3018-4c4e-8a10-f69d075828b4')
-
-# uuid as bytes
->>> uu.bytes
-b'z\xe2\xe3~0\x18LN\x8a\x10\xf6\x9d\x07X(\xb4'
-
-# bytes to uuid
->>> UUID(bytes=uu.bytes)
-UUID('7ae2e37e-3018-4c4e-8a10-f69d075828b4')
->>> 
-
-Adrian
-
-```
-[__python3 uuid__](https://docs.python.org/3/library/uuid.html#module-uuid)
-
-### CNN
-
-> Dear CNN, 
-> 
-> your SCTE-35 and HLS id eff'ed up, I can help.
->
-> This is just kooky man.
-![image](https://user-images.githubusercontent.com/52701496/203175735-d2f7c6b9-f45a-4e2b-9c81-86babc28576e.png)
-
 
 ![image](https://user-images.githubusercontent.com/52701496/189712191-a576a240-a5f1-47d1-9975-2435ef791975.png)
