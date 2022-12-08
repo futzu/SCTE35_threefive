@@ -5,7 +5,7 @@
  [python3 vs.pypy3](https://github.com/futzu/SCTE35-threefive/blob/master/benchmarking.md)
 ___
 
-  # threefive is SCTE-35. 
+  # threefive is the highest rated SCTE-35 parser / SCTE-35 decoder/ SCTE-35 encoder lib. Ever.  
 ___
 
 #### threefive parses  All __2022__ SCTE35  
