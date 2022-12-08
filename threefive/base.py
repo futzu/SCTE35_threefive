@@ -19,7 +19,17 @@ class SCTE35Base:
 
     @staticmethod
     def as_90k(int_time):
+        """
+        ticks to 90k timestamps
+        """
         return round((int_time / 90000.0), 6)
+
+    @staticmethod
+    def as_ticks(float_time):
+        """
+        90k timestamps to ticks
+        """
+        return int(round(float_time * 90000))
 
     @staticmethod
     def as_hms(secs_of_time):
