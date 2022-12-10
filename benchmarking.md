@@ -16,20 +16,20 @@ if __name__ == "__main__":
             strm.decode()
 ```
 ### python 3.10 
-```lua
-a@debian:~/build/scte35-threefive$ time python3 test.py /home/a/mpegts/plp0.ts
+```py3
+a@debian:~/$ time python3 test.py /home/a/mpegts/plp0.ts
 
 real	0m14.293s
 user	0m12.666s
-sys	    0m1.406s
+sys     0m1.406s
 
 ```
 ### PyPy 7.3.9
 
 ```lua
-a@debian:~/build/scte35-threefive$ time pypy3 test.py /home/a/mpegts/plp0.ts
+a@debian:~/$ time pypy3 test.py /home/a/mpegts/plp0.ts
 
 real	0m2.879s         <--  Boom goes the dynamite.
 user	0m2.576s
-sys	0m1.101s
+sys	    0m1.101s
 ```
