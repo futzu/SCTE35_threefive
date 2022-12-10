@@ -15,13 +15,14 @@ if __name__ == "__main__":
             strm = threefive.Stream(arg)
             strm.decode()
 ```
-### python 3.10
+### python 3.10 
 ```lua
 a@debian:~/build/scte35-threefive$ time python3 test.py /home/a/mpegts/plp0.ts
 
-real	0m22.824s
-user	0m22.424s
-sys	0m1.713s
+real	0m14.293s
+user	0m12.666s
+sys	    0m1.406s
+
 ```
 ### PyPy 7.3.9
 
