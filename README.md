@@ -43,24 +43,6 @@ ___
 * [__m3ufu__, m3u8 parser powered by __threefive__](https://github.com/futzu/m3ufu)
 * [__Project Super Kabuki__](https://github.com/futzu/threefive/blob/master/superkabuki.md) SCTE35 MPEGTS Packet Injection.
  
-
----
-### `Q.` 
-Is python fast enough to parse video?
-
-
-###  `A.` 
-Oh, yeah. 
----
----
-### `Q`
-How do you stop ffmpeg from changing the SCTE-35 Stream type to 0x6 bin data?
-
-### `A`
-I have no idea. It doesn't matter though, threefive parses stream types 0x6 and 0x86 for SCTE-35.
-
- If you need to change the stream type back to 0x86(SCTE-35) use [kabuki](https://github.com/futzu/kabuki).
----
  
 ### `Requirements`
 * threefive requires 
@@ -94,84 +76,22 @@ pypy3 -mpip  install  threefive[all]
 ![image](https://user-images.githubusercontent.com/52701496/206329140-8ed1df42-78f7-4885-b37b-58090df1bc0d.png)
 
 ```lua
-Python 3.10.6 (main, Aug 10 2022, 11:19:32) [GCC 12.1.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
 >>> from threefive import version
 >>> version()
 '2.3.63'
 >>> 
 ```
-*  I do [__Rolling Releases__](https://en.wikipedia.org/wiki/Rolling_release)
 * __Release__ versions are  __odd__.
 * __Unstable__ testing versions are __even__.
 
-
 ---
-### `upids.charset`
-`Specify a charset for Upid data by setting threefive.upids.charset` [`issue #55`](https://github.com/futzu/scte35-threefive/issues/55)
+![image](https://user-images.githubusercontent.com/52701496/189712191-a576a240-a5f1-47d1-9975-2435ef791975.png)
 
-* default charset is ascii
-* python charsets info [Here](https://docs.python.org/3/library/codecs.html)
-* setting charset to None will return raw bytes.
-
-*  `threefive.upids.charset` will set a charset for the following upid types:
-
-   * `0x01` (Deprecated)
-   * `0x02` (Deprecated)
-   * `0x03` (AdID)
-   * `0x07` (TID)
-   * `0x09` (ADI)
-   * `0x10` (UUID) 
-   * `0x11` (SCR) 
-   * `0x0E` (ADS Info)
-   * `0x0F` (URI)
-   * `0xFD` (Unknown)
-   * `0x0B` (ATSC) _only applied to_ `content_id`
-#### Example Usage:   
-```lua
->>> from threefive import Cue,upids
->>> i="/DBKAAAAAAAAAP/wBQb+YtC8/AA0AiZDVUVJAAAD6X/CAAD3W3ACEmJibG5kcHBobkQCAsGDpQIAAAAAAAEKQ1VFSRSAIyowMljRk9c="
-
->>> upids.charset
-'ascii'
->>> cue=Cue(i)
->>> cue.decode()
-ascii
-True
->>> cue.descriptors[0].segmentation_upid
-'bblndpphnD\x02\x02���\x02\x00\x00'
-
->>> upids.charset="utf16"
->>> cue.decode()
-utf16
-True
->>> cue.descriptors[0].segmentation_upid
-'扢湬灤桰䑮Ȃ菁ʥ\x00'
-```
-
-> Q. Why not change the default to latin-1 instead of ascii?
-
-> A. Because latin-1 and ascii are different.
-```lua
->>>> a=b'\xfc0'
->>>> a.decode(encoding="ascii",errors='backslashreplace')
-'\\xfc0'
->>>> a.decode(encoding="latin-1",errors='backslashreplace')
-'ü0'
->>>> a.decode(encoding="latin-1",errors='backslashreplace').encode()
-b'\xc3\xbc0'
->>>> a.decode(encoding="ascii",errors='backslashreplace').encode()
-b'\\xfc0'
->>>> 
-```
----
 ### `Easy Examples`
-> threefive is a library. 
->
-> A library means you dont have to write a lot of code. 
->
+> threefive is a library.  A library means you dont have to write a lot of code. 
 > Most SCTE-35 parsing can be done in a few lines.
 ___
+
 ##### `Mpegts Multicast`
 
 ```python3
@@ -180,7 +100,9 @@ import threefive
 strm = threefive.Stream('udp://@239.35.0.35:1234')
 strm.decode()
 ````
+
 #### Mpegts over Https
+
 ```python3
 import threefive
 strm = threefive.Stream('https://iodisco.com/ch1/ready.ts')
@@ -189,6 +111,7 @@ strm.decode()
 ```
 
 ##### Base64
+
 ```python3
 >>> from threefive import Cue
 >>> stuff = '/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
@@ -197,6 +120,7 @@ strm.decode()
 True
 ```
 ##### `Bytes`
+
 ```python3
 >>> import threefive 
 
@@ -207,6 +131,7 @@ True
 >>> cue.show()
 ```
 ##### `Hex`
+
 ```python3
 import threefive 
 
@@ -214,7 +139,6 @@ cue = threefive.Cue("0XFC301100000000000000FFFFFF0000004F253396")
 cue.decode()
 cue.show()
 ```
-
 ___
 
 # Documentation for classes and methods 
@@ -224,33 +148,8 @@ ___
 
    *  src [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
-   
-```python3
-    >>>> import threefive
-    >>>> Base64 = "/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g="
-    >>>> cue = threefive.Cue(Base64)
-```
 
-*  cue.decode() returns True on success,or False if decoding failed
-```python3
-    >>>> cue.decode()
-    True
-```
-* After Calling cue.decode() the instance variables can be accessed via dot notation.
-```python3
-
-    >>>> cue.command
-    {'calculated_length': 5, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 21695.740089}
-
-    >>>> cue.command.pts_time
-    21695.740089
-
-    >>>> cue.info_section.table_id
-
-    '0xfc'
-```
-
-```js
+```py3
 
 class Cue(threefive.base.SCTE35Base)
  |  Cue(data=None, packet_data=None)
@@ -266,6 +165,20 @@ class Cue(threefive.base.SCTE35Base)
  |  decode(self)
  |      Cue.decode() parses for SCTE35 data
 ```
+* After Calling cue.decode() the __instance variables can be accessed via dot notation__.
+```python3
+
+    >>>> cue.command
+    {'calculated_length': 5, 'name': 'Time Signal', 'time_specified_flag': True, 'pts_time': 21695.740089}
+
+    >>>> cue.command.pts_time
+    21695.740089
+
+    >>>> cue.info_section.table_id
+
+    '0xfc'
+```
+
 * `Cue.get()`
 ```js
  |  get(self)
@@ -331,9 +244,7 @@ ___
   	 * __Multiple Programs__.
   	 * __Multi-Packet PAT, PMT, and SCTE35 tables__. 
  
-* threefive tries to include __pid__, __program__,  __pts__, and __pcr__ of the SCTE-35 packet.
-
-  
+* threefive tries to include __pid__, __program__, anf  __pts__ of the SCTE-35 packet.
 
 ```js
 class Stream(builtins.object)
@@ -341,23 +252,18 @@ class Stream(builtins.object)
  |  
  |  Stream class for parsing MPEG-TS data.
  ```
- ```js
+ ```py3
  |  __init__(self, tsdata, show_null=True)
  |      
  |      tsdata is a file or http, https, 
  |       udp or multicast url.
  |       
  |      set show_null=False to exclude Splice Nulls
- |      
- |      Use like...
- |      
- |      from threefive import Stream
- |      strm = Stream("vid.ts",show_null=False)
- |      strm.decode()
+
  ```
 
 * `Stream.decode(func=show_cue)`
- ```js
+ ```py3
  |  decode(self, func=show_cue)
  |      Stream.decode reads self.tsdata to find SCTE35 packets.
  |      func can be set to a custom function that accepts
@@ -464,17 +370,6 @@ ___
 ```
 
 ```js
-Program: 1040
-    Service:    fumatic
-    Provider:   fu-labs
-    Pcr Pid:    1041[0x411]
-    Streams:
-                Pid: 1041[0x411]        Type: 0x1b AVC Video
-                Pid: 1042[0x412]        Type: 0x3 MP2 Audio
-                Pid: 1044[0x414]        Type: 0x6 PES Packets/Private Data
-                Pid: 1045[0x415]        Type: 0x86 SCTE35 Data
-
-Program: 1050
     Service:    fancy ˹ 
     Provider:   fu-corp
     Pcr Pid:    1051[0x41b]
@@ -487,4 +382,35 @@ Program: 1050
 ```
 ___
 
-![image](https://user-images.githubusercontent.com/52701496/189712191-a576a240-a5f1-47d1-9975-2435ef791975.png)
+
+---
+### `upids.charset`
+`Specify a charset for Upid data by setting threefive.upids.charset` [`issue #55`](https://github.com/futzu/scte35-threefive/issues/55)
+
+* default charset is ascii
+* python charsets info [Here](https://docs.python.org/3/library/codecs.html)
+* setting charset to None will return raw bytes.
+
+
+#### Example Usage:   
+
+```lua
+>>> from threefive import Cue,upids
+>>> i="/DBKAAAAAAAAAP/wBQb+YtC8/AA0AiZDVUVJAAAD6X/CAAD3W3ACEmJibG5kcHBobkQCAsGDpQIAAAAAAAEKQ1VFSRSAIyowMljRk9c="
+
+>>> upids.charset
+'ascii'
+>>> cue=Cue(i)
+>>> cue.decode()
+ascii
+True
+>>> cue.descriptors[0].segmentation_upid
+'bblndpphnD\x02\x02���\x02\x00\x00'
+
+>>> upids.charset="utf16"
+>>> cue.decode()
+utf16
+True
+>>> cue.descriptors[0].segmentation_upid
+'扢湬灤桰䑮Ȃ菁ʥ\x00'
+```
