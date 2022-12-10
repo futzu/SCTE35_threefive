@@ -168,7 +168,7 @@ class Stream:
             one = self._tsdata.read(1)
             if not one:
                 print("\nNo Stream Found. \n")
-                return iter([])
+                return []
             if one[0] == self._SYNC_BYTE:
                 tail = self._tsdata.read(self._PACKET_SIZE - 1)
                 if tail:
