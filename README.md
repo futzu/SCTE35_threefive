@@ -1,12 +1,6 @@
+   # threefive is the highest rated SCTE-35 parser / SCTE-35 decoder/ SCTE-35 encoder lib. Ever.  
  
- [Install](#install) | [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md)  | 
- [Cue](#cue-class)  |  [Stream](#stream-class) | 
- [Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)  |
  [python3 vs.pypy3](https://github.com/futzu/SCTE35-threefive/blob/master/benchmarking.md)
-___
-
-  # threefive is the highest rated SCTE-35 parser / SCTE-35 decoder/ SCTE-35 encoder lib. Ever.  
-___
 
 #### threefive parses  All __2022__ SCTE35  
   - [x] [Commands](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py)
@@ -14,14 +8,13 @@ ___
  - [x] [Upids](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upids.py)
 
 ### Latest release is `2.3.63`
-* In response to issue [#71](https://github.com/futzu/scte35-threefive/issues/71) Decode / encode round trip produces unexpected results
+* In response to issue [#71](https://github.com/futzu/scte35-threefive/issues/71) 
     * Encoded time stamp values are now based on ticks to eliminate rounding differences.
-
 
 #### Be cool. 
 * [Install threefive](#install)
-* Do you have a limited attention span? 
    * [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+   * [Super Cool Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 * [Versions and Releases](#versions-and-releases)
 
 ####  threefive is classy.
@@ -31,18 +24,15 @@ ___
 #### help(threefive)
 * [Diagram of a threefive SCTE-35 Cue. ](https://github.com/futzu/threefive/blob/master/cue.md)  
 
-* [__Super Cool Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
-
 * [ffmpeg and SCTE35 and Stream Type 0x6 bin data and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
 * [Issues and Bugs and Feature Requests *No forms man, just open an issue and tell me what you need.*  ](https://github.com/futzu/scte35-threefive/issues)
 
 #### threefive related projects
-* [__cuei__ is the fastest SCTE-35 parser allowed by law, writtern In Go.](https://github.com/futzu/cuei)
-* [ __x9k3__ , SCTE35 hls segmenter powered by __threefive__](https://github.com/futzu/x9k3)
-* [__m3ufu__, m3u8 parser powered by __threefive__](https://github.com/futzu/m3ufu)
-* [__Project Super Kabuki__](https://github.com/futzu/threefive/blob/master/superkabuki.md) SCTE35 MPEGTS Packet Injection.
- 
+* [cuei](https://github.com/futzu/cuei)  is the fastest SCTE-35 parser allowed by law, writtern In Go.
+* [x9k3](https://github.com/futzu/x9k3) HLS segmenter powered by __threefive__
+* [m3ufu](https://github.com/futzu/m3ufu) M3U8 parser powered by __threefive__
+* [Project Super Kabuki](https://github.com/futzu/threefive/blob/master/superkabuki.md) SCTE35 MPEGTS Packet Injection.
  
 ### `Requirements`
 * threefive requires 
@@ -73,7 +63,6 @@ pypy3 -mpip  install  threefive[all]
 ```
 ---
 ### `Versions and Releases`
-![image](https://user-images.githubusercontent.com/52701496/206329140-8ed1df42-78f7-4885-b37b-58090df1bc0d.png)
 
 ```lua
 >>> from threefive import version
