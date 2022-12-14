@@ -29,10 +29,12 @@
 * [Issues and Bugs and Feature Requests *No forms man, just open an issue and tell me what you need.*  ](https://github.com/futzu/scte35-threefive/issues)
 
 #### threefive related projects
-* [cuei](https://github.com/futzu/cuei)  is the fastest SCTE-35 parser allowed by law, writtern In Go.
 * [x9k3](https://github.com/futzu/x9k3) HLS segmenter powered by __threefive__
-* [m3ufu](https://github.com/futzu/m3ufu) M3U8 parser powered by __threefive__
+* [amt-play](https://github.com/vivoh-inc/amt-play) Uses __x9k3__ and __threefive__
+* [m3ufu](https://github.com/futzu/m3ufu) M3U8 parser with SCTE-35 support.
+* [kabuki](https://github.com/futzu/kabuki) changes stream types set to bin data by ffmpeg back to SCTE-35.
 * [Project Super Kabuki](https://github.com/futzu/threefive/blob/master/superkabuki.md) SCTE35 MPEGTS Packet Injection.
+* [cuei](https://github.com/futzu/cuei)  is the fastest SCTE-35 parser allowed by law, writtern In Go.
  
 ### `Requirements`
 * threefive requires 
@@ -77,7 +79,10 @@ pypy3 -mpip  install  threefive[all]
 ![image](https://user-images.githubusercontent.com/52701496/189712191-a576a240-a5f1-47d1-9975-2435ef791975.png)
 
 ### `Easy Examples`
-> threefive is a library.  A library means you dont have to write a lot of code. 
+> threefive is a library. 
+> 
+> A library means you dont have to write a lot of code. 
+>
 > Most SCTE-35 parsing can be done in a few lines.
 ___
 
@@ -89,8 +94,10 @@ import threefive
 strm = threefive.Stream('udp://@239.35.0.35:1234')
 strm.decode()
 ````
+  _(need an easy multicast server?_ [gumd](https://github.com/futzu/gumd) ) 
 
-#### Mpegts over Https
+---
+#### `Mpegts over Https`
 
 ```python3
 import threefive
@@ -98,8 +105,8 @@ strm = threefive.Stream('https://iodisco.com/ch1/ready.ts')
 strm.decode()
 
 ```
-
-##### Base64
+---
+##### `Base64`
 
 ```python3
 >>> from threefive import Cue
@@ -108,6 +115,7 @@ strm.decode()
 >>> cue.decode()
 True
 ```
+---
 ##### `Bytes`
 
 ```python3
@@ -119,6 +127,7 @@ True
 True
 >>> cue.show()
 ```
+---
 ##### `Hex`
 
 ```python3
