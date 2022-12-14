@@ -1,15 +1,15 @@
 """
 crc.py  crc32 function for encoding.
-
 """
 
 POLY = 0x104C11DB7
 INIT_VALUE = 0xFFFFFFFF
-SIZE_BITS = 32
+FOUR_BYTES = 32
+THREE_BYTES = 24
 
 
 def _bytecrc(crc, poly):
-    mask = 1 << ( SIZE_BITS- 1)   
+    mask = 1 << ( FOUR_BYTES- 1)
     i = 8
     while i:
         crc = (crc << 1, crc << 1 ^ poly)[crc & mask != 0]
@@ -18,9 +18,9 @@ def _bytecrc(crc, poly):
 
 
 def _mk_table():
-    mask = (1 << SIZE_BITS) - 1
+    mask = (1 << FOUR_BYTES) - 1
     poly = POLY & mask
-    return [_bytecrc(i << (SIZE_BITS - 8), poly) for i in range(256)]
+    return [_bytecrc((i << THREE_BYTES), poly) for i in range(256)]
 
 
 def crc32(data):
@@ -28,9 +28,7 @@ def crc32(data):
     generate a 32 bit crc
     """
     table = _mk_table()
-    emvee = memoryview(data)
-    crc = INIT_VALUE 
-    for bite in emvee.tobytes():
-        crc = table[bite ^ ((crc >> 24) & 0xFF)] ^ ((crc << 8) & 0xFFFFFF00)
+    crc = INIT_VALUE
+    for bite in data:
+        crc = table[bite ^ ((crc >> THREE_BYTES) & 0xFF)] ^ ((crc << 8) & 0xFFFFFF00)
     return crc
-
