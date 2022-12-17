@@ -1,8 +1,8 @@
    # threefive is a SCTE-35 lib in python3. 
  ### This is the SCTE-35 tool you want to use. 
  
- 
- [python3 vs.pypy3](https://github.com/futzu/SCTE35-threefive/blob/master/benchmarking.md)
+ * threefive/go its now [cuei](https://github.com/futzu/cuei) 
+ * [python3 vs.pypy3](https://github.com/futzu/SCTE35-threefive/blob/master/benchmarking.md)
 
 #### threefive parses  All __2022__ SCTE35  
   - [x] [Commands](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py)
