@@ -19,9 +19,8 @@
 
  <details>
    <summary>Latest release is <b>2.3.67</b></summary>
-   
-* In response to issue [#71](https://github.com/futzu/scte35-threefive/issues/71) 
-    * Encoded time stamp values are now based on ticks to eliminate rounding differences.
+ * 2.3.67 fixes a timestamp encoding bug created by my fix in v.2.3.63 for #71. Sorry about that.
+ 
 </details>
 
  <details><summary><b>Installation and Getting Started</b></summary>
