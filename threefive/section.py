@@ -129,8 +129,8 @@ class SpliceInfoSection(SCTE35Base):
         """
         if not self.pts_adjustment_ticks:
             self.pts_adjustment_ticks = 0
-            if self.pts_adjustment:
-                self.pts_adjustment_ticks = self.as_ticks(self.pts_adjustment)
+        if self.pts_adjustment:
+            self.pts_adjustment_ticks = self.as_ticks(self.pts_adjustment)
         self._chk_var(int, nbin.add_int, "pts_adjustment_ticks", 33)
 
     def _encode_cw_index(self, nbin):
