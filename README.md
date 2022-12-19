@@ -1,49 +1,62 @@
    # threefive is a SCTE-35 lib in python3. 
- ### This is the SCTE-35 tool you want to use. 
  
- * threefive/go its now [cuei](https://github.com/futzu/cuei) 
- * [python3 vs.pypy3](https://github.com/futzu/SCTE35-threefive/blob/master/benchmarking.md)
+  threefive/go its now [cuei](https://github.com/futzu/cuei)
 
-#### threefive parses  All __2022__ SCTE35  
-  - [x] [Commands](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py)
+ <details>
+   <summary>threefive parses  <b>All 2022 SCTE35</b></summary>
+  
+ - [x] [Commands](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py)
  - [x] [Descriptors](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)
  - [x] [Upids](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upids.py)
+</details>
 
-### Latest release is `2.3.63`
+ <details>
+   <summary>Latest release is <b>2.3.63</b></summary>
+   
 * In response to issue [#71](https://github.com/futzu/scte35-threefive/issues/71) 
     * Encoded time stamp values are now based on ticks to eliminate rounding differences.
+</details>
 
-#### Be cool. 
+ <details><summary><b>Installation and Getting Started</b></summary>
+  
+<details><summary>Requirements</summary>
+
+* threefive requires 
+  * [pypy3](https://pypy.org) or python 3.6+ 
+  * [new_reader](https://github.com/futzu/new_reader)
+* optional dependencies:
+    *  __pyaes__  If you want AES decryption for HLS segments.
+</details>
+
+   
 * [Install threefive](#install)
    * [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
    * [Super Cool Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 * [Versions and Releases](#versions-and-releases)
+</details>
 
-####  threefive is classy.
+ <details><summary>threefive <b>classes</b>.</summary>
+   
   *  [Cue Class](#cue-class)         
   *  [Stream Class](#stream-class)
+</details>
 
-#### help(threefive)
-* [Diagram of a threefive SCTE-35 Cue. ](https://github.com/futzu/threefive/blob/master/cue.md)  
-
-* [ffmpeg and SCTE35 and Stream Type 0x6 bin data and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
-
-* [Issues and Bugs and Feature Requests *No forms man, just open an issue and tell me what you need.*  ](https://github.com/futzu/scte35-threefive/issues)
-
-#### threefive related projects
+ <details><summary> threefive related projects</summary>
+    
 * [x9k3](https://github.com/futzu/x9k3) HLS segmenter powered by __threefive__
 * [amt-play](https://github.com/vivoh-inc/amt-play) Uses __x9k3__ and __threefive__
 * [m3ufu](https://github.com/futzu/m3ufu) M3U8 parser with SCTE-35 support.
 * [kabuki](https://github.com/futzu/kabuki) changes stream types set to bin data by ffmpeg back to SCTE-35.
 * [Project Super Kabuki](https://github.com/futzu/threefive/blob/master/superkabuki.md) SCTE35 MPEGTS Packet Injection.
 * [cuei](https://github.com/futzu/cuei)  is the fastest SCTE-35 parser allowed by law, writtern In Go.
- 
-### `Requirements`
-* threefive requires 
-  * [pypy3](https://pypy.org) or python 3.6+ 
-  * [new_reader](https://github.com/futzu/new_reader)
-* optional dependencies:
-    *  __pyaes__  If you want AES decryption for HLS segments.
+</details>
+  
+ [Diagram of a threefive SCTE-35 Cue. ](https://github.com/futzu/threefive/blob/master/cue.md)  
+
+[ffmpeg and SCTE35 and Stream Type 0x6 bin data and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
+
+[Issues and Bugs and Feature Requests *No forms man, just open an issue and tell me what you need.*  ](https://github.com/futzu/scte35-threefive/issues)
+
 
 ### `Install`
  
@@ -81,14 +94,8 @@ pypy3 -mpip  install  threefive[all]
 ![image](https://user-images.githubusercontent.com/52701496/189712191-a576a240-a5f1-47d1-9975-2435ef791975.png)
 
 ### `Easy Examples`
-> threefive is a library. 
-> 
-> A library means you dont have to write a lot of code. 
->
-> Most SCTE-35 parsing can be done in a few lines.
-___
 
-##### `Mpegts Multicast`
+<details><summary>Mpegts Multicast</summary>
 
 ```python3
 import threefive 
@@ -99,7 +106,9 @@ strm.decode()
   _(need an easy multicast server?_ [gumd](https://github.com/futzu/gumd) ) 
 
 ---
-#### `Mpegts over Https`
+  </details>
+  
+ <details><summary>Mpegts over Https</summary>
 
 ```python3
 import threefive
@@ -108,7 +117,9 @@ strm.decode()
 
 ```
 ---
-##### `Base64`
+   </details>
+   
+ <details><summary>Base64</summary>
 
 ```python3
 >>> from threefive import Cue
@@ -118,7 +129,9 @@ strm.decode()
 True
 ```
 ---
-##### `Bytes`
+   </details>
+   
+ <details><summary>Bytes</summary>
 
 ```python3
 >>> import threefive 
@@ -130,7 +143,9 @@ True
 >>> cue.show()
 ```
 ---
-##### `Hex`
+   </details>
+   
+<details><summary>Hex</summary>
 
 ```python3
 import threefive 
@@ -139,10 +154,11 @@ cue = threefive.Cue("0XFC301100000000000000FFFFFF0000004F253396")
 cue.decode()
 cue.show()
 ```
+        
 ___
+</details>
 
-# Documentation for classes and methods 
-
+### Documentation for classes and methods 
 
 ##  `Cue Class`
 
