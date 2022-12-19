@@ -1,6 +1,13 @@
    # threefive is a SCTE-35 lib in python3. 
  
   threefive/go its now [cuei](https://github.com/futzu/cuei)
+  
+<details><summary><b>Heads Up PCR wil no long be included in threefive.Stream as of  v.2.3.65</b> </summary>
+
+* SCTE-35 Never uses PCR
+* Parsing PCR times accounts for about 30% of of the parse time for python3, and it's not used.
+* If this change negatively impacts you, let me know.
+</details>
 
  <details>
    <summary>threefive parses  <b>All 2022 SCTE35</b></summary>
@@ -11,7 +18,7 @@
 </details>
 
  <details>
-   <summary>Latest release is <b>2.3.63</b></summary>
+   <summary>Latest release is <b>2.3.65</b></summary>
    
 * In response to issue [#71](https://github.com/futzu/scte35-threefive/issues/71) 
     * Encoded time stamp values are now based on ticks to eliminate rounding differences.
