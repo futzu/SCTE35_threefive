@@ -18,7 +18,7 @@
 </details>
 
  <details>
-   <summary>Latest release is <b>2.3.65</b></summary>
+   <summary>Latest release is <b>2.3.67</b></summary>
    
 * In response to issue [#71](https://github.com/futzu/scte35-threefive/issues/71) 
     * Encoded time stamp values are now based on ticks to eliminate rounding differences.
