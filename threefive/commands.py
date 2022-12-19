@@ -143,8 +143,8 @@ class TimeSignal(SpliceCommand):
             nbin.reserve(6)
             if not self.pts_time_ticks:
                 self.pts_time_ticks = 0
-                if self.pts_time:
-                    self.pts_time_ticks = self.as_ticks(self.pts_time)
+            if self.pts_time:
+                self.pts_time_ticks = self.as_ticks(self.pts_time)
             self._chk_var(int, nbin.add_int, "pts_time_ticks", 33)
         else:
             nbin.reserve(7)
@@ -280,8 +280,8 @@ class SpliceInsert(TimeSignal):
             nbin.forward(6)
             if not self.break_duration_ticks:
                 self.break_duration_ticks = 0
-                if self.break_duration:
-                    self.break_duration_ticks = self.as_ticks(self.break_duration)
+            if self.break_duration:
+                self.break_duration_ticks = self.as_ticks(self.break_duration)
             self._chk_var(int, nbin.add_int, "break_duration_ticks", 33)
 
     def _encode_flags(self, nbin):
