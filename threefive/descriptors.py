@@ -362,9 +362,9 @@ class SegmentationDescriptor(SpliceDescriptor):
         if self.segmentation_duration_flag:
             if not self.segmentation_duration_ticks:
                 self.segmentation_duration_ticks = 0
-                if self.segmentation_duration:
-                    self.segmentation_duration_ticks = self.as_ticks(
-                        self.segmentation_duration
+            if self.segmentation_duration:
+                self.segmentation_duration_ticks = self.as_ticks(
+                    self.segmentation_duration
                     )
             self._chk_var(
                 int, nbin.add_int, "segmentation_duration_ticks", 40
