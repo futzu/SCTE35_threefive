@@ -18,8 +18,15 @@
 </details>
 
  <details>
-   <summary>Latest release is <b>2.3.67</b></summary>
- * 2.3.67 fixes a timestamp encoding bug created by my fix in v.2.3.63 for #71. Sorry about that.
+   <summary>Latest release is <b>2.3.69</b></summary>
+ * 2.3.69 fixes threefive.encode.mk_splice_insert for Cues with splice_immediate and auto_break_return.
+    * set pts=None for splice_immediate_flag
+    * if duration is set, break_auto_return is set to True
+    
+ ```js
+ >>>> from threefive.encode import mk_splice_insert
+>>>> cue =mk_splice_insert(evnt_id,pts=None,duration=100.0)
+```
  
 </details>
 
