@@ -5,7 +5,7 @@
 <details><summary><b>Heads Up PCR wil no long be included in threefive.Stream as of  v.2.3.65</b> </summary>
 
 * SCTE-35 Never uses PCR
-* Parsing PCR times accounts for about 30% of of the parse time for python3, and it's not used.
+* Parsing PCR times accounts for about 30% of of the parse time for python3.
 * If this change negatively impacts you, let me know.
 </details>
 
