@@ -1,6 +1,6 @@
-   # threefive is a SCTE-35 lib in python3. 
- 
-  threefive/go its now [cuei](https://github.com/futzu/cuei)
+   # threefive is the highest rated SCTE-35 decoder lib in the World. 
+
+ #### threefive/go is now [cuei](https://github.com/futzu/cuei)
   
 <details><summary><b>Heads Up PCR wil no long be included in threefive.Stream as of  v.2.3.65</b> </summary>
 
