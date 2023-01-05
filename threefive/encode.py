@@ -27,7 +27,7 @@ def mk_time_signal(pts=None):
      mk_time_signal returns a Cue
      with a Time Signal
 
-     if pts is NOT set:
+     if pts is None:
          time_specified_flag   False
 
     if pts IS set:
@@ -47,14 +47,15 @@ def mk_time_signal(pts=None):
     return cue
 
 
-def mk_splice_insert(event_id, pts=None, duration=None):
+def mk_splice_insert(event_id, pts=None, duration=None, out=False):
     """
-    mk_cue returns a Cue
-    with a Splice Insert.
+    mk_cue returns a Cue with a Splice Insert.
+
+    The args set the SpliceInsert vars.
 
     splice_event_id = event_id
 
-    if pts is none:
+    if pts is None (default):
         splice_immediate_flag      True
         time_specified_flag        False
 
@@ -62,11 +63,9 @@ def mk_splice_insert(event_id, pts=None, duration=None):
         splice_immediate_flag      False
         time_specified_flag        True
         pts_time                   pts
-   
-    If duration is NOT set,
-        out_of_network_indicator   False
+
+    If duration is None (default)
         duration_flag              False
-        
 
     if duration IS set:
         out_of_network_indicator   True
@@ -75,14 +74,19 @@ def mk_splice_insert(event_id, pts=None, duration=None):
         break_duration             duration
         pts_time                   pts
 
-    
+    if out is True:
+        out_of_network_indicator   True
+
+    if out is False (default):
+        out_of_network_indicator   False
+
     """
     cue = Cue()
     # default is a CUE-IN
     sin = SpliceInsert()
     sin.splice_event_id = event_id
     sin.splice_event_cancel_indicator = False
-    sin.out_of_network_indicator = False
+    sin.out_of_network_indicator = out
     sin.duration_flag = False
     sin.unique_program_id = event_id
     sin.avail_num = 0
@@ -96,16 +100,17 @@ def mk_splice_insert(event_id, pts=None, duration=None):
         sin.program_splice_flag = True
         sin.splice_immediate_flag = False
         sin.time_specified_flag = True
-        sin.pts_time= float(pts)
+        sin.pts_time = float(pts)
     else:
-        sin.component_count=0
-    # If we have a duration, make a CUE-OUT
+        sin.component_count = 0
+    # If we have a duration, set duration
     if duration is not None:
         duration = float(duration)
         sin.break_duration = duration
         sin.break_auto_return = True
         sin.duration_flag = True
         sin.out_of_network_indicator = True
-    cue.command = sin  # Add SpliceInsert to the SCTE35 cue
+    # Add SpliceInsert to the SCTE35 cue
+    cue.command = sin
     cue.encode()
     return cue
