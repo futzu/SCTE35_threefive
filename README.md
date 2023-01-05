@@ -1,7 +1,93 @@
    # threefive is the highest rated SCTE-35 decoder lib in the World. 
 
  #### threefive/go is now [cuei](https://github.com/futzu/cuei)
-  
+<details><summary><b>Cool New Stuff</b> </summary>
+
+* the threefive executable script is now automatically installed 
+
+     * Example Usage:
+```sh 
+threefive '/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
+
+cat video.ts | threefive
+
+threefive https://so.slo.me/longb.ts
+
+threefive /home/a/video.ts
+
+threefive udp://@235.35.3.5:3535
+```
+
+* Helper functions for SCTE35 Cue encoding
+
+```python3
+Python 3.8.13 (7.3.9+dfsg-5, Oct 30 2022, 09:55:31)
+[PyPy 7.3.9 with GCC 12.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>>> import threefive.encode
+>>>> help(threefive.encode)
+
+
+
+Help on module threefive.encode in threefive:
+
+NAME
+    threefive.encode - encode.py
+
+DESCRIPTION
+    threefive.encode has helper functions for Cue encoding.
+
+FUNCTIONS
+    mk_splice_insert(event_id, pts=None, duration=None, out=False)
+        mk_cue returns a Cue with a Splice Insert.
+        
+        The args set the SpliceInsert vars.
+        
+        splice_event_id = event_id
+        
+        if pts is None (default):
+            splice_immediate_flag      True
+            time_specified_flag        False
+        
+        if pts:
+            splice_immediate_flag      False
+            time_specified_flag        True
+            pts_time                   pts
+        
+        If duration is None (default)
+            duration_flag              False
+        
+        if duration IS set:
+            out_of_network_indicator   True
+            duration_flag              True
+            break_auto_return          True
+            break_duration             duration
+            pts_time                   pts
+        
+        if out is True:
+            out_of_network_indicator   True
+        
+        if out is False (default):
+            out_of_network_indicator   False
+    
+    mk_splice_null()
+        mk_splice_null returns a Cue
+        with a Splice Null
+    
+    mk_time_signal(pts=None)
+         mk_time_signal returns a Cue
+         with a Time Signal
+        if pts is None:
+             time_specified_flag   False
+        
+        if pts IS set:
+             time_specified_flag   True
+             pts_time              pts
+
+```
+</details>
+
+
 <details><summary><b>Heads Up PCR wil no long be included in threefive.Stream as of  v.2.3.65</b> </summary>
 
 * SCTE-35 Never uses PCR
