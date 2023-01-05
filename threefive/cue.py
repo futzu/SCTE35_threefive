@@ -126,11 +126,11 @@ class Cue(SCTE35Base):
         Hex and Base64 strings into bytes.
         """
         if isinstance(data, bytes):
-            return data[data.index(b'\xfc') :]
+            return data[data.index(b"\xfc") :]
         # handles int and unquoted hex
-        if isinstance(data,int):
-            length = data.bit_length()>>3
-            bites = int.to_bytes(data,length,byteorder="big")
+        if isinstance(data, int):
+            length = data.bit_length() >> 3
+            bites = int.to_bytes(data, length, byteorder="big")
             return bites
         try:
             # Handles hex byte strings
