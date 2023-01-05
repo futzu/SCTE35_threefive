@@ -3,7 +3,7 @@
  #### threefive/go is now [cuei](https://github.com/futzu/cuei)
 <details><summary><b>Cool New Stuff</b> </summary>
 
-* the threefive executable script is now automatically installed 
+* `the threefive executable script is now automatically installed` 
 
      * Example Usage:
 ```sh 
@@ -18,7 +18,7 @@ threefive /home/a/video.ts
 threefive udp://@235.35.3.5:3535
 ```
 
-* Helper functions for SCTE35 Cue encoding
+* `Helper functions for SCTE35 Cue encoding`
 
 ```python3
 Python 3.8.13 (7.3.9+dfsg-5, Oct 30 2022, 09:55:31)
