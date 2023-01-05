@@ -4,12 +4,12 @@ crc.py  crc32 function for encoding.
 
 POLY = 0x104C11DB7
 INIT_VALUE = 0xFFFFFFFF
-FOUR_BYTES = 32
-THREE_BYTES = 24
+FOUR_BYTES = 0x20
+THREE_BYTES = 0x18
 
 
 def _bytecrc(crc, poly):
-    mask = 1 << ( FOUR_BYTES- 1)
+    mask = 1 << (FOUR_BYTES - 1)
     i = 8
     while i:
         crc = (crc << 1, crc << 1 ^ poly)[crc & mask != 0]
