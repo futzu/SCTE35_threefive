@@ -175,14 +175,13 @@ pypy3 -m pip install threefive
 ```lua
 >>> from threefive import version
 >>> version()
-'2.3.63'
+'2.3.71'
 >>> 
 ```
 * __Release__ versions are  __odd__.
 * __Unstable__ testing versions are __even__.
 
 ---
-![image](https://user-images.githubusercontent.com/52701496/189712191-a576a240-a5f1-47d1-9975-2435ef791975.png)
 
 ### `Easy Examples`
 
@@ -521,3 +520,4 @@ True
 >>> cue.descriptors[0].segmentation_upid
 '扢湬灤桰䑮Ȃ菁ʥ\x00'
 ```
+![image](https://user-images.githubusercontent.com/52701496/189712191-a576a240-a5f1-47d1-9975-2435ef791975.png)
