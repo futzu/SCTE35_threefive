@@ -10,6 +10,7 @@ set charset to None to return raw bytes
 """
 charset = "ascii"
 
+
 class UpidDecoder:
     """
     UpidDecoder for use by the
@@ -32,7 +33,7 @@ class UpidDecoder:
             "reserved": self.bitbin.as_int(2),
             "end_of_day": self.bitbin.as_int(5),
             "unique_for": self.bitbin.as_int(9),
-            "content_id": self.bitbin.as_charset(cont_size,charset)
+            "content_id": self.bitbin.as_charset(cont_size, charset),
         }
 
     def _decode_eidr(self):
@@ -146,7 +147,6 @@ def upid_encoder(nbin, upid_type, upid_length, seg_upid):
         0x10: ["UUID", _encode_uri],
         0x11: ["SCR", _encode_uri],
         0x0A: ["EIDR", _encode_eidr],
-        0x0C: ["MPU", _encode_mpu],
         0x0D: ["MID", _encode_mid],
         0x0E: ["ADS Info", _encode_uri],
         0x0F: ["URI", _encode_uri],
@@ -158,6 +158,7 @@ def upid_encoder(nbin, upid_type, upid_length, seg_upid):
         0x05: ["ISAN", _encode_isan],
         0x06: ["ISAN", _encode_isan],
         0x08: ["AiringID", _encode_air_id],
+        0x0C: ["MPU", _encode_mpu],
     }
     if upid_type in upid_map_too:
         upid_map_too[upid_type][1](nbin, seg_upid, upid_length)
@@ -197,9 +198,11 @@ def _encode_mid(nbin, seg_upid):
         )
 
 
-def _encode_mpu(nbin, seg_upid):
+def _encode_mpu(nbin, seg_upid, upid_length):
+    bit_len = upid_length << 3
     nbin.add_int(seg_upid["format_identifier"], 32)
-    nbin.add_hex(seg_upid["private_data"])
+    bit_len -=32
+    nbin.add_hex(seg_upid["private_data"],bit_len)
 
 
 def _encode_no(nbin, seg_upid):
