@@ -125,8 +125,7 @@ FUNCTIONS
 * threefive requires 
   * [pypy3](https://pypy.org) or python 3.6+ 
   * [new_reader](https://github.com/futzu/new_reader)
-* optional dependencies:
-    *  __pyaes__  If you want AES decryption for HLS segments.
+  *  __pyaes__ 
 </details>
 
    
@@ -169,16 +168,7 @@ python3 -mpip  install  threefive
 pypy3 -m pip install threefive
 
 ```
-  `To install the optional dependencies`
 
-```lua
-python3 -mpip  install threefive[all]
-
-# and / or
-
-pypy3 -mpip  install  threefive[all]
-
-```
 ---
 ### `Versions and Releases`
 
