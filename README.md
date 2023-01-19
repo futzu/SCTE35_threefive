@@ -88,7 +88,7 @@ FUNCTIONS
 </details>
 
 
-<details><summary><b>Heads Up PCR wil no long be included in threefive.Stream as of  v.2.3.65</b> </summary>
+<details><summary><b>Heads Up! PCR wil no long be included in threefive.Stream as of  v.2.3.65</b> </summary>
 
 * SCTE-35 Never uses PCR
 * Parsing PCR times accounts for about 30% of of the parse time for python3.
@@ -158,7 +158,7 @@ FUNCTIONS
 [Issues and Bugs and Feature Requests *No forms man, just open an issue and tell me what you need.*  ](https://github.com/futzu/scte35-threefive/issues)
 
 
-### `Install`
+### `Install`</summary>
  
 ```smalltalk
 python3 -mpip  install  threefive
@@ -169,6 +169,7 @@ pypy3 -m pip install threefive
 
 ```
 
+</details>
 ---
 ### `Versions and Releases`
 
@@ -245,12 +246,12 @@ cue.decode()
 cue.show()
 ```
         
-___
 </details>
 
-### Documentation for classes and methods 
+### `Documentation for classes` 
 
-##  `Cue Class`
+  
+<details><summary><h3>Cue Class</h3> </summary>
 
    *  src [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
@@ -340,9 +341,11 @@ True
  |  to_stderr(self)
  |      Cue.to_stderr prints the Cue
 ```
-___
 
-##  `Stream Class`
+</details>
+
+<details><summary><h3>Stream Class</h3></summary>
+
   * src [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
   * The threefive.__Stream__ class parses __SCTE35__ from __Mpegts__.
   * Supports:
@@ -486,11 +489,12 @@ ___
                 Pid: 1055[0x41f]        Type: 0x86 SCTE35 Data
  
 ```
-___
+</details>
 
 
----
-### `upids.charset`
+### `Custom charsets for UPIDS`
+<details><summary><h3> upids.charset</h3></summary>
+
 `Specify a charset for Upid data by setting threefive.upids.charset` [`issue #55`](https://github.com/futzu/scte35-threefive/issues/55)
 
 * default charset is ascii
@@ -520,4 +524,6 @@ True
 >>> cue.descriptors[0].segmentation_upid
 '扢湬灤桰䑮Ȃ菁ʥ\x00'
 ```
+
+</details>
 ![image](https://user-images.githubusercontent.com/52701496/189712191-a576a240-a5f1-47d1-9975-2435ef791975.png)
