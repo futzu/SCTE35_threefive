@@ -1,12 +1,9 @@
    <h1> threefive</h1> 
    <h3> The highest rated SCTE-35 python3 lib. Ever.</h3>
-  <details><summary> <h3>threefive is used by Seven of the top Ten braodcasters.</h3></summary>
  
-  <i> (three of my ex-wives work at the three broadcasters that dont use threefive)</i>
   
- </details> 
  
- threefive/go is now [cuei](https://github.com/futzu/cuei)
+threefive/go is now [cuei](https://github.com/futzu/cuei)
 <details><summary><b>Cool New Stuff</b> </summary>
 
 * `the threefive executable script is now automatically installed` 
