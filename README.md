@@ -158,7 +158,7 @@ FUNCTIONS
 [Issues and Bugs and Feature Requests *No forms man, just open an issue and tell me what you need.*  ](https://github.com/futzu/scte35-threefive/issues)
 
 
-### `Install`</summary>
+<details><summary> <h3>Install</h3></summary>
  
 ```smalltalk
 python3 -mpip  install  threefive
@@ -170,8 +170,8 @@ pypy3 -m pip install threefive
 ```
 
 </details>
----
-### `Versions and Releases`
+
+<details><summary><h3>Versions and Releases</h3></summary>
 
 ```lua
 >>> from threefive import version
@@ -181,12 +181,11 @@ pypy3 -m pip install threefive
 ```
 * __Release__ versions are  __odd__.
 * __Unstable__ testing versions are __even__.
+</details>
 
----
+<h3>Easy Examples</h3>
 
-### `Easy Examples`
-
-<details><summary>Mpegts Multicast</summary>
+   <details><summary>Mpegts Multicast</summary>
 
 ```python3
 import threefive 
@@ -244,14 +243,11 @@ import threefive
 cue = threefive.Cue("0XFC301100000000000000FFFFFF0000004F253396")
 cue.decode()
 cue.show()
-```
-        
+```       
 </details>
 
-### `Documentation for classes` 
-
-  
-<details><summary><h3>Cue Class</h3> </summary>
+### Documentation for classes
+<details><summary>Cue Class</summary>
 
    *  src [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
@@ -341,10 +337,9 @@ True
  |  to_stderr(self)
  |      Cue.to_stderr prints the Cue
 ```
-
 </details>
 
-<details><summary><h3>Stream Class</h3></summary>
+<details><summary>Stream Class</summary>
 
   * src [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
   * The threefive.__Stream__ class parses __SCTE35__ from __Mpegts__.
@@ -492,7 +487,7 @@ ___
 </details>
 
 
-### `Custom charsets for UPIDS`
+<h3>Custom charsets for UPIDS</h3>
 <details><summary><h3> upids.charset</h3></summary>
 
 `Specify a charset for Upid data by setting threefive.upids.charset` [`issue #55`](https://github.com/futzu/scte35-threefive/issues/55)
