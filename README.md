@@ -1,4 +1,4 @@
- # [PEP 668 sucks.  Boo hiss!](https://peps.python.org/pep-0668/)
+ # [PEP 668.... boo hiss! *(throws a tomato)*](https://peps.python.org/pep-0668/)
  
  <h1> threefive</h1> 
    <h3> The highest rated SCTE-35 python3 lib. Ever.</h3>
