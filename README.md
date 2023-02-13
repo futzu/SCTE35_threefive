@@ -1,4 +1,6 @@
-   <h1> threefive</h1> 
+ # [PEP 668 sucks.  Boo hiss!](https://peps.python.org/pep-0668/)
+ 
+ <h1> threefive</h1> 
    <h3> The highest rated SCTE-35 python3 lib. Ever.</h3>
  
 * [SuperKabuki](https://github.com/futzu/SuperKabuki) is SCTE-35 packet injection.
