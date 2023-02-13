@@ -1,9 +1,9 @@
    <h1> threefive</h1> 
    <h3> The highest rated SCTE-35 python3 lib. Ever.</h3>
  
-  
- 
-threefive/go is now [cuei](https://github.com/futzu/cuei)
+* [SuperKabuki](https://github.com/futzu/SuperKabuki) is SCTE-35 packet injection.
+* [cuei](https://github.com/futzu/cuei) is threefive in golang.
+<br/>
 <details><summary><b>Cool New Stuff</b> </summary>
 
 * `the threefive executable script is now automatically installed` 
