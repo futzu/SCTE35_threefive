@@ -1,5 +1,12 @@
- # [PEP 668.... boo hiss! *(throws a tomato)*](https://peps.python.org/pep-0668/)
- 
+ #  # [PEP 668.... boo hiss! *(throws a tomato)*](https://peps.python.org/pep-0668/)
+* Pep 668 inhibits installing packages with pip and pypy3.9,  at least on Debian. 
+   * Quick fix *(notice the use of unlink for dramatic effect)*
+   ```js
+   
+   root@debian:~# unlink /usr/lib/pypy3.9/EXTERNALLY-MANAGED
+   
+   ```
+
  <h1> threefive</h1> 
    <h3> The highest rated SCTE-35 python3 lib. Ever.</h3>
  
