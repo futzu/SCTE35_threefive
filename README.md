@@ -1,46 +1,94 @@
  <h1> threefive</h1> 
-   <h3> The highest rated SCTE-35 python3 lib, Ever.<br/>Probably.<br/> Maybe.<br/></h3>
-   
- <details><summary> PEP 668.... boo hiss! <i>(throws a tomato)</i> </summary>
- 
-Why are there so many Peps? <br/>I'm still mad about Pep 8. <br/>
- Pep 668 inhibits installing packages with pip for pypy3.9, <br/>
- unless you use a venv, at least on Debian.  <br/>
- 
-  Quick fix *(notice the use of unlink for dramatic effect)*
-   ```js
-   
-   root@debian:~# unlink /usr/lib/pypy3.9/EXTERNALLY-MANAGED
-   
-   ```
- </details>
+   <h3> The highest rated SCTE-35 lib. Ever. Probably.  Maybe.<br/></h3>
+___
 
- <details><summary><h3> threefive </h3> related projects</summary>
-    
-* [x9k3](https://github.com/futzu/x9k3) HLS segmenter powered by __threefive__
-* [amt-play](https://github.com/vivoh-inc/amt-play) Uses __x9k3__ and __threefive__
-* [m3ufu](https://github.com/futzu/m3ufu) M3U8 parser with SCTE-35 support.
-* [kabuki](https://github.com/futzu/kabuki) changes stream types set to bin data by ffmpeg back to SCTE-35.
-* [Project Super Kabuki](https://github.com/futzu/superkabuki) SCTE35 MPEGTS Packet Injection.
-* [cuei](https://github.com/futzu/cuei)  is the fastest SCTE-35 parser allowed by law, writtern In Go.
-</details>
+
+
+
+### Easy Examples
+
+   <details><summary>Mpegts Multicast</summary>
+
+```python3
+import threefive 
+
+strm = threefive.Stream('udp://@239.35.0.35:1234')
+strm.decode()
+````
+  _(need an easy multicast server?_ [gumd](https://github.com/futzu/gumd) ) 
+
+---
+  </details>
   
-<details><summary><b>Cool New Stuff</b> </summary>
+ <details><summary>Mpegts over Https</summary>
 
-* `the threefive executable script is now automatically installed` 
+```python3
+import threefive
+strm = threefive.Stream('https://iodisco.com/ch1/ready.ts')
+strm.decode()
 
-     * Example Usage:
+```
+---
+   </details>
+   
+ <details><summary>Base64</summary>
+
+```python3
+>>> from threefive import Cue
+>>> stuff = '/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
+>>> cue=Cue(stuff)
+>>> cue.decode()
+True
+```
+---
+   </details>
+   
+ <details><summary>Bytes</summary>
+
+```python3
+>>> import threefive 
+
+>>> stuff = b'\xfc0\x11\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00\x00\x00O%3\x96'
+>>> cue=Cue(stuff)
+>>> cue.decode()
+True
+>>> cue.show()
+```
+---
+   </details>
+   
+<details><summary>Hex</summary>
+
+```python3
+import threefive 
+
+cue = threefive.Cue("0XFC301100000000000000FFFFFF0000004F253396")
+cue.decode()
+cue.show()
+```       
+</details> 
+
+ <details><summary>Cli</summary> 
+ threefive comes with the threefive executable script. 
+Parse SCTE-35 like this.
+
 ```sh 
-threefive '/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
-
 cat video.ts | threefive
-
+```
+or like this
+```js
 threefive https://so.slo.me/longb.ts
-
-threefive /home/a/video.ts
-
+```
+parse multicast like this
+```
 threefive udp://@235.35.3.5:3535
 ```
+ 
+</details>
+
+---
+
+<details><summary><b>Cool New Stuff</b> </summary>
 
 * `Helper functions for SCTE35 Cue encoding`
 
@@ -112,42 +160,13 @@ FUNCTIONS
 </details>
 
 
-<details><summary><b>Heads Up! PCR wil no long be included in threefive.Stream as of  v.2.3.65</b> </summary>
-
-* SCTE-35 Never uses PCR
-* Parsing PCR times accounts for about 30% of of the parse time for python3.
-* If this change negatively impacts you, let me know.
-</details>
-
- <details>
-   <summary>threefive parses  <b>All 2022 SCTE35</b></summary>
-  
- - [x] [Commands](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py)
- - [x] [Descriptors](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)
- - [x] [Upids](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upids.py)
-</details>
-
- <details>
-   <summary>Latest release is <b>2.3.69</b></summary>
-   
-   * `2.3.69` fixes `threefive.encode.mk_splice_insert` for Cues with `splice_immediate_flag` and `auto_break_return`.
- 
-   * set `pts=None` for `splice_immediate_flag`
-   * if `duration` is set, `break_auto_return` is set 
-    
- ```js
- >>>> from threefive.encode import mk_splice_insert
->>>> cue =mk_splice_insert(evnt_id,pts=None,duration=100.0)
-```
- 
-</details>
 
  <details><summary><b>Installation and Getting Started</b></summary>
   
 <details><summary>Requirements</summary>
 
 * threefive requires 
-  * [pypy3](https://pypy.org) or python 3.6+ 
+  * [pypy3](https://pypy.org) or python 3.6+ (pypy3 runs threefive 2-3 times faster than python 3.10)
   * [new_reader](https://github.com/futzu/new_reader)
   *  __pyaes__ 
 </details>
@@ -183,7 +202,19 @@ python3 -mpip  install  threefive
 pypy3 -m pip install threefive
 
 ```
-
+ <details><summary> PEP 668.... boo hiss! <i>(throws a tomato)</i> </summary>
+ 
+Why are there so many Peps? <br/>I'm still mad about Pep 8. <br/>
+ Pep 668 inhibits installing packages with pip for pypy3.9, <br/>
+ unless you use a venv, at least on Debian.  <br/>
+ 
+  Quick fix *(notice the use of unlink for dramatic effect)*
+   ```js
+   
+   root@debian:~# unlink /usr/lib/pypy3.9/EXTERNALLY-MANAGED
+   
+   ```
+ </details>
 </details>
 
 <details><summary><h3>Versions and Releases</h3></summary>
@@ -198,68 +229,6 @@ pypy3 -m pip install threefive
 * __Unstable__ testing versions are __even__.
 </details>
 
-<h3>Easy Examples</h3>
-
-   <details><summary>Mpegts Multicast</summary>
-
-```python3
-import threefive 
-
-strm = threefive.Stream('udp://@239.35.0.35:1234')
-strm.decode()
-````
-  _(need an easy multicast server?_ [gumd](https://github.com/futzu/gumd) ) 
-
----
-  </details>
-  
- <details><summary>Mpegts over Https</summary>
-
-```python3
-import threefive
-strm = threefive.Stream('https://iodisco.com/ch1/ready.ts')
-strm.decode()
-
-```
----
-   </details>
-   
- <details><summary>Base64</summary>
-
-```python3
->>> from threefive import Cue
->>> stuff = '/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
->>> cue=Cue(stuff)
->>> cue.decode()
-True
-```
----
-   </details>
-   
- <details><summary>Bytes</summary>
-
-```python3
->>> import threefive 
-
->>> stuff = b'\xfc0\x11\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00\x00\x00O%3\x96'
->>> cue=Cue(stuff)
->>> cue.decode()
-True
->>> cue.show()
-```
----
-   </details>
-   
-<details><summary>Hex</summary>
-
-```python3
-import threefive 
-
-cue = threefive.Cue("0XFC301100000000000000FFFFFF0000004F253396")
-cue.decode()
-cue.show()
-```       
-</details>
 
 ### Documentation for classes
 <details><summary>Cue Class</summary>
