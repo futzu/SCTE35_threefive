@@ -9,11 +9,17 @@
 
  <h1> threefive</h1> 
    <h3> The highest rated SCTE-35 python3 lib. Ever.</h3>
- 
-* [SuperKabuki](https://github.com/futzu/SuperKabuki) is SCTE-35 packet injection.
-* [x9k3](https://github.com/futzu/x9k3) SCTE-35 + HLS
-* [cuei](https://github.com/futzu/cuei) is threefive in golang.
-<br/>
+   
+ <details><summary><h3> threefive </h3> related projects</summary>
+    
+* [x9k3](https://github.com/futzu/x9k3) HLS segmenter powered by __threefive__
+* [amt-play](https://github.com/vivoh-inc/amt-play) Uses __x9k3__ and __threefive__
+* [m3ufu](https://github.com/futzu/m3ufu) M3U8 parser with SCTE-35 support.
+* [kabuki](https://github.com/futzu/kabuki) changes stream types set to bin data by ffmpeg back to SCTE-35.
+* [Project Super Kabuki](https://github.com/futzu/superkabuki) SCTE35 MPEGTS Packet Injection.
+* [cuei](https://github.com/futzu/cuei)  is the fastest SCTE-35 parser allowed by law, writtern In Go.
+</details>
+  
 <details><summary><b>Cool New Stuff</b> </summary>
 
 * `the threefive executable script is now automatically installed` 
@@ -154,16 +160,7 @@ FUNCTIONS
   *  [Stream Class](#stream-class)
 </details>
 
- <details><summary> threefive related projects</summary>
-    
-* [x9k3](https://github.com/futzu/x9k3) HLS segmenter powered by __threefive__
-* [amt-play](https://github.com/vivoh-inc/amt-play) Uses __x9k3__ and __threefive__
-* [m3ufu](https://github.com/futzu/m3ufu) M3U8 parser with SCTE-35 support.
-* [kabuki](https://github.com/futzu/kabuki) changes stream types set to bin data by ffmpeg back to SCTE-35.
-* [Project Super Kabuki](https://github.com/futzu/threefive/blob/master/superkabuki.md) SCTE35 MPEGTS Packet Injection.
-* [cuei](https://github.com/futzu/cuei)  is the fastest SCTE-35 parser allowed by law, writtern In Go.
-</details>
-  
+
  [Diagram of a threefive SCTE-35 Cue. ](https://github.com/futzu/threefive/blob/master/cue.md)  
 
 [ffmpeg and SCTE35 and Stream Type 0x6 bin data and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
