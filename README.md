@@ -1,16 +1,20 @@
- https://docs.python.org/3/library/collections.html# [PEP 668.... boo hiss! *(throws a tomato)*](https://peps.python.org/pep-0668/)
-* Pep 668 inhibits installing packages with pip for pypy3.9, unless you use a venv, at least on Debian. 
-* Pep668, why are there so many Peps? I'm still mad about Pep8.
-   * Quick fix *(notice the use of unlink for dramatic effect)*
+ <h1> threefive</h1> 
+   <h3> The highest rated SCTE-35 python3 lib, Ever.<br/>Probably.<br/> Maybe.<br/></h3>
+   
+ <details><summary> PEP 668.... boo hiss! <i>(throws a tomato)</i> </summary>
+ 
+Why are there so many Peps? <br/>I'm still mad about Pep 8. <br/>
+ Pep 668 inhibits installing packages with pip for pypy3.9, <br/>
+ unless you use a venv, at least on Debian.  <br/>
+ 
+  Quick fix *(notice the use of unlink for dramatic effect)*
    ```js
    
    root@debian:~# unlink /usr/lib/pypy3.9/EXTERNALLY-MANAGED
    
    ```
+ </details>
 
- <h1> threefive</h1> 
-   <h3> The highest rated SCTE-35 python3 lib. Ever.</h3>
-   
  <details><summary><h3> threefive </h3> related projects</summary>
     
 * [x9k3](https://github.com/futzu/x9k3) HLS segmenter powered by __threefive__
