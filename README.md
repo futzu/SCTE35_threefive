@@ -1,5 +1,6 @@
- #  # [PEP 668.... boo hiss! *(throws a tomato)*](https://peps.python.org/pep-0668/)
-* Pep 668 inhibits installing packages with pip and pypy3.9,  at least on Debian. 
+ https://docs.python.org/3/library/collections.html# [PEP 668.... boo hiss! *(throws a tomato)*](https://peps.python.org/pep-0668/)
+* Pep 668 inhibits installing packages with pip for pypy3.9, unless you use a venv, at least on Debian. 
+* Pep668, why are there so many Peps? I'm still mad about Pep8.
    * Quick fix *(notice the use of unlink for dramatic effect)*
    ```js
    
