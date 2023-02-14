@@ -11,6 +11,8 @@
    <h3> The highest rated SCTE-35 python3 lib. Ever.</h3>
  
 * [SuperKabuki](https://github.com/futzu/SuperKabuki) is SCTE-35 packet injection.
+<br/>
+* [x9k3](https://github.com/futzu/x9k3) SCTE-35 + HLS
 * [cuei](https://github.com/futzu/cuei) is threefive in golang.
 <br/>
 <details><summary><b>Cool New Stuff</b> </summary>
