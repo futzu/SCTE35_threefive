@@ -2,33 +2,21 @@
    <h3> The highest rated SCTE-35 lib. Ever. Probably.  Maybe.<br/></h3>
    
    ![image](https://user-images.githubusercontent.com/52701496/218638490-398863fe-7123-4ac4-ad49-f60c091f2fee.png)
-# Using threefive.
-
-> **install via pip**
-<pre><span style="color:#55FF55"><b>a@debian</b></span>:<span style="color:#5555FF"><b>~/build/clean/x9k3</b></span>$ pypy3 -mpip install threefive
-</pre>
-<pre><span style="color:#55FF55"><b>a@debian</b></span>:<span style="color:#5555FF"><b>~/build/clean/x9k3</b></span>$ python3 -mpip install threefive<span style="background-color:#08F7D0"><span style="color:#000000"></span></span>
-</pre>
->  *pypy3.9 runs threefive twice as fast as Python3.11.*
-
-
-
----
 
 
 > When I first began with SCTE-35, I just wanted to see SCTE-35, and there wasn't an easy to see the SCTE-35 messages.
 I used a lib, and still had to write 500 lines of code just to  see SCTE-35 data in an mpegts file. 
 threefive works right out of the box. No configuration needed.
 
-#### threefive comes with the threefive executable script.
+### threefive comes with the threefive executable script.
 
  <details><summary>Parse SCTE-35 like this.  </summary> 
 
 
-```sh
+```js
 threefive 0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A
 ```
-```sh 
+```js 
 cat video.ts | threefive
 ```
 or like this
@@ -36,20 +24,16 @@ or like this
 threefive https://so.slo.me/longb.ts
 ```
 parse multicast like this
-```
+```lua
 threefive udp://@235.35.3.5:3535
 ```
  
 </details>
 
+### threefive is also a library. 
+ <details><summary>Parse SCTE-35 with three to five lines of code.</summary>
 
-
-
-
-#### threefive is also a library. 
-> Parse SCTE-35 with three to five lines of code.
-
-   <details><summary>Mpegts Multicast</summary>
+   <details><summary>Mpegts Multicast in three lines of code.</summary>
 
 ```python3
 import threefive 
@@ -62,7 +46,7 @@ strm.decode()
 ---
   </details>
   
- <details><summary>Mpegts over Https</summary>
+ <details><summary>Mpegts over Https in three lines of code.</summary>
 
 ```python3
 import threefive
@@ -73,7 +57,7 @@ strm.decode()
 ---
    </details>
    
- <details><summary>Base64</summary>
+ <details><summary>Base64 in five lines of code.</summary>
 
 ```python3
 >>> from threefive import Cue
@@ -81,11 +65,13 @@ strm.decode()
 >>> cue=Cue(stuff)
 >>> cue.decode()
 True
+ >>> cue.show()
+
 ```
 ---
    </details>
    
- <details><summary>Bytes</summary>
+ <details><summary>Bytes i five lines of code.</summary>
 
 ```python3
 >>> import threefive 
@@ -99,7 +85,7 @@ True
 ---
    </details>
    
-<details><summary>Hex</summary>
+<details><summary>Hex in 4 lines of code.</summary>
 
 ```python3
 import threefive 
@@ -110,12 +96,20 @@ cue.show()
 ```       
 </details> 
 
+ </details>
+ 
+
+
 
 ---
 
-<details><summary><b>Cool New Stuff</b> </summary>
+---
 
-* `Helper functions for SCTE35 Cue encoding`
+<details><summary><b>Easy SCTE-35 encoding with threefive.</b> </summary>
+ 
+* Need SCTE-35 Packet Injection? [SuperKabuki](https://github.com/futzu/SuperKabuki)
+
+ * `Helper functions for SCTE35 Cue encoding`
 
 ```python3
 Python 3.8.13 (7.3.9+dfsg-5, Oct 30 2022, 09:55:31)
@@ -186,6 +180,7 @@ FUNCTIONS
 
 
 
+
  <details><summary><b>Installation and Getting Started</b></summary>
   
 <details><summary>Requirements</summary>
@@ -201,45 +196,6 @@ FUNCTIONS
    * [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
    * [Super Cool Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 * [Versions and Releases](#versions-and-releases)
-</details>
-
- <details><summary>threefive <b>classes</b>.</summary>
-   
-  *  [Cue Class](#cue-class)         
-  *  [Stream Class](#stream-class)
-</details>
-
-
- [Diagram of a threefive SCTE-35 Cue. ](https://github.com/futzu/threefive/blob/master/cue.md)  
-
-[ffmpeg and SCTE35 and Stream Type 0x6 bin data and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
-
-[Issues and Bugs and Feature Requests *No forms man, just open an issue and tell me what you need.*  ](https://github.com/futzu/scte35-threefive/issues)
-
-
-<details><summary> <h3>Install</h3></summary>
- 
-```smalltalk
-python3 -mpip  install  threefive
-
-# and / or
-
-pypy3 -m pip install threefive
-
-```
- <details><summary> PEP 668.... boo hiss! <i>(throws a tomato)</i> </summary>
- 
-Why are there so many Peps? <br/>I'm still mad about Pep 8. <br/>
- Pep 668 inhibits installing packages with pip for pypy3.9, <br/>
- unless you use a venv, at least on Debian.  <br/>
- 
-  Quick fix *(notice the use of unlink for dramatic effect)*
-   ```js
-   
-   root@debian:~# unlink /usr/lib/pypy3.9/EXTERNALLY-MANAGED
-   
-   ```
- </details>
 </details>
 
 <details><summary><h3>Versions and Releases</h3></summary>
@@ -496,8 +452,7 @@ ___
 </details>
 
 
-<h3>Custom charsets for UPIDS</h3>
-<details><summary><h3> upids.charset</h3></summary>
+<details><summary><h5>Custom charsets for UPIDS aka upids.charset</h5></summary>
 
 `Specify a charset for Upid data by setting threefive.upids.charset` [`issue #55`](https://github.com/futzu/scte35-threefive/issues/55)
 
@@ -531,3 +486,9 @@ True
 
 </details>
 
+
+ [Diagram of a threefive SCTE-35 Cue. ](https://github.com/futzu/threefive/blob/master/cue.md)  
+
+[ffmpeg and SCTE35 and Stream Type 0x6 bin data and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
+
+[Issues and Bugs and Feature Requests *No forms man, just open an issue and tell me what you need.*  ](https://github.com/futzu/scte35-threefive/issues)
