@@ -49,8 +49,7 @@ import threefive
 strm = threefive.Stream('https://iodisco.com/ch1/ready.ts')
 strm.decode()
 
-```
----
+
    </details>
    
  <details><summary>Base64 in five lines of code.</summary>
@@ -67,7 +66,7 @@ True
 ---
    </details>
    
- <details><summary>Bytes i five lines of code.</summary>
+ <details><summary>Bytes in five lines of code.</summary>
 
 ```python3
 >>> import threefive 
@@ -101,7 +100,7 @@ cue.show()
 
 ---
 
-<details><summary><b>Easy SCTE-35 encoding with threefive.</b> </summary>
+<details><summary><h5>Easy SCTE-35 encoding with threefive.</h5> </summary>
  
 * Need SCTE-35 Packet Injection? [SuperKabuki](https://github.com/futzu/SuperKabuki)
 
@@ -177,7 +176,7 @@ FUNCTIONS
 
 
 
- <details><summary><b>Installation and Getting Started</b></summary>
+ <details><summary><h5>Installation and Getting Started</h5></summary>
   
 <details><summary>Requirements</summary>
 
