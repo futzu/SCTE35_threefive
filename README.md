@@ -4,13 +4,9 @@
    ![image](https://user-images.githubusercontent.com/52701496/218638490-398863fe-7123-4ac4-ad49-f60c091f2fee.png)
 
 
-> When I first began with SCTE-35, I just wanted to see SCTE-35, and there wasn't an easy to see the SCTE-35 messages.
-I used a lib, and still had to write 500 lines of code just to  see SCTE-35 data in an mpegts file. 
-threefive works right out of the box. No configuration needed.
-
 ### threefive comes with the threefive executable script.
 
- <details><summary>Parse SCTE-35 like this.  </summary> 
+ <details><summary>Parse SCTE-35 on the command line. </summary> 
 
 
 ```js
