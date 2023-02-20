@@ -3,6 +3,34 @@
    
    ![image](https://user-images.githubusercontent.com/52701496/218638490-398863fe-7123-4ac4-ad49-f60c091f2fee.png)
 
+ <details><summary>Installation and Getting Started</summary>
+  
+<details><summary>Requirements</summary>
+
+* threefive requires 
+  * [pypy3](https://pypy.org) or python 3.6+ (pypy3 runs threefive 2-3 times faster than python 3.10)
+  * [new_reader](https://github.com/futzu/new_reader)
+  *  __pyaes__ 
+</details>
+
+   
+* [Install threefive](#install)
+   * [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
+   * [Super Cool Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
+* [Versions and Releases](#versions-and-releases)
+</details>
+
+<details><summary>Versions and Releases</summary>
+
+```lua
+>>> from threefive import version
+>>> version()
+'2.3.71'
+>>> 
+```
+* __Release__ versions are  __odd__.
+* __Unstable__ testing versions are __even__.
+</details>
 
 ### threefive comes with the threefive executable script.
 
@@ -93,9 +121,7 @@ cue.show()
 
  </details>
  
-
-
-<details><summary><h5>Easy SCTE-35 encoding with threefive.</h5> </summary>
+<details><summary>Easy SCTE-35 encoding with threefive. </summary>
  
 * Need SCTE-35 Packet Injection? [SuperKabuki](https://github.com/futzu/SuperKabuki)
 
@@ -167,39 +193,6 @@ FUNCTIONS
 
 ```
 </details>
-
-
-
-
- <details><summary><h5>Installation and Getting Started</h5></summary>
-  
-<details><summary>Requirements</summary>
-
-* threefive requires 
-  * [pypy3](https://pypy.org) or python 3.6+ (pypy3 runs threefive 2-3 times faster than python 3.10)
-  * [new_reader](https://github.com/futzu/new_reader)
-  *  __pyaes__ 
-</details>
-
-   
-* [Install threefive](#install)
-   * [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md) 
-   * [Super Cool Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
-* [Versions and Releases](#versions-and-releases)
-</details>
-
-<details><summary><h5>Versions and Releases</h5></summary>
-
-```lua
->>> from threefive import version
->>> version()
-'2.3.71'
->>> 
-```
-* __Release__ versions are  __odd__.
-* __Unstable__ testing versions are __even__.
-</details>
-
 
 <h5> Documentation for classes</h5>
 <details><summary>Cue Class</summary>
@@ -442,7 +435,7 @@ ___
 </details>
 
 
-<details><summary><h5>Custom charsets for UPIDS aka upids.charset</h5></summary>
+<details><summary>Custom charsets for UPIDS aka upids.charset</summary>
 
 `Specify a charset for Upid data by setting threefive.upids.charset` [`issue #55`](https://github.com/futzu/scte35-threefive/issues/55)
 
