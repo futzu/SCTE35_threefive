@@ -1,5 +1,5 @@
  <h1> threefive is better than You.</h1> 
-   <h3> The #1 SCTE-35 parser / SCTE-35 Encoder in China, Micronesia, and Lawrenceville, Ga.<br/></h3>
+   <h3> The #1 SCTE-35 Parser / SCTE-35 Encoder in China, Micronesia, Lawrenceville Ga, and at least two villages in Nepal.<br/></h3>
  
    ![image](https://user-images.githubusercontent.com/52701496/218638490-398863fe-7123-4ac4-ad49-f60c091f2fee.png)
 
