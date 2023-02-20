@@ -2,13 +2,52 @@
    <h3> The highest rated SCTE-35 lib. Ever. Probably.  Maybe.<br/></h3>
    
    ![image](https://user-images.githubusercontent.com/52701496/218638490-398863fe-7123-4ac4-ad49-f60c091f2fee.png)
+# Using threefive.
+
+> **install via pip**
+<pre><span style="color:#55FF55"><b>a@debian</b></span>:<span style="color:#5555FF"><b>~/build/clean/x9k3</b></span>$ pypy3 -mpip install threefive
+</pre>
+<pre><span style="color:#55FF55"><b>a@debian</b></span>:<span style="color:#5555FF"><b>~/build/clean/x9k3</b></span>$ python3 -mpip install threefive<span style="background-color:#08F7D0"><span style="color:#000000"></span></span>
+</pre>
+>  *pypy3.9 runs threefive twice as fast as Python3.11.*
+
+
+
+---
+
+
+> When I first began with SCTE-35, I just wanted to see SCTE-35, and there wasn't an easy to see the SCTE-35 messages.
+I used a lib, and still had to write 500 lines of code just to  see SCTE-35 data in an mpegts file. 
+threefive works right out of the box. No configuration needed.
+
+#### threefive comes with the threefive executable script.
+
+ <details><summary>Parse SCTE-35 like this.  </summary> 
+
+
+```sh
+threefive 0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A
+```
+```sh 
+cat video.ts | threefive
+```
+or like this
+```js
+threefive https://so.slo.me/longb.ts
+```
+parse multicast like this
+```
+threefive udp://@235.35.3.5:3535
+```
+ 
+</details>
 
 
 
 
 
-
-### Easy Examples
+#### threefive is also a library. 
+> Parse SCTE-35 with three to five lines of code.
 
    <details><summary>Mpegts Multicast</summary>
 
@@ -71,23 +110,6 @@ cue.show()
 ```       
 </details> 
 
- <details><summary>Cli</summary> 
- threefive comes with the threefive executable script. 
-Parse SCTE-35 like this.
-
-```sh 
-cat video.ts | threefive
-```
-or like this
-```js
-threefive https://so.slo.me/longb.ts
-```
-parse multicast like this
-```
-threefive udp://@235.35.3.5:3535
-```
- 
-</details>
 
 ---
 
