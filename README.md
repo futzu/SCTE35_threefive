@@ -193,7 +193,7 @@ FUNCTIONS
 * [Versions and Releases](#versions-and-releases)
 </details>
 
-<details><summary><h3>Versions and Releases</h3></summary>
+<details><summary><h5>Versions and Releases</h5></summary>
 
 ```lua
 >>> from threefive import version
@@ -206,7 +206,7 @@ FUNCTIONS
 </details>
 
 
-### Documentation for classes
+<h5> Documentation for classes</h5>
 <details><summary>Cue Class</summary>
 
    *  src [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
