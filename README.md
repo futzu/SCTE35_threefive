@@ -1,4 +1,6 @@
- <h4> threefive is the highest rated SCTE-35 parser, SCTE-35 decoder and SCTE-35 encoder lib.</h4>
+
+
+<h4> threefive is the highest rated SCTE-35 parser, SCTE-35 decoder and SCTE-35 encoder lib.</h4>
  
  
  <h1>Ever. </h1>
@@ -8,7 +10,8 @@
 
 
 ![image](https://user-images.githubusercontent.com/52701496/220821468-3fe7e5c3-aa1c-4ae5-a55a-863d2661d587.png)  
-  
+ 
+ 
  <details><summary>Installation and Getting Started</summary>
   
 <details><summary>Requirements</summary>
@@ -37,6 +40,8 @@
 * __Release__ versions are  __odd__.
 * __Unstable__ testing versions are __even__.
 </details>
+
+
 
 ### threefive comes with the threefive executable script.
 
@@ -199,6 +204,9 @@ FUNCTIONS
 
 ```
 </details>
+
+
+
 
 <h5> Documentation for classes</h5>
 <details><summary>Cue Class</summary>
@@ -481,3 +489,18 @@ True
 [ffmpeg and SCTE35 and Stream Type 0x6 bin data and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
 
 [Issues and Bugs and Feature Requests *No forms man, just open an issue and tell me what you need.*  ](https://github.com/futzu/scte35-threefive/issues)
+
+
+
+___
+
+
+<details> <summary><h2> I have declared war against PEP tyranny.</h2> </summary>
+
+* Phase One: Expose the Pep Deep State.
+  * [Phase One has begun](https://github.com/python/peps/compare/main...futzu:peps:main)
+  
+</details>
+
+
+___
