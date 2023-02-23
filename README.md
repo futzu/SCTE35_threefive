@@ -1,8 +1,15 @@
- <h1> threefive is better than You.</h1> 
-   <h3> The #1 SCTE-35 Parser / SCTE-35 Encoder in China, Micronesia, Lawrenceville Ga, and at least two villages in Nepal.<br/></h3>
+ <h3> threefive is the highest rated </h3>
+ <h3>SCTE-35 parser, SCTE-35 decoder, and SCTE-35 encoder lib.</h3>
  
-   ![image](https://user-images.githubusercontent.com/52701496/218638490-398863fe-7123-4ac4-ad49-f60c091f2fee.png)
+ 
+ <h1>Ever. </h1>
+ 
+ <h3>Google it.</h3> 
 
+
+
+![image](https://user-images.githubusercontent.com/52701496/220821468-3fe7e5c3-aa1c-4ae5-a55a-863d2661d587.png)  
+  
  <details><summary>Installation and Getting Started</summary>
   
 <details><summary>Requirements</summary>
