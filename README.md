@@ -495,9 +495,9 @@ True
 
 
 
-<details> <summary><h2> I have declared war against PEP tyranny.</h2> </summary>
+<details> <summary><h2> 
 
-* Phase One: Expose the Pep Deep State.
+ Phase One: Expose the Pep Deep State</h2> </summary>
   * [Phase One has begun](https://github.com/python/peps/compare/main...futzu:peps:main)
   
 </details>
