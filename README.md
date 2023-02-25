@@ -511,15 +511,3 @@ True
 
 
 
-
-
-
-<details> <summary><h2> 
-
- Phase One: Expose the Pep Deep State</h2> </summary>
-  * [Phase One has begun](https://github.com/python/peps/compare/main...futzu:peps:main)
-  
-</details>
-
-
-
