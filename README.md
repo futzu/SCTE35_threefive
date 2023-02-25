@@ -12,6 +12,8 @@
 ![image](https://user-images.githubusercontent.com/52701496/220821468-3fe7e5c3-aa1c-4ae5-a55a-863d2661d587.png)  
  
  
+ 
+ 
  <details><summary>Installation and Getting Started</summary>
   
 <details><summary>Requirements</summary>
@@ -41,7 +43,24 @@
 * __Unstable__ testing versions are __even__.
 </details>
 
+<details><summary> Feedback, Pull Requests and other such things.</summary>
+ 
+###  [Here's an exchange I had today with the PEP boys over at python.](https://github.com/python/peps/pull/3025) 
+ I used "Grammatical Update" for the title of the change, and then made a joke about it and they got all pissy with me.
+ Nothing was accomplished and it wasted everyone's time. 
+ This kind of nonsense happens a lot on github, but I promise you, it won't happen here. 
+ 
+### I want your feedback. Open an issue. 
+ 
+* Not ever idea is a winner, but I still want to hear what have to say.
+ 
+* I will treat you with respect, as long as you treat me the same way.
+ 
+* If you find a bug, <b>I want to know about it. If there is something you dont like, <b>I want to know about.</b>
+ 
+*  <b>All the best parts of threefive came from other people</b>, If you do a pull request, if I can accept it without breaking anything, I will, even if I dont agree with it. 
 
+ </details>
 
 ### threefive comes with the threefive executable script.
 
