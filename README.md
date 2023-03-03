@@ -1,18 +1,7 @@
-### Everybody doing SCTE-35 is using threefive.  
+## `Everybody doing SCTE-35 is using threefive`  
 
 
-<h4> threefive is the highest rated SCTE-35 parser, SCTE-35 decoder and SCTE-35 encoder lib.</h4>
- 
- 
- <h1>Ever. </h1>
- 
- <h5>Google it.</h5> 
-
-
-
-![image](https://user-images.githubusercontent.com/52701496/220821468-3fe7e5c3-aa1c-4ae5-a55a-863d2661d587.png)  
- 
- 
+ #### Need SCTE-35 Packet Injection?  [SuperKabuki](https://github.com/futzu/superkabuki) 
  
  <details><summary>Installation and Getting Started</summary>
   
@@ -45,11 +34,6 @@
 
 <details><summary> Feedback, Pull Requests and other such things.</summary>
  
-###  [Here's an exchange I had today with the PEP boys over at python.](https://github.com/python/peps/pull/3025) 
- I used "Grammatical Update" for the title of the change, and then made a joke about it and they got all pissy with me.
- Nothing was accomplished and it wasted everyone's time. 
- This kind of nonsense happens a lot on github, but I promise you, it won't happen here. 
- 
 ### I want your feedback. Open an issue. 
  
 * Not ever idea is a winner, but I still want to hear what have to say.
@@ -62,7 +46,7 @@
 
  </details>
 
-### threefive comes with the threefive executable script.
+### `threefive comes with the threefive executable script.`
 
  <details><summary>Parse SCTE-35 on the command line. </summary> 
 
@@ -84,7 +68,7 @@ threefive udp://@235.35.3.5:3535
  
 </details>
 
-### threefive is also a library. 
+### `threefive is also a library`. 
  <details><summary>Parse SCTE-35 with three to five lines of code.</summary>
 
    <details><summary>Mpegts Multicast in three lines of code.</summary>
@@ -227,7 +211,7 @@ FUNCTIONS
 
 
 
-<h5> Documentation for classes</h5>
+### `Documentation for classes`
 <details><summary>Cue Class</summary>
 
    *  src [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
@@ -467,6 +451,8 @@ ___
 ```
 </details>
 
+
+### `Stuff`
 
 <details><summary>Custom charsets for UPIDS aka upids.charset</summary>
 
