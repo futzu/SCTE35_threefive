@@ -96,7 +96,7 @@ def mk_splice_insert(event_id, pts=None, duration=None, out=False):
     sin.program_splice_flag = False
 
     # pts = None for Splice Immediate
-    if pts is not None:
+    if pts:
         sin.program_splice_flag = True
         sin.splice_immediate_flag = False
         sin.time_specified_flag = True
@@ -104,7 +104,7 @@ def mk_splice_insert(event_id, pts=None, duration=None, out=False):
     else:
         sin.component_count = 0
     # If we have a duration, set duration
-    if duration is not None:
+    if duration:
         duration = float(duration)
         sin.break_duration = duration
         sin.break_auto_return = True
