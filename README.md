@@ -1,5 +1,6 @@
 ## `Everybody doing SCTE-35 is using threefive`  
 
+### Latest Version: `2.3.73`
 
  #### Need SCTE-35 Packet Injection?  [SuperKabuki](https://github.com/futzu/superkabuki) 
  
