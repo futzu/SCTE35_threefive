@@ -132,7 +132,7 @@ class Stream:
     _SDT_TID = b"\x42"
     # pts
     ROLLOVER = 8589934591  # 95443.717678
-    _NO_PTS_PIDS = [188, 190, 191, 240, 241, 242, 248]
+    NO_PTS_PIDS = [188, 190, 191, 240, 241, 242, 248]
 
     def __init__(self, tsdata, show_null=True):
         """
@@ -298,8 +298,8 @@ class Stream:
         return pkt[1] & 0x40
 
     @staticmethod
-    def _afc_flag(pkt):
-        return pkt[3] & 0x20
+    def _afc_flag(pkt3):
+        return pkt3 & 0x20
 
     @staticmethod
     def _pcr_flag(pkt):
@@ -315,8 +315,10 @@ class Stream:
         return pay[7] & 0x80
 
     @staticmethod
-    def _has_pts(pkt):
-        return (pkt[1] & 0x40) and (pkt[11] & 0x80)
+    def _has_pts(pkt_one, pkt_eleven):
+        if pkt_one & 0x40:
+            return pkt_eleven & 0x80
+        return False
 
     @staticmethod
     def _parse_length(byte1, byte2):
@@ -330,7 +332,8 @@ class Stream:
         """
         parse a 13 bit pid value
         """
-        return (byte1 & 0x1F) << 8 | byte2
+        pid = (byte1 & 0x1F) << 8 | byte2
+        return pid
 
     @staticmethod
     def _parse_program(byte1, byte2):
@@ -346,6 +349,19 @@ class Stream:
         except ValueError:
             return False
 
+    def _parse_cc(self, pkt, pid):
+        last_cc = None
+        c_c = pkt[3] & 0xF
+        if pid in self.maps.pid_cc:
+            last_cc = self.maps.pid_cc[pid]
+            good = (last_cc, ((last_cc + 1) % 16))
+            if c_c not in good:
+                print(
+                    f"BAD --> pid: {hex(pid)} last cc: {last_cc} cc: {c_c}",
+                    file=sys.stderr,
+                )
+            self.maps.pid_cc[pid] = c_c
+
     def _parse_pts(self, pkt, pid):
         """
         parse pts and store by program key
@@ -353,22 +369,23 @@ class Stream:
         """
         payload = self._parse_payload(pkt)
         if len(payload) > 13:
-            pts = (payload[9] & 14) << 29
-            pts |= payload[10] << 22
-            pts |= (payload[11] >> 1) << 15
-            pts |= payload[12] << 7
-            pts |= payload[13] >> 1
-            prgm = self.pid2prgm(pid)
-            self.maps.prgm_pts[prgm] = pts
-            if prgm not in self.start:
-                self.start[prgm] = pts
+            if self._pusi_flag(pkt):
+                pts = (payload[9] & 14) << 29
+                pts |= payload[10] << 22
+                pts |= (payload[11] >> 1) << 15
+                pts |= payload[12] << 7
+                pts |= payload[13] >> 1
+                prgm = self.pid2prgm(pid)
+                self.maps.prgm_pts[prgm] = pts
+                if prgm not in self.start:
+                    self.start[prgm] = pts
 
     def _parse_payload(self, pkt):
         """
         _parse_payload returns the packet payload
         """
         head_size = 4
-        if self._afc_flag(pkt):
+        if self._afc_flag(pkt[3]):
             afl = pkt[4]
             head_size += afl + 1  # +1 for afl byte
         return pkt[head_size:]
@@ -380,14 +397,15 @@ class Stream:
         based on pid of the pkt
         """
         pay = self._parse_payload(pkt)
-        if not self._same_as_last(pay, pid):
-            if pid == self.pids.PAT_PID:
-                return self._parse_pat(pay)
-            if pid == self.pids.SDT_PID:
-                if self.info:
-                    return self._parse_sdt(pay)
-            if pid in self.pids.pmt:
-                return self._parse_pmt(pay, pid)
+        if self._same_as_last(pay, pid):
+            return False
+        if pid in self.pids.pmt:
+            return self._parse_pmt(pay, pid)
+        if pid == self.pids.PAT_PID:
+            return self._parse_pat(pay)
+        if pid == self.pids.SDT_PID:
+            if self.info:
+                return self._parse_sdt(pay)
         return False
 
     def _parse_info(self, pkt):
@@ -402,10 +420,9 @@ class Stream:
 
     def _parse(self, pkt):
         cue = False
-        pid = self._parse_pid(pkt[1], pkt[2])
-        if pid in self.pids.tables:
-            self._parse_tables(pkt, pid)
-        if self._has_pts(pkt):
+        pid = self._parse_info(pkt)
+        # self._parse_cc(pkt, pid)
+        if self._pts_flag(pkt):
             self._parse_pts(pkt, pid)
         if pid in self.pids.scte35:
             cue = self._parse_scte35(pkt, pid)
