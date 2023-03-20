@@ -3,7 +3,6 @@ The bitn.BitBin and bitn.NBin classes
 """
 
 
-import sys
 from .stuff import print2
 
 
