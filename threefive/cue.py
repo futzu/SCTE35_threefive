@@ -3,7 +3,7 @@ threefive.Cue Class
 """
 from base64 import b64decode, b64encode
 import json
-from sys import stderr
+from .stuff import print2
 from .bitn import NBin
 from .base import SCTE35Base
 from .section import SpliceInfoSection
@@ -190,14 +190,15 @@ class Cue(SCTE35Base):
         """
         Cue.show prints the Cue as JSON
         """
-        print(self.get_json())
+        print2(self.get_json())
 
     def to_stderr(self):
         """
         Cue.to_stderr prints the Cue
         as JSON to sys.stderr
         """
-        print(self.get_json(), file=stderr)
+        # print(self.get_json(), file=stderr)
+        self.show()
 
     # encode related
 
@@ -309,7 +310,7 @@ class Cue(SCTE35Base):
             try:
                 cmd = cmd.get()
             except:
-                print(f" cmd is a {type(cmd)} should be a dict,")
+                print2(f" cmd is a {type(cmd)} should be a dict,")
                 return
         if "command_type" in cmd:
             self.command = command_map[cmd["command_type"]]()
