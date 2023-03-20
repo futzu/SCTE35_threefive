@@ -1,20 +1,8 @@
-## Everybody doing SCTE-35 is using threefive 
 # threefive is the highest rate SCTE-35 Tool. Ever.
 
+### Latest Version: `2.3.75`  The Fastest threefive to date. 
 
-### Latest Version: `2.3.75` 
-## Fastest threefive ever.
-# 3.7GB in 2.775 seconds on a chromebook.
-![image](https://user-images.githubusercontent.com/52701496/226222095-5a148f54-e9f5-43c9-a79e-19ede894e2e5.png)
-![image](https://user-images.githubusercontent.com/52701496/226221619-6731ab8f-86fe-4f86-861a-5f5654e88656.png)
-![image](https://user-images.githubusercontent.com/52701496/226221565-72d6cd4c-c521-4d47-8f3b-6b5952a4c6ca.png)
-![image](https://user-images.githubusercontent.com/52701496/226221708-ad477bd0-260e-4ccb-a30d-a03d5dd04453.png)
-
-
-
-
-
- #### Need SCTE-35 Packet Injection?  [SuperKabuki](https://github.com/futzu/superkabuki) 
+ ### Need SCTE-35 Packet Injection?  [SuperKabuki](https://github.com/futzu/superkabuki) 
  
  <details><summary>Installation and Getting Started</summary>
   
@@ -38,7 +26,7 @@
 ```lua
 >>> from threefive import version
 >>> version()
-'2.3.71'
+'2.3.75'
 >>> 
 ```
 * __Release__ versions are  __odd__.
