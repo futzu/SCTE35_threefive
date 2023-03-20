@@ -3,6 +3,7 @@ smoke_test.py
 """
 
 from .decode import decode
+from .stuff import print2
 
 # The format for tests is a dict of { "test_name" : value to pass to threefive.decode}
 ten_tests = {
@@ -23,7 +24,7 @@ ten_tests = {
 def _decode_test(test_name, test_data):
     passed = "✔"
     failed = "✘"
-    print(f"testing {test_name}\n Data: {test_data}\n")
+    print2(f"testing {test_name}\n Data: {test_data}\n")
     if decode(test_data):
         return passed
     return failed
@@ -49,9 +50,9 @@ def smoke(tests=None):
     if not tests:
         tests = ten_tests
     results = {k: _decode_test(k, v) for k, v in tests.items()}
-    print("Smoke Test\n")
+    print2("Smoke Test\n")
     for kay, vee in results.items():
-        print(f"{kay}  {vee}")
+        print2(f"{kay}  {vee}")
 
 
 if __name__ == "__main__":
