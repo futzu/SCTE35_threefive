@@ -15,6 +15,7 @@
 * [segmentation.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/segmentation.py)   The `lookup tables for SegmentationDescriptor` class values.
 * [smoketest.py](https://github.com/futzu/threefive/blob/master/threefive/smoketest.py) The `threefive.smoke` function runs ten quick tests to verify threefive is working correctly.
 * [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)   The `threefive.Stream` class.
+* [stuff.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stuff.py)   `print2` function.
 * [upids.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upids.py)   `Segmentation Upids` used by the `SegmentationDescriptor` class.  
 * [version.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/version.py)  `threefive.version`.
 
