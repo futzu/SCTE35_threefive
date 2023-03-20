@@ -4,6 +4,7 @@ Mpeg-TS Stream parsing class Stream
 import sys
 from functools import partial
 from new_reader import reader
+from .stuff import print2
 from .cue import Cue
 from .packetdata import PacketData
 
@@ -39,7 +40,7 @@ def show_cue(cue):
 
 def show_cue_stderr(cue):
     """
-    print cue data to sys.stderr
+    print2 cue data to sys.stderr
     for Stream.decode_proxy
     """
     cue.to_stderr()
@@ -61,15 +62,15 @@ class ProgramInfo:
 
     def show(self):
         """
-        show print the Program Infomation
+        show print2 the Program Infomation
         in a familiar format.
         """
         serv = self.service.decode(errors="ignore")
         prov = self.provider.decode(errors="ignore")
-        print(f"    Service:\t{ serv}\n    Provider:\t{prov}")
-        print(f"    Pid:\t{self.pid}")
-        print(f"    Pcr Pid:\t{self.pcr_pid}")
-        print("    Streams:")
+        print2(f"    Service:\t{ serv}\n    Provider:\t{prov}")
+        print2(f"    Pid:\t{self.pid}")
+        print2(f"    Pcr Pid:\t{self.pcr_pid}")
+        print2("    Streams:")
         # sorted_dict = {k:my_dict[k] for k in sorted(my_dict)})
         keys = sorted(self.streams)
         for k in keys:
@@ -78,8 +79,8 @@ class ProgramInfo:
                 vee = f"{vee} {streamtype_map[vee]}"
             else:
                 vee = f"{vee} Unknown"
-            print(f"\t\tPid: {k}[{hex(k)}]\tType: {vee}")
-        print()
+            print2(f"\t\tPid: {k}[{hex(k)}]\tType: {vee}")
+        print2()
 
 
 class Pids:
@@ -169,7 +170,7 @@ class Stream:
         while self._tsdata:
             one = self._tsdata.read(1)
             if not one:
-                print("\nNo Stream Found. \n")
+                print2("\nNo Stream Found. \n")
                 return []
             if one[0] == self._SYNC_BYTE:
                 tail = self._tsdata.read(self._PACKET_SIZE - 1)
@@ -207,11 +208,11 @@ class Stream:
             return False
         return self.as_90k(self.maps.prgm_pcr[prgm])
 
-    def iter_pkts(self,num_pkts=1):
+    def iter_pkts(self, num_pkts=1):
         """
         iter_pkts iterates a mpegts stream into packets
         """
-        return iter(partial(self._tsdata.read, self._PACKET_SIZE* num_pkts), b"")
+        return iter(partial(self._tsdata.read, self._PACKET_SIZE * num_pkts), b"")
 
     def decode(self, func=show_cue):
         """
@@ -239,12 +240,12 @@ class Stream:
         num_pkts packets at a time.
         Super Fast with pypy3.
         """
-        num_pkts =  1000
+        num_pkts = 1000
         for chunk in self.iter_pkts(num_pkts):
             _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
             del _
         self._tsdata.close()
-        return True
+        return False
 
     def decode_next(self):
         """
@@ -265,7 +266,7 @@ class Stream:
         """
         Stream.decode_proxy writes all ts packets are written to stdout
         for piping into another program like mplayer.
-        SCTE-35 cues are printed to stderr.
+        SCTE-35 cues are print2ed to stderr.
         """
         for pkt in self._find_start():
             cue = self._parse(pkt)
@@ -284,7 +285,7 @@ class Stream:
         sopro = sorted(self.maps.prgm.items())
         for k, vee in sopro:
             if len(vee.streams.items()) > 0:
-                print(f"Program: {k}")
+                print2(f"Program: {k}")
                 vee.show()
         return True
 
@@ -375,7 +376,7 @@ class Stream:
             last_cc = self.maps.pid_cc[pid]
             good = (last_cc, ((last_cc + 1) % 16))
             if c_c not in good:
-                print(
+                print2(
                     f"BAD --> pid: {hex(pid)} last cc: {last_cc} cc: {c_c}",
                     file=sys.stderr,
                 )
@@ -386,18 +387,18 @@ class Stream:
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
-        payload = self._parse_payload(pkt)
-        if len(payload) > 13:
-            if self._pusi_flag(pkt):
-                pts = (payload[9] & 14) << 29
-                pts |= payload[10] << 22
-                pts |= (payload[11] >> 1) << 15
-                pts |= payload[12] << 7
-                pts |= payload[13] >> 1
-                prgm = self.pid2prgm(pid)
-                self.maps.prgm_pts[prgm] = pts
-                if prgm not in self.start:
-                    self.start[prgm] = pts
+        # if len(payload) > 13:
+        if self._has_pts(pkt[1], pkt[11]):
+            payload = self._parse_payload(pkt)
+            pts = (payload[9] & 14) << 29
+            pts |= payload[10] << 22
+            pts |= (payload[11] >> 1) << 15
+            pts |= payload[12] << 7
+            pts |= payload[13] >> 1
+            prgm = self.pid2prgm(pid)
+            self.maps.prgm_pts[prgm] = pts
+            if prgm not in self.start:
+                self.start[prgm] = pts
 
     def _parse_payload(self, pkt):
         """
@@ -439,9 +440,8 @@ class Stream:
     def _parse(self, pkt):
         cue = False
         pid = self._parse_info(pkt)
-       # self._parse_cc(pkt, pid)
-        if self._pts_flag(pkt):
-            self._parse_pts(pkt, pid)
+        # self._parse_cc(pkt, pid)
+        self._parse_pts(pkt, pid)
         if pid in self.pids.scte35:
             cue = self._parse_scte35(pkt, pid)
         return cue
