@@ -1,6 +1,10 @@
 # threefive is the highest rate SCTE-35 Tool. Ever.
-
+### Clean Code
+ * cyclomatic complexity score: 1.904 
+ * pylint score: 9.86/10.0
+ 
 ### Latest Version is 2.3.75
+
 
  <details><summary>Installation and Getting Started</summary>
   
