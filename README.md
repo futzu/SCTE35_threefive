@@ -2,8 +2,6 @@
 
 ### Latest Version: `2.3.75`  The Fastest threefive to date. 
 
- ### Need SCTE-35 Packet Injection?  [SuperKabuki](https://github.com/futzu/superkabuki) 
- 
  <details><summary>Installation and Getting Started</summary>
   
 <details><summary>Requirements</summary>
@@ -47,7 +45,6 @@
 
  </details>
 
-### `threefive comes with the threefive executable script.`
 
  <details><summary>Parse SCTE-35 on the command line. </summary> 
 
@@ -68,8 +65,7 @@ threefive udp://@235.35.3.5:3535
 ```
  
 </details>
-
-### `threefive is also a library`. 
+ 
  <details><summary>Parse SCTE-35 with three to five lines of code.</summary>
 
    <details><summary>Mpegts Multicast in three lines of code.</summary>
@@ -138,7 +134,9 @@ cue.show()
  
 <details><summary>Easy SCTE-35 encoding with threefive. </summary>
  
-* Need SCTE-35 Packet Injection? [SuperKabuki](https://github.com/futzu/SuperKabuki)
+* Need SCTE-35 Packet Injection? [SuperKabuki](https://github.com/futzu/SuperKabuki), powered by threefive.
+* [x9k3](https://github.com/futzu/x9k3) is a SCTE-35 capable HLS Segmenter, powered by threefive.
+* [m3ufu]((https://github.com/futzu/m3ufu) is a SCTE-35 aware m3u8 parser powered by threefive.
 
  * `Helper functions for SCTE35 Cue encoding`
 
@@ -211,9 +209,7 @@ FUNCTIONS
 
 
 
-
-### `Documentation for classes`
-<details><summary>Cue Class</summary>
+ <details><summary>Cue Class</summary>
 
    *  src [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string. 
@@ -401,19 +397,19 @@ if __name__ == "__main__":
 
 ```
 
-* `Stream.decode_proxy(func = show_cue)`
+* `Stream.proxy(func = show_cue)`
 
   *  Writes all packets to sys.stdout.
 
   *  Writes scte35 data to sys.stderr.
 
  ```js
- |  decode_proxy(self, func=show_cue_stderr)
+ |  decode(self, func=show_cue_stderr)
  |      Stream.decode_proxy writes all ts packets are written to stdout
  |      for piping into another program like mplayer.
  |      SCTE-35 cues are printed to stderr.
  ```
-> `Stream.decode_proxy Example`
+> `Stream.proxy Example`
 ```python3
 
 import threefive
@@ -453,8 +449,6 @@ ___
 </details>
 
 
-### `Stuff`
-
 <details><summary>Custom charsets for UPIDS aka upids.charset</summary>
 
 `Specify a charset for Upid data by setting threefive.upids.charset` [`issue #55`](https://github.com/futzu/scte35-threefive/issues/55)
@@ -489,12 +483,16 @@ True
 
 </details>
 
+# Other threefive Stuff
+ * [Diagram](https://github.com/futzu/threefive/blob/master/cue.md) of a threefive SCTE-35 Cue. 
+ * [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) and SCTE35 and Stream Type 0x6 bin data.
+ * [Issues and Bugs and Feature Requests](https://github.com/futzu/scte35-threefive/issues) *No forms man, just open an issue and tell me what you need.* 
 
- [Diagram of a threefive SCTE-35 Cue. ](https://github.com/futzu/threefive/blob/master/cue.md)  
-
-[ffmpeg and SCTE35 and Stream Type 0x6 bin data and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md)
-
-[Issues and Bugs and Feature Requests *No forms man, just open an issue and tell me what you need.*  ](https://github.com/futzu/scte35-threefive/issues)
+# Powered by threefive
+ * [six2scte35](https://github.com/futzu/six2scte35): ffmpeg changes SCTE-35 stream type to 0x06 bin data, six2scte35 changes it back.
+ * [SuperKabuki](https://github.com/futzu/SuperKabuki): SCTE-35 Packet Injection.
+ * [x9k3](https://github.com/futzu/x9k3): SCTE-35 HLS Segmenter and Cue Inserter.
+ * [m3ufu](https://github.com/futzu/m3ufu): SCTE-35 m3u8 Parser.
 
 
 
