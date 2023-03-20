@@ -1,6 +1,6 @@
 # threefive is the highest rate SCTE-35 Tool. Ever.
 
-### Latest Version: `2.3.75`  The Fastest threefive to date. 
+### Latest Version is 2.3.75
 
  <details><summary>Installation and Getting Started</summary>
   
@@ -30,21 +30,6 @@
 * __Release__ versions are  __odd__.
 * __Unstable__ testing versions are __even__.
 </details>
-
-<details><summary> Feedback, Pull Requests and other such things.</summary>
- 
-### I want your feedback. Open an issue. 
- 
-* Not ever idea is a winner, but I still want to hear what have to say.
- 
-* I will treat you with respect, as long as you treat me the same way.
- 
-* If you find a bug, <b>I want to know about it. If there is something you dont like, <b>I want to know about.</b>
- 
-*  <b>All the best parts of threefive came from other people</b>, If you do a pull request, if I can accept it without breaking anything, I will, even if I dont agree with it. 
-
- </details>
-
 
  <details><summary>Parse SCTE-35 on the command line. </summary> 
 
@@ -483,16 +468,21 @@ True
 
 </details>
 
-# Other threefive Stuff
+<details><summary> Other threefive Stuff </summary>
+ 
  * [Diagram](https://github.com/futzu/threefive/blob/master/cue.md) of a threefive SCTE-35 Cue. 
  * [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) and SCTE35 and Stream Type 0x6 bin data.
  * [Issues and Bugs and Feature Requests](https://github.com/futzu/scte35-threefive/issues) *No forms man, just open an issue and tell me what you need.* 
 
-# Powered by threefive
+ </details>
+ 
+<details><summary> Powered by threefive </summary>
+ 
  * [six2scte35](https://github.com/futzu/six2scte35): ffmpeg changes SCTE-35 stream type to 0x06 bin data, six2scte35 changes it back.
  * [SuperKabuki](https://github.com/futzu/SuperKabuki): SCTE-35 Packet Injection.
  * [x9k3](https://github.com/futzu/x9k3): SCTE-35 HLS Segmenter and Cue Inserter.
  * [m3ufu](https://github.com/futzu/m3ufu): SCTE-35 m3u8 Parser.
-
+ 
+ </details>
 
 
