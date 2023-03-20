@@ -468,21 +468,15 @@ True
 
 </details>
 
-<details><summary> Other threefive Stuff </summary>
- 
- * [Diagram](https://github.com/futzu/threefive/blob/master/cue.md) of a threefive SCTE-35 Cue. 
- * [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) and SCTE35 and Stream Type 0x6 bin data.
- * [Issues and Bugs and Feature Requests](https://github.com/futzu/scte35-threefive/issues) *No forms man, just open an issue and tell me what you need.* 
+* Powered by threefive 
 
- </details>
- 
-<details><summary> Powered by threefive </summary>
- 
- * [six2scte35](https://github.com/futzu/six2scte35): ffmpeg changes SCTE-35 stream type to 0x06 bin data, six2scte35 changes it back.
- * [SuperKabuki](https://github.com/futzu/SuperKabuki): SCTE-35 Packet Injection.
- * [x9k3](https://github.com/futzu/x9k3): SCTE-35 HLS Segmenter and Cue Inserter.
- * [m3ufu](https://github.com/futzu/m3ufu): SCTE-35 m3u8 Parser.
- 
- </details>
+    * [six2scte35](https://github.com/futzu/six2scte35): ffmpeg changes SCTE-35 stream type to 0x06 bin data, six2scte35 changes it back.
+    * [SuperKabuki](https://github.com/futzu/SuperKabuki): SCTE-35 Packet Injection.
+    * [x9k3](https://github.com/futzu/x9k3): SCTE-35 HLS Segmenter and Cue Inserter.
+    * [m3ufu](https://github.com/futzu/m3ufu): SCTE-35 m3u8 Parser.
+* other threefive stuff
+    * [Diagram](https://github.com/futzu/threefive/blob/master/cue.md) of a threefive SCTE-35 Cue. 
+    * [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) and SCTE35 and Stream Type 0x6 bin data.
+    * [Issues and Bugs and Feature Requests](https://github.com/futzu/scte35-threefive/issues) *No forms man, just open an issue and tell me what you need.* 
 
 
