@@ -4,6 +4,7 @@ The bitn.BitBin and bitn.NBin classes
 
 
 import sys
+from .stuff import print2
 
 
 class BitBin:
@@ -86,13 +87,11 @@ class BitBin:
         negative_shift is called instead of
         throwing a negative shift count error.
         """
-        print(
-            f"{num_bits} bits requested, but only {self.idx} bits left.",
-            file=sys.stderr,
+        print2(
+            f"{num_bits} bits requested, but only {self.idx} bits left."
         )
-        print(
-            f"\n bytes remaining: {self.as_bytes(self.idx)} ",
-            file=sys.stderr,
+        print2(
+            f"\n bytes remaining: {self.as_bytes(self.idx)} "
         )
 
 
