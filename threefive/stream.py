@@ -207,11 +207,11 @@ class Stream:
             return False
         return self.as_90k(self.maps.prgm_pcr[prgm])
 
-    def iter_pkts(self):
+    def iter_pkts(self,num_pkts=1):
         """
         iter_pkts iterates a mpegts stream into packets
         """
-        return iter(partial(self._tsdata.read, self._PACKET_SIZE), b"")
+        return iter(partial(self._tsdata.read, self._PACKET_SIZE* num_pkts), b"")
 
     def decode(self, func=show_cue):
         """
@@ -226,6 +226,25 @@ class Stream:
                     return cue
                 func(cue)
         return False
+
+    def _mk_pkts(self, chunk):
+        return [
+            self._parse(chunk[i : i + self._PACKET_SIZE])
+            for i in range(0, len(chunk), self._PACKET_SIZE)
+        ]
+
+    def decode_fu(self, func=show_cue):
+        """
+        Stream.decode_fu decodes
+        num_pkts packets at a time.
+        Super Fast with pypy3.
+        """
+        num_pkts =  1000
+        for chunk in self.iter_pkts(num_pkts):
+            _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
+            del _
+        self._tsdata.close()
+        return True
 
     def decode_next(self):
         """
@@ -242,7 +261,7 @@ class Stream:
         self.the_program = the_program
         return self.decode(func)
 
-    def decode_proxy(self, func=show_cue_stderr):
+    def proxy(self, func=show_cue_stderr):
         """
         Stream.decode_proxy writes all ts packets are written to stdout
         for piping into another program like mplayer.
@@ -360,7 +379,7 @@ class Stream:
                     f"BAD --> pid: {hex(pid)} last cc: {last_cc} cc: {c_c}",
                     file=sys.stderr,
                 )
-            self.maps.pid_cc[pid] = c_c
+        self.maps.pid_cc[pid] = c_c
 
     def _parse_pts(self, pkt, pid):
         """
@@ -403,9 +422,8 @@ class Stream:
             return self._parse_pmt(pay, pid)
         if pid == self.pids.PAT_PID:
             return self._parse_pat(pay)
-        if pid == self.pids.SDT_PID:
-            if self.info:
-                return self._parse_sdt(pay)
+        if pid == self.pids.SDT_PID and self.info:
+            return self._parse_sdt(pay)
         return False
 
     def _parse_info(self, pkt):
@@ -421,7 +439,7 @@ class Stream:
     def _parse(self, pkt):
         cue = False
         pid = self._parse_info(pkt)
-        # self._parse_cc(pkt, pid)
+       # self._parse_cc(pkt, pid)
         if self._pts_flag(pkt):
             self._parse_pts(pkt, pid)
         if pid in self.pids.scte35:
