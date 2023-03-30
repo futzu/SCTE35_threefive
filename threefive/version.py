@@ -20,7 +20,7 @@ def version() -> str:
     """
     version prints threefives version as a string
     """
-    with open("VERSION", "r") as ver:
+    with open("VERSION", "r", encoding="utf-8") as ver:
         version_from_file = ver.read()
     return version_from_file
 

@@ -2,10 +2,10 @@
 
 import setuptools
 
-with open("README.md", "r") as fh:
+with open("README.md", "r", encoding="utf-8") as fh:
     readme = fh.read()
 
-with open("VERSION", "r") as ver:
+with open("VERSION", "r", encoding="utf-8") as ver:
     version = ver.read()
 
 setuptools.setup(

@@ -79,7 +79,7 @@ class Stanza:
         try:
             tmp = self.segment.rsplit("/", 1)[1]
             with threefive.reader(self.segment) as infile:
-                with open(tmp, "wb") as outfile:
+                with open(tmp, "wb", encoding="utf-8") as outfile:
                     pyaes.decrypt_stream(self.mode, infile, outfile)
                     self._get_pts_start(tmp)
             os.unlink(tmp)
