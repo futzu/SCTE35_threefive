@@ -9,7 +9,7 @@ def do(mesg):
     tf.show()
 
 
-with open(sys.argv[1], "r") as manifest:
+with open(sys.argv[1], "r", encoding="utf-8") as manifest:
     hls_time = duration = cue_out = cue_in = 0
     while manifest:
         l = manifest.readline()

@@ -15,7 +15,7 @@ class ResetCC(Stream):
         pcount = 600
         outfile = sys.stdout.buffer
         if not proxy:
-            outfile = open("re_cc.ts", "wb+")
+            outfile = open("re_cc.ts", "wb+", encoding="utf-8")
         for chunk in iter(partial(self._tsdata.read, self._PACKET_SIZE * pcount), b""):
             chunky = memoryview(bytearray(chunk))
             chunks = [
