@@ -114,4 +114,3 @@ def mk_splice_insert(event_id, pts=None, duration=None, out=False):
     cue.command = sin
     cue.encode()
     return cue
-
