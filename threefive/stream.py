@@ -376,10 +376,9 @@ class Stream:
             last_cc = self.maps.pid_cc[pid]
             good = (last_cc, ((last_cc + 1) % 16))
             if c_c not in good:
-                print2(
-                    f"BAD --> pid: {hex(pid)} last cc: {last_cc} cc: {c_c}",
-                    file=sys.stderr,
-                )
+                # print2 prints to stderr, get it?  print 2>
+                # That's mine too. I shoiuld know better.
+                print2(f"BAD --> pid: {hex(pid)} last cc: {last_cc} cc: {c_c}" )
         self.maps.pid_cc[pid] = c_c
 
     def _parse_pts(self, pkt, pid):
