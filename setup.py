@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 
 import setuptools
-import threefive
 
 with open("README.md", "r") as fh:
     readme = fh.read()
 
+with open("VERSION", "r") as ver:
+    version = ver.read()
+
 setuptools.setup(
     name="threefive",
-    version=threefive.version(),
+    version=version,
     author="Adrian",
     author_email="spam@iodisco.com",
     description="Pythonic SCTE35",
