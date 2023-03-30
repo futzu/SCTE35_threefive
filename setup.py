@@ -11,7 +11,7 @@ setuptools.setup(
     version=threefive.version(),
     author="Adrian",
     author_email="spam@iodisco.com",
-    description="Southern Fried SCTE35",
+    description="Pythonic SCTE35",
     long_description=readme,
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/threefive",
