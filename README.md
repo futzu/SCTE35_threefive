@@ -488,5 +488,3 @@ True
 
     * [Issues and Bugs and Feature Requests](https://github.com/futzu/scte35-threefive/issues) *No forms man, just open an issue and tell me what you need.*
 
-
-![image](https://user-images.githubusercontent.com/52701496/227035350-6868ab71-86ba-4737-ad5d-52e991458953.png)
