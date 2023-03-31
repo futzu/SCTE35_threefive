@@ -13,14 +13,20 @@ It is this VERSION file that needs to be updated when the version of threefive
 is to be incremented.
 These methods are just for convenience and for backwards compatibility with
 any current consumer of the version module.
+
+Ammendment:
+The VERSION file isn't visible after the install, so now setup.py is copying the VERSION file
+to threefive/latest.py. I am thinking my whole version.py idea is just too flawed 
+and version.py may go away soon. I like the VERSION file idea better. ~ Adrian 
 """
 
+VERSION_FILE = 'latest.py'
 
 def version() -> str:
     """
     version prints threefives version as a string
     """
-    with open("VERSION", "r", encoding="utf-8") as ver:
+    with open(VERSION_FILE, "r", encoding="utf-8") as ver:
         version_from_file = ver.read()
     return version_from_file
 
