@@ -9,7 +9,7 @@ from .section import SpliceInfoSection
 from .segment import Segment
 from .smoketest import smoke
 from .stream import Stream
-from .version import version, version_number
+from .version import version
 
 from .commands import (
     TimeSignal,
