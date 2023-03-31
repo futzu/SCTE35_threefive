@@ -1,6 +1,6 @@
 # threefive is the highest rate SCTE-35 Tool. Ever.
 
-### Latest Version is 2.3.75
+### Latest Version is 2.3.79
 *  Big thanks to the fine folks at [airlangga-m2amedia](https://github.com/airlangga-m2amedia) for their work. I appreciate it.
 
 
@@ -25,9 +25,9 @@
 <details><summary>Versions and Releases</summary>
 
 ```lua
->>> from threefive import version
->>> version()
-'2.3.75'
+>>> import threefive
+>>> threefive.version
+'2.3.79'
 >>>
 ```
 * __Release__ versions are  __odd__.
