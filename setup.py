@@ -8,17 +8,20 @@ with open("README.md", "r", encoding="utf-8") as fh:
 with open("VERSION", "r", encoding="utf-8") as ver:
     version = ver.read()
 
+with open("threefive/latest.py","w", encoding="utf-8") as latest:
+    latest.write(version)
+
 setuptools.setup(
     name="threefive",
     version=version,
-    author="Adrian",
+    author="Adrian and a cast of thousands.",
     author_email="spam@iodisco.com",
     description="Pythonic SCTE35",
     long_description=readme,
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/threefive",
     install_requires=[
-        'new_reader >= 0.1.3',
+        'new_reader >= 0.1.7',
         "pyaes",
     ],
 
