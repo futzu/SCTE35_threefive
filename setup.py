@@ -5,16 +5,13 @@ import setuptools
 with open("README.md", "r", encoding="utf-8") as fh:
     readme = fh.read()
 
-with open("VERSION", "r", encoding="utf-8") as ver:
-    version = ver.read()
-
-with open("threefive/latest.py","w", encoding="utf-8") as latest:
-    latest.write(version)
+with open("threefive/version.py","r", encoding="utf-8") as latest:
+    version = latest.read().split("'")[1]
 
 setuptools.setup(
     name="threefive",
     version=version,
-    author="Adrian and a cast of thousands.",
+    author="Adrian and a Cast of Thousands.",
     author_email="spam@iodisco.com",
     description="Pythonic SCTE35",
     long_description=readme,
