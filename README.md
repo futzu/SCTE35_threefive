@@ -470,7 +470,7 @@ True
 
 </details>
 
-* Powered by threefive
+### Powered by threefive
 
     * [x9k3](https://github.com/futzu/x9k3): SCTE-35 HLS Segmenter and Cue Inserter.
 
@@ -480,7 +480,7 @@ True
 
     * [SuperKabuki](https://github.com/futzu/SuperKabuki): SCTE-35 Packet Injection.
 
-* other threefive stuff
+### other threefive stuff
 
     * [Diagram](https://github.com/futzu/threefive/blob/master/cue.md) of a threefive SCTE-35 Cue.
 
