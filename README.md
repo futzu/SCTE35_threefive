@@ -1,11 +1,8 @@
 # threefive is the highest rate SCTE-35 Tool. Ever.
 
 ### Latest Version is 2.3.81
-*  Big thanks to [NicoAdrian](https://github.com/NicoAdrian) for repeatedly telling me the issue until I finally fixed it. Great name by the way.  ~Adrian 
 
-
-
- <details><summary>Installation and Getting Started</summary>
+ <details><summary><b>Installation and Getting Started</b></summary>
 
 <details><summary>Requirements</summary>
 
@@ -34,27 +31,32 @@
 * __Unstable__ testing versions are __even__.
 </details>
 
- <details><summary>Parse SCTE-35 on the command line. </summary>
-
-
+ <details><summary><b>Parse SCTE-35 on the command line.</b> </summary>
+ 
+* `Parse base64`
+```js
+threefive '/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo='
+```
+* `Parse a hex value`
 ```js
 threefive 0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A
 ```
+* `Parse MPEGTS from stdin`
 ```js
 cat video.ts | threefive
 ```
-or like this
+* `Parse MPEGTS video over https`
 ```js
 threefive https://so.slo.me/longb.ts
 ```
-parse multicast like this
+* `Parse multicast`
 ```lua
 threefive udp://@235.35.3.5:3535
 ```
 
 </details>
 
- <details><summary>Parse SCTE-35 with three to five lines of code.</summary>
+ <details><summary><b>Parse SCTE-35 programmatically with a few lines of code.</b></summary>
 
    <details><summary>Mpegts Multicast in three lines of code.</summary>
 
