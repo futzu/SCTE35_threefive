@@ -141,10 +141,13 @@ class TimeSignal(SpliceCommand):
         self._chk_var(bool, nbin.add_flag, "time_specified_flag", 1)
         if self.time_specified_flag:
             nbin.reserve(6)
+            if not self.pts_time and not self.pts_time_ticks:
+                err_mesg = ' self.time_specified_flag is set. Please set self.pts_time ( float )  or self.pts_time_ticks ( int  )'
+                raise ValueError(err_mesg)
             if not self.pts_time_ticks:
-                self.pts_time_ticks = 0
-            if self.pts_time:
                 self.pts_time_ticks = self.as_ticks(self.pts_time)
+            if not self.pts_time:
+                self.pts_time = self.as_90k(self.pts_time_ticks)
             self._chk_var(int, nbin.add_int, "pts_time_ticks", 33)
         else:
             nbin.reserve(7)
