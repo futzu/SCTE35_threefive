@@ -320,12 +320,13 @@ class SegmentationDescriptor(SpliceDescriptor):
             # if sub_segment_num and sub_segments_expected
             # are not available set both of them to zero
             # This has been an issue at CBS and CNN just recently.
-            self.sub_segment_num = self.sub_segments_expected = 0
-            try:
-                self.sub_segment_num = bitbin.as_int(8)  # 1 byte
-                self.sub_segments_expected = bitbin.as_int(8)  # 1 byte
-            except:
-                pass
+            ssn = bitbin.as_int(8)
+            sse = bitbin.as_int(8)
+            if not ssn:
+                ssn =0
+                sse = 0
+            self.sub_segment_num = ssn  # 1 byte
+            self.sub_segments_expected = sse  # 1 byte
 
     def encode(self, nbin=None):
         """
