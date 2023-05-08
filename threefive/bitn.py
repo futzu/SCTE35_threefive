@@ -36,6 +36,7 @@ class BitBin:
             self.idx -= num_bits
             return (self.bits >> (self.idx)) & ~(~0 << num_bits)
         # return self.negative_shift(num_bits)
+        return False
 
     def as_hex(self, num_bits):
         """
