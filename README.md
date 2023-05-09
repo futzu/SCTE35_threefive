@@ -1,11 +1,13 @@
 # threefive is the highest rate SCTE-35 Tool. Ever. I swear.
 
-### Latest Version is 2.3.85
+<details><summary><b>Latest Version is 2.3.85</b></summary>
+ 
 * threefive now corrects for Amazon's incomplete encoding of Segmentation Descriptors.
   * Amazon is not including sub_segments_num and sub_segments_expected in Segmentation Descriptors with a segmentation_type_id of 0x34, 0x36, 0x38, or 0x3. 
   * threefive now adds these fields if they are missing and sets them to zero.
   
-
+</details>
+ 
  <details><summary><b>Installation and Getting Started</b></summary>
 
 <details><summary>Requirements</summary>
