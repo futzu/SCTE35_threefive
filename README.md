@@ -1,4 +1,4 @@
-# threefive is the highest rate SCTE-35 Tool. Ever.
+# threefive is the highest rate SCTE-35 Tool. Ever. I swear.
 
 ### Latest Version is 2.3.85
 * threefive now corrects for Amazon's incomplete encoding of Segmentation Descriptors.
