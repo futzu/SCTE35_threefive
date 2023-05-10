@@ -151,6 +151,9 @@ def upid_encoder(nbin, upid_type, upid_length, seg_upid):
         0x0E: ["ADS Info", _encode_uri],
         0x0F: ["URI", _encode_uri],
     }
+    if not seg_upid or len(seg_upid) < 1:
+        return
+
     if upid_type in upid_map:
         upid_map[upid_type][1](nbin, seg_upid)
 
@@ -160,6 +163,8 @@ def upid_encoder(nbin, upid_type, upid_length, seg_upid):
         0x08: ["AiringID", _encode_air_id],
         0x0C: ["MPU", _encode_mpu],
     }
+
+#    if seg_upid and len(seg_upid) > 0:
     if upid_type in upid_map_too:
         upid_map_too[upid_type][1](nbin, seg_upid, upid_length)
 
@@ -216,6 +221,6 @@ def _encode_umid(nbin, seg_upid):
 
 
 def _encode_uri(nbin, seg_upid):
-    if len(seg_upid) > 0:
-        seg_upid = seg_upid.encode()
-        nbin.add_bites(seg_upid)
+        if seg_upid:
+            seg_upid = seg_upid.encode()
+            nbin.add_bites(seg_upid)
