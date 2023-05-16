@@ -155,6 +155,7 @@ class Stream:
         self.start = {}
         self.info = None
         self.the_program = None
+        self.the_scte35_pids = []
         self.pids = Pids()
         self.maps = Maps()
 
@@ -260,6 +261,15 @@ class Stream:
         to a specific MPEGTS program.
         """
         self.the_program = the_program
+        return self.decode(func)
+
+    def decode_pids(self, scte35_pids=[], func=show_cue):
+        """
+        Stream.decode_pids takes a list of SCTE-35 Pids parse
+        and an optional call back function to run when a Cue is found.
+        if scte35_pids is not set , all scte35 pids will be parsed.
+        """
+        self.the_scte35_pids = scte35_pids
         return self.decode(func)
 
     def proxy(self, func=show_cue_stderr):
@@ -387,7 +397,7 @@ class Stream:
         in the dict Stream._pid_pts
         """
         # if len(payload) > 13:
-        if self._pusi_flag(pkt):            
+        if self._pusi_flag(pkt):
             payload = self._parse_payload(pkt)
             if self._pts_flag(payload):
                 pts = (payload[9] & 14) << 29
@@ -476,6 +486,8 @@ class Stream:
         """
         parse a scte35 cue from one or more packets
         """
+        if self.the_scte35_pids and pid not in self.the_scte35_pids:
+            return False
         pay = self._parse_payload(pkt)
         if not pay:
             return False
