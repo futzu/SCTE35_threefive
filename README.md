@@ -1,6 +1,6 @@
 ![image](https://github.com/futzu/scte35-threefive/assets/52701496/8bfacebe-1cf9-4cc5-82f5-84efa5dbe1c2)
 
-<details><summary><b>Latest Version is 2.3.91</b><i> (PTS fix for long AFC and Stream.decode_pids)</i> </summary>
+<details><summary><b>Latest Version is 2.3.93</b><i> (workaround to handle Amazon not padding base64 correctly)</i> </summary>
 
  * __Removed__ The rogue file cmd.py.
 
