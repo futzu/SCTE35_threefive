@@ -120,6 +120,12 @@ class Cue(SCTE35Base):
         return json.dumps(self.get(), indent=4)
 
     @staticmethod
+    def fix_bad_b64(data):
+        while len(data) % 4 !=0:
+            data=data+'='
+        return data
+
+    @staticmethod
     def _mk_bits(data):
         """
         cue._mk_bits Converts
@@ -144,7 +150,7 @@ class Cue(SCTE35Base):
             if data[:2].lower() == "fc":
                 return bytes.fromhex(data)
         try:
-            return b64decode(data)
+            return b64decode(self.fix_bad_b64(data))
         except (LookupError, TypeError, ValueError):
             return data
 
