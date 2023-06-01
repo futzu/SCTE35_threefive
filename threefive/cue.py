@@ -125,8 +125,7 @@ class Cue(SCTE35Base):
             data=data+'='
         return data
 
-    @staticmethod
-    def _mk_bits(data):
+    def _mk_bits(self,data):
         """
         cue._mk_bits Converts
         Hex and Base64 strings into bytes.
