@@ -494,5 +494,5 @@ True
 
   * [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) and SCTE35 and Stream Type 0x6 bin data.
 
-  * [Issues and Bugs and Feature Requests](https://github.com/futzu/scte35-threefive/issues) *No forms man, just open an issue and tell me what you need. It needs to be a threefive related issue. I am NOT the SCTE-35 Support Hotline. Do your own damn homework*
+  * [Issues and Bugs and Feature Requests](https://github.com/futzu/scte35-threefive/issues) *No forms man, just open an issue and tell me what you need. It needs to be a threefive related issue or "what is the meaning of life?" type of question.*
 
