@@ -396,19 +396,20 @@ class Stream:
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
-        # if len(payload) > 13:
+
         if self._pusi_flag(pkt):
             payload = self._parse_payload(pkt)
-            if self._pts_flag(payload):
-                pts = (payload[9] & 14) << 29
-                pts |= payload[10] << 22
-                pts |= (payload[11] >> 1) << 15
-                pts |= payload[12] << 7
-                pts |= payload[13] >> 1
-                prgm = self.pid2prgm(pid)
-                self.maps.prgm_pts[prgm] = pts
-                if prgm not in self.start:
-                    self.start[prgm] = pts
+            if len(payload) > 13:
+                if self._pts_flag(payload):
+                    pts = (payload[9] & 14) << 29
+                    pts |= payload[10] << 22
+                    pts |= (payload[11] >> 1) << 15
+                    pts |= payload[12] << 7
+                    pts |= payload[13] >> 1
+                    prgm = self.pid2prgm(pid)
+                    self.maps.prgm_pts[prgm] = pts
+                    if prgm not in self.start:
+                        self.start[prgm] = pts
 
     def _parse_payload(self, pkt):
         """
