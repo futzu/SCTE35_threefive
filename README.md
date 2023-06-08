@@ -5,6 +5,11 @@
  ```smalltalk
  python3 -mpip install --upgrade threefive
  ```
+ 
+ 
+ ```smalltalk
+ pypy3 -mpip install --upgrade threefive
+ ```
 <H1>  Upgrade Now. </h1>
 <details><summary><b>Latest Version is 2.3.97</b><i> (fix for me breaking parsing for payloads without PTS in the Stream class)</i> </summary>
 
