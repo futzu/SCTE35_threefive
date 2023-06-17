@@ -1,4 +1,4 @@
-#  The Most Advanced SCTE-35 Decoder / Encoder allowed by law.
+#  The Most Advanced SCTE-35 Decoder / Encoder Allowed by Law.
 
 ![Resized_20210916_135344](https://github.com/futzu/cuei/assets/52701496/f4596860-7087-437e-828f-f5bfec339ee6)
 ![image](https://github.com/futzu/scte35-threefive/assets/52701496/8bfacebe-1cf9-4cc5-82f5-84efa5dbe1c2)
