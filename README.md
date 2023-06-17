@@ -97,6 +97,7 @@ strm = threefive.Stream('https://iodisco.com/ch1/ready.ts')
 strm.decode()
 
 
+       
    </details>
 
  <details><summary>Base64 in five lines of code.</summary>
