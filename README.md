@@ -494,8 +494,10 @@ True
 ### Powered by threefive
 
   * [POIS Server](https://github.com/scunning1987/pois_reference_server) is Super Cool.
- 
+  
+
   * [x9k3](https://github.com/futzu/x9k3): SCTE-35 HLS Segmenter and Cue Inserter.
+      * [__amt-play__ ](https://github.com/vivoh-inc/amt-play) uses x9k3.
 
   * [m3ufu](https://github.com/futzu/m3ufu): SCTE-35 m3u8 Parser.
 
