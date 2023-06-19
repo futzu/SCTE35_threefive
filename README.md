@@ -1,17 +1,12 @@
 #  The Most Advanced SCTE-35 Decoder / Encoder Allowed by Law.
 
 
-<H1> Upgrade to v.2.3.97</H1>
+<H3> Upgrade to v.2.3.97   Upgrade Now.</H3>
 
- ```smalltalk
- python3 -mpip install --upgrade threefive
- ```
- 
- 
  ```smalltalk
  pypy3 -mpip install --upgrade threefive
  ```
-<H1>  Upgrade Now. </h1>
+<H3> threefive runs best on pypy3.  </h3>
 <details><summary><b>Latest Version is 2.3.97</b><i> (fix for me breaking parsing for payloads without PTS in the Stream class)</i> </summary>
 
  * __Removed__ The rogue file cmd.py.
