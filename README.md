@@ -1,8 +1,5 @@
 #  The Most Advanced SCTE-35 Decoder / Encoder Allowed by Law.
 
-![image](https://github.com/futzu/scte35-threefive/assets/52701496/8bfacebe-1cf9-4cc5-82f5-84efa5dbe1c2)
-
-![Resized_20210916_135344](https://github.com/futzu/cuei/assets/52701496/f4596860-7087-437e-828f-f5bfec339ee6)
 
 <H1> Upgrade to v.2.3.97</H1>
 
