@@ -1,7 +1,6 @@
 #  The Most Advanced SCTE-35 Decoder / Encoder Allowed by Law.
 
 
-<H3> pypy3 runs threefive four times faster than python3.  </h3>
 
 
 <details><summary><b>Latest Version is 2.3.97</b><i> (fix for me breaking parsing for payloads without PTS in the Stream class)</i> </summary>
@@ -480,6 +479,8 @@ True
 ```
 
 </details>
+
+
 
 ### Powered by threefive
 
