@@ -1,12 +1,9 @@
 #  The Most Advanced SCTE-35 Decoder / Encoder Allowed by Law.
 
 
-<H3> Upgrade to v.2.3.97   Upgrade Now.</H3>
+<H3> pypy3 runs threefive four times faster than python3.  </h3>
 
- ```smalltalk
- pypy3 -mpip install --upgrade threefive
- ```
-<H3> threefive runs best on pypy3.  </h3>
+
 <details><summary><b>Latest Version is 2.3.97</b><i> (fix for me breaking parsing for payloads without PTS in the Stream class)</i> </summary>
 
  * __Removed__ The rogue file cmd.py.
