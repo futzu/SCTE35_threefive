@@ -1,6 +1,5 @@
 #  The Most Advanced SCTE-35 Decoder / Encoder Allowed by Law.
-
-
+### threefive is optimized for [pypy3](https://pypy.org) 
 
 
 <details><summary><b>Latest Version is 2.3.97</b><i> (fix for me breaking parsing for payloads without PTS in the Stream class)</i> </summary>
