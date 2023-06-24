@@ -1,14 +1,13 @@
 #  The Most Advanced SCTE-35 Decoder / Encoder Allowed by Law.
-### threefive is optimized for [pypy3](https://pypy.org) 
 
 
-<details><summary><b>Latest Version is 2.3.97</b><i> (fix for me breaking parsing for payloads without PTS in the Stream class)</i> </summary>
+<details><summary>Latest Version is 2.3.97</summary>
 
  * __Removed__ The rogue file cmd.py.
 
 </details>
  
- <details><summary><b>Installation and Getting Started</b></summary>
+ <details><summary>Installation and Getting Started</summary>
 
 <details><summary>Requirements</summary>
 
@@ -37,7 +36,7 @@
 * __Unstable__ testing versions are __even__.
 </details>
 
- <details><summary><b>Parse SCTE-35 on the command line.</b> </summary>
+ <details><summary>Parse SCTE-35 on the command line.</summary>
  
 * `Parse base64`
 ```js
@@ -62,7 +61,7 @@ threefive udp://@235.35.3.5:3535
 
 </details>
 
- <details><summary><b>Parse SCTE-35 programmatically with a few lines of code.</b></summary>
+ <details><summary>Parse SCTE-35 programmatically with a few lines of code.</summary>
 
    <details><summary>Mpegts Multicast in three lines of code.</summary>
 
@@ -487,15 +486,17 @@ True
   
 
   * [x9k3](https://github.com/futzu/x9k3): SCTE-35 HLS Segmenter and Cue Inserter.
-      * [__amt-play__ ](https://github.com/vivoh-inc/amt-play) uses x9k3.
+      * [amt-play ](https://github.com/vivoh-inc/amt-play) uses x9k3.
 
   * [m3ufu](https://github.com/futzu/m3ufu): SCTE-35 m3u8 Parser.
 
   * [six2scte35](https://github.com/futzu/six2scte35): ffmpeg changes SCTE-35 stream type to 0x06 bin data, six2scte35 changes it back.
 
   * [SuperKabuki](https://github.com/futzu/SuperKabuki): SCTE-35 Packet Injection.
+  
+  *[bpkio-cli](https://pypi.org/project/bpkio-cli/): A command line interface to the broadpeak.io APIs. 
 
-### other threefive stuff
+### threefive | more
 
   * [Diagram](https://github.com/futzu/threefive/blob/master/cue.md) of a threefive SCTE-35 Cue.
 
