@@ -1,12 +1,8 @@
-#  The Most Advanced SCTE-35 Decoder / Encoder Allowed by Law.
-
-
-<details><summary>Latest Version is 2.3.97</summary>
-
- * __Removed__ The rogue file cmd.py.
-
-</details>
+ 🥇 threefive is the most advanced SCTE-35 decoder/encoder allowed by law.
+ ---
  
+Latest Version is `2.3.97` 
+
  <details><summary>Installation and Getting Started</summary>
 
 <details><summary>Requirements</summary>
@@ -480,7 +476,8 @@ True
 
 
 
-### Powered by threefive
+ Powered by threefive
+---
 
   * [POIS Server](https://github.com/scunning1987/pois_reference_server) is Super Cool.
   
@@ -494,9 +491,10 @@ True
 
   * [SuperKabuki](https://github.com/futzu/SuperKabuki): SCTE-35 Packet Injection.
   
-  *[bpkio-cli](https://pypi.org/project/bpkio-cli/): A command line interface to the broadpeak.io APIs. 
+  * [bpkio-cli](https://pypi.org/project/bpkio-cli/): A command line interface to the broadpeak.io APIs. 
 
-### threefive | more
+ threefive | more
+---
 
   * [Diagram](https://github.com/futzu/threefive/blob/master/cue.md) of a threefive SCTE-35 Cue.
 
