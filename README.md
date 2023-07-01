@@ -440,6 +440,29 @@ ___
 </details>
 
 
+<details><summary> Need to verify your splice points? </summary> 
+ 
+
+ 
+ 
+* Try [cue2vtt.py](https://github.com/futzu/scte35-threefive/blob/master/examples/stream/cue2vtt.py) in the examples.
+
+   * cue2vtt.py creates webvtt subtitles out of SCTE-35 Cue data
+ 
+* use it like this 
+
+ ```rebol
+ pypy3 cue2vtt.py video.ts | mplayer video.ts -sub -
+```
+
+
+ ![image](https://github.com/futzu/scte35-threefive/assets/52701496/5b8dbea3-1d39-48c4-8fbe-de03a53cc1dd)
+
+
+---
+
+</details> 
+
 <details><summary>Custom charsets for UPIDS aka upids.charset</summary>
 
 `Specify a charset for Upid data by setting threefive.upids.charset` [`issue #55`](https://github.com/futzu/scte35-threefive/issues/55)
