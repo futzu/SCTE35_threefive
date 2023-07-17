@@ -403,18 +403,17 @@ descriptor_map = {
     2: SegmentationDescriptor,
     3: TimeDescriptor,
     4: AudioDescriptor,
+    
 }
 
 
 def splice_descriptor(bites):
     """
-    splice_descriptor reads the
-    descriptor tag and decodes and
-    returns an instance self._descriptor_map[tag]
+    replaced splice_descriptor
     """
     tag = bites[0]
     if tag not in descriptor_map:
-        return False
+        return SpliceDescriptor(bites)
     spliced = descriptor_map[tag](bites)
     spliced.decode()
     return spliced
