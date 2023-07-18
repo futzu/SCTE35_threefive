@@ -1,7 +1,7 @@
- 🥇 threefive is the most advanced SCTE-35 decoder/encoder allowed by law.
+ 🥇 threefive is the most advanced SCTE-35 decoder/encoder. Ever.
  ---
  
-Latest Version is `2.3.97` 
+Latest Version is `2.3.99` 
 
  <details><summary>Installation and Getting Started</summary>
 
@@ -502,19 +502,16 @@ True
  Powered by threefive
 ---
 
+  * [myvideeotools.com](https://myvideotools.com/scte35parser)  _hey myvideotools, update your threefive_
   * [POIS Server](https://github.com/scunning1987/pois_reference_server) is Super Cool.
-  
-
+  * [bpkio-cli](https://pypi.org/project/bpkio-cli/): A command line interface to the broadpeak.io APIs. 
   * [x9k3](https://github.com/futzu/x9k3): SCTE-35 HLS Segmenter and Cue Inserter.
       * [amt-play ](https://github.com/vivoh-inc/amt-play) uses x9k3.
-
   * [m3ufu](https://github.com/futzu/m3ufu): SCTE-35 m3u8 Parser.
-
   * [six2scte35](https://github.com/futzu/six2scte35): ffmpeg changes SCTE-35 stream type to 0x06 bin data, six2scte35 changes it back.
-
   * [SuperKabuki](https://github.com/futzu/SuperKabuki): SCTE-35 Packet Injection.
+  * [showcues](https://github.com/futzu/showcues) m3u8 SCTE-35 parser.
   
-  * [bpkio-cli](https://pypi.org/project/bpkio-cli/): A command line interface to the broadpeak.io APIs. 
 
  threefive | more
 ---
