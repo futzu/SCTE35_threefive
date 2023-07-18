@@ -608,7 +608,7 @@ a@debian:~/clean/scte35-threefive$ pypy3 mdsn.py
  Powered by threefive
 ---
 
-  * [myvideeotools.com](https://myvideotools.com/scte35parser)  _hey myvideotools, update your threefive._
+  * [myvideeotools.com](https://myvideotools.com/scte35parser) online SCTE-35 Cue parser. Powered by threefive. 
   * [POIS Server](https://github.com/scunning1987/pois_reference_server) is Super Cool.
   * [bpkio-cli](https://pypi.org/project/bpkio-cli/): A command line interface to the broadpeak.io APIs. 
   * [x9k3](https://github.com/futzu/x9k3): SCTE-35 HLS Segmenter and Cue Inserter.
