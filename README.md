@@ -497,7 +497,110 @@ True
 
 </details>
 
+<details> <summary> Parse Custom Splice Descriptors</summary>
 
+
+1.   Subclass `threefive.descriptors.SpliceDescriptor`
+2. Add `self.private_data` to` __init__`
+3. Add a `decode` method 
+4. Add it to `threefive.descriptors.descriptor_map` tag:Class  `112: MDSNDescriptor`
+```py3
+import threefive
+
+class MDSNDescriptor(threefive.descriptors.SpliceDescriptor):
+    """
+    MDSNDescriptor
+    """
+    def __init__(self, bites=None):
+        super().__init__(bites)
+        self.name = "MDSN Descriptor"
+        self.private_data=None
+
+    def decode(self):
+        self.private_data="".join(list(self.bites[: self.descriptor_length -4].decode()))
+
+
+if __name__ == '__main__':
+    threefive.descriptors.descriptor_map[112]=MDSNDescriptor 
+
+    cue = threefive.Cue('/DBlAAAAAAAAAP/wBQb+GVJTDABPcAZNRFNOQzUCRUNVRUkAAKTff8MAACky4A8xdXJuOnV1aWQ6QnJlYWstQjAwMjA4NTU2ODlfMDAxMi0wNy0xMC1YMDExMjUxNjEyNDAAAPkSB7E=')
+    cue.decode()
+    cue.show()
+
+```
+
+
+```json
+a@debian:~/clean/scte35-threefive$ pypy3 mdsn.py 
+{
+    "info_section": {
+        "table_id": "0xfc",
+        "section_syntax_indicator": false,
+        "private": false,
+        "sap_type": "0x3",
+        "sap_details": "No Sap Type",
+        "section_length": 101,
+        "protocol_version": 0,
+        "encrypted_packet": false,
+        "encryption_algorithm": 0,
+        "pts_adjustment_ticks": 0,
+        "pts_adjustment": 0.0,
+        "cw_index": "0x0",
+        "tier": "0xfff",
+        "splice_command_length": 5,
+        "splice_command_type": 6,
+        "descriptor_loop_length": 79,
+        "crc": "0xf91207b1"
+    },
+    "command": {
+        "command_length": 5,
+        "command_type": 6,
+        "name": "Time Signal",
+        "time_specified_flag": true,
+        "pts_time": 4720.284578,
+        "pts_time_ticks": 424825612
+    },
+    "descriptors": [
+        {
+            "tag": 112,
+            "descriptor_length": 6,
+            "name": "MDSN Descriptor",   # <---- Custom Descriptor parsed. 
+            "identifier": "MDSN",
+            "private_data": "C5"
+        },
+        {
+            "tag": 2,
+            "descriptor_length": 69,
+            "name": "Segmentation Descriptor",
+            "identifier": "CUEI",
+            "components": [],
+            "segmentation_event_id": "0xa4df",
+            "segmentation_event_cancel_indicator": false,
+            "program_segmentation_flag": true,
+            "segmentation_duration_flag": true,
+            "delivery_not_restricted_flag": false,
+            "web_delivery_allowed_flag": false,
+            "no_regional_blackout_flag": false,
+            "archive_allowed_flag": false,
+            "device_restrictions": "No Restrictions",
+            "segmentation_duration": 30.0,
+            "segmentation_duration_ticks": 2700000,
+            "segmentation_message": "Provider Advertisement Start",
+            "segmentation_upid_type": 15,
+            "segmentation_upid_type_name": "URI",
+            "segmentation_upid_length": 49,
+            "segmentation_upid": "urn:uuid:Break-B0020855689_0012-07-10-X0112516124",
+            "segmentation_type_id": 48,
+            "segment_num": 0,
+            "segments_expected": 0
+        }
+    ]
+}
+
+```
+
+
+</details>
 
  Powered by threefive
 ---
