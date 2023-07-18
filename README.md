@@ -4,7 +4,7 @@
 Latest Version is `2.3.99` 
 
 
-[__threefive/go__ is now __cuei__](https://github.comfutzu/cuei)
+[__threefive/go__ is now __cuei__](https://github.com/futzu/cuei)
 
  <details><summary>Installation and Getting Started</summary>
 
