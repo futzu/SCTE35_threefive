@@ -49,7 +49,7 @@ def mk_time_signal(pts=None):
 
 def mk_splice_insert(event_id, pts=None, duration=None, out=False):
     """
-    mk_cue returns a Cue with a Splice Insert.
+    mk_splice_insert returns a Cue with a Splice Insert.
 
     The args set the SpliceInsert vars.
 
@@ -93,11 +93,10 @@ def mk_splice_insert(event_id, pts=None, duration=None, out=False):
     sin.avail_expected = 0
     sin.splice_immediate_flag = True
     sin.time_specified_flag = False
-    sin.program_splice_flag = False
+    sin.program_splice_flag = True
 
     # pts = None for Splice Immediate
     if pts:
-        sin.program_splice_flag = True
         sin.splice_immediate_flag = False
         sin.time_specified_flag = True
         sin.pts_time = float(pts)
