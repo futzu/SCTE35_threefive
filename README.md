@@ -630,4 +630,3 @@ a@debian:~/clean/scte35-threefive$ pypy3 mdsn.py
 
 
  ![image](https://github.com/futzu/scte35-threefive/assets/52701496/19af391d-095b-42fc-944a-c783dc9a2cce)
- _run sid, it keeps life interesting._
