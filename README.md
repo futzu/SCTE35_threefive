@@ -626,7 +626,11 @@ a@debian:~/clean/scte35-threefive$ pypy3 mdsn.py
 
   * [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) and SCTE35 and Stream Type 0x6 bin data.
 
-  * [Issues and Bugs and Feature Requests](https://github.com/futzu/scte35-threefive/issues) *No forms man, just open an issue and tell me what you need. It needs to be a threefive related issue or "what is the meaning of life?" type of question.*
+  * [Issues and Bugs and Feature Requests](https://github.com/futzu/scte35-threefive/issues) No forms man, just open an issue and tell me what you need. It needs to be a **threefive related issue** or a __"What is the meaning of life and stuff?"__ type of question.
+
+---
+
+
 
 
  ![image](https://github.com/futzu/scte35-threefive/assets/52701496/19af391d-095b-42fc-944a-c783dc9a2cce)
