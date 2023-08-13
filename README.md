@@ -1,8 +1,13 @@
- 🥇 threefive is the most advanced SCTE-35 decoder/encoder. Ever.
- ---
- 
-Latest Version is `2.3.99` 
+ 🥇 threefive is the most advanced SCTE-35 decoder/encoder on the planet. 
+ If you find a better SCTE-35 tool, you should use it.
+ --- 
+Latest Version is `2.3.99`
 
+- [x] `Decodes` SCTE-35.
+- [x] `Encodes` SCTE-35.
+- [x] Parses SCTE-35 from `Base64`, `Bytes`, `Hex`, `Integers`, and `MPEGTS` Streams.
+- [x] Parses  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
+- [x] Parses SCTE-35 from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
 [__threefive/go__ is now __cuei__](https://github.com/futzu/cuei)
 
