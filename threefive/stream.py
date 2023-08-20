@@ -147,10 +147,9 @@ class Stream:
         strm.decode()
 
         """
-        if isinstance(tsdata, str):
-            self._tsdata = reader(tsdata)
-        else:
-            self._tsdata = tsdata
+        self._tsdata = None
+        self.tsdata=tsdata
+      #  self.load(tsdata)
         self.show_null = show_null
         self.start = {}
         self.info = None
@@ -162,12 +161,22 @@ class Stream:
     def __repr__(self):
         return str(self.__dict__)
 
+    def load(self,tsdata=None):
+        if not tsdata:
+            tsdata = self.tsdata
+        if isinstance(tsdata, str):
+            self._tsdata = reader(tsdata)
+        else:
+            self._tsdata = tsdata
+
+
     def _find_start(self):
         """
         _find_start locates the first SYNC_BYTE
         parses 1 packet and returns a iterator
         of packets
         """
+        self.load()
         while self._tsdata:
             one = self._tsdata.read(1)
             if not one:
@@ -242,6 +251,7 @@ class Stream:
         Super Fast with pypy3.
         """
         num_pkts = 1000
+        self.load()
         for chunk in self.iter_pkts(num_pkts):
             _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
             del _
@@ -289,6 +299,7 @@ class Stream:
         displays streams that will be
         parsed for SCTE-35.
         """
+        self.load()
         self.info = True
         for pkt in self._find_start():
             self._parse_info(pkt)
