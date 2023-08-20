@@ -34,6 +34,7 @@ class SpliceDescriptor(SCTE35Base):
         self.parse_id()
         self.provider_avail_id = None
         self.components = None
+        self.private_data = None
 
     def parse_tag_and_len(self):
         """
@@ -56,6 +57,7 @@ class SpliceDescriptor(SCTE35Base):
             #      if self.identifier != "CUEI":
             #          raise Exception('Identifier Is Not "CUEI"')
             self.bites = self.bites[4:]
+
 
     def encode(self, nbin=None):
         """
@@ -403,7 +405,7 @@ descriptor_map = {
     2: SegmentationDescriptor,
     3: TimeDescriptor,
     4: AudioDescriptor,
-    
+
 }
 
 
@@ -413,7 +415,7 @@ def splice_descriptor(bites):
     """
     tag = bites[0]
     if tag not in descriptor_map:
-        return SpliceDescriptor(bites)
+        return  SpliceDescriptor(bites)
     spliced = descriptor_map[tag](bites)
     spliced.decode()
     return spliced
