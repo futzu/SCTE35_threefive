@@ -9,7 +9,10 @@ Latest Version is `2.3.99`
 - [x] Parses  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 - [x] Parses SCTE-35 from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
-[__threefive/go__ is now __cuei__](https://github.com/futzu/cuei)
+[threefive/go is now cuei](https://github.com/futzu/cuei) <br/>
+
+[The threefive.Segment class for parsing HLS segments](https://github.com/futzu/scte35-threefive/segment.md)
+
 
  <details><summary>Installation and Getting Started</summary>
 
