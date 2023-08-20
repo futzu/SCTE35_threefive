@@ -31,11 +31,14 @@ class Segment(Stream):
         >>>> uri = "https://example.com/1.ts"
         >>>> seg = Segment(uri)
         >>>> seg.decode()
-        >>>> [cue.encode() for cue in cues]
+        >>>> [cue.encode() for cue in seg.cues]
         ['/DARAAAAAAAAAP/wAAAAAHpPv/8=',
         '/DAvAAAAAAAAAP/wFAUAAAKWf+//4WoauH4BTFYgAAEAAAAKAAhDVUVJAAAAAOv1oqc=']
 
-        # For aes encrypted files
+
+    AES Encryption Example:
+
+        from threefive import Segment
 
         >>>> key = "https://example.com/aes.key"
         >>>> IV=0x998C575D24F514AEC84EDC5CABCCDB81
@@ -43,7 +46,7 @@ class Segment(Stream):
 
         >>>> seg = Segment(uri,key_uri=key, iv=IV)
         >>>> seg.decode()
-        >>>> {cue.packet_data.pcr:cue.encode() for cue in seg.cues}
+        >>>> {cue.packet_data.pts:cue.encode() for cue in seg.cues}
 
        { 89718.451333: '/DARAAAAAAAAAP/wAAAAAHpPv/8=',
        89730.281789: '/DAvAAAAAAAAAP/wFAUAAAKWf+//4WoauH4BTFYgAAEAAAAKAAhDVUVJAAAAAOv1oqc='}
@@ -57,6 +60,8 @@ class Segment(Stream):
         self.iv = None
         self.cues = []
         self.pts_start = None
+        self.pts_last = None
+        self.shush = False
         self.tmp = None
         if AES:
             if iv:
@@ -87,12 +92,19 @@ class Segment(Stream):
             pyaes.decrypt_stream(mode, infile, outfile)
         self.seg_uri = self.tmp
 
-    def add_cue(self, cue):
+    def _add_cue(self, cue):
         """
-        add_cue is called  by a segment instance
+        _add_cue is called  by a segment instance
         to collect SCTE35 cues.
         """
         self.cues.append(cue)
+
+    def shushed(self):
+        """
+        shushed sets self.shush to true to suppress
+        printing SCTE-35 Cue data.
+        """
+        self.shush = True
 
     def show_cue(self, cue):
         """
@@ -100,15 +112,17 @@ class Segment(Stream):
         and calls add_cue to append the cue to
         the Segment,cues list.
         """
-        cue.show()
-        self.add_cue(cue)
+        if not self.shush:
+            cue.show()
+        self._add_cue(cue)
 
-    def decode(self, func=None):
+    def decode(self,func=None):
         """
         decode a mpegts segment.
         """
-        super().decode(func=self.show_cue)
-        # self.pts_start
 
+        super().decode_fu(func=self.show_cue)
+        self.pts_start  = self.as_90k(self.start.popitem()[1])
+        self.pts_last = self.as_90k(list(self.maps.prgm_pts.items())[0][1])
         if self.tmp:
             os.unlink(self.tmp)
