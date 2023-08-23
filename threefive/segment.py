@@ -122,7 +122,13 @@ class Segment(Stream):
         """
 
         super().decode_fu(func=self.show_cue)
-        self.pts_start  = self.as_90k(self.start.popitem()[1])
-        self.pts_last = self.as_90k(list(self.maps.prgm_pts.items())[0][1])
+        try:
+            self.pts_start  = self.as_90k(self.start.popitem()[1])
+        except:
+            pass
+        try:
+            self.pts_last = self.as_90k(list(self.maps.prgm_pts.items())[0][1])
+        except:
+            pass
         if self.tmp:
             os.unlink(self.tmp)
