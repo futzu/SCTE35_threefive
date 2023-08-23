@@ -1,6 +1,6 @@
  🥇 threefive is the best and most advanced SCTE-35 tool on the planet. 
  --- 
-Latest Version is `2.4.3`
+Latest Version is `2.4.5`
 
 - [x] `Decodes` SCTE-35.
 - [x] `Encodes` SCTE-35.
