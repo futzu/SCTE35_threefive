@@ -23,7 +23,7 @@ streamtype_map = {
     0x81 : "MPEG-2 Audio",
     0x82: "AC3 Audio ",
     0x83 : "AAC Audio",
-    0x84 : "AAC HE v2 Audio"
+    0x84 : "AAC HE v2 Audio",
     0x86: "SCTE35 Data",
     0xC0: "Unknown",
     
