@@ -10,15 +10,23 @@ from .packetdata import PacketData
 
 
 streamtype_map = {
-    "0x02": "MP2 Video",
-    "0x03": "MP2 Audio",
-    "0x04": "MP2 Audio",
-    "0x06": "PES Packets/Private Data",
-    "0x0f": "AAC Audio",
-    "0x1b": "AVC Video",
-    "0x81": "AC3 Audio ",
-    "0x86": "SCTE35 Data",
-    "0xc0": "Unknown",
+    0x00: "MPEG-2 Video",
+    0x01 : "H.264 Video",
+    0x02: "MP2 Video",
+    0x03: "MP2 Audio",
+    0x04: "MP2 Audio",
+    0x06: "PES Packets/Private Data",
+    0x0F: "AAC Audio",
+    0x15: "ID3 Timed Meta Data",
+    0x1B: "AVC Video",
+    0x80 : "MPEG-1 Audio",
+    0x81 : "MPEG-2 Audio",
+    0x82: "AC3 Audio ",
+    0x83 : "AAC Audio",
+    0x84 : "AAC HE v2 Audio"
+    0x86: "SCTE35 Data",
+    0xC0: "Unknown",
+    
 }
 
 
@@ -74,13 +82,12 @@ class ProgramInfo:
         # sorted_dict = {k:my_dict[k] for k in sorted(my_dict)})
         keys = sorted(self.streams)
         for k in keys:
-            vee = self.streams[k]
+            vee = int(self.streams[k],base=16)
             if vee in streamtype_map:
-                vee = f"{vee} {streamtype_map[vee]}"
+                vee = f"{hex(vee)} {streamtype_map[vee]}"
             else:
                 vee = f"{vee} Unknown"
             print2(f"\t\tPid: {k}[{hex(k)}]\tType: {vee}")
-        print2()
 
 
 class Pids:
@@ -290,12 +297,15 @@ class Stream:
         parsed for SCTE-35.
         """
         self.info = True
-        for pkt in self._find_start():
+        data = self._tsdata.read(188*5000)
+        while data:
+            pkt =data[:188]
+            data = data[188:]
             self._parse_info(pkt)
         sopro = sorted(self.maps.prgm.items())
         for k, vee in sopro:
             if len(vee.streams.items()) > 0:
-                print2(f"Program: {k}")
+                print2(f"\nProgram: {k}")
                 vee.show()
         return True
 
