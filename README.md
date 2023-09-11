@@ -1,20 +1,27 @@
- 🥇 threefive is the most advanced SCTE-35 tool, ever.
+#  threefive is the most advanced SCTE-35 tool, ever 
  <br><br> SCTE-35 Encoder and Decoder Python3 lib.
  --- 
 Latest Version is `2.4.9`
 
-- [x] `Decodes` SCTE-35.
-- [x] `Encodes` SCTE-35.
-- [x] Parses SCTE-35 from `Base64`, `Bytes`, `Hex`, `Integers`, and `MPEGTS` Streams.
-- [x] Parses  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
-- [x] Parses SCTE-35 from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
+ ⚡ `Decodes` SCTE-35.
+<br>⚡ `Encodes` SCTE-35.
+<br>⚡ Parses SCTE-35 from `Base64`, `Bytes`, `Hex`, `Integers`, and `MPEGTS` Streams.
+<br>⚡ Parses  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
+<br>⚡ Parses SCTE-35 from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
 [threefive/go is now cuei](https://github.com/futzu/cuei) <br/>
 
 [The threefive.Segment class for parsing HLS segments](https://github.com/futzu/scte35-threefive/segment.md)
 
 
- <details><summary>Installation and Getting Started</summary>
+
+
+<details><summary>Supported Platforms</summary>
+ 
+### threefive is expected to work on any platform that runs python3.6 and up.
+### There are no known platform specific issues. 
+  
+</details>
 
 <details><summary>Requirements</summary>
 
@@ -22,7 +29,6 @@ Latest Version is `2.4.9`
   * [pypy3](https://pypy.org) or python 3.6+ (pypy3 runs threefive 2-3 times faster than python 3.10)
   * [new_reader](https://github.com/futzu/new_reader)
   *  __pyaes__
-</details>
 
 
 * [Install threefive](#install)
@@ -616,32 +622,22 @@ a@debian:~/clean/scte35-threefive$ pypy3 mdsn.py
  Powered by threefive
 ---
 
-  * [myvideeotools.com](https://myvideotools.com/scte35parser) online SCTE-35 Cue parser. Powered by threefive. 
-  * [POIS Server](https://github.com/scunning1987/pois_reference_server) is Super Cool.
-  * [bpkio-cli](https://pypi.org/project/bpkio-cli/): A command line interface to the broadpeak.io APIs. 
-  * [x9k3](https://github.com/futzu/x9k3): SCTE-35 HLS Segmenter and Cue Inserter.
-      * [amt-play ](https://github.com/vivoh-inc/amt-play) uses x9k3.
-  * [m3ufu](https://github.com/futzu/m3ufu): SCTE-35 m3u8 Parser.
-  * [six2scte35](https://github.com/futzu/six2scte35): ffmpeg changes SCTE-35 stream type to 0x06 bin data, six2scte35 changes it back.
-  * [SuperKabuki](https://github.com/futzu/SuperKabuki): SCTE-35 Packet Injection.
-  * [showcues](https://github.com/futzu/showcues) m3u8 SCTE-35 parser.
+<br>⚡ [myvideeotools.com](https://myvideotools.com/scte35parser) online SCTE-35 Cue parser. Powered by threefive. 
+<br>⚡ [POIS Server](https://github.com/scunning1987/pois_reference_server) is Super Cool.
+<br>⚡ [bpkio-cli](https://pypi.org/project/bpkio-cli/): A command line interface to the broadpeak.io APIs. 
+<br>⚡ [x9k3](https://github.com/futzu/x9k3): SCTE-35 HLS Segmenter and Cue Inserter.
+      <br>⚡ [amt-play ](https://github.com/vivoh-inc/amt-play) uses x9k3.
+<br>⚡ [m3ufu](https://github.com/futzu/m3ufu): SCTE-35 m3u8 Parser.
+<br>⚡ [six2scte35](https://github.com/futzu/six2scte35): ffmpeg changes SCTE-35 stream type to 0x06 bin data, six2scte35 changes it back.
+<br>⚡ [SuperKabuki](https://github.com/futzu/SuperKabuki): SCTE-35 Packet Injection.
+<br>⚡ [showcues](https://github.com/futzu/showcues) m3u8 SCTE-35 parser.
   
-
  threefive | more
 ---
+<br>⚡ [Diagram](https://github.com/futzu/threefive/blob/master/cue.md) of a threefive SCTE-35 Cue.
+<br>⚡ [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) and SCTE35 and Stream Type 0x6 bin data.
+<br>⚡ [Issues and Bugs and Feature Requests](https://github.com/futzu/scte35-threefive/issues) No forms man, just open an issue and tell me what you need. <br><i>(It needs to be  threefive related or a "What is the meaning of life and stuff?" type of question)</i>
 
-  * [Diagram](https://github.com/futzu/threefive/blob/master/cue.md) of a threefive SCTE-35 Cue.
 
-  * [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) and SCTE35 and Stream Type 0x6 bin data.
-
-  * [Issues and Bugs and Feature Requests](https://github.com/futzu/scte35-threefive/issues) No forms man, just open an issue and tell me what you need. <br>It needs to be  **threefive related** or a __"What is the meaning of life and stuff?"__ type of question.
-
-___
-
-* On the Servers I run OpenBSD. 
-![image](https://github.com/futzu/scte35-threefive/assets/52701496/eae600a1-1fb4-4329-8203-cdad54cd56f1)
-
-* On my laptop, I run Debian Sid. 
-![image](https://github.com/futzu/scte35-threefive/assets/52701496/be42c6f9-cb1d-497c-9a95-3da8fa7446ac)
 
 
