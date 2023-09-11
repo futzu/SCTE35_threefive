@@ -3,15 +3,15 @@
  --- 
 Latest Version is `2.4.9`
 
- ⚡ `Decodes` SCTE-35.
-<br>⚡ `Encodes` SCTE-35.
-<br>⚡ Parses SCTE-35 from `Base64`, `Bytes`, `Hex`, `Integers`, and `MPEGTS` Streams.
-<br>⚡ Parses  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
-<br>⚡ Parses SCTE-35 from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
+ ⚡ `Decodes` __SCTE-35__.
+<br>⚡ `Encodes` __SCTE-35__.
+<br>⚡ `Parses` __SCTE-35__ from `Base64`, `Bytes`, `Hex`, `Integers`, and `MPEGTS` Streams.
+<br>⚡ `Parses` __SCTE-36__ from `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
+<br>⚡ `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
-[threefive/go is now cuei](https://github.com/futzu/cuei) <br/>
+[`threefive/go` is now `cuei`](https://github.com/futzu/cuei) <br/>
 
-[The threefive.Segment class for parsing HLS segments](https://github.com/futzu/scte35-threefive/segment.md)
+[The `threefive.Segment` class for parsing `HLS` segments](https://github.com/futzu/scte35-threefive/segment.md)
 
 
 
