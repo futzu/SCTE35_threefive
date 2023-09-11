@@ -1,259 +1,258 @@
 # threefive Cyclomatic Complexity
-| Filename | Name | Type | Start:End Line | Complexity | Clasification |
-| -------- | ---- | ---- | -------------- | ---------- | ------------- |
-| ../scte35-threefive/threefive/base.py | kv_clean.b2l | F | 66:75 | 7 | B |
-| ../scte35-threefive/threefive/base.py | SCTE35Base._chk_var | M | 95:108 | 3 | A |
-| ../scte35-threefive/threefive/base.py | SCTE35Base.load | M | 85:93 | 3 | A |
-| ../scte35-threefive/threefive/base.py | SCTE35Base.kv_clean | M | 61:77 | 3 | A |
-| ../scte35-threefive/threefive/base.py | SCTE35Base._chk_nbin | M | 80:83 | 2 | A |
-| ../scte35-threefive/threefive/base.py | SCTE35Base.as_hms | M | 35:46 | 2 | A |
-| ../scte35-threefive/threefive/base.py | SCTE35Base | C | 9:108 | 2 | A |
-| ../scte35-threefive/threefive/base.py | SCTE35Base.get_json | M | 54:59 | 1 | A |
-| ../scte35-threefive/threefive/base.py | SCTE35Base.get | M | 48:52 | 1 | A |
-| ../scte35-threefive/threefive/base.py | SCTE35Base.as_ticks | M | 28:32 | 1 | A |
-| ../scte35-threefive/threefive/base.py | SCTE35Base.as_90k | M | 21:25 | 1 | A |
-| ../scte35-threefive/threefive/base.py | SCTE35Base.__repr__ | M | 17:18 | 1 | A |
-| ../scte35-threefive/threefive/bitn.py | NBin.zeroed | M | 186:192 | 2 | A |
-| ../scte35-threefive/threefive/bitn.py | NBin.reserve | M | 169:178 | 2 | A |
-| ../scte35-threefive/threefive/bitn.py | NBin.add_int | M | 132:139 | 2 | A |
-| ../scte35-threefive/threefive/bitn.py | NBin | C | 98:192 | 2 | A |
-| ../scte35-threefive/threefive/bitn.py | BitBin.as_charset | M | 48:60 | 2 | A |
-| ../scte35-threefive/threefive/bitn.py | BitBin.as_int | M | 30:39 | 2 | A |
-| ../scte35-threefive/threefive/bitn.py | BitBin | C | 9:94 | 2 | A |
-| ../scte35-threefive/threefive/bitn.py | NBin.forward | M | 180:184 | 1 | A |
-| ../scte35-threefive/threefive/bitn.py | NBin.add_flag | M | 160:167 | 1 | A |
-| ../scte35-threefive/threefive/bitn.py | NBin.add_hex | M | 150:158 | 1 | A |
-| ../scte35-threefive/threefive/bitn.py | NBin.add_90k | M | 141:148 | 1 | A |
-| ../scte35-threefive/threefive/bitn.py | NBin.add_bites | M | 122:127 | 1 | A |
-| ../scte35-threefive/threefive/bitn.py | NBin.nbits2bites | M | 111:120 | 1 | A |
-| ../scte35-threefive/threefive/bitn.py | NBin.__init__ | M | 106:109 | 1 | A |
-| ../scte35-threefive/threefive/bitn.py | BitBin.negative_shift | M | 85:94 | 1 | A |
-| ../scte35-threefive/threefive/bitn.py | BitBin.forward | M | 78:83 | 1 | A |
-| ../scte35-threefive/threefive/bitn.py | BitBin.as_flag | M | 72:76 | 1 | A |
-| ../scte35-threefive/threefive/bitn.py | BitBin.as_bytes | M | 63:70 | 1 | A |
-| ../scte35-threefive/threefive/bitn.py | BitBin.as_hex | M | 41:46 | 1 | A |
-| ../scte35-threefive/threefive/bitn.py | BitBin.as_90k | M | 22:28 | 1 | A |
-| ../scte35-threefive/threefive/bitn.py | BitBin.__init__ | M | 17:20 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | TimeSignal._encode_splice_time | M | 140:153 | 6 | B |
-| ../scte35-threefive/threefive/commands.py | SpliceInsert.encode | M | 247:264 | 5 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceInsert.decode | M | 180:198 | 5 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceInsert._encode_break | M | 276:288 | 4 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceSchedule | C | 317:382 | 3 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceSchedule.SpliceEvent.decode | M | 348:361 | 3 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceSchedule.SpliceEvent | C | 322:361 | 3 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceInsert | C | 156:314 | 3 | A |
-| ../scte35-threefive/threefive/commands.py | TimeSignal | C | 95:153 | 3 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceSchedule.decode | M | 372:382 | 2 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceSchedule.SpliceEvent._decode_components | M | 336:345 | 2 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceInsert._encode_components | M | 301:309 | 2 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceInsert._decode_components | M | 211:220 | 2 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceInsert._decode_break | M | 200:209 | 2 | A |
-| ../scte35-threefive/threefive/commands.py | TimeSignal._splice_time | M | 126:138 | 2 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceNull | C | 84:92 | 2 | A |
-| ../scte35-threefive/threefive/commands.py | PrivateCommand | C | 55:81 | 2 | A |
-| ../scte35-threefive/threefive/commands.py | BandwidthReservation | C | 39:50 | 2 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceCommand | C | 8:36 | 2 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceSchedule.__init__ | M | 363:370 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceSchedule.SpliceEvent.__init__ | M | 328:334 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceInsert._encode_unique_avail | M | 311:314 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceInsert._encode_flags | M | 290:299 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceInsert._encode_event | M | 266:274 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceInsert._decode_unique_avail | M | 242:245 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceInsert._decode_flags | M | 232:240 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceInsert._decode_event | M | 222:230 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceInsert.__init__ | M | 161:178 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | TimeSignal.encode | M | 117:124 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | TimeSignal.decode | M | 108:115 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | TimeSignal.__init__ | M | 100:106 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceNull.__init__ | M | 89:92 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | PrivateCommand.encode | M | 75:81 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | PrivateCommand.decode | M | 66:73 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | PrivateCommand.__init__ | M | 60:64 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | BandwidthReservation.decode | M | 49:50 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | BandwidthReservation.__init__ | M | 44:47 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceCommand.encode | M | 31:36 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceCommand._set_len | M | 24:29 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceCommand.decode | M | 19:20 | 1 | A |
-| ../scte35-threefive/threefive/commands.py | SpliceCommand.__init__ | M | 13:17 | 1 | A |
-| ../scte35-threefive/threefive/crc.py | crc32 | F | 31:41 | 2 | A |
-| ../scte35-threefive/threefive/crc.py | _mk_table | F | 25:28 | 2 | A |
-| ../scte35-threefive/threefive/crc.py | _bytecrc | F | 16:22 | 2 | A |
-| ../scte35-threefive/threefive/cue.py | Cue._mk_bits | M | 128:154 | 7 | B |
-| ../scte35-threefive/threefive/cue.py | Cue.load_descriptors | M | 325:344 | 6 | B |
-| ../scte35-threefive/threefive/cue.py | Cue.load_command | M | 307:323 | 5 | A |
-| ../scte35-threefive/threefive/cue.py | Cue.load | M | 275:293 | 5 | A |
-| ../scte35-threefive/threefive/cue.py | Cue.get | M | 92:106 | 4 | A |
-| ../scte35-threefive/threefive/cue.py | Cue._unloop_descriptors | M | 259:273 | 3 | A |
-| ../scte35-threefive/threefive/cue.py | Cue._descriptor_loop | M | 78:90 | 3 | A |
-| ../scte35-threefive/threefive/cue.py | Cue | C | 15:344 | 3 | A |
-| ../scte35-threefive/threefive/cue.py | Cue.load_info_section | M | 295:305 | 2 | A |
-| ../scte35-threefive/threefive/cue.py | Cue.encode | M | 210:235 | 2 | A |
-| ../scte35-threefive/threefive/cue.py | Cue._set_splice_command | M | 179:192 | 2 | A |
-| ../scte35-threefive/threefive/cue.py | Cue.fix_bad_b64 | M | 123:126 | 2 | A |
-| ../scte35-threefive/threefive/cue.py | Cue.get_descriptors | M | 108:113 | 2 | A |
-| ../scte35-threefive/threefive/cue.py | Cue.decode | M | 63:76 | 2 | A |
-| ../scte35-threefive/threefive/cue.py | Cue.__init__ | M | 45:56 | 2 | A |
-| ../scte35-threefive/threefive/cue.py | Cue._encode_crc | M | 251:257 | 1 | A |
-| ../scte35-threefive/threefive/cue.py | Cue.encode_as_hex | M | 244:249 | 1 | A |
-| ../scte35-threefive/threefive/cue.py | Cue.encode_as_int | M | 237:242 | 1 | A |
-| ../scte35-threefive/threefive/cue.py | Cue.to_stderr | M | 200:206 | 1 | A |
-| ../scte35-threefive/threefive/cue.py | Cue.show | M | 194:198 | 1 | A |
-| ../scte35-threefive/threefive/cue.py | Cue.mk_info_section | M | 168:177 | 1 | A |
-| ../scte35-threefive/threefive/cue.py | Cue._mk_descriptors | M | 156:166 | 1 | A |
-| ../scte35-threefive/threefive/cue.py | Cue.get_json | M | 115:120 | 1 | A |
-| ../scte35-threefive/threefive/cue.py | Cue.__repr__ | M | 58:59 | 1 | A |
-| ../scte35-threefive/threefive/decode.py | decode | F | 43:83 | 3 | A |
-| ../scte35-threefive/threefive/decode.py | _read_stuff | F | 27:40 | 3 | A |
-| ../scte35-threefive/threefive/descriptors.py | SegmentationDescriptor._encode_segmentation | M | 371:391 | 4 | A |
-| ../scte35-threefive/threefive/descriptors.py | SegmentationDescriptor.encode | M | 333:346 | 3 | A |
-| ../scte35-threefive/threefive/descriptors.py | SegmentationDescriptor._decode_segments | M | 318:331 | 3 | A |
-| ../scte35-threefive/threefive/descriptors.py | SegmentationDescriptor._decode_segmentation | M | 304:316 | 3 | A |
-| ../scte35-threefive/threefive/descriptors.py | SegmentationDescriptor.decode | M | 268:280 | 3 | A |
-| ../scte35-threefive/threefive/descriptors.py | SegmentationDescriptor | C | 235:398 | 3 | A |
-| ../scte35-threefive/threefive/descriptors.py | k_by_v | F | 10:17 | 3 | A |
-| ../scte35-threefive/threefive/descriptors.py | SegmentationDescriptor._encode_segments | M | 393:398 | 2 | A |
-| ../scte35-threefive/threefive/descriptors.py | SegmentationDescriptor._encode_flags | M | 358:369 | 2 | A |
-| ../scte35-threefive/threefive/descriptors.py | SegmentationDescriptor._encode_components | M | 348:356 | 2 | A |
-| ../scte35-threefive/threefive/descriptors.py | SegmentationDescriptor._decode_components | M | 294:302 | 2 | A |
-| ../scte35-threefive/threefive/descriptors.py | SegmentationDescriptor._decode_flags | M | 282:292 | 2 | A |
-| ../scte35-threefive/threefive/descriptors.py | TimeDescriptor | C | 202:232 | 2 | A |
-| ../scte35-threefive/threefive/descriptors.py | DtmfDescriptor.encode | M | 187:199 | 2 | A |
-| ../scte35-threefive/threefive/descriptors.py | DtmfDescriptor | C | 166:199 | 2 | A |
-| ../scte35-threefive/threefive/descriptors.py | AvailDescriptor | C | 140:163 | 2 | A |
-| ../scte35-threefive/threefive/descriptors.py | AudioDescriptor.encode | M | 125:137 | 2 | A |
-| ../scte35-threefive/threefive/descriptors.py | AudioDescriptor.decode | M | 112:123 | 2 | A |
-| ../scte35-threefive/threefive/descriptors.py | AudioDescriptor | C | 79:137 | 2 | A |
-| ../scte35-threefive/threefive/descriptors.py | SpliceDescriptor.parse_id | M | 50:59 | 2 | A |
-| ../scte35-threefive/threefive/descriptors.py | SpliceDescriptor.parse_tag_and_len | M | 39:48 | 2 | A |
-| ../scte35-threefive/threefive/descriptors.py | SpliceDescriptor | C | 20:76 | 2 | A |
-| ../scte35-threefive/threefive/descriptors.py | splice_descriptor | F | 412:421 | 2 | A |
-| ../scte35-threefive/threefive/descriptors.py | SegmentationDescriptor.__init__ | M | 240:266 | 1 | A |
-| ../scte35-threefive/threefive/descriptors.py | TimeDescriptor.encode | M | 224:232 | 1 | A |
-| ../scte35-threefive/threefive/descriptors.py | TimeDescriptor.decode | M | 215:222 | 1 | A |
-| ../scte35-threefive/threefive/descriptors.py | TimeDescriptor.__init__ | M | 207:213 | 1 | A |
-| ../scte35-threefive/threefive/descriptors.py | DtmfDescriptor.decode | M | 178:185 | 1 | A |
-| ../scte35-threefive/threefive/descriptors.py | DtmfDescriptor.__init__ | M | 171:176 | 1 | A |
-| ../scte35-threefive/threefive/descriptors.py | AvailDescriptor.encode | M | 157:163 | 1 | A |
-| ../scte35-threefive/threefive/descriptors.py | AvailDescriptor.decode | M | 150:155 | 1 | A |
-| ../scte35-threefive/threefive/descriptors.py | AvailDescriptor.__init__ | M | 145:148 | 1 | A |
-| ../scte35-threefive/threefive/descriptors.py | AudioDescriptor._encode_comp | M | 105:110 | 1 | A |
-| ../scte35-threefive/threefive/descriptors.py | AudioDescriptor._decode_comp | M | 91:102 | 1 | A |
-| ../scte35-threefive/threefive/descriptors.py | AudioDescriptor.__init__ | M | 84:89 | 1 | A |
-| ../scte35-threefive/threefive/descriptors.py | SpliceDescriptor._encode_id | M | 70:76 | 1 | A |
-| ../scte35-threefive/threefive/descriptors.py | SpliceDescriptor.encode | M | 62:68 | 1 | A |
-| ../scte35-threefive/threefive/descriptors.py | SpliceDescriptor.__init__ | M | 27:37 | 1 | A |
-| ../scte35-threefive/threefive/encode.py | mk_splice_insert | F | 50:115 | 3 | A |
-| ../scte35-threefive/threefive/encode.py | mk_time_signal | F | 25:47 | 2 | A |
-| ../scte35-threefive/threefive/encode.py | mk_splice_null | F | 13:22 | 1 | A |
-| ../scte35-threefive/threefive/packetdata.py | PacketData | C | 8:47 | 3 | A |
-| ../scte35-threefive/threefive/packetdata.py | PacketData.mk_pts | M | 39:47 | 2 | A |
-| ../scte35-threefive/threefive/packetdata.py | PacketData.mk_pcr | M | 29:37 | 2 | A |
-| ../scte35-threefive/threefive/packetdata.py | PacketData._mk_timestamp | M | 24:27 | 2 | A |
-| ../scte35-threefive/threefive/packetdata.py | PacketData.__init__ | M | 15:21 | 1 | A |
-| ../scte35-threefive/threefive/section.py | SpliceInfoSection._encode_splice_command | M | 152:162 | 3 | A |
-| ../scte35-threefive/threefive/section.py | SpliceInfoSection._encode_pts_adjustment | M | 126:134 | 3 | A |
-| ../scte35-threefive/threefive/section.py | SpliceInfoSection._encode_encrypted | M | 114:124 | 3 | A |
-| ../scte35-threefive/threefive/section.py | SpliceInfoSection._encode_tier | M | 144:150 | 2 | A |
-| ../scte35-threefive/threefive/section.py | SpliceInfoSection._encode_cw_index | M | 136:142 | 2 | A |
-| ../scte35-threefive/threefive/section.py | SpliceInfoSection._encode_protocol_version | M | 106:112 | 2 | A |
-| ../scte35-threefive/threefive/section.py | SpliceInfoSection._encode_section_length | M | 98:104 | 2 | A |
-| ../scte35-threefive/threefive/section.py | SpliceInfoSection._encode_sap | M | 89:96 | 2 | A |
-| ../scte35-threefive/threefive/section.py | SpliceInfoSection.decode | M | 43:66 | 2 | A |
-| ../scte35-threefive/threefive/section.py | SpliceInfoSection | C | 17:182 | 2 | A |
-| ../scte35-threefive/threefive/section.py | SpliceInfoSection.encode | M | 164:182 | 1 | A |
-| ../scte35-threefive/threefive/section.py | SpliceInfoSection._encode_private_flag | M | 82:87 | 1 | A |
-| ../scte35-threefive/threefive/section.py | SpliceInfoSection._encode_section_syntax_indicator | M | 75:80 | 1 | A |
-| ../scte35-threefive/threefive/section.py | SpliceInfoSection._encode_table_id | M | 68:73 | 1 | A |
-| ../scte35-threefive/threefive/section.py | SpliceInfoSection.__init__ | M | 23:41 | 1 | A |
-| ../scte35-threefive/threefive/segment.py | Segment.decode | M | 119:134 | 4 | A |
-| ../scte35-threefive/threefive/segment.py | Segment.__init__ | M | 56:72 | 4 | A |
-| ../scte35-threefive/threefive/segment.py | Segment.show_cue | M | 109:117 | 2 | A |
-| ../scte35-threefive/threefive/segment.py | Segment | C | 15:134 | 2 | A |
-| ../scte35-threefive/threefive/segment.py | Segment.shushed | M | 102:107 | 1 | A |
-| ../scte35-threefive/threefive/segment.py | Segment._add_cue | M | 95:100 | 1 | A |
-| ../scte35-threefive/threefive/segment.py | Segment._aes_decrypt | M | 85:93 | 1 | A |
-| ../scte35-threefive/threefive/segment.py | Segment._aes_get_key | M | 81:83 | 1 | A |
-| ../scte35-threefive/threefive/segment.py | Segment._mk_tmp | M | 77:79 | 1 | A |
-| ../scte35-threefive/threefive/segment.py | Segment.__repr__ | M | 74:75 | 1 | A |
-| ../scte35-threefive/threefive/smoketest.py | smoke | F | 33:55 | 4 | A |
-| ../scte35-threefive/threefive/smoketest.py | _decode_test | F | 24:30 | 2 | A |
-| ../scte35-threefive/threefive/stuff.py | print2 | F | 8:12 | 1 | A |
-| ../scte35-threefive/threefive/upids.py | upid_encoder | F | 130:169 | 5 | A |
-| ../scte35-threefive/threefive/upids.py | UpidDecoder.decode | M | 95:127 | 3 | A |
-| ../scte35-threefive/threefive/upids.py | UpidDecoder._decode_eidr | M | 39:48 | 3 | A |
-| ../scte35-threefive/threefive/upids.py | UpidDecoder._decode_umid | M | 81:87 | 2 | A |
-| ../scte35-threefive/threefive/upids.py | UpidDecoder._decode_mid | M | 53:72 | 2 | A |
-| ../scte35-threefive/threefive/upids.py | UpidDecoder | C | 14:127 | 2 | A |
-| ../scte35-threefive/threefive/upids.py | _encode_uri | F | 223:226 | 2 | A |
-| ../scte35-threefive/threefive/upids.py | _encode_umid | F | 217:220 | 2 | A |
-| ../scte35-threefive/threefive/upids.py | _encode_mid | F | 194:202 | 2 | A |
-| ../scte35-threefive/threefive/upids.py | UpidDecoder._decode_no | M | 92:93 | 1 | A |
-| ../scte35-threefive/threefive/upids.py | UpidDecoder._decode_uri | M | 89:90 | 1 | A |
-| ../scte35-threefive/threefive/upids.py | UpidDecoder._decode_mpu | M | 74:79 | 1 | A |
-| ../scte35-threefive/threefive/upids.py | UpidDecoder._decode_isan | M | 50:51 | 1 | A |
-| ../scte35-threefive/threefive/upids.py | UpidDecoder._decode_atsc | M | 29:36 | 1 | A |
-| ../scte35-threefive/threefive/upids.py | UpidDecoder._decode_air_id | M | 26:27 | 1 | A |
-| ../scte35-threefive/threefive/upids.py | UpidDecoder.__init__ | M | 20:24 | 1 | A |
-| ../scte35-threefive/threefive/upids.py | _encode_no | F | 213:214 | 1 | A |
-| ../scte35-threefive/threefive/upids.py | _encode_mpu | F | 206:210 | 1 | A |
-| ../scte35-threefive/threefive/upids.py | _encode_isan | F | 190:191 | 1 | A |
-| ../scte35-threefive/threefive/upids.py | _encode_eidr | F | 184:187 | 1 | A |
-| ../scte35-threefive/threefive/upids.py | _encode_atsc | F | 176:181 | 1 | A |
-| ../scte35-threefive/threefive/upids.py | _encode_air_id | F | 172:173 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._parse_sdt | M | 518:552 | 7 | B |
-| ../scte35-threefive/threefive/stream.py | Stream._parse_scte35 | M | 496:516 | 7 | B |
-| ../scte35-threefive/threefive/stream.py | Stream._parse_pmt | M | 575:600 | 6 | B |
-| ../scte35-threefive/threefive/stream.py | Stream._parse_tables | M | 434:449 | 6 | B |
-| ../scte35-threefive/threefive/stream.py | Stream._parse_pts | M | 404:422 | 5 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._find_start | M | 172:187 | 5 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._parse_pat | M | 554:573 | 4 | A |
-| ../scte35-threefive/threefive/stream.py | Stream.show | M | 294:310 | 4 | A |
-| ../scte35-threefive/threefive/stream.py | Stream.decode_fu | M | 245:256 | 4 | A |
-| ../scte35-threefive/threefive/stream.py | Stream.decode | M | 225:237 | 4 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._parse_cc | M | 392:402 | 3 | A |
-| ../scte35-threefive/threefive/stream.py | Stream.proxy | M | 282:292 | 3 | A |
-| ../scte35-threefive/threefive/stream.py | Stream | C | 130:633 | 3 | A |
-| ../scte35-threefive/threefive/stream.py | ProgramInfo.show | M | 71:90 | 3 | A |
-| ../scte35-threefive/threefive/stream.py | ProgramInfo | C | 57:90 | 3 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._set_scte35_pids | M | 627:633 | 2 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._parse_program_streams | M | 602:615 | 2 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._parse_cue | M | 488:494 | 2 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._section_incomplete | M | 481:486 | 2 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._same_as_last | M | 475:479 | 2 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._chk_partial | M | 470:473 | 2 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._parse | M | 461:468 | 2 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._parse_info | M | 451:459 | 2 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._parse_payload | M | 424:432 | 2 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._split_by_idx | M | 386:390 | 2 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._has_pts | M | 358:361 | 2 | A |
-| ../scte35-threefive/threefive/stream.py | Stream.decode_start_time | M | 312:320 | 2 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._mk_pkts | M | 239:242 | 2 | A |
-| ../scte35-threefive/threefive/stream.py | Stream.pid2pcr | M | 209:217 | 2 | A |
-| ../scte35-threefive/threefive/stream.py | Stream.pid2pts | M | 199:207 | 2 | A |
-| ../scte35-threefive/threefive/stream.py | Stream.pid2prgm | M | 189:197 | 2 | A |
-| ../scte35-threefive/threefive/stream.py | Stream.__init__ | M | 145:167 | 2 | A |
-| ../scte35-threefive/threefive/stream.py | Maps | C | 110:127 | 2 | A |
-| ../scte35-threefive/threefive/stream.py | Pids | C | 93:107 | 2 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._parse_stream_type | M | 617:625 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._parse_program | M | 379:383 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._parse_pid | M | 371:376 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._parse_length | M | 364:368 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._pts_flag | M | 353:355 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._spi_flag | M | 349:350 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._pcr_flag | M | 345:346 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._afc_flag | M | 341:342 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._pusi_flag | M | 337:338 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | Stream.as_90k | M | 330:334 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | Stream._mk_packet_data | M | 322:327 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | Stream.decode_pids | M | 273:280 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | Stream.decode_program | M | 265:271 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | Stream.decode_next | M | 258:263 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | Stream.iter_pkts | M | 219:223 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | Stream.__repr__ | M | 169:170 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | Maps.__init__ | M | 120:127 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | Pids.__init__ | M | 101:107 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | ProgramInfo.__init__ | M | 64:69 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | show_cue_stderr | F | 49:54 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | show_cue | F | 41:46 | 1 | A |
-| ../scte35-threefive/threefive/stream.py | no_op | F | 33:38 | 1 | A |
-
+|  Filename  |  Name  |  Complexity  |  Clasification  |
+|  --------  |  ----  |  ----------  |  -------------  |
+|  ../scte35-threefive/threefive/base.py  |  kv_clean.b2l  |  7  |  B  |
+|  ../scte35-threefive/threefive/base.py  |  SCTE35Base._chk_var  |  3  |  A  |
+|  ../scte35-threefive/threefive/base.py  |  SCTE35Base.load  |  3  |  A  |
+|  ../scte35-threefive/threefive/base.py  |  SCTE35Base.kv_clean  |  3  |  A  |
+|  ../scte35-threefive/threefive/base.py  |  SCTE35Base._chk_nbin  |  2  |  A  |
+|  ../scte35-threefive/threefive/base.py  |  SCTE35Base.as_hms  |  2  |  A  |
+|  ../scte35-threefive/threefive/base.py  |  SCTE35Base  |  2  |  A  |
+|  ../scte35-threefive/threefive/base.py  |  SCTE35Base.get_json  |  1  |  A  |
+|  ../scte35-threefive/threefive/base.py  |  SCTE35Base.get  |  1  |  A  |
+|  ../scte35-threefive/threefive/base.py  |  SCTE35Base.as_ticks  |  1  |  A  |
+|  ../scte35-threefive/threefive/base.py  |  SCTE35Base.as_90k  |  1  |  A  |
+|  ../scte35-threefive/threefive/base.py  |  SCTE35Base.__repr__  |  1  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  NBin.zeroed  |  2  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  NBin.reserve  |  2  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  NBin.add_int  |  2  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  NBin  |  2  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  BitBin.as_charset  |  2  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  BitBin.as_int  |  2  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  BitBin  |  2  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  NBin.forward  |  1  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  NBin.add_flag  |  1  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  NBin.add_hex  |  1  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  NBin.add_90k  |  1  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  NBin.add_bites  |  1  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  NBin.nbits2bites  |  1  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  NBin.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  BitBin.negative_shift  |  1  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  BitBin.forward  |  1  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  BitBin.as_flag  |  1  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  BitBin.as_bytes  |  1  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  BitBin.as_hex  |  1  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  BitBin.as_90k  |  1  |  A  |
+|  ../scte35-threefive/threefive/bitn.py  |  BitBin.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  TimeSignal._encode_splice_time  |  6  |  B  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceInsert.encode  |  5  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceInsert.decode  |  5  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceInsert._encode_break  |  4  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceSchedule  |  3  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceSchedule.SpliceEvent.decode  |  3  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceSchedule.SpliceEvent  |  3  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceInsert  |  3  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  TimeSignal  |  3  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceSchedule.decode  |  2  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceSchedule.SpliceEvent._decode_components  |  2  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceInsert._encode_components  |  2  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceInsert._decode_components  |  2  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceInsert._decode_break  |  2  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  TimeSignal._splice_time  |  2  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceNull  |  2  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  PrivateCommand  |  2  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  BandwidthReservation  |  2  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceCommand  |  2  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceSchedule.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceSchedule.SpliceEvent.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceInsert._encode_unique_avail  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceInsert._encode_flags  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceInsert._encode_event  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceInsert._decode_unique_avail  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceInsert._decode_flags  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceInsert._decode_event  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceInsert.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  TimeSignal.encode  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  TimeSignal.decode  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  TimeSignal.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceNull.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  PrivateCommand.encode  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  PrivateCommand.decode  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  PrivateCommand.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  BandwidthReservation.decode  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  BandwidthReservation.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceCommand.encode  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceCommand._set_len  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceCommand.decode  |  1  |  A  |
+|  ../scte35-threefive/threefive/commands.py  |  SpliceCommand.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/crc.py  |  crc32  |  2  |  A  |
+|  ../scte35-threefive/threefive/crc.py  |  _mk_table  |  2  |  A  |
+|  ../scte35-threefive/threefive/crc.py  |  _bytecrc  |  2  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue._mk_bits  |  7  |  B  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue.load_descriptors  |  6  |  B  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue.load_command  |  5  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue.load  |  5  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue.get  |  4  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue._unloop_descriptors  |  3  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue._descriptor_loop  |  3  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue  |  3  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue.load_info_section  |  2  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue.encode  |  2  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue._set_splice_command  |  2  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue.fix_bad_b64  |  2  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue.get_descriptors  |  2  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue.decode  |  2  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue.__init__  |  2  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue._encode_crc  |  1  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue.encode_as_hex  |  1  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue.encode_as_int  |  1  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue.to_stderr  |  1  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue.show  |  1  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue.mk_info_section  |  1  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue._mk_descriptors  |  1  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue.get_json  |  1  |  A  |
+|  ../scte35-threefive/threefive/cue.py  |  Cue.__repr__  |  1  |  A  |
+|  ../scte35-threefive/threefive/decode.py  |  decode  |  3  |  A  |
+|  ../scte35-threefive/threefive/decode.py  |  _read_stuff  |  3  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  SegmentationDescriptor._encode_segmentation  |  4  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  SegmentationDescriptor.encode  |  3  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  SegmentationDescriptor._decode_segments  |  3  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  SegmentationDescriptor._decode_segmentation  |  3  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  SegmentationDescriptor.decode  |  3  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  SegmentationDescriptor  |  3  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  k_by_v  |  3  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  SegmentationDescriptor._encode_segments  |  2  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  SegmentationDescriptor._encode_flags  |  2  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  SegmentationDescriptor._encode_components  |  2  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  SegmentationDescriptor._decode_components  |  2  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  SegmentationDescriptor._decode_flags  |  2  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  TimeDescriptor  |  2  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  DtmfDescriptor.encode  |  2  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  DtmfDescriptor  |  2  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  AvailDescriptor  |  2  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  AudioDescriptor.encode  |  2  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  AudioDescriptor.decode  |  2  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  AudioDescriptor  |  2  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  SpliceDescriptor.parse_id  |  2  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  SpliceDescriptor.parse_tag_and_len  |  2  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  SpliceDescriptor  |  2  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  splice_descriptor  |  2  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  SegmentationDescriptor.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  TimeDescriptor.encode  |  1  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  TimeDescriptor.decode  |  1  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  TimeDescriptor.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  DtmfDescriptor.decode  |  1  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  DtmfDescriptor.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  AvailDescriptor.encode  |  1  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  AvailDescriptor.decode  |  1  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  AvailDescriptor.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  AudioDescriptor._encode_comp  |  1  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  AudioDescriptor._decode_comp  |  1  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  AudioDescriptor.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  SpliceDescriptor._encode_id  |  1  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  SpliceDescriptor.encode  |  1  |  A  |
+|  ../scte35-threefive/threefive/descriptors.py  |  SpliceDescriptor.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/encode.py  |  mk_splice_insert  |  3  |  A  |
+|  ../scte35-threefive/threefive/encode.py  |  mk_time_signal  |  2  |  A  |
+|  ../scte35-threefive/threefive/encode.py  |  mk_splice_null  |  1  |  A  |
+|  ../scte35-threefive/threefive/packetdata.py  |  PacketData  |  3  |  A  |
+|  ../scte35-threefive/threefive/packetdata.py  |  PacketData.mk_pts  |  2  |  A  |
+|  ../scte35-threefive/threefive/packetdata.py  |  PacketData.mk_pcr  |  2  |  A  |
+|  ../scte35-threefive/threefive/packetdata.py  |  PacketData._mk_timestamp  |  2  |  A  |
+|  ../scte35-threefive/threefive/packetdata.py  |  PacketData.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/section.py  |  SpliceInfoSection._encode_splice_command  |  3  |  A  |
+|  ../scte35-threefive/threefive/section.py  |  SpliceInfoSection._encode_pts_adjustment  |  3  |  A  |
+|  ../scte35-threefive/threefive/section.py  |  SpliceInfoSection._encode_encrypted  |  3  |  A  |
+|  ../scte35-threefive/threefive/section.py  |  SpliceInfoSection._encode_tier  |  2  |  A  |
+|  ../scte35-threefive/threefive/section.py  |  SpliceInfoSection._encode_cw_index  |  2  |  A  |
+|  ../scte35-threefive/threefive/section.py  |  SpliceInfoSection._encode_protocol_version  |  2  |  A  |
+|  ../scte35-threefive/threefive/section.py  |  SpliceInfoSection._encode_section_length  |  2  |  A  |
+|  ../scte35-threefive/threefive/section.py  |  SpliceInfoSection._encode_sap  |  2  |  A  |
+|  ../scte35-threefive/threefive/section.py  |  SpliceInfoSection.decode  |  2  |  A  |
+|  ../scte35-threefive/threefive/section.py  |  SpliceInfoSection  |  2  |  A  |
+|  ../scte35-threefive/threefive/section.py  |  SpliceInfoSection.encode  |  1  |  A  |
+|  ../scte35-threefive/threefive/section.py  |  SpliceInfoSection._encode_private_flag  |  1  |  A  |
+|  ../scte35-threefive/threefive/section.py  |  SpliceInfoSection._encode_section_syntax_indicator  |  1  |  A  |
+|  ../scte35-threefive/threefive/section.py  |  SpliceInfoSection._encode_table_id  |  1  |  A  |
+|  ../scte35-threefive/threefive/section.py  |  SpliceInfoSection.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/segment.py  |  Segment.decode  |  4  |  A  |
+|  ../scte35-threefive/threefive/segment.py  |  Segment.__init__  |  4  |  A  |
+|  ../scte35-threefive/threefive/segment.py  |  Segment.show_cue  |  2  |  A  |
+|  ../scte35-threefive/threefive/segment.py  |  Segment  |  2  |  A  |
+|  ../scte35-threefive/threefive/segment.py  |  Segment.shushed  |  1  |  A  |
+|  ../scte35-threefive/threefive/segment.py  |  Segment._add_cue  |  1  |  A  |
+|  ../scte35-threefive/threefive/segment.py  |  Segment._aes_decrypt  |  1  |  A  |
+|  ../scte35-threefive/threefive/segment.py  |  Segment._aes_get_key  |  1  |  A  |
+|  ../scte35-threefive/threefive/segment.py  |  Segment._mk_tmp  |  1  |  A  |
+|  ../scte35-threefive/threefive/segment.py  |  Segment.__repr__  |  1  |  A  |
+|  ../scte35-threefive/threefive/smoketest.py  |  smoke  |  4  |  A  |
+|  ../scte35-threefive/threefive/smoketest.py  |  _decode_test  |  2  |  A  |
+|  ../scte35-threefive/threefive/stuff.py  |  print2  |  1  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  upid_encoder  |  5  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  UpidDecoder.decode  |  3  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  UpidDecoder._decode_eidr  |  3  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  UpidDecoder._decode_umid  |  2  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  UpidDecoder._decode_mid  |  2  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  UpidDecoder  |  2  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  _encode_uri  |  2  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  _encode_umid  |  2  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  _encode_mid  |  2  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  UpidDecoder._decode_no  |  1  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  UpidDecoder._decode_uri  |  1  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  UpidDecoder._decode_mpu  |  1  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  UpidDecoder._decode_isan  |  1  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  UpidDecoder._decode_atsc  |  1  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  UpidDecoder._decode_air_id  |  1  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  UpidDecoder.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  _encode_no  |  1  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  _encode_mpu  |  1  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  _encode_isan  |  1  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  _encode_eidr  |  1  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  _encode_atsc  |  1  |  A  |
+|  ../scte35-threefive/threefive/upids.py  |  _encode_air_id  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._parse_sdt  |  7  |  B  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._parse_scte35  |  7  |  B  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._parse_pmt  |  6  |  B  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._parse_tables  |  6  |  B  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._parse_pts  |  5  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._find_start  |  5  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._parse_pat  |  4  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream.show  |  4  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream.decode_fu  |  4  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream.decode  |  4  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._parse_cc  |  3  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream.proxy  |  3  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream  |  3  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  ProgramInfo.show  |  3  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  ProgramInfo  |  3  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._set_scte35_pids  |  2  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._parse_program_streams  |  2  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._parse_cue  |  2  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._section_incomplete  |  2  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._same_as_last  |  2  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._chk_partial  |  2  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._parse  |  2  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._parse_info  |  2  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._parse_payload  |  2  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._split_by_idx  |  2  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._has_pts  |  2  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream.decode_start_time  |  2  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._mk_pkts  |  2  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream.pid2pcr  |  2  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream.pid2pts  |  2  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream.pid2prgm  |  2  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream.__init__  |  2  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Maps  |  2  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Pids  |  2  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._parse_stream_type  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._parse_program  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._parse_pid  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._parse_length  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._pts_flag  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._spi_flag  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._pcr_flag  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._afc_flag  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._pusi_flag  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream.as_90k  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream._mk_packet_data  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream.decode_pids  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream.decode_program  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream.decode_next  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream.iter_pkts  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Stream.__repr__  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Maps.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  Pids.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  ProgramInfo.__init__  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  show_cue_stderr  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  show_cue  |  1  |  A  |
+|  ../scte35-threefive/threefive/stream.py  |  no_op  |  1  |  A  |
