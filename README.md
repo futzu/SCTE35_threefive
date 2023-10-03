@@ -3,7 +3,6 @@
  --- 
 Latest Version is `2.4.9`
 
-## I love you Jenny Gibson.
 
 
  ⚡ `Decodes` __SCTE-35__.
