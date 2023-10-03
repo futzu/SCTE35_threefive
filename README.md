@@ -4,7 +4,18 @@
 Latest Version is `2.4.9`
 
 
+<details><summary><h1>2FA? WTF?</h1></summary<H1> </summary>
+ 
+   Do they expect us to use the two factor authentication on every commit?
+   <br/>I can't do that, sometimes I commit 20 or 30 times in a few hours.<br/> How are we supposed to do that on the commandline? <br/>
+   Two Factor authentication seems to be more about data mining than security. <br/>
+   I looked at the blog post about it, but they aren't taking comments or questions, so I don't know.
+   <br/>I hate to be like this, but <b>Microsoft is ruining github</b>.
+ 
+</details>
 
+
+ 
  ⚡ `Decodes` __SCTE-35__.
 <br>⚡ `Encodes` __SCTE-35__.
 <br>⚡ `Parses` __SCTE-35__ from `Base64`, `Bytes`, `Hex`, `Integers`, and `MPEGTS` Streams.
