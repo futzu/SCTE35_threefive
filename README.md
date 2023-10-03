@@ -4,7 +4,7 @@
 Latest Version is `2.4.9`
 
 
-<details><summary><h1>2FA? WTF?</h1></summary<H1> </summary>
+<details><summary><h1>2FA? </h1></summary<H1> </summary>
  
    Do they expect us to use the two factor authentication on every commit?
    <br/>I can't do that, sometimes I commit 20 or 30 times in a few hours.<br/> How are we supposed to do that on the commandline? <br/>
