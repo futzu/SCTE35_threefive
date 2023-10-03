@@ -1,4 +1,4 @@
-#  threefive is the most advanced SCTE-35 tool. Ever. 
+#  threefive is the most advanced SCTE-35 tool.   Ever. 
  --- 
 Latest Version is `2.4.9`
 
