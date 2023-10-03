@@ -1,8 +1,6 @@
-#  threefive is the most advanced SCTE-35 tool, ever 
- <br><br> SCTE-35 Encoder and Decoder Python3 lib.
+#  threefive is the most advanced SCTE-35 tool. Ever. 
  --- 
 Latest Version is `2.4.9`
-
 
 <details><summary><h1>2FA? </h1></summary<H1> </summary>
  
