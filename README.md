@@ -1,13 +1,11 @@
 #  threefive is the most advanced SCTE-35 tool.   Ever. 
 # Latest Version is `2.4.9`
 
-<details><summary><h1>2FA? </h1></summary<H1> </summary>
+<details><summary><h1>2FA?  </h1></summary<H1> </summary>
+
+  * I am nor installing an app on my phone or giving github my phone number so they can spam me with text messages.
+  * I found an application called numberstation that runs on my desktop, seems to be a good way to go. 
  
-   Do they expect us to use the two factor authentication on every commit?
-   <br/>I can't do that, sometimes I commit 20 or 30 times in a few hours.<br/> How are we supposed to do that on the commandline? <br/>
-   Two Factor authentication seems to be more about data mining than security. <br/>
-   I looked at the blog post about it, but they aren't taking comments or questions, so I don't know.
-   <br/>I hate to be like this, but <b>Microsoft is ruining github</b>.
  
 </details>
 
