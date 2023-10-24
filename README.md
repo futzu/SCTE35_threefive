@@ -1,30 +1,18 @@
 #  threefive is the most advanced SCTE-35 tool.   Ever. 
 # Latest Version is `2.4.9`
 
-<details><summary><h1>2FA?  </h1></summary<H1> </summary>
-
-  * I am nor installing an app on my phone or giving github my phone number so they can spam me with text messages.
-  * I found an application called numberstation that runs on my desktop, seems to be a good way to go. 
- 
- 
-</details>
-
-
- 
  ⚡ `Decodes` __SCTE-35__.
 <br>⚡ `Encodes` __SCTE-35__.
 <br>⚡ `Parses` __SCTE-35__ from `Base64`, `Bytes`, `Hex`, `Integers`, and `MPEGTS` Streams.
 <br>⚡ `Parses` __SCTE-36__ from `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br>⚡ `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
-[`threefive/go` is now `cuei`](https://github.com/futzu/cuei) <br/>
 
 [The `threefive.Segment` class for parsing `HLS` segments](https://github.com/futzu/scte35-threefive/segment.md)
 
 
-
-
-<details><summary>Supported Platforms</summary>
+[__Documentation__](#) _(click a topic to expand)_
+<details><summary>Supported Platforms</summary> _(click to expand these)_
  
 * threefive is expected to work on any platform that runs python3.6 and up.
 * There are no known platform specific issues. 
@@ -629,7 +617,7 @@ a@debian:~/clean/scte35-threefive$ pypy3 mdsn.py
 
  Powered by threefive
 ---
-
+<br>⚡ [`threefive/go` is now `cuei`](https://github.com/futzu/cuei) <br/>
 <br>⚡ [myvideeotools.com](https://myvideotools.com/scte35parser) online SCTE-35 Cue parser. Powered by threefive. 
 <br>⚡ [POIS Server](https://github.com/scunning1987/pois_reference_server) is Super Cool.
 <br>⚡ [bpkio-cli](https://pypi.org/project/bpkio-cli/): A command line interface to the broadpeak.io APIs. 
