@@ -11,7 +11,7 @@
 [The `threefive.Segment` class for parsing `HLS` segments](https://github.com/futzu/scte35-threefive/segment.md)
 
 
-[__Documentation__](#) _(click a topic to expand)_
+__Documentation__ _(click a topic to expand)_
 <details><summary>Supported Platforms</summary> _(click to expand these)_
  
 * threefive is expected to work on any platform that runs python3.6 and up.
