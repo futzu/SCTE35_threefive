@@ -3,7 +3,7 @@
 
 ### All the cool kids use threefive, what are you using? 
 
-# Latest Version is `2.4.9`
+# Latest Version is `2`.`4`.`9`
 
  ⚡ `Decodes` __SCTE-35__.
 <br>⚡ `Encodes` __SCTE-35__.
