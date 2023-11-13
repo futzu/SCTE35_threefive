@@ -12,10 +12,8 @@
 <br>⚡ `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
 
-[The `threefive.Segment` class for parsing `HLS` segments](https://github.com/futzu/scte35-threefive/segment.md)
+### __Documentation__ _(click a topic to expand)_
 
-
-__Documentation__ _(click a topic to expand)_
 <details><summary>Supported Platforms</summary> 
  
 * threefive is expected to work on any platform that runs python3.6 and up.
@@ -39,11 +37,18 @@ __Documentation__ _(click a topic to expand)_
 
 <details><summary>Versions and Releases</summary>
 
+Every time I fix a bug or add a feature, I do a new release. 
+I only support the latest version. Stay up with me. 
 ```lua
->>> import threefive
->>> threefive.version
-'2.3.79'
->>>
+a@fu:~$ pypy3
+Python 3.9.17 (7.3.12+dfsg-1, Jun 16 2023, 18:55:49)
+[PyPy 7.3.12 with GCC 12.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>>> import threefive
+>>>> threefive.version
+'2.4.9'
+>>>> 
+
 ```
 * __Release__ versions are  __odd__.
 * __Unstable__ testing versions are __even__.
