@@ -1,8 +1,4 @@
-#  threefive is the most advanced SCTE-35 tool. Ever. 
-
-
-### All the cool kids use threefive, what are you using? 
-
+#  threefive is SCTE-35 Kung-Fu. 
 # Latest Version is `2`.`4`.`9`
 
  ⚡ `Decodes` __SCTE-35__.
