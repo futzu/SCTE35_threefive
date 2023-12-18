@@ -1,4 +1,5 @@
 #  threefive is SCTE-35 Kung-Fu. 
+## (over three hundred and fifty nine milliom ad breaks parsed.)[#data]
 # Latest Version is `2`.`4`.`9`
 
  ⚡ `Decodes` __SCTE-35__.
@@ -642,3 +643,25 @@ a@debian:~/clean/scte35-threefive$ pypy3 mdsn.py
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# data
+> this might be wild baseless speculation.
