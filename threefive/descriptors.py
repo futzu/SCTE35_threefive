@@ -243,6 +243,7 @@ class SegmentationDescriptor(SpliceDescriptor):
         self.name = "Segmentation Descriptor"
         self.segmentation_event_id = None
         self.segmentation_event_cancel_indicator = None
+        self.segmentation_event_id_compliance_indicator = None
         self.component_count = None
         self.components = []
         self.program_segmentation_flag = None
@@ -272,7 +273,8 @@ class SegmentationDescriptor(SpliceDescriptor):
         bitbin = BitBin(self.bites)
         self.segmentation_event_id = bitbin.as_hex(32)  # 4 bytes
         self.segmentation_event_cancel_indicator = bitbin.as_flag(1)
-        bitbin.forward(7)  # 1 byte
+        self.segmentation_event_id_compliance_indicator = bitbin.as_flag(1)
+        bitbin.forward(6)  # 1 byte
         if not self.segmentation_event_cancel_indicator:
             self._decode_flags(bitbin)  # 1 byte
             if not self.program_segmentation_flag:
@@ -318,7 +320,7 @@ class SegmentationDescriptor(SpliceDescriptor):
     def _decode_segments(self, bitbin):
         self.segment_num = bitbin.as_int(8)  # 1 byte
         self.segments_expected = bitbin.as_int(8)  # 1 byte
-        if self.segmentation_type_id in [0x34, 0x36, 0x38, 0x3A]:
+        if self.segmentation_type_id in [0x30,0x32,0x34, 0x36,0x38,0x3A,0x44,0x46]:
             # if sub_segment_num and sub_segments_expected
             # are not available set both of them to zero
             # This has been an issue at CBS and CNN just recently.
@@ -337,7 +339,9 @@ class SegmentationDescriptor(SpliceDescriptor):
         nbin = super().encode(nbin)
         self._chk_var(str, nbin.add_hex, "segmentation_event_id", 32)  # 4 bytes
         self._chk_var(bool, nbin.add_flag, "segmentation_event_cancel_indicator", 1)
-        nbin.forward(7)  # 1 byte
+        self._chk_var(bool, nbin.add_flag, "segmentation_event_id_compliance_indicator", 1)
+
+        nbin.forward(6)  # 1 byte
         if not self.segmentation_event_cancel_indicator:
             self._encode_flags(nbin)  # 1 byte
             if not self.program_segmentation_flag:
