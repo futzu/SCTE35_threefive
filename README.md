@@ -1,5 +1,7 @@
 #  threefive is SCTE-35 Kung-Fu. 
-## [over three hundred and fifty nine milliom ad breaks parsed.](#data)
+## The Industry leading SCTE-35 cli parser and decoder and encoder library.
+### threefive written in python3 and optimized for [pypy3](https://www.pypy.org/) 
+_( pypy3 runs threefive four times faster than python3 )_
 # Latest Version is `2`.`4`.`9`
 
  ⚡ `Decodes` __SCTE-35__.
