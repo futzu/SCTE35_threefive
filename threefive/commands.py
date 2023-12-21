@@ -171,6 +171,7 @@ class SpliceInsert(TimeSignal):
         self.program_splice_flag = None
         self.duration_flag = None
         self.splice_immediate_flag = None
+        self.event_id_compliance_flag = None
         self.component_count = None
         self.components = None
         self.unique_program_id = None
@@ -237,7 +238,8 @@ class SpliceInsert(TimeSignal):
         self.program_splice_flag = bitbin.as_flag(1)
         self.duration_flag = bitbin.as_flag(1)
         self.splice_immediate_flag = bitbin.as_flag(1)
-        bitbin.forward(4)
+        self.event_id_compliance_flag = bitbin.as_flag(1)
+        bitbin.forward(3)
 
     def _decode_unique_avail(self, bitbin):
         self.unique_program_id = bitbin.as_int(16)
@@ -296,7 +298,8 @@ class SpliceInsert(TimeSignal):
         self._chk_var(bool, nbin.add_flag, "program_splice_flag", 1)
         self._chk_var(bool, nbin.add_flag, "duration_flag", 1)
         self._chk_var(bool, nbin.add_flag, "splice_immediate_flag", 1)
-        nbin.forward(4)
+        self._chk_var(bool, nbin.add_flag, "event_id_compliance_flag", 1)
+        nbin.forward(3)
 
     def _encode_components(self, nbin):
         """
@@ -332,6 +335,7 @@ class SpliceSchedule(SpliceCommand):
             super().__init__(None)
             self.name = None
             self.utc_splice_time = None
+            self.event_id_compliance_flag = None
 
         def _decode_components(self, bitbin):
             """
@@ -344,6 +348,17 @@ class SpliceSchedule(SpliceCommand):
                     "component_tag": bitbin.as_int(8),
                     "utc_splice_time": bitbin.as_int(32),
                 }
+
+    def _decode_event(self, bitbin):
+        """
+        SpliceEvent._decode_event parses
+        self.splice_event_id and self.splice_event_cancel_indicator
+        and the new event_id_compliance_flag.
+        """
+        self.splice_event_id = bitbin.as_int(32)
+        self.splice_event_cancel_indicator = bitbin.as_flag(1)
+        event_id_compliance_flag = bitbin.as_flag(1)
+        bitbin.forward(6)
 
         def decode(self, bitbin):
             """
@@ -368,6 +383,7 @@ class SpliceSchedule(SpliceCommand):
         self.command_type = 4
         self.name = "Splice Schedule"
         self.splices = []
+
 
     def decode(self):
         """
