@@ -1,7 +1,13 @@
+
 #  threefive is SCTE-35 Kung-Fu. 
 ## The Industry leading SCTE-35 cli parser and decoder and encoder library.
 ### threefive written in python3 and optimized for [pypy3](https://www.pypy.org/) 
 # Latest Version is `2`.`4`.`9`
+
+# `News Flash`
+* Updates to support the 11/30/2023 version of the SCTE-35 specification will be released soon.
+* I believe I have most of it done, but there is no chnage log, so I have to go therough the entire specification.
+
 
  ⚡ `Decodes` __SCTE-35__.
 <br>⚡ `Encodes` __SCTE-35__.
