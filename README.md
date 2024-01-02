@@ -8,18 +8,12 @@
 <br>⚡ `Parses` __SCTE-36__ from `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br>⚡ `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
- __"threefive is the best SCTE-35 implementation I've seen, but don't quote me on that, I'm supposed b be impartial..."__
 
+## Nine of The Top Ten Python SCTE-35 Packages use threefive.
 
-_Senior member of the SCTE-35 Specification team._
-
+![image](https://github.com/futzu/scte35-threefive/assets/52701496/def479f9-b4eb-4288-a85c-e08ec4e7be8d)
 
 # Latest Version is `2`.`4`.`9`
-
-### `News Flash`
-* Updates to support the 11/30/2023 version of the SCTE-35 specification will be released soon.
-* I believe I have most of it done, but there is no chnage log, so I have to go therough the entire specification.
-
 
 
 ## [threefive has a lot of example SCTE-35 code](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
