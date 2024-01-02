@@ -9,9 +9,6 @@
 <br>⚡ `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
 
-## Nine of The Top Ten Python SCTE-35 Packages use threefive.
-
-![image](https://github.com/futzu/scte35-threefive/assets/52701496/def479f9-b4eb-4288-a85c-e08ec4e7be8d)
 
 # Latest Version is `2`.`4`.`9`
 
