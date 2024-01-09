@@ -28,7 +28,7 @@ class SpliceDescriptor(SCTE35Base):
         self.tag = None
         self.descriptor_length = 0
         self.name = None
-        self.identifier = "CUEI"
+        self.identifier =None
         self.bites = bites
         self.parse_tag_and_len()
         self.parse_id()
@@ -58,6 +58,11 @@ class SpliceDescriptor(SCTE35Base):
             #          raise Exception('Identifier Is Not "CUEI"')
             self.bites = self.bites[4:]
 
+    def decode(self):
+        """
+        decode handles Private Descriptors
+        """
+        self.private_data = self.bites
 
     def encode(self, nbin=None):
         """
@@ -65,6 +70,7 @@ class SpliceDescriptor(SCTE35Base):
         """
         nbin = self._chk_nbin(nbin)
         self._encode_id(nbin)
+        nbin.add_bites(self.private_data)
         return nbin
 
     def _encode_id(self, nbin):
@@ -418,8 +424,6 @@ def splice_descriptor(bites):
     replaced splice_descriptor
     """
     tag = bites[0]
-    if tag not in descriptor_map:
-        return  SpliceDescriptor(bites)
-    spliced = descriptor_map[tag](bites)
+    spliced = ( SpliceDescriptor(bites),descriptor_map[tag](bites))[tag in descriptor_map]
     spliced.decode()
     return spliced
