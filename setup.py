@@ -13,7 +13,7 @@ setuptools.setup(
     version=version,
     author="Adrian and a Cast of Thousands.",
     author_email="spam@iodisco.com",
-    description="Pythonic SCTE35",
+    description="The Undisputed Heavyweight Champion of SCTE-35.",
     long_description=readme,
     long_description_content_type="text/markdown",
     url="https://github.com/futzu/threefive",
