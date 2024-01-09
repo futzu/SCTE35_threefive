@@ -1,5 +1,5 @@
 
-# threefive is the industry leading SCTE-35 decoder and encoder.
+# threefive is the undisputed heavyweight champion of SCTE-35.
 ### If you aren't using threefive, you're a loser and nobody likes you.
 
 <br>⚡ `Decodes` __SCTE-35__.
