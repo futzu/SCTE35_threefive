@@ -1,8 +1,8 @@
 
-# threefive is the industry leading SCTE-35 tool.
+# threefive is the industry leading SCTE-35 decoder /encoder .
 
 
- <br>⚡ `Decodes` __SCTE-35__.
+<br>⚡ `Decodes` __SCTE-35__.
 <br>⚡ `Encodes` __SCTE-35__.
 <br>⚡ `Parses` __SCTE-35__ from `Base64`, `Bytes`, `Hex`, `Integers`, and `MPEGTS` Streams.
 <br>⚡ `Parses` __SCTE-36__ from `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
@@ -10,8 +10,9 @@
 
 
 
-# Latest Version is `2`.`4`.`9`
-
+### Latest Version is `2`.`4`.`9`  
+### new release coming soon.
+___
 
 ## [threefive has a lot of example SCTE-35 code](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 
