@@ -94,7 +94,7 @@ def mk_splice_insert(event_id, pts=None, duration=None, out=False):
     sin.splice_immediate_flag = True
     sin.time_specified_flag = False
     sin.program_splice_flag = True
-
+    sin.event_id_compliance_flag=True
     # pts = None for Splice Immediate
     if pts:
         sin.splice_immediate_flag = False
