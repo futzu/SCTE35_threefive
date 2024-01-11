@@ -70,7 +70,8 @@ class SpliceDescriptor(SCTE35Base):
         """
         nbin = self._chk_nbin(nbin)
         self._encode_id(nbin)
-        nbin.add_bites(self.private_data)
+        if self.private_data:
+            nbin.add_bites(self.private_data)
         return nbin
 
     def _encode_id(self, nbin):
