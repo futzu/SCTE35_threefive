@@ -10,8 +10,9 @@
 
 
 
-### Latest Version is `2`.`4`.`9`  
-### new release coming soon.
+### Latest Version is `2`.`4`.`11`  
+* 11/30/2023 SCTE-35 specification Updates to splice commands and splice descriptors.
+* includes direct support for private descriptors.  
 ___
 
 ## [threefive has a lot of example SCTE-35 code](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
