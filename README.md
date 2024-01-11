@@ -15,7 +15,7 @@
 > Most of you shouldn't have a problem, I think I've handled most of the potential issues.
 > If you see something crazy, don't freak out, just open an issue, and we'll get it resolved.
 * v2.4.15 fix for `encode.mk_splice insert` 
-* v2.4.17 fix for empty and private descriptors
+* v2.4.17 fix for `private descriptor` encoding
 ___
 
 ## [threefive has a lot of example SCTE-35 code](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
