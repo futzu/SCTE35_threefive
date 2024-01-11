@@ -28,7 +28,7 @@ def _read_stuff(stuff):
     try:
         # Mpegts Video
         strm = Stream(stuff)
-        strm.decode_fu()
+        strm.decode()
         return True
     except:
         try:
@@ -77,7 +77,7 @@ def decode(stuff=None):
     """
     if stuff in [None, sys.stdin.buffer]:
         # Mpegts stream or file piped in
-        return Stream(sys.stdin.buffer).decode_fu()
+        return Stream(sys.stdin.buffer).decode()
     if isinstance(stuff, int):
         return _read_stuff(hex(stuff))
     return _read_stuff(stuff)
