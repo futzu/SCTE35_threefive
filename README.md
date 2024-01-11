@@ -10,7 +10,7 @@
 
 
 
-### Latest Version is `2`.`4`.`13`  
+### Latest Version is `2`.`4`.`15`  
 * 11/30/2023 SCTE-35 specification Updates to splice commands and splice descriptors.
 * includes direct support for private descriptors.  
 ___
