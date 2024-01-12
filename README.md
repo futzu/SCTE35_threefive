@@ -54,7 +54,7 @@ ___
 
 # __Documentation__ _(click a topic to expand)_
 
-threefive pts /home/a/msnbc.ts 2>&1<details><summary>Supported Platforms</summary> 
+<details><summary>Supported Platforms</summary> 
  
 * threefive is expected to work on any platform that runs python3.6 and up.
 * There are no known platform specific issues. 
