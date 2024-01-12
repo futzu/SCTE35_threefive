@@ -314,6 +314,17 @@ class Stream:
                 vee.show()
         return True
 
+    def show_pts(self):
+        """
+        show_pts displays current pts by stream prgm.
+        """
+        if self._find_start():
+            for pkt in  iter(partial(self._tsdata.read, self._PACKET_SIZE ), b""):
+                self._parse(pkt)
+                if self._pusi_flag(pkt):
+                    _={ print2(f'{pgrm}-> {self.as_90k(pts)}') for pgrm,pts in  self.maps.prgm_pts.items()}
+        return False
+
     def decode_start_time(self):
         """
        decode_start_time
@@ -421,6 +432,12 @@ class Stream:
                     self.maps.prgm_pts[prgm] = pts
                     if prgm not in self.start:
                         self.start[prgm] = pts
+
+    def pts(self):
+        """
+        pts returns a dict of  program:pts
+        """
+        return self.maps.prgm_pts
 
     def _parse_payload(self, pkt):
         """
