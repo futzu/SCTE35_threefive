@@ -8,21 +8,53 @@
 <br>⚡ `Parses` __SCTE-36__ from `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br>⚡ `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
-
-
-# Latest Version is `2`.`4`.`17`
+# Latest Version is `2`.`4`.`19`
 ### Heads Up, the new specification has field changes. 
 > Most of you shouldn't have a problem, I think I've handled most of the potential issues.
 > If you see something crazy, don't freak out, just open an issue, and we'll get it resolved.
 * v2.4.15 fix for `encode.mk_splice insert` 
 * v2.4.17 fix for `private descriptor` encoding
+* v2.4.19
+  * more spec updates
+  * new `threefive.Stream` methods
+      * `threefive.Stream.pts()` returns dict of `{program:pts}` for current pts.
+      *  `threefive.Stream.show_pts()` prints realtime `program -> pts`
+
+  * threefive `cli` tool now accepts `show` and `pts` keywords
+  * `show`   displays stream info 
+ ```lua
+a@fu:~$ threefive show https://futzu.com/xaa.ts
+
+Program: 1
+    Service:	Service01
+    Provider:	FFmpeg
+    Pid:	4096
+    Pcr Pid:	256
+    Streams:
+		Pid: 134[0x86]	Type: 0x86 SCTE35 Data
+		Pid: 256[0x100]	Type: 0x1b AVC Video
+		Pid: 257[0x101]	Type: 0xf AAC Audio
+```
+* `pts`  displays realtime program -> pts
+```lua
+a@fu:~$ threefive pts /home/a/msnbc.ts
+1-> 3164.442756
+1-> 3164.409422
+1-> 3164.476089
+1-> 3164.476089
+1-> 3164.476089
+1-> 3164.642756
+1-> 3164.576089
+```
+
+
 ___
 
 ## [threefive has a lot of example SCTE-35 code](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 
 # __Documentation__ _(click a topic to expand)_
 
-<details><summary>Supported Platforms</summary> 
+threefive pts /home/a/msnbc.ts 2>&1<details><summary>Supported Platforms</summary> 
  
 * threefive is expected to work on any platform that runs python3.6 and up.
 * There are no known platform specific issues. 
