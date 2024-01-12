@@ -15,11 +15,9 @@
 * v2.4.15 fix for `encode.mk_splice insert` 
 * v2.4.17 fix for `private descriptor` encoding
 * v2.4.19
-  * more spec updates
   * new `threefive.Stream` methods
       * `threefive.Stream.pts()` returns dict of `{program:pts}` for current pts.
       *  `threefive.Stream.show_pts()` prints realtime `program -> pts`
-
   * threefive `cli` tool now accepts `show` and `pts` keywords
   * `show`   displays stream info 
  ```lua
