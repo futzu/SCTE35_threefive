@@ -24,6 +24,9 @@ import sys
 import threefive
 
 if __name__ == "__main__":
+    if sys.argv and sys.argv[1].lower() in [b'version','version']:
+        print(f'{threefive.version}')
+        sys.exit()
     if len(sys.argv) > 1:
         if sys.argv[1].lower() in [b'pts','pts']:
             strm = threefive.Stream(sys.argv[2])
