@@ -1,7 +1,6 @@
 
 # threefive is the undisputed heavyweight champion of SCTE-35.
 ### If you aren't using threefive, you're a loser and nobody likes you.
-
 <br>⚡ `Decodes` __SCTE-35__.
 <br>⚡ `Encodes` __SCTE-35__.
 <br>⚡ `Parses` __SCTE-35__ from `Base64`, `Bytes`, `Hex`, `Integers`, and `MPEGTS` Streams.
@@ -665,7 +664,6 @@ a@debian:~/clean/scte35-threefive$ pypy3 mdsn.py
  Powered by threefive
 ---
 <br>⚡ [`threefive/go` is now `cuei`](https://github.com/futzu/cuei) <br/>
-<br>⚡ [myvideeotools.com](https://myvideotools.com/scte35parser) online SCTE-35 Cue parser. Powered by threefive. 
 <br>⚡ [POIS Server](https://github.com/scunning1987/pois_reference_server) is Super Cool.
 <br>⚡ [bpkio-cli](https://pypi.org/project/bpkio-cli/): A command line interface to the broadpeak.io APIs. 
 <br>⚡ [x9k3](https://github.com/futzu/x9k3): SCTE-35 HLS Segmenter and Cue Inserter.
