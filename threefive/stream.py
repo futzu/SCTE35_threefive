@@ -26,7 +26,7 @@ streamtype_map = {
     0x84 : "AAC HE v2 Audio",
     0x86: "SCTE35 Data",
     0xC0: "Unknown",
-    
+
 }
 
 
@@ -184,7 +184,8 @@ class Stream:
                 tail = self._tsdata.read(self._PACKET_SIZE - 1)
                 if tail:
                     self._parse(one + tail)
-                    return self.iter_pkts()
+                    return True
+        return False
 
     def pid2prgm(self, pid):
         """
@@ -228,12 +229,13 @@ class Stream:
         func can be set to a custom function that accepts
         a threefive.Cue instance as it's only argument.
         """
-        for pkt in self._find_start():
-            cue = self._parse(pkt)
-            if cue:
-                if not func:
-                    return cue
-                func(cue)
+        if self._find_start():
+            for pkt in  iter(partial(self._tsdata.read, self._PACKET_SIZE ), b""):
+                cue = self._parse(pkt)
+                if cue:
+                    if not func:
+                        return cue
+                    func(cue)
         return False
 
     def _mk_pkts(self, chunk):
@@ -248,11 +250,12 @@ class Stream:
         num_pkts packets at a time.
         Super Fast with pypy3.
         """
-        num_pkts = 1000
-        for chunk in self.iter_pkts(num_pkts):
-            _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
-            del _
-        self._tsdata.close()
+        if self._find_start():
+            num_pkts = 700
+            for chunk in  iter(partial(self._tsdata.read, self._PACKET_SIZE * num_pkts), b""):
+                _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
+                del _
+            self._tsdata.close()
         return False
 
     def decode_next(self):
@@ -285,11 +288,13 @@ class Stream:
         for piping into another program like mplayer.
         SCTE-35 cues are print2ed to stderr.
         """
-        for pkt in self._find_start():
-            cue = self._parse(pkt)
-            if cue:
-                func(cue)
-            sys.stdout.buffer.write(pkt)
+        if self._find_start():
+            for pkt in  iter(partial(self._tsdata.read, self._PACKET_SIZE ), b""):
+                cue = self._parse(pkt)
+                if cue:
+                    func(cue)
+                sys.stdout.buffer.write(pkt)
+        return False
 
     def show(self):
         """
@@ -311,8 +316,7 @@ class Stream:
 
     def decode_start_time(self):
         """
-        displays streams that will be
-        parsed for SCTE-35.
+       decode_start_time
         """
         self.decode(func=no_op)
         if len(self.start.values()) > 0:
@@ -396,8 +400,6 @@ class Stream:
             last_cc = self.maps.pid_cc[pid]
             good = (last_cc, ((last_cc + 1) % 16))
             if c_c not in good:
-                # print2 prints to stderr, get it?  print 2>
-                # That's mine too. I shoiuld know better.
                 print2(f"BAD --> pid: {hex(pid)} last cc: {last_cc} cc: {c_c}" )
         self.maps.pid_cc[pid] = c_c
 
@@ -406,7 +408,6 @@ class Stream:
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
-
         if self._pusi_flag(pkt):
             payload = self._parse_payload(pkt)
             if len(payload) > 13:
@@ -462,7 +463,8 @@ class Stream:
         cue = False
         pid = self._parse_info(pkt)
         # self._parse_cc(pkt, pid)
-        self._parse_pts(pkt, pid)
+        if pid in self.pids.pcr:
+            self._parse_pts(pkt, pid)
         if pid in self.pids.scte35:
             cue = self._parse_scte35(pkt, pid)
         return cue
