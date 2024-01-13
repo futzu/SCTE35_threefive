@@ -47,7 +47,7 @@ a@fu:~$ threefive pts /home/a/msnbc.ts
 
 ___
 
-## [threefive has Twenty-Two SCTE-35 examples)](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
+## [threefive has Twenty-Two SCTE-35 examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 
 # __Documentation__ _(click a topic to expand)_
 
