@@ -73,7 +73,7 @@ class UpidDecoder:
 
     def _decode_mpu(self):
         mpu_data = {
-            "format_identifier": self.bitbin.as_int(32),
+            "format_identifier": self.bitbin.as_charset(32),
             "private_data": self.bitbin.as_hex(self.bit_length - 32),
         }
         return mpu_data
