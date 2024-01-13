@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+  
+"""
+  
+  Custom threefive cli tool with a modified mpu upid for 
+  
+  the "Addressable TV" spec (https://www.snptv.org/wp-content/uploads/2020/08/SNPTV-AFMM-Addressable-TV-UK-version-2.0.6.1.pdf)
+
+
+1) Define a new mpu method 
+  
+def adfr_mpu(self):
+    mpu_data = {
+        "format_identifier": self.bitbin.as_charset(32),
+        "version": self.bitbin.as_int(8),       
+        "ChannelID": self.bitbin.as_int(16),
+        "YYYMMDD": self.bitbin.as_hex(32),
+        "Ad Code": self.bitbin.as_hex(16),
+        "Duration": self.bitbin.as_int(24),
+    }
+    return mpu_data
+
+
+  
+2) clobber the old mpu method
+
+      threefive.upids.UpidDecoder._decode_mpu = adfr_mpu
+
+3) use the install command to install it.
+  
+     install threefiveafr ~/.local/bin
+  
+"""
+
+
+import sys
+import threefive
+
+def adfr_mpu(self):
+    mpu_data = {
+        "format_identifier": self.bitbin.as_charset(32),
+        "version": self.bitbin.as_int(8),       
+        "ChannelID": self.bitbin.as_int(16),
+        "YYYMMDD": self.bitbin.as_hex(32),
+        "Ad Code": self.bitbin.as_hex(16),
+        "Duration": self.bitbin.as_int(24),
+    }
+    return mpu_data
+
+
+
+if __name__ == "__main__":
+
+    threefive.upids.UpidDecoder._decode_mpu = adfr_mpu
+
+    if sys.argv and sys.argv[1].lower() in [b'version','version']:
+        print(f'{threefive.version}')
+        sys.exit()
+    if len(sys.argv) > 1:
+        if sys.argv[1].lower() in [b'pts','pts']:
+            strm = threefive.Stream(sys.argv[2])
+            strm.show_pts()
+            sys.exit()
+        if sys.argv[1].lower() in [b'show','show']:
+            strm = threefive.Stream(sys.argv[2])
+            strm.show()
+            sys.exit()
+        for arg in sys.argv[1:]:
+            threefive.decode(arg)
+    else:
+        threefive.decode(sys.stdin.buffer)
