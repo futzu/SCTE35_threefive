@@ -10,7 +10,7 @@
 <br>⚡ `Parses` __SCTE-36__ from `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br>⚡ `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
-# Latest Version is `2`.`4`.`21`
+# Latest Version is `2`.`4`.`23`
 * __new stuff__ 
    * new `threefive.Stream` methods
       * `threefive.Stream.pts()` returns dict of `{program:pts}` for current pts.
