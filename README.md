@@ -11,40 +11,16 @@
 <br>⚡ `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
 # Latest Version is `2`.`4`.`21`
-* v2.4.19  * new `threefive.Stream` methods
+* __new stuff__ 
+   * new `threefive.Stream` methods
       * `threefive.Stream.pts()` returns dict of `{program:pts}` for current pts.
       *  `threefive.Stream.show_pts()` prints realtime `program -> pts`
-  * threefive `cli` tool now accepts `show` and `pts` keywords
-  * `show`   displays stream info 
- ```lua
-a@fu:~$ threefive show https://futzu.com/xaa.ts
-
-Program: 1
-    Service:	Service01
-    Provider:	FFmpeg
-    Pid:	4096
-    Pcr Pid:	256
-    Streams:
-		Pid: 134[0x86]	Type: 0x86 SCTE35 Data
-		Pid: 256[0x100]	Type: 0x1b AVC Video
-		Pid: 257[0x101]	Type: 0xf AAC Audio
-```
-* `pts`  displays realtime program -> pts
-```lua
-a@fu:~$ threefive pts /home/a/msnbc.ts
-1-> 3164.442756
-1-> 3164.409422
-1-> 3164.476089
-1-> 3164.476089
-1-> 3164.476089
-1-> 3164.642756
-1-> 3164.576089
-```
-
-
+ 
+   * threefive `cli` tool now accepts `show` and `pts` keywords
+   
 ___
 
-## [threefive has Twenty-Two SCTE-35 code examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
+### [threefive has Twenty-Two SCTE-35 code examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 
 # __Documentation__ _(click a topic to expand)_
 
@@ -110,6 +86,33 @@ threefive https://so.slo.me/longb.ts
 ```lua
 threefive udp://@235.35.3.5:3535
 ```
+* `display realtime program -> pts`
+```lua
+a@fu:~$ threefive pts /home/a/msnbc.ts
+
+1-> 3164.442756
+1-> 3164.409422
+1-> 3164.476089
+1-> 3164.476089
+1-> 3164.476089
+1-> 3164.642756
+1-> 3164.576089
+```
+* `display mpegts stream info`
+ ```lua
+a@fu:~$ threefive show https://futzu.com/xaa.ts
+
+Program: 1
+    Service:	Service01
+    Provider:	FFmpeg
+    Pid:	4096
+    Pcr Pid:	256
+    Streams:
+		Pid: 134[0x86]	Type: 0x86 SCTE35 Data
+		Pid: 256[0x100]	Type: 0x1b AVC Video
+		Pid: 257[0x101]	Type: 0xf AAC Audio
+```
+
 
 </details>
 
