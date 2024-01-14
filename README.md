@@ -22,7 +22,7 @@ ___
 
 ### [threefive has Twenty-Two SCTE-35 code examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 
-# __Documentation__ _(click a topic to expand)_
+### __Documentation__ _(click a topic to expand)_
 
 <details><summary>Supported Platforms</summary> 
  
