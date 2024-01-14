@@ -63,6 +63,7 @@ class Segment(Stream):
         self.pts_last = None
         self.shush = False
         self.tmp = None
+        self.duration = None
         if AES:
             if iv:
                 self.iv = int.to_bytes(int(iv), 16, byteorder="big")
@@ -132,3 +133,5 @@ class Segment(Stream):
             pass
         if self.tmp:
             os.unlink(self.tmp)
+        if self.pts_start and self.pts_last:
+            self.duration = round(self.pts_last - self.pts_start,6)
