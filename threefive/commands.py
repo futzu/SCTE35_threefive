@@ -306,16 +306,16 @@ class SpliceSchedule(SpliceCommand):
             self.utc_splice_time = None
             self.event_id_compliance_flag = None
 
-    def _decode_event(self, bitbin):
-        """
-        SpliceEvent._decode_event parses
-        self.splice_event_id and self.splice_event_cancel_indicator
-        and the new event_id_compliance_flag.
-        """
-        self.splice_event_id = bitbin.as_int(32)
-        self.splice_event_cancel_indicator = bitbin.as_flag(1)
-        event_id_compliance_flag = bitbin.as_flag(1)
-        bitbin.forward(6)
+        def _decode_event(self, bitbin):
+            """
+            SpliceEvent._decode_event parses
+            self.splice_event_id and self.splice_event_cancel_indicator
+            and the new event_id_compliance_flag.
+            """
+            self.splice_event_id = bitbin.as_int(32)
+            self.splice_event_cancel_indicator = bitbin.as_flag(1)
+            self.event_id_compliance_flag = bitbin.as_flag(1)
+            bitbin.forward(6)
 
         def decode(self, bitbin):
             """
