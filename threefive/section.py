@@ -7,10 +7,10 @@ from .bitn import BitBin
 from .base import SCTE35Base
 
 sap_map = {
-    "0x0": "Type 1 Closed GOP with no leading pictures",
-    "0x1": "Type 2 Closed GOP with leading pictures",
-    "0x2": "Type 3 Open GOP",
-    "0x3": "No Sap Type",
+    "0x00": "Type 1 Closed GOP with no leading pictures",
+    "0x01": "Type 2 Closed GOP with leading pictures",
+    "0x02": "Type 3 Open GOP",
+    "0x03": "No Sap Type",
 }
 
 
@@ -91,7 +91,7 @@ class SpliceInfoSection(SCTE35Base):
         the 3 reserved bits now map SAP
         """
         if self.sap_type not in sap_map:
-            self.sap_type = "0x3"
+            self.sap_type = "0x03"
         self.sap_details = sap_map[self.sap_type]
         nbin.add_hex(self.sap_type, 2)
 
