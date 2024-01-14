@@ -10,14 +10,8 @@
 <br>⚡ `Parses` __SCTE-36__ from `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br>⚡ `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
-# Latest Version is `2`.`4`.`19`
-### Heads Up, the new specification has field changes. 
-> Most of you shouldn't have a problem, I think I've handled most of the potential issues.
-> If you see something crazy, don't freak out, just open an issue, and we'll get it resolved.
-* v2.4.15 fix for `encode.mk_splice insert` 
-* v2.4.17 fix for `private descriptor` encoding
-* v2.4.19
-  * new `threefive.Stream` methods
+# Latest Version is `2`.`4`.`21`
+* v2.4.19  * new `threefive.Stream` methods
       * `threefive.Stream.pts()` returns dict of `{program:pts}` for current pts.
       *  `threefive.Stream.show_pts()` prints realtime `program -> pts`
   * threefive `cli` tool now accepts `show` and `pts` keywords
