@@ -45,6 +45,12 @@ class SCTE35Base:
             output += "0"
         return output
 
+    def fix_hex(hexed):
+        """
+        fix_hex adds padded zero if needed for byte conversion.
+        """
+         return (hexed.replace('0x','0x0',1),hexed)[len(hexed) %2 == 0]
+
     def get(self):
         """
         Returns instance as a dict
