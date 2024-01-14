@@ -45,6 +45,7 @@ class SCTE35Base:
             output += "0"
         return output
 
+    @staticmethod
     def fix_hex(hexed):
         """
         fix_hex adds padded zero if needed for byte conversion.
