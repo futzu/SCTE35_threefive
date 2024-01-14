@@ -35,7 +35,6 @@ class BitBin:
         if self.idx >= num_bits:
             self.idx -= num_bits
             return (self.bits >> (self.idx)) & ~(~0 << num_bits)
-        # return self.negative_shift(num_bits)
         return False
 
     def as_hex(self, num_bits):
@@ -43,7 +42,9 @@ class BitBin:
         Returns the hex value
         of num_bits of bits
         """
-        return hex(self.as_int(num_bits))
+        hexed = hex(self.as_int(num_bits))
+        return (hexed.replace('0x','0x0',1),hexed)[len(hexed) %2 == 0]
+
 
     def as_charset(self, num_bits, charset="ascii"):
         """
