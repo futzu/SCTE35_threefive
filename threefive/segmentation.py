@@ -16,6 +16,7 @@ table20 = {
 table22 = {
     0x00: "Not Indicated",
     0x01: "Content Identification",
+    0x02:  "Call Ad Server", # Addressable tv stuff
     0x10: "Program Start",
     0x11: "Program End",
     0x12: "Program Early Termination",
