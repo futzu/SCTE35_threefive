@@ -10,16 +10,48 @@
 <br>⚡ `Parses` __SCTE-36__ from `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br>⚡ `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
-# Latest Version is `2`.`4`.`23`
-![image](https://github.com/futzu/scte35-threefive/assets/52701496/6a0a73c9-9ae1-48eb-8996-719b2662602e)
+# Latest Version is `2`.`4`.`25`
 
-* __new stuff__ 
+* __new stuff__
    * new `threefive.Stream` methods
       * `threefive.Stream.pts()` returns dict of `{program:pts}` for current pts.
       *  `threefive.Stream.show_pts()` prints realtime `program -> pts`
  
-   * threefive `cli` tool now accepts `show` and `pts` keywords
+   * threefive `cli` tool now accepts `show` and `pts` and `version` keywords
    
+   * __addressable TV compatibility__
+  ```smalltalk
+             "tag": 2,
+            "descriptor_length": 31,
+            "name": "Segmentation Descriptor",
+            "identifier": "CUEI",
+            "components": [],
+            "segmentation_event_id": "0x065eff",
+            "segmentation_event_cancel_indicator": false,
+            "segmentation_event_id_compliance_indicator": true,
+            "program_segmentation_flag": true,
+            "segmentation_duration_flag": false,
+            "delivery_not_restricted_flag": true,
+            "segmentation_message": "Call Ad Server",   < --- Boom
+            "segmentation_upid_type": 12,
+            "segmentation_upid_type_name": "MPU",
+            "segmentation_upid_length": 16,
+            "segmentation_upid": {
+                "format_identifier": "ADFR",	<--- Boom
+                "private_data": "0x0133f10134b04f065e060220",
+                "version": 1,                            <---- Boom
+                "channel_identifier": "0x33f1",                  <---- Boom
+                "date": 20230223,                         <---- Boom
+                "break_code": 1630,                       <---- Boom
+                "duration": "0x602"                <---- Boom
+            },
+            "segmentation_type_id": 2,         <----  Boom
+            "segment_num": 0,
+            "segments_expected": 0
+        },
+
+  ```
+
 ___
 
 ### [threefive has Twenty-Two SCTE-35 code examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
