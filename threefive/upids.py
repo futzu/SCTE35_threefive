@@ -76,6 +76,13 @@ class UpidDecoder:
             "format_identifier": self.bitbin.as_charset(32),
             "private_data": self.bitbin.as_hex(self.bit_length - 32),
         }
+        if mpu_data["format_identifier"] =="ADFR":
+            data = bytes.fromhex(mpu_data["private_data"][2:])
+            mpu_data["version"] = data[0]
+            mpu_data["channel_identifier"]= hex(int.from_bytes(data[1:3],byteorder="big"))
+            mpu_data["date"] = int.from_bytes(data[3:7],byteorder="big")
+            mpu_data["break_code"]= int.from_bytes(data[7:9],byteorder="big")
+            mpu_data["duration"] =hex(int.from_bytes(data[9:11], byteorder="big"))
         return mpu_data
 
     def _decode_umid(self):
