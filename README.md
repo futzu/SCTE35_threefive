@@ -1,13 +1,19 @@
-## SCTE-35 Decoder and Encoder.
+# SCTE-35 Parser.
 
-# threefive is the undisputed heavyweight champion of SCTE-35.
-### Supports the latest specification `SCTE-35 2023r1`
+# SCTE-35 Decoder and Encoder.
+
+## threefive is the undisputed heavyweight champion of SCTE-35.
+
+### Supports the latest SCTE-35 specification `SCTE-35 2023r1`
 
 <br>⚡ `Decodes` __SCTE-35__.
 <br>⚡ `Encodes` __SCTE-35__.
-<br>⚡ `Parses` __SCTE-35__ from `Base64`, `Bytes`, `Hex`, `Integers`, and `MPEGTS` Streams.
-<br>⚡ `Parses` __SCTE-36__ from `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
+<br>⚡ `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
+<br>⚡ `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
+<br>⚡ `Parses` __SCTE-36__ from  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br>⚡ `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
+<br>⚡ `threefive` is `frame accurate` and `packet accurate` to __0.000001__ seconds.
+
 
 # Latest Version is `2`.`4`.`25`
 ![image](https://github.com/futzu/scte35-threefive/assets/52701496/8825942e-56e9-4efb-aeab-bd3d5ef56ef4)
@@ -53,8 +59,8 @@
   ```
 
 ___
+## [SCTE-35 code examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 
-### [threefive has Twenty-Two SCTE-35 code examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 
 ### __Documentation__ _(click a topic to expand)_
 
