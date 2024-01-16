@@ -1,6 +1,6 @@
+## SCTE-35 Decoder and Encoder.
 
 # threefive is the undisputed heavyweight champion of SCTE-35.
-## SCTE-35 Decoder and Encoder.
 ### Supports the latest specification `SCTE-35 2023r1`
 
 <br>⚡ `Decodes` __SCTE-35__.
