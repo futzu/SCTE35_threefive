@@ -1,10 +1,7 @@
 # SCTE-35 Parser.
-
-# SCTE-35 Decoder and Encoder.
-
-## threefive is the undisputed heavyweight champion of SCTE-35.
-
-### Supports the latest SCTE-35 specification `SCTE-35 2023r1`
+# SCTE-35 Decoder.
+# SCTE-35 Encoder.
+## threefive Supports the latest SCTE-35 specification `SCTE-35 2023r1`
 
 <br>⚡ `Decodes` __SCTE-35__.
 <br>⚡ `Encodes` __SCTE-35__.
@@ -16,7 +13,6 @@
 
 
 # Latest Version is `2`.`4`.`25`
-![image](https://github.com/futzu/scte35-threefive/assets/52701496/8825942e-56e9-4efb-aeab-bd3d5ef56ef4)
 
 * __new stuff__
    * new `threefive.Stream` methods
@@ -24,7 +20,37 @@
       *  `threefive.Stream.show_pts()` prints realtime `program -> pts`
  
    * threefive `cli` tool now accepts `show` and `pts` and `version` keywords
-   
+```smalltalk
+
+a@fu:~$ threefive version
+2.4.25
+
+a@fu:~$ threefive show f10.ts
+
+Program: 1
+    Service:	Service01
+    Provider:	FFmpeg
+    Pid:	4096
+    Pcr Pid:	256
+    Streams:
+		Pid: 256[0x100]	Type: 0x1b AVC Video
+		Pid: 257[0x101]	Type: 0xf AAC Audio
+		Pid: 258[0x102]	Type: 0x6 PES Packets/Private Data
+		Pid: 259[0x103]	Type: 0x6 PES Packets/Private Data
+		Pid: 260[0x104]	Type: 0x15 ID3 Timed Meta Data
+
+a@fu:~$ threefive pts f10.ts
+1-> 1.466667
+1-> 1.6
+1-> 1.533333
+1-> 1.533333
+1-> 1.533333
+1-> 1.5
+1-> 1.566667
+1-> 1.733333
+1-> 1.733333
+```
+
    * __addressable TV compatibility__
   ```smalltalk
              "tag": 2,
