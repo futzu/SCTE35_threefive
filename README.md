@@ -90,6 +90,12 @@ ___
 
 
 ### __Documentation__ _(click a topic to expand)_
+* The builtin docs are always the most up to date.
+* example to get help on the Stream classs
+![image](https://github.com/futzu/scte35parser/assets/52701496/445c1584-7de5-4d28-9ac7-5eea68da5e62)
+![image](https://github.com/futzu/scte35parser/assets/52701496/a2137e60-dc7c-44bd-8c5e-ff2c08e02bb4)
+
+
 
 <details><summary>Supported Platforms</summary> 
  
