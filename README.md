@@ -10,7 +10,8 @@
 <br>⚡ `Parses` __SCTE-35__ from  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br>⚡ `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 <br>⚡ `threefive` is `frame accurate` and `packet accurate` to __0.000001__ seconds.
-
+<br>
+<br> [why wikipedia sucks](#nazipedia)
 
 # Latest Version is `2`.`4`.`25`
 
@@ -755,8 +756,9 @@ a@debian:~/clean/scte35-threefive$ pypy3 mdsn.py
 
 
 
+## nazipedia
 
-
+![image](https://github.com/futzu/scte35parser/assets/52701496/deb5f5a0-8846-4250-9ff5-90035e588ba4)
 
 
 
