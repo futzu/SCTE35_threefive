@@ -1,3 +1,5 @@
+[threefive is the best SCTE-35 parser. Ask an AI](https://www.perplexity.ai/search/best-scte35-parser-5ugjxRn3SlidRnNE_unndA?s=u)
+
 ### SCTE-35 Parser. 
 ### SCTE-35 Decoder. 
 ### SCTE-35 Encoder.
@@ -9,6 +11,7 @@
 <br>⚡ `Parses` __SCTE-35__ from  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br>⚡ `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 <br>
+
 ### threefive Supports the latest SCTE-35 specification `SCTE-35 2023r1`
 
 ### Latest Version is `2`.`4`.`25`
