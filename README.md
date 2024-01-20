@@ -1,33 +1,32 @@
-# SCTE-35 Parser.
-# SCTE-35 Decoder.
-# SCTE-35 Encoder.
-## threefive Supports the latest SCTE-35 specification `SCTE-35 2023r1`
+### SCTE-35 Parser. 
+### SCTE-35 Decoder. 
+### SCTE-35 Encoder.
 
-<br>⚡ `Decodes` __SCTE-35__.
-<br>⚡ `Encodes` __SCTE-35__.
+# threefive.
+
 <br>⚡ `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
 <br>⚡ `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
 <br>⚡ `Parses` __SCTE-35__ from  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br>⚡ `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
-<br>⚡ `threefive` is `frame accurate` and `packet accurate` to __0.000001__ seconds.
 <br>
+### threefive Supports the latest SCTE-35 specification `SCTE-35 2023r1`
 
+### Latest Version is `2`.`4`.`25`
 
-# Latest Version is `2`.`4`.`25`
+<details> <summary><h3>new stuff in threefive</h3> </summary>
 
+ threefive cli tool now accepts `version`,  `show` and `pts` keywords.
 
-
-
-* __new stuff__
-   * new `threefive.Stream` methods
-      * `threefive.Stream.pts()` returns dict of `{program:pts}` for current pts.
-      *  `threefive.Stream.show_pts()` prints realtime `program -> pts`
- 
-   * threefive `cli` tool now accepts `show` and `pts` and `version` keywords
+* `version` <br>
 ```smalltalk
 
 a@fu:~$ threefive version
 2.4.25
+```
+
+* `show` <br>
+
+```smalltalk
 
 a@fu:~$ threefive show f10.ts
 
@@ -42,6 +41,11 @@ Program: 1
 		Pid: 258[0x102]	Type: 0x6 PES Packets/Private Data
 		Pid: 259[0x103]	Type: 0x6 PES Packets/Private Data
 		Pid: 260[0x104]	Type: 0x15 ID3 Timed Meta Data
+```
+
+* `pts`<br>
+
+```smalltalk
 
 a@fu:~$ threefive pts f10.ts
 1-> 1.466667
@@ -55,7 +59,10 @@ a@fu:~$ threefive pts f10.ts
 1-> 1.733333
 ```
 
-   * __addressable TV compatibility__
+
+* threefive is now  __addressable TV compatible__
+
+
   ```smalltalk
              "tag": 2,
             "descriptor_length": 31,
@@ -88,7 +95,9 @@ a@fu:~$ threefive pts f10.ts
 
   ```
 
-___
+</details>
+
+
 ## [SCTE-35 code examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 
 
@@ -371,10 +380,6 @@ a@fu:~/.local/lib/pypy3.9/site-packages$ radon cc -sa -o SCORE --md threefive/*.
 
 
 ### __Documentation__ _(click a topic to expand)_
-* The builtin docs are always the most up to date.
-* example to get help on the Stream classs
-![image](https://github.com/futzu/scte35parser/assets/52701496/445c1584-7de5-4d28-9ac7-5eea68da5e62)
-![image](https://github.com/futzu/scte35parser/assets/52701496/a2137e60-dc7c-44bd-8c5e-ff2c08e02bb4)
 
 
 
