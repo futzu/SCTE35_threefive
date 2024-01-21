@@ -1,26 +1,27 @@
 
-### SCTE-35 Parser. 
-### SCTE-35 Decoder. 
-### SCTE-35 Encoder.
+#### SCTE-35 Parser. 
+#### SCTE-35 Decoder. 
+#### SCTE-35 Encoder.
 
-# threefive.
+## threefive.
+#### cli tool and  python3 library.
 
 
-### [threefive is the best SCTE-35 parser.](https://www.perplexity.ai/search/best-scte35-parser-5ugjxRn3SlidRnNE_unndA?s=u)
 
-<br>⚡ `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
-<br>⚡ `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
-<br>⚡ `Parses` __SCTE-35__ from  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
-<br>⚡ `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
-<br>
+<br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
+<br> `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
+<br> `Parses` __SCTE-35__ from  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
+<br> `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
-### threefive Supports the latest SCTE-35 specification `SCTE-35 2023r1`
+#### threefive Supports the latest SCTE-35 specification `SCTE-35 2023r1`
+#### Latest threefive release is `2`.`4`.`25`
+#### It's not just me saying [threefive is the best SCTE-35 parser.](https://www.perplexity.ai/search/best-scte35-parser-5ugjxRn3SlidRnNE_unndA?s=u)
+####  [threefive/go is now cuei](https://github.com/futzu/cuei) 
 
-### Latest Version is `2`.`4`.`25`
 
-<details> <summary><h3>new stuff in threefive</h3> </summary>
+## new stuff in threefive 
 
- threefive cli tool now accepts `version`,  `show` and `pts` keywords.
+ <details> <summary>threefive cli tool now accepts <b>version</b>,  <b>show</b> and <b>pts</b> keywords. </summary>
 
 * `version` <br>
 ```smalltalk
@@ -65,7 +66,10 @@ a@fu:~$ threefive pts f10.ts
 ```
 
 
-* threefive is now  __addressable TV compatible__
+</details>
+
+
+<details><summary>threefive is now addressable TV compatible</summary>
 
 
   ```smalltalk
@@ -99,20 +103,17 @@ a@fu:~$ threefive pts f10.ts
         },
 
   ```
-
 </details>
 
 
-## [SCTE-35 code examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 
-
-
-<details><summary><h2>threefive's cyclomatic complexity</h2> </summary>
-
+<details><summary>threefive's cyclomatic complexity</summary>
+<br>
 <br>
   A cyclomatic coimplesity score under 15 is considered good.
-
+<br>
 <b> threefive's cyclomatic complexity is 1.968</b>
+
 <br>
 
 ```lua	
@@ -383,6 +384,7 @@ a@fu:~/.local/lib/pypy3.9/site-packages$ radon cc -sa -o SCORE --md threefive/*.
 </details>
 
 
+### [SCTE-35 code examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 
 ### __Documentation__ _(click a topic to expand)_
 
@@ -1027,7 +1029,6 @@ a@debian:~/clean/scte35-threefive$ pypy3 mdsn.py
 
  Powered by threefive
 ---
-<br>⚡ [`threefive/go` is now `cuei`](https://github.com/futzu/cuei) <br/>
 <br>⚡ [POIS Server](https://github.com/scunning1987/pois_reference_server) is Super Cool.
 <br>⚡ [bpkio-cli](https://pypi.org/project/bpkio-cli/): A command line interface to the broadpeak.io APIs. 
 <br>⚡ [x9k3](https://github.com/futzu/x9k3): SCTE-35 HLS Segmenter and Cue Inserter.
