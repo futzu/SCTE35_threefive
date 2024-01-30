@@ -70,7 +70,7 @@ a@fu:~$ threefive pts f10.ts
 </details>
 
 
-<details><summary>threefive is now addressable TV compatible</summary>
+<details><summary><b>threefive</b> is now <b>addressable TVnew stuff in thr compatible</summary>
 
 
   ```smalltalk
@@ -108,7 +108,7 @@ a@fu:~$ threefive pts f10.ts
 
 
 
-<details><summary>threefive's code is cleaner than your dishes OR cyclomatic complexity score</summary>
+<details><summary><b>threefive's code is cleaner than your dishes</b> </summary>
 <br>
 <br>
   A cyclomatic coimplesity score under 15 is considered good.
