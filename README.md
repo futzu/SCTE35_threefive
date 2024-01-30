@@ -1,28 +1,28 @@
-
-#### SCTE-35 Parser. 
-#### SCTE-35 Decoder. 
-#### SCTE-35 Encoder.
-
-## threefive.
-#### cli tool and  python3 library.
-
-<b>[threefive online SCTE-35 parser](https://iodisco.com/cgi-bin/scte35parser)</b>
-<br>
 #### It's not just me saying [threefive is the best SCTE-35 parser.](https://www.perplexity.ai/search/best-scte35-parser-5ugjxRn3SlidRnNE_unndA?s=u)
+
+# __threefive__ is the  highest rated SCTE-35 parser. Ever.
+ 
+### cli tool and library for encoding and decoding SCTE-35.
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
 <br> `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
 <br> `Parses` __SCTE-35__ from  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br> `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
-<br><br>
 
-#### threefive Supports the latest SCTE-35 specification `SCTE-35 2023r1`
-#### Latest threefive release is `2`.`4`.`25`
 
-####  [threefive/go is now cuei](https://github.com/futzu/cuei) 
+## new stuff in __threefive__ 
 
-## new stuff in threefive 
+* Latest __threefive__ release is `2`.`4`.`25`, 
 
- <details> <summary>threefive cli tool now accepts <b>version</b>,  <b>show</b> and <b>pts</b> keywords. </summary>
+* __threefive__ supports the latest SCTE-35 specification `SCTE-35 2023r1`
+
+* [__threefive__ online SCTE-35 parser](https://iodisco.com/cgi-bin/scte35parser)</b><br>
+     * _I need a UX folk to jazz up the online parser page for me._
+     * _You can do it any way you want, just maintain the functionality_
+      
+*  <b>threefive/go</b> is now[ cuei](https://github.com/futzu/cuei) 
+
+
+ <details> <summary> <b>threefive cli tool</b> now accepts <b>version</b>,  <b>show</b> and <b>pts</b> keywords. </summary>
 
 * `version` <br>
 ```smalltalk
@@ -108,7 +108,7 @@ a@fu:~$ threefive pts f10.ts
 
 
 
-<details><summary>threefive's cyclomatic complexity</summary>
+<details><summary>threefive's code is cleaner than your dishes OR cyclomatic complexity score</summary>
 <br>
 <br>
   A cyclomatic coimplesity score under 15 is considered good.
