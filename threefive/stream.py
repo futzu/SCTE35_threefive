@@ -1,6 +1,7 @@
 """
 Mpeg-TS Stream parsing class Stream
 """
+
 import sys
 from functools import partial
 from new_reader import reader
@@ -11,7 +12,7 @@ from .packetdata import PacketData
 
 streamtype_map = {
     0x00: "MPEG-2 Video",
-    0x01 : "H.264 Video",
+    0x01: "H.264 Video",
     0x02: "MP2 Video",
     0x03: "MP2 Audio",
     0x04: "MP2 Audio",
@@ -19,14 +20,13 @@ streamtype_map = {
     0x0F: "AAC Audio",
     0x15: "ID3 Timed Meta Data",
     0x1B: "AVC Video",
-    0x80 : "MPEG-1 Audio",
-    0x81 : "MPEG-2 Audio",
+    0x80: "MPEG-1 Audio",
+    0x81: "MPEG-2 Audio",
     0x82: "AC3 Audio ",
-    0x83 : "AAC Audio",
-    0x84 : "AAC HE v2 Audio",
+    0x83: "AAC Audio",
+    0x84: "AAC HE v2 Audio",
     0x86: "SCTE35 Data",
     0xC0: "Unknown",
-
 }
 
 
@@ -82,7 +82,7 @@ class ProgramInfo:
         # sorted_dict = {k:my_dict[k] for k in sorted(my_dict)})
         keys = sorted(self.streams)
         for k in keys:
-            vee = int(self.streams[k],base=16)
+            vee = int(self.streams[k], base=16)
             if vee in streamtype_map:
                 vee = f"{hex(vee)} {streamtype_map[vee]}"
             else:
@@ -230,7 +230,7 @@ class Stream:
         a threefive.Cue instance as it's only argument.
         """
         if self._find_start():
-            for pkt in  iter(partial(self._tsdata.read, self._PACKET_SIZE ), b""):
+            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
                 cue = self._parse(pkt)
                 if cue:
                     if not func:
@@ -252,7 +252,9 @@ class Stream:
         """
         if self._find_start():
             num_pkts = 700
-            for chunk in  iter(partial(self._tsdata.read, self._PACKET_SIZE * num_pkts), b""):
+            for chunk in iter(
+                partial(self._tsdata.read, self._PACKET_SIZE * num_pkts), b""
+            ):
                 _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
                 del _
             self._tsdata.close()
@@ -289,7 +291,7 @@ class Stream:
         SCTE-35 cues are print2ed to stderr.
         """
         if self._find_start():
-            for pkt in  iter(partial(self._tsdata.read, self._PACKET_SIZE ), b""):
+            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
                 cue = self._parse(pkt)
                 if cue:
                     func(cue)
@@ -302,9 +304,9 @@ class Stream:
         parsed for SCTE-35.
         """
         self.info = True
-        data = self._tsdata.read(188*5000)
+        data = self._tsdata.read(188 * 5000)
         while data:
-            pkt =data[:188]
+            pkt = data[:188]
             data = data[188:]
             self._parse_info(pkt)
         sopro = sorted(self.maps.prgm.items())
@@ -319,15 +321,18 @@ class Stream:
         show_pts displays current pts by stream prgm.
         """
         if self._find_start():
-            for pkt in  iter(partial(self._tsdata.read, self._PACKET_SIZE ), b""):
+            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
                 self._parse(pkt)
                 if self._pusi_flag(pkt):
-                    _={ print2(f'{pgrm}-> {self.as_90k(pts)}') for pgrm,pts in  self.maps.prgm_pts.items()}
+                    _ = {
+                        print2(f"{pgrm}-> {self.as_90k(pts)}")
+                        for pgrm, pts in self.maps.prgm_pts.items()
+                    }
         return False
 
     def decode_start_time(self):
         """
-       decode_start_time
+        decode_start_time
         """
         self.decode(func=no_op)
         if len(self.start.values()) > 0:
@@ -411,7 +416,7 @@ class Stream:
             last_cc = self.maps.pid_cc[pid]
             good = (last_cc, ((last_cc + 1) % 16))
             if c_c not in good:
-                print2(f"BAD --> pid: {hex(pid)} last cc: {last_cc} cc: {c_c}" )
+                print2(f"BAD --> pid: {hex(pid)} last cc: {last_cc} cc: {c_c}")
         self.maps.pid_cc[pid] = c_c
 
     def _parse_pts(self, pkt, pid):
