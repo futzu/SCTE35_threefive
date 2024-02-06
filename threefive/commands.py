@@ -1,6 +1,7 @@
 """
 SCTE35 Splice Commands
 """
+
 from .bitn import BitBin
 from .base import SCTE35Base
 
@@ -142,7 +143,7 @@ class TimeSignal(SpliceCommand):
         if self.time_specified_flag:
             nbin.reserve(6)
             if not self.pts_time and not self.pts_time_ticks:
-                err_mesg = ' self.time_specified_flag is set. Please set self.pts_time ( float )  or self.pts_time_ticks ( int  )'
+                err_mesg = " self.time_specified_flag is set. Please set self.pts_time ( float )  or self.pts_time_ticks ( int  )"
                 raise ValueError(err_mesg)
             if not self.pts_time_ticks:
                 self.pts_time_ticks = self.as_ticks(self.pts_time)
@@ -338,7 +339,6 @@ class SpliceSchedule(SpliceCommand):
         self.command_type = 4
         self.name = "Splice Schedule"
         self.splices = []
-
 
     def decode(self):
         """
