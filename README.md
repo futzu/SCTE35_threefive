@@ -12,7 +12,10 @@
 <br> `Parses` __SCTE-35__ from  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br> `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
-## You haven't seen an [online SCTE-35 Encoder](https://iodisco.com/cgi-bin/scte35encoder) before, have you? 
+
+
+### You haven't seen an [online SCTE-35 Encoder](https://iodisco.com/cgi-bin/scte35encoder) before, have you? 
+###  [__threefive__ online SCTE-35 parser](https://iodisco.com/cgi-bin/scte35parser)
  
 
 ## new stuff in __threefive__ 
@@ -20,11 +23,7 @@
 * Latest __threefive__ release is `2`.`4`.`25`, 
 
 * __threefive__ supports the latest SCTE-35 specification `SCTE-35 2023r1`
-
-* [__threefive__ online SCTE-35 parser](https://iodisco.com/cgi-bin/scte35parser)</b><br>
-     * _I need a UX folk to jazz up the online parser page for me._
-     * _You can do it any way you want, just maintain the functionality_
-      
+  
 *  <b>threefive/go</b> is now[ cuei](https://github.com/futzu/cuei) 
 
 
