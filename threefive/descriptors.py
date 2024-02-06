@@ -72,7 +72,7 @@ class SpliceDescriptor(SCTE35Base):
         self._encode_id(nbin)
         if self.private_data:
             nbin.add_bites(self.private_data)
-        return nbin
+        return nbin.bites
 
     def _encode_id(self, nbin):
         """
@@ -399,7 +399,12 @@ def splice_descriptor(bites):
     """
     replaced splice_descriptor
     """
+    spliced=None
     tag = bites[0]
-    spliced = ( SpliceDescriptor(bites),descriptor_map[tag](bites))[tag in descriptor_map]
+    if tag in descriptor_map:
+        spliced = descriptor_map[tag](bites)
+    else:
+        spliced = SpliceDescriptor(bites)
+    #spliced = ( SpliceDescriptor(bites),descriptor_map[tag](bites))[tag in descriptor_map]
     spliced.decode()
     return spliced
