@@ -2,7 +2,6 @@
 The bitn.BitBin and bitn.NBin classes
 """
 
-
 from .stuff import print2
 
 
@@ -43,8 +42,7 @@ class BitBin:
         of num_bits of bits
         """
         hexed = hex(self.as_int(num_bits))
-        return (hexed.replace('0x','0x0',1),hexed)[len(hexed) %2 == 0]
-
+        return (hexed.replace("0x", "0x0", 1), hexed)[len(hexed) % 2 == 0]
 
     def as_charset(self, num_bits, charset="ascii"):
         """
@@ -88,12 +86,8 @@ class BitBin:
         negative_shift is called instead of
         throwing a negative shift count error.
         """
-        print2(
-            f"{num_bits} bits requested, but only {self.idx} bits left."
-        )
-        print2(
-            f"\n bytes remaining: {self.as_bytes(self.idx)} "
-        )
+        print2(f"{num_bits} bits requested, but only {self.idx} bits left.")
+        print2(f"\n bytes remaining: {self.as_bytes(self.idx)} ")
 
 
 class NBin:
