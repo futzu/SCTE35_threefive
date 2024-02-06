@@ -136,7 +136,7 @@ class Stream:
     _SYNC_BYTE = 0x47
     # tids
     _PMT_TID = b"\x02"
-    _SCTE35_TID = b"\xFC0"
+    _SCTE35_TID = b"\xFC"
     _SDT_TID = b"\x42"
     # pts
     ROLLOVER = 8589934591  # 95443.717678
