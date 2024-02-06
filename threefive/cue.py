@@ -126,52 +126,33 @@ class Cue(SCTE35Base):
             data = data + "="
         return data
 
-    ##    def _mk_bits(self,data):
-    ##        """
-    ##        cue._mk_bits Converts
-    ##        Hex and Base64 strings into bytes.
-    ##        """
-    ##        if isinstance(data, bytes):
-    ##            return data[data.index(b"\xfc") :]
-    ##        # handles int and unquoted hex
-    ##        if isinstance(data, int):
-    ##            length = data.bit_length() >> 3
-    ##            bites = int.to_bytes(data, length, byteorder="big")
-    ##            return bites
-    ##        try:
-    ##            # Handles hex byte strings
-    ##            i = int(data, 16)
-    ##            i_len = i.bit_length() >> 3
-    ##            bites = int.to_bytes(i, i_len, byteorder="big")
-    ##            return bites[
-    ##        except (LookupError, TypeError, ValueError):
-    ##            if data[:2].lower() == "0x":
-    ##                data = data[2:]
-    ##            if data[:2].lower() == "fc":
-    ##                return bytes.fromhex(data)
-    ##        try:
-    ##            return b64decode(self.fix_bad_b64(data))
-    ##        except (LookupError, TypeError, ValueError):
-    ##            return data
-
-    def _mk_bits(self, data):
-        print(data, "FIRST")
+    def _mk_bits(self,data):
+        """
+        cue._mk_bits Converts
+        Hex and Base64 strings into bytes.
+        """
         if isinstance(data, bytes):
-            data = data.decode()
-            print(data[:2].lower())
-        if data[:2].lower() in ["0x"]:
-            data = data[2:]
-            print(data)
-        if data[:2].lower() in ["fc"]:
-            data = int(data, 16)
-            print(data)
+            return data[data.index(b"\xfc") :]
+        # handles int and unquoted hex
         if isinstance(data, int):
-            bitelen = data.bit_length() << 3
-            bites = int.to_bytes(data, bitelen, byteorder="big")
-            print(bites)
-            return bites[bites.index(b"\xfc0") :]
-        print("third")
-        return b64decode(self.fix_bad_b64(data))
+            length = data.bit_length() >> 3
+            bites = int.to_bytes(data, length, byteorder="big")
+            return bites
+        try:
+            # Handles hex byte strings
+            i = int(data, 16)
+            i_len = i.bit_length() >> 3
+            bites = int.to_bytes(i, i_len, byteorder="big")
+            return bites
+        except (LookupError, TypeError, ValueError):
+            if data[:2].lower() == "0x":
+                data = data[2:]
+            if data[:2].lower() == "fc":
+                return bytes.fromhex(data)
+        try:
+            return b64decode(self.fix_bad_b64(data))
+        except (LookupError, TypeError, ValueError):
+            return data
 
     def _mk_descriptors(self, bites):
         """
