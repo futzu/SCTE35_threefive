@@ -20,7 +20,7 @@
 
 ## new stuff in __threefive__ 
 
-* Latest __threefive__ release is `2`.`4`.`25`, 
+* Latest __threefive__ release is `2`.`4`.`29`, 
 
 * __threefive__ supports the latest SCTE-35 specification `SCTE-35 2023r1`
   
