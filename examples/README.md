@@ -9,6 +9,7 @@
       * [Combination Upid Segmentation Descriptor](https://github.com/futzu/threefive/blob/master/examples/upid/upid_combo.py)
 
 * `Stream`
+   * [Show raw SCTE-35 packets in a file or stream](https://github.com/futzu/scte35parser-threefive/blob/master/examples/stream/scte35packets.py) __New 02/06/2024__
    * [Return a dict of PTS timestamps and SCTE-35 cue strings from MPEGTS](https://github.com/futzu/scte35-threefive/blob/master/examples/stream/cue_list_too.py)
    * [Display SCTE35 info via Webvtt Subtitles](https://github.com/futzu/threefive/blob/master/examples/stream/cue2vtt.py) __Updated 07/01/2023!__
    * [Return a list of SCTE-35 Cues from an MPEGTS file](https://github.com/futzu/threefive/blob/master/examples/stream/cue_list.py)
