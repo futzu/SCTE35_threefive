@@ -392,8 +392,7 @@ a@fu:~/.local/lib/pypy3.9/site-packages$ radon cc -sa -o SCORE --md threefive/*.
 
 ### [SCTE-35 code examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 
-### __Documentation__ _(click a topic to expand)_
-
+# __Documentation__ 
 
 
 <details><summary>Supported Platforms</summary> 
