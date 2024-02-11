@@ -927,7 +927,7 @@ True
 
 </details>
 
-<details> <summary> __Custom Private Splice Descriptors__</summary>
+<details> <summary> Custom Private Splice Descriptors ( new! )</summary>
 
 
 ### threefive now supports custom private splice descriptors, right out the box. 
