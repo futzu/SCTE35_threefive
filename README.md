@@ -16,7 +16,8 @@
 
 ### You haven't seen an [online SCTE-35 Encoder](https://iodisco.com/cgi-bin/scte35encoder) before, have you? 
 ###  [__threefive__ online SCTE-35 parser](https://iodisco.com/cgi-bin/scte35parser)
- 
+
+ ### Need a cli to fast generate SCTE-35 Cues for HLS? Behold, [adbreak2](https://github.com/futzu/adbreak2/blob/main/adbreak2)
 
 ## new stuff in __threefive__ 
 
@@ -1034,15 +1035,19 @@ a@debian:~/clean/scte35-threefive$ pypy3 mdsn.py
 
  Powered by threefive
 ---
+<br>⚡ [sideways](https://github.com/futzu/sideways) inject SCTE-35 into HLS via maanifest manipulation.
+<br>⚡ [adbreak2](https://github.com/futzu/adbreak2) a cli tool that quickly and easily generates SCTE-35 Cues for HLS and stuff.
+<br>⚡ [Ultra Mega Zoom Zoom](https://github.com/futzu/umzz) ABR HLS segmenter and SCTE-35 inserter. 
 <br>⚡ [POIS Server](https://github.com/scunning1987/pois_reference_server) is Super Cool.
 <br>⚡ [bpkio-cli](https://pypi.org/project/bpkio-cli/): A command line interface to the broadpeak.io APIs. 
 <br>⚡ [x9k3](https://github.com/futzu/x9k3): SCTE-35 HLS Segmenter and Cue Inserter.
-      <br>⚡ [amt-play ](https://github.com/vivoh-inc/amt-play) uses x9k3.
+<br>⚡ [amt-play ](https://github.com/vivoh-inc/amt-play) uses x9k3.
 <br>⚡ [m3ufu](https://github.com/futzu/m3ufu): SCTE-35 m3u8 Parser.
 <br>⚡ [six2scte35](https://github.com/futzu/six2scte35): ffmpeg changes SCTE-35 stream type to 0x06 bin data, six2scte35 changes it back.
 <br>⚡ [SuperKabuki](https://github.com/futzu/SuperKabuki): SCTE-35 Packet Injection.
 <br>⚡ [showcues](https://github.com/futzu/showcues) m3u8 SCTE-35 parser.
-  
+
+
  threefive | more
 ---
 <br>⚡ [Diagram](https://github.com/futzu/threefive/blob/master/cue.md) of a threefive SCTE-35 Cue.
