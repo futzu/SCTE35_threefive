@@ -18,7 +18,8 @@
 * Latest __threefive__ release is `2`.`4`.`29`, 
 
 * __threefive__ supports the latest SCTE-35 specification `SCTE-35 2023r1`
-  
+
+* [`Encoding`](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) AND [`Encoding | more` ](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding%7Cmore.md)
 
 <details><summary><b>threefive's code is cleaner than your dishes</b> </summary>
 <br>
