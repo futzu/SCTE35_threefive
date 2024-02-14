@@ -23,8 +23,10 @@ from .commands import (
 from .descriptors import (
     AudioDescriptor,
     AvailDescriptor,
+    DVBDASDescriptor,
     DtmfDescriptor,
     SegmentationDescriptor,
+    SpliceDescriptor,
     TimeDescriptor,
 )
 
