@@ -50,41 +50,10 @@ b'\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfeB9t\xc4\x00\x002\xcc`
 >>>> 
 
 
->>>> cue.show()
-{
-    "info_section": {
-        "table_id": "0xfc",
-        "section_syntax_indicator": false,
-        "private": false,
-        "sap_type": "0x03",
-        "sap_details": "No Sap Type",
-        "section_length": 22,
-        "protocol_version": 0,
-        "encrypted_packet": false,
-        "encryption_algorithm": 0,
-        "pts_adjustment_ticks": 0,
-        "cw_index": "0x0",
-        "tier": "0xfff",
-        "splice_command_length": 5,
-        "splice_command_type": 6,
-        "descriptor_loop_length": 0,
-        "crc": "0x32cc606e"
-    },
-    "command": {
-        "command_length": 5,
-        "command_type": 6,
-        "name": "Time Signal",
-        "time_specified_flag": true,
-        "pts_time": 12345.13,
-        "pts_time_ticks": 1111061700
-    },
-    "descriptors": []
-}
->>>> 
 ```
 ### The Cue class also has methods to load data from a dictionary or JSON for encoding
 
-```pypy3
+```py3
 |  load(self, stuff)
  |      Cue.load loads SCTE35 data for encoding.
  |      stuff is a dict or json
