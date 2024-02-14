@@ -63,9 +63,9 @@ table22 = {
 DVB Equivalent Segmentation Type
 """
 dvb_table2={
-0x0: "No Equivalent"
-0x1: "Distributor Placement Opportunity"
-0x2: "Provider Placement Opportunity"
-0x3: "Distributor Advertisement"
-0x4: "Provider Advertisement"
+0x0: "No Equivalent",
+0x1: "Distributor Placement Opportunity",
+0x2: "Provider Placement Opportunity",
+0x3: "Distributor Advertisement",
+0x4: "Provider Advertisement",
 }
