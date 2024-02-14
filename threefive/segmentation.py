@@ -4,7 +4,6 @@ segmentation.py
 SCTE35 Segmentation Descriptor tables.
 """
 
-
 table20 = {
     0x00: "Restrict Group 0",
     0x01: "Restrict Group 1",
@@ -16,7 +15,7 @@ table20 = {
 table22 = {
     0x00: "Not Indicated",
     0x01: "Content Identification",
-    0x02:  "Call Ad Server", # Addressable tv stuff
+    0x02: "Call Ad Server",  # Addressable tv stuff
     0x10: "Program Start",
     0x11: "Program End",
     0x12: "Program Early Termination",
@@ -57,4 +56,16 @@ table22 = {
     0x47: "Distributor Ad Block End",
     0x50: "Network Start",
     0x51: "Network End",
+}
+
+
+"""
+DVB Equivalent Segmentation Type
+"""
+dvb_table2={
+0x0: "No Equivalent"
+0x1: "Distributor Placement Opportunity"
+0x2: "Provider Placement Opportunity"
+0x3: "Distributor Advertisement"
+0x4: "Provider Advertisement"
 }
