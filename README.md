@@ -1,10 +1,13 @@
+### Heads up. This is no longer maintained. It's been fun, but it's time for me to go find a real job. ~ Adrian
+
+
+
 #### It's not just me saying [threefive is the best SCTE-35 parser.](https://www.perplexity.ai/search/best-scte35-parser-5ugjxRn3SlidRnNE_unndA?s=u)
 
 
 
 # __threefive__ is the  highest rated SCTE-35 parser.  Ever.
 
-### Heads up. This is no longer maintained. It's been fun, but it's time for me to go find a real job. ~ Adrian
 
 ### cli tool and library for encoding and decoding SCTE-35.
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
