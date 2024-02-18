@@ -1,13 +1,29 @@
-### Heads up. This is no longer maintained. It's been fun, but it's time for me to go find a real job. ~ Adrian 02/15/2024
-
-
-
-
 #### It's not just me saying [threefive is the best SCTE-35 parser.](https://www.perplexity.ai/search/best-scte35-parser-5ugjxRn3SlidRnNE_unndA?s=u)
 
 
 
 # __threefive__ is the  highest rated SCTE-35 parser.  Ever.
+
+<pre>
+Let me explain.
+<b>This is not beginner software. </b>
+I have like a dozen or so active repos for SCTE-35 related software.
+I spend ten to fifteen every week just answering y'all's questions.
+Most of the issues reported have nothing to do with my software, 
+they are about related protocols like MPEGTS, HLS, SCTE-35, Multicast...
+
+<b>I just don't have the bandwidth man. </b>
+
+The code will be here, and I'll update it as I feel the need. 
+<b>I just can't do any more support, I'm going to ignore the issues. </b>
+
+Sorry, I know it's a dick move, but I have to put my oxygen mask on first or we're all going to die. 
+
+Adrian
+</pre>
+
+
+
 
 
 ### cli tool and library for encoding and decoding SCTE-35.
