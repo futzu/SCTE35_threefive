@@ -17,7 +17,8 @@ they are about related protocols like MPEGTS, HLS, SCTE-35, Multicast...
 The code will be here, and I'll update it as I feel the need. 
 <b>I just can't do any more support, I'm going to ignore the issues. </b>
 
-Sorry, I know it's a dick move, but I have to put my oxygen mask on first or we're all going to die. 
+Sorry, I know it's a dick move, 
+but I have to put my oxygen mask on first or we're all going to die. 
 
 Adrian
 </pre>
