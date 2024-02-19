@@ -3,9 +3,6 @@
 """
 threefive command line SCTE35 decoder.
 
-( type 'make cli' or 'make pypy3-cli' as root
-to install to /usr/local/bin )
-
 use like:
 
     cat myvideo.ts | threefive
@@ -16,14 +13,63 @@ use like:
 
     threefive mpegts_dir/*.ts
 
-    threefive '/DBZAAAAAAAA///wBQb+AAAAAABDAkFDVUVJAAAACn//AAApMuAPLXVybjp1dWlkOmFhODViYmI2LTVjNDMtNGI2YS1iZWJiLWVlM2IxM2ViNzk5ORAAAFz7UQA='
 """
 
 
 import sys
 import threefive
 
+class SupaStream(threefive.Stream):
+
+    def _parse_scte35(self,pkt,pid):
+        print(pkt)
+        super()._parse_scte35(pkt,pid)
+
+
+HELP="""
+
+threefive can parse a SCTE-35 Cue in Base64, Hex, or Integer format.
+
+threefive can also parse SCTE-35 in MPEGTS streams
+from local files, over HTTP(S), UDP unicast or UDP multicast.
+
+use like:
+    cat myvideo.ts | threefive
+
+    threefive https://futzu.com/xaa.ts
+
+    threefive myvideo.ts yourvideo.ts someothervideo.ts
+
+    threefive mpegts_dir/*.ts
+
+    threefive '/DAWAAAAAAAAAP/wBQb+AKmKxwAACzuu2Q=='
+
+    threefive '0xfc301600000000000000fff00506fe00a98ac700000b3baed9'
+
+to show the version of threefive:
+
+    threefive verion
+
+to show the streams in an MPEGTS video:
+
+    threefive show video.ts
+
+to show the raw SCTE-35 packets from a video stream:
+
+    threefive packets video.ts
+    
+to show this help:
+
+    threefive help
+
+    
+"""
+
+
 if __name__ == "__main__":
+    if len(sys.argv) == 1 :
+        print(HELP)
+        sys.exit()
     if sys.argv and sys.argv[1].lower() in [b'version','version']:
         print(f'{threefive.version}')
         sys.exit()
@@ -36,7 +82,12 @@ if __name__ == "__main__":
             strm = threefive.Stream(sys.argv[2])
             strm.show()
             sys.exit()
-        for arg in sys.argv[1:]:
+        if sys.argv[1].lower() in [b'packets','packets']:
+            supa = SupaStream(sys.argv[2])
+            supa.decode()
+        if sys.argv[1].lower() in [b'help','help']:
+            print(HELP)
+        for arg in sys.argv[1]:
             threefive.decode(arg)
     else:
         threefive.decode(sys.stdin.buffer)
