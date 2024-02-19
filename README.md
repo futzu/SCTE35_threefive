@@ -820,9 +820,7 @@ private_data = b'threefive kicks ass'
 ---
 <br>⚡ [Diagram](https://github.com/futzu/threefive/blob/master/cue.md) of a threefive SCTE-35 Cue.
 <br>⚡ [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) and SCTE35 and Stream Type 0x6 bin data.
-<br>⚡ [Issues and Bugs and Feature Requests](https://github.com/futzu/scte35-threefive/issues) No forms man, just open an issue and tell me what you need. <br><i>(It needs to be  threefive related or a "What is the meaning of life and stuff?" type of question)</i>
-
-
+<br>⚡ [Issues and Bugs and Feature Requests](https://github.com/futzu/scte35-threefive/issues) are no longer being accepted.
 
 
 
