@@ -8,14 +8,8 @@
 
 <b>This is not beginner software. </b>
 
-If you want to work with SCTE-35, [read the specification first](https://www.scte.org/documents/6710/SCTE_35_2023r1.pdf) <br>
-If you want to parse SCTE-35 from MPEGTS read [the tsduck mpegts intro ](https://tsduck.io/download/docs/mpegts-introduction.pdf)
-
-
-
-![image](https://github.com/futzu/scte35parser-threefive/assets/52701496/acca3673-7b6c-4145-8399-c209d199bbc0)
-
-
+## If you want to work with SCTE-35, [read the specification first](https://www.scte.org/documents/6710/SCTE_35_2023r1.pdf) <br>
+## If you want to parse SCTE-35 from MPEGTS read [the tsduck mpegts intro ](https://tsduck.io/download/docs/mpegts-introduction.pdf)
 
 
 ### cli tool and library for encoding and decoding SCTE-35.
