@@ -5,22 +5,23 @@
 # __threefive__ is the  highest rated SCTE-35 parser.  Ever.
 
 
-
-<b>This is not beginner software. </b>
-
-## If you want to work with SCTE-35, [read the specification first](https://www.scte.org/documents/6710/SCTE_35_2023r1.pdf) <br>
-## If you want to parse SCTE-35 from MPEGTS read [the tsduck mpegts intro ](https://tsduck.io/download/docs/mpegts-introduction.pdf)
-
-
 ### cli tool and library for encoding and decoding SCTE-35.
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
 <br> `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
 <br> `Parses` __SCTE-35__ from  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br> `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
-## new stuff in __threefive__ 
 
-* Latest __threefive__ release is `2`.`4`.`31`
+
+# <b>This is not beginner software. </b>
+
+## If you want to work with SCTE-35, [read the specification first](https://www.scte.org/documents/6710/SCTE_35_2023r1.pdf) <br>
+## If you want to parse SCTE-35 from MPEGTS read [the tsduck mpegts intro ](https://tsduck.io/download/docs/mpegts-introduction.pdf)
+
+
+# Latest __threefive__ release is `2`.`4`.`33`
+
+## New stuff in __threefive__ 
 
 * __threefive__ supports the latest SCTE-35 specification `SCTE-35 2023r1`
 
@@ -28,9 +29,9 @@
 ![image](https://github.com/futzu/scte35parser-threefive/assets/52701496/883cdc41-b761-40a6-bff4-3f05ed9e0fec)
 
 
-### [SCTE-35 code examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
+## [SCTE-35 code examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 
-* [`Encoding`](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [`Encoding | more` ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md)
+## [`Encoding`](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [`Encoding | more` ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md)
 
 
 # __Documentation__ 
