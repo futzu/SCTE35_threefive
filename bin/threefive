@@ -87,7 +87,7 @@ if __name__ == "__main__":
             supa.decode()
         if sys.argv[1].lower() in [b'help','help']:
             print(HELP)
-        for arg in sys.argv[1]:
+        for arg in sys.argv[1:]:
             threefive.decode(arg)
     else:
         threefive.decode(sys.stdin.buffer)
