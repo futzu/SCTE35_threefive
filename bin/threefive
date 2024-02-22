@@ -19,14 +19,15 @@ use like:
 import sys
 import threefive
 
+
 class SupaStream(threefive.Stream):
 
-    def _parse_scte35(self,pkt,pid):
+    def _parse_scte35(self, pkt, pid):
         print(pkt)
-        super()._parse_scte35(pkt,pid)
+        super()._parse_scte35(pkt, pid)
 
 
-HELP="""
+HELP = """
 
 threefive can parse a SCTE-35 Cue in Base64, Hex, or Integer format.
 
@@ -57,36 +58,38 @@ to show the streams in an MPEGTS video:
 to show the raw SCTE-35 packets from a video stream:
 
     threefive packets video.ts
-    
+
 to show this help:
 
     threefive help
 
-    
+
 """
 
 
 if __name__ == "__main__":
-    if len(sys.argv) == 1 :
+    if len(sys.argv) == 1:
         print(HELP)
         sys.exit()
-    if sys.argv and sys.argv[1].lower() in [b'version','version']:
-        print(f'{threefive.version}')
+    if sys.argv and sys.argv[1].lower() in [b"version", "version"]:
+        print(f"{threefive.version}")
         sys.exit()
     if len(sys.argv) > 1:
-        if sys.argv[1].lower() in [b'pts','pts']:
+        if sys.argv[1].lower() in [b"pts", "pts"]:
             strm = threefive.Stream(sys.argv[2])
             strm.show_pts()
             sys.exit()
-        if sys.argv[1].lower() in [b'show','show']:
+        if sys.argv[1].lower() in [b"show", "show"]:
             strm = threefive.Stream(sys.argv[2])
             strm.show()
             sys.exit()
-        if sys.argv[1].lower() in [b'packets','packets']:
+        if sys.argv[1].lower() in [b"packets", "packets"]:
             supa = SupaStream(sys.argv[2])
             supa.decode()
-        if sys.argv[1].lower() in [b'help','help']:
+            sys.exit()
+        if sys.argv[1].lower() in [b"help", "help"]:
             print(HELP)
+            sys.exit()
         for arg in sys.argv[1:]:
             threefive.decode(arg)
     else:
