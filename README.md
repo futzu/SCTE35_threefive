@@ -728,7 +728,7 @@ private_data = b'threefive kicks ass'
 
  Powered by threefive
 ---
-<br>⚡ [sideways](https://github.com/futzu/sideways) inject SCTE-35 into HLS via maanifest manipulation.
+<br>⚡ [sideways](https://github.com/futzu/sideways) inject SCTE-35 into HLS via manifest manipulation.
 <br>⚡ [adbreak2](https://github.com/futzu/adbreak2) a cli tool that quickly and easily generates SCTE-35 Cues for HLS and stuff.
 <br>⚡ [Ultra Mega Zoom Zoom](https://github.com/futzu/umzz) ABR HLS segmenter and SCTE-35 inserter. 
 <br>⚡ [POIS Server](https://github.com/scunning1987/pois_reference_server) is Super Cool.
