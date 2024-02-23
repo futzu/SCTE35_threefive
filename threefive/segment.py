@@ -1,6 +1,7 @@
 """
 The threefive.Segment class
 """
+
 import os
 from new_reader import reader
 from .stream import Stream
@@ -66,7 +67,8 @@ class Segment(Stream):
         self.duration = None
         if AES:
             if iv:
-                self.iv = int.to_bytes(int(iv), 16, byteorder="big")
+                iv = iv.replace('\n','')
+                self.iv = int.to_bytes(int(iv,base=16), 16, byteorder="big")
             if self.key_uri:
                 self._aes_get_key()
                 self._aes_decrypt()
@@ -86,10 +88,9 @@ class Segment(Stream):
     def _aes_decrypt(self):
         mode = pyaes.AESModeOfOperationCBC(self.key, iv=self.iv)
         self._mk_tmp()
-        with open(
-                self.tmp,
-                "wb",
-                encoding="utf-8") as outfile, reader(self.seg_uri) as infile:
+        with open(self.tmp, "wb") as outfile, reader(
+            self.seg_uri
+        ) as infile:
             pyaes.decrypt_stream(mode, infile, outfile)
         self.seg_uri = self.tmp
 
@@ -117,14 +118,14 @@ class Segment(Stream):
             cue.show()
         self._add_cue(cue)
 
-    def decode(self,func=None):
+    def decode(self, func=None):
         """
         decode a mpegts segment.
         """
 
         super().decode_fu(func=self.show_cue)
         try:
-            self.pts_start  = self.as_90k(self.start.popitem()[1])
+            self.pts_start = self.as_90k(self.start.popitem()[1])
         except:
             pass
         try:
@@ -134,4 +135,4 @@ class Segment(Stream):
         if self.tmp:
             os.unlink(self.tmp)
         if self.pts_start and self.pts_last:
-            self.duration = round(self.pts_last - self.pts_start,6)
+            self.duration = round(self.pts_last - self.pts_start, 6)
