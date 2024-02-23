@@ -527,52 +527,6 @@ ___
 
 
 
- <details> <summary> <b>threefive cli tool</b> now accepts <b>version</b>,  <b>show</b> and <b>pts</b> keywords. </summary>
-
-* `version` <br>
-```smalltalk
-
-a@fu:~$ threefive version
-2.4.25
-```
-
-* `show` <br>
-
-```smalltalk
-
-a@fu:~$ threefive show f10.ts
-
-Program: 1
-    Service:	Service01
-    Provider:	FFmpeg
-    Pid:	4096
-    Pcr Pid:	256
-    Streams:
-		Pid: 256[0x100]	Type: 0x1b AVC Video
-		Pid: 257[0x101]	Type: 0xf AAC Audio
-		Pid: 258[0x102]	Type: 0x6 PES Packets/Private Data
-		Pid: 259[0x103]	Type: 0x6 PES Packets/Private Data
-		Pid: 260[0x104]	Type: 0x15 ID3 Timed Meta Data
-```
-
-* `pts`<br>
-
-```smalltalk
-
-a@fu:~$ threefive pts f10.ts
-1-> 1.466667
-1-> 1.6
-1-> 1.533333
-1-> 1.533333
-1-> 1.533333
-1-> 1.5
-1-> 1.566667
-1-> 1.733333
-1-> 1.733333
-```
-
-
-</details>
 
 
 <details><summary><b>threefive</b> is now <b>addressable TV</b> compatible</summary>
@@ -609,17 +563,16 @@ a@fu:~$ threefive pts f10.ts
         },
 
   ```
+
+---
+
+
 </details>
-
-
-
-
-
-
 
 
 <details><summary>Custom charsets for UPIDS aka upids.charset</summary>
 
+\
 `Specify a charset for Upid data by setting threefive.upids.charset` [`issue #55`](https://github.com/futzu/scte35-threefive/issues/55)
 
 * default charset is ascii
