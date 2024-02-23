@@ -11,14 +11,6 @@
 <br> `Parses` __SCTE-35__ from  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br> `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
-
-
-# <b>This is not beginner software. </b>
-
-## If you want to work with SCTE-35, [read the specification first](https://www.scte.org/documents/6710/SCTE_35_2023r1.pdf) <br>
-## If you want to parse SCTE-35 from MPEGTS read [the tsduck mpegts intro ](https://tsduck.io/download/docs/mpegts-introduction.pdf)
-
-
 # Latest __threefive__ release is `2`.`4`.`35`
 
 ## New stuff in __threefive__ 
