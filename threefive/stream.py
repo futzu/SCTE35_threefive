@@ -76,7 +76,7 @@ class ProgramInfo:
         serv = self.service.decode(errors="ignore")
         prov = self.provider.decode(errors="ignore")
         print2(f"    Service:\t{ serv}\n    Provider:\t{prov}")
-        print2(f"    Pid:\t{self.pid}")
+        print2(f"    Pid:\t\t{self.pid}")
         print2(f"    Pcr Pid:\t{self.pcr_pid}")
         print2("    Streams:")
         # sorted_dict = {k:my_dict[k] for k in sorted(my_dict)})
@@ -87,7 +87,7 @@ class ProgramInfo:
                 vee = f"{hex(vee)} {streamtype_map[vee]}"
             else:
                 vee = f"{vee} Unknown"
-            print2(f"\t\tPid: {k}[{hex(k)}]\tType: {vee}")
+            print2(f"\t\t\t\t\tPid: {k}[{hex(k)}]\tType: {vee}")
 
 
 class Pids:
