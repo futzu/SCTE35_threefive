@@ -11,68 +11,59 @@
 <br> `Parses` __SCTE-35__ from  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br> `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
+ ### __threefive__ supports the latest SCTE-35 specification `SCTE-35 2023r1`
+
 # Latest __threefive__ release is `2`.`4`.`35`
 
-## New stuff in __threefive__ 
+### `NEW!` __threefive__ now has experimental DVB DAS Support `ETSI TS 103 752-1` <br><br>
 
-* threefive cli tool now accepts keywords
-![image](https://github.com/futzu/scte35parser-threefive/assets/52701496/3db52bcb-72be-4bee-a056-1fbc1bcda90d)
 
-* __threefive__ supports the latest SCTE-35 specification `SCTE-35 2023r1`
-
-* `NEW!` __threefive__ now has experimental DVB DAS Support `ETSI TS 103 752-1` <br>
 ![image](https://github.com/futzu/scte35parser-threefive/assets/52701496/883cdc41-b761-40a6-bff4-3f05ed9e0fec)
 
-
-## [SCTE-35 code examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
-
-## [`Encoding`](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [`Encoding | more` ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md)
 
 
 # __Documentation__ 
 
+<details><summary>Install</summary>
 
-<details><summary>Supported Platforms</summary> 
- 
-* threefive is expected to work on any platform that runs python3.6 and up.
-* There are no known platform specific issues. 
-  
-</details>
+* install threefive with pip
+```smalltalk
+python3 -mpip install --upgrade threefive
+```
+* threefive has two third party packages 
+	* pip will automatically install PyAES and [new_reader](https://github.com/futzu/new_reader) 
 
-<details><summary>Requirements</summary>
-
-* threefive requires
-  * [pypy3](https://pypy.org) or python 3.6+ (pypy3 runs threefive 2-3 times faster than python 3.10)
-  * [new_reader](https://github.com/futzu/new_reader)
-  *  __pyaes__
-
-
-* [Install threefive](#install)
    * [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md)
    * [Super Cool Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
-* [Versions and Releases](#versions-and-releases)
+
+---
+
+
 </details>
+
 
 <details><summary>Versions and Releases</summary>
 
-Every time I fix a bug or add a feature, I do a new release. 
-I only support the latest version. Stay up with me. 
+Every time I fix a bug or add a feature, I do a new release. <br>
+In the last four years, that's about 250 releases.<br>
+ Stay up with me. 
 ```lua
-a@fu:~$ pypy3
-Python 3.9.17 (7.3.12+dfsg-1, Jun 16 2023, 18:55:49)
-[PyPy 7.3.12 with GCC 12.3.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>>> import threefive
->>>> threefive.version
-'2.4.9'
->>>> 
+a@slow:~/threefive$ threefive version
+2.4.35
+a@slow:~/threefive$ 
 
 ```
+
 * __Release__ versions are  __odd__.
 * __Unstable__ testing versions are __even__.
+---
+
+
 </details>
 
- <details><summary>Parse SCTE-35 on the command line.</summary>
+
+ <details><summary><b>threefive cli tool</b></summary>
+
  
 * `Parse base64`
 ```js
@@ -90,22 +81,22 @@ cat video.ts | threefive
 ```js
 threefive https://so.slo.me/longb.ts
 ```
+
 * `Parse multicast`
 ```lua
 threefive udp://@235.35.3.5:3535
-```
-* `display realtime program -> pts`
-```lua
-a@fu:~$ threefive pts /home/a/msnbc.ts
 
-1-> 3164.442756
-1-> 3164.409422
-1-> 3164.476089
-1-> 3164.476089
-1-> 3164.476089
-1-> 3164.642756
-1-> 3164.576089
 ```
+## keywords
+
+* `show threefive version`
+```lua
+a@slow:~/threefive$ threefive version
+2.4.35                                                                                           
+a@slow:~/threefive$                                                                               
+                           
+```
+---
 * `display mpegts stream info`
  ```lua
 a@fu:~$ threefive show https://futzu.com/xaa.ts
@@ -120,11 +111,70 @@ Program: 1
 		Pid: 256[0x100]	Type: 0x1b AVC Video
 		Pid: 257[0x101]	Type: 0xf AAC Audio
 ```
+---
+
+* `display realtime program -> pts`
+```lua
+a@fu:~$ threefive pts /home/a/msnbc.ts
+
+1-> 3164.442756
+1-> 3164.409422
+1-> 3164.476089
+1-> 3164.476089
+1-> 3164.476089
+1-> 3164.642756
+1-> 3164.576089
+```
+---
+* `show raw SCTE-35 packets`
+```lua
+a@slow:~/threefive$ threefive packets https://futzu.com/xaa.ts
+
+b'G@\x86\x00\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00\x05\xdd\x01\x00\x00\xc0\xfc\xe7\x80\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff'
+b'G@\x86\x01\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00\x07<\xeb\x00\x00\xbf\x8b\x96\x02\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff'
+b'G@\x86\x02\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00\x08\x9c\xd5\x00\x00e\x07\x16F\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff'
+
+```
+---
+* `Generate a sidecar file of pts,cue pairs from a stream`
+```lua
+  threefive sidecar https://futzu.com/xaa.ts
+
+cat sidecar.txt
+a@slow:~$ cat sidecar.txt
+  
+9.241178,/DAWAAAAAAAAAP/wBQb+AAy8lAAA2Olecw==
+10.242178,/DAWAAAAAAAAAP/wBQb+AA4cfgAAquAlEw==
+11.243178,/DAWAAAAAAAAAP/wBQb+AA98aAAAwU63WA==
+12.244178,/DAWAAAAAAAAAP/wBQb+ABDcUgAAn3KLDA==
+13.245178,/DAWAAAAAAAAAP/wBQb+ABI8PAAA11yRpQ==
+14.246178,/DAWAAAAAAAAAP/wBQb+ABOcJgAAwqB4gg==
+15.213811,/DAWAAAAAAAAAP/wBQb+ABT8EAAAIPU2sA==
+16.214811,/DAWAAAAAAAAAP/wBQb+ABZb+gAATn6zuw==
+17.215811,/DAWAAAAAAAAAP/wBQb+ABe75AAAjfN41Q==
+18.216822,/DAWAAAAAAAAAP/wBQb+ABkb0AAAEwaiKg==
+19.251189,/DAWAAAAAAAAAP/wBQb+ABp7ugAAs6FQDw==
+20.218822,/DAWAAAAAAAAAP/wBQb+ABvbpAAAoT8LNA==
+```
+---
+* ` parse the SCTE-35 from a stream and write it to stdout (for piping to ffmpeg and such)`
+```lua
+threefive proxy https://example.com/video.ts | ffmpeg -i - {ffmpeg commands}
+```
+---
+* `help`
+
+```lua
+threefive help
+```
+---
 
 
 </details>
 
+
  <details><summary>Parse SCTE-35 programmatically with a few lines of code.</summary>
+
 
    <details><summary>Mpegts Multicast in three lines of code.</summary>
 
@@ -176,7 +226,9 @@ True
 >>> cue.show()
 ```
 ---
+
    </details>
+
 
 <details><summary>Hex in 4 lines of code.</summary>
 
@@ -187,82 +239,25 @@ cue = threefive.Cue("0XFC301100000000000000FFFFFF0000004F253396")
 cue.decode()
 cue.show()
 ```
+
+---
+
 </details>
 
+
  </details>
+
 
 <details><summary>Easy SCTE-35 encoding with threefive. </summary>
 
 * Need SCTE-35 Packet Injection? [SuperKabuki](https://github.com/futzu/SuperKabuki), powered by threefive.
 
+## [SCTE-35 code examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 
- * `Helper functions for SCTE35 Cue encoding`
+## [`Encoding`](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [`Encoding | more` ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md)
 
-```python3
-Python 3.8.13 (7.3.9+dfsg-5, Oct 30 2022, 09:55:31)
-[PyPy 7.3.9 with GCC 12.2.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>>> import threefive.encode
->>>> help(threefive.encode)
+---
 
-
-
-Help on module threefive.encode in threefive:
-
-NAME
-    threefive.encode - encode.py
-
-DESCRIPTION
-    threefive.encode has helper functions for Cue encoding.
-
-FUNCTIONS
-    mk_splice_insert(event_id, pts=None, duration=None, out=False)
-        mk_cue returns a Cue with a Splice Insert.
-
-        The args set the SpliceInsert vars.
-
-        splice_event_id = event_id
-
-        if pts is None (default):
-            splice_immediate_flag      True
-            time_specified_flag        False
-
-        if pts:
-            splice_immediate_flag      False
-            time_specified_flag        True
-            pts_time                   pts
-
-        If duration is None (default)
-            duration_flag              False
-
-        if duration IS set:
-            out_of_network_indicator   True
-            duration_flag              True
-            break_auto_return          True
-            break_duration             duration
-            pts_time                   pts
-
-        if out is True:
-            out_of_network_indicator   True
-
-        if out is False (default):
-            out_of_network_indicator   False
-
-    mk_splice_null()
-        mk_splice_null returns a Cue
-        with a Splice Null
-
-    mk_time_signal(pts=None)
-         mk_time_signal returns a Cue
-         with a Time Signal
-        if pts is None:
-             time_specified_flag   False
-
-        if pts IS set:
-             time_specified_flag   True
-             pts_time              pts
-
-```
 </details>
 
 
