@@ -19,9 +19,12 @@
 ## If you want to parse SCTE-35 from MPEGTS read [the tsduck mpegts intro ](https://tsduck.io/download/docs/mpegts-introduction.pdf)
 
 
-# Latest __threefive__ release is `2`.`4`.`33`
+# Latest __threefive__ release is `2`.`4`.`35`
 
 ## New stuff in __threefive__ 
+
+* threefive cli tool now accepts keywords
+![image](https://github.com/futzu/scte35parser-threefive/assets/52701496/3db52bcb-72be-4bee-a056-1fbc1bcda90d)
 
 * __threefive__ supports the latest SCTE-35 specification `SCTE-35 2023r1`
 
