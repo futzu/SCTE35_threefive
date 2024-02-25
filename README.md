@@ -24,6 +24,8 @@
 
 # __Documentation__ 
 
+### [trigger on SCTE-35 events using threefive.Stream](https://github.com/futzu/threefive/trigger.md)
+
 <details><summary>Install</summary>
 
 * install threefive with pip
