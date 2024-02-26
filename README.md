@@ -16,9 +16,24 @@
 # Latest __threefive__ release is `2`.`4`.`35`
 
 ### `NEW!` __threefive__ now has experimental DVB DAS Support `ETSI TS 103 752-1` <br><br>
-
-
-![image](https://github.com/futzu/scte35parser-threefive/assets/52701496/883cdc41-b761-40a6-bff4-3f05ed9e0fec)
+```json
+    "descriptors": [
+        {
+            "tag": 240,
+            "descriptor_length": 7,
+            "name": "DVD DAS Descriptor",
+            "identifier": "DVB_",
+            "break_num": 0,
+            "breaks_expected": 0,
+            "equivalent_segmentation_type": 0,
+            "equivalent_segmentation_message": "No Equivalent",
+            "upid_type": 15,
+            "upid_type_name": "URI",
+            "upid_length": 0,
+            "upid": ""
+        }
+    ]
+```
 
 
 
