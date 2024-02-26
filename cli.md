@@ -1,0 +1,142 @@
+
+# threefive is the SCTE-35 cli tool.
+
+When you install __threefive__, you get an cli tool named __threefive__. <br>
+
+
+###  threefive can figure out most of the time what it needs to do.
+<br> <br>
+  
+* You can pass it __Base64__, __Hex__, or __Bytes__ for a SCTE-35 Cue.
+    
+* __MPEGTS__ streams  can be parsed for SCTE-35 from a __file__, over __HTTP(s)__, over __UDP__, or over __Multicast__.
+        
+  * __threefive__ can parse Multiple SCTE-35 elemental streams in an MPEGTS stream. __Multiple Programs__ can also be parsed.
+        
+  * __threefive is the only SCTE-35 parser__ that checks both __0x06(bin data) and 0x86 (SCTE-35)__ stream types for SCTE-35 data. 
+    
+  * __SCTE-35 Cues__ up to __4MB__ spread over multiple packets can be parsed.
+    
+* __MPEGTS__ streams can also be __piped__ to threefive.
+
+# Using.
+ 
+* `Parse base64`
+```js
+threefive '/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo='
+```
+
+* `Parse a hex value`
+```js
+threefive 0xFC302F000000000000FFFFF014054800008F7FEFFE7369C02EFE0052CCF500000000000A0008435545490000013562DBA30A
+```
+
+* `Parse MPEGTS from stdin`
+```js
+cat video.ts | threefive
+```
+
+
+* `Parse MPEGTS video over https`
+```js
+threefive https://so.slo.me/longb.ts
+```
+
+
+* `Parse multicast`
+```lua
+threefive udp://@235.35.3.5:3535
+
+
+```
+
+
+## keywords
+
+
+* `show threefive version`
+```lua
+a@slow:~/threefive$ threefive version
+2.4.35                                                                                           
+a@slow:~/threefive$                                                                               
+                           
+```
+---
+
+
+* `display mpegts stream info`
+ ```lua
+a@fu:~$ threefive show https://futzu.com/xaa.ts
+
+Program: 1
+    Service:	Service01
+    Provider:	FFmpeg
+    Pid:	4096
+    Pcr Pid:	256
+    Streams:
+		Pid: 134[0x86]	Type: 0x86 SCTE35 Data
+		Pid: 256[0x100]	Type: 0x1b AVC Video
+		Pid: 257[0x101]	Type: 0xf AAC Audio
+```
+---
+
+
+* `display realtime program -> pts`
+```lua
+a@fu:~$ threefive pts /home/a/msnbc.ts
+
+1-> 3164.442756
+1-> 3164.409422
+1-> 3164.476089
+1-> 3164.476089
+1-> 3164.476089
+1-> 3164.642756
+1-> 3164.576089
+```
+---
+* `show raw SCTE-35 packets`
+```lua
+a@slow:~/threefive$ threefive packets https://futzu.com/xaa.ts
+
+b'G@\x86\x00\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00\x05\xdd\x01\x00\x00\xc0\xfc\xe7\x80\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff'
+b'G@\x86\x01\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00\x07<\xeb\x00\x00\xbf\x8b\x96\x02\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff'
+b'G@\x86\x02\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00\x08\x9c\xd5\x00\x00e\x07\x16F\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff'
+
+```
+---
+* `Generate a sidecar file of pts,cue pairs from a stream`
+```lua
+  threefive sidecar https://futzu.com/xaa.ts
+
+cat sidecar.txt
+a@slow:~$ cat sidecar.txt
+  
+9.241178,/DAWAAAAAAAAAP/wBQb+AAy8lAAA2Olecw==
+10.242178,/DAWAAAAAAAAAP/wBQb+AA4cfgAAquAlEw==
+11.243178,/DAWAAAAAAAAAP/wBQb+AA98aAAAwU63WA==
+12.244178,/DAWAAAAAAAAAP/wBQb+ABDcUgAAn3KLDA==
+13.245178,/DAWAAAAAAAAAP/wBQb+ABI8PAAA11yRpQ==
+14.246178,/DAWAAAAAAAAAP/wBQb+ABOcJgAAwqB4gg==
+15.213811,/DAWAAAAAAAAAP/wBQb+ABT8EAAAIPU2sA==
+16.214811,/DAWAAAAAAAAAP/wBQb+ABZb+gAATn6zuw==
+17.215811,/DAWAAAAAAAAAP/wBQb+ABe75AAAjfN41Q==
+18.216822,/DAWAAAAAAAAAP/wBQb+ABkb0AAAEwaiKg==
+19.251189,/DAWAAAAAAAAAP/wBQb+ABp7ugAAs6FQDw==
+20.218822,/DAWAAAAAAAAAP/wBQb+ABvbpAAAoT8LNA==
+```
+---
+* ` parse the SCTE-35 from a stream and write it to stdout (for piping to ffmpeg and such)`
+```lua
+threefive proxy https://example.com/video.ts | ffmpeg -i - {ffmpeg commands}
+```
+---
+* `help`
+
+```lua
+threefive help
+```
+---
+
+
+
+
