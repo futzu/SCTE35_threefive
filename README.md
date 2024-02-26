@@ -23,11 +23,6 @@
 
 
 # __Documentation__ 
-
-### [SCTE-35 on the command line](https://github.com/futzu/scte35parser-threefive/blob/master/cli.md)
-
-### [trigger on SCTE-35 events using threefive.Stream](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md)
-
 <details><summary>Install</summary>
 
 * install threefive with pip
@@ -64,6 +59,17 @@ a@slow:~/threefive$
 
 
 </details>
+
+
+
+
+#### [SCTE-35 on the command line](https://github.com/futzu/scte35parser-threefive/blob/master/cli.md)
+
+#### [Trigger on SCTE-35 events using threefive.Stream](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md)
+
+#### [SCTE-35 code examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
+
+#### [Encoding](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [Encoding | more ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md)
 
 
  <details><summary>Parse SCTE-35 programmatically with a few lines of code.</summary>
@@ -139,20 +145,6 @@ cue.show()
 
 
  </details>
-
-
-<details><summary>Easy SCTE-35 encoding with threefive. </summary>
-
-* Need SCTE-35 Packet Injection? [SuperKabuki](https://github.com/futzu/SuperKabuki), powered by threefive.
-
-## [SCTE-35 code examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
-
-## [`Encoding`](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [`Encoding | more` ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md)
-
----
-
-</details>
-
 
 
  <details><summary>Cue Class</summary>
