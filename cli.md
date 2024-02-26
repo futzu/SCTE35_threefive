@@ -1,23 +1,20 @@
 <pre>
-# threefive is the SCTE-35 cli tool.
+ <h1>threefive is the SCTE-35 cli tool</h1>
 </pre>
-When you install __threefive__, you get an cli tool named __threefive__. <br>
+<br>
 
-
-###  threefive can figure out most of the time what it needs to do.
-<br> <br>
   
-* You can pass it __Base64__, __Hex__, or __Bytes__ for a SCTE-35 Cue.
+* You can pass it __Base64__, __Hex__, or __Bytes__ for a __SCTE-35 Cue__.
     
-* __MPEGTS__ streams  can be parsed for SCTE-35 from a __file__, over __HTTP(s)__, over __UDP__, or over __Multicast__.
+* __MPEGTS__ streams  can be parsed for __SCTE-35__ from a __file__, over __HTTP(s)__, over __UDP__, or over __Multicast__.
         
-  * __threefive__ can parse Multiple SCTE-35 elemental streams in an MPEGTS stream. __Multiple Programs__ can also be parsed.
+  * __threefive__ can parse Multiple __SCTE-35__ elemental streams in an __MPEGTS__ stream. __Multiple Programs__ can also be parsed.
         
-  * __threefive is the only SCTE-35 parser__ that checks both __0x06(bin data) and 0x86 (SCTE-35)__ stream types for SCTE-35 data. 
+  * __threefive is the only SCTE-35 parser__ that checks both __0x06(bin data) and 0x86 (SCTE-35)__ stream types for __SCTE-35__ data. 
     
   * __SCTE-35 Cues__ up to __4MB__ spread over multiple packets can be parsed.
     
-* __MPEGTS__ streams can also be __piped__ to threefive.
+* __MPEGTS__ streams can also be __piped__ to __threefive__
 
 # Using.
  
