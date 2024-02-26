@@ -3,19 +3,6 @@
 </pre>
 <br>
 
-  
-* You can pass it __Base64__, __Hex__, or __Bytes__ for a __SCTE-35 Cue__.
-    
-* __MPEGTS__ streams  can be parsed for __SCTE-35__ from a __file__, over __HTTP(s)__, over __UDP__, or over __Multicast__.
-        
-  * __threefive__ can parse Multiple __SCTE-35__ elemental streams in an __MPEGTS__ stream. __Multiple Programs__ can also be parsed.
-        
-  * __threefive is the only SCTE-35 parser__ that checks both __0x06(bin data) and 0x86 (SCTE-35)__ stream types for __SCTE-35__ data. 
-    
-  * __SCTE-35 Cues__ up to __4MB__ spread over multiple packets can be parsed.
-    
-* __MPEGTS__ streams can also be __piped__ to __threefive__
-
 # Using.
  
 * `Parse base64`
