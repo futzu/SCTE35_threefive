@@ -331,19 +331,32 @@ ___
 
 > `Stream.decode_next Example`
 ```python3
+"""
+Stream.decode_next example.
+decode_next returns the Cue every time a Cue is found.
+
+This uses a while loop to pull the Cues from a mpegts stream.
+When a Cue is found, if it's a Time Signal,
+cue.command.command_type=6, print Cue.command.
+You can filter on any var in the SCTE-35 Cue.
+"""
+
 import sys
 import threefive
+from new_reader import reader
 
 def do():
     arg = sys.argv[1]
-    with open(arg,'rb',encoding="utf-8") as tsdata:
+    with reader(arg) as tsdata:
         st = threefive.Stream(tsdata)
         while True:
             cue = st.decode_next()
             if not cue:
                 return False
             if cue:
-                cue.show()
+                if cue.command.command_type ==6:
+                    print(cue.command)
+
 
 if __name__ == "__main__":
     do()
