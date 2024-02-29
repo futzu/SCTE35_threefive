@@ -1,19 +1,19 @@
-## <pre>Triggering on SCTE-35 Events with threefive.Stream.<pre>
+# <pre>Triggering on SCTE-35 Events with threefive.Stream.<pre>
 
 
-__threefive.Stream__, like all of the classes in threefive is made to be easy to customize and subclass. <br>
+## `option 1` ` pass in a function`
+---
+* Most of the Stream methods take an optional arg __func__, a function to be called when a SCTE-35 Cue is found.  
 
-The __threefive.Stream__ class has a few ways to trigger on SCTE-35.<br>Most of the Stream methods take an optional arg __func__, a function to be called when a SCTE-35 Cue is found.  
-<br>
-The __func__ function __must__ take __only one arg__, and that is  __a threefive.Cue object__.
-<br>
-  
-I use __sidecar__ files for some of my other projects a __sidecar__ file consists
+* The __func__ function __must__ take __only one arg__, and that is  __a threefive.Cue object__.
+
+---
+
+* I use __sidecar__ files for some of my other projects a __sidecar__ file consists
 of __(PTS, Cue)__ pairs, one per line.
-<br>
-<br> A __sidecar  file__ looks this.
-<br><br>
+*  A __sidecar  file__ looks this.
 
+  
 ```js
 a@slow:~$ cat sidecar.txt 
 
@@ -28,7 +28,6 @@ a@slow:~$ cat sidecar.txt
 48.246844,/DAWAAAAAAAAAP/wBQb+AEJZPgAAypfF7w==
 49.281211,/DAWAAAAAAAAAP/wBQb+AEO5KAAAB99quQ==
 ```
-
 
 One of the ways I use a sidecar file is to exact the SCTE-35 before using ffmpeg to encode to HLS, 
 and then I use the sidecar file to generate HLS tags and insert them into the ffmpeg m3u8 files in real time. 
@@ -49,9 +48,7 @@ def mk_sidecar(cue):
         data = f"{pts},{cue.encode()}\n"
         sidecar.write(data)
 
-
 ```
-
 * The only other step is to call __Stream.decode__ and pass in the mk_sidecar function.
 
 * Here's the complete example to generate a sidecar file.
@@ -89,7 +86,7 @@ if __name__ == '__main__':
 ```py3
 pypy3 sidecar_gen.py https://example.com/nmx.ts
 ```
-
+---
 * If you want to limit your sidecar file to the SCTE-35 in a specific MPEGTS program, call __decode_program__ instead.
 
 
@@ -100,7 +97,7 @@ if __name__ == '__main__':
         strm.decode_program(the_program, func=mk_sidecar)
 
 ```
-
+---
 * To limit the sidecar file to SCTE-35 from a list of pids, call __decode_pids__. 
 
 ```py3
@@ -110,8 +107,8 @@ if __name__ == '__main__':
         strm.decode_pids(scte35_pids, func=mk_sidecar)
 
 ```
-
-* to parse the video and then pipe it to ffmpeg or another program, __Stream.proxy__ writes the video stream sys.stdout.
+---
+* To parse the video and then pipe it to ffmpeg or another program, __Stream.proxy__ writes the video stream sys.stdout.
 
 ```py3
 if __name__ == '__main__':
@@ -121,5 +118,45 @@ if __name__ == '__main__':
 
 ```
 
-  
+---
 
+## `option 2`  `Stream.decode_next`
+
+* __Stream.decode_next__ returns the next Cue found.<br>
+	* This example uses a while loop  with __Stream.decode_next__. <br> 
+	* using __Stream.decode_next__ gives you more control over processing the Cue. 
+```py3
+
+import sys
+import threefive
+from new_reader import reader
+
+def mk_sidecar(cue):
+    """
+    mk_sidecar generates a sidecar file with the SCTE-35 Cues
+    """
+    pts = 0.0
+    with open("sidecar.txt", "a") as sidecar:
+        cue.show()
+        if cue.packet_data.pts:
+            pts = cue.packet_data.pts
+        data = f"{pts},{cue.encode()}\n"
+        sidecar.write(data)
+
+
+def do():
+    arg = sys.argv[1]
+    with reader(arg) as tsdata:
+        st = threefive.Stream(tsdata)
+        while True:
+            cue = st.decode_next()
+            if not cue:
+                return False
+            if cue:
+               mk_sidecar(cue)
+
+
+if __name__ == "__main__":
+    do()
+
+```
