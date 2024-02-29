@@ -78,88 +78,19 @@ a@slow:~/threefive$
 
 
 
-#### [SCTE-35 on the command line](https://github.com/futzu/scte35parser-threefive/blob/master/cli.md)
+#### SCTE-35 on the [command line](https://github.com/futzu/scte35parser-threefive/blob/master/cli.md)
 
-#### [Trigger on SCTE-35 events using threefive.Stream](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md)
+#### [Trigger on SCTE-35 events](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md) using threefive.Stream
 
-#### [SCTE-35 code examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
+#### SCTE-35 code [examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 
 #### [Encoding](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [Encoding | more ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md)
 
-
- <details><summary>Parse SCTE-35 programmatically with a few lines of code.</summary>
-
-
-   <details><summary>Mpegts Multicast in three lines of code.</summary>
-
-```python3
-import threefive
-
-strm = threefive.Stream('udp://@239.35.0.35:1234')
-strm.decode()
-````
-  _(need an easy multicast server?_ [gumd](https://github.com/futzu/gumd) )
-
----
-  </details>
-
- <details><summary>Mpegts over Https in three lines of code.</summary>
-
-```python3
-import threefive
-strm = threefive.Stream('https://iodisco.com/ch1/ready.ts')
-strm.decode()
+#### [Parse SCTE-35 programmatically ](https://github.com/futzu/threefive/prog.md) with a few lines of code
 
 
-       
-   </details>
-
- <details><summary>Base64 in five lines of code.</summary>
-
-```python3
->>> from threefive import Cue
->>> stuff = '/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g='
->>> cue=Cue(stuff)
->>> cue.decode()
-True
- >>> cue.show()
-
-```
----
-   </details>
-
- <details><summary>Bytes in five lines of code.</summary>
-
-```python3
->>> import threefive
-
->>> stuff = b'\xfc0\x11\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00\x00\x00O%3\x96'
->>> cue=Cue(stuff)
->>> cue.decode()
-True
->>> cue.show()
-```
----
-
-   </details>
 
 
-<details><summary>Hex in 4 lines of code.</summary>
-
-```python3
-import threefive
-
-cue = threefive.Cue("0XFC301100000000000000FFFFFF0000004F253396")
-cue.decode()
-cue.show()
-```
-
----
-
-</details>
-
-
- </details>
 
 
  <details><summary>Cue Class</summary>
