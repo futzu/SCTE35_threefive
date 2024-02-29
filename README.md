@@ -86,7 +86,7 @@ a@slow:~/threefive$
 
 #### [Encoding](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [Encoding | more ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md)
 
-#### [Parse SCTE-35 programmatically ](https://github.com/futzu/threefive/prog.md) with a few lines of code
+#### [Parse SCTE-35 programmatically ](https://github.com/futzu/scte35parser-threefive/blob/master/prog.md) with a few lines of code
 
 
 
