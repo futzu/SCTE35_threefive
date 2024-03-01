@@ -75,19 +75,23 @@ class ProgramInfo:
         """
         serv = self.service.decode(errors="ignore")
         prov = self.provider.decode(errors="ignore")
-        print2(f"    Service:\t{ serv}\n    Provider:\t{prov}")
-        print2(f"    Pid:\t\t{self.pid}")
-        print2(f"    Pcr Pid:\t{self.pcr_pid}")
-        print2("    Streams:")
+        print2("")
+        print2(f"\tService: {serv}")
+        print2(f"\tProvider: {prov}")
+        print2(f"\tPid:\t  {self.pid}")
+        print2(f"\tPcr Pid:  {self.pcr_pid}")
+        print2("\tStreams:")
         # sorted_dict = {k:my_dict[k] for k in sorted(my_dict)})
         keys = sorted(self.streams)
+        print2(f"\t\t  Pid\t\tType")
+
         for k in keys:
             vee = int(self.streams[k], base=16)
             if vee in streamtype_map:
-                vee = f"{hex(vee)} {streamtype_map[vee]}"
+                vee = f"{hex(vee)}\t{streamtype_map[vee]}"
             else:
                 vee = f"{vee} Unknown"
-            print2(f"\t\t\t\t\tPid: {k}[{hex(k)}]\tType: {vee}")
+            print2(f"\t\t  {k} [{hex(k)}]\t{vee}")
 
 
 class Pids:
@@ -132,15 +136,15 @@ class Stream:
     Stream class for parsing MPEG-TS data.
     """
 
-    _PACKET_SIZE = 188
-    _SYNC_BYTE = 0x47
+    PACKET_SIZE = 188
+    SYNC_BYTE = 0x47
     # tids
-    _PMT_TID = b"\x02"
-    _SCTE35_TID = b"\xFC"
-    _SDT_TID = b"\x42"
+    PMT_TID = b"\x02"
+    SCTE35_TID = b"\xFC"
+    SDT_TID = b"\x42"
     # pts
     ROLLOVER = 8589934591  # 95443.717678
-    NO_PTS_PIDS = [188, 190, 191, 240, 241, 242, 248]
+    ROLLOVER9K = 95443.717678
 
     def __init__(self, tsdata, show_null=True):
         """
@@ -172,16 +176,16 @@ class Stream:
     def _find_start(self):
         """
         _find_start locates the first SYNC_BYTE
-        parses 1 packet and returns a iterator
-        of packets
+        parses 1 packet and returns True
+        if SYNC_BYTE is found.
         """
         while self._tsdata:
             one = self._tsdata.read(1)
             if not one:
                 print2("\nNo Stream Found. \n")
                 return []
-            if one[0] == self._SYNC_BYTE:
-                tail = self._tsdata.read(self._PACKET_SIZE - 1)
+            if one[0] == self.SYNC_BYTE:
+                tail = self._tsdata.read(self.PACKET_SIZE - 1)
                 if tail:
                     self._parse(one + tail)
                     return True
@@ -221,7 +225,7 @@ class Stream:
         """
         iter_pkts iterates a mpegts stream into packets
         """
-        return iter(partial(self._tsdata.read, self._PACKET_SIZE * num_pkts), b"")
+        return iter(partial(self._tsdata.read, self.PACKET_SIZE * num_pkts), b"")
 
     def decode(self, func=show_cue):
         """
@@ -230,7 +234,7 @@ class Stream:
         a threefive.Cue instance as it's only argument.
         """
         if self._find_start():
-            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
+            for pkt in self.iter_pkts():
                 cue = self._parse(pkt)
                 if cue:
                     if not func:
@@ -240,8 +244,8 @@ class Stream:
 
     def _mk_pkts(self, chunk):
         return [
-            self._parse(chunk[i : i + self._PACKET_SIZE])
-            for i in range(0, len(chunk), self._PACKET_SIZE)
+            self._parse(chunk[i : i + self.PACKET_SIZE])
+            for i in range(0, len(chunk), self.PACKET_SIZE)
         ]
 
     def decode_fu(self, func=show_cue):
@@ -252,12 +256,9 @@ class Stream:
         """
         if self._find_start():
             num_pkts = 700
-            for chunk in iter(
-                partial(self._tsdata.read, self._PACKET_SIZE * num_pkts), b""
-            ):
+            for chunk in self.iter_pkts(num_pkts=num_pkts):
                 _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
                 del _
-            self._tsdata.close()
         return False
 
     def decode_next(self):
@@ -279,7 +280,7 @@ class Stream:
         """
         Stream.decode_pids takes a list of SCTE-35 Pids parse
         and an optional call back function to run when a Cue is found.
-        if scte35_pids is not set , all scte35 pids will be parsed.
+        if scte35_pids is not set, all scte35 pids will be parsed.
         """
         self.the_scte35_pids = scte35_pids
         return self.decode(func)
@@ -288,10 +289,10 @@ class Stream:
         """
         Stream.decode_proxy writes all ts packets are written to stdout
         for piping into another program like mplayer.
-        SCTE-35 cues are print2ed to stderr.
+        SCTE-35 cues are print2`ed to stderr.
         """
         if self._find_start():
-            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
+            for pkt in iter(partial(self._tsdata.read, self.PACKET_SIZE), b""):
                 cue = self._parse(pkt)
                 if cue:
                     func(cue)
@@ -304,7 +305,7 @@ class Stream:
         parsed for SCTE-35.
         """
         self.info = True
-        data = self._tsdata.read(188 * 5000)
+        data = self._tsdata.read(188 * 1000)
         while data:
             pkt = data[:188]
             data = data[188:]
@@ -321,11 +322,11 @@ class Stream:
         show_pts displays current pts by stream prgm.
         """
         if self._find_start():
-            for pkt in iter(partial(self._tsdata.read, self._PACKET_SIZE), b""):
+            for pkt in iter(partial(self._tsdata.read, self.PACKET_SIZE), b""):
                 self._parse(pkt)
                 if self._pusi_flag(pkt):
                     _ = {
-                        print2(f"{pgrm}-> {self.as_90k(pts)}")
+                        print2(f"{pgrm},{self.as_90k(pts)}")
                         for pgrm, pts in self.maps.prgm_pts.items()
                     }
         return False
@@ -416,7 +417,7 @@ class Stream:
             last_cc = self.maps.pid_cc[pid]
             good = (last_cc, ((last_cc + 1) % 16))
             if c_c not in good:
-                print2(f"BAD --> pid: {hex(pid)} last cc: {last_cc} cc: {c_c}")
+                print2(f"BAD --> pid:\t{hex(pid)}\tlast cc:\t{last_cc}\tcc:\t{c_c}")
         self.maps.pid_cc[pid] = c_c
 
     def _parse_pts(self, pkt, pid):
@@ -526,7 +527,7 @@ class Stream:
         pay = self._parse_payload(pkt)
         if not pay:
             return False
-        pay = self._chk_partial(pay, pid, self._SCTE35_TID)
+        pay = self._chk_partial(pay, pid, self.SCTE35_TID)
         if not pay:
             self.pids.scte35.remove(pid)
             return False
@@ -543,7 +544,7 @@ class Stream:
         """
         _parse_sdt parses the SDT for program metadata
         """
-        pay = self._chk_partial(pay, self.pids.SDT_PID, self._SDT_TID)
+        pay = self._chk_partial(pay, self.pids.SDT_PID, self.SDT_TID)
         if not pay:
             return False
         seclen = self._parse_length(pay[1], pay[2])
@@ -600,7 +601,7 @@ class Stream:
         """
         parse program maps for streams
         """
-        pay = self._chk_partial(pay, pid, self._PMT_TID)
+        pay = self._chk_partial(pay, pid, self.PMT_TID)
         if not pay:
             return False
         seclen = self._parse_length(pay[1], pay[2])
