@@ -136,13 +136,17 @@ class Stream:
     Stream class for parsing MPEG-TS data.
     """
 
-    PACKET_SIZE = 188
-    SYNC_BYTE = 0x47
+    # the _CONST are deprecated
+    # please switch to CONST
+
+    _PACKET_SIZE = PACKET_SIZE = 188
+    _SYNC_BYTE = SYNC_BYTE = 0x47
+
     # tids
-    PMT_TID = b"\x02"
-    SCTE35_TID = b"\xFC"
-    SDT_TID = b"\x42"
-    # pts
+
+    _PMT_TID = PMT_TID = b"\x02"
+    _SCTE35_TID = SCTE35_TID = b"\xFC"
+    _SDT_TID = SDT_TID = b"\x42"
     ROLLOVER = 8589934591  # 95443.717678
     ROLLOVER9K = 95443.717678
 
