@@ -308,12 +308,16 @@ class Stream:
         displays streams that will be
         parsed for SCTE-35.
         """
+        pkt_count =0
         self.info = True
-        data = self._tsdata.read(188 * 1000)
-        while data:
-            pkt = data[:188]
-            data = data[188:]
-            self._parse_info(pkt)
+        while not self.maps.prgm.items():
+            data = self._tsdata.read(self.PACKET_SIZE * 100)
+            while data:
+                pkt = data[:188]
+                pkt_count +=1
+                data = data[188:]
+                self._parse_info(pkt)
+        print2(f"Read {pkt_count} packets")
         sopro = sorted(self.maps.prgm.items())
         for k, vee in sopro:
             if len(vee.streams.items()) > 0:
