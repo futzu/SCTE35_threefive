@@ -1,6 +1,6 @@
 #  `threefive + Python3` VS. `threefive + pypy3` VS. `tsduck in C++` VS. `cuei in Go.` 
 
-* The video: 4.9GB MPEGTS. 
+* The video: __4.9 GB__ MPEGTS with __14,862__ SCTE-35 Cues.
 
 ```rebol
 a@slow:~/cuei$ ls -alh ../v2.ts
