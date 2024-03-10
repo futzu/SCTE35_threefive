@@ -19,6 +19,8 @@
 # Latest __threefive__ release is `2`.`4`.`35`
 
 ### `NEW!` __threefive__ now has experimental DVB DAS Support `ETSI TS 103 752-1` <br><br>
+### SCTE-35 Parsing Shoot Out: 
+#### [`threefive + Python3` VS. `threefive + pypy3` VS. `tsduck in C++` VS. `cuei in Go`.](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) 
 
 
 # __Documentation__ 
