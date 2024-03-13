@@ -1,6 +1,10 @@
 <pre>
  <h1>threefive is the SCTE-35 cli tool</h1>
 </pre>
+ * the __threefive cli tool__ __automatically__ decodes SCTE-35 Cues in __Base64__, __Bytes__,__Hex__, or __Integers__. 
+ * __Mpegts__ streams are also __automatically__ decoded for SCTE-35 data in Stream Types __0x06__ (bin data) and __0x86__ (SCTE-35)
+ * __mpegts__ streams can be __local files__, __stdin__, or served over __http(s)__, __UDP__, or __Multicast__.
+
 <br>
 
 # Using.
@@ -36,9 +40,9 @@ threefive udp://@235.35.3.5:3535
 
 
 ## keywords
+the threefive cli uses keywords for additional functionality.
 
-
-* `show threefive version`
+* keyword `version` - show threefive version
 ```lua
 a@slow:~/threefive$ threefive version
 2.4.35                                                                                           
@@ -46,9 +50,8 @@ a@slow:~/threefive$
                            
 ```
 ---
+* keyword `show`- display mpegts stream info
 
-
-* `display mpegts stream info`
  ```lua
 a@fu:~$ threefive show https://futzu.com/xaa.ts
 
@@ -64,8 +67,8 @@ Program: 1
 ```
 ---
 
+* keyword `pts` -  display realtime program -> pts
 
-* `display realtime program -> pts`
 ```lua
 a@fu:~$ threefive pts /home/a/msnbc.ts
 
@@ -78,7 +81,7 @@ a@fu:~$ threefive pts /home/a/msnbc.ts
 1-> 3164.576089
 ```
 ---
-* `show raw SCTE-35 packets`
+* keyword `packets` - show raw SCTE-35 packets
 ```lua
 a@slow:~/threefive$ threefive packets https://futzu.com/xaa.ts
 
@@ -88,7 +91,7 @@ b'G@\x86\x02\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00\x08\x9
 
 ```
 ---
-* `Generate a sidecar file of pts,cue pairs from a stream`
+* keyword `sidecar` - Generate a sidecar file of pts,cue pairs from a stream
 ```lua
   threefive sidecar https://futzu.com/xaa.ts
 
@@ -109,12 +112,12 @@ a@slow:~$ cat sidecar.txt
 20.218822,/DAWAAAAAAAAAP/wBQb+ABvbpAAAoT8LNA==
 ```
 ---
-* ` parse the SCTE-35 from a stream and write it to stdout (for piping to ffmpeg and such)`
+* keyword `proxy` - parse the SCTE-35 from a stream and write it to stdout (for piping to ffmpeg and such)
 ```lua
 threefive proxy https://example.com/video.ts | ffmpeg -i - {ffmpeg commands}
 ```
 ---
-* `help`
+*  keyword `help`
 
 ```lua
 threefive help
