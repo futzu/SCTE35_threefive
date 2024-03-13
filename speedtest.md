@@ -6,7 +6,7 @@
 a@slow:~/cuei$ ls -alh ../v2.ts
 -rw-r--r-- 1 a a 4.9G Mar  8 04:03 ../v2.ts
 ```
-* I used SuperKabuki to insert 14,862 SCTE-35 Time Signals
+* I used [SuperKabuki](https://github.com/futzu/superkabuki) to insert 14,862 SCTE-35 Time Signals
 ---  
 ### Test 1: `threefive` with `Python 3.11.2`
 
@@ -51,7 +51,7 @@ sys     0m0.861s
 ---
 
 
-### Test 4: `cuei v1.1.93 "Junior"` written in `Go`
+### Test 4: [`cuei v1.1.93 "Junior"`](https://github.com/futzu/cuei) written in `Go`
 
 * __4.6755725__ GB / second
 
@@ -69,6 +69,5 @@ sys     0m0.509s
 
 
 
-# Winner: `cuei v1.1.93 "Junior"`
-
+# Winner:  [`cuei v1.1.93 "Junior"`](https://github.com/futzu/cuei)
 
