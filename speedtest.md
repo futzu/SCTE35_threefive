@@ -2,7 +2,7 @@
 
 > Q. Why only use __threefive, tsduck and cuei__? What about other SCTE-35 parsers? 
 
-> A. To be honest, they are very few other parsers that will parse SCTE-35 from MPEGTS.
+> A. To be honest, they are very few other parsers that will parse SCTE-35 from MPEGTS, here are three that were excluded and why.
 > There are three that I'm aware of:
 1. __lib BitStream from the VLC folks__. Fast parser, but incomplete SCTE-35 Data last time I used it, and it requires writing about 500 lines of code to parse SCTE-35.
 2. __gstreamer__ I believe it will parse SCTE-35, but I spent a few hours trying to figure out how to do it and I have no idea how to even run gstreamer, much less parse SCTE-35 with it.
