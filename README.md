@@ -17,7 +17,7 @@
  ### __threefive__ supports the latest SCTE-35 specification `SCTE-35 2023r1`
 
 # Latest __threefive__ release is `2`.`4`.`35`
-
+## [stackoverflow attacks my sensibilities, I am a victim.](https://github.com/futzu/threefive/blob/master/stack_these.md)
 ### `NEW!` __threefive__ now has experimental DVB DAS Support `ETSI TS 103 752-1` <br><br>
 ## SCTE-35 Parsing Shoot Out: 
 * The challenge is to parse 14,862 SCTE-35 Cues from an MPEGTS as fast as possible. 
