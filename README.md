@@ -1,7 +1,6 @@
 # SCTE-35 parser. SCTE-35 Decoder. SCTE-35 Encoder.
 # threefive
 
-#### [I am a victim. stack overflow is picking on me. ](https://github.com/futzu/threefive/blob/master/stack_these.md)
 
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
