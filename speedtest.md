@@ -36,8 +36,8 @@ sys     0m0.778s
 
 ```
 
-* We grep 'sap_type' because it appears in every SCTE-35 Cue, and only once, so we can count the nunmber of cues detected.
-
+* We grep 'sap_type' because it appears in every SCTE-35 Cue, and only once, so we can count the number of cues detected.
+* 'sap_type' is proper var naming in python.
 ---
 
 ### Test 2: `threefive` with `PyPy 7.3.11`
@@ -50,7 +50,7 @@ real    0m3.543s
 user    0m2.880s
 sys     0m0.846s
 ```
-* We grep 'sap_type' because it appears in every SCTE-35 Cue, and only once, so we can count the nunmber of cues detected. 
+* We grep 'sap_type' because it appears in every SCTE-35 Cue, and only once, so we can count the number of cues detected. 
 
 
 ---
@@ -65,7 +65,7 @@ user    0m2.006s
 sys     0m0.861s
 ```
 ---
-* We grep 'Command type' because it appears in every SCTE-35 Cue, and only once, so we can count the nunmber of cues detected. 
+* We grep 'Command type' because tsduck is not up to date with the specification and doesn't have sap type yet. 'Command type' appears in every tsduck SCTE-35 Cue, and only once, so we can count the number of cues detected. 
 
 
 ### Test 4: [`cuei v1.1.93 "Junior"`](https://github.com/futzu/cuei) written in `Go`
@@ -95,7 +95,8 @@ func main(){                          // 6
         stream.Decode(arg)            // 9
 }                                     // 10  lines
 ```
-* We grep 'SapType' because it appears in every SCTE-35 Cue, and only once, so we can count the nunmber of cues detected. 
+* We grep 'SapType' because it appears in every SCTE-35 Cue, and only once, so we can count the nunmber of cues detected.
+*  'SapType' is proper Go var naming.
 
 ---
 
@@ -110,5 +111,9 @@ func main(){                          // 6
 
 
 
-# Winner:  [`cuei v1.1.93 "Junior"`](https://github.com/futzu/cuei)
+# Winner:  [`cuei v1.1.93 "Junior"`](https://github.com/futzu/cuei) 
+parsing over 4.6 GigaBytes per second. I haven't even optimized cuei for speed yet, it will go even faster. 
+
+### ADDENDUM:
+threefive didn't win, but even at the slowest, it's parsing over 500 MegaBytes a second, high quality 4K  video is about 11 MegaBytes a second.
 
