@@ -3,7 +3,7 @@
 # Chicks dig threefive.
 #### _"Before I wrote threefive, I didn't have a girlfriend. Now, I'm dating a Power Ranger."_ ~ Adrian
 
-# SCTE-35 parser / SCTE-35 Decoder / SCTE-35 Encoder 
+# SCTE-35 Parser / SCTE-35 Decoder / SCTE-35 Encoder 
 
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
