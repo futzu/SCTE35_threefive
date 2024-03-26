@@ -1,6 +1,7 @@
+ [ two step SCTE-35 Encoding for MPEGTS](https://github.com/futzu/threefive/EasyEncode.md) 
+
 # Chicks dig threefive.
-#### Before I wrote threefive, I didn't have a girlfriend. Now, I'm dating a Power Ranger.
-#### ~ Adrian
+#### _"Before I wrote threefive, I didn't have a girlfriend. Now, I'm dating a Power Ranger."_ ~ Adrian
 
 # SCTE-35 parser / SCTE-35 Decoder / SCTE-35 Encoder 
 
