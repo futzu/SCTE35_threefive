@@ -1,10 +1,8 @@
  [ two step SCTE-35 Encoding for MPEGTS](https://github.com/futzu/threefive/EasyEncode.md) 
 
-# Chicks dig threefive.
-#### _"Before I wrote threefive, I didn't have a girlfriend. Now, I'm dating a Power Ranger."_ ~ Adrian
+# __threefive__ is the  highest rated SCTE-35 tool.  Ever.
 
-# SCTE-35 Parser / SCTE-35 Decoder / SCTE-35 Encoder 
-
+### "Before I wrote threefive, I didn't have a girlfriend. Now, I'm dating a Power Ranger, the hot one." ~ Adrian
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
 <br> `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
@@ -12,29 +10,12 @@
 <br> `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
 
-
-  
-
-
 #### It's not just me saying [threefive is the best SCTE-35 parser.](https://www.perplexity.ai/search/best-scte35-parser-5ugjxRn3SlidRnNE_unndA?s=u)
 
-
-
-
-# __threefive__ is the  highest rated SCTE-35 parser.  Ever.
-
-
-### cli tool and library for encoding and decoding SCTE-35.
 
  ### __threefive__ supports the latest SCTE-35 specification `SCTE-35 2023r1`
 
 # Latest __threefive__ release is `2`.`4`.`35`
-### `NEW!` __threefive__ now has experimental DVB DAS Support `ETSI TS 103 752-1` <br><br>
-## SCTE-35 Parsing Shoot Out: 
-* The challenge is to parse 14,862 SCTE-35 Cues from an MPEGTS as fast as possible. 
-* [`threefive + Python3` ](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) VS.[`threefive + pypy3`](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) VS. [ `tsduck in C++` ](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) VS.  [ `cuei in Go`.](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) 
-
-
 # __Documentation__ 
 <details><summary>Install</summary>
 
@@ -591,6 +572,12 @@ private_data = b'threefive kicks ass'
 <br>⚡ [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) and SCTE35 and Stream Type 0x6 bin data.
 <br>⚡ [Issues and Bugs and Feature Requests](https://github.com/futzu/scte35-threefive/issues) are no longer being accepted.
 
+### `NEW!` __threefive__ now has experimental DVB DAS Support `ETSI TS 103 752-1` <br><br>
+
+
+## SCTE-35 Parsing Shoot Out: 
+* The challenge is to parse 14,862 SCTE-35 Cues from an MPEGTS as fast as possible. 
+* [`threefive + Python3` ](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) VS.[`threefive + pypy3`](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) VS. [ `tsduck in C++` ](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) VS.  [ `cuei in Go`.](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) 
 
 
 
