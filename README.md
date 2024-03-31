@@ -1,4 +1,4 @@
- [ two step SCTE-35 Encoding for MPEGTS](https://github.com/futzu/threefive/EasyEncode.md) 
+ [ two step SCTE-35 Encoding for MPEGTS](https://github.com/futzu/threefive/EasyEncode.md) | [ Super Kabuki is a  MPEGTS SCTE-35 Encoder](https://github.com/futzu/superkabuki)
 
 # __threefive__ is the  highest rated SCTE-35 tool.  Ever.
 
@@ -588,3 +588,7 @@ private_data = b'threefive kicks ass'
 
 ### data
 > this might be wild baseless speculation.
+
+### Other well named products:
+
+![image](https://github.com/futzu/threefive/assets/52701496/586aa16b-4d77-496b-be38-d524cdefbe5c)
