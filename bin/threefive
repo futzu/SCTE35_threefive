@@ -87,7 +87,10 @@ from local files, over HTTP(S), UDP unicast or UDP multicast.
 
         {REV}threefive version{NORM}
 
-    show the pids,programs and streams in an MPEGTS container:
+    show the pids,
+             programs,
+             and streams 
+             in an MPEGTS container:
 
         {REV}threefive show video.ts{NORM}
 
@@ -103,12 +106,12 @@ from local files, over HTTP(S), UDP unicast or UDP multicast.
     parse a stream,
     write raw video to stdout,
     write SCTE-35 to stderr,
-    write pts,scte35 cue pairsto sidecar.txt:
+    write pts,scte35 cue pairs to sidecar.txt:
 
         {REV}threefive proxy https://example.com/video.ts{NORM}
 
     parse a stream,
-    write pts, SCTE-35 cue pairs to the file sidecar.txt:
+    write pts, SCTE-35 cue pairs to sidecar.txt:
 
         {REV}threefive sidecar https://example.com/video.ts{NORM}
 
