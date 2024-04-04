@@ -8,7 +8,6 @@ threefive command line SCTE35 decoder.
 
 import sys
 from threefive import Stream, print2, decode, version
-import cProfile
 
 REV = "\033[7m"
 NORM = "\033[27m"
