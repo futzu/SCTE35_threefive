@@ -327,14 +327,16 @@ class Stream:
 
     def show_pts(self):
         """
-        show_pts displays current pts by stream prgm.
+        show_pts displays current pts by pid.
         """
         if self._find_start():
+            print2("PID , PTS")
             for pkt in iter(partial(self._tsdata.read, self.PACKET_SIZE), b""):
                 self._parse(pkt)
-                if self._pusi_flag(pkt):
+                pid = self._parse_pid(pkt[1],pkt[2])
+                if self.pcr_pid_pts(pid,pkt):
                     _ = {
-                        print2(f"{pgrm},{self.as_90k(pts)}")
+                        print2(f"{pid} , {self.as_90k(pts)}")
                         for pgrm, pts in self.maps.prgm_pts.items()
                     }
         return False
@@ -383,10 +385,13 @@ class Stream:
         # uses pay not pkt
         return pay[7] & 0x80
 
-    @staticmethod
-    def _has_pts(pkt_one, pkt_eleven):
-        if pkt_one & 0x40:
-            return pkt_eleven & 0x80
+    def pcr_pid_pts(self,pid,pkt):
+        """
+        If it has pts and it's the pcr_pid,
+        return True
+        """
+        if self._pusi_flag(pkt) and self._pcr_flag(pkt):
+            return pid in self.pids.pcr
         return False
 
     @staticmethod
@@ -433,19 +438,18 @@ class Stream:
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
-        if self._pusi_flag(pkt):
-            payload = self._parse_payload(pkt)
-            if len(payload) > 13:
-                if self._pts_flag(payload):
-                    pts = (payload[9] & 14) << 29
-                    pts |= payload[10] << 22
-                    pts |= (payload[11] >> 1) << 15
-                    pts |= payload[12] << 7
-                    pts |= payload[13] >> 1
-                    prgm = self.pid2prgm(pid)
-                    self.maps.prgm_pts[prgm] = pts
-                    if prgm not in self.start:
-                        self.start[prgm] = pts
+        payload = self._parse_payload(pkt)
+        if len(payload) > 13:
+            if self._pts_flag(payload):
+                pts = (payload[9] & 14) << 29
+                pts |= payload[10] << 22
+                pts |= (payload[11] >> 1) << 15
+                pts |= payload[12] << 7
+                pts |= payload[13] >> 1
+                prgm = self.pid2prgm(pid)
+                self.maps.prgm_pts[prgm] = pts
+                if prgm not in self.start:
+                    self.start[prgm] = pts
 
     def pts(self):
         """
@@ -494,7 +498,7 @@ class Stream:
         cue = False
         pid = self._parse_info(pkt)
         # self._parse_cc(pkt, pid)
-        if pid in self.pids.pcr:
+        if self.pcr_pid_pts(pid,pkt):
             self._parse_pts(pkt, pid)
         if pid in self.pids.scte35:
             cue = self._parse_scte35(pkt, pid)
