@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 
 """
 threefive command line SCTE35 decoder.
@@ -8,7 +8,7 @@ threefive command line SCTE35 decoder.
 
 import sys
 from threefive import Stream, print2, decode, version
-
+import cProfile
 
 REV = "\033[7m"
 NORM = "\033[27m"
@@ -47,6 +47,13 @@ from local files, over HTTP(S), UDP unicast or UDP multicast.
 
         threefive '/DAWAAAAAAAAAP/wBQb+AKmKxwAACzuu2Q=='
 
+    {REV} threefive writes all info to stderr:{NORM}
+
+     if you want to page or parse the output, use 2>&1 .
+
+        threefive '/DAWAAAAAAAAAP/wBQb+AKmKxwAACzuu2Q==' 2>&1 | grep "event_id'
+
+
     {REV} hex: {NORM}
 
        threefive '0xfc301600000000000000fff00506fe00a98ac700000b3baed9'
@@ -65,6 +72,7 @@ from local files, over HTTP(S), UDP unicast or UDP multicast.
 
         threefive https://futzu.com/xaa.ts
 
+
     {REV} udp: {NORM}
 
         threefive udp://127.0.0.1:3535
@@ -79,24 +87,32 @@ from local files, over HTTP(S), UDP unicast or UDP multicast.
 
         {REV}threefive version{NORM}
 
-    to show the streams in an MPEGTS video:
+    show the pids,programs and streams in an MPEGTS container:
 
         {REV}threefive show video.ts{NORM}
 
-    to show the raw SCTE-35 packets from a video stream:
+    show raw SCTE-35 packets from MPEGTS video stream:
 
-       {REV}threefive packets video.ts{NORM}
+        {REV}threefive packets video.ts{NORM}
 
-    to proxy the stream (parse and write to stdout good for piping)
-    pts, and scte35 cue pairs are written to sidecar.txt:
+    parse a stream,
+    write PID,PTS pairs of the video to stderr.
+
+        {REV}threefive pts video.ts{NORM}
+
+    parse a stream,
+    write raw video to stdout,
+    write SCTE-35 to stderr,
+    write pts,scte35 cue pairsto sidecar.txt:
 
         {REV}threefive proxy https://example.com/video.ts{NORM}
 
-    to generate a sidecar file without proxying the stream:
+    parse a stream,
+    write pts, SCTE-35 cue pairs to the file sidecar.txt:
 
         {REV}threefive sidecar https://example.com/video.ts{NORM}
 
-    to show this help:
+    show this help:
 
         {REV}threefive help{NORM}
 
@@ -111,7 +127,6 @@ def pts_chk(low):
     """
     if 'pts' in low:
         idx =low.index('pts')
-        print2("Program-> PTS")
         strm = Stream(sys.argv[idx+1])
         strm.show_pts()
         sys.exit()
