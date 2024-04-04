@@ -8,6 +8,7 @@ threefive command line SCTE35 decoder.
 
 import sys
 from threefive import Stream, print2, decode, version
+import cProfile
 
 REV = "\033[7m"
 NORM = "\033[27m"
@@ -82,42 +83,38 @@ from local files, over HTTP(S), UDP unicast or UDP multicast.
 
 {REV} keywords {NORM}
 
-    to show the version of threefive:
+{REV}show the version of threefive:{NORM}
 
-        {REV}threefive version{NORM}
+        threefive version
 
-    show the pids,
-             programs,
-             and streams 
-             in an MPEGTS container:
+{REV}show the pids,programs and streams in an MPEGTS container:{NORM}
 
-        {REV}threefive show video.ts{NORM}
+        threefive show video.ts
 
-    show raw SCTE-35 packets from MPEGTS video stream:
+{REV}show raw SCTE-35 packets from MPEGTS video stream:{NORM}
 
-        {REV}threefive packets video.ts{NORM}
+        threefive packets video.ts
 
-    parse a stream,
-    write PID,PTS pairs of the video to stderr.
+{REV}parse a stream,
+write PID,PTS pairs of the video to stderr:{NORM}
 
-        {REV}threefive pts video.ts{NORM}
+        threefive pts video.ts
 
-    parse a stream,
-    write raw video to stdout,
-    write SCTE-35 to stderr,
-    write pts,scte35 cue pairs to sidecar.txt:
+{REV}parse a stream,
+write raw video to stdout,
+write SCTE-35 to stderr,
+write pts,scte35 cue pairsto sidecar.txt:{NORM}
 
-        {REV}threefive proxy https://example.com/video.ts{NORM}
+        threefive proxy https://example.com/video.ts
 
-    parse a stream,
-    write pts, SCTE-35 cue pairs to sidecar.txt:
+{REV}parse a stream,
+write pts, SCTE-35 cue pairs to the file sidecar.txt:{NORM}
 
-        {REV}threefive sidecar https://example.com/video.ts{NORM}
+        threefive sidecar https://example.com/video.ts
 
-    show this help:
+{REV}show this help:{NORM}
 
-        {REV}threefive help{NORM}
-
+        threefive help
 
 """
 
