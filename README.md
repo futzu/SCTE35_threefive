@@ -1,8 +1,5 @@
- [ two step SCTE-35 Encoding for MPEGTS](https://github.com/futzu/threefive/EasyEncode.md) | [ Super Kabuki is a  MPEGTS SCTE-35 Encoder](https://github.com/futzu/superkabuki)
-
-# __threefive__ is the  highest rated SCTE-35 tool.  Ever.
-
-### "Before I wrote threefive, I didn't have a girlfriend. Now, I'm dating a Power Ranger, the hot one." ~ Adrian
+ [RTFM ](#documentation) 
+# __threefive__ is the  highest rated SCTE-35 tool and proof positive that I don't have a girlfriend.
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
 <br> `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
@@ -14,6 +11,7 @@
 
 
  ### __threefive__ supports the latest SCTE-35 specification `SCTE-35 2023r1`
+ * threefive and cuei are the only parsers I've seen that support the 2023r1 spec.
 
 # Latest __threefive__ release is `2`.`4`.`35`
 # __Documentation__ 
@@ -28,7 +26,7 @@ python3 -mpip install --upgrade threefive
 
    * [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md)
    * [Super Cool Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
-
+   
 ---
 
 
@@ -38,8 +36,10 @@ python3 -mpip install --upgrade threefive
 <details><summary>Versions and Releases</summary>
 
 Every time I fix a bug or add a feature, I do a new release. <br>
-In the last four years, that's about 250 releases.<br>
- Stay up with me. 
+This makes tracking down bugs and stuff much easier, and change 
+comes gradually. threefive is pretty stable these days,I've implemented
+almost everything I wanted, so releases are less frequent now.
+I do urge you to check from time to time for updates.
 ```lua
 a@slow:~/threefive$ threefive version
 2.4.35
