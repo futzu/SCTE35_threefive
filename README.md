@@ -1,5 +1,6 @@
  [RTFM ](#documentation) 
-# __threefive__ is the  highest rated SCTE-35 tool and proof positive that I don't have a girlfriend.
+# __threefive__ is the  highest rated SCTE-35 tool, 
+# and proof positive that I don't have a girlfriend.
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
 <br> `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
