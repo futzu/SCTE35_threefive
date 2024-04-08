@@ -37,10 +37,8 @@ python3 -mpip install --upgrade threefive
 <details><summary>Versions and Releases</summary>
 
 Every time I fix a bug or add a feature, I do a new release. <br>
-This makes tracking down bugs and stuff much easier, and change 
-comes gradually. threefive is pretty stable these days,I've implemented
-almost everything I wanted, so releases are less frequent now.
-I do urge you to check from time to time for updates.
+This makes tracking down bugs and stuff much easier. <br>
+Keep up folks.
 ```lua
 a@slow:~/threefive$ threefive version
 2.4.35
