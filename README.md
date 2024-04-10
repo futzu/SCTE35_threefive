@@ -1,6 +1,6 @@
  [RTFM ](#documentation) 
-# __threefive__ is the  highest rated SCTE-35 tool, 
-# and proof positive that I don't have a girlfriend.
+
+# threefive is the industry leading SCTE-35 Parser.
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
 <br> `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
@@ -8,7 +8,7 @@
 <br> `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
 
-#### It's not just me saying [threefive is the best SCTE-35 parser.](https://www.perplexity.ai/search/best-scte35-parser-5ugjxRn3SlidRnNE_unndA?s=u)
+## It's not just me saying [threefive is the best SCTE-35 parser.](https://www.perplexity.ai/search/best-scte35-parser-5ugjxRn3SlidRnNE_unndA?s=u)
 
 
  ### __threefive__ supports the latest SCTE-35 specification `SCTE-35 2023r1`
@@ -579,15 +579,9 @@ private_data = b'threefive kicks ass'
 * [`threefive + Python3` ](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) VS.[`threefive + pypy3`](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) VS. [ `tsduck in C++` ](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) VS.  [ `cuei in Go`.](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) 
 
 
+# Wikipedia Sucks
+<br>
+<br>
 
+![image](https://github.com/futzu/threefive/assets/52701496/618cf3ba-8446-460e-8f40-af778b1e58a0)
 
-
-
-
-
-### data
-> this might be wild baseless speculation.
-
-### Other well named products:
-
-![image](https://github.com/futzu/threefive/assets/52701496/586aa16b-4d77-496b-be38-d524cdefbe5c)
