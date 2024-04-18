@@ -1,6 +1,8 @@
- [RTFM ](#documentation) 
+### SCTE-35 Parser  
+#### SCTE-35 Decoder
+##### SCTE-35 Encoder
 
-# threefive is the industry leading SCTE-35 Parser.
+# threefive
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
 <br> `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
@@ -573,15 +575,7 @@ private_data = b'threefive kicks ass'
 
 ### `NEW!` __threefive__ now has experimental DVB DAS Support `ETSI TS 103 752-1` <br><br>
 
-
 ## SCTE-35 Parsing Shoot Out: 
 * The challenge is to parse 14,862 SCTE-35 Cues from an MPEGTS as fast as possible. 
 * [`threefive + Python3` ](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) VS.[`threefive + pypy3`](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) VS. [ `tsduck in C++` ](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) VS.  [ `cuei in Go`.](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) 
-
-
-# Wikipedia Sucks
-<br>
-<br>
-
-![image](https://github.com/futzu/threefive/assets/52701496/618cf3ba-8446-460e-8f40-af778b1e58a0)
 
