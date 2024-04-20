@@ -16,7 +16,13 @@
  ### __threefive__ supports the latest SCTE-35 specification `SCTE-35 2023r1`
  * threefive and cuei are the only parsers I've seen that support the 2023r1 spec.
 
-### Latest __threefive__ version is `2`.`4`.`35` _release #274_ 
+### Latest __threefive__ version is `2`.`4`.`35`  /  release `274` 
+* cyclomatic complexity for #274
+```js
+256 blocks (classes, functions, methods) analyzed.
+Average complexity: A (1.9921875)
+
+```
 # __Documentation__ 
 <details><summary>Install</summary>
 
