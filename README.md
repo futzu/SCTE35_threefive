@@ -16,7 +16,7 @@
  ### __threefive__ supports the latest SCTE-35 specification `SCTE-35 2023r1`
  * threefive and cuei are the only parsers I've seen that support the 2023r1 spec.
 
-# Latest __threefive__ release is `2`.`4`.`35`
+### Latest __threefive__ version is `2`.`4`.`35` _release #274_ 
 # __Documentation__ 
 <details><summary>Install</summary>
 
