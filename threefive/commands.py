@@ -39,7 +39,7 @@ class SpliceCommand(SCTE35Base):
 
 class BandwidthReservation(SpliceCommand):
     """
-    Table 11 - bandwidth_reservation()
+    Table 12 - bandwidth_reservation()
     """
 
     def __init__(self, bites=None):
@@ -55,7 +55,7 @@ class BandwidthReservation(SpliceCommand):
 
 class PrivateCommand(SpliceCommand):
     """
-    Table 12 - private_command
+    Table 13 - private_command
     """
 
     def __init__(self, bites=None):
@@ -84,7 +84,7 @@ class PrivateCommand(SpliceCommand):
 
 class SpliceNull(SpliceCommand):
     """
-    Table 7 - splice_null()
+    Table 8 - splice_null()
     """
 
     def __init__(self, bites=None):
@@ -95,7 +95,7 @@ class SpliceNull(SpliceCommand):
 
 class TimeSignal(SpliceCommand):
     """
-    Table 10 - time_signal()
+    Table 11 - time_signal()
     """
 
     def __init__(self, bites=None):
@@ -126,9 +126,7 @@ class TimeSignal(SpliceCommand):
 
     def _splice_time(self, bitbin):
         """
-        parse_pts is called by either a
-        TimeSignal or SpliceInsert instance
-        to decode pts.
+        _splice_time Table 14 - splice_time()
         """
         self.time_specified_flag = bitbin.as_flag(1)
         if self.time_specified_flag:
@@ -139,11 +137,14 @@ class TimeSignal(SpliceCommand):
             bitbin.forward(7)
 
     def _encode_splice_time(self, nbin):
+        """
+        _encode_splice_time Table 14 - splice_time()
+        """
         self._chk_var(bool, nbin.add_flag, "time_specified_flag", 1)
         if self.time_specified_flag:
             nbin.reserve(6)
             if not self.pts_time and not self.pts_time_ticks:
-                err_mesg = " self.time_specified_flag is set. Please set self.pts_time ( float )  or self.pts_time_ticks ( int  )"
+                err_mesg = "Please set self.pts_time ( float )  or self.pts_time_ticks ( int  )"
                 raise ValueError(err_mesg)
             if not self.pts_time_ticks:
                 self.pts_time_ticks = self.as_ticks(self.pts_time)
@@ -156,7 +157,7 @@ class TimeSignal(SpliceCommand):
 
 class SpliceInsert(TimeSignal):
     """
-    Table 9 - splice_insert()
+    Table 10 - splice_insert()
     """
 
     def __init__(self, bites=None):
@@ -177,119 +178,83 @@ class SpliceInsert(TimeSignal):
         self.avail_num = None
         self.avail_expected = None
 
+    def decode_break_duration(self, bitbin):
+        """
+        break_duration Table 15 - break_duration()
+        """
+        self.break_auto_return = bitbin.as_flag(1)
+        bitbin.forward(6)
+        self.break_duration_ticks = bitbin.as_int(33)
+        self.break_duration = self.as_90k(self.break_duration_ticks)
+
     def decode(self):
         """
-        SpliceInsert.decode
+        decode SpliceInsert
         """
         bitbin = BitBin(self.bites)
         start = bitbin.idx
-        self._decode_event(bitbin)
-        if not self.splice_event_cancel_indicator:
-            self._decode_flags(bitbin)
-            if self.program_splice_flag:
-                if not self.splice_immediate_flag:
-                    self._splice_time(bitbin)
-            self._decode_break(bitbin)
-            self._decode_unique_avail(bitbin)
-        self._set_len(start, bitbin.idx)
-
-    def _decode_break(self, bitbin):
-        """
-        SpliceInsert._decode_break(bitbin) is called
-        if SpliceInsert.duration_flag is set
-        """
-        if self.duration_flag:
-            self.break_auto_return = bitbin.as_flag(1)
-            bitbin.forward(6)
-            self.break_duration_ticks = bitbin.as_int(33)
-            self.break_duration = self.as_90k(self.break_duration_ticks)
-
-    def _decode_event(self, bitbin):
-        """
-        SpliceInsert._decode_event parses
-        self.splice_event_id and self.splice_event_cancel_indicator
-        and is called from SpliceInsert.decode()
-        """
         self.splice_event_id = bitbin.as_int(32)
         self.splice_event_cancel_indicator = bitbin.as_flag(1)
         bitbin.forward(7)
-
-    def _decode_flags(self, bitbin):
-        """
-        SpliceInsert._decode_flags parses four bit flags
-        """
-        self.out_of_network_indicator = bitbin.as_flag(1)
-        self.program_splice_flag = bitbin.as_flag(1)
-        self.duration_flag = bitbin.as_flag(1)
-        self.splice_immediate_flag = bitbin.as_flag(1)
-        self.event_id_compliance_flag = bitbin.as_flag(1)
-        bitbin.forward(3)
-
-    def _decode_unique_avail(self, bitbin):
-        self.unique_program_id = bitbin.as_int(16)
-        self.avail_num = bitbin.as_int(8)
-        self.avail_expected = bitbin.as_int(8)
+        if not self.splice_event_cancel_indicator:
+            self.out_of_network_indicator = bitbin.as_flag(1)
+            self.program_splice_flag = bitbin.as_flag(1)
+            self.duration_flag = bitbin.as_flag(1)
+            self.splice_immediate_flag = bitbin.as_flag(1)
+            self.event_id_compliance_flag = bitbin.as_flag(1)
+            bitbin.forward(3)
+            if self.program_splice_flag:
+                if not self.splice_immediate_flag:
+                    self._splice_time(bitbin)
+            if self.duration_flag:
+                self.decode_break_duration(bitbin)
+            self.unique_program_id = bitbin.as_int(16)
+            self.avail_num = bitbin.as_int(8)
+            self.avail_expected = bitbin.as_int(8)
+        self._set_len(start, bitbin.idx)
 
     def encode(self, nbin=None):
         """
         SpliceInsert.encode
         """
         nbin = self._chk_nbin(nbin)
-        self._encode_event(nbin)
-        if not self.splice_event_cancel_indicator:
-            self._encode_flags(nbin)
-            if self.program_splice_flag:
-                if not self.splice_immediate_flag:
-                    self._encode_splice_time(nbin)
-            self._encode_break(nbin)
-            self._encode_unique_avail(nbin)
-        return nbin.bites
-
-    def _encode_event(self, nbin):
-        """
-        SpliceInsert._encode_event encodes
-        self.splice_event_id and self.splice_event_cancel_indicator
-        and is called from SpliceInsert.encode()
-        """
         self._chk_var(int, nbin.add_int, "splice_event_id", 32)
         self._chk_var(bool, nbin.add_flag, "splice_event_cancel_indicator", 1)
         nbin.forward(7)
+        if not self.splice_event_cancel_indicator:
+            self._chk_var(bool, nbin.add_flag, "out_of_network_indicator", 1)
+            self._chk_var(bool, nbin.add_flag, "program_splice_flag", 1)
+            self._chk_var(bool, nbin.add_flag, "duration_flag", 1)
+            self._chk_var(bool, nbin.add_flag, "splice_immediate_flag", 1)
+            self._chk_var(bool, nbin.add_flag, "event_id_compliance_flag", 1)
+            nbin.forward(3)
+            if self.program_splice_flag:
+                if not self.splice_immediate_flag:
+                    self._encode_splice_time(nbin)
+            if self.duration_flag:
+                self.encode_break_duration(nbin)
+            self._chk_var(int, nbin.add_int, "unique_program_id", 16)
+            self._chk_var(int, nbin.add_int, "avail_num", 8)
+            self._chk_var(int, nbin.add_int, "avail_expected", 8)
+        return nbin.bites
 
-    def _encode_break(self, nbin):
+    def encode_break_duration(self, nbin):
         """
         SpliceInsert._encode_break(nbin) is called
         if SpliceInsert.duration_flag is set
         """
-        if self.duration_flag:
-            self._chk_var(bool, nbin.add_flag, "break_auto_return", 1)
-            nbin.forward(6)
-            if not self.break_duration_ticks:
-                self.break_duration_ticks = 0
-            if self.break_duration:
-                self.break_duration_ticks = self.as_ticks(self.break_duration)
-            self._chk_var(int, nbin.add_int, "break_duration_ticks", 33)
-
-    def _encode_flags(self, nbin):
-        """
-        SpliceInsert._encode_flags converts four flags
-        to bits
-        """
-        self._chk_var(bool, nbin.add_flag, "out_of_network_indicator", 1)
-        self._chk_var(bool, nbin.add_flag, "program_splice_flag", 1)
-        self._chk_var(bool, nbin.add_flag, "duration_flag", 1)
-        self._chk_var(bool, nbin.add_flag, "splice_immediate_flag", 1)
-        self._chk_var(bool, nbin.add_flag, "event_id_compliance_flag", 1)
-        nbin.forward(3)
-
-    def _encode_unique_avail(self, nbin):
-        self._chk_var(int, nbin.add_int, "unique_program_id", 16)
-        self._chk_var(int, nbin.add_int, "avail_num", 8)
-        self._chk_var(int, nbin.add_int, "avail_expected", 8)
+        self._chk_var(bool, nbin.add_flag, "break_auto_return", 1)
+        nbin.forward(6)
+        if not self.break_duration_ticks:
+            self.break_duration_ticks = 0
+        if self.break_duration:
+            self.break_duration_ticks = self.as_ticks(self.break_duration)
+        self._chk_var(int, nbin.add_int, "break_duration_ticks", 33)
 
 
 class SpliceSchedule(SpliceCommand):
     """
-    Table 8 - splice_schedule()
+    Table 9 - splice_schedule()
     """
 
     class SpliceEvent(SpliceInsert):
@@ -305,31 +270,48 @@ class SpliceSchedule(SpliceCommand):
             super().__init__(None)
             self.name = None
             self.utc_splice_time = None
-            self.event_id_compliance_flag = None
 
-        def _decode_event(self, bitbin):
+        def decode(self, bitbin):
             """
-            SpliceEvent._decode_event parses
-            self.splice_event_id and self.splice_event_cancel_indicator
-            and the new event_id_compliance_flag.
+            decode SpliceEvent
             """
             self.splice_event_id = bitbin.as_int(32)
             self.splice_event_cancel_indicator = bitbin.as_flag(1)
             self.event_id_compliance_flag = bitbin.as_flag(1)
             bitbin.forward(6)
-
-        def decode(self, bitbin):
-            """
-            SpliceEvent.decode
-            """
-            self._decode_event(bitbin)
             if not self.splice_event_cancel_indicator:
-                self._decode_flags(bitbin)
+                self.out_of_network_indicator = bitbin.as_flag(1)
+                self.program_splice_flag = bitbin.as_flag(1)
+                self.duration_flag = bitbin.as_flag(1)
                 bitbin.forward(5)
                 if self.program_splice_flag:
                     self.utc_splice_time = bitbin.as_int(32)
-                self._decode_break(bitbin)
-                self._decode_unique_avail(bitbin)
+                if self.duration_flag:
+                    self.decode_break_duration(bitbin)
+                self.unique_program_id = bitbin.as_int(16)
+                self.avail_num = bitbin.as_int(8)
+                self.avail_expected = bitbin.as_int(8)
+
+        def encode(self, nbin=None):
+            """
+            encode SpliceEvent
+            """
+            self._chk_var(int, nbin.add_int, "splice_event_id", 32)
+            self._chk_var(bool, nbin.add_flag, "splice_event_cancel_indicator", 1)
+            self._chk_var(bool, nbin.add_flag, "event_id_compliance_flag", 1)
+            nbin.forward(6)
+            if not self.splice_event_cancel_indicator:
+                self._chk_var(bool, nbin.add_flag, "out_of_network_indicator", 1)
+                self._chk_var(bool, nbin.add_flag, "program_splice_flag", 1)
+                self._chk_var(bool, nbin.add_flag, "duration_flag", 1)
+                nbin.forward(5)
+                if self.program_splice_flag:
+                    self._chk_var(int, nbin.add_int, "utc_splice_time", 32)
+                if self.duration_flag:
+                    self.encode_break_duration(nbin)
+            self._chk_var(int, nbin.add_int, "unique_program_id", 16)
+            self._chk_var(int, nbin.add_int, "avail_num", 8)
+            self._chk_var(int, nbin.add_int, "avail_expected", 8)
 
     def __init__(self, bites=None):
         """
@@ -342,7 +324,7 @@ class SpliceSchedule(SpliceCommand):
 
     def decode(self):
         """
-        SpliceSchedule.decode
+        decode SpliceSchedule
         """
         bitbin = BitBin(self.bites)
         start = bitbin.idx
@@ -352,7 +334,18 @@ class SpliceSchedule(SpliceCommand):
             self.splices[i].decode(bitbin)
         self._set_len(start, bitbin.idx)
 
+    def encode(self, nbin=None):
+        """
+        encode SpliceSchedule
+        """
+        nbin = self._chk_nbin(nbin)
+        self._chk_var(int, nbin.add_int, "splice_count", 8)
+        for splice in self.splices:
+            splice.encode(nbin)
+        return nbin.bites
 
+
+# table 7
 command_map = {
     0: SpliceNull,
     4: SpliceSchedule,
