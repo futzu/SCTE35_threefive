@@ -17,7 +17,7 @@
  * threefive and cuei are the only parsers I've seen that support the 2023r1 spec.
 
 ### Latest __threefive__ version is `2`.`4`.`37`  /  release `275` 
-* cyclomatic complexity for #274
+* cyclomatic complexity for #275
 ```js
 256 blocks (classes, functions, methods) analyzed.
 Average complexity: A (1.9921875)
