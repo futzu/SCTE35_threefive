@@ -1,14 +1,11 @@
-`Heads Up`    I have applied to join the [SCTE Digital Video Subcommittee](https://www.scte.org/information-page-index/digital-video-subcommittee-dvs/)  _If someone asks you about me, say something nice._ 
+### SCTE-35 Parser 
 
-
-
-
-### SCTE-35 Parser  
 #### SCTE-35 Decoder
+
 ##### SCTE-35 Encoder
 
-
 # threefive
+
 
 
 
