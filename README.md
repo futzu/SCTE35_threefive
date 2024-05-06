@@ -1,5 +1,4 @@
-### Using threefive for SCTE-35 is like having a letter from The Pope and a rocket launcher. 
-### Not much can slow you down, and a tie goes to the runner.
+# Using threefive for SCTE-35 is like having a letter from The Pope and a rocket launcher. Things are going to tend to go your way.
 
 
 ##### SCTE-35 Parser 
