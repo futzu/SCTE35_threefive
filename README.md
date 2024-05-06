@@ -1,13 +1,15 @@
-### SCTE-35 Parser 
+### Using threefive for SCTE-35 is like having a letter from The Pope and a rocket launcher. 
+### Not much can slow you down, and a tie goes to the runner.
+
+
+##### SCTE-35 Parser 
 
 #### SCTE-35 Decoder
 
-##### SCTE-35 Encoder
+### SCTE-35 Encoder
 
 # threefive
 
-### Using threefive for SCTE-35 is like having a letter from The Pope, and a rocket launcher. 
-### Not much can slow you down, and a tie goes to the runner.
 
 
 
