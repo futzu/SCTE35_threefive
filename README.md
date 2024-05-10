@@ -1,6 +1,3 @@
-# Using threefive for SCTE-35 is like having a letter from The Pope and a rocket launcher. Things are going to tend to go your way.
-
-
 ##### SCTE-35 Parser 
 
 #### SCTE-35 Decoder
@@ -10,16 +7,13 @@
 # threefive
 
 
-
+# Using threefive for SCTE-35 is like having a letter from The Pope and a rocket launcher. Things are going to tend to go your way.
 
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
 <br> `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
 <br> `Parses` __SCTE-35__ from  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br> `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
-
-## It's not just me saying [threefive is the best SCTE-35 parser.](https://www.perplexity.ai/search/best-scte35-parser-5ugjxRn3SlidRnNE_unndA?s=u)
-
 
  ### __threefive__ supports the latest SCTE-35 specification `SCTE-35 2023r1`
  * threefive and cuei are the only parsers I've seen that support the 2023r1 spec.
@@ -33,7 +27,7 @@ Average complexity: A (1.9921875)
 
 
 ```
-# __Documentation__ 
+# `Documentation`
 <details><summary>Install</summary>
 
 * install threefive with pip
