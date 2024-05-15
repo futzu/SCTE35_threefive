@@ -1,13 +1,6 @@
-##### SCTE-35 Parser 
+# threefive is the highest rated SCTE-35 parser. Ever.
 
-#### SCTE-35 Decoder
-
-### SCTE-35 Encoder
-
-# threefive
-
-
-# Using threefive for SCTE-35 is like having a letter from The Pope and a rocket launcher. Things are going to tend to go your way.
+## Using threefive for SCTE-35 is like having a letter from The Pope and a rocket launcher. Things are going to tend to go your way.
 
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
