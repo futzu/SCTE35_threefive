@@ -20,6 +20,13 @@ Average complexity: A (1.9921875)
 
 
 ```
+![image](https://github.com/futzu/SCTE-35_threefive/assets/52701496/01af69eb-4b61-4973-a768-97a3b3be9117)
+> My new phone has thermal imaging.
+>
+<BR>
+
+
+
 # `Documentation`
 <details><summary>Install</summary>
 
