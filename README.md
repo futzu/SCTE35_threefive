@@ -11,6 +11,8 @@
  ### __threefive__ supports the latest SCTE-35 specification `SCTE-35 2023r1`
  * threefive and cuei are the only parsers I've seen that support the 2023r1 spec.
 
+### Want something in Go? Check out [cuei](https://github.com/futzu/cuei)
+
 ### Latest __threefive__ version is `2`.`4`.`37`  /  release `275` 
 * cyclomatic complexity for #275
 ```js
