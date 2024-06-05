@@ -13,15 +13,8 @@
 
 ### Want something in Go? Check out [cuei](https://github.com/futzu/cuei)
 
-### Latest __threefive__ version is `2`.`4`.`37`  /  release `275` 
-* cyclomatic complexity for #275
-```js
-
-256 blocks (classes, functions, methods) analyzed.
-Average complexity: A (1.9921875)
-
-
-```
+### Latest __threefive__ version is `2`.`4`.`39`  /  release `276` 
+* fix for ffmpeg mangling SCTE-35 packets
 
 
 
@@ -51,7 +44,7 @@ Average complexity: A (1.9921875)
  
   ### `Q.` What can you do about it?
 
-  ### `A.` I'm about to push a new release that handles it.
+  ### `A.` threefive v2.4.39 will decode the modified packets correctly.
 
 ---
 
