@@ -84,7 +84,6 @@ class ProgramInfo:
         # sorted_dict = {k:my_dict[k] for k in sorted(my_dict)})
         keys = sorted(self.streams)
         print2(f"\t\t  Pid\t\tType")
-
         for k in keys:
             vee = int(self.streams[k], base=16)
             if vee in streamtype_map:
