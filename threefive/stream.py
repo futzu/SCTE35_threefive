@@ -145,7 +145,7 @@ class Stream:
     # tids
 
     _PMT_TID = PMT_TID = b"\x02"
-    _SCTE35_TID = SCTE35_TID = b"\xFC"
+    _SCTE35_TID = SCTE35_TID = b"\xfc"
     _SDT_TID = SDT_TID = b"\x42"
     ROLLOVER = 8589934591  # 95443.717678
     ROLLOVER9K = 95443.717678
@@ -457,6 +457,14 @@ class Stream:
         """
         return self.maps.prgm_pts
 
+    def _unpad(self,bites):
+        pad = b'\xff'
+        if bites[-1] == pad:
+            bites = self._unpad(bites[:-1])
+        if bites[0] == pad:
+            bites = self._unpad(bites[1:])
+        return bites
+
     def _parse_payload(self, pkt):
         """
         _parse_payload returns the packet payload
@@ -464,6 +472,7 @@ class Stream:
         head_size = 4
         if self._afc_flag(pkt[3]):
             afl = pkt[4]
+            pkt = pkt[:5] + self._unpad(pkt[5:])
             head_size += afl + 1  # +1 for afl byte
         return pkt[head_size:]
 
@@ -545,6 +554,8 @@ class Stream:
             return False
         if pay[13] == self.show_null:
             return False
+        split = pay.split(self.SCTE35_TID)
+        pay = self.SCTE35_TID+split[-1]
         seclen = self._parse_length(pay[1], pay[2])
         if self._section_incomplete(pay, pid, seclen):
             return False
