@@ -14,43 +14,12 @@
 ### Want something in Go? Check out [cuei](https://github.com/futzu/cuei)
 
 ### Latest __threefive__ version is `2`.`4`.`39`  /  release `276` 
-* fix for ffmpeg mangling SCTE-35 packets
+* `fix` to handle __ffmpeg adding Adaptive field headers and PCR to SCTE-35 packets__
 
 
 
 
 # `Documentation`
-<details><summary>Heads Up ffmpeg SCTE-35 packet mangling and how to deal with it. </summary>
-	
-> I recently noticed that ffmpeg is modifying not just the Stream type , 
-> but also the the SCTE-35 packet payloads.
-* original packet
-  ![image](https://github.com/futzu/SCTE-35_threefive/assets/52701496/ecdbeb9a-8672-4bbf-a0f6-311f3b7f2c12)
-  * the blue is the packet header
-  * the green is the SCTE-35 payload
-  * the gray '\xff' is the padding
-
-* ffmpeg Command
-```js
-  ffmpeg -copyts -i nmx.ts -map 0 -c copy  -y -f mpegts nmx-map-copy.ts
-```
-* modified packet
-![image](https://github.com/futzu/SCTE-35_threefive/assets/52701496/e56b101d-87db-4948-bb5e-9bc8931c5914)
-  * the blue is the packet header
-  * the gray '\xff' is the __padding has been moved and resized__
-  * the red is.... __I Have No Idea__
-  	* the big problem here is that the new data also contains the SCTE-35 Table ID __\xfc__.   
-  * the green is the SCTE-35 payload
- 
-  ### `Q.` What can you do about it?
-
-  ### `A.` threefive v2.4.39 will decode the modified packets correctly.
-
----
-
-
-
-</details>
 
 <details><summary>Install</summary>
 
