@@ -13,14 +13,14 @@ ___
 ### Latest __threefive__ version is `2`.`4`.`39`  /  release `276` 
 * `fix` to handle __ffmpeg Adding PES Start Codes and info to SCTE-35 packets__
 	* It took me a minute to figure out what was happening I don't believe I've seen it done like this before.
-  		* __ffmpeg changes the stream type to 0x6__ for SCTE-35 streams, __threefive__ has always handled that correctly.
-    		* Now, __threefive__ also handles the __PES__ info inserted into existing SCTE-35 packets by __ffmpeg__,
+  	* __ffmpeg changes the stream type to 0x6__ for SCTE-35 streams, __threefive__ has always handled that correctly.
+    	* Now, __threefive__ also handles the __PES__ info inserted into existing SCTE-35 packets by __ffmpeg__,
         ![image](https://github.com/futzu/SCTE-35_threefive/assets/52701496/ee9dce0e-1e34-4357-a383-17819093acb7)
-  		* if you __transcode SCTE-35__ with __ffmpeg__, __pip up to 2.4.39__.
-    		* If you have an issue, just __hit me up__.
+  	* if you __transcode SCTE-35__ with __ffmpeg__, __pip up to 2.4.39__.
+  	* If you have an issue, just __hit me up__.
         
-  * __threefive will always be fully compatible with ffmpeg,__
-  	*   I swear__. 
+* __threefive will always be fully compatible with ffmpeg,__
+  	*   __I swear__. 
 ___
 
 # `Documentation`
