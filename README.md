@@ -1,23 +1,27 @@
 # threefive is the highest rated SCTE-35 parser. Ever.
 
-## Using threefive for SCTE-35 is like having a letter from The Pope and a rocket launcher. Things are going to tend to go your way.
-
+ <br>
+ 
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
 <br> `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
 <br> `Parses` __SCTE-35__ from  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br> `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
- ### __threefive__ supports the latest SCTE-35 specification `SCTE-35 2023r1`
- * threefive and cuei are the only parsers I've seen that support the 2023r1 spec.
 
-### Want something in Go? Check out [cuei](https://github.com/futzu/cuei)
-
+___
 ### Latest __threefive__ version is `2`.`4`.`39`  /  release `276` 
-* `fix` to handle __ffmpeg adding Adaptive field headers and PCR to SCTE-35 packets__
-
-
-
+* `fix` to handle __ffmpeg Adding PES Start Codes and info to SCTE-35 packets__
+	* It took me a minute to figure out what was happening I don't believe I've seen it done like this before.
+  		* __ffmpeg changes the stream type to 0x6__ for SCTE-35 streams, __threefive__ has always handled that correctly.
+    		* Now, __threefive__ also handles the __PES__ info inserted into existing SCTE-35 packets by __ffmpeg__,
+        ![image](https://github.com/futzu/SCTE-35_threefive/assets/52701496/ee9dce0e-1e34-4357-a383-17819093acb7)
+  		* if you __transcode SCTE-35__ with __ffmpeg__, __pip up to 2.4.39__.
+    		* If you have an issue, just __hit me up__.
+        
+  * __threefive will always be fully compatible with ffmpeg,__
+  	*   I swear__. 
+___
 
 # `Documentation`
 
@@ -27,7 +31,7 @@
 ```smalltalk
 python3 -mpip install --upgrade threefive
 ```
-* threefive has two third party packages 
+* threefive has two third party packages and I wrote one of them.
 	* pip will automatically install PyAES and [new_reader](https://github.com/futzu/new_reader) 
 
    * [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md)
