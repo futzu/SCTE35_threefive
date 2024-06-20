@@ -23,6 +23,9 @@ ___
   	*   __I swear__. 
 ___
 
+## threefive and [AI?](https://ludic.mataroa.blog/blog/i-will-fucking-piledrive-you-if-you-mention-ai-again/) If was good , I'd be using it. 
+
+
 # `Documentation`
 
 <details><summary>Install</summary>
