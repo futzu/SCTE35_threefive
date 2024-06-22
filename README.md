@@ -17,22 +17,27 @@
 
 
 ___
-### Latest __threefive__ version is `2`.`4`.`39`  /  release `276` 
-* `fix` to handle __ffmpeg Adding PES Start Codes and info to SCTE-35 packets__
-	* It took me a minute to figure out what was happening I don't believe I've seen it done like this before.
-  	* __ffmpeg changes the stream type to 0x6__ for SCTE-35 streams, __threefive__ has always handled that correctly.
-    	* Now, __threefive__ also handles the __PES__ info inserted into existing SCTE-35 packets by __ffmpeg__,
-        ![image](https://github.com/futzu/SCTE-35_threefive/assets/52701496/ee9dce0e-1e34-4357-a383-17819093acb7)
-  	* if you __transcode SCTE-35__ with __ffmpeg__, __pip up to 2.4.39__.
-  	* If you have an issue, just __hit me up__.
-        
-* __threefive will always be fully compatible with ffmpeg,__
-  	*   __I swear__. 
-___
+# Latest __threefive__ version is `2`.`4`.`39`  /  release `276` 
+---
 
-## threefive and [AI?](https://ludic.mataroa.blog/blog/i-will-fucking-piledrive-you-if-you-mention-ai-again/)  No. If it was good , I'd be using it. 
-
-
+# `RFC` 
+#### _( Request For Comments)_ 
+> Does anyone have  a better way to do this?
+```py3
+   def _unpad(self,bites):
+        pad = b'\xff'
+        if bites[-1] == pad:
+            bites = self._unpad(bites[:-1])
+        if bites[0] == pad:
+            bites = self._unpad(bites[1:]) # <------- This is not good, front padding makes you pop left
+        return bites			   #  	popping left with a list is a performance killer,
+					   #    deque is not bad though.
+```
+> Details: when I parse a mpegts packet, I remove sections as I go, first thing I process is header and then remove it.
+> The payload of the packet or a PES packet, comes padded in the front or the back of the payload. 
+> What _unpad does is remove a padding byte from the front or back and then calls itself again.
+> You can't replace all the b'\xff' bytes, because it's only a padding byte in certain places.
+---
 # `Documentation`
 
 <details><summary>Install</summary>
