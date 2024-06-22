@@ -33,10 +33,13 @@ ___
         return bites			   #  	popping left with a list is a performance killer,
 					   #    deque is not bad though.
 ```
-> Details: when I parse a mpegts packet, I remove sections as I go, first thing I process is header and then remove it.
+> Details: when I parse a mpegts packet, I remove sections as I go. I parse the header and then remove it.
 > The payload of the packet or a PES packet, comes padded in the front or the back of the payload. 
 > What _unpad does is remove a padding byte from the front or back and then calls itself again.
-> You can't replace all the b'\xff' bytes, because it's only a padding byte in certain places.
+> You can't just replace all the b'\xff' bytes, because it's only a padding byte in certain places.
+> I'm thinking read the packet into a deque call  popleft and pop. <br>
+Does anyone have a better idea?
+
 ---
 # `Documentation`
 
