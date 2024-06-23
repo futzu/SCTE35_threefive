@@ -5,7 +5,7 @@ SCTE35 Splice Descriptors
 from .bitn import BitBin
 from .base import SCTE35Base
 from .segmentation import table20, table22,dvb_table2
-from .upids import upid_map 
+from .upids import upid_map
 
 def k_by_v(adict, avalue):
     """
@@ -84,7 +84,9 @@ class SpliceDescriptor(SCTE35Base):
 
 
 class DVBDASDescriptor(SpliceDescriptor):
-
+    """
+    Experimental DVB Descriptor Support
+    """
     def __init__(self, bites=None):
         super().__init__(bites)
         self.tag = 240 # 0xf0
