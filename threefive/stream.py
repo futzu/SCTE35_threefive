@@ -120,9 +120,9 @@ class Maps:
 
     """
 
-        self.pid_prgm = {}
     def __init__(self):
         self.pid_cc = {}
+        self.pid_prgm = {}
         self.prgm_pcr = {}
         self.prgm_pts = {}
         self.prgm = {}
