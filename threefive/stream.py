@@ -120,9 +120,9 @@ class Maps:
 
     """
 
+        self.pid_prgm = {}
     def __init__(self):
         self.pid_cc = {}
-        self.pid_prgm = {}
         self.prgm_pcr = {}
         self.prgm_pts = {}
         self.prgm = {}
@@ -148,6 +148,7 @@ class Stream:
     _SDT_TID = SDT_TID = b"\x42"
     ROLLOVER = 8589934591  # 95443.717678
     ROLLOVER9K = 95443.717678
+    PES_START=b'\x00\x00\x01'
 
     def __init__(self, tsdata, show_null=True):
         """
@@ -389,7 +390,7 @@ class Stream:
         If it has pts and it's the pcr_pid,
         return True
         """
-        if self._pusi_flag(pkt) and self._pcr_flag(pkt):
+        if self._pusi_flag(pkt):
             return pid in self.pids.pcr
         return False
 
@@ -457,12 +458,12 @@ class Stream:
         return self.maps.prgm_pts
 
     def _unpad(self,bites):
-        pad = b'\xff'
-        if bites[-1] == pad:
-            bites = self._unpad(bites[:-1])
-        if bites[0] == pad:
-            bites = self._unpad(bites[1:])
+        pad = 255
+        one = 1
+        while bites[0] in [pad]:
+            bites = self._unpad(bites[one:])
         return bites
+
 
     def _parse_payload(self, pkt):
         """
@@ -471,7 +472,7 @@ class Stream:
         head_size = 4
         if self._afc_flag(pkt[3]):
             afl = pkt[4]
-            pkt = pkt[:5] + self._unpad(pkt[5:])
+            pkt = pkt[:6] + self._unpad(pkt[6:])
             head_size += afl + 1  # +1 for afl byte
         return pkt[head_size:]
 
@@ -525,7 +526,8 @@ class Stream:
 
     def _section_incomplete(self, pay, pid, seclen):
         # + 3 for the bytes before section starts
-        if (seclen + 3) > len(pay):
+        three = 3
+        if (seclen + three) > len(pay):
             self.maps.partial[pid] = pay
             return True
         return False
