@@ -17,43 +17,28 @@
 
 
 ___
-# Latest __threefive__ version is `2`.`4`.`39`  /  release `276` 
+# Latest __threefive__ version is `2`.`4`.`41` 
+* this is the 277th release of threefive
+* Cyclomatic Complexity Score 1.99
 ---
 
-# `RFC` 
-#### _( Request For Comments)_ 
-> Does anyone have  a better way to do this?
-```py3
-   def _unpad(self,bites):
-        pad = b'\xff'
-        if bites[-1] == pad:
-            bites = self._unpad(bites[:-1])
-        if bites[0] == pad:
-            bites = self._unpad(bites[1:]) # <------- This is not good, front padding makes you pop left
-        return bites			   #  	popping left with a list is a performance killer,
-					   #    deque is not bad though.
-```
-> Details: when I parse a mpegts packet, I remove sections as I go. I parse the header and then remove it.
-> The payload of the packet or a PES packet, comes padded in the front or the back of the payload. 
-> What _unpad does is remove a padding byte from the front or back and then calls itself again.
-> You can't just replace all the b'\xff' bytes, because it's only a padding byte in certain places.
-> I'm thinking read the packet into a deque call  popleft and pop. <br>
-Does anyone have a better idea?
 
----
+
 # `Documentation`
 
 <details><summary>Install</summary>
-
+	<br/>
 * install threefive with pip
+* threefive has two third party package dependencies and I wrote one of them.
+* pip will automatically install PyAES and [new_reader](https://github.com/futzu/new_reader) 
+
 ```smalltalk
 python3 -mpip install --upgrade threefive
 ```
-* threefive has two third party packages and I wrote one of them.
-	* pip will automatically install PyAES and [new_reader](https://github.com/futzu/new_reader) 
 
-   * [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md)
-   * [Super Cool Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
+
+* [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md)
+* [Super Cool Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
    
 ---
 
@@ -68,7 +53,7 @@ This makes tracking down bugs and stuff much easier. <br>
 Keep up folks.
 ```lua
 a@slow:~/threefive$ threefive version
-2.4.35
+2.4.41
 a@slow:~/threefive$ 
 
 ```
