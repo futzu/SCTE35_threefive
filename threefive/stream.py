@@ -11,15 +11,20 @@ from .packetdata import PacketData
 
 
 streamtype_map = {
-    0x00: "MPEG-2 Video",
-    0x01: "H.264 Video",
+    0x01: "MPEG-2 Video",
     0x02: "MP2 Video",
-    0x03: "MP2 Audio",
-    0x04: "MP2 Audio",
+    0x03: "MP3 Audio",
+    0x04: "MP3 Audio",
     0x06: "PES Packets/Private Data",
     0x0F: "AAC Audio",
+    0x10: "MPEG4",
+    0x11:  "AAC LATM",
     0x15: "ID3 Timed Meta Data",
-    0x1B: "AVC Video",
+    0x1B: "AVC Video H.264",
+    0x1c: "AAC",
+    0x20: "H264",
+    0x21: "JPEG2000",
+    0x24: "HEVC",
     0x80: "MPEG-1 Audio",
     0x81: "MPEG-2 Audio",
     0x82: "AC3 Audio ",
@@ -27,6 +32,10 @@ streamtype_map = {
     0x84: "AAC HE v2 Audio",
     0x86: "SCTE35 Data",
     0xC0: "Unknown",
+    0xdb: "HLS Encrypted H.264",
+    0xcf: "HLS Encrypted AAC",
+    0xc1: "HLS Encrypted AC3",
+    0xdb: "HLS Encrypted EAC3",
 }
 
 
@@ -83,7 +92,7 @@ class ProgramInfo:
         print2("\tStreams:")
         # sorted_dict = {k:my_dict[k] for k in sorted(my_dict)})
         keys = sorted(self.streams)
-        print2("\t\t  Pid\t\tType")
+        print2(f"\t\t  Pid\t\tType")
         for k in keys:
             vee = int(self.streams[k], base=16)
             if vee in streamtype_map:
@@ -148,7 +157,7 @@ class Stream:
     _SDT_TID = SDT_TID = b"\x42"
     ROLLOVER = 8589934591  # 95443.717678
     ROLLOVER9K = 95443.717678
-    PES_START=b'\x00\x00\x01'
+    SCTE35_PES_START  = b"\x00\x00\x01\xfc"
 
     def __init__(self, tsdata, show_null=True):
         """
@@ -168,7 +177,7 @@ class Stream:
             self._tsdata = tsdata
         self.show_null = show_null
         self.start = {}
-        self.info = None
+        self.info = True
         self.the_program = None
         self.the_scte35_pids = []
         self.pids = Pids()
@@ -385,7 +394,7 @@ class Stream:
         # uses pay not pkt
         return pay[7] & 0x80
 
-    def pcr_pid_pts(self,pid,pkt):
+    def pcr_pid_pts(self,pkt,pid):
         """
         If it has pts and it's the pcr_pid,
         return True
@@ -457,13 +466,28 @@ class Stream:
         """
         return self.maps.prgm_pts
 
+    def _parse_pcr(self,pkt,pid):
+        if self._afc_flag(pkt[3]):
+            pcr  = pkt[6] << 25
+            pcr |= pkt[7] << 17
+            pcr |= pkt[8] << 9
+            pcr |= pkt[9] << 1
+            pcr |= pkt[10] >> 7
+            prgm = self.pid2prgm(pid)
+            self.maps.prgm_pcr[prgm] = pcr
+
+
+    def _unpad_afc(self,pkt):
+        if self._afc_flag(pkt[3]):
+            pkt= pkt[:4] + self._unpad(pkt[4:])
+        return pkt
+
     def _unpad(self,bites):
         pad = 255
         one = 1
         while bites[0] in [pad]:
-            bites = self._unpad(bites[one:])
+            self._unpad(bites[one:])
         return bites
-
 
     def _parse_payload(self, pkt):
         """
@@ -471,10 +495,16 @@ class Stream:
         """
         head_size = 4
         if self._afc_flag(pkt[3]):
+            pkt = self._unpad_afc(pkt)
             afl = pkt[4]
-            pkt = pkt[:6] + self._unpad(pkt[6:])
             head_size += afl + 1  # +1 for afl byte
         return pkt[head_size:]
+
+    def _changed(self,what,pid):
+        pts = self.pid2pts(pid)
+        if pts:
+            effed = f"\n{what} changed @ {pts}\n"
+            print2(effed)
 
     def _parse_tables(self, pkt, pid):
         """
@@ -486,13 +516,15 @@ class Stream:
         if self._same_as_last(pay, pid):
             return False
         if pid in self.pids.pmt:
+            self._changed("PMT",pid)
             return self._parse_pmt(pay, pid)
         if pid == self.pids.PAT_PID:
+            self._changed("PAT",pid)
             return self._parse_pat(pay)
-        if pid == self.pids.SDT_PID and self.info:
+        if pid == self.pids.SDT_PID: # and self.info:
+            self._changed("SDT",pid)
             return self._parse_sdt(pay)
         return False
-
     def _parse_info(self, pkt):
         """
         _parse_info parses the packet for tables
@@ -506,8 +538,10 @@ class Stream:
     def _parse(self, pkt):
         cue = False
         pid = self._parse_info(pkt)
-        # self._parse_cc(pkt, pid)
-        if self.pcr_pid_pts(pid,pkt):
+        #self._parse_cc(pkt, pid)
+       # if self._pcr_flag(pkt):
+        #    self._parse_pcr(pkt,pid)
+        if self.pcr_pid_pts(pkt,pid):
             self._parse_pts(pkt, pid)
         if pid in self.pids.scte35:
             cue = self._parse_scte35(pkt, pid)
@@ -519,15 +553,15 @@ class Stream:
         return self._split_by_idx(pay, sep)
 
     def _same_as_last(self, pay, pid):
+        old = ''
         if pid in self.maps.last:
-            return pay == self.maps.last[pid]
+            old  = self.maps.last[pid]
         self.maps.last[pid] = pay
-        return False
+        return old == self.maps.last[pid]
 
     def _section_incomplete(self, pay, pid, seclen):
         # + 3 for the bytes before section starts
-        three = 3
-        if (seclen + three) > len(pay):
+        if (seclen + 3) > len(pay):
             self.maps.partial[pid] = pay
             return True
         return False
@@ -557,8 +591,12 @@ class Stream:
             return False
         split = pay.split(self.SCTE35_TID)
         pay = self.SCTE35_TID+split[-1]
+
         seclen = self._parse_length(pay[1], pay[2])
         if self._section_incomplete(pay, pid, seclen):
+            return False
+        pay = self.SCTE35_TID+split[-1]
+        if len(pay) <3:
             return False
         pay = pay[: seclen + 3]
         cue = self._parse_cue(pay, pid)
