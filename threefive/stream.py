@@ -35,7 +35,6 @@ streamtype_map = {
     0xdb: "HLS Encrypted H.264",
     0xcf: "HLS Encrypted AAC",
     0xc1: "HLS Encrypted AC3",
-    0xdb: "HLS Encrypted EAC3",
 }
 
 
@@ -92,7 +91,7 @@ class ProgramInfo:
         print2("\tStreams:")
         # sorted_dict = {k:my_dict[k] for k in sorted(my_dict)})
         keys = sorted(self.streams)
-        print2(f"\t\t  Pid\t\tType")
+        print2("\t\t  Pid\t\tType")
         for k in keys:
             vee = int(self.streams[k], base=16)
             if vee in streamtype_map:
@@ -270,7 +269,9 @@ class Stream:
         if self._find_start():
             num_pkts = 700
             for chunk in self.iter_pkts(num_pkts=num_pkts):
-                _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
+         Too few public methods (0/2) (too-few-public-methods)
+threefive/stream.py:122:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+threefive/stream.py:142:0: R0902: Too many       _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
                 del _
         return False
 
@@ -343,7 +344,7 @@ class Stream:
             for pkt in iter(partial(self._tsdata.read, self.PACKET_SIZE), b""):
                 self._parse(pkt)
                 pid = self._parse_pid(pkt[1],pkt[2])
-                if self.pcr_pid_pts(pid,pkt):
+                if self.pcr_pid_pts(pkt,pid):
                     _ = {
                         print2(f"{pid} , {self.as_90k(pts)}")
                         for pgrm, pts in self.maps.prgm_pts.items()
