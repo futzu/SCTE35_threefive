@@ -269,9 +269,7 @@ class Stream:
         if self._find_start():
             num_pkts = 700
             for chunk in self.iter_pkts(num_pkts=num_pkts):
-         Too few public methods (0/2) (too-few-public-methods)
-threefive/stream.py:122:0: R0903: Too few public methods (0/2) (too-few-public-methods)
-threefive/stream.py:142:0: R0902: Too many       _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
+                _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
                 del _
         return False
 
