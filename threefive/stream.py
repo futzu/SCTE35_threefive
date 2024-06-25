@@ -538,8 +538,8 @@ class Stream:
         cue = False
         pid = self._parse_info(pkt)
         #self._parse_cc(pkt, pid)
-       # if self._pcr_flag(pkt):
-        #    self._parse_pcr(pkt,pid)
+        if self._pcr_flag(pkt):
+            self._parse_pcr(pkt,pid)
         if self.pcr_pid_pts(pkt,pid):
             self._parse_pts(pkt, pid)
         if pid in self.pids.scte35:
@@ -573,6 +573,13 @@ class Stream:
             return cue
         return False
 
+    def _strip_scte35_pes(self,pay):
+        if self.SCTE35_PES_START in pay:
+            print2("Stripping PES Header from SCTE35")
+            pay =pay.split(self.SCTE35_PES_START,1)[1]
+        pay = self._split_by_idx(pay,self.SCTE35_TID)
+        return pay
+
     def _parse_scte35(self, pkt, pid):
         """
         parse a scte35 cue from one or more packets
@@ -580,6 +587,7 @@ class Stream:
         if self.the_scte35_pids and pid not in self.the_scte35_pids:
             return False
         pay = self._parse_payload(pkt)
+        pay = self._strip_scte35_pes(pay)
         if not pay:
             return False
         pay = self._chk_partial(pay, pid, self.SCTE35_TID)
@@ -588,13 +596,9 @@ class Stream:
             return False
         if pay[13] == self.show_null:
             return False
-        split = pay.split(self.SCTE35_TID)
-        pay = self.SCTE35_TID+split[-1]
-
         seclen = self._parse_length(pay[1], pay[2])
         if self._section_incomplete(pay, pid, seclen):
             return False
-        pay = self.SCTE35_TID+split[-1]
         if len(pay) <3:
             return False
         pay = pay[: seclen + 3]
