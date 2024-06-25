@@ -118,23 +118,25 @@ class Eidr(Upid):
         """
         decode Eidr Upid
         """
-        if self.upid_length != 12:
-            return f"upid_length is {self.upid_length} should be 12 bytes."
-        pre = self.bitbin.as_int(16)
+        pre = self.bitbin.as_hex(16)
         post = []
-        bit_count = 80
-        while bit_count:
-            bit_count -= 16
-            post.append(self.bitbin.as_hex(16)[2:])
-        return self.upid_name, f"10.{pre}/{'-'.join(post)}"
+        # switch to compact binary format
+        nibbles = 20
+        while nibbles:
+            post.append(hex(self.bitbin.as_int(4))[2:])
+            nibbles -= 1
+        return self.upid_name, f"{pre}{''.join(post)}"
 
     def encode(self, nbin, seg_upid):
         """
         encode Eidr Upid
         """
-        pre, post = seg_upid[3:].split("/", 1)
-        nbin.add_int(int(pre), 16)
-        nbin.add_hex(post.replace("-", ""), 80)
+        # switch to compact binary format
+        nbin.add_hex(seg_upid[:6], 16)
+        substring = seg_upid[6:]
+        for i in substring:
+            hexed = f"0x{i}"
+            nbin.add_hex(hexed, 4)
 
 
 class Isan(Upid):
