@@ -1,14 +1,6 @@
 
-![image](https://github.com/futzu/SCTE-35_threefive/assets/52701496/9439f55e-586e-4feb-8a73-4cdede53fac5)
-
-###
-###
-###
-
 # threefive is the highest rated SCTE-35 parser. Ever.
 
- <br>
- 
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
 <br> `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
@@ -17,9 +9,14 @@
 
 
 ___
-# Latest __threefive__ version is `2`.`4`.`43` 
-* this is the 277th release of threefive
+# Latest __threefive__ version is `2`.`4`.`45` 
+* this is the 279th release of threefive
 * Cyclomatic Complexity Score 1.99
+* EIDR UPIDs are now in compact binary format
+* Stream class now includes PCR timestamps
+* Stream class now logs PAT, PMT, and SDT changes
+* SCTE-35 PES Packets are now properly handled 
+  
 ---
 
 
