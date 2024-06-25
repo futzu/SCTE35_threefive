@@ -438,7 +438,7 @@ class Stream:
             last_cc = self.maps.pid_cc[pid]
             good = (last_cc, ((last_cc + 1) % 16))
             if c_c not in good:
-                print2(f"BAD --> pid:\t{hex(pid)}\tlast cc:\t{last_cc}\tcc:\t{c_c}")
+                print2(f" # BAD --> pid:\t{hex(pid)}\tlast cc:\t{last_cc}\tcc:\t{c_c}")
         self.maps.pid_cc[pid] = c_c
 
     def _parse_pts(self, pkt, pid):
@@ -502,7 +502,7 @@ class Stream:
     def _changed(self,what,pid):
         pts = self.pid2pts(pid)
         if pts:
-            effed = f"\n{what} changed @ {pts}\n"
+            effed = f"\n# {what} changed @ {pts}\n"
             print2(effed)
 
     def _parse_tables(self, pkt, pid):
@@ -573,9 +573,9 @@ class Stream:
             return cue
         return False
 
-    def _strip_scte35_pes(self,pay):
+    def _strip_scte35_pes(self,pay,pid):
         if self.SCTE35_PES_START in pay:
-            print2("Stripping PES Header from SCTE35")
+            print2(f"# Stripping PES Header from SCTE35 @ {self.pid2pts(pid)}")
             pay =pay.split(self.SCTE35_PES_START,1)[1]
         pay = self._split_by_idx(pay,self.SCTE35_TID)
         return pay
@@ -587,7 +587,7 @@ class Stream:
         if self.the_scte35_pids and pid not in self.the_scte35_pids:
             return False
         pay = self._parse_payload(pkt)
-        pay = self._strip_scte35_pes(pay)
+        pay = self._strip_scte35_pes(pay,pid)
         if not pay:
             return False
         pay = self._chk_partial(pay, pid, self.SCTE35_TID)
@@ -598,8 +598,6 @@ class Stream:
             return False
         seclen = self._parse_length(pay[1], pay[2])
         if self._section_incomplete(pay, pid, seclen):
-            return False
-        if len(pay) <3:
             return False
         pay = pay[: seclen + 3]
         cue = self._parse_cue(pay, pid)
