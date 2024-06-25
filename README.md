@@ -23,6 +23,20 @@ ___
 
 # `Documentation`
 
+
+* SCTE-35 on the [command line](https://github.com/futzu/scte35parser-threefive/blob/master/cli.md)
+
+* [Trigger on SCTE-35 events](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md) using threefive.Stream
+
+* SCTE-35 code [examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
+
+* [Encoding](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [Encoding | more ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md)
+
+* [Parse SCTE-35 programmatically ](https://github.com/futzu/scte35parser-threefive/blob/master/prog.md) with a few lines of code
+
+
+
+
 <details><summary>Install</summary>
 	<br/>
 * install threefive with pip
@@ -61,23 +75,6 @@ a@slow:~/threefive$
 
 
 </details>
-
-
-
-
-#### SCTE-35 on the [command line](https://github.com/futzu/scte35parser-threefive/blob/master/cli.md)
-
-#### [Trigger on SCTE-35 events](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md) using threefive.Stream
-
-#### SCTE-35 code [examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
-
-#### [Encoding](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [Encoding | more ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md)
-
-#### [Parse SCTE-35 programmatically ](https://github.com/futzu/scte35parser-threefive/blob/master/prog.md) with a few lines of code
-
-
-
-
 
 
  <details><summary>Cue Class</summary>
