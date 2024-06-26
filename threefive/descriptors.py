@@ -4,8 +4,9 @@ SCTE35 Splice Descriptors
 
 from .bitn import BitBin
 from .base import SCTE35Base
-from .segmentation import table20, table22,dvb_table2
+from .segmentation import table20, table22, dvb_table2
 from .upids import upid_map
+
 
 def k_by_v(adict, avalue):
     """
@@ -87,19 +88,20 @@ class DVBDASDescriptor(SpliceDescriptor):
     """
     Experimental DVB Descriptor Support
     """
+
     def __init__(self, bites=None):
         super().__init__(bites)
-        self.tag = 240 # 0xf0
+        self.tag = 240  # 0xf0
         self.name = "DVD DAS Descriptor"
         self.identifier = "DVB_"
         self.break_num = 0
         self.breaks_expected = 0
-        self.equivalent_segmentation_type=None
-        self.equivalent_segmentation_message=None
+        self.equivalent_segmentation_type = None
+        self.equivalent_segmentation_message = None
         self.upid_type = 0x0F
-        self.upid_type_name=None
-        self.upid_length=None
-        self.upid=None
+        self.upid_type_name = None
+        self.upid_length = None
+        self.upid = None
 
     def decode(self):
         """
@@ -111,11 +113,11 @@ class DVBDASDescriptor(SpliceDescriptor):
         bitbin.forward(4)
         self.equivalent_segmentation_type = bitbin.as_int(4)
         if self.equivalent_segmentation_type in dvb_table2:
-            self.equivalent_segmentation_message= dvb_table2[self.equivalent_segmentation_type]
-        self.upid_length = len(self.bites)-3
-        the_upid = upid_map[self.upid_type][1](
-            bitbin, self.upid_type, self.upid_length
-        )
+            self.equivalent_segmentation_message = dvb_table2[
+                self.equivalent_segmentation_type
+            ]
+        self.upid_length = len(self.bites) - 3
+        the_upid = upid_map[self.upid_type][1](bitbin, self.upid_type, self.upid_length)
         self.upid_type_name, self.upid = the_upid.decode()
 
     def encode(self, nbin=None):
@@ -123,13 +125,12 @@ class DVBDASDescriptor(SpliceDescriptor):
         encode DVB DAS Descriptor
         """
         nbin = super().encode(nbin)
-        nbin.add_int(self.break_num , 8)
-        nbin.add_int(self.breaks_expected , 8)
+        nbin.add_int(self.break_num, 8)
+        nbin.add_int(self.breaks_expected, 8)
         nbin.forward(4)
-        nbin.add_int(self.equivalent_segmentation_type ,4)
-        the_upid = upid_map[self.upid_type][1](
-            None, self.upid_type, self.upid_length)
-        the_upid.encode(nbin,self.upid)
+        nbin.add_int(self.equivalent_segmentation_type, 4)
+        the_upid = upid_map[self.upid_type][1](None, self.upid_type, self.upid_length)
+        the_upid.encode(nbin, self.upid)
         return nbin.bites
 
 
@@ -206,7 +207,6 @@ class AvailDescriptor(SpliceDescriptor):
         self.tag = 0
         self.identifier = "CUEI"
         self.provider_avail_id = None
-
 
     def decode(self):
         """
@@ -359,8 +359,11 @@ class SegmentationDescriptor(SpliceDescriptor):
             self.segmentation_duration = self.as_90k(self.segmentation_duration_ticks)
         self.segmentation_upid_type = bitbin.as_int(8)
         self.segmentation_upid_length = bitbin.as_int(8)
-        the_upid = upid_map[self.segmentation_upid_type][1](
-            bitbin, self.segmentation_upid_type, self.segmentation_upid_length
+        upid_type = self.segmentation_upid_type
+        if upid_type not in upid_map:
+            upid_type = 0xFD
+        the_upid = upid_map[upid_type][1](
+            bitbin, upid_type, self.segmentation_upid_length
         )
         self.segmentation_upid_type_name, self.segmentation_upid = the_upid.decode()
         self.segmentation_type_id = bitbin.as_int(8)
@@ -433,9 +436,11 @@ class SegmentationDescriptor(SpliceDescriptor):
             self._chk_var(int, nbin.add_int, "segmentation_duration_ticks", 40)
         self._chk_var(int, nbin.add_int, "segmentation_upid_type", 8)
         self._chk_var(int, nbin.add_int, "segmentation_upid_length", 8)
-        upid_type=self.segmentation_upid_type
-        the_upid =upid_map[upid_type][1](None,upid_type,self.segmentation_upid_length)
-        the_upid.encode(nbin,self.segmentation_upid)
+        upid_type = self.segmentation_upid_type
+        the_upid = upid_map[upid_type][1](
+            None, upid_type, self.segmentation_upid_length
+        )
+        the_upid.encode(nbin, self.segmentation_upid)
         self._chk_var(int, nbin.add_int, "segmentation_type_id", 8)
         self._encode_segments(nbin)
 
