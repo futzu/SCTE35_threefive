@@ -437,6 +437,8 @@ class SegmentationDescriptor(SpliceDescriptor):
         self._chk_var(int, nbin.add_int, "segmentation_upid_type", 8)
         self._chk_var(int, nbin.add_int, "segmentation_upid_length", 8)
         upid_type = self.segmentation_upid_type
+        if upid_type not in upid_map:
+            upid_type = 0xFD
         the_upid = upid_map[upid_type][1](
             None, upid_type, self.segmentation_upid_length
         )
