@@ -143,13 +143,10 @@ class TimeSignal(SpliceCommand):
         self._chk_var(bool, nbin.add_flag, "time_specified_flag", 1)
         if self.time_specified_flag:
             nbin.reserve(6)
-            if not self.pts_time and not self.pts_time_ticks:
-                err_mesg = "Please set self.pts_time ( float )  or self.pts_time_ticks ( int  )"
-                raise ValueError(err_mesg)
-            if not self.pts_time_ticks:
-                self.pts_time_ticks = self.as_ticks(self.pts_time)
-            if not self.pts_time:
+            if self.pts_time_ticks:
                 self.pts_time = self.as_90k(self.pts_time_ticks)
+            elif self.pts_time:
+                self.pts_time_ticks = self.as_ticks(self.pts_time)
             self._chk_var(int, nbin.add_int, "pts_time_ticks", 33)
         else:
             nbin.reserve(7)
@@ -245,10 +242,12 @@ class SpliceInsert(TimeSignal):
         """
         self._chk_var(bool, nbin.add_flag, "break_auto_return", 1)
         nbin.forward(6)
-        if not self.break_duration_ticks:
-            self.break_duration_ticks = 0
-        if self.break_duration:
+        if self.break_duration_ticks:
+            self.break_duration = self.as_90k(self.break_duration_ticks)
+        elif self.break_duration:
             self.break_duration_ticks = self.as_ticks(self.break_duration)
+        else:
+            self.break_duration_ticks = 0
         self._chk_var(int, nbin.add_int, "break_duration_ticks", 33)
 
 
