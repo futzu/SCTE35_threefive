@@ -10,7 +10,6 @@
 
 ___
 # Latest __threefive__ version is `2`.`4`.`49` 
-* this is the 281th release of threefive
 * Cyclomatic Complexity Score 1.99
 * EIDR UPIDs are now in compact binary format
 * Stream class now includes PCR timestamps
