@@ -126,7 +126,7 @@ class Cue(SCTE35Base):
             data = data + "="
         return data
 
-    def _mk_bits(self,data):
+    def _mk_bits(self, data):
         """
         cue._mk_bits Converts
         Hex and Base64 strings into bytes.
@@ -298,9 +298,6 @@ class Cue(SCTE35Base):
         an empty command instance will be created for Cue.command
         """
         self.info_section.load(isec)
-        if "splice_command_type" in isec:
-            cmd_type = isec["splice_command_type"]
-            command_map[cmd_type]()
 
     def load_command(self, cmd):
         """
@@ -309,15 +306,8 @@ class Cue(SCTE35Base):
         if 'command_type' is included,
         the command instance will be created.
         """
-        if not isinstance(cmd, dict):
-            try:
-                cmd = cmd.get()
-            except:
-                print2(f" cmd is a {type(cmd)} should be a dict,")
-                return
         if "command_type" in cmd:
             self.command = command_map[cmd["command_type"]]()
-        if self.command:
             self.command.load(cmd)
 
     def load_descriptors(self, dlist):
@@ -330,12 +320,6 @@ class Cue(SCTE35Base):
         if not isinstance(dlist, list):
             raise Exception("descriptors should be a list")
         for dstuff in dlist:
-            if not isinstance(dstuff, dict):
-                try:
-                    dstuff = dstuff.get()
-                except:
-                    print(f" dstuff is a {type(dstuff)} should be a dict,")
-                    return
             if "tag" in dstuff:
                 dscptr = descriptor_map[dstuff["tag"]]()
                 dscptr.load(dstuff)
