@@ -177,7 +177,7 @@ class Stream:
             self._tsdata = tsdata
         self.show_null = show_null
         self.start = {}
-        self.info = True
+        self.info = False
         self.the_program = None
         self.the_scte35_pids = []
         self.pids = Pids()
@@ -462,7 +462,7 @@ class Stream:
 
     def pts(self):
         """
-        pts returns a dict of  program:pts
+        pts returns a dict of  program:ptsunpad
         """
         return self.maps.prgm_pts
 
@@ -476,25 +476,12 @@ class Stream:
             prgm = self.pid2prgm(pid)
             self.maps.prgm_pcr[prgm] = pcr
 
-    def _unpad_afc(self, pkt):
-        if self._afc_flag(pkt[3]):
-            pkt = pkt[:4] + self._unpad(pkt[4:])
-        return pkt
-
-    def _unpad(self, bites):
-        pad = 255
-        one = 1
-        while bites[0] in [pad]:
-            self._unpad(bites[one:])
-        return bites
-
     def _parse_payload(self, pkt):
         """
         _parse_payload returns the packet payload
         """
         head_size = 4
         if self._afc_flag(pkt[3]):
-            pkt = self._unpad_afc(pkt)
             afl = pkt[4]
             head_size += afl + 1  # +1 for afl byte
         return pkt[head_size:]
@@ -520,7 +507,7 @@ class Stream:
         if pid == self.pids.PAT_PID:
             self._changed("PAT", pid)
             return self._parse_pat(pay)
-        if pid == self.pids.SDT_PID:  # and self.info:
+        if self.info and pid == self.pids.SDT_PID:
             self._changed("SDT", pid)
             return self._parse_sdt(pay)
         return False
