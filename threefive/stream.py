@@ -1,3 +1,4 @@
+
 """
 Mpeg-TS Stream parsing class Stream
 """
@@ -18,10 +19,10 @@ streamtype_map = {
     0x06: "PES Packets/Private Data",
     0x0F: "AAC Audio",
     0x10: "MPEG4",
-    0x11:  "AAC LATM",
+    0x11: "AAC LATM",
     0x15: "ID3 Timed Meta Data",
     0x1B: "AVC Video H.264",
-    0x1c: "AAC",
+    0x1C: "AAC",
     0x20: "H264",
     0x21: "JPEG2000",
     0x24: "HEVC",
@@ -32,9 +33,9 @@ streamtype_map = {
     0x84: "AAC HE v2 Audio",
     0x86: "SCTE35 Data",
     0xC0: "Unknown",
-    0xdb: "HLS Encrypted H.264",
-    0xcf: "HLS Encrypted AAC",
-    0xc1: "HLS Encrypted AC3",
+    0xDB: "HLS Encrypted H.264",
+    0xCF: "HLS Encrypted AAC",
+    0xC1: "HLS Encrypted AC3",
 }
 
 
@@ -156,7 +157,7 @@ class Stream:
     _SDT_TID = SDT_TID = b"\x42"
     ROLLOVER = 8589934591  # 95443.717678
     ROLLOVER9K = 95443.717678
-    SCTE35_PES_START  = b"\x00\x00\x01\xfc"
+    SCTE35_PES_START = b"\x00\x00\x01\xfc"
 
     def __init__(self, tsdata, show_null=True):
         """
@@ -316,13 +317,13 @@ class Stream:
         displays streams that will be
         parsed for SCTE-35.
         """
-        pkt_count =0
+        pkt_count = 0
         self.info = True
         while not self.maps.prgm.items():
             data = self._tsdata.read(self.PACKET_SIZE * 100)
             while data:
                 pkt = data[:188]
-                pkt_count +=1
+                pkt_count += 1
                 data = data[188:]
                 self._parse_info(pkt)
         print2(f"Read {pkt_count} packets")
@@ -341,8 +342,8 @@ class Stream:
             print2("PID , PTS")
             for pkt in iter(partial(self._tsdata.read, self.PACKET_SIZE), b""):
                 self._parse(pkt)
-                pid = self._parse_pid(pkt[1],pkt[2])
-                if self.pcr_pid_pts(pkt,pid):
+                pid = self._parse_pid(pkt[1], pkt[2])
+                if self.pcr_pid_pts(pkt, pid):
                     _ = {
                         print2(f"{pid} , {self.as_90k(pts)}")
                         for pgrm, pts in self.maps.prgm_pts.items()
@@ -393,7 +394,7 @@ class Stream:
         # uses pay not pkt
         return pay[7] & 0x80
 
-    def pcr_pid_pts(self,pkt,pid):
+    def pcr_pid_pts(self, pkt, pid):
         """
         If it has pts and it's the pcr_pid,
         return True
@@ -465,9 +466,9 @@ class Stream:
         """
         return self.maps.prgm_pts
 
-    def _parse_pcr(self,pkt,pid):
+    def _parse_pcr(self, pkt, pid):
         if self._afc_flag(pkt[3]):
-            pcr  = pkt[6] << 25
+            pcr = pkt[6] << 25
             pcr |= pkt[7] << 17
             pcr |= pkt[8] << 9
             pcr |= pkt[9] << 1
@@ -475,13 +476,12 @@ class Stream:
             prgm = self.pid2prgm(pid)
             self.maps.prgm_pcr[prgm] = pcr
 
-
-    def _unpad_afc(self,pkt):
+    def _unpad_afc(self, pkt):
         if self._afc_flag(pkt[3]):
-            pkt= pkt[:4] + self._unpad(pkt[4:])
+            pkt = pkt[:4] + self._unpad(pkt[4:])
         return pkt
 
-    def _unpad(self,bites):
+    def _unpad(self, bites):
         pad = 255
         one = 1
         while bites[0] in [pad]:
@@ -499,7 +499,7 @@ class Stream:
             head_size += afl + 1  # +1 for afl byte
         return pkt[head_size:]
 
-    def _changed(self,what,pid):
+    def _changed(self, what, pid):
         pts = self.pid2pts(pid)
         if pts:
             effed = f"\n# {what} changed @ {pts}\n"
@@ -515,15 +515,16 @@ class Stream:
         if self._same_as_last(pay, pid):
             return False
         if pid in self.pids.pmt:
-            self._changed("PMT",pid)
+            self._changed("PMT", pid)
             return self._parse_pmt(pay, pid)
         if pid == self.pids.PAT_PID:
-            self._changed("PAT",pid)
+            self._changed("PAT", pid)
             return self._parse_pat(pay)
-        if pid == self.pids.SDT_PID: # and self.info:
-            self._changed("SDT",pid)
+        if pid == self.pids.SDT_PID:  # and self.info:
+            self._changed("SDT", pid)
             return self._parse_sdt(pay)
         return False
+
     def _parse_info(self, pkt):
         """
         _parse_info parses the packet for tables
@@ -537,10 +538,10 @@ class Stream:
     def _parse(self, pkt):
         cue = False
         pid = self._parse_info(pkt)
-        #self._parse_cc(pkt, pid)
+        # self._parse_cc(pkt, pid)
         if self._pcr_flag(pkt):
-            self._parse_pcr(pkt,pid)
-        if self.pcr_pid_pts(pkt,pid):
+            self._parse_pcr(pkt, pid)
+        if self.pcr_pid_pts(pkt, pid):
             self._parse_pts(pkt, pid)
         if pid in self.pids.scte35:
             cue = self._parse_scte35(pkt, pid)
@@ -552,9 +553,9 @@ class Stream:
         return self._split_by_idx(pay, sep)
 
     def _same_as_last(self, pay, pid):
-        old = ''
+        old = ""
         if pid in self.maps.last:
-            old  = self.maps.last[pid]
+            old = self.maps.last[pid]
         self.maps.last[pid] = pay
         return old == self.maps.last[pid]
 
@@ -573,12 +574,11 @@ class Stream:
             return cue
         return False
 
-    def _strip_scte35_pes(self,pay,pid):
-        if self.SCTE35_PES_START in pay:
+    def _strip_scte35_pes(self, pkt, pid):
+        if self.SCTE35_PES_START in pkt:
             print2(f"# Stripping PES Header from SCTE35 @ {self.pid2pts(pid)}")
-            pay =pay.split(self.SCTE35_PES_START,1)[1]
-        pay = self._split_by_idx(pay,self.SCTE35_TID)
-        return pay
+            pkt = pkt.split(self.SCTE35_PES_START, 1)[1]
+        return pkt
 
     def _parse_scte35(self, pkt, pid):
         """
@@ -586,8 +586,8 @@ class Stream:
         """
         if self.the_scte35_pids and pid not in self.the_scte35_pids:
             return False
-        pay = self._parse_payload(pkt)
-        pay = self._strip_scte35_pes(pay,pid)
+        prepay = self._strip_scte35_pes(pkt, pid)
+        pay = self._parse_payload(prepay)
         if not pay:
             return False
         pay = self._chk_partial(pay, pid, self.SCTE35_TID)
