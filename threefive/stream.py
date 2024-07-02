@@ -36,6 +36,7 @@ streamtype_map = {
     0xDB: "HLS Encrypted H.264",
     0xCF: "HLS Encrypted AAC",
     0xC1: "HLS Encrypted AC3",
+    0xFC: "KLV Data",
 }
 
 
