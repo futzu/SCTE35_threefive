@@ -420,7 +420,7 @@ class Stream:
     def _split_by_idx(pay, marker):
         try:
             return pay[pay.index(marker) :]
-        except ValueError:
+        except :
             return False
 
     def _parse_cc(self, pkt, pid):
@@ -557,7 +557,8 @@ class Stream:
         if self.SCTE35_PES_START in pay:
             print2(f"# Stripping PES Header from SCTE35 @ {self.pid2pts(pid)}")
             pay = pay.split(self.SCTE35_PES_START, 1)[1]
-            return pay[pay[4]+5:]
+            return pay[pay[4]+5:] # PES header length
+        return pay
 
     def _parse_scte35(self, pay, pid):
         """
