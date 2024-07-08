@@ -36,7 +36,6 @@ streamtype_map = {
     0xDB: "HLS Encrypted H.264",
     0xCF: "HLS Encrypted AAC",
     0xC1: "HLS Encrypted AC3",
-    0xFC: "KLV Data",
 }
 
 
@@ -178,7 +177,7 @@ class Stream:
             self._tsdata = tsdata
         self.show_null = show_null
         self.start = {}
-        self.info = False
+        self.info = True
         self.the_program = None
         self.the_scte35_pids = []
         self.pids = Pids()
@@ -395,15 +394,6 @@ class Stream:
         # uses pay not pkt
         return pay[7] & 0x80
 
-    def pcr_pid_pts(self, pkt, pid):
-        """
-        If it has pts and it's the pcr_pid,
-        return True
-        """
-        if self._pusi_flag(pkt):
-            return pid in self.pids.pcr
-        return False
-
     @staticmethod
     def _parse_length(byte1, byte2):
         """
@@ -463,7 +453,7 @@ class Stream:
 
     def pts(self):
         """
-        pts returns a dict of  program:ptsunpad
+        pts returns a dict of  program:pts
         """
         return self.maps.prgm_pts
 
@@ -508,7 +498,7 @@ class Stream:
         if pid == self.pids.PAT_PID:
             self._changed("PAT", pid)
             return self._parse_pat(pay)
-        if self.info and pid == self.pids.SDT_PID:
+        if pid == self.pids.SDT_PID:  # and self.info:
             self._changed("SDT", pid)
             return self._parse_sdt(pay)
         return False
@@ -529,10 +519,11 @@ class Stream:
         # self._parse_cc(pkt, pid)
         if self._pcr_flag(pkt):
             self._parse_pcr(pkt, pid)
-        if self.pcr_pid_pts(pkt, pid):
+        if self._pusi_flag(pkt):
             self._parse_pts(pkt, pid)
         if pid in self.pids.scte35:
-            cue = self._parse_scte35(pkt, pid)
+            pay = self._strip_scte35_pes(pkt, pid)
+            cue = self._parse_scte35(pay, pid)
         return cue
 
     def _chk_partial(self, pay, pid, sep):
@@ -562,23 +553,19 @@ class Stream:
             return cue
         return False
 
-    def _strip_scte35_pes(self, pkt, pid):
-        if self.SCTE35_PES_START in pkt:
+    def _strip_scte35_pes(self, pay, pid):
+        if self.SCTE35_PES_START in pay:
             print2(f"# Stripping PES Header from SCTE35 @ {self.pid2pts(pid)}")
-            pkt = pkt.split(self.SCTE35_PES_START, 1)[1]
-        return pkt
+            pay = pay.split(self.SCTE35_PES_START, 1)[1]
+            return pay[pay[4]+5:]
 
-    def _parse_scte35(self, pkt, pid):
+    def _parse_scte35(self, pay, pid):
         """
         parse a scte35 cue from one or more packets
         """
         if self.the_scte35_pids and pid not in self.the_scte35_pids:
             return False
-        prepay = self._strip_scte35_pes(pkt, pid)
-        pay = self._parse_payload(prepay)
-        if not pay:
-            return False
-        pay = self._chk_partial(pay, pid, self.SCTE35_TID)
+        pay = self._chk_partial(pay, pid, self._SCTE35_TID)
         if not pay:
             self.pids.scte35.remove(pid)
             return False
