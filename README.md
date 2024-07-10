@@ -9,7 +9,7 @@
 
 
 ___
-# Latest __threefive__ version is `2`.`4`.`57
+# Latest __threefive__ version is `2`.`4`.`57`
 * Fix for multicast( new_reader)
     * python has been making changes the socket lib.
     * this fixes multicast in new_reader and is backward compatible.   
