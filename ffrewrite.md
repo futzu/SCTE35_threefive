@@ -1,6 +1,6 @@
 
 # Ffmpeg rewriting SCTE-35 packets.
-## As of 2.4.53, threefive can parse the packet either way.
+## As of 2.4.55, threefive can parse the packet either way.
 
 <div> I love you msnbc, (please don't get mad at me for using your SCTE-35) </div>
 
@@ -52,5 +52,5 @@ My goal is to keep threefive as flexible and compatible as possible.<br>
 3300403264"\x04\x01\xb5\xf6\x1d\x83
 ```
 
-## As of 2.4.53, threefive can parse the packet either way.
+## As of 2.4.55, threefive can parse the packet either way.
 
