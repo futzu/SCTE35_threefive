@@ -535,7 +535,7 @@ class Stream:
             self._parse_pcr(pkt, pid)
         if self._pusi_flag(pkt):
             self._parse_pts(pkt, pid)
-        if pid in self.pids.scte35:   
+        if pid in self.pids.scte35:
             cue = self._parse_scte35(pkt, pid)
         return cue
 
@@ -569,8 +569,8 @@ class Stream:
         if self.SCTE35_PES_START in pay:
             print2(f"# Stripping PES Header from SCTE35 @ {self.pid2pts(pid)}")
             pay = pay.split(self.SCTE35_PES_START, 1)[-1]
-            return pay[pay[4]+5:] # PES header length
-
+            peslen= pay[4]+5 # PES header length
+            pay = pay[peslen:]
         return pay
 
     def _parse_scte35(self, pkt, pid):
