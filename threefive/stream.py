@@ -467,15 +467,29 @@ class Stream:
             prgm = self.pid2prgm(pid)
             self.maps.prgm_pcr[prgm] = pcr
 
+    def _unpad_afc(self, pkt):
+        if self._afc_flag(pkt[3]):
+            pkt = pkt[:4] + self._unpad(pkt[4:])
+        return pkt
+
+    def _unpad(self, bites):
+        pad = 255
+        one = 1
+        while bites[0] in [pad]:
+            self._unpad(bites[one:])
+        return bites
+
     def _parse_payload(self, pkt):
         """
         _parse_payload returns the packet payload
         """
         head_size = 4
         if self._afc_flag(pkt[3]):
+            pkt = self._unpad_afc(pkt)
             afl = pkt[4]
             head_size += afl + 1  # +1 for afl byte
         return pkt[head_size:]
+
 
     def _changed(self, what, pid):
         pts = self.pid2pts(pid)
@@ -521,9 +535,8 @@ class Stream:
             self._parse_pcr(pkt, pid)
         if self._pusi_flag(pkt):
             self._parse_pts(pkt, pid)
-        if pid in self.pids.scte35:
-            pay = self._strip_scte35_pes(pkt, pid)
-            cue = self._parse_scte35(pay, pid)
+        if pid in self.pids.scte35:   
+            cue = self._parse_scte35(pkt, pid)
         return cue
 
     def _chk_partial(self, pay, pid, sep):
@@ -532,11 +545,10 @@ class Stream:
         return self._split_by_idx(pay, sep)
 
     def _same_as_last(self, pay, pid):
-        old = ""
         if pid in self.maps.last:
-            old = self.maps.last[pid]
+            return pay == self.maps.last[pid]
         self.maps.last[pid] = pay
-        return old == self.maps.last[pid]
+        return False
 
     def _section_incomplete(self, pay, pid, seclen):
         # + 3 for the bytes before section starts
@@ -556,17 +568,22 @@ class Stream:
     def _strip_scte35_pes(self, pay, pid):
         if self.SCTE35_PES_START in pay:
             print2(f"# Stripping PES Header from SCTE35 @ {self.pid2pts(pid)}")
-            pay = pay.split(self.SCTE35_PES_START, 1)[1]
+            pay = pay.split(self.SCTE35_PES_START, 1)[-1]
             return pay[pay[4]+5:] # PES header length
+
         return pay
 
-    def _parse_scte35(self, pay, pid):
+    def _parse_scte35(self, pkt, pid):
         """
         parse a scte35 cue from one or more packets
         """
         if self.the_scte35_pids and pid not in self.the_scte35_pids:
             return False
-        pay = self._chk_partial(pay, pid, self._SCTE35_TID)
+        pay = self._parse_payload(pkt)
+        pay = self._strip_scte35_pes(pay, pid)
+        if not pay:
+            return False
+        pay = self._chk_partial(pay, pid, self.SCTE35_TID)
         if not pay:
             self.pids.scte35.remove(pid)
             return False
