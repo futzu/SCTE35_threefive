@@ -10,7 +10,7 @@
 
 ___
 # Latest __threefive__ version is `2`.`4`.`53` 
-* CRITICAL FIX 
+* [CRITICAL FIX](https://github.com/futzu/threefive/ffrewrite.md) Related to ffmpeg.
 ---
 
 
