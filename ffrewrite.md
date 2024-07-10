@@ -6,9 +6,11 @@
 
 <br>
 <br>
-<div> Let me preface this by saying this is not a criticism of ffmpeg. In my experience, 
-ffmpeg tends to do things the correct way, and I have no problem adapting to them.
-My goal is to keep threefive as flexible and compatible as possible.
+<div> Let me preface this by saying this is not a criticism of ffmpeg.<br>
+ In my experience, ffmpeg tends to do things the correct way, <br>
+ and I have no problem adapting to them.<br>
+ 
+My goal is to keep threefive as flexible and compatible as possible.<br>
 </div>
 
 #### This is what I usually get for SCTE-35 packets. 
