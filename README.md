@@ -10,8 +10,8 @@
 
 ___
 # Latest __threefive__ version is `2`.`4`.`57`
-* Fix for multicast( new_reader)
-    * python has been making changes the socket lib.
+* threefive `2`.`4`.`57` Fix for multicast( new_reader)
+    * python has been making changes to the socket lib.
     * this fixes multicast in new_reader and is backward compatible.   
 * threefive `2`.`4`.`55` has a [CRITICAL FIX](https://github.com/futzu/SCTE35_threefive/blob/master/ffrewrite.md) related to __ffmpeg__.
 ---
