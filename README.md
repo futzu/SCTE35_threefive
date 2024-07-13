@@ -8,8 +8,8 @@
 <br> `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 
 
-___
 # Latest __threefive__ version is `2`.`4`.`57`
+
 * threefive `2`.`4`.`57` Fix for multicast( new_reader)
     * python has been making changes to the socket lib.
     * this fixes multicast in new_reader and is backward compatible.   
