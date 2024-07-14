@@ -1,4 +1,3 @@
-
 """
 Mpeg-TS Stream parsing class Stream
 """
@@ -305,7 +304,7 @@ class Stream:
         SCTE-35 cues are print2`ed to stderr.
         """
         if self._find_start():
-            for pkt in iter(partial(self._tsdata.read, self.PACKET_SIZE), b""):
+            for pkt in self.iter_pkts():
                 cue = self._parse(pkt)
                 if cue:
                     func(cue)
@@ -319,20 +318,18 @@ class Stream:
         """
         pkt_count = 0
         self.info = True
-        while not self.maps.prgm.items():
-            data = self._tsdata.read(self.PACKET_SIZE * 100)
-            while data:
-                pkt = data[:188]
-                pkt_count += 1
-                data = data[188:]
-                self._parse_info(pkt)
-        print2(f"Read {pkt_count} packets")
-        sopro = sorted(self.maps.prgm.items())
-        for k, vee in sopro:
-            if len(vee.streams.items()) > 0:
-                print2(f"\nProgram: {k}")
-                vee.show()
-        return True
+        for pkt in self.iter_pkts():
+            pkt_count += 1
+            self._parse_info(pkt)
+            if self.maps.prgm.items():
+                print2(f"Read {pkt_count} packets")
+                sopro = sorted(self.maps.prgm.items())
+                for k, vee in sopro:
+                    if len(vee.streams.items()) > 0:
+                        print2(f"\nProgram: {k}")
+                        vee.show()
+                return True
+        return False
 
     def show_pts(self):
         """
@@ -340,14 +337,12 @@ class Stream:
         """
         if self._find_start():
             print2("PID , PTS")
-            for pkt in iter(partial(self._tsdata.read, self.PACKET_SIZE), b""):
-                self._parse(pkt)
-                pid = self._parse_pid(pkt[1], pkt[2])
-                if self.pcr_pid_pts(pkt, pid):
-                    _ = {
-                        print2(f"{pid} , {self.as_90k(pts)}")
-                        for pgrm, pts in self.maps.prgm_pts.items()
-                    }
+            for pkt in self.iter_pkts():
+                pid = self._parse_info(pkt)
+                if self._pusi_flag(pkt):
+                    self._parse_pts(pkt, pid)
+                    print2(f"{pid} , {self.pid2pts(pid)}")
+        print2("done")
         return False
 
     def decode_start_time(self):
@@ -420,7 +415,7 @@ class Stream:
     def _split_by_idx(pay, marker):
         try:
             return pay[pay.index(marker) :]
-        except :
+        except (ValueError, IndexError, KeyError, TypeError,):
             return False
 
     def _parse_cc(self, pkt, pid):
@@ -490,7 +485,6 @@ class Stream:
             head_size += afl + 1  # +1 for afl byte
         return pkt[head_size:]
 
-
     def _changed(self, what, pid):
         pts = self.pid2pts(pid)
         if pts:
@@ -545,10 +539,12 @@ class Stream:
         return self._split_by_idx(pay, sep)
 
     def _same_as_last(self, pay, pid):
+        same = False
         if pid in self.maps.last:
-            return pay == self.maps.last[pid]
-        self.maps.last[pid] = pay
-        return False
+            same = pay == self.maps.last[pid]
+        if not same:
+            self.maps.last[pid] = pay
+        return same
 
     def _section_incomplete(self, pay, pid, seclen):
         # + 3 for the bytes before section starts
@@ -569,7 +565,7 @@ class Stream:
         if self.SCTE35_PES_START in pay:
             print2(f"# Stripping PES Header from SCTE35 @ {self.pid2pts(pid)}")
             pay = pay.split(self.SCTE35_PES_START, 1)[-1]
-            peslen= pay[4]+5 # PES header length
+            peslen = pay[4] + 5  # PES header length
             pay = pay[peslen:]
         return pay
 
@@ -631,6 +627,7 @@ class Stream:
                     pinfo.service = service_name
                 i = dloop_len
                 idx += i
+        return False
 
     def _parse_pat(self, pay):
         """
@@ -652,6 +649,7 @@ class Stream:
                 self.pids.tables.add(pmt_pid)
             seclen -= chunk_size
             idx += chunk_size
+        return False
 
     def _parse_pmt(self, pay, pid):
         """
