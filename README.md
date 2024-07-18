@@ -32,7 +32,7 @@
 * [Parse SCTE-35 programmatically ](https://github.com/futzu/scte35parser-threefive/blob/master/prog.md) with a few lines of code
 
 
-
+* [Issues](https://github.com/futzu/SCTE35_threefive/blob/master/issues.md) and Featue Requests and Assorted Comments.
 
 <details><summary>Install</summary>
 	<br/>
