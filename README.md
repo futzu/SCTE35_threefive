@@ -18,24 +18,34 @@
 
 
 
-# `Documentation`
+# Documentation
 
 
-* SCTE-35 on the [command line](https://github.com/futzu/scte35parser-threefive/blob/master/cli.md)
-
-* [Trigger on SCTE-35 events](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md) using threefive.Stream
-
-* SCTE-35 code [examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
-
-* [Encoding](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [Encoding | more ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md)
-
-* [Parse SCTE-35 programmatically ](https://github.com/futzu/scte35parser-threefive/blob/master/prog.md) with a few lines of code
 
 
-* [Issues](https://github.com/futzu/SCTE35_threefive/blob/master/issues.md) and Featue Requests and Assorted Comments.
+* SCTE-35 on the [__command line__](https://github.com/futzu/scte35parser-threefive/blob/master/cli.md)
+
+* [__Trigger on SCTE-35 events__](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md) using threefive.Stream
+
+* SCTE-35 code [__Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
+
+* [__Encoding__](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [__Encoding | more__ ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md)
+
+* [__Parse SCTE-35 programmatically__](https://github.com/futzu/scte35parser-threefive/blob/master/prog.md) with a few lines of code
+
+
+* [__Issues__](https://github.com/futzu/SCTE35_threefive/blob/master/issues.md) and Featue Requests and Assorted Comments.
+
+
+
+
+
 
 <details><summary>Install</summary>
-	<br/>
+
+ 
+
+ 
 * install threefive with pip
 * threefive has two third party package dependencies and I wrote one of them.
 * pip will automatically install PyAES and [new_reader](https://github.com/futzu/new_reader) 
@@ -56,6 +66,8 @@ python3 -mpip install --upgrade threefive
 
 <details><summary>Versions and Releases</summary>
 
+
+
 Every time I fix a bug or add a feature, I do a new release. <br>
 This makes tracking down bugs and stuff much easier. <br>
 Keep up folks.
@@ -72,6 +84,8 @@ a@slow:~/threefive$
 
 
 </details>
+
+
 
 
  <details><summary>Cue Class</summary>
