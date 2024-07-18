@@ -14,6 +14,8 @@
 * [segmentation.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/segmentation.py)  `lookup tables` for SegmentationDescriptor class.
 * [smoketest.py](https://github.com/futzu/threefive/blob/master/threefive/smoketest.py) `threefive.smoke`
 * [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py) `threefive.Stream`
+* [streamtypes.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/streamtypes.py) threefive.streamtype. `streamtype_map`  is a dict of mpegts stream types.
+
 * [stuff.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stuff.py)   `print2`
 * [upids.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upids.py)   `Segmentation Upids` 
 * [version.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/version.py)  `threefive.version`
