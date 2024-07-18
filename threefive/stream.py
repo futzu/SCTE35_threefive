@@ -8,34 +8,7 @@ from new_reader import reader
 from .stuff import print2
 from .cue import Cue
 from .packetdata import PacketData
-
-
-streamtype_map = {
-    0x01: "MPEG-2 Video",
-    0x02: "MP2 Video",
-    0x03: "MP3 Audio",
-    0x04: "MP3 Audio",
-    0x06: "PES Packets/Private Data",
-    0x0F: "AAC Audio",
-    0x10: "MPEG4",
-    0x11: "AAC LATM",
-    0x15: "ID3 Timed Meta Data",
-    0x1B: "AVC Video H.264",
-    0x1C: "AAC",
-    0x20: "H264",
-    0x21: "JPEG2000",
-    0x24: "HEVC",
-    0x80: "MPEG-1 Audio",
-    0x81: "MPEG-2 Audio",
-    0x82: "AC3 Audio ",
-    0x83: "AAC Audio",
-    0x84: "AAC HE v2 Audio",
-    0x86: "SCTE35 Data",
-    0xC0: "Unknown",
-    0xDB: "HLS Encrypted H.264",
-    0xCF: "HLS Encrypted AAC",
-    0xC1: "HLS Encrypted AC3",
-}
+from .streamtypes import streamtype_map
 
 
 def no_op(cue):
@@ -84,21 +57,21 @@ class ProgramInfo:
         serv = self.service.decode(errors="ignore")
         prov = self.provider.decode(errors="ignore")
         print2("")
-        print2(f"\tService: {serv}")
+        print2(f"\tService:  {serv}")
         print2(f"\tProvider: {prov}")
-        print2(f"\tPid:\t  {self.pid}")
+        print2(f"\tPid:      {self.pid}")
         print2(f"\tPcr Pid:  {self.pcr_pid}")
         print2("\tStreams:")
         # sorted_dict = {k:my_dict[k] for k in sorted(my_dict)})
         keys = sorted(self.streams)
-        print2("\t\t  Pid\t\tType")
+        print2("\t  Pid\t\tType")
         for k in keys:
             vee = int(self.streams[k], base=16)
             if vee in streamtype_map:
                 vee = f"{hex(vee)}\t{streamtype_map[vee]}"
             else:
                 vee = f"{vee} Unknown"
-            print2(f"\t\t  {k} [{hex(k)}]\t{vee}")
+            print2(f"\t  {k} [{hex(k)}]\t{vee}")
 
 
 class Pids:
@@ -318,9 +291,10 @@ class Stream:
         """
         pkt_count = 0
         self.info = True
-        for pkt in self.iter_pkts():
-            pkt_count += 1
-            self._parse_info(pkt)
+        while True:
+            for pkt in self.iter_pkts(50):
+                pkt_count += 1
+                self._parse_info(pkt)
             if self.maps.prgm.items():
                 print2(f"Read {pkt_count} packets")
                 sopro = sorted(self.maps.prgm.items())
@@ -415,7 +389,7 @@ class Stream:
     def _split_by_idx(pay, marker):
         try:
             return pay[pay.index(marker) :]
-        except (ValueError, IndexError, KeyError, TypeError,):
+        except:
             return False
 
     def _parse_cc(self, pkt, pid):
@@ -627,7 +601,6 @@ class Stream:
                     pinfo.service = service_name
                 i = dloop_len
                 idx += i
-        return False
 
     def _parse_pat(self, pay):
         """
@@ -649,7 +622,6 @@ class Stream:
                 self.pids.tables.add(pmt_pid)
             seclen -= chunk_size
             idx += chunk_size
-        return False
 
     def _parse_pmt(self, pay, pid):
         """
