@@ -25,7 +25,7 @@ My goal is to keep threefive as flexible and compatible as possible.<br>
 
 
 
-`ffmpeg -i msnbc-latest.ts  -map 0 -c copy msnbc-latest-ffmpeg.ts`
+`ffmpeg  -copyts -i msnbc-latest.ts  -map 0 -c copy msnbc-latest-ffmpeg.ts`
 
 #### Now ffmpeg changes that packet to look like this.
 
