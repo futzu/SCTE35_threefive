@@ -3,6 +3,7 @@ section.py
 
 SCTE35 Splice Info Section
 """
+
 from .bitn import BitBin
 from .base import SCTE35Base
 
@@ -180,3 +181,4 @@ class SpliceInfoSection(SCTE35Base):
         self._encode_tier(nbin)
         self._encode_splice_command(nbin)
         return nbin.bites
+        
