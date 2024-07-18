@@ -67,8 +67,8 @@ class Segment(Stream):
         self.duration = None
         if AES:
             if iv:
-                iv = iv.replace('\n','')
-                self.iv = int.to_bytes(int(iv,base=16), 16, byteorder="big")
+                iv = iv.replace("\n", "")
+                self.iv = int.to_bytes(int(iv, base=16), 16, byteorder="big")
             if self.key_uri:
                 self._aes_get_key()
                 self._aes_decrypt()
@@ -88,9 +88,7 @@ class Segment(Stream):
     def _aes_decrypt(self):
         mode = pyaes.AESModeOfOperationCBC(self.key, iv=self.iv)
         self._mk_tmp()
-        with open(self.tmp, "wb") as outfile, reader(
-            self.seg_uri
-        ) as infile:
+        with open(self.tmp, "wb") as outfile, reader(self.seg_uri) as infile:
             pyaes.decrypt_stream(mode, infile, outfile)
         self.seg_uri = self.tmp
 
