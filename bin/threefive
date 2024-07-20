@@ -7,6 +7,7 @@ threefive command line SCTE35 decoder.
 
 
 import sys
+from time import sleep
 from threefive import Stream, print2, decode, version
 import cProfile
 
@@ -96,7 +97,7 @@ from local files, over HTTP(S), UDP unicast or UDP multicast.
         threefive packets video.ts
 
 {REV}parse a stream,
-write PID,PTS pairs of the video to stderr:{NORM}
+write PID,PTS pairs of the video to stdout:{NORM}
 
         threefive pts video.ts
 
@@ -119,97 +120,120 @@ write pts, SCTE-35 cue pairs to the file sidecar.txt:{NORM}
 """
 
 
-def pts_chk(low):
+def print_help():
     """
-    pts_chk checks for pts keyword in sys.argv
-    and shows pts if present
+    print_help checks sys.argv for the word help
+    and displays the help if found
     """
-    if 'pts' in low:
-        idx =low.index('pts')
-        strm = Stream(sys.argv[idx+1])
-        strm.show_pts()
-        sys.exit()
+    print2(HELP)
+    sys.exit()
 
 
-def version_chk(low):
+def print_version():
     """
     version_chk checks for the version keyword.
 
     """
-    if "version" in low:
-        print2(f"{version}")
-        sys.exit()
+    print2(f"{version}")
+    sys.exit()
 
 
-def show_chk(low):
+print_map = {
+    "help": print_help,
+    "version": print_version,
+}
+
+
+#   #   #
+
+
+def no_op(cue):
     """
-    show_chk checks for the show keyword
-    and displays the streams if present.
+    no_op is just a dummy func to pass to Stream.decode()
+    to suppress output.
     """
-    if "show" in low:
-        idx =low.index('show')
-        strm = Stream(sys.argv[idx+1])
-        strm.show()
-        sys.exit()
+    return cue
 
 
-def packet_chk(low):
+def packet_chk(arg):
     """
     packet_chk checks for the packet keyword
     and displays SCTE-35 packets if present.
     """
-    if 'packets' in low:
-        idx =low.index('packets')
-        supa = SupaStream(sys.argv[idx+1])
-        supa.decode()
-        sys.exit()
+    supa = SupaStream(arg)
+    supa.decode()
 
 
-def proxy_chk(low):
+def proxy_chk(arg):
     """
     proxy_chk checks for the proxy keyword
     and proxies the stream to stdout if present.
     proxy_chk also writes pts,cue pairs to sidecar.txt
     """
-    if 'proxy' in low:
-        idx =low.index('proxy')
-        strm = Stream(sys.argv[idx+1])
-        strm.proxy(func=mk_sidecar)
-        sys.exit()
+    strm = Stream(arg)
+    strm.proxy(func=mk_sidecar)
 
 
-def sidecar_chk(low):
+def pts_chk(arg):
+    strm = Stream(arg)
+    strm.show_pts()
+
+
+def show_chk(arg):
+    """
+    show_chk checks for the show keyword
+    and displays the streams if present.
+    """
+    strm = Stream(arg)
+    strm.show()
+
+
+def sidecar_chk(arg):
     """
     sidecar_chk checks for the sidecar keyword and
     generates a sidecar file if present.
     """
-    if 'sidecar' in low:
-        idx =low.index('sidecar')
-        strm = Stream(sys.argv[idx+1])
-        strm.decode(func=mk_sidecar)
-        sys.exit()
+    strm = Stream(arg)
+    strm.decode(func=mk_sidecar)
 
 
-def help_chk(low):
+func_map = {
+    "pts": pts_chk,
+    "show": show_chk,
+    "packets": packet_chk,
+    "proxy": proxy_chk,
+    "sidecar": sidecar_chk,
+}
+
+
+def chk_print_map():
     """
-    help_chk checks sys.argv for the word help
-    and displays the help if found
+    chk_print_map checks for print_map.keys() in sys.argv
     """
-    if  "help" in low:
-        print2(HELP)
-        sys.exit()
+    for key in print_map.keys():
+        if key in sys.argv:
+            print_map[key]()
+            sys.exit()
+
+
+def chk_func_map():
+    """
+    chk_func_map checks for func_map.keys() in sys.argv
+    """
+    for key in func_map.keys():
+        if key in sys.argv:
+            sys.argv.remove(key)
+            for arg in sys.argv[1:]:
+                print2(f"\n\n {arg}\n")
+                sleep(1)
+                func_map[key](arg)
+            sys.exit()
 
 
 if __name__ == "__main__":
-    if sys.argv and len(sys.argv) > 1:
-        low = [x.lower() for x in sys.argv]
-        pts_chk(low)
-        show_chk(low)
-        packet_chk(low)
-        proxy_chk(low)
-        sidecar_chk(low)
-        help_chk(low)
-        version_chk(low)
+    if len(sys.argv) > 1:
+        chk_print_map()
+        chk_func_map()
         for arg in sys.argv[1:]:
             decode(arg)
     else:
