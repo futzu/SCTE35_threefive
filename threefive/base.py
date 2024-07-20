@@ -19,6 +19,27 @@ class SCTE35Base:
         return str(self.__dict__)
 
     @staticmethod
+    def _chk_nbin(nbin):
+        if not nbin:
+            nbin = NBin()
+        return nbin
+
+    def _chk_var(self, var_type, nbin_method, var_name, bit_count):
+        """
+        _chk_var is used to check var values and types before encoding
+        """
+        var_value = self.__dict__[var_name]
+        if var_value is None:
+            err_mesg = (
+                f"\033[7m{var_name} is not set, it should be type {var_type}\033[27m"
+            )
+            raise ValueError(err_mesg)
+        if not isinstance(var_value, var_type):
+            err_mesg = f' \033[7m{var_name} is "{var_value}", it should be type {var_type}\033[27m '
+            raise ValueError(err_mesg)
+        nbin_method(var_value, bit_count)
+
+    @staticmethod
     def as_90k(int_time):
         """
         ticks to 90k timestamps
@@ -85,10 +106,19 @@ class SCTE35Base:
         return {k: b2l(v) for k, v in vars(self).items() if v is not None}
 
     @staticmethod
-    def _chk_nbin(nbin):
-        if not nbin:
-            nbin = NBin()
-        return nbin
+    def idxsplit(stuff, sep):
+        """
+        idxsplit is like split but you keep
+        the sep
+        example:
+                >>> idxsplit('123456789',4)
+                >>>'456789'
+
+        """
+        if sep in stuff:
+            return stuff[stuff.index(sep) :]
+        else:
+            return False
 
     def load(self, stuff):
         """
@@ -99,18 +129,3 @@ class SCTE35Base:
             stuff = json.loads(stuff)
         if isinstance(stuff, dict):
             self.__dict__.update(stuff)
-
-    def _chk_var(self, var_type, nbin_method, var_name, bit_count):
-        """
-        _chk_var is used to check var values and types before encoding
-        """
-        var_value = self.__dict__[var_name]
-        if var_value is None:
-            err_mesg = (
-                f"\033[7m{var_name} is not set, it should be type {var_type}\033[27m"
-            )
-            raise ValueError(err_mesg)
-        if not isinstance(var_value, var_type):
-            err_mesg = f' \033[7m{var_name} is "{var_value}", it should be type {var_type}\033[27m '
-            raise ValueError(err_mesg)
-        nbin_method(var_value, bit_count)
