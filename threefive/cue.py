@@ -81,7 +81,7 @@ class Cue(SCTE35Base):
         Cue._descriptor_loop parses all splice descriptors
         """
         tag_n_len = 2
-        while loop_bites:
+        while len(loop_bites) > tag_n_len:
             spliced = splice_descriptor(loop_bites)
             if not spliced:
                 return
@@ -132,7 +132,9 @@ class Cue(SCTE35Base):
         Hex and Base64 strings into bytes.
         """
         if isinstance(data, bytes):
-            return data[data.index(b"\xfc") :]
+            bites = self.idxsplit(data, b"\xfc")
+            if bites:
+                return bites
         # handles int and unquoted hex
         if isinstance(data, int):
             length = data.bit_length() >> 3
@@ -149,6 +151,7 @@ class Cue(SCTE35Base):
                 data = data[2:]
             if data[:2].lower() == "fc":
                 return bytes.fromhex(data)
+            return False
         try:
             return b64decode(self.fix_bad_b64(data))
         except (LookupError, TypeError, ValueError):
@@ -160,6 +163,8 @@ class Cue(SCTE35Base):
         Cue.info_section.descriptor_loop_length,
         then call Cue._descriptor_loop
         """
+        if len(bites) < 2:
+            return
         dll = (bites[0] << 8) | bites[1]
         self.info_section.descriptor_loop_length = dll
         bites = bites[2:]
