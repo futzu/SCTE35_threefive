@@ -3,6 +3,7 @@ Mpeg-TS Stream parsing class Stream
 """
 
 import sys
+
 from functools import partial
 from new_reader import reader
 from .stuff import print2
@@ -292,10 +293,10 @@ class Stream:
         pkt_count = 0
         self.info = True
         while True:
-            for pkt in self.iter_pkts(50):
+            for pkt in self.iter_pkts(5):
                 pkt_count += 1
                 self._parse_info(pkt)
-            if self.maps.prgm.items():
+            if self.maps.prgm.keys():
                 print2(f"Read {pkt_count} packets")
                 sopro = sorted(self.maps.prgm.items())
                 for k, vee in sopro:
@@ -310,12 +311,12 @@ class Stream:
         show_pts displays current pts by pid.
         """
         if self._find_start():
-            print2("PID , PTS")
+            print2("\tPID\tPTS")
             for pkt in self.iter_pkts():
                 pid = self._parse_info(pkt)
-                if self._pusi_flag(pkt):
+                if self._pusi_flag(pkt) and pid != 0:
                     self._parse_pts(pkt, pid)
-                    print2(f"{pid} , {self.pid2pts(pid)}")
+                    print(f"\t{pid}\t{self.pid2pts(pid)}", end="\r")
         print2("done")
         return False
 
@@ -459,12 +460,6 @@ class Stream:
             head_size += afl + 1  # +1 for afl byte
         return pkt[head_size:]
 
-    def _changed(self, what, pid):
-        pts = self.pid2pts(pid)
-        if pts:
-            effed = f"\n# {what} changed @ {pts}\n"
-            print2(effed)
-
     def _parse_tables(self, pkt, pid):
         """
         _parse_tables parse for
@@ -475,13 +470,10 @@ class Stream:
         if self._same_as_last(pay, pid):
             return False
         if pid in self.pids.pmt:
-            self._changed("PMT", pid)
             return self._parse_pmt(pay, pid)
         if pid == self.pids.PAT_PID:
-            self._changed("PAT", pid)
             return self._parse_pat(pay)
         if pid == self.pids.SDT_PID:  # and self.info:
-            self._changed("SDT", pid)
             return self._parse_sdt(pay)
         return False
 
@@ -515,7 +507,7 @@ class Stream:
     def _same_as_last(self, pay, pid):
         same = False
         if pid in self.maps.last:
-            same = pay == self.maps.last[pid]
+            same = (False, True)[pay == self.maps.last[pid]]
         if not same:
             self.maps.last[pid] = pay
         return same
@@ -537,7 +529,7 @@ class Stream:
 
     def _strip_scte35_pes(self, pay, pid):
         if self.SCTE35_PES_START in pay:
-            print2(f"# Stripping PES Header from SCTE35 @ {self.pid2pts(pid)}")
+            #  print2(f"# Stripping PES Header from SCTE35 @ {self.pid2pts(pid)}")
             pay = pay.split(self.SCTE35_PES_START, 1)[-1]
             peslen = pay[4] + 5  # PES header length
             pay = pay[peslen:]
@@ -555,7 +547,7 @@ class Stream:
             return False
         pay = self._chk_partial(pay, pid, self.SCTE35_TID)
         if not pay:
-            self.pids.scte35.remove(pid)
+            # self.pids.scte35.remove(pid)
             return False
         if pay[13] == self.show_null:
             return False
