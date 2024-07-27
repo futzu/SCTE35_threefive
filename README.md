@@ -16,6 +16,15 @@
 ---
 
 
+## threefive's code is clean and concise and well-documented.
+```js
+a@fu:~$ gocloc /home/a/.local/lib/pypy3.9/site-packages/threefive/
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Python                          19            453            961           1953
+-------------------------------------------------------------------------------
+```
 
 # Documentation
 
