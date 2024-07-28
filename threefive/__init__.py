@@ -15,13 +15,11 @@ from .commands import (
     TimeSignal,
     SpliceInsert,
     SpliceNull,
-    SpliceSchedule,
     PrivateCommand,
     BandwidthReservation,
 )
 
 from .descriptors import (
-    AudioDescriptor,
     AvailDescriptor,
     DVBDASDescriptor,
     DtmfDescriptor,
