@@ -151,7 +151,7 @@ class Cue(SCTE35Base):
                 data = data[2:]
             if data[:2].lower() == "fc":
                 return bytes.fromhex(data)
-            return False
+        #    return False
         try:
             return b64decode(self.fix_bad_b64(data))
         except (LookupError, TypeError, ValueError):
