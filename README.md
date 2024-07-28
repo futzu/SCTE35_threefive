@@ -6,7 +6,18 @@
 <br> `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
 <br> `Parses` __SCTE-35__ from  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br> `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
-
+<br>
+# `Heads Up!`
+### Signifigant changes coming in v2.4.61 ( that you probably won't notice)
+1. __vars shown in seconds and ticks, will now only be shown in seconds.__
+2. __The SpliceSchedule command has been removed.__
+  * In four years I have never seen a SpliceSchedule Command in the Wild.
+  * Show me one and I'll put it back. 
+3. __The AudioDescriptor Descriptor has been removed.__ 
+  * In four years I have never seen an AudioDescriptor Command in the Wild.
+  * Show me one and I'll put it back. 
+### `Expect v2.4.61 to rollout this week`
+___
 
 # Latest __threefive__ version is `2`.`4`.`59`
 * threefive `2`.`4`.`57` Fix for multicast( new_reader)
@@ -15,16 +26,6 @@
 * threefive `2`.`4`.`55` has a [CRITICAL FIX](https://github.com/futzu/SCTE35_threefive/blob/master/ffrewrite.md) related to __ffmpeg__.
 ---
 
-
-## threefive's code is clean and concise and well-documented.
-```js
-a@fu:~$ gocloc /home/a/.local/lib/pypy3.9/site-packages/threefive/
--------------------------------------------------------------------------------
-Language                     files          blank        comment           code
--------------------------------------------------------------------------------
-Python                          19            453            961           1953
--------------------------------------------------------------------------------
-```
 
 # Documentation
 
