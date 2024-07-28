@@ -134,68 +134,6 @@ class DVBDASDescriptor(SpliceDescriptor):
         return nbin.bites
 
 
-class AudioDescriptor(SpliceDescriptor):
-    """q
-    Table 26 - audio_descriptor()
-    """
-
-    def __init__(self, bites=None):
-        super().__init__(bites)
-        self.tag = 4
-        self.name = "Audio Descriptor"
-        self.components = []
-        self.audio_count = None
-        self.identifier = "CUEI"
-
-    def _decode_comp(self, bitbin):
-        """
-        AudioDescriptor._mk_comp parses
-        for audio component data.
-        """
-        comp = {}
-        comp["component_tag"] = bitbin.as_int(8)
-        comp["ISO_code="] = bitbin.as_int(24)
-        comp["bit_stream_mode"] = bitbin.as_int(3)
-        comp["num_channels"] = bitbin.as_int(4)
-        comp["full_srvc_audio"] = bitbin.as_flag(1)
-        self.components.append(comp)
-
-    @staticmethod
-    def _encode_comp(comp, nbin):
-        nbin.add_int(comp["component_tag"], 8)
-        nbin.add_int(comp["ISO_code="], 24)
-        nbin.add_int(comp["bit_stream_mode"], 3)
-        nbin.add_int(comp["num_channels"], 4)
-        nbin.add_flag(comp["full_srvc_audio"])
-
-    def decode(self):
-        """
-        Decode SCTE35 Audio Descriptor
-        """
-        self.name = "Audio Descriptor"
-        bitbin = BitBin(self.bites)
-        a_c = bitbin.as_int(4)
-        bitbin.forward(4)
-        self.components = []
-        while a_c:
-            a_c -= 1
-            self._decode_comp(bitbin)
-
-    def encode(self, nbin=None):
-        """
-        encode SCTE35 Audio Descriptor
-        """
-        nbin = super().encode(nbin)
-        nbin.add_int(self.audio_count, 4)
-        nbin.forward(4)
-        a_c = 0
-        while a_c < self.audio_count:
-            comp = self.components[a_c]
-            self._encode_comp(comp, nbin)
-            a_c += 1
-        return nbin.bites
-
-
 class AvailDescriptor(SpliceDescriptor):
     """
     Table 17 -  avail_descriptor()
@@ -316,7 +254,6 @@ class SegmentationDescriptor(SpliceDescriptor):
         self.archive_allowed_flag = None
         self.device_restrictions = None
         self.segmentation_duration = None
-        self.segmentation_duration_ticks = None
         self.segmentation_message = None
         self.segmentation_upid_type = None
         self.segmentation_upid_type_name = None
@@ -355,8 +292,8 @@ class SegmentationDescriptor(SpliceDescriptor):
 
     def _decode_segmentation(self, bitbin):
         if self.segmentation_duration_flag:
-            self.segmentation_duration_ticks = bitbin.as_int(40)
-            self.segmentation_duration = self.as_90k(self.segmentation_duration_ticks)
+            segmentation_duration_ticks = bitbin.as_int(40)
+            self.segmentation_duration = self.as_90k(segmentation_duration_ticks)
         self.segmentation_upid_type = bitbin.as_int(8)
         self.segmentation_upid_length = bitbin.as_int(8)
         upid_type = self.segmentation_upid_type
@@ -427,15 +364,7 @@ class SegmentationDescriptor(SpliceDescriptor):
 
     def _encode_segmentation(self, nbin):
         if self.segmentation_duration_flag:
-            if self.segmentation_duration_ticks:
-                self.segmentation_duration = self.as_90k(
-                    self.segmentation_duration_ticks
-                )
-            elif self.segmentation_duration:
-                self.segmentation_duration_ticks = self.as_ticks(
-                    self.segmentation_duration
-                )
-            self._chk_var(int, nbin.add_int, "segmentation_duration_ticks", 40)
+            nbin.add_int(self.as_ticks(self.segmentation_duration), 40)
         self._chk_var(int, nbin.add_int, "segmentation_upid_type", 8)
         self._chk_var(int, nbin.add_int, "segmentation_upid_length", 8)
         upid_type = self.segmentation_upid_type
@@ -475,7 +404,6 @@ descriptor_map = {
     1: DtmfDescriptor,
     2: SegmentationDescriptor,
     3: TimeDescriptor,
-    4: AudioDescriptor,
     240: DVBDASDescriptor,
 }
 
