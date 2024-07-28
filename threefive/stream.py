@@ -223,10 +223,8 @@ class Stream:
             for pkt in self.iter_pkts():
                 cue = self._parse(pkt)
                 if cue:
-                    if not func:
-                        return cue
                     func(cue)
-        return False
+        return
 
     def _mk_pkts(self, chunk):
         return [
@@ -245,14 +243,19 @@ class Stream:
             for chunk in self.iter_pkts(num_pkts=num_pkts):
                 _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
                 del _
-        return False
+        return
 
     def decode_next(self):
         """
         Stream.decode_next returns the next
         SCTE35 cue as a threefive.Cue instance.
         """
-        return self.decode(func=None)
+        if self._find_start():
+            for pkt in self.iter_pkts():
+                cue = self._parse(pkt)
+                if cue:
+                    return cue
+        return
 
     def decode_program(self, the_program, func=show_cue):
         """
@@ -283,7 +286,7 @@ class Stream:
                 if cue:
                     func(cue)
                 sys.stdout.buffer.write(pkt)
-        return False
+        return
 
     def show(self):
         """
@@ -304,7 +307,7 @@ class Stream:
                         print2(f"\nProgram: {k}")
                         vee.show()
                 return True
-        return False
+        return
 
     def show_pts(self):
         """
@@ -318,7 +321,7 @@ class Stream:
                     self._parse_pts(pkt, pid)
                     print(f"\t{pid}\t{self.pid2pts(pid)}", end="\r")
         print2("done")
-        return False
+        return
 
     def decode_start_time(self):
         """
@@ -327,7 +330,7 @@ class Stream:
         self.decode(func=no_op)
         if len(self.start.values()) > 0:
             return self.start.popitem()[1]
-        return False
+        return
 
     def _mk_packet_data(self, pid):
         prgm = self.maps.pid_prgm[pid]
@@ -473,7 +476,7 @@ class Stream:
             return self._parse_pmt(pay, pid)
         if pid == self.pids.PAT_PID:
             return self._parse_pat(pay)
-        if pid == self.pids.SDT_PID:  # and self.info:
+        if pid == self.pids.SDT_PID and self.info:
             return self._parse_sdt(pay)
         return False
 
