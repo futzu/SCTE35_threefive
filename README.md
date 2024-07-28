@@ -22,7 +22,7 @@
 
 ____
 
-# Latest __threefive__ version is `2`.`4`.`61
+# Latest __threefive__ version is `2`.`4`.`61`
 * threefive `2`.`4`.`61`
   * Cyclomatic complexity score: __A__ (`1.9603174603174602`)
   * __1814__ lines of code, __924__ lines of comments 
