@@ -18,11 +18,18 @@
 * In four years I have never seen a SpliceSchedule or an AudioDescriptor in the Wild.
    * Show me one and I'll put it back. 
 
-### `Expect v2.4.61 to rollout this week`
+### `v2.4.61 is out!`
 
-___
+____
 
-# Latest __threefive__ version is `2`.`4`.`59`
+# Latest __threefive__ version is `2`.`4`.`61
+* threefive `2`.`4`.`61`
+  * Cyclomatic complexity score: __A__ (`1.9603174603174602`)
+  * __1814__ lines of code, __924__ lines of comments 
+  * `dropped` ticks
+  * `dropped` SpliceSchedule
+  * `dropped` AudioDescriptor
+  * `fixed` Cue.encode()
 * threefive `2`.`4`.`57` Fix for multicast( new_reader)
     * python has been making changes to the socket lib.
     * this fixes multicast in new_reader and is backward compatible.   
