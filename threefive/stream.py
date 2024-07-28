@@ -255,7 +255,7 @@ class Stream:
                 cue = self._parse(pkt)
                 if cue:
                     return cue
-        return
+        return False
 
     def decode_program(self, the_program, func=show_cue):
         """
