@@ -8,15 +8,18 @@
 <br> `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 <br>
 # `Heads Up!`
+
 ### Signifigant changes coming in v2.4.61 ( that you probably won't notice)
-1. __vars shown in seconds and ticks, will now only be shown in seconds.__
-2. __The SpliceSchedule command has been removed.__
-  * In four years I have never seen a SpliceSchedule in the Wild.
-  * Show me one and I'll put it back. 
-3. __The AudioDescriptor Descriptor has been removed.__ 
-  * In four years I have never seen an AudioDescriptor in the Wild.
-  * Show me one and I'll put it back. 
+
+1. `Vars shown in seconds and ticks, will now only be shown in seconds`
+2. `The SpliceSchedule command has been removed`
+3. `The AudioDescriptor Descriptor has been removed`
+* Using ticks and seconds causes tons of problems and I'm over it.
+* In four years I have never seen a SpliceSchedule or an AudioDescriptor in the Wild.
+   * Show me one and I'll put it back. 
+
 ### `Expect v2.4.61 to rollout this week`
+
 ___
 
 # Latest __threefive__ version is `2`.`4`.`59`
