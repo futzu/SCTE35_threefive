@@ -1,423 +1,178 @@
 """
-SCTE35 Splice Descriptors
+section.py
+
+SCTE35 Splice Info Section
 """
 
 from .bitn import BitBin
 from .base import SCTE35Base
-from .segmentation import table20, table22, dvb_table2
-from .upids import upid_map
 
-
-def k_by_v(adict, avalue):
-    """
-    dict key lookup by value
-    """
-    for kay, vee in adict.items():
-        if vee == avalue:
-            return kay
-    return None
-
-
-class SpliceDescriptor(SCTE35Base):
-    """
-    SpliceDescriptor is the
-    base class for all splice descriptors.
-    It should not be used directly
-    """
-
-    def __init__(self, bites=None):
-        self.tag = None
-        self.descriptor_length = 0
-        self.name = None
-        self.identifier = None
-        self.bites = bites
-        self.parse_tag_and_len()
-        self.parse_id()
-        self.private_data = None
-
-    def parse_tag_and_len(self):
-        """
-        parse_tag_and_len
-        parses the descriptors tag and length
-        from self.bites
-        """
-        if self.bites:
-            self.tag = self.bites[0]
-            self.descriptor_length = self.bites[1]
-            self.bites = self.bites[2:]
-
-    def parse_id(self):
-        """
-        parse splice descriptor identifier
-        """
-        if self.bites:
-            self.identifier = self.bites[:4].decode()
-            # disabled for ffmv30
-            #      if self.identifier != "CUEI":
-            #          raise Exception('Identifier Is Not "CUEI"')
-            self.bites = self.bites[4:]
-
-    def decode(self):
-        """
-        decode handles Private Descriptors
-        """
-        self.private_data = self.bites
-
-    def encode(self, nbin=None):
-        """
-        SpliceDescriptor.encode
-        """
-        nbin = self._chk_nbin(nbin)
-        self._encode_id(nbin)
-        if self.private_data:
-            nbin.add_bites(self.private_data)
-        if self.tag in descriptor_map:
-            return nbin
-        return nbin.bites
-
-    def _encode_id(self, nbin):
-        """
-        parse splice descriptor identifier
-        """
-        # self.identifier = "CUEI"
-        id_int = int.from_bytes(self.identifier.encode(), byteorder="big")
-        nbin.add_int(id_int, 32)
-
-
-class DVBDASDescriptor(SpliceDescriptor):
-    """
-    Experimental DVB Descriptor Support
-    """
-
-    def __init__(self, bites=None):
-        super().__init__(bites)
-        self.tag = 240  # 0xf0
-        self.name = "DVD DAS Descriptor"
-        self.identifier = "DVB_"
-        self.break_num = 0
-        self.breaks_expected = 0
-        self.equivalent_segmentation_type = None
-        self.equivalent_segmentation_message = None
-        self.upid_type = 0x0F
-        self.upid_type_name = None
-        self.upid_length = None
-        self.upid = None
-
-    def decode(self):
-        """
-        Decode DVB DAS Descriptor
-        """
-        bitbin = BitBin(self.bites)
-        self.break_num = bitbin.as_int(8)
-        self.breaks_expected = bitbin.as_int(8)
-        bitbin.forward(4)
-        self.equivalent_segmentation_type = bitbin.as_int(4)
-        if self.equivalent_segmentation_type in dvb_table2:
-            self.equivalent_segmentation_message = dvb_table2[
-                self.equivalent_segmentation_type
-            ]
-        self.upid_length = len(self.bites) - 3
-        the_upid = upid_map[self.upid_type][1](bitbin, self.upid_type, self.upid_length)
-        self.upid_type_name, self.upid = the_upid.decode()
-
-    def encode(self, nbin=None):
-        """
-        encode DVB DAS Descriptor
-        """
-        nbin = super().encode(nbin)
-        nbin.add_int(self.break_num, 8)
-        nbin.add_int(self.breaks_expected, 8)
-        nbin.forward(4)
-        nbin.add_int(self.equivalent_segmentation_type, 4)
-        the_upid = upid_map[self.upid_type][1](None, self.upid_type, self.upid_length)
-        the_upid.encode(nbin, self.upid)
-        return nbin.bites
-
-
-
-class AvailDescriptor(SpliceDescriptor):
-    """
-    Table 17 -  avail_descriptor()
-    """
-
-    def __init__(self, bites=None):
-        super().__init__(bites)
-        self.name = "Avail Descriptor"
-        self.tag = 0
-        self.identifier = "CUEI"
-        self.provider_avail_id = None
-
-    def decode(self):
-        """
-        decode SCTE35 Avail Descriptor
-        """
-        bitbin = BitBin(self.bites)
-        self.provider_avail_id = bitbin.as_int(32)
-
-    def encode(self, nbin=None):
-        """
-        encode SCTE35 Avail Descriptor
-        """
-        nbin = super().encode(nbin)
-        self._chk_var(int, nbin.add_int, "provider_avail_id", 32)
-        return nbin.bites
-
-
-class DtmfDescriptor(SpliceDescriptor):
-    """
-    Table 18 -  DTMF_descriptor()
-    """
-
-    def __init__(self, bites=None):
-        super().__init__(bites)
-        self.name = "DTMF Descriptor"
-        self.identifier = "CUEI"
-        self.preroll = None
-        self.dtmf_count = 0
-        self.dtmf_chars = None
-
-    def decode(self):
-        """
-        decode SCTE35 Dtmf Descriptor
-        """
-        self.preroll = self.bites[0]
-        self.dtmf_count = self.bites[1] >> 5
-        self.bites = self.bites[2:]
-        self.dtmf_chars = list(self.bites[: self.dtmf_count].decode())
-
-    def encode(self, nbin=None):
-        """
-        encode SCTE35 Dtmf Descriptor
-        """
-        nbin = super().encode(nbin)
-        self._chk_var(int, nbin.add_int, "preroll", 8)
-        d_c = 0
-        self._chk_var(int, nbin.add_int, "dtmf_count", 3)
-        nbin.forward(5)
-        while d_c < self.dtmf_count:
-            nbin.add_int(ord(self.dtmf_chars[d_c]), 8)
-            d_c += 1
-        return nbin.bites
-
-
-class TimeDescriptor(SpliceDescriptor):
-    """
-    Table 25 - time_descriptor()
-    """
-
-    def __init__(self, bites=None):
-        super().__init__(bites)
-        self.tag = 3
-        self.name = "Time Descriptor"
-        self.identifier = "CUEI"
-        self.tai_seconds = 0
-        self.tai_ns = 0
-        self.utc_offset = 0
-
-    def decode(self):
-        """
-        decode SCTE35 Time Descriptor
-        """
-        bitbin = BitBin(self.bites)
-        self.tai_seconds = bitbin.as_int(48)
-        self.tai_ns = bitbin.as_int(32)
-        self.utc_offset = bitbin.as_int(16)
-
-    def encode(self, nbin=None):
-        """
-        encode SCTE35 Time Descriptor
-        """
-        nbin = super().encode(nbin)
-        self._chk_var(int, nbin.add_int, "tai_seconds", 48)
-        self._chk_var(int, nbin.add_int, "tai_ns", 32)
-        self._chk_var(int, nbin.add_int, "utc_offset", 16)
-        return nbin.bites
-
-
-class SegmentationDescriptor(SpliceDescriptor):
-    """
-    Table 19 - segmentation_descriptor()
-    """
-
-    def __init__(self, bites=None):
-        super().__init__(bites)
-        self.tag = 2
-        self.name = "Segmentation Descriptor"
-        self.identifier = "CUEI"
-        self.segmentation_event_id = None
-        self.segmentation_event_cancel_indicator = None
-        self.segmentation_event_id_compliance_indicator = None
-        self.program_segmentation_flag = None
-        self.segmentation_duration_flag = None
-        self.delivery_not_restricted_flag = None
-        self.web_delivery_allowed_flag = None
-        self.no_regional_blackout_flag = None
-        self.archive_allowed_flag = None
-        self.device_restrictions = None
-        self.segmentation_duration = None
-        self.segmentation_message = None
-        self.segmentation_upid_type = None
-        self.segmentation_upid_type_name = None
-        self.segmentation_upid_length = None
-        self.segmentation_upid = None
-        self.segmentation_type_id = None
-        self.segment_num = None
-        self.segments_expected = None
-        self.sub_segment_num = None
-        self.sub_segments_expected = None
-
-    def decode(self):
-        """
-        decode a segmentation descriptor
-        """
-        bitbin = BitBin(self.bites)
-        self.segmentation_event_id = bitbin.as_hex(32)
-        self.segmentation_event_cancel_indicator = bitbin.as_flag(1)
-        self.segmentation_event_id_compliance_indicator = bitbin.as_flag(1)
-        bitbin.forward(6)
-        if not self.segmentation_event_cancel_indicator:
-            self._decode_flags(bitbin)
-            self._decode_segmentation(bitbin)
-
-    def _decode_flags(self, bitbin):
-        self.program_segmentation_flag = bitbin.as_flag(1)
-        self.segmentation_duration_flag = bitbin.as_flag(1)
-        self.delivery_not_restricted_flag = bitbin.as_flag(1)
-        if not self.delivery_not_restricted_flag:
-            self.web_delivery_allowed_flag = bitbin.as_flag(1)
-            self.no_regional_blackout_flag = bitbin.as_flag(1)
-            self.archive_allowed_flag = bitbin.as_flag(1)
-            self.device_restrictions = table20[bitbin.as_int(2)]
-        else:
-            bitbin.forward(5)
-
-    def _decode_segmentation(self, bitbin):
-        if self.segmentation_duration_flag:
-            segmentation_duration_ticks = bitbin.as_int(40)
-            self.segmentation_duration = self.as_90k(segmentation_duration_ticks)
-        self.segmentation_upid_type = bitbin.as_int(8)
-        self.segmentation_upid_length = bitbin.as_int(8)
-        upid_type = self.segmentation_upid_type
-        if upid_type not in upid_map:
-            upid_type = 0xFD
-        the_upid = upid_map[upid_type][1](
-            bitbin, upid_type, self.segmentation_upid_length
-        )
-        self.segmentation_upid_type_name, self.segmentation_upid = the_upid.decode()
-        self.segmentation_type_id = bitbin.as_int(8)
-        if self.segmentation_type_id in table22:
-            self.segmentation_message = table22[self.segmentation_type_id]
-            self._decode_segments(bitbin)
-
-    def _decode_segments(self, bitbin):
-        self.segment_num = bitbin.as_int(8)
-        self.segments_expected = bitbin.as_int(8)
-        if self.segmentation_type_id in [
-            0x30,
-            0x32,
-            0x34,
-            0x36,
-            0x38,
-            0x3A,
-            0x44,
-            0x46,
-        ]:
-            # if sub_segment_num and sub_segments_expected
-            # are not available set both of them to zero
-            ssn = bitbin.as_int(8)
-            sse = bitbin.as_int(8)
-            if not ssn:
-                ssn = 0
-                sse = 0
-            self.sub_segment_num = ssn  # 1 byte
-            self.sub_segments_expected = sse  # 1 byte
-
-    def encode(self, nbin=None):
-        """
-        encode a segmentation descriptor
-        """
-        nbin = super().encode(nbin)
-        self._chk_var(str, nbin.add_hex, "segmentation_event_id", 32)
-        self._chk_var(bool, nbin.add_flag, "segmentation_event_cancel_indicator", 1)
-        self._chk_var(
-            bool, nbin.add_flag, "segmentation_event_id_compliance_indicator", 1
-        )
-
-        nbin.forward(6)
-        if not self.segmentation_event_cancel_indicator:
-            self._encode_flags(nbin)
-
-            self._encode_segmentation(nbin)
-        return nbin.bites
-
-    def _encode_flags(self, nbin):
-        self._chk_var(bool, nbin.add_flag, "program_segmentation_flag", 1)
-        self._chk_var(bool, nbin.add_flag, "segmentation_duration_flag", 1)
-        self._chk_var(bool, nbin.add_flag, "delivery_not_restricted_flag", 1)
-        if not self.delivery_not_restricted_flag:
-            self._chk_var(bool, nbin.add_flag, "web_delivery_allowed_flag", 1)
-            self._chk_var(bool, nbin.add_flag, "no_regional_blackout_flag", 1)
-            self._chk_var(bool, nbin.add_flag, "archive_allowed_flag", 1)
-            a_key = k_by_v(table20, self.device_restrictions)
-            nbin.add_int(a_key, 2)
-        else:
-            nbin.reserve(5)
-
-    def _encode_segmentation(self, nbin):
-        if self.segmentation_duration_flag:
-            nbin.add_int(self.as_ticks(self.segmentation_duration),40)
-        self._chk_var(int, nbin.add_int, "segmentation_upid_type", 8)
-        self._chk_var(int, nbin.add_int, "segmentation_upid_length", 8)
-        upid_type = self.segmentation_upid_type
-        if upid_type not in upid_map:
-            upid_type = 0xFD
-        the_upid = upid_map[upid_type][1](
-            None, upid_type, self.segmentation_upid_length
-        )
-        the_upid.encode(nbin, self.segmentation_upid)
-        self._chk_var(int, nbin.add_int, "segmentation_type_id", 8)
-        self._encode_segments(nbin)
-
-    def _encode_segments(self, nbin):
-        self._chk_var(int, nbin.add_int, "segment_num", 8)
-        self._chk_var(int, nbin.add_int, "segments_expected", 8)
-        if self.segmentation_type_id in [
-            0x30,
-            0x32,
-            0x34,
-            0x36,
-            0x38,
-            0x3A,
-            0x44,
-            0x46,
-        ]:
-            try:
-                self._chk_var(int, nbin.add_int, "sub_segment_num", 8)
-                self._chk_var(int, nbin.add_int, "sub_segments_expected", 8)
-            except:
-                nbin.add_int(0, 8)
-                nbin.add_int(0, 8)
-
-
-# map of known descriptors and associated classes
-descriptor_map = {
-    0: AvailDescriptor,
-    1: DtmfDescriptor,
-    2: SegmentationDescriptor,
-    3: TimeDescriptor,
-    240: DVBDASDescriptor,
+sap_map = {
+    "0x00": "Type 1 Closed GOP with no leading pictures",
+    "0x01": "Type 2 Closed GOP with leading pictures",
+    "0x02": "Type 3 Open GOP",
+    "0x03": "No Sap Type",
 }
 
 
-def splice_descriptor(bites):
+class SpliceInfoSection(SCTE35Base):
     """
-    replaced splice_descriptor
+    The SCTE-35 splice info section
+    data.
     """
-    spliced = None
-    tag = bites[0]
-    if tag in descriptor_map:
-        spliced = descriptor_map[tag](bites)
-    else:
-        spliced = SpliceDescriptor(bites)
-    spliced.decode()
-    return spliced
+
+    def __init__(self):
+        self.table_id = None
+        self.section_syntax_indicator = None
+        self.private = None
+        # sap_type used to be marked reserved.
+        self.sap_type = None
+        self.sap_details = None
+        self.section_length = None
+        self.protocol_version = None
+        self.encrypted_packet = None
+        self.encryption_algorithm = None
+        self.pts_adjustment = None
+        self.cw_index = None
+        self.tier = None
+        self.splice_command_length = None
+        self.splice_command_type = None
+        self.descriptor_loop_length = 0
+        self.crc = None
+
+    def decode(self, bites):
+        """
+        InfoSection.decode
+        """
+        bitbin = BitBin(bites)
+        self.table_id = bitbin.as_hex(8)
+        if self.table_id != "0xfc":
+            raise ValueError(
+                ("splice_info_section.table_id should be 0xfc Not: ", self.table_id)
+            )
+        self.section_syntax_indicator = bitbin.as_flag(1)
+        self.private = bitbin.as_flag(1)
+        self.sap_type = bitbin.as_hex(2)
+        self.sap_details = sap_map[self.sap_type]
+        self.section_length = bitbin.as_int(12)
+        self.protocol_version = bitbin.as_int(8)
+        self.encrypted_packet = bitbin.as_flag(1)
+        self.encryption_algorithm = bitbin.as_int(6)
+        pts_adjustment_ticks = bitbin.as_int(33)
+        self.pts_adjustment = self.as_90k(pts_adjustment_ticks)
+        self.cw_index = bitbin.as_hex(8)
+        self.tier = bitbin.as_hex(12)
+        self.splice_command_length = bitbin.as_int(12)
+        self.splice_command_type = bitbin.as_int(8)
+
+    def _encode_table_id(self, nbin):
+        """
+        encode SpliceInfoSection.table_id
+        """
+        self.table_id = "0xfc"
+        nbin.add_hex(self.table_id, 8)
+
+    def _encode_section_syntax_indicator(self, nbin):
+        """
+        encode SpliceInfoSection.section_syntax_indicator
+        """
+        self.section_syntax_indicator = False
+        nbin.add_flag(self.section_syntax_indicator, 1)
+
+    def _encode_private_flag(self, nbin):
+        """
+        encode SpliceInfoSection.private
+        """
+        self.private = False
+        nbin.add_flag(self.private, 1)
+
+    def _encode_sap(self, nbin):
+        """
+        the 3 reserved bits now map SAP
+        """
+        if self.sap_type not in sap_map:
+            self.sap_type = "0x03"
+        self.sap_details = sap_map[self.sap_type]
+        nbin.add_hex(self.sap_type, 2)
+
+    def _encode_section_length(self, nbin):
+        """
+        encode SpliceInfoSection.section_length
+        """
+        if not self.section_length:
+            self.section_length = 11
+        nbin.add_int(self.section_length, 12)
+
+    def _encode_protocol_version(self, nbin):
+        """
+        encode SpliceInfoSection.protocol_version
+        """
+        if not self.protocol_version:
+            self.protocol_version = 0
+        nbin.add_int(self.protocol_version, 8)
+
+    def _encode_encrypted(self, nbin):
+        """
+        encode SpliceInfoSection.encrypted_packet
+        and SpliceInfoSection.encyption_algorithm
+        """
+        if not self.encrypted_packet:
+            self.encrypted_packet = False
+        nbin.add_flag(self.encrypted_packet)
+        if not self.encryption_algorithm:
+            self.encryption_algorithm = 0
+        nbin.add_int(self.encryption_algorithm, 6)
+
+    def _encode_pts_adjustment(self, nbin):
+        """
+        encode SpliceInfoSection.pts_adjustment_ticks
+        """
+        nbin.add_int(self.as_ticks(self.pts_adjustment), 33)
+
+    def _encode_cw_index(self, nbin):
+        """
+        encode SpliceInfoSection.cw_index
+        """
+        if not self.cw_index:
+            self.cw_index = "0x0"
+        nbin.add_hex(self.cw_index, 8)
+
+    def _encode_tier(self, nbin):
+        """
+        encode SpliceInfoSection.tier
+        """
+        if not self.tier:
+            self.tier = "0xfff"
+        nbin.add_hex(self.tier, 12)
+
+    def _encode_splice_command(self, nbin):
+        """
+        encode Splice.InfoSection.splice_command_length
+        and Splice.InfoSection.splice_command_type
+        """
+        if not self.splice_command_length:
+            self.splice_command_length = 0
+        nbin.add_int(self.splice_command_length, 12)
+        if not self.splice_command_type:
+            self.splice_command_type = 0
+        nbin.add_int(self.splice_command_type, 8)
+
+    def encode(self, nbin=None):
+        """
+        SpliceInfoSection.encode
+        takes the vars from an instance and
+        encodes them as bytes.
+        """
+        nbin = self._chk_nbin(nbin)
+        self._encode_table_id(nbin)
+        self._encode_section_syntax_indicator(nbin)
+        self._encode_private_flag(nbin)
+        self._encode_sap(nbin)
+        self._encode_section_length(nbin)
+        self._encode_protocol_version(nbin)
+        self._encode_encrypted(nbin)
+        self._encode_pts_adjustment(nbin)
+        self._encode_cw_index(nbin)
+        self._encode_tier(nbin)
+        self._encode_splice_command(nbin)
+        return nbin.bites
