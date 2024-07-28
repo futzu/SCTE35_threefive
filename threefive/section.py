@@ -32,7 +32,6 @@ class SpliceInfoSection(SCTE35Base):
         self.protocol_version = None
         self.encrypted_packet = None
         self.encryption_algorithm = None
-        self.pts_adjustment_ticks = None
         self.pts_adjustment = None
         self.cw_index = None
         self.tier = None
@@ -59,8 +58,8 @@ class SpliceInfoSection(SCTE35Base):
         self.protocol_version = bitbin.as_int(8)
         self.encrypted_packet = bitbin.as_flag(1)
         self.encryption_algorithm = bitbin.as_int(6)
-        self.pts_adjustment_ticks = bitbin.as_int(33)
-        self.pts_adjustment = self.as_90k(self.pts_adjustment_ticks)
+        pts_adjustment_ticks = bitbin.as_int(33)
+        self.pts_adjustment = self.as_90k(pts_adjustment_ticks)
         self.cw_index = bitbin.as_hex(8)
         self.tier = bitbin.as_hex(12)
         self.splice_command_length = bitbin.as_int(12)
@@ -128,11 +127,7 @@ class SpliceInfoSection(SCTE35Base):
         """
         encode SpliceInfoSection.pts_adjustment_ticks
         """
-        if not self.pts_adjustment_ticks:
-            self.pts_adjustment_ticks = 0
-        if self.pts_adjustment:
-            self.pts_adjustment_ticks = self.as_ticks(self.pts_adjustment)
-        self._chk_var(int, nbin.add_int, "pts_adjustment_ticks", 33)
+        nbin.add_int(self.as_ticks(self.pts_adjustment),33)
 
     def _encode_cw_index(self, nbin):
         """
