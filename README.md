@@ -11,10 +11,10 @@
 ### Signifigant changes coming in v2.4.61 ( that you probably won't notice)
 1. __vars shown in seconds and ticks, will now only be shown in seconds.__
 2. __The SpliceSchedule command has been removed.__
-  * In four years I have never seen a SpliceSchedule Command in the Wild.
+  * In four years I have never seen a SpliceSchedule in the Wild.
   * Show me one and I'll put it back. 
 3. __The AudioDescriptor Descriptor has been removed.__ 
-  * In four years I have never seen an AudioDescriptor Command in the Wild.
+  * In four years I have never seen an AudioDescriptor in the Wild.
   * Show me one and I'll put it back. 
 ### `Expect v2.4.61 to rollout this week`
 ___
