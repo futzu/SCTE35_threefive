@@ -104,7 +104,6 @@ class TimeSignal(SpliceCommand):
         self.name = "Time Signal"
         self.time_specified_flag = None
         self.pts_time = None
-        self.pts_time_ticks = None
 
     def decode(self):
         """
@@ -131,8 +130,8 @@ class TimeSignal(SpliceCommand):
         self.time_specified_flag = bitbin.as_flag(1)
         if self.time_specified_flag:
             bitbin.forward(6)
-            self.pts_time_ticks = bitbin.as_int(33)
-            self.pts_time = self.as_90k(self.pts_time_ticks)
+            pts_time_ticks = bitbin.as_int(33)
+            self.pts_time = self.as_90k(pts_time_ticks)
         else:
             bitbin.forward(7)
 
@@ -143,11 +142,7 @@ class TimeSignal(SpliceCommand):
         self._chk_var(bool, nbin.add_flag, "time_specified_flag", 1)
         if self.time_specified_flag:
             nbin.reserve(6)
-            if self.pts_time_ticks:
-                self.pts_time = self.as_90k(self.pts_time_ticks)
-            elif self.pts_time:
-                self.pts_time_ticks = self.as_ticks(self.pts_time)
-            self._chk_var(int, nbin.add_int, "pts_time_ticks", 33)
+            nbin.add_int(int(self.as_ticks(self.pts_time)),33)
         else:
             nbin.reserve(7)
 
@@ -163,7 +158,6 @@ class SpliceInsert(TimeSignal):
         self.name = "Splice Insert"
         self.break_auto_return = None
         self.break_duration = None
-        self.break_duration_ticks = None
         self.splice_event_id = None
         self.splice_event_cancel_indicator = None
         self.out_of_network_indicator = None
@@ -181,8 +175,8 @@ class SpliceInsert(TimeSignal):
         """
         self.break_auto_return = bitbin.as_flag(1)
         bitbin.forward(6)
-        self.break_duration_ticks = bitbin.as_int(33)
-        self.break_duration = self.as_90k(self.break_duration_ticks)
+        break_duration_ticks = bitbin.as_int(33)
+        self.break_duration = self.as_90k(break_duration_ticks)
 
     def decode(self):
         """
@@ -242,112 +236,12 @@ class SpliceInsert(TimeSignal):
         """
         self._chk_var(bool, nbin.add_flag, "break_auto_return", 1)
         nbin.forward(6)
-        if self.break_duration_ticks:
-            self.break_duration = self.as_90k(self.break_duration_ticks)
-        elif self.break_duration:
-            self.break_duration_ticks = self.as_ticks(self.break_duration)
-        else:
-            self.break_duration_ticks = 0
-        self._chk_var(int, nbin.add_int, "break_duration_ticks", 33)
-
-
-class SpliceSchedule(SpliceCommand):
-    """
-    Table 9 - splice_schedule()
-    """
-
-    class SpliceEvent(SpliceInsert):
-        """
-        SpliceEvent is a class declared in
-        the SpliceSchedule class.
-        """
-
-        def __init__(self):
-            """
-            SpliceEvent
-            """
-            super().__init__(None)
-            self.name = None
-            self.utc_splice_time = None
-
-        def decode(self, bitbin):
-            """
-            decode SpliceEvent
-            """
-            self.splice_event_id = bitbin.as_int(32)
-            self.splice_event_cancel_indicator = bitbin.as_flag(1)
-            self.event_id_compliance_flag = bitbin.as_flag(1)
-            bitbin.forward(6)
-            if not self.splice_event_cancel_indicator:
-                self.out_of_network_indicator = bitbin.as_flag(1)
-                self.program_splice_flag = bitbin.as_flag(1)
-                self.duration_flag = bitbin.as_flag(1)
-                bitbin.forward(5)
-                if self.program_splice_flag:
-                    self.utc_splice_time = bitbin.as_int(32)
-                if self.duration_flag:
-                    self.decode_break_duration(bitbin)
-                self.unique_program_id = bitbin.as_int(16)
-                self.avail_num = bitbin.as_int(8)
-                self.avail_expected = bitbin.as_int(8)
-
-        def encode(self, nbin=None):
-            """
-            encode SpliceEvent
-            """
-            self._chk_var(int, nbin.add_int, "splice_event_id", 32)
-            self._chk_var(bool, nbin.add_flag, "splice_event_cancel_indicator", 1)
-            self._chk_var(bool, nbin.add_flag, "event_id_compliance_flag", 1)
-            nbin.forward(6)
-            if not self.splice_event_cancel_indicator:
-                self._chk_var(bool, nbin.add_flag, "out_of_network_indicator", 1)
-                self._chk_var(bool, nbin.add_flag, "program_splice_flag", 1)
-                self._chk_var(bool, nbin.add_flag, "duration_flag", 1)
-                nbin.forward(5)
-                if self.program_splice_flag:
-                    self._chk_var(int, nbin.add_int, "utc_splice_time", 32)
-                if self.duration_flag:
-                    self.encode_break_duration(nbin)
-            self._chk_var(int, nbin.add_int, "unique_program_id", 16)
-            self._chk_var(int, nbin.add_int, "avail_num", 8)
-            self._chk_var(int, nbin.add_int, "avail_expected", 8)
-
-    def __init__(self, bites=None):
-        """
-        SpliceSchedule.__init__
-        """
-        super().__init__(bites)
-        self.command_type = 4
-        self.name = "Splice Schedule"
-        self.splices = []
-
-    def decode(self):
-        """
-        decode SpliceSchedule
-        """
-        bitbin = BitBin(self.bites)
-        start = bitbin.idx
-        splice_count = bitbin.as_int(8)
-        for i in range(0, splice_count):
-            self.splices[i] = self.SpliceEvent()
-            self.splices[i].decode(bitbin)
-        self._set_len(start, bitbin.idx)
-
-    def encode(self, nbin=None):
-        """
-        encode SpliceSchedule
-        """
-        nbin = self._chk_nbin(nbin)
-        self._chk_var(int, nbin.add_int, "splice_count", 8)
-        for splice in self.splices:
-            splice.encode(nbin)
-        return nbin.bites
+        nbin.add_int(self.as_ticks(self.break_duration),33)
 
 
 # table 7
 command_map = {
     0: SpliceNull,
-    4: SpliceSchedule,
     5: SpliceInsert,
     6: TimeSignal,
     7: BandwidthReservation,
