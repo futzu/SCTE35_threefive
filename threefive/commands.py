@@ -142,7 +142,7 @@ class TimeSignal(SpliceCommand):
         self._chk_var(bool, nbin.add_flag, "time_specified_flag", 1)
         if self.time_specified_flag:
             nbin.reserve(6)
-            nbin.add_int(int(self.as_ticks(self.pts_time)),33)
+            nbin.add_int(int(self.as_ticks(self.pts_time)), 33)
         else:
             nbin.reserve(7)
 
@@ -236,7 +236,7 @@ class SpliceInsert(TimeSignal):
         """
         self._chk_var(bool, nbin.add_flag, "break_auto_return", 1)
         nbin.forward(6)
-        nbin.add_int(self.as_ticks(self.break_duration),33)
+        nbin.add_int(self.as_ticks(self.break_duration), 33)
 
 
 # table 7
