@@ -94,16 +94,28 @@ others = {
 
 
 def hex_literal(integer):
+    """
+    Return hex literal
+    """
     return int(hex(integer), base=16)
 
 
 def add_stream_types(alist, streamtype):
+    """
+    add_stream_types dynamically
+    adds a range of a stream type,
+    like "Reserved",to streamtype_map
+    """
     for i in alist:
         j = hex_literal(i)
         streamtype_map[j] = streamtype
 
 
 def mk_streamtype_map(others):
+    """
+    mk_streamtype_map dynamically adds
+    stream types to streamtype_map
+    """
     for k, v in others.items():
         add_stream_types(v, k)
     keys = list(streamtype_map.keys())
