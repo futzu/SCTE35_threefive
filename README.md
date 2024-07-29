@@ -1,6 +1,8 @@
 
 # threefive is the highest rated SCTE-35 parser. Ever.
 
+> _v2.4.61 is the most threefive version of threefive to date. ~ Adrian_
+
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
 <br> `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
@@ -19,13 +21,14 @@
    * Show me one and I'll put it back. 
 
 ### `v2.4.61 is out!`
-
 ____
 
 # Latest __threefive__ version is `2`.`4`.`61`
 * threefive `2`.`4`.`61`
   * Cyclomatic complexity score: __A__ (`1.9603174603174602`)
-  * __1814__ lines of code, __924__ lines of comments 
+  * The code is clean and concise and well documented.
+    * __1807__ lines of code
+    *  __936__ lines of comments 
   * `dropped` ticks
   * `dropped` SpliceSchedule
   * `dropped` AudioDescriptor
