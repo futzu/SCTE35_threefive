@@ -10,7 +10,7 @@ cue = threefive.Cue(BE64)
 cue.decode()
 cue.show()
 # use dot notation to access values and change them
-cue.command.break_duration_ticks = cue.as_ticks(9000.0)
+cue.command.break_duration = 9000.0
 
 # Run cue.encode to generate new base64 string
 print(cue.encode())
