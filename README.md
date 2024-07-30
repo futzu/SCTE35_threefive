@@ -63,13 +63,7 @@ ___
 
 <b> A) </b> Yes, that's all I've done for the last four years. Just open an issue and we can discuss.
 ___
-<b> Q)</b> "I heard the python guys banned your from their site, what did you do?"
-
-<b> A) </b> I pointed out gramatical errors in pep 1 and they blocked me from making comments.
 # Documentation
-
-
-
 
 * SCTE-35 on the [__command line__](https://github.com/futzu/scte35parser-threefive/blob/master/cli.md)
 
