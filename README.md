@@ -39,7 +39,7 @@ ____
 * threefive `2`.`4`.`55` has a [CRITICAL FIX](https://github.com/futzu/SCTE35_threefive/blob/master/ffrewrite.md) related to __ffmpeg__.
 ---
 
-### FAQ:
+# `FAQ`
 
 <b> Q)</b>  "How do I capture the output of threefive?"
 
@@ -55,12 +55,19 @@ a@fu:~$ threefive proxy input.ts 1> copyofinput.ts 2> output.txt
 
 ```
 ___
+
 <b> Q)</b> "You aren't on any social media, are you a Chinese secret agent?"
 
+![image](https://github.com/user-attachments/assets/aefed0bb-de61-4222-a04b-aaf1192bf4d6)
+
+
 <b> A) </b> No, I am not a Chinese secret agent, threefive is huge in China though.<br>
-![image](https://github.com/user-attachments/assets/36171acf-a302-4f0d-85cf-74afc675a10e)
+
+
 <br>
+
 ___
+
 <b> Q)</b> "SCTE-35 sucks, can we just hire you to do it for us?"
 
 <b> A) </b> Yes, that's all I've done for the last four years. Just open an issue and we can discuss.
