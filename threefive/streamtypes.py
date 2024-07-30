@@ -76,7 +76,8 @@ streamtype_map = {
     0xDB: " H.264 with AES-128-CBC slice encryption",
     # 0xDC - 0xE9:"Privately defined.",
     0xEA: "Microsoft Windows Media Video 9",
-    # 0xEB - 0xFF:"Privately defined.",
+    # 0xEB - 0xFB:"Privately defined.",
+    0xFC: "KLV",
 }
 
 
@@ -89,7 +90,8 @@ others = {
     + list(range(0xC3, 0xCE))
     + list(range(0xD5, 0xDA))
     + list(range(0xDC, 0xE9))
-    + list(range(0xEB, 0xFF)),
+    + list(range(0xEB, 0xFB)),
+    + list(range(0xFD,0xFF)),
 }
 
 
