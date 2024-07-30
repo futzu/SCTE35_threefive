@@ -57,7 +57,9 @@ a@fu:~$ threefive proxy input.ts 1> copyofinput.ts 2> output.txt
 ___
 <b> Q)</b> "You aren't on any social media, are you a Chinese secret agent?"
 
-<b> A) </b> No, I am not a Chinese secret agent, threefive is huge in China though.
+<b> A) </b> No, I am not a Chinese secret agent, threefive is huge in China though.<br>
+![image](https://github.com/user-attachments/assets/36171acf-a302-4f0d-85cf-74afc675a10e)
+<br>
 ___
 <b> Q)</b> "SCTE-35 sucks, can we just hire you to do it for us?"
 
