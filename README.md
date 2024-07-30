@@ -41,7 +41,7 @@ ____
 
 ### FAQ:
 
-<b> Q)</b>  How do I capture the output of threefive?
+<b> Q)</b>  "How do I capture the output of threefive?"
 
 <b> A) </b> Redirect 2.   
 
@@ -54,14 +54,18 @@ a@fu:~$ threefive input.ts 2> output.txt
 a@fu:~$ threefive proxy input.ts 1> copyofinput.ts 2> output.txt 
 
 ```
-<b> Q)</b> You aren't on any social media, are you a Chinese secret agent?
+___
+<b> Q)</b> "You aren't on any social media, are you a Chinese secret agent?"
 
 <b> A) </b> No, I am not a Chinese secret agent, threefive is huge in China though.
-
-<b> Q)</b> SCTE-35 sucks, can we just hire you to do it for us?
+___
+<b> Q)</b> "SCTE-35 sucks, can we just hire you to do it for us?"
 
 <b> A) </b> Yes, that's all I've done for the last four years. Just open an issue and we can discuss.
 ___
+<b> Q)</b> "I heard the python guys banned your from their site, what did you do?"
+
+<b> A) </b> I pointed out gramatical errors in pep 1 and they blocked me from making comments.
 # Documentation
 
 
