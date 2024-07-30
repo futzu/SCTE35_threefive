@@ -51,6 +51,7 @@ class SCTE35Base:
         """
         90k timestamps to ticks
         """
+        if not float_time: return 0
         return int(round(float_time * 90000))
 
     @staticmethod
