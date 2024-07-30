@@ -95,7 +95,7 @@ class Stream2(Stream):
                 "protocol_version": 0,
                 "encrypted_packet": false,
                 "encryption_algorithm": 0,
-                "pts_adjustment"                          # <-- Changed
+                "pts_adjustment":  109.55,     # <-- Changed
                 "cw_index": "0xff",
                 "tier": "0xfff",
                 "splice_command_length": 15,
