@@ -32,7 +32,7 @@ class SpliceInfoSection(SCTE35Base):
         self.protocol_version = None
         self.encrypted_packet = None
         self.encryption_algorithm = None
-        self.pts_adjustment = None
+        self.pts_adjustment = 0
         self.cw_index = None
         self.tier = None
         self.splice_command_length = None
