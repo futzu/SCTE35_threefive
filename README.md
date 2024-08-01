@@ -9,69 +9,16 @@
 <br> `Parses` __SCTE-35__ from  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br> `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 <br>
-# `Heads Up!`
-
-### Signifigant changes coming in v2.4.61 ( that you probably won't notice)
-
-1. `Vars shown in seconds and ticks, will now only be shown in seconds`
-2. `The SpliceSchedule command has been removed`
-3. `The AudioDescriptor Descriptor has been removed`
-* Using ticks and seconds causes tons of problems and I'm over it.
-* In four years I have never seen a SpliceSchedule or an AudioDescriptor in the Wild.
-   * Show me one and I'll put it back. 
-
-### `v2.4.61 is out!`
 ____
 
 # Latest __threefive__ version is `2`.`4`.`61`
 * threefive `2`.`4`.`61`
-  * Cyclomatic complexity score: __A__ (`1.9603174603174602`)
-  * The code is clean and concise and well documented.
-    * __1807__ lines of code
-    *  __936__ lines of comments 
   * `dropped` ticks
   * `dropped` SpliceSchedule
   * `dropped` AudioDescriptor
   * `fixed` Cue.encode()
-* threefive `2`.`4`.`57` Fix for multicast( new_reader)
-    * python has been making changes to the socket lib.
-    * this fixes multicast in new_reader and is backward compatible.   
-* threefive `2`.`4`.`55` has a [CRITICAL FIX](https://github.com/futzu/SCTE35_threefive/blob/master/ffrewrite.md) related to __ffmpeg__.
 ---
 
-# `FAQ`
-
-<b> Q)</b>  "How do I capture the output of threefive?"
-
-<b> A) </b> Redirect 2.   
-
-      
-```sh
-a@fu:~$ threefive input.ts 2> output.txt
-
-# you can redirect 1 and 2.
-
-a@fu:~$ threefive proxy input.ts 1> copyofinput.ts 2> output.txt 
-
-```
-___
-
-<b> Q)</b> "You aren't on any social media, are you a Chinese secret agent?"
-
-![image](https://github.com/user-attachments/assets/aefed0bb-de61-4222-a04b-aaf1192bf4d6)
-
-
-<b> A) </b> No, I am not a Chinese secret agent, threefive is huge in China though.<br>
-
-
-<br>
-
-___
-
-<b> Q)</b> "SCTE-35 sucks, can we just hire you to do it for us?"
-
-<b> A) </b> Yes, that's all I've done for the last four years. Just open an issue and we can discuss.
-___
 # Documentation
 
 * SCTE-35 on the [__command line__](https://github.com/futzu/scte35parser-threefive/blob/master/cli.md)
@@ -85,10 +32,10 @@ ___
 * [__Parse SCTE-35 programmatically__](https://github.com/futzu/scte35parser-threefive/blob/master/prog.md) with a few lines of code
 
 
-* [__Issues__](https://github.com/futzu/SCTE35_threefive/blob/master/issues.md) and Featue Requests and Assorted Comments.
+* [__Issues__](https://github.com/futzu/SCTE35_threefive/blob/master/issues.md) and __featue requests__ and assorted __comments__.
 
 
-
+* [__FAQ__](#faq) All your questions answered. 
 
 
 
@@ -641,8 +588,42 @@ private_data = b'threefive kicks ass'
 
 ### `NEW!` __threefive__ now has experimental DVB DAS Support `ETSI TS 103 752-1` <br><br>
 
-## SCTE-35 Parsing Shoot Out: 
-* The challenge is to parse 14,862 SCTE-35 Cues from an MPEGTS as fast as possible. 
-* [`threefive + Python3` ](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) VS.[`threefive + pypy3`](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) VS. [ `tsduck in C++` ](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) VS.  [ `cuei in Go`.](https://github.com/futzu/SCTE35-threefive/blob/master/speedtest.md) 
+# `FAQ`
 
+<b> Q)</b>  "How do I capture the output of threefive?"
+
+<b> A) </b> Redirect 2.   
+
+      
+```sh
+a@fu:~$ threefive input.ts 2> output.txt
+```
+*  you can redirect 1 and 2.
+```sh
+a@fu:~$ threefive proxy input.ts 1> copyofinput.ts 2> output.txt
+```
+*  For piping and such, use 2>&1
+```sh
+a@fu:~$ threefive packets  plp0.ts 2>&1 | less
+```
+
+
+___
+
+<b> Q)</b> "You aren't on any social media, are you a Chinese secret agent?"
+
+![image](https://github.com/user-attachments/assets/aefed0bb-de61-4222-a04b-aaf1192bf4d6)
+
+
+<b> A) </b> No, I am not a Chinese secret agent, threefive is huge in China though.<br>
+
+
+<br>
+
+___
+
+<b> Q)</b> "SCTE-35 sucks, can we just hire you to do it for us?"
+
+<b> A) </b> Yes, that's all I've done for the last four years. Just open an issue and we can discuss.
+___
 
