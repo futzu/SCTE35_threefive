@@ -51,7 +51,6 @@ class SCTE35Base:
         """
         90k timestamps to ticks
         """
-        if not float_time: return 0
         return int(round(float_time * 90000))
 
     @staticmethod
@@ -105,6 +104,14 @@ class SCTE35Base:
             return val
 
         return {k: b2l(v) for k, v in vars(self).items() if v is not None}
+
+    def has(self,what):
+        """
+        has runs hasattr with self and what
+        """
+        if hasattr(self,what):
+            return True
+        return False
 
     @staticmethod
     def idxsplit(stuff, sep):
