@@ -16,7 +16,7 @@ streamtype_map = {
     0x03: "MPEG-1 audio",
     0x04: "MPEG-2 halved sample rate audio",
     0x05: "MPEG-2 tabled data",
-    0x06: "The Dreaded Bin Data",
+    0x06: "MPEG-2 binary data",
     0x07: "ISO/IEC 13522 (MHEG)",
     0x08: "H.222 and  DSM CC",
     0x09: "H.222 and auxiliary data",
