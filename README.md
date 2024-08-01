@@ -591,39 +591,28 @@ private_data = b'threefive kicks ass'
 # `FAQ`
 
 <b> Q)</b>  "How do I capture the output of threefive?"
-
+<br><br>
 <b> A) </b> Redirect 2.   
-
-      
 ```sh
 a@fu:~$ threefive input.ts 2> output.txt
-```
-*  you can redirect 1 and 2.
-```sh
-a@fu:~$ threefive proxy input.ts 1> copyofinput.ts 2> output.txt
 ```
 *  For piping and such, use 2>&1
 ```sh
 a@fu:~$ threefive packets  plp0.ts 2>&1 | less
 ```
 
-
 ___
 
-<b> Q)</b> "You aren't on any social media, are you a Chinese secret agent?"
-
-![image](https://github.com/user-attachments/assets/aefed0bb-de61-4222-a04b-aaf1192bf4d6)
-
-
-<b> A) </b> No, I am not a Chinese secret agent, threefive is huge in China though.<br>
-
-
-<br>
+<b> Q)</b> "You aren't on any social media, are you a Super Secret Chinese agent?"
+<br><br>
+<b> A) </b> No, I am not a Chinese agent, threefive is huge in China though.<br>
 
 ___
 
 <b> Q)</b> "SCTE-35 sucks, can we just hire you to do it for us?"
-
+<br><br>
 <b> A) </b> Yes, that's all I've done for the last four years. Just open an issue and we can discuss.
 ___
+<br><br>
+![image](https://github.com/user-attachments/assets/aefed0bb-de61-4222-a04b-aaf1192bf4d6)
 
