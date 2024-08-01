@@ -87,6 +87,7 @@ class Pids:
         self.pcr = set()
         self.pmt = set()
         self.scte35 = set()
+        self.maybe_scte35=set()
         self.tables = set()
         self.tables.add(self.PAT_PID)
         self.tables.add(self.SDT_PID)
@@ -238,7 +239,7 @@ class Stream:
         Super Fast with pypy3.
         """
         if self._find_start():
-            num_pkts = 700
+            num_pkts = 3000
             for chunk in self.iter_pkts(num_pkts=num_pkts):
                 _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
                 del _
@@ -491,7 +492,7 @@ class Stream:
             self._parse_pcr(pkt, pid)
         if self._pusi_flag(pkt):
             self._parse_pts(pkt, pid)
-        if pid in self.pids.scte35:
+        if pid in self.pids.scte35 or self.pids.maybe_scte35:
             cue = self._parse_scte35(pkt, pid)
         return cue
 
@@ -543,7 +544,8 @@ class Stream:
             return False
         pay = self._chk_partial(pay, pid, self.SCTE35_TID)
         if not pay:
-            # self.pids.scte35.remove(pid)
+            if pid in self.pids.maybe_scte35:
+                self.pids.maybe_scte35.remove(pid)
             return False
         if pay[13] == self.show_null:
             return False
@@ -668,5 +670,7 @@ class Stream:
         if stream_type is 0x06 or 0x86
         add it to self._scte35_pids.
         """
-        if stream_type in ["0x6", "0x86"]:
+        if stream_type in ["0x86"]:
             self.pids.scte35.add(pid)
+        if stream_type in ["0x06"]:
+            self.pids.maybe_scte35.add(pid)
