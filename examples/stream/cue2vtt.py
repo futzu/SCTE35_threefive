@@ -11,7 +11,7 @@ pypy3 cue2vtt.py thevideo.ts | mplayer thevideo.ts -sub -
 
 import sys
 from threefive import Stream
-
+import time
 
 def ts_to_vtt(timestamp):
     """
@@ -30,21 +30,27 @@ def scte35_to_vtt(cue):
     start =0
     end = 0
     duration = None
-    pts_time = cue.packet_data.pts
-    start = cue.packet_data.pts
-    if "pts_time" in cue.command.get():
-        pts_time = cue.command.pts_time
-    if "break_duration" in cue.command.get():
+    pts_time = None
+    upid = None
+    seg_mesg= None
+    now = cue.packet_data.pts
+    if cue.command.has("pts_time"):
+        start= pts_time = cue.command.pts_time+cue.info_section.pts_adjustment
+        if pts_time > now:  time.sleep(pts_time -now)
+    if cue.command.has("break_duration"):
         duration = cue.command.break_duration
-        end =  start + duration -1
-    else:
-        for d in cue.descriptors:
-            if "segmentation_duration" in d.get():
-                duration = d.segmentation_duration
-                end = start + duration -1
+    for d in cue.descriptors:
+        if d.has("segmentation_duration"):
+            duration = d.segmentation_duration
+            if d.has("segmentation_upid"):
+                upid = d.segmentation_upid
+            if d.has("segmentation_message"):
+                seg_mesg = d.segmentation_message
+    if start and duration:
+        end = start + duration
     if end == 0:
         end = start+4
-            
+
     print(f"{ts_to_vtt(start)} --> {ts_to_vtt(end)} ")
 
     print(f"Cmd: {cue.command.name}    ")
@@ -52,6 +58,10 @@ def scte35_to_vtt(cue):
         print(f"PTS:  {pts_time}  ")
     if duration:
         print(f"Duration:  {round(duration,3)} " )
+    if seg_mesg:
+        print(seg_mesg)
+    if upid:
+        print(f"Upid: {upid}")
     print()
 
 
@@ -60,4 +70,3 @@ if __name__ == "__main__":
     print("WEBVTT\n\n\n")
     strm = Stream(arg)
     strm.decode(func=scte35_to_vtt)
-
