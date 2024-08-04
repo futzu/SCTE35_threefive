@@ -118,7 +118,7 @@ threefive proxy https://example.com/video.ts | ffmpeg -i - {ffmpeg commands}
 ```
 ---
 * keyword `encode` - Edit and Re-encode JSON output from threefive
-* [json.out](https://github.com/futzu/SCTE35_threefive/master/json.txt)
+* [json.out](https://github.com/futzu/SCTE35_threefive/blob/master/json.txt)
 * as base64 
 ```lua
 a@fu:~$ cat json.out | threefive encode
