@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/pypy3
 
 """
 threefive command line SCTE35 decoder.
@@ -8,7 +8,8 @@ threefive command line SCTE35 decoder.
 
 import sys
 from time import sleep
-from threefive import Stream, print2, decode, version
+from threefive import Cue,Stream, print2, decode, version
+from new_reader import reader
 import cProfile
 
 REV = "\033[7m"
@@ -113,6 +114,19 @@ write pts, SCTE-35 cue pairs to the file sidecar.txt:{NORM}
 
         threefive sidecar https://example.com/video.ts
 
+{REV} load JSON and encode as a Base64:{NORM}
+    cat json.file | threefive encode
+    
+{REV} load JSON and encode as hex:{NORM}
+    cat json.file | threefive encode hex
+
+{REV} load JSON and encode as an int:{NORM}
+    cat json.file | threefive encode int
+
+{REV} load JSON and encode as bytes:{NORM}
+    cat json.file | threefive encode bytes
+       
+
 {REV}show this help:{NORM}
 
         threefive help
@@ -137,10 +151,30 @@ def print_version():
     print2(f"{version}")
     sys.exit()
 
+def json_load():
+    with  reader(sys.stdin.buffer) as stuff:
+        json = stuff.read().decode()
+        cue = Cue()
+        cue.load(json)
+        if "hex" in sys.argv:
+            print(cue.encode_as_hex())
+            sys.exit()
+        if "int" in sys.argv:
+            print(cue.encode_as_int())
+            sys.exit()
+        if "bytes" in sys.argv:
+            cue.encode()
+            print(cue.bites)
+            sys.exit()
+        print(cue.encode())   
+        sys.exit()
+
 
 print_map = {
     "help": print_help,
     "version": print_version,
+    "encode": json_load,
+
 }
 
 
