@@ -1,10 +1,10 @@
 """
 SCTE35 Splice Commands
 """
-
+import sys
 from .bitn import BitBin
 from .base import SCTE35Base
-
+from .stuff import print2
 
 class SpliceCommand(SCTE35Base):
     """
@@ -142,6 +142,9 @@ class TimeSignal(SpliceCommand):
         self._chk_var(bool, nbin.add_flag, "time_specified_flag", 1)
         if self.time_specified_flag:
             nbin.reserve(6)
+            if not self.pts_time:
+                print2("\033[7mA float for pts_time for the splice command is required.\033[27m")
+                sys.exit()
             nbin.add_int(int(self.as_ticks(self.pts_time)), 33)
         else:
             nbin.reserve(7)
