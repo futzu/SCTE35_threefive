@@ -117,6 +117,29 @@ a@slow:~$ cat sidecar.txt
 threefive proxy https://example.com/video.ts | ffmpeg -i - {ffmpeg commands}
 ```
 ---
+* keyword `encode` - Edit and Re-encode JSON output from threefive
+* [json.out](https://github.com/futzu/SCTE35_threefive/master/json.txt)
+* as base64 
+```lua
+a@fu:~$ cat json.out | threefive encode
+/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw==
+```
+ * as hex
+```lua
+a@fu:~$ cat json.out | threefive encode hex
+0xfc3061000000000000fffff00506fea8cd44ed004b021743554549480000ad7f9f0808000000002cb2d79d350200021743554549480000267f9f0808000000002cb2d79d110000021743554549480000277f9f0808000000002cb2d7b31000008a18869f
+```
+* as an int
+```lua
+a@fu:~$ cat json.out | threefive encode int
+6568749059128831486770192060532589909352206581290249439460423247484378938150399213176211592233234590227802036714452527295011311848713149376955134229649960769281993134835846163707258133030654884112453407592348170135352109879034827455065523871
+```
+* as bytes
+```lua
+a@fu:~$ cat json.out | threefive encode bytes
+b"\xfc0a\x00\x00\x00\x00\x00\x00\xff\xff\xf0\x05\x06\xfe\xa8\xcdD\xed\x00K\x02\x17CUEIH\x00\x00\xad\x7f\x9f\x08\x08\x00\x00\x00\x00,\xb2\xd7\x9d5\x02\x00\x02\x17CUEIH\x00\x00&\x7f\x9f\x08\x08\x00\x00\x00\x00,\xb2\xd7\x9d\x11\x00\x00\x02\x17CUEIH\x00\x00'\x7f\x9f\x08\x08\x00\x00\x00\x00,\xb2\xd7\xb3\x10\x00\x00\x8a\x18\x86\x9f"
+```
+--- 
 *  keyword `help`
 
 ```lua
