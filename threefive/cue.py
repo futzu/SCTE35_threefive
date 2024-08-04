@@ -1,7 +1,7 @@
 """
 threefive.Cue Class
 """
-
+import sys
 from base64 import b64decode, b64encode
 import json
 from .stuff import print2
@@ -288,6 +288,9 @@ class Cue(SCTE35Base):
         """
         if isinstance(stuff, str):
             stuff = json.loads(stuff)
+        if "command" not in stuff:
+            print2("\033[7mA splice command is required\033[27m")
+            sys.exit()
         if "info_section" in stuff:
             self.load_info_section(stuff["info_section"])
         if "command" in stuff:
