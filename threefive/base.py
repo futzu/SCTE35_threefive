@@ -2,10 +2,10 @@
 threefive.base contains
 the class SCTE35Base.
 """
-
+import sys
 import json
 from .bitn import NBin
-
+from.stuff import print2
 
 class SCTE35Base:
     """
@@ -33,10 +33,12 @@ class SCTE35Base:
             err_mesg = (
                 f"\033[7m{var_name} is not set, it should be type {var_type}\033[27m"
             )
-            raise ValueError(err_mesg)
+            print2(err_mesg)
+            sys.exit()
         if not isinstance(var_value, var_type):
             err_mesg = f' \033[7m{var_name} is "{var_value}", it should be type {var_type}\033[27m '
-            raise ValueError(err_mesg)
+            print2(err_mesg)
+            sys.exit()
         nbin_method(var_value, bit_count)
 
     @staticmethod
