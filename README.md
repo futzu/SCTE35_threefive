@@ -17,7 +17,14 @@ ____
 
 # Documentation
 
-* SCTE-35 on the [__command line__](https://github.com/futzu/scte35parser-threefive/blob/master/cli.md)
+* [The cli tool](https://github.com/futzu/scte35parser-threefive/blob/master/cli.md)
+    * Decodes SCTE-35 Strings and MPEGTS
+    * Show Show MPEGTS Stream information
+    * Prints PTS from MPEGTS Streams
+    * Prints Raw SCTE-35 packets
+    * Creates SCTE-35 sidecar files from MPEGTS
+    * Encodes JSON to SCTE-35
+    * Converts SCTE-35 Formats 
 
 * [__Trigger on SCTE-35 events__](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md) using threefive.Stream
 
