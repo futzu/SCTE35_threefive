@@ -6,6 +6,7 @@ to put it here.
 ### The Cue class has a lot of stuff I've never really mentioned. I wanted to wait a while and see if anything blew up. A lot of the Cue methods are for encoding.
 
 ### Cues can be encoded as base64, hex, integers, or bytes
+* Docs
 ```py3
 |  encode(self)
  |      Cue.encode() converts SCTE35 data
@@ -19,6 +20,7 @@ to put it here.
  |      encode_as_int returns self.bites as an int.
  |
 ```
+* How to use
 ```py3
 a@slow:~/SCTE-35-HLS-Sideways$ pypy3
 Python 3.9.16 (7.3.11+dfsg-2, Feb 06 2023, 16:52:03)
