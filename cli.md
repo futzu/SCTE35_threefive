@@ -1,11 +1,20 @@
 <pre>
  <h1>threefive is the SCTE-35 cli tool</h1>
 </pre>
- * the __threefive cli tool__ __automatically__ decodes SCTE-35 Cues in __Base64__, __Bytes__,__Hex__, or __Integers__. 
+
+ ### the __threefive cli tool__ 
+ * __automatically__ decodes SCTE-35 Cues in __Base64__, __Bytes__,__Hex__, or __Integers__. 
  * __Mpegts__ streams are also __automatically__ decoded for SCTE-35 data in Stream Types __0x06__ (bin data) and __0x86__ (SCTE-35)
  * __mpegts__ streams can be __local files__, __stdin__, or served over __http(s)__, __UDP__, or __Multicast__.
+ * Displays __PTS__ from Mpegts streams
+ * Prints __raw SCTE-35 packets__
+ * Parse and __proxy__ Mpegts streams
+ *  Encode __JSON to SCTE-35__
+ *  Convert SCTE-35 Cues from one format to another (like Base64 to Hex)
 
-<br>
+
+
+   <br>
 
 # Using.
  
