@@ -12,7 +12,7 @@ streamtypes.py
 streamtype_map = {
     0x00: "Reserved",
     0x01: "MPEG-1 video",
-    0x02: " H.262  video",
+    0x02: "H.262  video",
     0x03: "MPEG-2 audio",
     0x04: "MPEG-2 halved sample rate audio",
     0x05: "MPEG-2 tabled data",
