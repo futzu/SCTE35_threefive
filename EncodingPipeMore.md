@@ -3,7 +3,7 @@ A lot of people have been looking at the encoding page, and I think the encoding
 but there is a little more encoding stuff in threefive and rather than complicated the encoding page, I wanted 
 to put it here. 
 
-# The Cue class has a lot of stuff I've never really mentioned. I wanted to wait a while and see if anything blew up. A lot of the Cue methods are for encoding.
+### The Cue class has a lot of stuff I've never really mentioned. I wanted to wait a while and see if anything blew up. A lot of the Cue methods are for encoding.
 
 ### Cues can be encoded as base64, hex, integers, or bytes
 ```py3
