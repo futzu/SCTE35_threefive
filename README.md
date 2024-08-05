@@ -10,7 +10,7 @@
 ____
 
 # Latest __threefive__ version is `2`.`4`.`65`
-* Introducing [Command Line Encoding](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md)
+* threefive `2`.`4`.`65` introduces [Command Line Encoding](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md)
  
 ---
 
