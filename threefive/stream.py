@@ -222,9 +222,10 @@ class Stream:
         """
         if self._find_start():
             for pkt in self.iter_pkts():
-                cue = self._parse(pkt)
-                if cue:
-                    func(cue)
+                if pkt[0] == self.SYNC_BYTE:
+                    cue = self._parse(pkt)
+                    if cue:
+                        func(cue)
 
     def _mk_pkts(self, chunk):
         return [
@@ -406,6 +407,7 @@ class Stream:
         in the dict Stream._pid_pts
         """
         payload = self._parse_payload(pkt)
+        payload = self._unpad(payload)
         if len(payload) > 13:
             if self._pts_flag(payload):
                 pts = (payload[9] & 14) << 29
@@ -452,7 +454,7 @@ class Stream:
         """
         head_size = 4
         if self._afc_flag(pkt[3]):
-            pkt = self._unpad_afc(pkt)
+           # pkt = self._unpad_afc(pkt)
             afl = pkt[4]
             head_size += afl + 1  # +1 for afl byte
         return pkt[head_size:]
@@ -466,6 +468,7 @@ class Stream:
         pay = self._parse_payload(pkt)
         if self._same_as_last(pay, pid):
             return False
+        pay= self._unpad(pay)
         if pid in self.pids.pmt:
             return self._parse_pmt(pay, pid)
         if pid == self.pids.PAT_PID:
