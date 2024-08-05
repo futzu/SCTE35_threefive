@@ -1,23 +1,22 @@
 <pre>
  <h1>threefive is the SCTE-35 cli tool</h1>
 </pre>
-
- ### the __threefive cli tool__ 
- * __automatically__ decodes SCTE-35 Cues in __Base64__, __Bytes__,__Hex__, or __Integers__. 
- * __Mpegts__ streams are also __automatically__ decoded for SCTE-35 data in Stream Types __0x06__ (bin data) and __0x86__ (SCTE-35)
- * __mpegts__ streams can be __local files__, __stdin__, or served over __http(s)__, __UDP__, or __Multicast__.
- * Displays __PTS__ from Mpegts streams
- * Prints __raw SCTE-35 packets__
- * Parse and __proxy__ Mpegts streams
- *  Encode __JSON to SCTE-35__
- *  Convert SCTE-35 Cues from one format to another (like Base64 to Hex)
-
-
-
    <br>
 
 # Using.
- 
+
+* [Parse](#parse) Decode SCTE-35 Strings and MPEGTS
+* [Version](#version) Display threefive version
+* [Show](#show)  Show MPEGTS Stream information
+* [PTS](#pts) Print PTS from MPEGTS Streams
+* [Packets](#packets) Print Raw SCTE-35 packets
+* [Sidecar](#sidecar) Create SCTE-35 sidecar files from MPEGTS
+* [Encode](#encode) JSON to SCTE-35
+* [Convert](#convert) SCTE-35 Formats
+* [Help](#help) Display threefive help
+
+
+ ### Parse 
 * `Parse base64`
 ```js
 threefive '/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo='
@@ -46,7 +45,7 @@ threefive udp://@235.35.3.5:3535
 
 
 ```
-
+### Version
 
 ## keywords
 the threefive cli uses keywords for additional functionality.
@@ -59,6 +58,7 @@ a@slow:~/threefive$
                            
 ```
 ---
+### Show
 * keyword `show`- display mpegts stream info
 
  ```lua
@@ -75,7 +75,7 @@ Program: 1
 		Pid: 257[0x101]	Type: 0xf AAC Audio
 ```
 ---
-
+### PTS
 * keyword `pts` -  display realtime program -> pts
 
 ```lua
@@ -90,6 +90,8 @@ a@fu:~$ threefive pts /home/a/msnbc.ts
 1-> 3164.576089
 ```
 ---
+### Packets
+
 * keyword `packets` - show raw SCTE-35 packets
 ```lua
 a@slow:~/threefive$ threefive packets https://futzu.com/xaa.ts
@@ -100,6 +102,7 @@ b'G@\x86\x02\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00\x08\x9
 
 ```
 ---
+# Sidecar
 * keyword `sidecar` - Generate a sidecar file of pts,cue pairs from a stream
 ```lua
   threefive sidecar https://futzu.com/xaa.ts
@@ -121,11 +124,14 @@ a@slow:~$ cat sidecar.txt
 20.218822,/DAWAAAAAAAAAP/wBQb+ABvbpAAAoT8LNA==
 ```
 ---
+### Proxy
+
 * keyword `proxy` - parse the SCTE-35 from a stream and write it to stdout (for piping to ffmpeg and such)
 ```lua
 threefive proxy https://example.com/video.ts | ffmpeg -i - {ffmpeg commands}
 ```
 ---
+### Encode
 * keyword `encode` - Edit and Re-encode JSON output from threefive
 * [json.out](https://github.com/futzu/SCTE35_threefive/blob/master/json.txt)
 * as base64 
@@ -148,6 +154,17 @@ a@fu:~$ cat json.out | threefive encode int
 a@fu:~$ cat json.out | threefive encode bytes
 b"\xfc0a\x00\x00\x00\x00\x00\x00\xff\xff\xf0\x05\x06\xfe\xa8\xcdD\xed\x00K\x02\x17CUEIH\x00\x00\xad\x7f\x9f\x08\x08\x00\x00\x00\x00,\xb2\xd7\x9d5\x02\x00\x02\x17CUEIH\x00\x00&\x7f\x9f\x08\x08\x00\x00\x00\x00,\xb2\xd7\x9d\x11\x00\x00\x02\x17CUEIH\x00\x00'\x7f\x9f\x08\x08\x00\x00\x00\x00,\xb2\xd7\xb3\x10\x00\x00\x8a\x18\x86\x9f"
 ```
+### Convert
+
+* Convert Base64 SCTE-35 to Hex SCTE-35
+```lua
+a@fu:~$ threefive '/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw==' 2>&1 | threefive encode hex
+```
+```lua
+0xfc3061000000000000fffff00506fea8cd44ed004b021743554549480000ad7f9f0808000000002cb2d79d350200021743554549480000267f9f0808000000002cb2d79d110000021743554549480000277f9f0808000000002cb2d7b31000008a18869f
+
+```
+### Help
 --- 
 *  keyword `help`
 
