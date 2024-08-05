@@ -77,6 +77,7 @@ b'\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00Re\xc0\x00\x00gS\
 ___
 
 ## Converting
+* Converting involves piping one threefive command into another.
 * `From`:
   * Base64
   * Hex
