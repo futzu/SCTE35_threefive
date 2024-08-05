@@ -102,7 +102,6 @@
     "packet_data": {
         "pid": "0x40b",
         "program": 1030,
-        "pts_ticks": 2131027203,             
         "pts": 23678.080033
     }
 
