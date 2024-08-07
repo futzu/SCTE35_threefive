@@ -10,7 +10,10 @@
 <br>
 ____
 
-# Latest __threefive__ version is `2`.`4`.`67`
+# Latest __threefive__ version is `2`.`4`.`69`
+* threefive `2`.`4`.`69`
+    * fix for parsing ffmpeg "bin data" for SCTE-35
+    * return without error for invalid files
 * threefive `2`.`4`.`65` introduces [Command Line Encoding](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md)
  
 ---
