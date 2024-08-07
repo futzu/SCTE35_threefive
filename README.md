@@ -32,7 +32,7 @@ ____
 
 * SCTE-35 code [__Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 
-* [__Encoding__](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [__Encoding | more__ ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md)
+* [__Encoding__](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [__Encoding | more__ ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md) and [JSON to SCTE-35 Encoding](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md)
 
 * [__Parse SCTE-35 programmatically__](https://github.com/futzu/scte35parser-threefive/blob/master/prog.md) with a few lines of code
 
