@@ -18,17 +18,17 @@ ____
 # Documentation
 
 * [The cli tool](https://github.com/futzu/scte35parser-threefive/blob/master/cli.md)
-    * Decodes SCTE-35 Strings and MPEGTS
-    * Show Show MPEGTS Stream information
-    * Prints PTS from MPEGTS Streams
-    * Prints Raw SCTE-35 packets
-    * Creates SCTE-35 sidecar files from MPEGTS
-    * Encodes JSON to SCTE-35
-    * Converts SCTE-35 Formats 
+    * `Decodes` __SCTE-35 Strings and MPEGTS__
+    * `Prints` __MPEGTS Stream__ information
+    * `Prints` __PTS__ from MPEGTS Streams
+    * `Prints` __Raw SCTE-35 packets__
+    * `Creates` SCTE-35 __Sidecar files__ from MPEGTS
+    * `Encodes` __JSON to SCTE-35__
+    * `Converts` __SCTE-35 Formats__ 
 
-* [__Trigger on SCTE-35 events__](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md) using threefive.Stream
+* [__Trigger on SCTE-35 Events__](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md) using threefive.Stream
 
-* Automatic AES decryption with [threefive.Segment](https://github.com/futzu/SCTE35_threefive/blob/master/segment.md)
+* Automatic __AES decryption__ with [threefive.Segment](https://github.com/futzu/SCTE35_threefive/blob/master/segment.md)
 
 * SCTE-35 code [__Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 
@@ -40,7 +40,7 @@ ____
 * [__Issues__](https://github.com/futzu/SCTE35_threefive/blob/master/issues.md) and __featue requests__ and assorted __comments__.
 
 
-* [__FAQ__](#faq) All your questions answered. 
+* [__FAQ__](#faq) All of Your Questions Answered. 
 
 
 
