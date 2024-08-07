@@ -28,6 +28,8 @@ ____
 
 * [__Trigger on SCTE-35 events__](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md) using threefive.Stream
 
+* Automatic AES decryption with [threefive.Segment](https://github.com/futzu/SCTE35_threefive/blob/master/segment.md)
+
 * SCTE-35 code [__Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
 
 * [__Encoding__](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [__Encoding | more__ ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md)
