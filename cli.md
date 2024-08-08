@@ -16,7 +16,8 @@
 * [Help](#help) Display threefive help
 
 
- ### Parse 
+### Parse 
+
 * `Parse base64`
 ```js
 threefive '/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo='
@@ -45,10 +46,11 @@ threefive udp://@235.35.3.5:3535
 
 
 ```
-### Version
 
 ## keywords
 the threefive cli uses keywords for additional functionality.
+
+### `Version`
 
 * keyword `version` - show threefive version
 ```lua
@@ -58,7 +60,8 @@ a@slow:~/threefive$
                            
 ```
 ---
-### Show
+### `Show`
+
 * keyword `show`- display mpegts stream info
 
  ```lua
@@ -75,7 +78,7 @@ Program: 1
 		Pid: 257[0x101]	Type: 0xf AAC Audio
 ```
 ---
-### PTS
+### `PTS`
 * keyword `pts` -  display realtime program -> pts
 
 ```lua
@@ -90,7 +93,7 @@ a@fu:~$ threefive pts /home/a/msnbc.ts
 1-> 3164.576089
 ```
 ---
-### Packets
+### `Packets`
 
 * keyword `packets` - show raw SCTE-35 packets
 ```lua
@@ -102,12 +105,14 @@ b'G@\x86\x02\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00\x08\x9
 
 ```
 ---
-# Sidecar
+### `Sidecar`
+
 * keyword `sidecar` - Generate a sidecar file of pts,cue pairs from a stream
 ```lua
   threefive sidecar https://futzu.com/xaa.ts
+```
 
-cat sidecar.txt
+```lua
 a@slow:~$ cat sidecar.txt
   
 9.241178,/DAWAAAAAAAAAP/wBQb+AAy8lAAA2Olecw==
@@ -124,47 +129,122 @@ a@slow:~$ cat sidecar.txt
 20.218822,/DAWAAAAAAAAAP/wBQb+ABvbpAAAoT8LNA==
 ```
 ---
-### Proxy
+### `Proxy`
 
 * keyword `proxy` - parse the SCTE-35 from a stream and write it to stdout (for piping to ffmpeg and such)
-```lua
+```smalltalk
 threefive proxy https://example.com/video.ts | ffmpeg -i - {ffmpeg commands}
 ```
 ---
-### Encode
+### `Encode`
 * keyword `encode` - Edit and Re-encode JSON output from threefive
-* [json.out](https://github.com/futzu/SCTE35_threefive/blob/master/json.txt)
-* as base64 
-```lua
-a@fu:~$ cat json.out | threefive encode
-/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw==
+The threefive cli tool can now encode JSON to SCTE-35. The JSON needs to be in threefive format. 
+
+*  `a@fu:~$ threefive '/DAWAAAAAAAAAP/wBQb+ABt4xwAAwhCGHw==' 2> json.txt`
+
+*  `cat json.txt`
+
+```json
+ {
+    "info_section": {
+        "table_id": "0xfc",
+        "section_syntax_indicator": false,
+        "private": false,
+        "sap_type": "0x03",
+        "sap_details": "No Sap Type",
+        "section_length": 22,
+        "protocol_version": 0,
+        "encrypted_packet": false,
+        "encryption_algorithm": 0,
+        "pts_adjustment": 0.0,
+        "cw_index": "0x00",
+        "tier": "0x0fff",
+        "splice_command_length": 5,
+        "splice_command_type": 6,
+        "descriptor_loop_length": 0,
+        "crc": "0xc210861f"
+    },
+    "command": {
+        "command_length": 5,
+        "command_type": 6,
+        "name": "Time Signal",
+        "time_specified_flag": true,
+        "pts_time": 20.004344
+    },
+    "descriptors": []
+}
+
 ```
- * as hex
-```lua
-a@fu:~$ cat json.out | threefive encode hex
-0xfc3061000000000000fffff00506fea8cd44ed004b021743554549480000ad7f9f0808000000002cb2d79d350200021743554549480000267f9f0808000000002cb2d79d110000021743554549480000277f9f0808000000002cb2d7b31000008a18869f
+* Change the pts_time 
+    * Here I do it with sed, you can use any editor 
+
+```js
+sed -i 's/20.004344/60.0/' json.txt
 ```
-* as an int
+* Re-encode as Base64
 ```lua
-a@fu:~$ cat json.out | threefive encode int
-6568749059128831486770192060532589909352206581290249439460423247484378938150399213176211592233234590227802036714452527295011311848713149376955134229649960769281993134835846163707258133030654884112453407592348170135352109879034827455065523871
+a@fu:~$ cat json.txt | threefive encode
+
+/DAWAAAAAAAAAP/wBQb+AFJlwAAAZ1PBRA==
 ```
-* as bytes
+
+* Re-encode as Hex
 ```lua
-a@fu:~$ cat json.out | threefive encode bytes
-b"\xfc0a\x00\x00\x00\x00\x00\x00\xff\xff\xf0\x05\x06\xfe\xa8\xcdD\xed\x00K\x02\x17CUEIH\x00\x00\xad\x7f\x9f\x08\x08\x00\x00\x00\x00,\xb2\xd7\x9d5\x02\x00\x02\x17CUEIH\x00\x00&\x7f\x9f\x08\x08\x00\x00\x00\x00,\xb2\xd7\x9d\x11\x00\x00\x02\x17CUEIH\x00\x00'\x7f\x9f\x08\x08\x00\x00\x00\x00,\xb2\xd7\xb3\x10\x00\x00\x8a\x18\x86\x9f"
+a@fu:~$ cat json.txt | threefive encode hex
+0xfc301600000000000000fff00506fe005265c000006753c144
 ```
-### Convert
+
+* Re-encode as an integer
+```lua
+a@fu:~$ cat json.txt | threefive encode int
+1583008701074197245727019716796221242034694813189400685691204
+```
+* Re-encode as bytes
+ ```lua
+a@fu:~$ cat json.txt | threefive encode bytes
+b'\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00Re\xc0\x00\x00gS\xc1D'
+```
+
+___
+### `Convert`
 
 * Convert Base64 SCTE-35 to Hex SCTE-35
-```lua
-a@fu:~$ threefive '/DBhAAAAAAAA///wBQb+qM1E7QBLAhdDVUVJSAAArX+fCAgAAAAALLLXnTUCAAIXQ1VFSUgAACZ/nwgIAAAAACyy150RAAACF0NVRUlIAAAnf58ICAAAAAAsstezEAAAihiGnw==' 2>&1 | threefive encode hex
-```
-```lua
-0xfc3061000000000000fffff00506fea8cd44ed004b021743554549480000ad7f9f0808000000002cb2d79d350200021743554549480000267f9f0808000000002cb2d79d110000021743554549480000277f9f0808000000002cb2d7b31000008a18869f
+* Converting involves piping one threefive command into another.
+* `From`:
+  * Base64
+  * Hex
+* `To`
+  * Base64
+  * Bytes
+  * Hex
+  * Int 
 
+* `Base64` to `hex`
+```js
+a@fu:~$ threefive '/DAWAAAAAAAAAP/wBQb+ABt4xwAAwhCGHw==' 2>&1 | threefive encode hex
 ```
-### Help
+```js
+0xfc301600000000000000fff00506fe001b78c70000c210861f
+```
+* `Hex` to `Integer`
+```js
+a@fu:~$ threefive '0xfc301600000000000000fff00506fe001b78c70000c210861f' 2>&1| threefive encode int
+```
+
+```js
+1583008701074197245727019716796221242033681613329959740278303
+```
+
+* `Hex` to `Bytes`
+```js
+
+a@fu:~$ threefive '0xfc301600000000000000fff00506fe001b78c70000c210861f' 2>&1| threefive encode bytes
+```
+```js
+b'\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00\x1bx\xc7\x00\x00\xc2\x10\x86\x1f'
+```
+
+### `Help`
 --- 
 *  keyword `help`
 
