@@ -63,7 +63,7 @@ a@slow:~/threefive$
 </details>
 
 ## 
-* [The cli tool](https://github.com/futzu/scte35parser-threefive/blob/master/cli.md)
+* [__threefive on the command line__](https://github.com/futzu/scte35parser-threefive/blob/master/cli.md)
     * [`Decodes`](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#parse) __SCTE-35 Strings and MPEGTS__
     * [`Prints`](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#show) __MPEGTS Stream__ information
     * [`Prints`](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#pts) __PTS__ from MPEGTS Streams
