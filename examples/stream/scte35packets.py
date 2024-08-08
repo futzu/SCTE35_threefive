@@ -3,12 +3,17 @@
 """
 scte35packets.py 
 
+
     print out the raw SCTE-35 packets in a stream or file.
 
 
 Use like:
 
     a@slow:~$ python3 scte35packets.py https://futzu.com/xaa.ts
+
+This  functionality is also available in the threefive command line tool:
+
+    threefive packets https://futzu.com/xaa.ts
 
 """
 
