@@ -71,6 +71,7 @@ a@slow:~/threefive$
     * `Creates` SCTE-35 __Sidecar files__ from MPEGTS
     * `Encodes` __JSON to SCTE-35__
     * `Converts` __SCTE-35 Formats__ 
+___
 
 * [__Trigger on SCTE-35 Events__](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md) using threefive.Stream
 * Automatic __AES decryption__ with [threefive.Segment](https://github.com/futzu/SCTE35_threefive/blob/master/segment.md)
@@ -80,7 +81,7 @@ a@slow:~/threefive$
 * [__Parse SCTE-35 programmatically__](https://github.com/futzu/scte35parser-threefive/blob/master/prog.md) with a few lines of code
 * [__Issues__](https://github.com/futzu/SCTE35_threefive/blob/master/issues.md) and __featue requests__ and assorted __comments__.
 * [__FAQ__](#faq) All of Your Questions Answered. 
-
+___
 
  <details><summary>Cue Class</summary>
 
