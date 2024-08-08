@@ -20,38 +20,9 @@ ____
 
 # Documentation
 
-* [The cli tool](https://github.com/futzu/scte35parser-threefive/blob/master/cli.md)
-    * `Decodes` __SCTE-35 Strings and MPEGTS__
-    * `Prints` __MPEGTS Stream__ information
-    * `Prints` __PTS__ from MPEGTS Streams
-    * `Prints` __Raw SCTE-35 packets__
-    * `Creates` SCTE-35 __Sidecar files__ from MPEGTS
-    * `Encodes` __JSON to SCTE-35__
-    * `Converts` __SCTE-35 Formats__ 
-
-* [__Trigger on SCTE-35 Events__](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md) using threefive.Stream
-
-* Automatic __AES decryption__ with [threefive.Segment](https://github.com/futzu/SCTE35_threefive/blob/master/segment.md)
-
-* SCTE-35 code [__Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
-
-* [__Encoding__](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [__Encoding | more__ ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md) and [JSON to SCTE-35 Encoding](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md)
-
-* [__Parse SCTE-35 programmatically__](https://github.com/futzu/scte35parser-threefive/blob/master/prog.md) with a few lines of code
-
-
-* [__Issues__](https://github.com/futzu/SCTE35_threefive/blob/master/issues.md) and __featue requests__ and assorted __comments__.
-
-
-* [__FAQ__](#faq) All of Your Questions Answered. 
-
-
-
 <details><summary>Install</summary>
 
- 
-
- 
+  
 * install threefive with pip
 * threefive has two third party package dependencies and I wrote one of them.
 * pip will automatically install PyAES and [new_reader](https://github.com/futzu/new_reader) 
@@ -91,7 +62,24 @@ a@slow:~/threefive$
 
 </details>
 
+## 
+* [The cli tool](https://github.com/futzu/scte35parser-threefive/blob/master/cli.md)
+    * `Decodes` __SCTE-35 Strings and MPEGTS__
+    * `Prints` __MPEGTS Stream__ information
+    * `Prints` __PTS__ from MPEGTS Streams
+    * `Prints` __Raw SCTE-35 packets__
+    * `Creates` SCTE-35 __Sidecar files__ from MPEGTS
+    * `Encodes` __JSON to SCTE-35__
+    * `Converts` __SCTE-35 Formats__ 
 
+* [__Trigger on SCTE-35 Events__](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md) using threefive.Stream
+* Automatic __AES decryption__ with [threefive.Segment](https://github.com/futzu/SCTE35_threefive/blob/master/segment.md)
+* Display SCTE-35 Data as [__WebVTT__ subtitles in Video](https://github.com/futzu/SCTE35_threefive/blob/master/examples/stream/cue2vtt.py)
+* SCTE-35 code [__Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
+* [__Encoding__](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [__Encoding | more__ ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md) and [JSON to SCTE-35 Encoding](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md)
+* [__Parse SCTE-35 programmatically__](https://github.com/futzu/scte35parser-threefive/blob/master/prog.md) with a few lines of code
+* [__Issues__](https://github.com/futzu/SCTE35_threefive/blob/master/issues.md) and __featue requests__ and assorted __comments__.
+* [__FAQ__](#faq) All of Your Questions Answered. 
 
 
  <details><summary>Cue Class</summary>
@@ -571,6 +559,7 @@ private_data = b'threefive kicks ass'
 
 </details>
 
+---
  Powered by threefive
 ---
 <br>⚡ [sideways](https://github.com/futzu/sideways) inject SCTE-35 into HLS via manifest manipulation.
