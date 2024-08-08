@@ -5,6 +5,7 @@
 
 # Using.
 
+* [Help](#help) Display threefive help
 * [Parse](#parse) Decode SCTE-35 Strings and MPEGTS
 * [Version](#version) Display threefive version
 * [Show](#show)  Show MPEGTS Stream information
@@ -13,11 +14,30 @@
 * [Sidecar](#sidecar) Create SCTE-35 sidecar files from MPEGTS
 * [Encode](#encode) JSON to SCTE-35
 * [Convert](#convert) SCTE-35 Formats
-* [Help](#help) Display threefive help
 
 
-### Parse 
+## `Help`
+* Use the help man, I spent a lot of time trying to get it to make sense.
 
+```lua
+threefive help
+```
+
+## `Parse` 
+* By default, threefive will parse SCTE-35 from:
+* Strings
+	* Bytes
+	* Base64
+	* Hex
+	* Integers
+   
+* MPEGTS 
+	* Files
+ 	* Https
+  	* Multicast
+  	* UDP
+  	* Stdin
+___
 * `Parse base64`
 ```js
 threefive '/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo='
@@ -47,10 +67,10 @@ threefive udp://@235.35.3.5:3535
 
 ```
 
-## keywords
+# keywords
 the threefive cli uses keywords for additional functionality.
 
-### `Version`
+## `Version`
 
 * keyword `version` - show threefive version
 ```lua
@@ -60,7 +80,7 @@ a@slow:~/threefive$
                            
 ```
 ---
-### `Show`
+## `Show`
 
 * keyword `show`- display mpegts stream info
 
@@ -78,7 +98,7 @@ Program: 1
 		Pid: 257[0x101]	Type: 0xf AAC Audio
 ```
 ---
-### `PTS`
+## `PTS`
 * keyword `pts` -  display realtime program -> pts
 
 ```lua
@@ -93,7 +113,7 @@ a@fu:~$ threefive pts /home/a/msnbc.ts
 1-> 3164.576089
 ```
 ---
-### `Packets`
+## `Packets`
 
 * keyword `packets` - show raw SCTE-35 packets
 ```lua
@@ -105,7 +125,7 @@ b'G@\x86\x02\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00\x08\x9
 
 ```
 ---
-### `Sidecar`
+## `Sidecar`
 
 * keyword `sidecar` - Generate a sidecar file of pts,cue pairs from a stream
 ```lua
@@ -129,14 +149,14 @@ a@slow:~$ cat sidecar.txt
 20.218822,/DAWAAAAAAAAAP/wBQb+ABvbpAAAoT8LNA==
 ```
 ---
-### `Proxy`
+## `Proxy`
 
 * keyword `proxy` - parse the SCTE-35 from a stream and write it to stdout (for piping to ffmpeg and such)
 ```smalltalk
 threefive proxy https://example.com/video.ts | ffmpeg -i - {ffmpeg commands}
 ```
 ---
-### `Encode`
+## `Encode`
 * keyword `encode` - Edit and Re-encode JSON output from threefive
 The threefive cli tool can now encode JSON to SCTE-35. The JSON needs to be in threefive format. 
 
@@ -206,7 +226,7 @@ b'\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00Re\xc0\x00\x00gS\
 ```
 
 ___
-### `Convert`
+## `Convert`
 
 * Convert Base64 SCTE-35 to Hex SCTE-35
 * Converting involves piping one threefive command into another.
@@ -244,13 +264,6 @@ a@fu:~$ threefive '0xfc301600000000000000fff00506fe001b78c70000c210861f' 2>&1| t
 b'\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00\x1bx\xc7\x00\x00\xc2\x10\x86\x1f'
 ```
 
-### `Help`
---- 
-*  keyword `help`
-
-```lua
-threefive help
-```
 ---
 
 
