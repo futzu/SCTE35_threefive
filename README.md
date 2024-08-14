@@ -582,7 +582,6 @@ private_data = b'threefive kicks ass'
 ---
 <br>⚡ [Diagram](https://github.com/futzu/threefive/blob/master/cue.md) of a threefive SCTE-35 Cue.
 <br>⚡ [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) and SCTE35 and Stream Type 0x6 bin data.
-![image](https://github.com/user-attachments/assets/014f0e17-9def-410c-ac5d-8dc472c250be)
 
 <br>⚡ [Issues and Bugs and Feature Requests](https://github.com/futzu/scte35-threefive/issues) will be considered. Please don't make me regret it. 
 
