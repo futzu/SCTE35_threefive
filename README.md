@@ -64,13 +64,13 @@ a@slow:~/threefive$
 
 ## 
 * [__threefive on the command line__](https://github.com/futzu/scte35parser-threefive/blob/master/cli.md)
-    * [`Decodes`](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#parse) __SCTE-35 Strings and MPEGTS__
-    * [`Prints`](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#show) __MPEGTS Stream__ information
-    * [`Prints`](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#pts) __PTS__ from MPEGTS Streams
-    * [`Prints`](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#packets) __Raw SCTE-35 packets__
-    * [`Creates`](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#sidecar) SCTE-35 __Sidecar files__ from MPEGTS
-    * [`Encodes`](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#encode) __JSON to SCTE-35__
-    * [`Converts`](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#convert) __SCTE-35 Formats__ 
+    * [__Decodes__](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#parse) __SCTE-35 Strings and MPEGTS__
+    * [__Prints__](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#show) __MPEGTS Stream__ information
+    * [__Prints__](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#pts) __PTS__ from MPEGTS Streams
+    * [__Prints__](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#packets) __Raw SCTE-35 packets__
+    * [__Creates__](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#sidecar) SCTE-35 __Sidecar files__ from MPEGTS
+    * [__Encodes__](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#encode) __JSON to SCTE-35__
+    * [__Converts__](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#convert) __SCTE-35 Formats__ 
 ___
 
 * [__Trigger on SCTE-35 Events__](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md) using threefive.Stream
