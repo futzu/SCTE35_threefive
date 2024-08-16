@@ -17,6 +17,32 @@ ____
 * threefive `2`.`4`.`65` introduces [Command Line Encoding](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md)
  
 ---
+# Issues and Feature Requests and Asking Me for Help.
+threefive is by far the best SCTE-35 software available.
+Why? It's not just me, it's al the folks that have he;ped along the way. 
+I'm not talking just about writing code. threefive has changed because of feedback from users. 
+This is  Open Soure, I put the code and my expertise in the pot, your help find bugs and give feedback.
+<br>
+Wheb you ask for my help, I take you seriously and I resolve most issues in a matter of hours. 
+<br>
+When I give you a solution, you have a responsibility to report back what happened. 
+
+#### It's not about me, it's about Open Soure. 
+
+I learned everything I know from Open Source projects.
+
+#### I wrote threefive for two reasons:
+1. Somebody bet me a thousand dollars that I couldn't write a SCTE-35 parser
+2. I was trying to impress a girl
+3. Because I felt like I owed Open Source.
+
+
+Like my Dad used to tell me, 
+
+### 'Son, Do something, even if it's wrong. '
+
+United we stand, divided we fall.
+
 
 # Documentation
 
