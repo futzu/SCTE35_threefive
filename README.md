@@ -41,7 +41,6 @@ Like my Dad used to tell me,
 
 ### 'Son, Do something, even if it's wrong. '
 
-United we stand, divided we fall.
 
 
 # Documentation
