@@ -1,6 +1,10 @@
 
 # threefive is the highest rated SCTE-35 parser. Ever.
-### [Now with Command Line SCTE-35 Encoding and Converting.](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md) (Boom << Boom)
+
+###  _" If I had some SCTE-35 I would use threefive, absolutely! "_  
+~ Lovely, (featured dancer the Pink Pony)
+
+
 
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
@@ -9,6 +13,8 @@
 <br> `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 <br>
 ____
+
+### [Now with Command Line SCTE-35 Encoding and Converting.](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md) (Boom << Boom)
 
 # Latest __threefive__ version is `2`.`4`.`69`
 * threefive `2`.`4`.`69`
