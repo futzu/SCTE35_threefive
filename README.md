@@ -2,10 +2,10 @@
 # threefive is the highest rated SCTE-35 parser. Ever.
 
 ## The Reviews are In!
-*  **" If I had some SCTE-35 I would use threefive, absolutely! "**  ~ Lovely, (featured dancer the Pink Pony)
-* __" threefive saved my marriage! "__  ~ Dan in Denver
-* __" threefive rocks my face! "__  ~ Joe from Jersey
-* __" If you say SCTE-35 one more time, I'm leaving you! "__  ~ My ex-girlfriend
+*  __If I had some SCTE-35 I would use threefive, absolutely!__  ~ Lovely, featured dancer the Pink Pony
+*  __threefive saved my marriage!__  ~ Dan in Denver
+* __threefive rocks my face!__  ~ Joe from Jersey
+*  __If you say SCTE-35 one more time, I'm leaving you!__  ~ My ex-girlfriend
 
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
