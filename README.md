@@ -1,9 +1,10 @@
 
 # threefive is the highest rated SCTE-35 parser. Ever.
 
-###  _" If I had some SCTE-35 I would use threefive, absolutely! "_  
-~ Lovely, (featured dancer the Pink Pony)
-
+## The Reviews are In!
+*  _" If I had some SCTE-35 I would use threefive, absolutely! "_  ~ Lovely, (featured dancer the Pink Pony)
+* _" threefive saved my marriage "_  ~ Dan in Denver
+* _" threefive rocks my face! "_  ~ Joe from Jersey
 
 
 
