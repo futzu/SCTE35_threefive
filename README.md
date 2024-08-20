@@ -5,7 +5,7 @@
 *  _" If I had some SCTE-35 I would use threefive, absolutely! "_  ~ Lovely, (featured dancer the Pink Pony)
 * _" threefive saved my marriage "_  ~ Dan in Denver
 * _" threefive rocks my face! "_  ~ Joe from Jersey
-
+* _" If you say SCTE-35 one more time I'm leaving you "_  ~ My ex-girlfriend
 
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
