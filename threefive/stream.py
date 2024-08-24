@@ -337,7 +337,7 @@ class Stream:
         pkt_count = 0
         self.info = True
         while True:
-            for pkt in self.iter_pkts(5):
+            for pkt in self.iter_pkts():
                 pkt_count += 1
                 self._parse_info(pkt)
             if self.maps.prgm.keys():
@@ -502,7 +502,7 @@ class Stream:
             self._parse_pcr(pkt, pid)
         if self._pusi_flag(pkt):
             self._parse_pts(pkt, pid)
-        if pid in self.pids.scte35 or pid in self.pids.maybe_scte35:
+        if pid in (self.pids.scte35 | self.pids.maybe_scte35):
             cue = self._parse_scte35(pkt, pid)
         return cue
 
