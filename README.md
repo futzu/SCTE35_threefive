@@ -15,6 +15,11 @@ ____
     * fix for parsing ffmpeg "bin data" for SCTE-35
     * return without error for invalid files
 * threefive `2`.`4`.`65` introduces [Command Line Encoding](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md)
+
+# New! [dashscte35](https://github.com/futzu/dashscte35) 
+* Parse SCTE-35 from dash events. 
+* Supports xml and binary formats.
+* Of course it's powered by threefive.
  
 # Documentation
 
