@@ -16,16 +16,6 @@ ____
     * return without error for invalid files
 * threefive `2`.`4`.`65` introduces [Command Line Encoding](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md)
  
----
-# Damn, you make a lot of misnakes.
-threefive automatically fixes several common mistakes made with SCTE-35.
-* Base64 encoded strings should have a length that's a multiple of four, threefive will pad strings as needed.
-*  threefive zero pads hex strings as needed to match bit lengths.
-*  When encoding, threefive recalculates lengths and fixes bad tags and crcs and identifiers.
-*  Segmentation Descriptors are often missing the vars sub_segment_num and sub_segments_expected, threefive adds them when needed.
-  <br> 
-
-
 # Documentation
 
 <details><summary>Install</summary>
@@ -567,6 +557,19 @@ private_data = b'threefive kicks ass'
 
 
 </details>
+
+ 
+
+# Damn, you make a lot of misnakes.
+threefive automatically fixes several common mistakes made with SCTE-35.
+* Base64 encoded strings should have a length that's a multiple of four, threefive will pad strings as needed.
+*  threefive zero pads hex strings as needed to match bit lengths.
+*  When encoding, threefive recalculates lengths and fixes bad tags and crcs and identifiers.
+*  Segmentation Descriptors are often missing the vars sub_segment_num and sub_segments_expected, threefive adds them when needed.
+  <br> 
+
+
+
 
 ---
  Powered by threefive
