@@ -1,13 +1,6 @@
 
 # threefive is the highest rated SCTE-35 parser. Ever.
 
-## The Reviews are In!
-*  __If I had some SCTE-35 I would use threefive, absolutely!__  ~ Lovely, featured dancer the Pink Pony
-*  __threefive saved my marriage!__  ~ Dan in Denver
-* __threefive rocks my face!__  ~ Joe from Jersey
-*  __If you say SCTE-35 one more time, I'm leaving you!__  ~ My ex-girlfriend
-___
-
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
 <br> `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
 <br> `Parses` __SCTE-35__ from  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
@@ -15,7 +8,7 @@ ___
 <br>
 ____
 
-### [Now with Command Line SCTE-35 Encoding and Converting.](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md) (Boom << Boom)
+### [Now with Command Line SCTE-35 Encoding and Converting.](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md) 
 
 # Latest __threefive__ version is `2`.`4`.`69`
 * threefive `2`.`4`.`69`
@@ -24,30 +17,13 @@ ____
 * threefive `2`.`4`.`65` introduces [Command Line Encoding](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md)
  
 ---
-# Issues and Feature Requests and Asking Me for Help.
-threefive is by far the best SCTE-35 software available.
-Why? It's not just me, it's al the folks that have he;ped along the way. 
-I'm not talking just about writing code. threefive has changed because of feedback from users. 
-This is  Open Soure, I put the code and my expertise in the pot, your help find bugs and give feedback.
-<br>
-Wheb you ask for my help, I take you seriously and I resolve most issues in a matter of hours. 
-<br>
-When I give you a solution, you have a responsibility to report back what happened. 
-
-#### It's not about me, it's about Open Soure. 
-
-I learned everything I know from Open Source projects.
-
-#### I wrote threefive for two reasons:
-1. Somebody bet me a thousand dollars that I couldn't write a SCTE-35 parser
-2. I was trying to impress a girl
-3. Because I felt like I owed Open Source.
-
-
-Like my Dad used to tell me, 
-
-### 'Son, Do something, even if it's wrong. '
-
+# Damn, you make a lot of misnakes.
+threefive automatically fixes several common mistakes made with SCTE-35.
+* Base64 encoded strings should have a length that's a multiple of four, threefive will pad strings as needed.
+*  threefive zero pads hex strings as needed to match bit lengths.
+*  When encoding, threefive recalculates lengths and fixes bad tags and crcs and identifiers.
+*  Segmentation Descriptors are often missing the vars sub_segment_num and sub_segments_expected, threefive adds them when needed.
+  <br> 
 
 
 # Documentation
