@@ -16,10 +16,9 @@ ____
     * return without error for invalid files
 * threefive `2`.`4`.`65` introduces [Command Line Encoding](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md)
 
-# New! [dashscte35](https://github.com/futzu/dashscte35) 
-* Parse SCTE-35 from dash events. 
-* Supports xml and binary formats.
-* Of course it's powered by threefive.
+# New! <s>[dashscte35](https://github.com/futzu/dashscte35) </s>
+ <b>I am backpeddling on Dash support</b>.<br> It's way too complicated, <br>there are too many variations.
+ <br>Ad insertion needs to be easier, not harder. 
  
 # Documentation
 
