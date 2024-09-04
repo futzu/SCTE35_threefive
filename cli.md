@@ -1,9 +1,5 @@
-<pre>
  <h1>threefive is the SCTE-35 cli tool</h1>
-</pre>
    <br>
-
-# Using.
 
 * [Help](#help) Display threefive help
 * [Parse](#parse) Decode SCTE-35 Strings and MPEGTS
