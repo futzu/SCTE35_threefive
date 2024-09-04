@@ -8,14 +8,10 @@
 <br>
 ____
 
+<br>⚡ [The Only Accurate Online SCTE-35 Parser](https://iodisco.com/cgi-bin/scte35parser) <br> All of the other online SCTE-35 parsers have errors or are outdated. Seriously.
+
+
 # Latest __threefive__ version is `2`.`4`.`69`
-
-* threefive `2`.`4`.`69`
-    * fix for parsing ffmpeg "bin data" for SCTE-35
-    * return without error for invalid files
-   
-* threefive `2`.`4`.`65` introduces [Command Line Encoding](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md)
-
 
 # Documentation
 
@@ -562,19 +558,18 @@ private_data = b'threefive kicks ass'
 ---
  Powered by threefive
 ---
-<br>⚡ [sideways](https://github.com/futzu/sideways) inject SCTE-35 into HLS via manifest manipulation.
-<br>⚡ [adbreak2](https://github.com/futzu/adbreak2) a cli tool that quickly and easily generates SCTE-35 Cues for HLS and stuff.
-<br>⚡ [Ultra Mega Zoom Zoom](https://github.com/futzu/umzz) ABR HLS segmenter and SCTE-35 inserter. 
-<br>⚡ [POIS Server](https://github.com/scunning1987/pois_reference_server) is Super Cool.
-<br>⚡ [bpkio-cli](https://pypi.org/project/bpkio-cli/): A command line interface to the broadpeak.io APIs. 
+<br>⚡ [__threefive online SCTE-35 Parser__](https://iodisco.com/cgi-bin/scte35parser)
 <br>⚡ [x9k3](https://github.com/futzu/x9k3): SCTE-35 HLS Segmenter and Cue Inserter.
-<br>⚡ [amt-play ](https://github.com/vivoh-inc/amt-play) uses x9k3.
+<br>⚡ [sideways](https://github.com/futzu/sideways) inject SCTE-35 into HLS via manifest manipulation.
 <br>⚡ [m3ufu](https://github.com/futzu/m3ufu): SCTE-35 m3u8 Parser.
 <br>⚡ [six2scte35](https://github.com/futzu/six2scte35): ffmpeg changes SCTE-35 stream type to 0x06 bin data, six2scte35 changes it back.
 <br>⚡ [SuperKabuki](https://github.com/futzu/SuperKabuki): SCTE-35 Packet Injection.
 <br>⚡ [showcues](https://github.com/futzu/showcues) m3u8 SCTE-35 parser.
-<br>
-<br>⚡ [__threefive online SCTE-35 Parser__](https://iodisco.com/cgi-bin/scte35parser)
+<br>⚡ [adbreak2](https://github.com/futzu/adbreak2) a cli tool that quickly and easily generates SCTE-35 Cues for HLS and stuff.
+<br>⚡ [Ultra Mega Zoom Zoom](https://github.com/futzu/umzz) ABR HLS segmenter and SCTE-35 inserter. 
+<br>⚡ [POIS Server](https://github.com/scunning1987/pois_reference_server) is Super Cool.
+<br>⚡ [bpkio-cli](https://pypi.org/project/bpkio-cli/): A command line interface to the broadpeak.io APIs. 
+<br>⚡ [amt-play ](https://github.com/vivoh-inc/amt-play) uses x9k3.
 <br>⚡[__threefive online SCTE-35 Encoder__](https://iodisco.com/cgi-bin/scte35encoder) 
 
  threefive | more
