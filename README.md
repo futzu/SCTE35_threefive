@@ -15,6 +15,9 @@ ____
 
 # Documentation
 
+* [__FAQ__](#faq) All of Your Questions Answered. 
+
+
 <details><summary>Install</summary>
 
   
@@ -76,7 +79,6 @@ a@slow:~/threefive$
    * [__Encoding__](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [__Encoding | more__ ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md) and [JSON to SCTE-35 Encoding](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md)
    * [__Parse SCTE-35 programmatically__](https://github.com/futzu/scte35parser-threefive/blob/master/prog.md) with a few lines of code
    
-* [__FAQ__](#faq) All of Your Questions Answered. 
 
  <details><summary>Cue Class</summary>
 
@@ -583,29 +585,30 @@ private_data = b'threefive kicks ass'
 
 # `FAQ`
 
-<b> Q)</b>  "How do I capture the output of threefive?"
+<b> `Q)`  "How do I capture the output of threefive?"</b>
 <br><br>
-<b> A) </b> Redirect 2.   
+<b> `A)`  Redirect 2. </b>  
 ```sh
 a@fu:~$ threefive input.ts 2> output.txt
 ```
-*  For piping and such, use 2>&1
+*  <b>For piping and such, use 2>&1</b>
 ```sh
 a@fu:~$ threefive packets  plp0.ts 2>&1 | less
 ```
 
-___
 
-<b> Q)</b> "You aren't on any social media, are you a Chinese secret agent?"
-<br><br>
-<b> A) </b> No, I am not a Chinese agent, threefive is huge in China though.<br>
+---
 
-___
+<b> `Q)` __"SCTE-35 sucks, can we just hire you to do it for us?"__
+<br><br>
+<b>` A)` __Yes.__
 
-<b> Q)</b> "SCTE-35 sucks, can we just hire you to do it for us?"
+---
+
+<b> `Q)` __"You aren't on any social media, are you a Chinese secret agent?"__
 <br><br>
-<b> A) </b> Yes, that's all I've done for the last four years. Just open an issue and we can discuss.
-___
-<br><br>
+<b> `A)` __No.__<br>
+
+
 ![image](https://github.com/user-attachments/assets/aefed0bb-de61-4222-a04b-aaf1192bf4d6)
 
