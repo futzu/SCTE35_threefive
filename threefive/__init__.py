@@ -2,6 +2,7 @@
 threefive.__init__.py
 """
 
+from .dash import cue_from_dash
 from .stuff import print2
 from .cue import Cue
 from .decode import decode
