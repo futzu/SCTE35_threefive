@@ -217,9 +217,9 @@ class DashSCTE35:
 
 
 
-def cue_from_dash(exemel):
+def dash2cue(exemel):
     """
-    cue_from_dash converts a dash event to a threefive.Cue instance
+    dash2cue converts a dash event to a threefive.Cue instance
     and returns the cue and xml converted to json
     """
     ds = DashSCTE35()
