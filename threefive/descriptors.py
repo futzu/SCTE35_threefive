@@ -61,7 +61,10 @@ class SpliceDescriptor(SCTE35Base):
         """
         decode handles Private Descriptors
         """
-        self.private_data = self.bites
+        self.private_data = self.bites.decode()
+        if isinstance(self.private_data,bytes):
+            self.private_data = self.bites.decode()
+        
 
     def encode(self, nbin=None):
         """
@@ -70,6 +73,8 @@ class SpliceDescriptor(SCTE35Base):
         nbin = self._chk_nbin(nbin)
         self._encode_id(nbin)
         if self.private_data:
+            if isinstance(self.private_data,str):
+                self.private_data = self.private_data.encode()
             nbin.add_bites(self.private_data)
         if self.tag in descriptor_map:
             return nbin
