@@ -9,7 +9,7 @@
 * [Packets](#packets) Print Raw SCTE-35 packets
 * [Sidecar](#sidecar) Create SCTE-35 sidecar files from MPEGTS
 * [Encode](#encode) JSON to SCTE-35
-* [Convert](#convert) SCTE-35 Formats
+* [Convert](#convert) SCTE-35 Formats (Base64 to Hex, etc...)
 
 
 ## `Help`
