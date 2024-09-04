@@ -203,13 +203,6 @@ class Cue(SCTE35Base):
         """
         print2(self.get_json())
 
-    def to_stderr(self):
-        """
-        Cue.to_stderr prints the Cue
-        as JSON to sys.stderr
-        """
-        # print(self.get_json(), file=stderr)
-        self.show()
 
     # encode related
 
@@ -244,12 +237,25 @@ class Cue(SCTE35Base):
         self.encode()
         return int.from_bytes(self.bites, byteorder="big")
 
+    def encode2int(self):
+        """
+        encode2int returns self.bites as an int.
+        """
+        return self.encode_as_int()
+
     def encode_as_hex(self):
         """
         encode_as_hex returns self.bites as
         a hex string
         """
         return hex(self.encode_as_int())
+
+    def encode2hex(self):
+        """
+        encode2hex returns self.bites as
+        a hex string
+        """
+        return hex(self.encode2int())
 
     def _encode_crc(self):
         """
