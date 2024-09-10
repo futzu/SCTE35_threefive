@@ -6,8 +6,7 @@
 <br> `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 <br>
 ____
-
-<br><B>⚡ [The Only Accurate Online SCTE-35 Parser ![image](https://github.com/user-attachments/assets/dfacf4d9-ea5d-4a0a-9111-929bfd83c2a1)
+## [The Only Accurate Online SCTE-35 Parser ![image](https://github.com/user-attachments/assets/dfacf4d9-ea5d-4a0a-9111-929bfd83c2a1)
 ](https://iodisco.com/cgi-bin/scte35parser) </B><br><B> All of the other online SCTE-35 parsers have errors or are outdated. Seriously.</B>
 
 
