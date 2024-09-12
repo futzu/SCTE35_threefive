@@ -7,7 +7,8 @@ from .cue import Cue
 from .commands import SpliceInsert, TimeSignal
 from .descriptors import SegmentationDescriptor
 from .segmentation import table20
-
+from .stuff import print2
+from new_reader import reader
 
 def _convert_k(k):
     """
@@ -54,7 +55,7 @@ class DashSCTE35:
         self.active = None
         self.stuff = {}
         self.child_path =[]
-        
+        self.cues = []
 
     def _iter_attrs(self, attrs):
         """
@@ -71,12 +72,22 @@ class DashSCTE35:
         start_element for expat
         """
         self.child_path.append(name)
-        print('->'.join(self.child_path))
+        print2('->'.join(self.child_path))
         self.active = name.split(":")[-1]
         self.stuff[self.active] = {}
         self._iter_attrs(attrs)
 
     def end_element(self,name):
+        """
+        end-element for expat
+        """
+        if name == 'Event':
+            cue = self._build_cue()
+            if cue:
+                print2(json.dumps(self.stuff, indent=4))
+                cue.show()
+                self.stuff = {}
+                self.cues.append(cue)
         self.child_path.pop()
 
     def char_data(self, data):
@@ -92,11 +103,12 @@ class DashSCTE35:
         build_info_section loads a converted
         dash info section dict into a cue.
         """
-        self.stuff["SpliceInfoSection"]["tier"] = hex(
-            self.stuff["SpliceInfoSection"]["tier"]
-        )
+        if isinstance(self.stuff["SpliceInfoSection"]["tier"],int):
+            self.stuff["SpliceInfoSection"]["tier"] = hex(
+                self.stuff["SpliceInfoSection"]["tier"])
         cue.info_section.load(self.stuff["SpliceInfoSection"])
         return cue
+
 
     def _build_splice_insert(self):
         """
@@ -209,21 +221,24 @@ class DashSCTE35:
         p.EndElementHandler = self.end_element
         p.CharacterDataHandler = self.char_data
         p.Parse(exemel, 1)
-        print(json.dumps(self.stuff, indent=4))
-        new_cue = self._build_cue()
-        #new_cue.show()
-        return new_cue
+        print2(json.dumps(self.stuff, indent=4))
 
+        the_cues = self.cues
+        self.cues =[]
+        return the_cues
 
+    def parse_mpd(self,mpd):
+        """
+        parse_mpd parses an mpd file
+        """
+        with reader(mpd) as mpd_fd:
+            return self.parse(mpd_fd.read().decode())
 
-
-def dash2cue(exemel):
+def dash2cues(exemel):
     """
-    dash2cue converts a dash event to a threefive.Cue instance
-    and returns the cue and xml converted to json
+    dash2cues converts a dash events to threefive.Cue instances
+    and returns the cues.
     """
     ds = DashSCTE35()
-    cue = ds.parse(exemel)
-    parsed = ds.stuff
-    return cue,parsed
-
+    cues = ds.parse(exemel)
+    return cues
