@@ -10,14 +10,15 @@
 a@fu:~$ pypy3
 Python 3.9.16 (7.3.11+dfsg-2+deb12u2, May 20 2024, 22:08:06)
 [PyPy 7.3.11 with GCC 12.2.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
+```
+```py3
 >>>> from threefive import DashSCTE35
 >>>> ds = DashSCTE35()
 >>>> mpd ="fu.mpd"
 >>>> cues=ds.parse_mpd(mpd)
 ```
 * Output
-```js
+```awk
 MPD
 MPD->Period
 MPD->Period->BaseURL
