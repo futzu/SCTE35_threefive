@@ -3,6 +3,10 @@
 ![image](https://github.com/user-attachments/assets/3a56410d-c01b-4aa6-8b7a-30bbd41a6842)
 
 # threefive is the Highest Rated SCTE-35 Parser.      Ever.
+<br>
+
+### `Heads Up!` Experimental Dash SCTE35 Parser Expected in The Next Release, `2.4.71`
+
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
 <br> `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
@@ -10,6 +14,8 @@
 <br> `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 <br>
 ____
+
+
 ## [The Only Accurate Online SCTE-35 Parser ](https://iodisco.com/cgi-bin/scte35parser)
 [![image](https://github.com/user-attachments/assets/dfacf4d9-ea5d-4a0a-9111-929bfd83c2a1)
 ](https://iodisco.com/cgi-bin/scte35parser) <br><B> All of the other online SCTE-35 parsers have errors or are outdated. Seriously.</B>
