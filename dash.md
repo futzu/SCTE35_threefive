@@ -1,5 +1,5 @@
 # Dash SCTE-35 Parser Preview
-### Expected in release 2.4.71
+### Expected in release v2.4.71
 ### Everything here may or may not change.
 
 * expat xml parsing
