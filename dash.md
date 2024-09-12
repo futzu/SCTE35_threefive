@@ -1,9 +1,12 @@
 # Dash SCTE-35 Parser Preview
 ### Expected in release 2.4.71
-### _Everything here may or may not change._
+### Everything here may or may not change.
 
+* expat xml parsing
 *  Dash SCTE-35 data is coverted to threefive.Cue instances.
-
+* [source](https://github.com/futzu/SCTE35_threefive/blob/master/threefive/dash.py)
+---
+### Usage:
 * `threefive.DashSCTE35` is the class
 *  the method is `parse_mpd`
 ```py3
