@@ -5,7 +5,8 @@
 # threefive is the Highest Rated SCTE-35 Parser.      Ever.
 <br>
 
-### `Heads Up!` Experimental Dash SCTE35 Parser Expected in The Next Release, `2.4.71`
+### `Heads Up!` [Experimental Dash SCTE35 Parser Expected in Release v2.4.71](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md)
+
 
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
