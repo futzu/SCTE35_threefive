@@ -7,6 +7,7 @@
 
 ### `Heads Up!` [Experimental Dash SCTE35 Parser Expected in Release v2.4.71](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md)
 
+### If you like my work, I'm looking for a cool job. I've been doing contracts for the last five years and now I'd like to work at the same place for a while. Just open an issue or hit me at a@iodisco.com.
 
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
