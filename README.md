@@ -5,7 +5,7 @@
 # threefive is the Highest Rated SCTE-35 Parser.      Ever.
 <br>
 
-### If you like my work, I'm looking for a cool job. I've been doing contracts for the last five years and now I'd like to work at the same place for a while. If you want to talk, just open an issue or hit me at a@iodisco.com.
+### If you like my work, I'm looking for a cool job.When I say 'cool', keep in mind, my idea of cool is SCTE-35,Closed Captioning,HLS, everything video,and bitwise ops.  I've been doing contracts for the last five years and now I'm old, and I'd like to work at the same place for a while. If you want to talk, just open an issue or hit me at a@iodisco.com. I know several languages. Go and Python being my best. 
 ---
 
 ### `Heads Up!` [Experimental Dash SCTE35 Parser Expected in Release v2.4.71](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md)
