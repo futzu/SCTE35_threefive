@@ -25,7 +25,7 @@
    * `-map`  keep SCTE-35 stream 
 
 ```sh
-ffmpeg  -copyts -i  oldvid.ts -vcodec libx265  -map 0  -y  newvid.ts
+ffmpeg  -copyts -i  oldvid.ts -vcodec libx265  -map 0  -muxpreload 0 -muxdelay 0 -y  newvid.ts
 ```
 
 * newvid.ts looks like this
@@ -39,7 +39,12 @@ ffmpeg  -copyts -i  oldvid.ts -vcodec libx265  -map 0  -y  newvid.ts
   Stream #0:4[0x104]: Audio: mp2 ([3][0][0][0] / 0x0003), 48000 Hz, stereo, fltp, 384 kb/s
   Stream #0:5[0x105]: Data: bin_data ([6][0][0][0] / 0x0006)
 ```
-
+ * with the threefive cli tool
+```js
+threefive newvid.ts
+```
+* or write some code
+ 
  * Create 35.py
  
  ```smalltalk
@@ -136,8 +141,12 @@ a@debian:~$ pypy3 35.py  newvid.ts
 ```
 * transcode with ffmpeg and pipe directly to 35.py
 ```sh
-ffmpeg  -copyts -i  oldvid.ts -vcodec libx265  -map 0  -f mpegts - | python3 35.py
+ffmpeg  -copyts -i  oldvid.ts -vcodec libx265  -map 0  -muxpreload 0 -muxdelay 0 -f mpegts - | python3 35.py
 
+```
+* transcode with ffmpeg and pipe into threefive cli
+```js
+ffmpeg  -copyts -i  oldvid.ts -vcodec libx265  -map 0  -muxpreload 0 -muxdelay 0 -f mpegts -| threefive
 ```
 ---
 ## Example 2
@@ -168,3 +177,7 @@ if __name__ == "__main__":
 ./35proxy.py vid.ts | ffplay -
 ```
 ---
+* with threefive cli tool
+```js
+threefive proxy | ffplay -
+```
