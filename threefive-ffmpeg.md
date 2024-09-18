@@ -1,18 +1,8 @@
+### Two Critical things to remember when using ffmpeg with SCTE-35.
+1) `-copyts` you need to keep the timestamps if you're transcoding.
+2) `-muxpreload 0 -muxdelay 0` needs to be used to keep iframes and SCTE-35 aligned.  
 
-
-
-
-# ffmpeg changes SCTE-35 stream type from 0x86 to 0x6, [kabuki](https://github.com/futzu/kabuki) changes it back.
-
-
-
-
-
-
-
-
-
-## threefive works very well with ffmpeg. 
+# threefive works very well with ffmpeg. 
 * __ffmpeg changes the SCTE-35 (0x86) stream type to bin data (0x6)__
 * __threefive is the only SCTE35 tool that parses both  SCTE-35 `(0x86)` and bin data `(0x6)` stream types__.  
 
