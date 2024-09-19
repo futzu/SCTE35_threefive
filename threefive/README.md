@@ -20,5 +20,6 @@
 * [stuff.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stuff.py)   `print2` function.
 * [upids.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upids.py)   `Segmentation Upids`  classes.
 * [version.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/version.py)  `threefive.version`
+* [xml.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/xml.py)  `threefive.xml.Node` class and several xml related functions.
 
 
