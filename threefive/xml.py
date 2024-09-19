@@ -1,0 +1,132 @@
+"""
+xml.py  The Node class for converting to xml
+and several conversion functions for names and values.
+
+use like this
+
+from threefive.xml import Node
+
+ts = Node('scte35:TimeSignal')
+st = Node('scte35:SpliceTime',attrs={'pts_time':3442857000})
+ts.add_child(st)
+ts.mk_all()
+
+
+<scte35:TimeSignal>
+    <scte35:SpliceTime ptsTime="3442857000"/>
+</scte35:TimeSignal>
+
+
+"""
+
+
+def num2xml(val):
+    """
+    num2xml py num to xml num
+    """
+    return str(val)
+
+
+def bool2xml(val):
+    """
+    bool2xml py boolean
+    to xml boolean
+    """
+    return str(val).lower()
+
+
+def hex2xml(val):
+    """
+    hex2xml py hex to xml int
+    """
+    return str(int(val, 16))
+
+
+def val2xml(val):
+    """
+    val2xmlconvert val for xml
+    """
+    if isinstance(val, bool):
+        return bool2xml(val)
+    if isinstance(val, (int, float)):
+        return num2xml(val)
+    if isinstance(val, str):
+        if val.lower()[:2] == "0x":
+            return hex2xml(val)
+    else:
+        return val
+
+
+def key2xml(string):
+    """
+    key2xml convert name to camel case
+    """
+    new_string = string.title().replace("_", "")
+    return new_string[0].lower() + new_string[1:]
+
+
+def mk_attrs(attrs):
+    """
+    mk_attrs converts a dict into
+    a dict of xml friendly keys and values
+    """
+    return {key2xml(k): val2xml(v) for k, v in attrs.items()}
+
+
+def unroll_attrs(attrs):
+    """
+    unroll_attrs converts attrs
+    into a string for a xml node
+    """
+    return "".join([f' {k}="{v}"' for k, v in attrs.items()])
+
+
+class Node:
+    """
+    Node class is to convert
+    a threefive object to an xml node.
+    """
+    def __init__(self, name, value=None, attrs={}):
+        self.name = name
+        self.value = value
+        self.attrs = mk_attrs(attrs)
+        self.children = []
+        self.end = False
+        if self.value:
+            self.end = True
+
+    def mk(self, obj):
+        """
+        mk makes the node obj,
+        and it's children into
+        an xml representation.
+        """
+        new_attrs = ""
+        if obj.attrs:
+            new_attrs = unroll_attrs(obj.attrs)
+        rendrd = f"<{obj.name}{new_attrs}>"
+        if not obj.value and not obj.children:
+            rendrd = rendrd.replace(">", "/>")
+        if obj.value:
+            rendered += obj.value
+        if obj.children:
+            for child in obj.children:
+                rendrd += obj.mk(child)
+        if obj.end:
+            rendrd += f"</{obj.name}>\n"
+        return rendrd
+
+    def add_child(self, child):
+        """
+        add_child adds a child node
+        """
+        self.children.append(child)
+        self.end = True
+
+    def mk_all(self):
+        """
+        mk_all calls mk on self
+        and stops child nodes from
+        throwing recursion errors.
+        """
+        return  self.mk(self)
