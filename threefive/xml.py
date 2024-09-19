@@ -108,7 +108,7 @@ class Node:
         if not obj.value and not obj.children:
             rendrd = rendrd.replace(">", "/>")
         if obj.value:
-            rendered += obj.value
+            rendrd += obj.value
         if obj.children:
             for child in obj.children:
                 rendrd += obj.mk(child)
