@@ -11,6 +11,7 @@ from .segment import Segment
 from .smoketest import smoke
 from .stream import Stream
 from .version import version
+from .xml import Node
 
 from .commands import (
     TimeSignal,
