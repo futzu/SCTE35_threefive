@@ -5,6 +5,7 @@ import sys
 from .bitn import BitBin
 from .base import SCTE35Base
 from .stuff import print2
+from .xml import Node
 
 class SpliceCommand(SCTE35Base):
     """
@@ -149,6 +150,16 @@ class TimeSignal(SpliceCommand):
         else:
             nbin.reserve(7)
 
+    def xml(self):
+        """
+        xml return TimeSignal as an xml node
+        """
+        ts = Node('scte35:TimeSignal')
+        if self.has('pts_time'):
+            st = Node('scte35:SpliceTime',attrs={'pts_time':self.pts_time})
+            ts.add_child(st)
+        return ts
+        
 
 class SpliceInsert(TimeSignal):
     """
@@ -170,7 +181,7 @@ class SpliceInsert(TimeSignal):
         self.event_id_compliance_flag = None
         self.unique_program_id = None
         self.avail_num = None
-        self.avail_expected = None
+        self.avails_expected = None
 
     def decode_break_duration(self, bitbin):
         """
@@ -204,7 +215,7 @@ class SpliceInsert(TimeSignal):
                 self.decode_break_duration(bitbin)
             self.unique_program_id = bitbin.as_int(16)
             self.avail_num = bitbin.as_int(8)
-            self.avail_expected = bitbin.as_int(8)
+            self.avails_expected = bitbin.as_int(8)
         self._set_len(start, bitbin.idx)
 
     def encode(self, nbin=None):
@@ -229,7 +240,7 @@ class SpliceInsert(TimeSignal):
                 self.encode_break_duration(nbin)
             self._chk_var(int, nbin.add_int, "unique_program_id", 16)
             self._chk_var(int, nbin.add_int, "avail_num", 8)
-            self._chk_var(int, nbin.add_int, "avail_expected", 8)
+            self._chk_var(int, nbin.add_int, "avails_expected", 8)
         return nbin.bites
 
     def encode_break_duration(self, nbin):
@@ -240,6 +251,31 @@ class SpliceInsert(TimeSignal):
         self._chk_var(bool, nbin.add_flag, "break_auto_return", 1)
         nbin.forward(6)
         nbin.add_int(self.as_ticks(self.break_duration), 33)
+
+    def xml(self):
+        """
+        xml return the SpliceInsert instance as an xml node.
+        """
+        si_attrs = {'spliceEventId': self.splice_event_id,
+         'spliceEventCancelIndicator': self.splice_event_cancel_indicator,
+          'availNum': self.avail_num,
+          'availsExpected': self.avails_expected}
+        for k,v in si_attrs.items():
+            if v ==None:
+                raise ValueError(f'\033[7mSpliceInsert.{k} needs to be set\033[27m')    
+        si = Node('scte35:SpliceInsert',attrs=si_attrs)
+        if self.pts_time:
+            prgm = Node('scte35:Program')
+            st = Node('scte35:SpliceTime',attrs={'pts_time':self.pts_time})
+            prgm.add_child(st)
+            si.add_child(prgm)
+        if self.break_duration:
+            bd_attrs={'autoReturn':self.auto_return,
+             'duration': self.break_duration}             
+            bd = Node('scte35:BreakDuration',attrs=bd_attrs)
+            si.add_child(bd)
+        return si
+
 
 
 # table 7
