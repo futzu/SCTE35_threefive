@@ -2,20 +2,6 @@
 xml.py  The Node class for converting to xml
 and several conversion functions for names and values.
 
-use like this
-
-from threefive.xml import Node
-
-ts = Node('scte35:TimeSignal')
-st = Node('scte35:SpliceTime',attrs={'pts_time':3442857000})
-ts.add_child(st)
-ts.mk_all()
-
-
-<scte35:TimeSignal>
-    <scte35:SpliceTime ptsTime="3442857000"/>
-</scte35:TimeSignal>
-
 
 """
 
@@ -83,8 +69,36 @@ def unroll_attrs(attrs):
 
 class Node:
     """
-    Node class is to convert
-    a threefive object to an xml node.
+    The Node class is to create an xml node.
+    
+    An instance of Node has:
+
+        name :      <name> </name>
+                
+        attrs :     <name attrs[k]="attrs[v]">
+                
+        value  :    <name>value</name>
+                
+        children :  <name><children[0]></children[0]</name>
+                
+        end :       if end: <name></name>
+                    if not end: <name/>
+                        
+
+    Use like this:
+
+        from threefive.xml import Node
+
+        ts = Node('scte35:TimeSignal')
+        st = Node('scte35:SpliceTime',attrs={'pts_time':3442857000})
+        ts.add_child(st)
+        ts.mk()
+
+
+        <scte35:TimeSignal>
+            <scte35:SpliceTime ptsTime="3442857000"/>
+        </scte35:TimeSignal>
+
     """
     def __init__(self, name, value=None, attrs={}):
         self.name = name
@@ -95,12 +109,13 @@ class Node:
         if self.value:
             self.end = True
 
-    def mk(self, obj):
+    def mk(self, obj=None):
         """
         mk makes the node obj,
         and it's children into
         an xml representation.
         """
+        obj=[obj,self][obj==None]
         new_attrs = ""
         if obj.attrs:
             new_attrs = unroll_attrs(obj.attrs)
@@ -108,12 +123,12 @@ class Node:
         if not obj.value and not obj.children:
             rendrd = rendrd.replace(">", "/>")
         if obj.value:
-            rendrd += obj.value
+            rendrd =f'{rendrd}{obj.value}'
         if obj.children:
             for child in obj.children:
                 rendrd += obj.mk(child)
         if obj.end:
-            rendrd += f"</{obj.name}>\n"
+            rendrd += f"</{obj.name}>"
         return rendrd
 
     def add_child(self, child):
@@ -122,11 +137,3 @@ class Node:
         """
         self.children.append(child)
         self.end = True
-
-    def mk_all(self):
-        """
-        mk_all calls mk on self
-        and stops child nodes from
-        throwing recursion errors.
-        """
-        return  self.mk(self)
