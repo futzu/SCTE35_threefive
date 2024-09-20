@@ -81,7 +81,7 @@ class DashSCTE35:
         """
         end-element for expat
         """
-        if name == 'Event':
+        if name in ['SpliceInfoSection','Event','Signal']:
             cue = self._build_cue()
             if cue:
                 print2(json.dumps(self.stuff, indent=4))
