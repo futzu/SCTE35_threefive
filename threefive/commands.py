@@ -1,11 +1,13 @@
 """
 SCTE35 Splice Commands
 """
+
 import sys
 from .bitn import BitBin
 from .base import SCTE35Base
 from .stuff import print2
 from .xml import Node
+
 
 class SpliceCommand(SCTE35Base):
     """
@@ -144,7 +146,9 @@ class TimeSignal(SpliceCommand):
         if self.time_specified_flag:
             nbin.reserve(6)
             if not self.pts_time:
-                print2("\033[7mA float for pts_time for the splice command is required.\033[27m")
+                print2(
+                    "\033[7mA float for pts_time for the splice command is required.\033[27m"
+                )
                 sys.exit()
             nbin.add_int(int(self.as_ticks(self.pts_time)), 33)
         else:
@@ -154,12 +158,12 @@ class TimeSignal(SpliceCommand):
         """
         xml return TimeSignal as an xml node
         """
-        ts = Node('scte35:TimeSignal')
-        if self.has('pts_time'):
-            st = Node('scte35:SpliceTime',attrs={'pts_time':self.pts_time})
+        ts = Node("scte35:TimeSignal")
+        if self.has("pts_time"):
+            st = Node("scte35:SpliceTime", attrs={"pts_time": self.pts_time})
             ts.add_child(st)
         return ts
-        
+
 
 class SpliceInsert(TimeSignal):
     """
@@ -256,26 +260,29 @@ class SpliceInsert(TimeSignal):
         """
         xml return the SpliceInsert instance as an xml node.
         """
-        si_attrs = {'spliceEventId': self.splice_event_id,
-         'spliceEventCancelIndicator': self.splice_event_cancel_indicator,
-          'availNum': self.avail_num,
-          'availsExpected': self.avails_expected}
-        for k,v in si_attrs.items():
-            if v ==None:
-                raise ValueError(f'\033[7mSpliceInsert.{k} needs to be set\033[27m')    
-        si = Node('scte35:SpliceInsert',attrs=si_attrs)
+        si_attrs = {
+            "splice_event_id": self.splice_event_id,
+            "splice_event_cancel_Indicator": self.splice_event_cancel_indicator,
+            "avail_num": self.avail_num,
+            "avails_expected": self.avails_expected,
+        }
+        for k, v in si_attrs.items():
+            if v == None:
+                raise ValueError(f"\033[7mSpliceInsert.{k} needs to be set\033[27m")
+        si = Node("scte35:SpliceInsert", attrs=si_attrs)
         if self.pts_time:
-            prgm = Node('scte35:Program')
-            st = Node('scte35:SpliceTime',attrs={'pts_time':self.pts_time})
+            prgm = Node("scte35:Program")
+            st = Node("scte35:SpliceTime", attrs={"ptsTime": self.pts_time})
             prgm.add_child(st)
             si.add_child(prgm)
         if self.break_duration:
-            bd_attrs={'autoReturn':self.auto_return,
-             'duration': self.break_duration}             
-            bd = Node('scte35:BreakDuration',attrs=bd_attrs)
+            bd_attrs = {
+                "auto_return": self.auto_return,
+                "duration": self.break_duration,
+            }
+            bd = Node("scte35:BreakDuration", attrs=bd_attrs)
             si.add_child(bd)
         return si
-
 
 
 # table 7
