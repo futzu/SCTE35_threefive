@@ -47,7 +47,9 @@ def key2xml(string):
     """
     key2xml convert name to camel case
     """
-    new_string = string.title().replace("_", "")
+    new_string = string
+    if "_" in string:
+        new_string = string.title().replace("_", "")
     return new_string[0].lower() + new_string[1:]
 
 
@@ -70,20 +72,21 @@ def unroll_attrs(attrs):
 class Node:
     """
     The Node class is to create an xml node.
-    
+
     An instance of Node has:
 
         name :      <name> </name>
-                
+
         attrs :     <name attrs[k]="attrs[v]">
-                
+
         value  :    <name>value</name>
-                
+
         children :  <name><children[0]></children[0]</name>
-                
+
         end :       if end: <name></name>
                     if not end: <name/>
-                        
+
+        depth:      tab depth for printing (automatically set)
 
     Use like this:
 
@@ -100,6 +103,7 @@ class Node:
         </scte35:TimeSignal>
 
     """
+
     def __init__(self, name, value=None, attrs={}):
         self.name = name
         self.value = value
@@ -108,6 +112,13 @@ class Node:
         self.end = False
         if self.value:
             self.end = True
+        self.depth = None
+
+    def _set_depth(self):
+        if not self.depth:
+            self.depth = 0
+        for child in self.children:
+            child.depth = self.depth + 1
 
     def mk(self, obj=None):
         """
@@ -115,20 +126,22 @@ class Node:
         and it's children into
         an xml representation.
         """
-        obj=[obj,self][obj==None]
+        obj = [obj, self][obj == None]
+        obj._set_depth()
+        tabs = "\t" * obj.depth
         new_attrs = ""
         if obj.attrs:
             new_attrs = unroll_attrs(obj.attrs)
-        rendrd = f"<{obj.name}{new_attrs}>"
+        rendrd = f"{tabs}<{obj.name}{new_attrs}>\n"
         if not obj.value and not obj.children:
             rendrd = rendrd.replace(">", "/>")
         if obj.value:
-            rendrd =f'{rendrd}{obj.value}'
+            rendrd = f"{rendrd}{obj.value}"
         if obj.children:
             for child in obj.children:
                 rendrd += obj.mk(child)
         if obj.end:
-            rendrd += f"</{obj.name}>"
+            rendrd += f"{tabs}</{obj.name}>\n"
         return rendrd
 
     def add_child(self, child):
@@ -137,3 +150,9 @@ class Node:
         """
         self.children.append(child)
         self.end = True
+
+    def show(self):
+        """
+        show displays the xml
+        """
+        print(self.mk())
