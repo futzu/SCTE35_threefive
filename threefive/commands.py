@@ -146,10 +146,8 @@ class TimeSignal(SpliceCommand):
         if self.time_specified_flag:
             nbin.reserve(6)
             if not self.pts_time:
-                print2(
-                    "\033[7mA float for pts_time for the splice command is required.\033[27m"
+                raise ValueError("\033[7mA float for pts_time for the splice command is required.\033[27m"
                 )
-                sys.exit()
             nbin.add_int(int(self.as_ticks(self.pts_time)), 33)
         else:
             nbin.reserve(7)
