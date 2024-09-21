@@ -11,6 +11,8 @@ from .section import SpliceInfoSection
 from .commands import command_map
 from .descriptors import splice_descriptor, descriptor_map
 from .crc import crc32
+from .xml import Node
+from .dash import DashSCTE35
 
 
 class Cue(SCTE35Base):
@@ -203,6 +205,16 @@ class Cue(SCTE35Base):
         """
         print2(self.get_json())
 
+    def xml(self):
+        sis= self.info_section.xml()
+        if self.command.command_type not in [5,6]:
+            err_mesg= 'Splice Command must be TimeSignal or SpliceInsert'
+            raise ValueError(err_mesg)
+        else:
+            cmd = self.command.xml()
+            sis.add_child(cmd)
+            sis.show()
+        return sis
 
     # encode related
 
@@ -293,6 +305,12 @@ class Cue(SCTE35Base):
             }
         """
         if isinstance(stuff, str):
+            # DASH Event or Signal
+            if stuff.strip()[0]=='<':
+                ds=DashSCTE35()
+                cue_data = ds.parse(stuff)
+                if cue_data:
+                    stuff =vars(cue_list[0])
             stuff = json.loads(stuff)
         if "command" not in stuff:
             print2("\033[7mA splice command is required\033[27m")
