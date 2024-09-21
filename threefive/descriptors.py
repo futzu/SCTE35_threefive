@@ -242,6 +242,16 @@ class SegmentationDescriptor(SpliceDescriptor):
     """
     Table 19 - segmentation_descriptor()
     """
+    SUB_SEG_TYPES=[
+            0x30,
+            0x32,
+            0x34,
+            0x36,
+            0x38,
+            0x3A,
+            0x44,
+            0x46,
+        ]
 
     def __init__(self, bites=None):
         super().__init__(bites)
@@ -313,28 +323,24 @@ class SegmentationDescriptor(SpliceDescriptor):
             self.segmentation_message = table22[self.segmentation_type_id]
             self._decode_segments(bitbin)
 
+    def _chk_sub_segments(self):
+        """
+        chk_sub_segments sets sub_segment vars if not present
+        """
+        if self.segmentation_type_id in self.SUB_SEG_TYPES:
+            if not self.sub_segment_num:
+                self.sub_segment_num = 0
+                self.sub_segments_expected = 0
+
     def _decode_segments(self, bitbin):
         self.segment_num = bitbin.as_int(8)
         self.segments_expected = bitbin.as_int(8)
-        if self.segmentation_type_id in [
-            0x30,
-            0x32,
-            0x34,
-            0x36,
-            0x38,
-            0x3A,
-            0x44,
-            0x46,
-        ]:
+        if self.segmentation_type_id in self.SUB_SEG_TYPES:
             # if sub_segment_num and sub_segments_expected
             # are not available set both of them to zero
             ssn = bitbin.as_int(8)
             sse = bitbin.as_int(8)
-            if not ssn:
-                ssn = 0
-                sse = 0
-            self.sub_segment_num = ssn  # 1 byte
-            self.sub_segments_expected = sse  # 1 byte
+            self._chk_sub_segments()
 
     def encode(self, nbin=None):
         """
@@ -385,22 +391,34 @@ class SegmentationDescriptor(SpliceDescriptor):
     def _encode_segments(self, nbin):
         self._chk_var(int, nbin.add_int, "segment_num", 8)
         self._chk_var(int, nbin.add_int, "segments_expected", 8)
-        if self.segmentation_type_id in [
-            0x30,
-            0x32,
-            0x34,
-            0x36,
-            0x38,
-            0x3A,
-            0x44,
-            0x46,
-        ]:
+        if self.segmentation_type_id in self.SUB_SEG_TYPES:
             try:
                 self._chk_var(int, nbin.add_int, "sub_segment_num", 8)
                 self._chk_var(int, nbin.add_int, "sub_segments_expected", 8)
             except:
                 nbin.add_int(0, 8)
                 nbin.add_int(0, 8)
+
+
+    def from_xml(self,stuff):
+        if "SegmentationDescriptor" in stuff:
+            self.load(stuff["SegmentationDescriptor"])
+            self.segmentation_event_id_compliance_indicator = True
+            self.program_segmentation_flag = True
+            if self.has("segmentation_duration"):
+                self.segmentation_duration_flag = True
+            self.delivery_not_restricted_flag = True
+            if "DeliveryRestrictions" in stuff:
+                self.delivery_not_restricted_flag = False
+            self.load(stuff["DeliveryRestrictions"])
+            self.segmentation_event_id = hex(self.segmentation_event_id)
+            self.device_restrictions = table20[self.device_restrictions]
+            self.segmentation_upid_length = 0
+            self.segmentation_upid_type = 0
+            if "SegmentationUpid" in stuff:
+                self.load(stuff["SegmentationUpid"])
+            self._chk_sub_segments(self)
+
 
 
 # map of known descriptors and associated classes
