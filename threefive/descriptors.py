@@ -417,7 +417,7 @@ class SegmentationDescriptor(SpliceDescriptor):
             self.segmentation_upid_type = 0
             if "SegmentationUpid" in stuff:
                 self.load(stuff["SegmentationUpid"])
-            self._chk_sub_segments(self)
+            self._chk_sub_segments()
 
 
 
