@@ -6,6 +6,8 @@ SCTE35 Splice Info Section
 
 from .bitn import BitBin
 from .base import SCTE35Base
+from .xml import Node
+
 
 sap_map = {
     "0x00": "Type 1 Closed GOP with no leading pictures",
@@ -176,3 +178,21 @@ class SpliceInfoSection(SCTE35Base):
         self._encode_tier(nbin)
         self._encode_splice_command(nbin)
         return nbin.bites
+
+    def xml(self):
+        """
+        xml create xml node for splice info section
+        """
+        sis_attrs= {'pts_adjustment': self.pts_adjustment,
+                    'protocol_version': self.protocol_version,
+                    'Tier':self.tier}
+        sis=Node('scte35:SpliceInfoSection',attrs=sis_attrs)
+        return sis
+        
+    def from_xml(self,stuff):
+        if isinstance(stuff["SpliceInfoSection"]["tier"],int):
+            stuff["SpliceInfoSection"]["tier"] = hex(
+                stuff["SpliceInfoSection"]["tier"])
+        self.load(stuff["SpliceInfoSection"])
+
+        
