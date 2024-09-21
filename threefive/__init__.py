@@ -3,7 +3,7 @@ threefive.__init__.py
 """
 
 from .dash import DashSCTE35, dash2cues
-from .stuff import print2
+from .stuff import print2, camel_case, convert_xml_value
 from .cue import Cue
 from .decode import decode
 from .section import SpliceInfoSection
