@@ -162,6 +162,10 @@ class TimeSignal(SpliceCommand):
             ts.add_child(st)
         return ts
 
+    def from_xml(self,stuff):
+        if "SpliceTime" in stuff:
+            self.load(stuff['SpliceTime'])
+            self.time_specified_flag = True        
 
 class SpliceInsert(TimeSignal):
     """
@@ -282,6 +286,20 @@ class SpliceInsert(TimeSignal):
             si.add_child(bd)
         return si
 
+    def from_xml(self,stuff):
+        self.load(stuff["SpliceInsert"])
+        self.event_id_compliance_flag = True
+        self.program_splice_flag = False
+        if "SpliceTime" in stuff:
+            self.load(stuff["SpliceTime"])
+            self.program_splice_flag = True
+            self.time_specified_flag = True
+        if "BreakDuration" in stuff:
+            self.load(stuff["BreakDuration"])
+            self.break_duration = self.duration
+            self.duration_flag = True
+            self.break_auto_return = self.auto_return
+        self.avails_expected = bool(self.avails_expected)        
 
 # table 7
 command_map = {
