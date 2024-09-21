@@ -3,7 +3,7 @@ dash.py converting dash SCTE-35 to a threefive.Cue instance.
 """
 import json
 import xml.parsers.expat
-from .stuff import print2, camel_case, convert_xml_value
+from .stuff import print2,camel_case,convert_xml_value
 from new_reader import reader
 
 def _ticks2seconds(v):
