@@ -3,7 +3,7 @@ dash.py converting dash SCTE-35 to a threefive.Cue instance.
 """
 import json
 import xml.parsers.expat
-from .stuff import print2,camel_case,from_xml
+from .stuff import print2, camel_case, convert_xml_value
 from new_reader import reader
 
 def _ticks2seconds(v):
@@ -33,7 +33,7 @@ class DashSCTE35:
         iter_attrs normalizes xml attributes
         and adds them to the stuff dict.
         """
-        conv = {camel_case(k): from_xml(v) for k, v in attrs.items()}
+        conv = {camel_case(k): convert_xml_value(v) for k, v in attrs.items()}
         pts_vars = ["pts_time", "pts_adjustment", "duration", "segmentation_duration"]
         conv = {k: (_ticks2seconds(v) if k in pts_vars else v) for k, v in conv.items()}
         self.stuff[self.active].update(conv)
