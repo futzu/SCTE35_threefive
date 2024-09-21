@@ -8,8 +8,8 @@ from .stuff import print2
 from .bitn import NBin
 from .base import SCTE35Base
 from .section import SpliceInfoSection
-from .commands import command_map
-from .descriptors import splice_descriptor, descriptor_map
+from .commands import command_map,SpliceInsert,TimeSignal
+from .descriptors import splice_descriptor, descriptor_map, SegmentationDescriptor
 from .crc import crc32
 from .xml import Node
 from .dash import DashSCTE35
@@ -293,6 +293,33 @@ class Cue(SCTE35Base):
             all_bites.add_bites(chunk)
         return all_bites.bites
 
+    def from_xml(self,stuff):
+        """
+        build_cue takes the data put into the stuff dict
+        and builds a threefive.Cue instance
+        """
+
+        if "Binary" in stuff:
+            self.bites = self._mk_bits(stuff["Binary"]["binary"])
+            self.decode()
+        else:
+            if "SpliceInfoSection" in stuff:
+                self.info_section=SpliceInfoSection()
+                self.info_section.from_xml(stuff)
+            if "SpliceInsert" in stuff:
+                self.command=SpliceInsert()
+                self.command.from_xml(stuff)
+            if "TimeSignal" in stuff:
+                self.command=TimeSignal()
+                self.command.from_xml(stuff)
+            self.info_section.splice_command_type =self.command.command_type
+            if "SegmentationDescriptor" in stuff:
+                segdes=SegmentationDescriptor()
+                segdes.from_xml(stuff)
+                self.descriptors.append(segdes)
+                self.encode()
+        self.show()   
+
     def load(self, stuff):
         """
         Cue.load loads SCTE35 data for encoding.
@@ -310,8 +337,11 @@ class Cue(SCTE35Base):
                 ds=DashSCTE35()
                 cue_data = ds.parse(stuff)
                 if cue_data:
-                    stuff =vars(cue_list[0])
-            stuff = json.loads(stuff)
+                    stuff =cue_data[0]
+                    self.from_xml(stuff)
+                    return
+            else:        
+                stuff = json.loads(stuff)
         if "command" not in stuff:
             print2("\033[7mA splice command is required\033[27m")
             sys.exit()
