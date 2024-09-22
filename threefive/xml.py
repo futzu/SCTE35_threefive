@@ -114,6 +114,9 @@ class Node:
             self.end = True
         self.depth = None
 
+    def __repr__(self):
+        return str(self.__dict__)
+
     def _set_depth(self):
         if not self.depth:
             self.depth = 0
