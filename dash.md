@@ -40,11 +40,12 @@ cue = Cue()
 cue.load(some_xml)
 ```
 
-* Output
+* Run
 
 ```js
 a@fu:~$ pypy3 dashtest2.py
 ```
+* <i> debug output</i>
 ```rebol
 Event
 Event->scte35:SpliceInfoSection
@@ -54,6 +55,7 @@ Event->scte35:SpliceInfoSection->scte35:SegmentationDescriptor
 Event->scte35:SpliceInfoSection->scte35:SegmentationDescriptor->scte35:DeliveryRestrictions
 Event->scte35:SpliceInfoSection->scte35:SegmentationDescriptor->scte35:SegmentationUpid
 ```
+* <i> more debug output</i>
 ```smalltalk
 {
     "Event": {
@@ -90,6 +92,7 @@ Event->scte35:SpliceInfoSection->scte35:SegmentationDescriptor->scte35:Segmentat
 }
 {}
 ```
+* The Cue
 ```json
 {
     "info_section": {
