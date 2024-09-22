@@ -6,6 +6,8 @@ import sys
 import json
 from .bitn import NBin
 from.stuff import print2
+from .xml import Node
+
 
 class SCTE35Base:
     """
@@ -112,6 +114,18 @@ class SCTE35Base:
         if hasattr(self,what):
             return True
         return False
+
+    def xml(self):
+        """
+        xml default xml method will return
+        all attributes, which is expressly allowed
+        for SCTE-35 xml.
+        """
+        xml_attrs=self.kv_clean()
+        iam=type(self)
+        iam= str(iam).split("'",1)[1].split("'",1)[0]
+        this = Node(iam,attrs=xml_attrs)
+        return this
 
     @staticmethod
     def idxsplit(stuff, sep):
