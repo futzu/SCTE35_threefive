@@ -213,6 +213,12 @@ class Cue(SCTE35Base):
         else:
             cmd = self.command.xml()
             sis.add_child(cmd)
+            for d in self.descriptors:
+                if d.tag == 2:
+                    sis.add_child(d.xml())
+                else:
+                    err_mesg="Need a Segmentation Descriptor"
+                    raise ValueError(err_mesg)
             sis.show()
         return sis
 
