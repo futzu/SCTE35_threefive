@@ -207,19 +207,14 @@ class Cue(SCTE35Base):
 
     def xml(self):
         sis= self.info_section.xml()
-        if self.command.command_type not in [5,6]:
-            err_mesg= 'Splice Command must be TimeSignal or SpliceInsert'
+        if not self.command:
+            err_mesg='A Splice Command is Required'
             raise ValueError(err_mesg)
-        else:
-            cmd = self.command.xml()
-            sis.add_child(cmd)
-            for d in self.descriptors:
-                if d.tag == 2:
-                    sis.add_child(d.xml())
-                else:
-                    err_mesg="Need a Segmentation Descriptor"
-                    raise ValueError(err_mesg)
-            sis.show()
+        cmd = self.command.xml()
+        sis.add_child(cmd)
+        for d in self.descriptors:
+            sis.add_child(d.xml())
+        sis.show()
         return sis
 
     # encode related
