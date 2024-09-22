@@ -8,7 +8,7 @@
 ### I'm looking for a real job.I've been doing contracts for the last five years and now I'm old. I'd like stable employment. If you want to talk, just open an issue or hit me at a@iodisco.com. I know several languages. Go and Python being my best. 
 ---
 
-### `Heads Up!` [Experimental Dash SCTE35 Parser Expected in Release v2.4.71](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md)
+### `Heads Up!` Updated 9/22/2024 [Experimental Dash SCTE35 Parser Expected in Release v2.4.71](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md)
 
 
 
