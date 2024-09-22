@@ -185,7 +185,9 @@ class SpliceInfoSection(SCTE35Base):
         """
         sis_attrs= {'pts_adjustment': self.pts_adjustment,
                     'protocol_version': self.protocol_version,
-                    'Tier':self.tier}
+                    'sap_type': self.sap_type,
+                    'sap_details':self.sap_details,
+                    'Tier':self.tier,}
         sis=Node('scte35:SpliceInfoSection',attrs=sis_attrs)
         return sis
         
