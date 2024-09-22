@@ -39,8 +39,8 @@ def val2xml(val):
     if isinstance(val, str):
         if val.lower()[:2] == "0x":
             return hex2xml(val)
-    else:
-        return val
+    return val
+
 
 
 def key2xml(string):
