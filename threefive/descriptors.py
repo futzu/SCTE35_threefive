@@ -6,6 +6,7 @@ from .bitn import BitBin
 from .base import SCTE35Base
 from .segmentation import table20, table22, dvb_table2
 from .upids import upid_map
+from .xml import Node
 
 
 def k_by_v(adict, avalue):
@@ -398,6 +399,38 @@ class SegmentationDescriptor(SpliceDescriptor):
             except:
                 nbin.add_int(0, 8)
                 nbin.add_int(0, 8)
+
+    def xml(self):
+        '''
+
+        '''
+        delrestrict_attrs={"web_delivery_allowed_flag":True,
+                           'no_regional_blackout_flag':True,
+                           'archive_allowed_flag': True,
+                           'device_restrictions': self.device_restrictions,}
+        dr=Node("DeliveryRestrictions",attrs=delrestrict_attrs)
+        
+        sd_attrs= {'segmentation_event_id':self.segmentation_event_id,
+                   'segmentation_event_cancel_indicator':self.segmentation_event_cancel_indicator,
+                   'segmentation_event_id_compliance_indicator':self.segmentation_event_id_compliance_indicator,
+                   'segmentation_duration':self.segmentation_duration,
+                   'segment_num':self.segment_num,
+                   'segments_expected':self.segments_expected,
+                   'self.sub_segment_num':self.sub_segment_num,
+                   'sub_segments_expected':self.sub_segments_expected,}
+        sd=Node('scte35:SegmentationDescriptor',attrs=sd_attrs)
+
+                 # I still need to figure format_identifier out.
+                  # Segmentation Upid format
+                  # Can be text,hexbinary, base-64, or pivate
+                  # for now, everything will be set to hexbinary
+        ud_attrs={'segmentation_upid_type': self.segmentation_upid_type,
+                  'format_identifier': 'fu',
+                  'segmentation_upid_format':'hexbinary',}
+        ud= Node('segmentation_upid',attrs= ud_attrs)
+        sd.add_child(dr)
+        sd.add_child(ud)          
+        return sd
 
 
     def from_xml(self,stuff):
