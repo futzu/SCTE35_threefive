@@ -2,7 +2,6 @@
 SCTE35 Splice Commands
 """
 
-import sys
 from .bitn import BitBin
 from .base import SCTE35Base
 from .stuff import print2
