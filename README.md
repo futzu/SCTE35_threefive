@@ -68,24 +68,22 @@ a@slow:~/threefive$
 
 
 * [__threefive On The Command Line__](https://github.com/futzu/scte35parser-threefive/blob/master/cli.md)
-     * [Decodes](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#parse) __SCTE-35 Strings and MPEGTS__
-     * [Prints](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#show) __MPEGTS Stream__ information
-     * [Prints](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#pts) __PTS__ from MPEGTS Streams
-     * [Prints](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#packets) __Raw SCTE-35 packets__
-     * [Creates](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#sidecar) SCTE-35 __Sidecar files__ from MPEGTS
-     * [Encodes](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#encode) __JSON to SCTE-35__
-     * [Converts](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#convert) __SCTE-35 Formats__ 
+     * [Decode](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#parse) __SCTE-35 Strings and MPEGTS__
+     * [Print](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#show) __MPEGTS Stream__ information
+     * [Print](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#pts) __PTS__ from MPEGTS Streams
+     * [Print](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#packets) __Raw SCTE-35 packets__
+     * [Create](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#sidecar) SCTE-35 __Sidecar files__ from MPEGTS
+     * [Encode](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#encode) __JSON to SCTE-35__
+     * [Convert](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#convert) __SCTE-35 Formats__ 
 
-* __Write Some Code with threefive__
-   * SCTE-35 code [__Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
-   * `New!` [How to Use __threefive.Cue__](https://github.com/futzu/SCTE35_threefive/blob/master/basic.md)
-   * [__Encoding__](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [__Encoding | more__ ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md) and [JSON to SCTE-35 Encoding](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md)
-   * [__Trigger on SCTE-35 Events__](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md) using threefive.Stream
-   * Automatic __AES decryption__ with [threefive.Segment](https://github.com/futzu/SCTE35_threefive/blob/master/segment.md)
-   * Display SCTE-35 Data as [__WebVTT__ subtitles in Video](https://github.com/futzu/SCTE35_threefive/blob/master/examples/stream/cue2vtt.py)
-   * [__Parse SCTE-35 programmatically__](https://github.com/futzu/scte35parser-threefive/blob/master/prog.md) with a few lines of code
+* [__Parse SCTE-35 programmatically__](https://github.com/futzu/scte35parser-threefive/blob/master/prog.md) </i>(write some code)</i>
+     * SCTE-35 code [__Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
+     * `New!` [How to Use __threefive.Cue__](https://github.com/futzu/SCTE35_threefive/blob/master/basic.md)
+     * [__Encoding__](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [__Encoding | more__ ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md) and [JSON to SCTE-35 Encoding](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md)
+     * [__Trigger on SCTE-35 Events__](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md) using threefive.Stream
+     * Automatic __AES decryption__ with [threefive.Segment](https://github.com/futzu/SCTE35_threefive/blob/master/segment.md)
+     * Display SCTE-35 Data as [__WebVTT__ subtitles in Video](https://github.com/futzu/SCTE35_threefive/blob/master/examples/stream/cue2vtt.py)
    
-* [__FAQ__](#faq) All of Your Questions Answered. 
 
  <details><summary>Cue Class</summary>
 
@@ -605,33 +603,6 @@ private_data = b'threefive kicks ass'
 <br>⚡ `NEW!` __threefive__ now has experimental DVB DAS Support `ETSI TS 103 752-1` <br><br>
 
 ---
-
-# `FAQ`
-
-<b> `Q)`  "How do I capture the output of threefive?"</b>
-<br><br>
-<b> `A)`  Redirect 2. </b>  
-```sh
-a@fu:~$ threefive input.ts 2> output.txt
-```
-*  <b>For piping and such, use 2>&1</b>
-```sh
-a@fu:~$ threefive packets  plp0.ts 2>&1 | less
-```
-
-
----
-
-<b> `Q)` __"SCTE-35 sucks, can we just hire you to do it for us?"__
-<br><br>
-<b>` A)` __Yes.__
-
----
-
-<b> `Q)` __"You aren't on any social media, are you a Chinese secret agent?"__
-<br><br>
-<b> `A)` __No.__<br>
-
 
 ![image](https://github.com/user-attachments/assets/aefed0bb-de61-4222-a04b-aaf1192bf4d6)
 
