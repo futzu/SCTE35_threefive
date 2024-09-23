@@ -1,14 +1,10 @@
+### `Heads Up!` Updated 9/22/2024 [Experimental Dash SCTE35 Parser Expected in Release v2.4.71](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md)
+
+  
   ![image](https://github.com/user-attachments/assets/aa9a29c1-c020-4af5-b2e6-7b1e192f7db0) <i>Optimized to kick ass. </i>
 
 
 # threefive is The Highest Rated SCTE-35 Parser.      Ever.
-
-
-
-
-
-
-### `Heads Up!` Updated 9/22/2024 [Experimental Dash SCTE35 Parser Expected in Release v2.4.71](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md)
 
 
 
@@ -20,10 +16,9 @@
 ____
 
 # Latest __threefive__ version is `2`.`4`.`69`
+![image](https://github.com/user-attachments/assets/79182075-62e7-4330-b998-6ec382566218)
 
 # Documentation
-
-* [__FAQ__](#faq) All of Your Questions Answered. 
 
 
 <details><summary>Install</summary>
@@ -39,6 +34,8 @@ python3 -mpip install --upgrade threefive
 
 
 * [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md)
+
+  
 * [Super Cool Examples](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
    
 ---
@@ -80,14 +77,15 @@ a@slow:~/threefive$
      * [Converts](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#convert) __SCTE-35 Formats__ 
 
 * __Write Some Code with threefive__
+   * SCTE-35 code [__Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
    * `New!` [How to Use __threefive.Cue__](https://github.com/futzu/SCTE35_threefive/blob/master/basic.md)
+   * [__Encoding__](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [__Encoding | more__ ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md) and [JSON to SCTE-35 Encoding](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md)
    * [__Trigger on SCTE-35 Events__](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md) using threefive.Stream
    * Automatic __AES decryption__ with [threefive.Segment](https://github.com/futzu/SCTE35_threefive/blob/master/segment.md)
    * Display SCTE-35 Data as [__WebVTT__ subtitles in Video](https://github.com/futzu/SCTE35_threefive/blob/master/examples/stream/cue2vtt.py)
-   * SCTE-35 code [__Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
-   * [__Encoding__](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [__Encoding | more__ ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md) and [JSON to SCTE-35 Encoding](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md)
    * [__Parse SCTE-35 programmatically__](https://github.com/futzu/scte35parser-threefive/blob/master/prog.md) with a few lines of code
    
+* [__FAQ__](#faq) All of Your Questions Answered. 
 
  <details><summary>Cue Class</summary>
 
@@ -180,6 +178,9 @@ True
  |      Cue.to_stderr prints the Cue
 ```
 </details>
+
+
+
 
 <details><summary>Stream Class</summary>
 
@@ -345,7 +346,8 @@ ___
 <details><summary> Need to verify your splice points? </summary> 
  
 
- 
+ ![image](https://github.com/user-attachments/assets/2581053a-e373-434e-9e06-32ace453aa02)
+
  
 * Try [cue2vtt.py](https://github.com/futzu/scte35-threefive/blob/master/examples/stream/cue2vtt.py) in the examples.
 
@@ -578,8 +580,8 @@ private_data = b'threefive kicks ass'
 ---
 
  Powered by threefive
----
-<br>⚡ [__threefive online SCTE-35 Parser__](https://iodisco.com/cgi-bin/scte35parser)
+
+ 
 <br>⚡ [x9k3](https://github.com/futzu/x9k3): SCTE-35 HLS Segmenter and Cue Inserter.
 <br>⚡ [sideways](https://github.com/futzu/sideways) inject SCTE-35 into HLS via manifest manipulation.
 <br>⚡ [m3ufu](https://github.com/futzu/m3ufu): SCTE-35 m3u8 Parser.
@@ -591,16 +593,18 @@ private_data = b'threefive kicks ass'
 <br>⚡ [POIS Server](https://github.com/scunning1987/pois_reference_server) is Super Cool.
 <br>⚡ [bpkio-cli](https://pypi.org/project/bpkio-cli/): A command line interface to the broadpeak.io APIs. 
 <br>⚡ [amt-play ](https://github.com/vivoh-inc/amt-play) uses x9k3.
-<br>⚡[__threefive online SCTE-35 Encoder__](https://iodisco.com/cgi-bin/scte35encoder) 
+
+
+---
 
  threefive | more
----
+ 
 <br>⚡ [Diagram](https://github.com/futzu/threefive/blob/master/cue.md) of a threefive SCTE-35 Cue.
 <br>⚡ [ffmpeg and threefive](https://github.com/futzu/SCTE35-threefive/blob/master/threefive-ffmpeg.md) and SCTE35 and Stream Type 0x6 bin data.
-
 <br>⚡ [Issues and Bugs and Feature Requests](https://github.com/futzu/scte35-threefive/issues) will be considered. Please don't make me regret it. 
+<br>⚡ `NEW!` __threefive__ now has experimental DVB DAS Support `ETSI TS 103 752-1` <br><br>
 
-### `NEW!` __threefive__ now has experimental DVB DAS Support `ETSI TS 103 752-1` <br><br>
+---
 
 # `FAQ`
 
