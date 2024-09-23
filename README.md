@@ -1,12 +1,12 @@
-### The Undisputed Heavywieght Champion of SCTE-35
+  ![image](https://github.com/user-attachments/assets/aa9a29c1-c020-4af5-b2e6-7b1e192f7db0) <i>The Undisputed Heavyweight Champion of SCTE-35</i>
 
-![image](https://github.com/user-attachments/assets/3a56410d-c01b-4aa6-8b7a-30bbd41a6842)
 
 # threefive is the Highest Rated SCTE-35 Parser.      Ever.
-<br>
 
-### I'm looking for a real job.I've been doing contracts for the last five years and now I'm old. I'd like stable employment. If you want to talk, just open an issue or hit me at a@iodisco.com. I know several languages. Go and Python being my best. 
----
+
+
+
+
 
 ### `Heads Up!` Updated 9/22/2024 [Experimental Dash SCTE35 Parser Expected in Release v2.4.71](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md)
 
@@ -18,12 +18,6 @@
 <br> `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 <br>
 ____
-
-
-## [The Only Accurate Online SCTE-35 Parser ](https://iodisco.com/cgi-bin/scte35parser)
-[![image](https://github.com/user-attachments/assets/dfacf4d9-ea5d-4a0a-9111-929bfd83c2a1)
-](https://iodisco.com/cgi-bin/scte35parser) <br><B> All of the other online SCTE-35 parsers have errors or are outdated. Seriously.</B>
-
 
 # Latest __threefive__ version is `2`.`4`.`69`
 
@@ -573,6 +567,16 @@ private_data = b'threefive kicks ass'
 </details>
 
 ---
+
+
+
+
+### [the only accurate online SCTE-35 parser.](https://iodisco.com/cgi-bin/scte35parser)
+[![image](https://github.com/user-attachments/assets/dfacf4d9-ea5d-4a0a-9111-929bfd83c2a1)
+](https://iodisco.com/cgi-bin/scte35parser) <br>
+
+---
+
  Powered by threefive
 ---
 <br>⚡ [__threefive online SCTE-35 Parser__](https://iodisco.com/cgi-bin/scte35parser)
