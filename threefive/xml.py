@@ -126,7 +126,7 @@ class Node:
         and it's children into
         an xml representation.
         """
-        obj = [obj, self][obj == None]
+        obj = [obj, self][obj is None]
         obj.set_depth()
         tabs = "\t" * obj.depth
         new_attrs = ""
