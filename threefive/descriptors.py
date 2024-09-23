@@ -331,7 +331,6 @@ class SegmentationDescriptor(SpliceDescriptor):
         if self.segmentation_type_id in self.SUB_SEG_TYPES:
             if not self.sub_segment_num:
                 self.sub_segment_num = 0
-            if not self.sub_segments_expected:
                 self.sub_segments_expected = 0
 
     def _decode_segments(self, bitbin):
@@ -342,7 +341,7 @@ class SegmentationDescriptor(SpliceDescriptor):
             # are not available set both of them to zero
             try:
                 self.sub_segment_num = bitbin.as_int(8)
-                sub_segments_expected = bitbin.as_int(8)
+                self.sub_segments_expected = bitbin.as_int(8)
             finally:
                 self._chk_sub_segments()
 
