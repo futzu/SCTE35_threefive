@@ -84,7 +84,52 @@ a@slow:~/threefive$
      * Automatic __AES decryption__ with [threefive.Segment](https://github.com/futzu/SCTE35_threefive/blob/master/segment.md)
      * Display SCTE-35 Data as [__WebVTT__ subtitles in Video](https://github.com/futzu/SCTE35_threefive/blob/master/examples/stream/cue2vtt.py)
    
+<details><summary>threefive class inheritance </summary>
 
+```smalltalk
+class SCTE35Base: 
+        class Cue(SCTE35Base):
+        class PacketData(SCTE35Base):   
+        class SpliceCommand(SCTE35Base):
+                class BandwidthReservation(SpliceCommand):
+                class PrivateCommand(SpliceCommand):
+                class SpliceNull(SpliceCommand):
+                class TimeSignal(SpliceCommand):
+                        class SpliceInsert(TimeSignal):  
+        class SpliceDescriptor(SCTE35Base): 
+                class AvailDescriptor(SpliceDescriptor):
+                class DtmfDescriptor(SpliceDescriptor):
+                class DVBDASDescriptor(SpliceDescriptor):
+                class SegmentationDescriptor(SpliceDescriptor):
+                class TimeDescriptor(SpliceDescriptor):           
+        class SpliceInfoSection(SCTE35Base)
+             
+class Upid: 
+        class NoUpid(Upid):    
+        class AirId(Upid):
+        class Atsc(Upid):
+        class Eidr(Upid):
+        class Isan(Upid):
+        class Mid(Upid):
+        class Mpu(Upid):
+        class Umid(Upid):
+
+class Stream:
+        class Segment(Stream):
+
+class BitBin:
+class DashSCTE35:
+class Maps:
+class NBin:
+class Node:
+class Pids:
+class ProgramInfo:
+```
+
+
+
+
+</details>
  <details><summary>Cue Class</summary>
 
    *  src [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
