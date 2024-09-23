@@ -1,10 +1,9 @@
 # Dash SCTE-35 Parser Preview
 ### Expected in release v2.4.71
 ### Everything here may or may not change.
-
-* expat xml parsing
-*  Dash SCTE-35 data is coverted to threefive.Cue instances.
-* [source](https://github.com/futzu/SCTE35_threefive/blob/master/threefive/dash.py)
+# From Xml
+  * expat xml parsing
+  *  Dash SCTE-35 data is coverted to threefive.Cue instances.
 ---
 ### Usage:
 
@@ -20,7 +19,7 @@
 ---
 
 ### Example #1     
-* `"urn:scte:scte35:2013:xml"`
+* `"u23rn:scte:scte35:2013:xml"`
 * Text Xml of SCTE-35 SpliceInfosection converted to a Cue instance.
 
 <details><summary> Xml </summary>
@@ -222,6 +221,68 @@ cue.load(some_xml)
     },
     "descriptors": []
 }
+
+```
+
+</details>
+
+---
+# To Xml
+
+### Usage:
+```py3
+
+from threefive import Cue
+
+cue=Cue(data) # Data can be Base64, Bytes, Hex, Integer
+#OR
+cue=Cue.load(data             # JSON, a dict, or xml can be loaded
+
+cue.decode()
+x = cue.xml() # returns a threefive.Node instance
+x.show()   # displays xml
+```
+
+### Example 3
+* `"u23rn:scte:scte35:2013:xml"`
+* Converting a Cue instance to xml for Dash
+<details><summary> Base64 </summary>
+
+
+```js
+/DA2AAHOR/nwAAAABQb+PnGRBwAgAh5DVUVJSAAAbH/PAAE1ODcICAAAAAAt86rXNAAAAACwnuYL
+```
+
+</details>
+
+
+ 
+<details><summary>Code</summary>
+
+```py3
+from threefive import Cue
+cue=Cue('/DA2AAHOR/nwAAAABQb+PnGRBwAgAh5DVUVJSAAAbH/PAAE1ODcICAAAAAAt86rXNAAAAACwnuYL')
+cue.decode()
+x = cue.xml() # returns a threefive.Node instance
+x.show()   # displays xml
+```
+
+</details>
+
+
+<details><summary>xml Output</summary>
+
+
+```xml
+<scte35:SpliceInfoSection ptsAdjustment="0" protocolVersion="None" sapType="None" sapDetails="None" tier="None">
+        <scte35:TimeSignal>
+                <scte35:SpliceTime ptsTime="11640.3343"/>
+        </scte35:TimeSignal>
+        <scte35:SegmentationDescriptor segmentationEventId="0x4800006c" segmentationEventCancelIndicator="false" segmentationEventIdComplianceIndicator="true" segmentationDuration="225.166833" segmentNum="0" segmentsExpected="0" self.SubSegmentNum="0" subSegmentsExpected="0">
+                <DeliveryRestrictions webDeliveryAllowedFlag="true" noRegionalBlackoutFlag="true" archiveAllowedFlag="true" deviceRestrictions="No Restrictions"/>
+                <segmentation_upid segmentationUpidType="8" segmentationUpidTypeName="AiringID" segmentationUpid="0x2df3aad7"/>
+        </scte35:SegmentationDescriptor>
+</scte35:SpliceInfoSection>
 
 ```
 
