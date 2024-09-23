@@ -110,7 +110,11 @@ class Node:
     def __repr__(self):
         return str(self.__dict__)
 
-    def _set_depth(self):
+    def set_depth(self):
+        """
+        set_depth is used to format
+        tabs in output
+        """
         if not self.depth:
             self.depth = 0
         for child in self.children:
@@ -123,7 +127,7 @@ class Node:
         an xml representation.
         """
         obj = [obj, self][obj == None]
-        obj._set_depth()
+        obj.set_depth()
         tabs = "\t" * obj.depth
         new_attrs = ""
         if obj.attrs:
