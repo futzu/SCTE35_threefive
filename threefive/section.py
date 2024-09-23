@@ -190,11 +190,9 @@ class SpliceInfoSection(SCTE35Base):
                     'Tier':self.tier,}
         sis=Node('scte35:SpliceInfoSection',attrs=sis_attrs)
         return sis
-        
+
     def from_xml(self,stuff):
         if isinstance(stuff["SpliceInfoSection"]["tier"],int):
             stuff["SpliceInfoSection"]["tier"] = hex(
                 stuff["SpliceInfoSection"]["tier"])
         self.load(stuff["SpliceInfoSection"])
-
-        
