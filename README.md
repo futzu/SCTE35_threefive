@@ -1,4 +1,4 @@
-### `Heads Up!` Updated 9/22/2024 [Experimental Dash SCTE35 Parser Expected in Release v2.4.71](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md)
+ `Heads Up!`  [Experimental Dash SCTE35 Parser Expected in Release v2.4.71](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md)
 
   
   ![image](https://github.com/user-attachments/assets/aa9a29c1-c020-4af5-b2e6-7b1e192f7db0) <i>Optimized to kick ass. </i>
