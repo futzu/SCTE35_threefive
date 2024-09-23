@@ -425,8 +425,8 @@ class SegmentationDescriptor(SpliceDescriptor):
                   # Can be text,hexbinary, base-64, or pivate
                   # for now, everything will be set to hexbinary
         ud_attrs={'segmentation_upid_type': self.segmentation_upid_type,
-                  'format_identifier': 'fu',
-                  'segmentation_upid_format':'hexbinary',}
+                  'segmentation_upid_type_name':self.segmentation_upid_type_name,
+                  'segmentation_upid':self.segmentation_upid,}
         ud= Node('segmentation_upid',attrs= ud_attrs)
         sd.add_child(dr)
         sd.add_child(ud)          
