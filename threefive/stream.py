@@ -502,7 +502,7 @@ class Stream:
             self._parse_pcr(pkt, pid)
         if self._pusi_flag(pkt):
             self._parse_pts(pkt, pid)
-        if pid in (self.pids.scte35 | self.pids.maybe_scte35):
+        if pid in self.pids.scte35 or pid in self.pids.maybe_scte35:
             cue = self._parse_scte35(pkt, pid)
         return cue
 
@@ -534,7 +534,7 @@ class Stream:
             return cue
         return False
 
-    def _strip_scte35_pes(self, pay, pid):
+    def _strip_scte35_pes(self, pay):
         if self.SCTE35_PES_START in pay:
             # print2(f"# Stripping PES Header from SCTE35 @ {self.pid2pts(pid)}")
             pay = pay.split(self.SCTE35_PES_START, 1)[-1]
@@ -549,7 +549,7 @@ class Stream:
         if self.the_scte35_pids and pid not in self.the_scte35_pids:
             return False
         pay = self._parse_payload(pkt)
-        pay = self._strip_scte35_pes(pay, pid)
+        pay = self._strip_scte35_pes(pay)
         if not pay:
             return False
         pay = self._chk_partial(pay, pid, self.SCTE35_TID)
