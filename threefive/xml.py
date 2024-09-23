@@ -21,13 +21,6 @@ def bool2xml(val):
     return str(val).lower()
 
 
-def hex2xml(val):
-    """
-    hex2xml py hex to xml int
-    """
-    return str(int(val, 16))
-
-
 def val2xml(val):
     """
     val2xmlconvert val for xml
@@ -36,9 +29,9 @@ def val2xml(val):
         return bool2xml(val)
     if isinstance(val, (int, float)):
         return num2xml(val)
-    if isinstance(val, str):
-        if val.lower()[:2] == "0x":
-            return hex2xml(val)
+   # if isinstance(val, str):
+       # if val.lower()[:2] == "0x":
+        #    return hex2xml(val)
     return val
 
 
