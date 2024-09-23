@@ -32,6 +32,7 @@ def crc32(data):
     """
     generate a 32 bit crc
     """
+
     table = _mk_table()
     crc = INIT_VALUE
     for bite in data:
@@ -39,3 +40,6 @@ def crc32(data):
             (crc << EIGHT) & (INIT_VALUE - TWO_FIFTY_FIVE)
         )
     return crc
+
+def crc32hex(data):
+    return hex(crc32(data))
