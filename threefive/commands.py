@@ -4,7 +4,6 @@ SCTE35 Splice Commands
 
 from .bitn import BitBin
 from .base import SCTE35Base
-from .stuff import print2
 from .xml import Node
 
 
@@ -268,7 +267,7 @@ class SpliceInsert(TimeSignal):
             "avails_expected": self.avails_expected,
         }
         for k, v in si_attrs.items():
-            if v == None:
+            if v is None:
                 raise ValueError(f"\033[7mSpliceInsert.{k} needs to be set\033[27m")
         si = Node("scte35:SpliceInsert", attrs=si_attrs)
         if self.pts_time:
