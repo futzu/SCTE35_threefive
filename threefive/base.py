@@ -2,12 +2,10 @@
 threefive.base contains
 the class SCTE35Base.
 """
-import sys
 import json
 from .bitn import NBin
 from.stuff import print2
 from .xml import Node
-
 
 class SCTE35Base:
     """
@@ -33,7 +31,7 @@ class SCTE35Base:
         var_value = self.__dict__[var_name]
         if var_value is None:
             err_mesg=f"\033[7m{var_name} is not set, it should be type {var_type}\033[27m"
-            
+
             raise ValueError(err_mesg)
         if not isinstance(var_value, var_type):
             err_mesg = f' \033[7m{var_name} is "{var_value}", it should be type {var_type}\033[27m\n '
@@ -139,8 +137,7 @@ class SCTE35Base:
         """
         if sep in stuff:
             return stuff[stuff.index(sep) :]
-        else:
-            return False
+        return False
 
     def load(self, stuff):
         """
