@@ -1,7 +1,7 @@
-  ![image](https://github.com/user-attachments/assets/aa9a29c1-c020-4af5-b2e6-7b1e192f7db0) <i>The Undisputed Heavyweight Champion of SCTE-35</i>
+  ![image](https://github.com/user-attachments/assets/aa9a29c1-c020-4af5-b2e6-7b1e192f7db0) <i>Optimized to kick ass. </i>
 
 
-# threefive is the Highest Rated SCTE-35 Parser.      Ever.
+# threefive is The Highest Rated SCTE-35 Parser.      Ever.
 
 
 
