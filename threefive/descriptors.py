@@ -65,7 +65,7 @@ class SpliceDescriptor(SCTE35Base):
         self.private_data = self.bites.decode()
         if isinstance(self.private_data,bytes):
             self.private_data = self.bites.decode()
-        
+
 
     def encode(self, nbin=None):
         """
@@ -331,6 +331,7 @@ class SegmentationDescriptor(SpliceDescriptor):
         if self.segmentation_type_id in self.SUB_SEG_TYPES:
             if not self.sub_segment_num:
                 self.sub_segment_num = 0
+            if not self.sub_segments_expected:
                 self.sub_segments_expected = 0
 
     def _decode_segments(self, bitbin):
@@ -339,9 +340,11 @@ class SegmentationDescriptor(SpliceDescriptor):
         if self.segmentation_type_id in self.SUB_SEG_TYPES:
             # if sub_segment_num and sub_segments_expected
             # are not available set both of them to zero
-            ssn = bitbin.as_int(8)
-            sse = bitbin.as_int(8)
-            self._chk_sub_segments()
+            try:
+                self.sub_segment_num = bitbin.as_int(8)
+                sub_segments_expected = bitbin.as_int(8)
+            finally:
+                self._chk_sub_segments()
 
     def encode(self, nbin=None):
         """
@@ -409,7 +412,7 @@ class SegmentationDescriptor(SpliceDescriptor):
                            'archive_allowed_flag': True,
                            'device_restrictions': self.device_restrictions,}
         dr=Node("DeliveryRestrictions",attrs=delrestrict_attrs)
-        
+
         sd_attrs= {'segmentation_event_id':self.segmentation_event_id,
                    'segmentation_event_cancel_indicator':self.segmentation_event_cancel_indicator,
                    'segmentation_event_id_compliance_indicator':self.segmentation_event_id_compliance_indicator,
@@ -429,7 +432,7 @@ class SegmentationDescriptor(SpliceDescriptor):
                   'segmentation_upid':self.segmentation_upid,}
         ud= Node('segmentation_upid',attrs= ud_attrs)
         sd.add_child(dr)
-        sd.add_child(ud)          
+        sd.add_child(ud)
         return sd
 
 
