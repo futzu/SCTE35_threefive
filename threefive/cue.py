@@ -11,7 +11,6 @@ from .section import SpliceInfoSection
 from .commands import command_map,SpliceInsert,TimeSignal
 from .descriptors import splice_descriptor, descriptor_map, SegmentationDescriptor
 from .crc import crc32
-from .xml import Node
 from .dash import DashSCTE35
 
 
