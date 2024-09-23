@@ -192,6 +192,9 @@ class SpliceInfoSection(SCTE35Base):
         return sis
 
     def from_xml(self,stuff):
+        """
+        from_xml SpliceInfoSection from Xml
+        """
         if isinstance(stuff["SpliceInfoSection"]["tier"],int):
             stuff["SpliceInfoSection"]["tier"] = hex(
                 stuff["SpliceInfoSection"]["tier"])
