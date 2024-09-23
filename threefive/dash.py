@@ -3,8 +3,8 @@ dash.py converting dash SCTE-35 to a threefive.Cue instance.
 """
 import json
 import xml.parsers.expat
-from .stuff import print2,camel_case,convert_xml_value
 from new_reader import reader
+from .stuff import print2,camel_case,convert_xml_value
 
 def _ticks2seconds(v):
     """
@@ -54,7 +54,7 @@ class DashSCTE35:
         """
         if name in ["Binary" , "scte35:SpliceInfoSection"] :
             stuff = self.stuff
-            print(json.dumps(stuff, indent=4))                
+            print(json.dumps(stuff, indent=4))
             self.cue_data.append(stuff)
             self.stuff = {}
         self.child_path.pop()
