@@ -12,7 +12,7 @@ from .commands import command_map,SpliceInsert,TimeSignal
 from .descriptors import splice_descriptor, descriptor_map, SegmentationDescriptor
 from .crc import crc32
 from .dash import DashSCTE35
-
+from .xml import Node
 
 class Cue(SCTE35Base):
     """
@@ -123,6 +123,9 @@ class Cue(SCTE35Base):
 
     @staticmethod
     def fix_bad_b64(data):
+        """
+        fix_bad_b64 fixes bad padding on Base64
+        """
         while len(data) % 4 != 0:
             data = data + "="
         return data
@@ -204,11 +207,17 @@ class Cue(SCTE35Base):
         """
         print2(self.get_json())
 
-    def xml(self):
+    def xml(self, binary=False):
         """
         xml returns a threefive.Node instance
         which can be edited as needed or printed.
         """
+        if binary:
+            sig_attrs = {'xmlns':'http://www.scte.org/schemas/35/2016'}
+            sig_node=Node('Signal',attrs=sig_attrs)
+            bin_node=Node('Binary',value=self.encode())
+            sig_node.add_child(bin_node)
+            return sig_node
         sis= self.info_section.xml()
         self.decode()
         if not self.command:
