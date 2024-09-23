@@ -323,7 +323,7 @@ class Cue(SCTE35Base):
                 segdes.from_xml(stuff)
                 self.descriptors.append(segdes)
                 self.encode()
-        self.show()   
+        self.show()
 
     def load(self, stuff):
         """
@@ -345,7 +345,7 @@ class Cue(SCTE35Base):
                     stuff =cue_data[0]
                     self.from_xml(stuff)
                     return
-            else:        
+            else:
                 stuff = json.loads(stuff)
         if "command" not in stuff:
             print2("\033[7mA splice command is required\033[27m")
