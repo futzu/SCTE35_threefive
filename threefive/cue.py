@@ -206,7 +206,12 @@ class Cue(SCTE35Base):
         print2(self.get_json())
 
     def xml(self):
+        """
+        xml returns a threefive.Node instance
+        which can be edited as needed or printed.
+        """
         sis= self.info_section.xml()
+        self.decode()
         if not self.command:
             err_mesg='A Splice Command is Required'
             raise ValueError(err_mesg)
@@ -214,7 +219,6 @@ class Cue(SCTE35Base):
         sis.add_child(cmd)
         for d in self.descriptors:
             sis.add_child(d.xml())
-        sis.show()
         return sis
 
     # encode related
