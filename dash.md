@@ -7,17 +7,26 @@
 * [source](https://github.com/futzu/SCTE35_threefive/blob/master/threefive/dash.py)
 ---
 ### Usage:
+
 * <s>`threefive.DashSCTE35` is the class </s>
 *  <s> the method is `parse_mpd` </s>
 
-* Use a __Cue__ instance and call the __load__ method
-    * ( Cue.load loads xml,json, and python dicts)
- 
-* Code
-
+* Use a __Cue__ instance pass in the Xml via the  __load__ method.
 ```py3
-from threefive import Cue
+  from threefive import Cue
+  cue=Cue()           # Create a Cue instance
+  cue.load(dash_xml)  # load xml
+```
+---
 
+### Example #1     
+* `"urn:scte:scte35:2013:xml"`
+* Text Xml of SCTE-35 SpliceInfosection converted to a Cue instance.
+
+<details><summary> Xml </summary>
+
+
+```xml
 some_xml = """<Event duration="5310000">
             <scte35:SpliceInfoSection protocolVersion="0" ptsAdjustment="183003" tier="4095">
             <scte35:TimeSignal>
@@ -35,64 +44,34 @@ some_xml = """<Event duration="5310000">
             </scte35:SpliceInfoSection>
         </Event>
         """
+```
+
+</details>
+
+
+
+
+
+
+ 
+<details><summary>Code</summary>
+
+```py3
+from threefive import Cue
 
 cue = Cue()
 cue.load(some_xml)
 ```
 
-* Run
 
-```js
-a@fu:~$ pypy3 dashtest2.py
-```
-* <i> debug output</i>
-```rebol
-Event
-Event->scte35:SpliceInfoSection
-Event->scte35:SpliceInfoSection->scte35:TimeSignal
-Event->scte35:SpliceInfoSection->scte35:TimeSignal->scte35:SpliceTime
-Event->scte35:SpliceInfoSection->scte35:SegmentationDescriptor
-Event->scte35:SpliceInfoSection->scte35:SegmentationDescriptor->scte35:DeliveryRestrictions
-Event->scte35:SpliceInfoSection->scte35:SegmentationDescriptor->scte35:SegmentationUpid
-```
-* <i> more debug output</i>
-```smalltalk
-{
-    "Event": {
-        "duration": 59.0
-    },
-    "SpliceInfoSection": {
-        "protocol_version": 0,
-        "pts_adjustment": 2.033367,
-        "tier": 4095
-    },
-    "TimeSignal": {},
-    "SpliceTime": {
-        "pts_time": 38253.966667
-    },
-    "SegmentationDescriptor": {
-        "segmentation_event_id": 1414668,
-        "segmentation_event_cancel_indicator": false,
-        "segmentation_duration": 90.0,
-        "segmentation_type_id": 52,
-        "segment_num": 0,
-        "segments_expected": 0
-    },
-    "DeliveryRestrictions": {
-        "web_delivery_allowed_flag": false,
-        "no_regional_blackout_flag": false,
-        "archive_allowed_flag": false,
-        "device_restrictions": 3
-    },
-    "SegmentationUpid": {
-        "segmentation_upid_type": 8,
-        "segmentation_upid_length": 8,
-        "segmentation_upid": "0x2df3aad7"
-    }
-}
-{}
-```
-* The Cue
+</details>
+
+
+
+
+<details><summary>The Cue after calling load()</summary>
+
+
 ```json
 {
     "info_section": {
@@ -149,7 +128,103 @@ Event->scte35:SpliceInfoSection->scte35:SegmentationDescriptor->scte35:Segmentat
     ]
 }
 a@fu:~$ 
+```
+
+</details>
 
 
+---
+
+
+### Example #2 
+* `"urn:scte:scte35:2014:xml+bin"`
+* SCTE-35 Base64 in Xml converted to a threefive.Cue instance.
+
+
+<details><summary> Xml </summary>
+
+
+```xml
+some_xml = """<Event
+        presentationTime="1725944855040"
+        duration="38400"
+        id="14268724">
+        <Signal
+          xmlns="http://www.scte.org/schemas/35/2016">
+          <Binary>/DAgAAAAAAAAAP/wDwUA2bk0f//+ADS8AMAAAAAAAORhJCQ=</Binary>
+        </Signal>
+      </Event>"""
 
 ```
+
+</details>
+
+
+
+
+
+
+ 
+<details><summary>Code</summary>
+
+```py3
+from threefive import Cue
+
+cue = Cue()
+cue.load(some_xml)
+```
+
+
+</details>
+
+
+
+
+<details><summary>The Cue after calling load()</summary>
+
+
+```json
+{
+    "info_section": {
+        "table_id": "0xfc",
+        "section_syntax_indicator": false,
+        "private": false,
+        "sap_type": "0x03",
+        "sap_details": "No Sap Type",
+        "section_length": 32,
+        "protocol_version": 0,
+        "encrypted_packet": false,
+        "encryption_algorithm": 0,
+        "pts_adjustment": 0.0,
+        "cw_index": "0x00",
+        "tier": "0x0fff",
+        "splice_command_length": 15,
+        "splice_command_type": 5,
+        "descriptor_loop_length": 0,
+        "crc": "0xe4612424"
+    },
+    "command": {
+        "command_length": 15,
+        "command_type": 5,
+        "name": "Splice Insert",
+        "break_auto_return": true,
+        "break_duration": 38.4,
+        "splice_event_id": 14268724,
+        "splice_event_cancel_indicator": false,
+        "out_of_network_indicator": true,
+        "program_splice_flag": true,
+        "duration_flag": true,
+        "splice_immediate_flag": true,
+        "event_id_compliance_flag": true,
+        "unique_program_id": 49152,
+        "avail_num": 0,
+        "avails_expected": 0
+    },
+    "descriptors": []
+}
+
+```
+
+</details>
+
+---
