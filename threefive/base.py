@@ -4,7 +4,6 @@ the class SCTE35Base.
 """
 import json
 from .bitn import NBin
-from.stuff import print2
 from .xml import Node
 
 class SCTE35Base:
@@ -31,13 +30,11 @@ class SCTE35Base:
         var_value = self.__dict__[var_name]
         if var_value is None:
             err_mesg=f"\033[7m{var_name} is not set, it should be type {var_type}\033[27m"
-
             raise ValueError(err_mesg)
         if not isinstance(var_value, var_type):
             err_mesg = f' \033[7m{var_name} is "{var_value}", it should be type {var_type}\033[27m\n '
             raise ValueError(err_mesg)
-        else:
-            nbin_method(var_value, bit_count)
+        nbin_method(var_value, bit_count)
 
     @staticmethod
     def as_90k(int_time):
