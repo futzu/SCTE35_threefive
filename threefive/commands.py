@@ -165,7 +165,7 @@ class TimeSignal(SpliceCommand):
     def from_xml(self,stuff):
         if "SpliceTime" in stuff:
             self.load(stuff['SpliceTime'])
-            self.time_specified_flag = True        
+            self.time_specified_flag = True
 
 class SpliceInsert(TimeSignal):
     """
@@ -279,7 +279,7 @@ class SpliceInsert(TimeSignal):
             si.add_child(prgm)
         if self.break_duration:
             bd_attrs = {
-                "auto_return": self.auto_return,
+                "auto_return": self.break_auto_return,
                 "duration": self.break_duration,
             }
             bd = Node("scte35:BreakDuration", attrs=bd_attrs)
@@ -296,10 +296,10 @@ class SpliceInsert(TimeSignal):
             self.time_specified_flag = True
         if "BreakDuration" in stuff:
             self.load(stuff["BreakDuration"])
-            self.break_duration = self.duration
+            self.break_duration = stuff["BreakDuration"]["duration"]
             self.duration_flag = True
-            self.break_auto_return = self.auto_return
-        self.avails_expected = bool(self.avails_expected)        
+            self.break_auto_return = stuff["BreakDuration"]["auto_return"]
+        self.avails_expected = bool(self.avails_expected)
 
 # table 7
 command_map = {
