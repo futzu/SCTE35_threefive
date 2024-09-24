@@ -56,6 +56,7 @@ class Cue(SCTE35Base):
         self.command = None
         self.descriptors = []
         self.packet_data = packet_data
+        self.dash_data =None
 
     def __repr__(self):
         return str(self.__dict__)
@@ -102,7 +103,9 @@ class Cue(SCTE35Base):
                 "command": self.command.get(),
                 "descriptors": self.get_descriptors(),
             }
-            if self.packet_data is not None:
+            if self.dash_data:
+                scte35['dash_data'] = self.dash_data
+            if self.packet_data:
                 scte35["packet_data"] = self.packet_data.get()
             return scte35
         return False
@@ -325,12 +328,18 @@ class Cue(SCTE35Base):
             segdes.from_xml(stuff)
             self.descriptors.append(segdes)
 
+    def _xml_event_signal(self,stuff):
+        self.dash_data={}
+        for x in ['EventStream','Event','Signal']:
+            if x in stuff:
+                self.dash_data[x] =stuff[x]
+
     def from_xml(self,stuff):
         """
         build_cue takes the data put into the stuff dict
         and builds a threefive.Cue instance
         """
-
+        self._xml_event_signal(stuff)
         if "Binary" in stuff:
             self.bites = self._mk_bits(stuff["Binary"]["binary"])
             self.decode()
@@ -342,11 +351,6 @@ class Cue(SCTE35Base):
             # Self.encode() will calculate lengths and types and such
             self.encode()
         self.show()
-
-    def load_xml(self,suff):
-        """
-        load_xml attempt to load xml data into self.
-        """
 
     def load(self, stuff):
         """
