@@ -409,7 +409,7 @@ class SegmentationDescriptor(SpliceDescriptor):
         del_attrs = None
         if not self.delivery_not_restricted_flag:
             del_attrs={"web_delivery_allowed_flag": self.web_delivery_allowed_flag,
-                        'no_regional_blackout_flag': self.no_reginal_blackout_flag,
+                        'no_regional_blackout_flag': self.no_regional_blackout_flag,
                         'archive_allowed_flag': self.archive_allowed_flag,
                         'device_restrictions': self.device_restrictions,}
         else:
@@ -427,8 +427,8 @@ class SegmentationDescriptor(SpliceDescriptor):
                    'segment_num':self.segment_num,
                    'segments_expected':self.segments_expected,}
         if self.segmentation_type_id in self.SUB_SEG_TYPES:
-                   sd_attrs['self.sub_segment_num']=self.sub_segment_num
-                   sd_attrs['sub_segments_expected']=self.sub_segments_expected
+            sd_attrs['self.sub_segment_num']=self.sub_segment_num
+            sd_attrs['sub_segments_expected']=self.sub_segments_expected
         sd=Node('scte35:SegmentationDescriptor',attrs=sd_attrs)
 
                  # I still need to figure format_identifier out.
