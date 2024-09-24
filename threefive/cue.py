@@ -210,28 +210,6 @@ class Cue(SCTE35Base):
         """
         print2(self.get_json())
 
-    def xml(self, binary=False):
-        """
-        xml returns a threefive.Node instance
-        which can be edited as needed or printed.
-        """
-        if binary:
-            sig_attrs = {'xmlns':'http://www.scte.org/schemas/35/2016'}
-            sig_node=Node('Signal',attrs=sig_attrs)
-            bin_node=Node('Binary',value=self.encode())
-            sig_node.add_child(bin_node)
-            return sig_node
-        sis= self.info_section.xml()
-        self.decode()
-        if not self.command:
-            err_mesg='A Splice Command is Required'
-            raise ValueError(err_mesg)
-        cmd = self.command.xml()
-        sis.add_child(cmd)
-        for d in self.descriptors:
-            sis.add_child(d.xml())
-        return sis
-
     # encode related
 
     def encode(self):
@@ -309,6 +287,75 @@ class Cue(SCTE35Base):
             all_bites.add_bites(chunk)
         return all_bites.bites
 
+    def load_info_section(self, isec):
+        """
+        load_info_section loads data for Cue.info_section
+        isec should be a dict.
+        if 'splice_command_type' is included,
+        an empty command instance will be created for Cue.command
+        """
+        self.info_section.load(isec)
+
+    def load_command(self, cmd):
+        """
+        load_command loads data for Cue.command
+        cmd should be a dict.
+        if 'command_type' is included,
+        the command instance will be created.
+        """
+        if "command_type" in cmd:
+            self.command = command_map[cmd["command_type"]]()
+            self.command.load(cmd)
+
+    def load_descriptors(self, dlist):
+        """
+        Load_descriptors loads descriptor data.
+        dlist is a list of dicts
+        if 'tag' is included in each dict,
+        a descriptor instance will be created.
+        """
+        if not isinstance(dlist, list):
+            raise Exception("\033[7mdescriptors should be a list\033[27m")
+        for dstuff in dlist:
+            if "tag" in dstuff:
+                dscptr = descriptor_map[dstuff["tag"]]()
+                dscptr.load(dstuff)
+                self.descriptors.append(dscptr)
+
+    def load(self, stuff):
+        """
+        Cue.load loads SCTE35 data for encoding.
+        stuff is a dict or json
+        with any or all of these keys
+        stuff = {
+            'info_section': {dict} ,
+            'command': {dict},
+            'descriptors': [list of {dicts}],
+            }
+        """
+        if isinstance(stuff, str):
+            # DASH
+            if stuff.strip()[0]=='<':
+                ds=DashSCTE35()
+                cue_data = ds.parse(stuff)
+                if cue_data:
+                    stuff =cue_data[0]
+                    self.from_xml(stuff)
+                    return
+            else:
+                stuff = json.loads(stuff)
+        if "command" not in stuff:
+            print2("\033[7mA splice command is required\033[27m")
+            sys.exit()
+        if "info_section" in stuff:
+            self.load_info_section(stuff["info_section"])
+        if "command" in stuff:
+            self.load_command(stuff["command"])
+        if "descriptors" in stuff:
+            self.load_descriptors(stuff["descriptors"])
+
+    # Dash
+
     def _xml_splice_info_section(self,stuff):
         if "SpliceInfoSection" in stuff:
             self.info_section=SpliceInfoSection()
@@ -352,69 +399,25 @@ class Cue(SCTE35Base):
             self.encode()
         self.show()
 
-    def load(self, stuff):
+    def xml(self, binary=False):
         """
-        Cue.load loads SCTE35 data for encoding.
-        stuff is a dict or json
-        with any or all of these keys
-        stuff = {
-            'info_section': {dict} ,
-            'command': {dict},
-            'descriptors': [list of {dicts}],
-            }
+        xml returns a threefive.Node instance
+        which can be edited as needed or printed.
         """
-        if isinstance(stuff, str):
-            # DASH
-            if stuff.strip()[0]=='<':
-                ds=DashSCTE35()
-                cue_data = ds.parse(stuff)
-                if cue_data:
-                    stuff =cue_data[0]
-                    self.from_xml(stuff)
-                    return
-            else:
-                stuff = json.loads(stuff)
-        if "command" not in stuff:
-            print2("\033[7mA splice command is required\033[27m")
-            sys.exit()
-        if "info_section" in stuff:
-            self.load_info_section(stuff["info_section"])
-        if "command" in stuff:
-            self.load_command(stuff["command"])
-        if "descriptors" in stuff:
-            self.load_descriptors(stuff["descriptors"])
+        if binary:
+            sig_attrs = {'xmlns':'http://www.scte.org/schemas/35/2016'}
+            sig_node=Node('Signal',attrs=sig_attrs)
+            bin_node=Node('Binary',value=self.encode())
+            sig_node.add_child(bin_node)
+            return sig_node
+        sis= self.info_section.xml()
+        self.decode()
+        if not self.command:
+            err_mesg='A Splice Command is Required'
+            raise ValueError(err_mesg)
+        cmd = self.command.xml()
+        sis.add_child(cmd)
+        for d in self.descriptors:
+            sis.add_child(d.xml())
+        return sis
 
-    def load_info_section(self, isec):
-        """
-        load_info_section loads data for Cue.info_section
-        isec should be a dict.
-        if 'splice_command_type' is included,
-        an empty command instance will be created for Cue.command
-        """
-        self.info_section.load(isec)
-
-    def load_command(self, cmd):
-        """
-        load_command loads data for Cue.command
-        cmd should be a dict.
-        if 'command_type' is included,
-        the command instance will be created.
-        """
-        if "command_type" in cmd:
-            self.command = command_map[cmd["command_type"]]()
-            self.command.load(cmd)
-
-    def load_descriptors(self, dlist):
-        """
-        Load_descriptors loads descriptor data.
-        dlist is a list of dicts
-        if 'tag' is included in each dict,
-        a descriptor instance will be created.
-        """
-        if not isinstance(dlist, list):
-            raise Exception("\033[7mdescriptors should be a list\033[27m")
-        for dstuff in dlist:
-            if "tag" in dstuff:
-                dscptr = descriptor_map[dstuff["tag"]]()
-                dscptr.load(dstuff)
-                self.descriptors.append(dscptr)
