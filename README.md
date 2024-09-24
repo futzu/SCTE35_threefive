@@ -1,11 +1,17 @@
- `Heads Up!`  [Experimental Dash SCTE35 Parser Expected in Release v2.4.71](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md)
+> "_F&*k me, threefive is f&*king sweet._" ~ Stan Loomis
+> 
+
+ 
+![image](https://github.com/user-attachments/assets/12521de0-ce6d-4471-8cde-87cb51b1a37d)
 
   
-  ![image](https://github.com/user-attachments/assets/aa9a29c1-c020-4af5-b2e6-7b1e192f7db0) <i>Optimized to kick ass. </i>
+# threefive is the Industry Leading SCTE-35 Decoder and Encoder. 
 
 
-# threefive is The Highest Rated SCTE-35 Parser.      Ever.
 
+[iodisco.com/scte35 ](https://iodisco.com/cgi-bin/scte35parser) the only accurate online SCTE-35 parser.
+
+ `Heads Up!`  [Experimental Dash SCTE35 Parser Expected in Release v2.4.71](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md)
 
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
@@ -76,58 +82,18 @@ a@slow:~/threefive$
      * [Encode](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#encode) __JSON to SCTE-35__
      * [Convert](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#convert) __SCTE-35 Formats__ 
 
-* [__Parse SCTE-35 programmatically__](https://github.com/futzu/scte35parser-threefive/blob/master/prog.md) </i>(write some code)</i>
+* [__Parse SCTE-35 programmatically__](https://github.com/futzu/scte35parser-threefive/blob/master/prog.md) with __threefive__ </i>(write some code)</i>
      * SCTE-35 code [__Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
-     * `New!` [How to Use __threefive.Cue__](https://github.com/futzu/SCTE35_threefive/blob/master/basic.md)
-     * [__Encoding__](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md) and [__Encoding | more__ ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md) and [JSON to SCTE-35 Encoding](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md)
-     * [__Trigger on SCTE-35 Events__](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md) using threefive.Stream
+     *  [How to Use __threefive.Cue__](https://github.com/futzu/SCTE35_threefive/blob/master/basic.md)
+    
+     * [__Trigger on SCTE-35 Events__](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md) using __threefive.Stream__
      * Automatic __AES decryption__ with [threefive.Segment](https://github.com/futzu/SCTE35_threefive/blob/master/segment.md)
      * Display SCTE-35 Data as [__WebVTT__ subtitles in Video](https://github.com/futzu/SCTE35_threefive/blob/master/examples/stream/cue2vtt.py)
-   
-<details><summary>threefive class inheritance </summary>
 
-```smalltalk
-class SCTE35Base: 
-        class Cue(SCTE35Base):
-        class PacketData(SCTE35Base):   
-        class SpliceCommand(SCTE35Base):
-                class BandwidthReservation(SpliceCommand):
-                class PrivateCommand(SpliceCommand):
-                class SpliceNull(SpliceCommand):
-                class TimeSignal(SpliceCommand):
-                        class SpliceInsert(TimeSignal):  
-        class SpliceDescriptor(SCTE35Base): 
-                class AvailDescriptor(SpliceDescriptor):
-                class DtmfDescriptor(SpliceDescriptor):
-                class DVBDASDescriptor(SpliceDescriptor):
-                class SegmentationDescriptor(SpliceDescriptor):
-                class TimeDescriptor(SpliceDescriptor):           
-        class SpliceInfoSection(SCTE35Base)
-             
-class Upid: 
-        class NoUpid(Upid):    
-        class AirId(Upid):
-        class Atsc(Upid):
-        class Eidr(Upid):
-        class Isan(Upid):
-        class Mid(Upid):
-        class Mpu(Upid):
-        class Umid(Upid):
-
-class Stream:
-        class Segment(Stream):
-
-class BitBin:
-class DashSCTE35:
-class Maps:
-class NBin:
-class Node:
-class Pids:
-class ProgramInfo:
-```
-
-
-
+* [__Encoding__](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md)
+    *  [__Encoding | more__ ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md)
+    *  [JSON to SCTE-35 Encoding](https://github.com/futzu/SCTE35_threefive/blob/master/cliencde.md)
+      
 
 </details>
  <details><summary>Cue Class</summary>
