@@ -214,7 +214,8 @@ class Stream:
     def _split_by_idx(pay, marker):
         try:
             return pay[pay.index(marker) :]
-        except:
+        except Exception as err:
+            print(f"Unexpected {err=}, {type(err)=}")
             return False
 
     def _find_start(self):
