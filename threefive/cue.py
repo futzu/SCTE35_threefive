@@ -306,6 +306,25 @@ class Cue(SCTE35Base):
             all_bites.add_bites(chunk)
         return all_bites.bites
 
+    def _xml_splice_info_section(self,stuff):
+        if "SpliceInfoSection" in stuff:
+            self.info_section=SpliceInfoSection()
+            self.info_section.from_xml(stuff)
+
+    def _xml_splice_command(self,stuff):
+        if "TimeSignal" in stuff:
+            self.command=TimeSignal()
+        if "SpliceInsert" in stuff:
+            self.command=SpliceInsert()
+        if self.command:
+            self.command.from_xml(stuff)
+
+    def _xml_splice_descriptor(self,stuff):
+        if "SegmentationDescriptor" in stuff:
+            segdes=SegmentationDescriptor()
+            segdes.from_xml(stuff)
+            self.descriptors.append(segdes)
+
     def from_xml(self,stuff):
         """
         build_cue takes the data put into the stuff dict
@@ -316,22 +335,18 @@ class Cue(SCTE35Base):
             self.bites = self._mk_bits(stuff["Binary"]["binary"])
             self.decode()
         else:
-            if "SpliceInfoSection" in stuff:
-                self.info_section=SpliceInfoSection()
-                self.info_section.from_xml(stuff)
-            if "SpliceInsert" in stuff:
-                self.command=SpliceInsert()
-                self.command.from_xml(stuff)
-            if "TimeSignal" in stuff:
-                self.command=TimeSignal()
-                self.command.from_xml(stuff)
+            self._xml_splice_info_section(stuff)
+            self._xml_splice_command(stuff)
             self.info_section.splice_command_type =self.command.command_type
-            if "SegmentationDescriptor" in stuff:
-                segdes=SegmentationDescriptor()
-                segdes.from_xml(stuff)
-                self.descriptors.append(segdes)
-                self.encode()
+            self._xml_splice_descriptor(stuff)
+            # Self.encode() will calculate lengths and types and such
+            self.encode()
         self.show()
+
+    def load_xml(self,suff):
+        """
+        load_xml attempt to load xml data into self.
+        """
 
     def load(self, stuff):
         """
@@ -345,7 +360,7 @@ class Cue(SCTE35Base):
             }
         """
         if isinstance(stuff, str):
-            # DASH Event or Signal
+            # DASH
             if stuff.strip()[0]=='<':
                 ds=DashSCTE35()
                 cue_data = ds.parse(stuff)
@@ -393,7 +408,7 @@ class Cue(SCTE35Base):
         a descriptor instance will be created.
         """
         if not isinstance(dlist, list):
-            raise Exception("descriptors should be a list")
+            raise Exception("\033[7mdescriptors should be a list\033[27m")
         for dstuff in dlist:
             if "tag" in dstuff:
                 dscptr = descriptor_map[dstuff["tag"]]()
