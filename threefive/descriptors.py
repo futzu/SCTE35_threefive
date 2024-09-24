@@ -406,20 +406,29 @@ class SegmentationDescriptor(SpliceDescriptor):
         '''
 
         '''
-        delrestrict_attrs={"web_delivery_allowed_flag":True,
-                           'no_regional_blackout_flag':True,
-                           'archive_allowed_flag': True,
-                           'device_restrictions': self.device_restrictions,}
-        dr=Node("DeliveryRestrictions",attrs=delrestrict_attrs)
+        del_attrs = None
+        if not self.delivery_not_restricted_flag:
+            del_attrs={"web_delivery_allowed_flag": self.web_delivery_allowed_flag,
+                        'no_regional_blackout_flag': self.no_reginal_blackout_flag,
+                        'archive_allowed_flag': self.archive_allowed_flag,
+                        'device_restrictions': self.device_restrictions,}
+        else:
+            del_attrs={"web_delivery_allowed_flag":True,
+                        'no_regional_blackout_flag':True,
+                        'archive_allowed_flag': True,
+                         'device_restrictions': self.device_restrictions,}
+
+        dr=Node("DeliveryRestrictions",attrs=del_attrs)
 
         sd_attrs= {'segmentation_event_id':self.segmentation_event_id,
                    'segmentation_event_cancel_indicator':self.segmentation_event_cancel_indicator,
                    'segmentation_event_id_compliance_indicator':self.segmentation_event_id_compliance_indicator,
                    'segmentation_duration':self.segmentation_duration,
                    'segment_num':self.segment_num,
-                   'segments_expected':self.segments_expected,
-                   'self.sub_segment_num':self.sub_segment_num,
-                   'sub_segments_expected':self.sub_segments_expected,}
+                   'segments_expected':self.segments_expected,}
+        if self.segmentation_type_id in self.SUB_SEG_TYPES:
+                   sd_attrs['self.sub_segment_num']=self.sub_segment_num
+                   sd_attrs['sub_segments_expected']=self.sub_segments_expected
         sd=Node('scte35:SegmentationDescriptor',attrs=sd_attrs)
 
                  # I still need to figure format_identifier out.
