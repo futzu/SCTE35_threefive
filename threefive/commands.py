@@ -263,8 +263,12 @@ class SpliceInsert(TimeSignal):
         si_attrs = {
             "splice_event_id": self.splice_event_id,
             "splice_event_cancel_Indicator": self.splice_event_cancel_indicator,
+            "splice_immediate_flag": self.splice_immediate_flag,
+            "event_id_compliance_flag": self.event_id_compliance_flag,
             "avail_num": self.avail_num,
             "avails_expected": self.avails_expected,
+            'out_of_network_indicator': self.out_of_network_indicator,
+            'unique_program_id': self.unique_program_id,
         }
         for k, v in si_attrs.items():
             if v is None:
