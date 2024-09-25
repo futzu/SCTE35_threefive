@@ -423,7 +423,7 @@ class SegmentationDescriptor(SpliceDescriptor):
         sd_attrs= {'segmentation_event_id':self.segmentation_event_id,
                    'segmentation_event_cancel_indicator':self.segmentation_event_cancel_indicator,
                    'segmentation_event_id_compliance_indicator':self.segmentation_event_id_compliance_indicator,
-                   'segmentation_duration':self.segmentation_duration,
+                   'segmentation_duration':self.as_ticks(self.segmentation_duration),
                    'segment_num':self.segment_num,
                    'segments_expected':self.segments_expected,}
         if self.segmentation_type_id in self.SUB_SEG_TYPES:
