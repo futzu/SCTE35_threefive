@@ -10,7 +10,7 @@
 * <s>`threefive.DashSCTE35` is the class </s>
 *  <s> the method is `parse_mpd` </s>
 
-* Use a __Cue__ instance pass in the Xml via the  __load__ method.
+* Use a __Cue__ instance and pass in the Xml via the  __load__ method.
 ```py3
   from threefive import Cue
   cue=Cue()           # Create a Cue instance
