@@ -125,8 +125,8 @@ cue.load(some_xml)
             "sub_segments_expected": 0
         }
     ],
-    "dash_data": {
-        "Event": {
+    "dash_data": {             # dash_data includes EventStream, Event,
+        "Event": {             # and Signal node data when present.
             "duration": 59.0
         }
     }
@@ -227,8 +227,8 @@ cue.load(some_xml)
         "avails_expected": 0
     },
     "descriptors": [],
-    "dash_data": {
-        "Event": {
+    "dash_data": {                             # dash_data includes EventStream, Event
+        "Event": {                              # and Signal node data when present.
             "presentation_time": 1725944855040,
             "duration": 0.426667,
             "id": 14268724
