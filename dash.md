@@ -124,8 +124,14 @@ cue.load(some_xml)
             "sub_segment_num": 0,
             "sub_segments_expected": 0
         }
-    ]
+    ],
+    "dash_data": {
+        "Event": {
+            "duration": 59.0
+        }
+    }
 }
+
 a@fu:~$ 
 ```
 
@@ -184,6 +190,7 @@ cue.load(some_xml)
 
 ```json
 {
+{
     "info_section": {
         "table_id": "0xfc",
         "section_syntax_indicator": false,
@@ -219,7 +226,17 @@ cue.load(some_xml)
         "avail_num": 0,
         "avails_expected": 0
     },
-    "descriptors": []
+    "descriptors": [],
+    "dash_data": {
+        "Event": {
+            "presentation_time": 1725944855040,
+            "duration": 0.426667,
+            "id": 14268724
+        },
+        "Signal": {
+            "xmlns": "http://www.scte.org/schemas/35/2016"
+        }
+    }
 }
 
 ```
