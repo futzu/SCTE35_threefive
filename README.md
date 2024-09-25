@@ -1,8 +1,5 @@
-> "_F&*k me, threefive is f&*king sweet._" ~ Stan Loomis
-> 
 
- 
-![image](https://github.com/user-attachments/assets/12521de0-ce6d-4471-8cde-87cb51b1a37d)
+![image alt="threefive is the highest rated SCTE-35 Parser. Ever."](https://github.com/user-attachments/assets/12521de0-ce6d-4471-8cde-87cb51b1a37d)
 
   
 # threefive is the Industry Leading SCTE-35 Decoder and Encoder. 
