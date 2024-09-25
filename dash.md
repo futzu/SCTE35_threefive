@@ -236,7 +236,7 @@ from threefive import Cue
 
 cue=Cue(data) # Data can be Base64, Bytes, Hex, Integer
 #OR
-cue=Cue.load(data             # JSON, a dict, or xml can be loaded
+cue=Cue.load(data)            # JSON, a dict, or xml can be loaded
 
 cue.decode()
 x = cue.xml() # returns a threefive.Node instance
@@ -284,6 +284,47 @@ x.show()   # displays xml
         </scte35:SegmentationDescriptor>
 </scte35:SpliceInfoSection>
 
+```
+
+</details>
+
+---
+
+### Example 4
+* `"u23rn:scte:scte35:2014:xml+bin"`
+* Converting a Cue instance to xml+binary for Dash
+<details><summary> Base64 </summary>
+
+
+```js
+'/DAlAAAAAAAAAP/wFAUAAAABf+/+y+LXLv4ARKogAAEAAAAAMZjNOQ=='
+```
+
+</details>
+
+
+ 
+<details><summary>Code</summary>
+
+```py3
+from threefive import Cue
+b64 = '/DAlAAAAAAAAAP/wFAUAAAABf+/+y+LXLv4ARKogAAEAAAAAMZjNOQ=='
+cue=Cue(b64)
+cue.decode()
+x = cue.xml(binary=True) # returns a threefive.Node instance
+x.show()   # displays xml
+```
+
+</details>
+
+
+<details><summary>xml Output</summary>
+
+
+```xml
+<Signal xmlns="http://www.scte.org/schemas/35/2016">
+    <Binary>/DAlAAAAAAAAAP/wFAUAAAABf+/+y+LXLv4ARKogAAEAAAAAMZjNOQ==</Binary>
+</Signal>
 ```
 
 </details>
