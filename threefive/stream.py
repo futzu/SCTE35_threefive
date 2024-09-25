@@ -151,7 +151,7 @@ class Stream:
             self._tsdata = tsdata
         self.show_null = show_null
         self.start = {}
-        self.info = True
+        self.info = False
         self.the_program = None
         self.the_scte35_pids = []
         self.pids = Pids()
@@ -256,10 +256,10 @@ class Stream:
         if not self._find_start():
             return False
         for pkt in self.iter_pkts():
-            if pkt[0] == self.SYNC_BYTE:
-                cue = self._parse(pkt)
-                if cue:
-                    func(cue)
+            #if pkt[0] == self.SYNC_BYTE:
+            cue = self._parse(pkt)
+            if cue:
+                func(cue)
         return False
 
     def decode_fu(self, func=show_cue):
@@ -497,7 +497,7 @@ class Stream:
     def _parse(self, pkt):
         cue = False
         pid = self._parse_info(pkt)
-        # self._parse_cc(pkt, pid)
+        #self._parse_cc(pkt, pid)
         if self._pcr_flag(pkt):
             self._parse_pcr(pkt, pid)
         if self._pusi_flag(pkt):
@@ -515,8 +515,7 @@ class Stream:
         same = False
         if pid in self.maps.last:
             same = (False, True)[pay == self.maps.last[pid]]
-        if not same:
-            self.maps.last[pid] = pay
+        if not same: self.maps.last[pid] = pay
         return same
 
     def _section_incomplete(self, pay, pid, seclen):
