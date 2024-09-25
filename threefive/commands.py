@@ -156,7 +156,7 @@ class TimeSignal(SpliceCommand):
         """
         ts = Node("scte35:TimeSignal")
         if self.has("pts_time"):
-            st = Node("scte35:SpliceTime", attrs={"pts_time": self.pts_time})
+            st = Node("scte35:SpliceTime", attrs={"pts_time": self.as_ticks(self.pts_time)})
             ts.add_child(st)
         return ts
 
@@ -276,13 +276,13 @@ class SpliceInsert(TimeSignal):
         si = Node("scte35:SpliceInsert", attrs=si_attrs)
         if self.pts_time:
             prgm = Node("scte35:Program")
-            st = Node("scte35:SpliceTime", attrs={"ptsTime": self.pts_time})
+            st = Node("scte35:SpliceTime", attrs={"ptsTime": self.as_ticks(self.pts_time)})
             prgm.add_child(st)
             si.add_child(prgm)
         if self.break_duration:
             bd_attrs = {
                 "auto_return": self.break_auto_return,
-                "duration": self.break_duration,
+                "duration": self.as_ticks(self.break_duration),
             }
             bd = Node("scte35:BreakDuration", attrs=bd_attrs)
             si.add_child(bd)
