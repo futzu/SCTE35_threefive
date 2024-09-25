@@ -345,8 +345,8 @@ class Cue(SCTE35Base):
             else:
                 stuff = json.loads(stuff)
         if "command" not in stuff:
-            print2("\033[7mA splice command is required\033[27m")
-            sys.exit()
+            err_mesg=("\033[7mA splice command is required\033[27m")
+            raise ValueError(err_mesg)
         if "info_section" in stuff:
             self.load_info_section(stuff["info_section"])
         if "command" in stuff:
@@ -413,11 +413,10 @@ class Cue(SCTE35Base):
         sis= self.info_section.xml()
         self.decode()
         if not self.command:
-            err_mesg='A Splice Command is Required'
+            err_mesg='\033[7mA Splice Command is Required\033[27m'
             raise ValueError(err_mesg)
         cmd = self.command.xml()
         sis.add_child(cmd)
         for d in self.descriptors:
             sis.add_child(d.xml())
         return sis
-
