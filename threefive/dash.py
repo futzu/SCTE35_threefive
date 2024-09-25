@@ -12,7 +12,7 @@ def t2s(v):
     90k ticks to seconds and
     rounds to six decimal places
     """
-    v = (un_xml(v) / 90000.0)
+    v = v/ 90000.0
     return round(v, 6)
 
 
@@ -58,8 +58,9 @@ class DashSCTE35:
         iter_attrs normalizes xml attributes
         and adds them to the stuff dict.
         """
+        conv = {camel(k): un_xml(v) for k, v in attrs.items()}
         pts_vars = ["pts_time", "pts_adjustment", "duration", "segmentation_duration"]
-        conv = {camel(k): (t2s(v) if k in pts_vars else un_xml(v) )for k, v in attrs.items()}
+        conv = {k: (t2s(v) if k in pts_vars else v) for k, v in conv.items()}
         self.stuff[self.active].update(conv)
 
     def start_element(self, name, attrs):
