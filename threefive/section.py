@@ -183,7 +183,7 @@ class SpliceInfoSection(SCTE35Base):
         """
         xml create xml node for splice info section
         """
-        sis_attrs= {'pts_adjustment': self.pts_adjustment,
+        sis_attrs= {'pts_adjustment': self.as_ticks(self.pts_adjustment),
                     'protocol_version': self.protocol_version,
                     'sap_type': self.sap_type,
                     'sap_details':self.sap_details,
