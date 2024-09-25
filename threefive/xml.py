@@ -50,8 +50,8 @@ def unroll_attrs(attrs):
     unroll_attrs converts attrs
     into a string for a xml node
     """
-    if attrs:   return "".join([f' {k}="{v}"' for k, v in attrs.items()])
-    return {}
+    return "".join([f' {k}="{v}"' for k, v in attrs.items()])
+
 
 
 class Node:
