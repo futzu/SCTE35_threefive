@@ -4,16 +4,41 @@ dash.py converting dash SCTE-35 to a threefive.Cue instance.
 import json
 import xml.parsers.expat
 from new_reader import reader
-from .stuff import print2,camel_case,convert_xml_value
+from .stuff import print2
 
-def _ticks2seconds(v):
+def t2s(v):
     """
-    _ticks2seconds converts
+    _t2s converts
     90k ticks to seconds and
     rounds to six decimal places
     """
-    v /= 90000.0
+    v = (un_xml(v) / 90000.0)
     return round(v, 6)
+
+
+def camel(k):
+    """
+    camel changes camel case xml names
+    to underscore_format names.
+    """
+    k = "".join([f"_{i.lower()}" if i.isupper() else i for i in k])
+    return (k, k[1:])[k[0] == "_"]
+
+
+def un_xml(v):
+    """
+    un_xml converts an xml value
+    to ints, floats and booleans.
+    """
+    if v.isdigit():
+        return int(v)
+    if v.replace(".", "").isdigit():
+        return float(v)
+    if v in ["false", "False"]:
+        return False
+    if v in ["true", "True"]:
+        return True
+    return v
 
 
 class DashSCTE35:
@@ -33,9 +58,8 @@ class DashSCTE35:
         iter_attrs normalizes xml attributes
         and adds them to the stuff dict.
         """
-        conv = {camel_case(k): convert_xml_value(v) for k, v in attrs.items()}
         pts_vars = ["pts_time", "pts_adjustment", "duration", "segmentation_duration"]
-        conv = {k: (_ticks2seconds(v) if k in pts_vars else v) for k, v in conv.items()}
+        conv = {camel(k): (t2s(v) if k in pts_vars else un_xml(v) )for k, v in attrs.items()}
         self.stuff[self.active].update(conv)
 
     def start_element(self, name, attrs):
@@ -65,7 +89,7 @@ class DashSCTE35:
         """
         data=data.replace(' ','').replace('\n','')
         if data:
-            self.stuff[self.active][camel_case(self.active)] = data
+            self.stuff[self.active][camel(self.active)] = data
 
 
     def parse(self, exemel):
