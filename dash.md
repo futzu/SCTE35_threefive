@@ -1,4 +1,4 @@
-# Dash SCTE-35 Parser Preview
+# Dash SCTE-35 Parser Preview    (_Updated 9/26/2024_)
 ### Expected in release v2.4.71
 ### Everything here may or may not change.
 # From Xml
