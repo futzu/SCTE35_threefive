@@ -19,7 +19,7 @@
 ---
 
 ### Example #1     
-* `"u23rn:scte:scte35:2013:xml"`
+* `"urn:scte:scte35:2013:xml"`
 * Text Xml of SCTE-35 SpliceInfosection converted to a Cue instance.
 
 <details><summary> Xml </summary>
@@ -261,7 +261,7 @@ print(x)  # displays xml
 ```
 
 ### Example 3
-* `"u23rn:scte:scte35:2013:xml"`
+* `"urn:scte:scte35:2013:xml"`
 * Converting a Cue instance to xml for Dash
 <details><summary> Base64 </summary>
 
@@ -308,7 +308,7 @@ print(x)   # displays xml
 ---
 
 ### Example 4
-* `"u23rn:scte:scte35:2014:xml+bin"`
+* `"urn:scte:scte35:2014:xml+bin"`
 * Converting a Cue instance to xml+binary for Dash
 <details><summary> Base64 </summary>
 
