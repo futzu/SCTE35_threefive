@@ -257,7 +257,7 @@ cue=Cue.load(data)            # JSON, a dict, or xml can be loaded
 
 cue.decode()
 x = cue.xml() # returns a threefive.Node instance
-x.show()   # displays xml
+print(x)  # displays xml
 ```
 
 ### Example 3
@@ -281,7 +281,7 @@ from threefive import Cue
 cue=Cue('/DA2AAHOR/nwAAAABQb+PnGRBwAgAh5DVUVJSAAAbH/PAAE1ODcICAAAAAAt86rXNAAAAACwnuYL')
 cue.decode()
 x = cue.xml() # returns a threefive.Node instance
-x.show()   # displays xml
+print(x)   # displays xml
 ```
 
 </details>
@@ -328,8 +328,8 @@ from threefive import Cue
 b64 = '/DAlAAAAAAAAAP/wFAUAAAABf+/+y+LXLv4ARKogAAEAAAAAMZjNOQ=='
 cue=Cue(b64)
 cue.decode()
-x = cue.xml(binary=True) # returns a threefive.Node instance
-x.show()   # displays xml
+x = cue.xml(binary=True) # returns a threefive.Node instance with a Binary Node
+print(x)  # displays xml
 ```
 
 </details>
