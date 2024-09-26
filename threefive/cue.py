@@ -11,8 +11,7 @@ from .section import SpliceInfoSection
 from .commands import command_map,SpliceInsert,TimeSignal
 from .descriptors import splice_descriptor, descriptor_map, SegmentationDescriptor
 from .crc import crc32
-from .dash import DashSCTE35
-from .xml import Node
+from .xml import Node, XmlParser
 
 class Cue(SCTE35Base):
     """
@@ -50,8 +49,7 @@ class Cue(SCTE35Base):
         packet_data is a instance passed from a Stream instance
         """
         self.bites = None
-        if data:
-            self.bites = self._mk_bits(data)
+        if data:    self.bites = self._mk_bits(data)
         self.info_section = SpliceInfoSection()
         self.command = None
         self.descriptors = []
@@ -85,8 +83,7 @@ class Cue(SCTE35Base):
         tag_n_len = 2
         while len(loop_bites) > tag_n_len:
             spliced = splice_descriptor(loop_bites)
-            if not spliced:
-                return
+            if not spliced:     return
             sd_size = tag_n_len + spliced.descriptor_length
             loop_bites = loop_bites[sd_size:]
             del spliced.bites
@@ -103,10 +100,8 @@ class Cue(SCTE35Base):
                 "command": self.command.get(),
                 "descriptors": self.get_descriptors(),
             }
-            if self.dash_data:
-                scte35['dash_data'] = self.dash_data
-            if self.packet_data:
-                scte35["packet_data"] = self.packet_data.get()
+            if self.dash_data:  scte35['dash_data'] = self.dash_data
+            if self.packet_data:    scte35["packet_data"] = self.packet_data.get()
             return scte35
         return False
 
@@ -154,15 +149,10 @@ class Cue(SCTE35Base):
             bites = int.to_bytes(i, i_len, byteorder="big")
             return bites
         except (LookupError, TypeError, ValueError):
-            if data[:2].lower() == "0x":
-                data = data[2:]
-            if data[:2].lower() == "fc":
-                return bytes.fromhex(data)
-        #    return False
-        try:
-            return b64decode(self.fix_bad_b64(data))
-        except (LookupError, TypeError, ValueError):
-            return data
+            if data[:2].lower() == "0x":    data = data[2:]
+            if data[:2].lower() == "fc":    return bytes.fromhex(data)
+        try:    return b64decode(self.fix_bad_b64(data))
+        except (LookupError, TypeError, ValueError):    return data
 
     def _mk_descriptors(self, bites):
         """
@@ -170,8 +160,7 @@ class Cue(SCTE35Base):
         Cue.info_section.descriptor_loop_length,
         then call Cue._descriptor_loop
         """
-        if len(bites) < 2:
-            return
+        if len(bites) < 2:  return
         dll = (bites[0] << 8) | bites[1]
         self.info_section.descriptor_loop_length = dll
         bites = bites[2:]
@@ -195,8 +184,7 @@ class Cue(SCTE35Base):
         the command section of a SCTE35 cue.
         """
         sct = self.info_section.splice_command_type
-        if sct not in command_map:
-            return False
+        if sct not in command_map: return False
         self.command = command_map[sct](bites)
         self.command.decode()
         del self.command.bites
@@ -314,8 +302,7 @@ class Cue(SCTE35Base):
         if 'tag' is included in each dict,
         a descriptor instance will be created.
         """
-        if not isinstance(dlist, list):
-            raise Exception("\033[7mdescriptors should be a list\033[27m")
+        if not isinstance(dlist, list): raise Exception("\033[7mdescriptors should be a list\033[27m")
         for dstuff in dlist:
             if "tag" in dstuff:
                 dscptr = descriptor_map[dstuff["tag"]]()
@@ -336,23 +323,20 @@ class Cue(SCTE35Base):
         if isinstance(stuff, str):
             # DASH
             if stuff.strip()[0]=='<':
-                ds=DashSCTE35()
-                cue_data = ds.parse(stuff)
+               # ds=DashSCTE35()
+                #cue_data = ds.parse(stuff)
+                xmlp=XmlParser()
+                cue_data= xmlp.parse(stuff)
                 if cue_data:
-                    stuff =cue_data[0]
+                    stuff =cue_data
                     self.from_xml(stuff)
                     return
             else:
                 stuff = json.loads(stuff)
-        if "command" not in stuff:
-            err_mesg=("\033[7mA splice command is required\033[27m")
-            raise ValueError(err_mesg)
-        if "info_section" in stuff:
-            self.load_info_section(stuff["info_section"])
-        if "command" in stuff:
-            self.load_command(stuff["command"])
-        if "descriptors" in stuff:
-            self.load_descriptors(stuff["descriptors"])
+        if "command" not in stuff: raise Exception("\033[7mA splice command is required\033[27m")
+        if "info_section" in stuff: self.load_info_section(stuff["info_section"])
+        if "command" in stuff: self.load_command(stuff["command"])
+        if "descriptors" in stuff:  self.load_descriptors(stuff["descriptors"])
 
     # Dash
 
@@ -362,12 +346,9 @@ class Cue(SCTE35Base):
             self.info_section.from_xml(stuff)
 
     def _xml_splice_command(self,stuff):
-        if "TimeSignal" in stuff:
-            self.command=TimeSignal()
-        if "SpliceInsert" in stuff:
-            self.command=SpliceInsert()
-        if self.command:
-            self.command.from_xml(stuff)
+        if "TimeSignal" in stuff: self.command=TimeSignal()
+        if "SpliceInsert" in stuff: self.command=SpliceInsert()
+        if self.command: self.command.from_xml(stuff)
 
     def _xml_splice_descriptor(self,stuff):
         if "SegmentationDescriptor" in stuff:
@@ -378,8 +359,7 @@ class Cue(SCTE35Base):
     def _xml_event_signal(self,stuff):
         self.dash_data={}
         for x in ['EventStream','Event','Signal']:
-            if x in stuff:
-                self.dash_data[x] =stuff[x]
+            if x in stuff: self.dash_data[x] = stuff[x]
 
     def from_xml(self,stuff):
         """
@@ -412,11 +392,8 @@ class Cue(SCTE35Base):
             return sig_node
         sis= self.info_section.xml()
         self.decode()
-        if not self.command:
-            err_mesg='\033[7mA Splice Command is Required\033[27m'
-            raise ValueError(err_mesg)
+        if not self.command: raise Exception('\033[7mA Splice Command is Required\033[27m')
         cmd = self.command.xml()
         sis.add_child(cmd)
-        for d in self.descriptors:
-            sis.add_child(d.xml())
+        for d in self.descriptors:  sis.add_child(d.xml())
         return sis
