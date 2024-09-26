@@ -9,7 +9,7 @@ from .bitn import NBin
 from .base import SCTE35Base
 from .section import SpliceInfoSection
 from .commands import command_map,SpliceInsert,TimeSignal
-from .descriptors import splice_descriptor, descriptor_map, SegmentationDescriptor
+from .descriptors import splice_descriptor, descriptor_map, SegmentationDescriptor, AvailDescriptor, DtmfDescriptor, TimeDescriptor
 from .crc import crc32
 from .xml import Node, XmlParser
 
@@ -355,6 +355,18 @@ class Cue(SCTE35Base):
             segdes=SegmentationDescriptor()
             segdes.from_xml(stuff)
             self.descriptors.append(segdes)
+        if "AvailDescriptor" in stuff:
+            availdes=AvailDescriptor()
+            availdes.from_xml(stuff)
+            self.descriptors.append(availdes)
+        if "DTMFDescriptor" in stuff:
+            dtmfdes=DtmfDescriptor()
+            dtmfdes.from_xml(stuff)
+            self.descriptors.append(dtmfdes)
+        if "TimeDescriptor" in stuff:
+            timedes=TimeDescriptor()
+            timedes.from_xml(stuff)
+            self.descriptors.append(timedes)
 
     def _xml_event_signal(self,stuff):
         self.dash_data={}

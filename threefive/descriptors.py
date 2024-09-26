@@ -167,6 +167,21 @@ class AvailDescriptor(SpliceDescriptor):
         self._chk_var(int, nbin.add_int, "provider_avail_id", 32)
         return nbin.bites
 
+    def xml(self):
+        """
+        Create a Node describing the AvailDescriptor
+        """
+        ad = Node('AvailDescriptor',attrs= {"providerAvailId": self.provider_avail_id})
+        return ad
+
+
+    def from_xml(self,stuff):
+        """
+        Load an AvailDescriptor from XML
+        """
+        if "AvailDescriptor" in stuff:
+            self.load(stuff["AvailDescriptor"])
+
 
 class DtmfDescriptor(SpliceDescriptor):
     """
@@ -205,6 +220,24 @@ class DtmfDescriptor(SpliceDescriptor):
             d_c += 1
         return nbin.bites
 
+    def xml(self):
+        """
+        Create a Node describing a DTMFDescriptor
+        """
+        dd = Node('DTMFDescriptor', attrs={
+            "preroll": self.preroll,
+            "chars": ''.join(self.dtmf_chars),
+        })
+        return dd
+
+    def from_xml(self,stuff):
+        """
+        Load an DTMFDescriptor from XML
+        """
+        if "DTMFDescriptor" in stuff:
+            stuff["DTMFDescriptor"]["dtmf_chars"] = stuff["DTMFDescriptor"].pop("chars")
+            self.load(stuff["DTMFDescriptor"])
+            self.dtmf_count = len(self.dtmf_chars)
 
 class TimeDescriptor(SpliceDescriptor):
     """
@@ -238,6 +271,24 @@ class TimeDescriptor(SpliceDescriptor):
         self._chk_var(int, nbin.add_int, "tai_ns", 32)
         self._chk_var(int, nbin.add_int, "utc_offset", 16)
         return nbin.bites
+
+    def xml(self):
+        """
+        create a Node describing a TimeDescriptor
+        """
+        td = Node("TimeDescriptor", attrs={
+            "tai_seconds", self.tai_seconds,
+            "tai_ns", self.tai_ns,
+            "utc_offset", self.utc_offset,
+        })
+        return td
+
+    def from_xml(self,stuff):
+        """
+        load a TimeDescriptor from XML
+        """
+        if "TimeDescriptor" in stuff:
+            self.load(stuff["TimeDescriptor"])
 
 
 class SegmentationDescriptor(SpliceDescriptor):
