@@ -5,7 +5,6 @@
 * [commands.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/commands.py)  All `Splice Command` classes.
 * [crc.py](https://github.com/futzu/scte35-threefive/blob/master/threefive/crc.py) `threefive.crc32` function.
 * [cue.py ](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)  `threefive.Cue` class.
-* [dash.py](https://github.com/futzu/SCTE35_threefive/blob/master/threefive/dash.py) `threefive.dash2cue` function.
 * [decode.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/decode.py)   `threefive.decode` function.
 * [descriptors.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/descriptors.py)   All `Splice Descriptor` classes.
 * [encode.py](https://github.com/futzu/threefive/blob/master/threefive/encode.py) `threefive.mk_splice_null`, `threefive.mk_splice_insert`, and `threefive.mk_time_signal` functions.
@@ -20,6 +19,6 @@
 * [stuff.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stuff.py)   `print2` function.
 * [upids.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upids.py)   `Segmentation Upids`  classes.
 * [version.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/version.py)  `threefive.version`
-* [xml.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/xml.py)  `threefive.xml.Node` class and several xml related functions.
+* [xml.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/xml.py)  `threefive.xml.Node` and, `threefive.xml.XmlParser` classes and several xml related functions.
 
 
