@@ -176,6 +176,7 @@ class DtmfDescriptor(SpliceDescriptor):
     def __init__(self, bites=None):
         super().__init__(bites)
         self.name = "DTMF Descriptor"
+        self.tag = 1
         self.identifier = "CUEI"
         self.preroll = None
         self.dtmf_count = 0
