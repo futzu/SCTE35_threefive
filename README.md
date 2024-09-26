@@ -8,7 +8,7 @@
 
 [iodisco.com/scte35 ](https://iodisco.com/cgi-bin/scte35parser) the only accurate online SCTE-35 parser.
 
- `Heads Up!`  [Experimental Dash SCTE35 Support Expected in Release v2.4.71](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md) (_updated 9/26/2024_)
+ `Heads Up!`  [Experimental Dash SCTE-214 Support Expected in Release v2.4.71](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md) (_updated 9/26/2024_)
 
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
