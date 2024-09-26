@@ -80,7 +80,7 @@ class Node:
         ts = Node('scte35:TimeSignal')
         st = Node('scte35:SpliceTime',attrs={'pts_time':3442857000})
         ts.add_child(st)
-        ts.mk()
+        print(ts)
 
     """
 
@@ -94,7 +94,7 @@ class Node:
         self.depth = None
 
     def __repr__(self):
-        return str(self.__dict__)
+        return self.mk()
 
     def set_depth(self):
         """
@@ -110,16 +110,16 @@ class Node:
         and it's children into
         an xml representation.
         """
-        obj = (obj, self)[obj is None]
+        if obj is None: obj=self
         obj.set_depth()
-        ndent = "    " * obj.depth
+        ndent = "   " * obj.depth
         new_attrs = unroll_attrs(obj.attrs)
-        rendrd = f"{ndent}<{obj.name}{new_attrs}>\n"
-        if obj.value:   rendrd = f"{rendrd}{obj.value}"
+        rendrd = f"{ndent}<{obj.name}{new_attrs}>"
+        if obj.value:   return f"{rendrd}{obj.value}</{obj.name}>\n"
+        rendrd = f"{rendrd}\n"
         for child in obj.children:  rendrd += obj.mk(child)
-        if obj.end: rendrd += f"{ndent}</{obj.name}>\n"
-        else:   rendrd = rendrd.replace(">", "/>")
-        return rendrd
+        if obj.children:    return f"{rendrd}{ndent}</{obj.name}>\n"
+        return rendrd.replace(">", "/>")
 
     def add_child(self, child):
         """
@@ -127,9 +127,3 @@ class Node:
         """
         self.children.append(child)
         self.end = True
-
-    def show(self):
-        """
-        show displays the xml
-        """
-        print(self.mk())
