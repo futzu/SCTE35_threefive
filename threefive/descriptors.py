@@ -167,6 +167,21 @@ class AvailDescriptor(SpliceDescriptor):
         self._chk_var(int, nbin.add_int, "provider_avail_id", 32)
         return nbin.bites
 
+    def xml(self):
+        """
+        Create a Node describing the AvailDescriptor
+        """
+        ad = Node('AvailDescriptor',attrs={"providerAvailId": self.provider_avail_id})
+        return ad
+
+
+    def from_xml(self,stuff):
+        """
+        Load an AvailDescriptor from XML
+        """
+        if "AvailDescriptor" in stuff:
+            self.load(stuff["AvailDescriptor"])
+
 
 class DtmfDescriptor(SpliceDescriptor):
     """
@@ -176,6 +191,7 @@ class DtmfDescriptor(SpliceDescriptor):
     def __init__(self, bites=None):
         super().__init__(bites)
         self.name = "DTMF Descriptor"
+        self.tag = 1
         self.identifier = "CUEI"
         self.preroll = None
         self.dtmf_count = 0
@@ -204,6 +220,24 @@ class DtmfDescriptor(SpliceDescriptor):
             d_c += 1
         return nbin.bites
 
+    def xml(self):
+        """
+        Create a Node describing a DTMFDescriptor
+        """
+        dd = Node('DTMFDescriptor', attrs={
+            "preroll": self.preroll,
+            "chars": ''.join(self.dtmf_chars),
+        })
+        return dd
+
+    def from_xml(self,stuff):
+        """
+        Load an DTMFDescriptor from XML
+        """
+        if "DTMFDescriptor" in stuff:
+            stuff["DTMFDescriptor"]["dtmf_chars"] = stuff["DTMFDescriptor"].pop("chars")
+            self.load(stuff["DTMFDescriptor"])
+            self.dtmf_count = len(self.dtmf_chars)
 
 class TimeDescriptor(SpliceDescriptor):
     """
@@ -237,6 +271,24 @@ class TimeDescriptor(SpliceDescriptor):
         self._chk_var(int, nbin.add_int, "tai_ns", 32)
         self._chk_var(int, nbin.add_int, "utc_offset", 16)
         return nbin.bites
+
+    def xml(self):
+        """
+        create a Node describing a TimeDescriptor
+        """
+        td = Node("TimeDescriptor", attrs={
+            "tai_seconds", self.tai_seconds,
+            "tai_ns", self.tai_ns,
+            "utc_offset", self.utc_offset,
+        })
+        return td
+
+    def from_xml(self,stuff):
+        """
+        load a TimeDescriptor from XML
+        """
+        if "TimeDescriptor" in stuff:
+            self.load(stuff["TimeDescriptor"])
 
 
 class SegmentationDescriptor(SpliceDescriptor):
@@ -403,64 +455,65 @@ class SegmentationDescriptor(SpliceDescriptor):
                 nbin.add_int(0, 8)
 
     def xml(self):
-        '''
-
-        '''
-        del_attrs = None
-        if not self.delivery_not_restricted_flag:
-            del_attrs={"web_delivery_allowed_flag": self.web_delivery_allowed_flag,
-                        'no_regional_blackout_flag': self.no_regional_blackout_flag,
-                        'archive_allowed_flag': self.archive_allowed_flag,
-                        'device_restrictions': self.device_restrictions,}
-        else:
-            del_attrs={"web_delivery_allowed_flag":True,
-                        'no_regional_blackout_flag':True,
-                        'archive_allowed_flag': True,
-                         'device_restrictions': self.device_restrictions,}
-
-        dr=Node("DeliveryRestrictions",attrs=del_attrs)
-
-        sd_attrs= {'segmentation_event_id':self.segmentation_event_id,
+        """
+        Create a Node describing a SegmentationDescriptor
+        """
+        sd_attrs= {'segmentation_event_id':int(self.segmentation_event_id, 0),
                    'segmentation_event_cancel_indicator':self.segmentation_event_cancel_indicator,
                    'segmentation_event_id_compliance_indicator':self.segmentation_event_id_compliance_indicator,
-                   'segmentation_duration':self.as_ticks(self.segmentation_duration),
+                   'segmentation_type_id': self.segmentation_type_id,
                    'segment_num':self.segment_num,
                    'segments_expected':self.segments_expected,}
         if self.segmentation_type_id in self.SUB_SEG_TYPES:
-            sd_attrs['self.sub_segment_num']=self.sub_segment_num
+            sd_attrs['sub_segment_num']=self.sub_segment_num
             sd_attrs['sub_segments_expected']=self.sub_segments_expected
-        sd=Node('scte35:SegmentationDescriptor',attrs=sd_attrs)
+        if self.segmentation_duration_flag:
+            sd_attrs['segmentation_duration'] = self.as_ticks(self.segmentation_duration)
+        sd=Node('SegmentationDescriptor',attrs=sd_attrs)
 
                  # I still need to figure format_identifier out.
                   # Segmentation Upid format
                   # Can be text,hexbinary, base-64, or pivate
                   # for now, everything will be set to hexbinary
         ud_attrs={'segmentation_upid_type': self.segmentation_upid_type,
-                  'segmentation_upid_type_name':self.segmentation_upid_type_name,
-                  'segmentation_upid':self.segmentation_upid,}
-        ud= Node('segmentation_upid',attrs= ud_attrs)
-        sd.add_child(dr)
+                  #'segmentation_upid_type_name':self.segmentation_upid_type_name,
+                  #'segmentation_upid':self.segmentation_upid,
+                  }
+        ud= Node('SegmentationUpid',attrs= ud_attrs, value=self.segmentation_upid)
+
+        if not self.delivery_not_restricted_flag:
+            sd.add_child(Node("DeliveryRestrictions",attrs={
+                'web_delivery_allowed_flag': self.web_delivery_allowed_flag,
+                'no_regional_blackout_flag': self.no_regional_blackout_flag,
+                'archive_allowed_flag': self.archive_allowed_flag,
+                'device_restrictions': k_by_v(table20, self.device_restrictions),
+            }))
         sd.add_child(ud)
         return sd
 
 
     def from_xml(self,stuff):
+        """
+        Load a SegmentationDescriptor from XML
+        """
         if "SegmentationDescriptor" in stuff:
             self.load(stuff["SegmentationDescriptor"])
             self.segmentation_event_id_compliance_indicator = True
             self.program_segmentation_flag = True
-            if self.has("segmentation_duration"):
+            self.segmentation_duration_flag = False
+            if "segmentationDuration" in stuff["SegmentationDescriptor"]:
                 self.segmentation_duration_flag = True
             self.delivery_not_restricted_flag = True
             if "DeliveryRestrictions" in stuff:
                 self.delivery_not_restricted_flag = False
-            self.load(stuff["DeliveryRestrictions"])
+                self.load(stuff["DeliveryRestrictions"])
+                self.device_restrictions = table20[self.device_restrictions]
             self.segmentation_event_id = hex(self.segmentation_event_id)
-            self.device_restrictions = table20[self.device_restrictions]
             self.segmentation_upid_length = 0
             self.segmentation_upid_type = 0
             if "SegmentationUpid" in stuff:
                 self.load(stuff["SegmentationUpid"])
+                self.segmentation_upid_length = len(self.segmentation_upid.strip("0x"))
             self._chk_sub_segments()
 
 

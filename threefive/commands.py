@@ -154,9 +154,9 @@ class TimeSignal(SpliceCommand):
         """
         xml return TimeSignal as an xml node
         """
-        ts = Node("scte35:TimeSignal")
+        ts = Node("TimeSignal")
         if self.has("pts_time"):
-            st = Node("scte35:SpliceTime", attrs={"pts_time": self.as_ticks(self.pts_time)})
+            st = Node("SpliceTime", attrs={"pts_time": self.as_ticks(self.pts_time)})
             ts.add_child(st)
         return ts
 
@@ -273,10 +273,10 @@ class SpliceInsert(TimeSignal):
         for k, v in si_attrs.items():
             if v is None:
                 raise ValueError(f"\033[7mSpliceInsert.{k} needs to be set\033[27m")
-        si = Node("scte35:SpliceInsert", attrs=si_attrs)
+        si = Node("SpliceInsert", attrs=si_attrs)
         if self.pts_time:
-            prgm = Node("scte35:Program")
-            st = Node("scte35:SpliceTime", attrs={"ptsTime": self.as_ticks(self.pts_time)})
+            prgm = Node("Program")
+            st = Node("SpliceTime", attrs={"ptsTime": self.as_ticks(self.pts_time)})
             prgm.add_child(st)
             si.add_child(prgm)
         if self.break_duration:
@@ -284,7 +284,7 @@ class SpliceInsert(TimeSignal):
                 "auto_return": self.break_auto_return,
                 "duration": self.as_ticks(self.break_duration),
             }
-            bd = Node("scte35:BreakDuration", attrs=bd_attrs)
+            bd = Node("BreakDuration", attrs=bd_attrs)
             si.add_child(bd)
         return si
 

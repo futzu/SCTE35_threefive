@@ -9,7 +9,7 @@ from .bitn import NBin
 from .base import SCTE35Base
 from .section import SpliceInfoSection
 from .commands import command_map,SpliceInsert,TimeSignal
-from .descriptors import splice_descriptor, descriptor_map, SegmentationDescriptor
+from .descriptors import splice_descriptor, descriptor_map, SegmentationDescriptor, AvailDescriptor, DtmfDescriptor, TimeDescriptor
 from .crc import crc32
 from .xml import Node, XmlParser
 
@@ -355,6 +355,18 @@ class Cue(SCTE35Base):
             segdes=SegmentationDescriptor()
             segdes.from_xml(stuff)
             self.descriptors.append(segdes)
+        if "AvailDescriptor" in stuff:
+            availdes=AvailDescriptor()
+            availdes.from_xml(stuff)
+            self.descriptors.append(availdes)
+        if "DTMFDescriptor" in stuff:
+            dtmfdes=DtmfDescriptor()
+            dtmfdes.from_xml(stuff)
+            self.descriptors.append(dtmfdes)
+        if "TimeDescriptor" in stuff:
+            timedes=TimeDescriptor()
+            timedes.from_xml(stuff)
+            self.descriptors.append(timedes)
 
     def _xml_event_signal(self,stuff):
         self.dash_data={}
@@ -391,9 +403,11 @@ class Cue(SCTE35Base):
             sig_node.add_child(bin_node)
             return sig_node
         sis= self.info_section.xml()
+        sis.attrs["xmlns"] = 'http://www.scte.org/schemas/35'
         self.decode()
         if not self.command: raise Exception('\033[7mA Splice Command is Required\033[27m')
         cmd = self.command.xml()
         sis.add_child(cmd)
         for d in self.descriptors:  sis.add_child(d.xml())
+
         return sis

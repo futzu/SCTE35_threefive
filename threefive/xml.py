@@ -87,8 +87,8 @@ class Node:
 
         from threefive.xml import Node
 
-        ts = Node('scte35:TimeSignal')
-        st = Node('scte35:SpliceTime',attrs={'pts_time':3442857000})
+        ts = Node('TimeSignal')
+        st = Node('SpliceTime',attrs={'pts_time':3442857000})
         ts.add_child(st)
         print(ts)
     """
