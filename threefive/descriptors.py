@@ -507,6 +507,7 @@ class SegmentationDescriptor(SpliceDescriptor):
         Load a SegmentationDescriptor from XML
         """
         if "SegmentationDescriptor" in stuff:
+            self.segmentation_event_cancel_indicator = False
             self.load(stuff["SegmentationDescriptor"])
             self.segmentation_event_id_compliance_indicator = True
             self.program_segmentation_flag = True
@@ -514,8 +515,11 @@ class SegmentationDescriptor(SpliceDescriptor):
             if "segmentationDuration" in stuff["SegmentationDescriptor"]:
                 self.segmentation_duration_flag = True
             self.delivery_not_restricted_flag = True
+            self.web_delivery_allowed_flag = True
+            self.no_regional_blackout_flag = True
+            self.archive_allowed_flag = True
+            self.device_restrictions = 3
             if "DeliveryRestrictions" in stuff:
-                self.delivery_not_restricted_flag = False
                 self.load(stuff["DeliveryRestrictions"])
                 self.device_restrictions = table20[self.device_restrictions]
             self.segmentation_event_id = hex(self.segmentation_event_id)
