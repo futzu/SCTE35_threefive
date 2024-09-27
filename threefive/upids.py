@@ -263,25 +263,28 @@ class Umid(Upid):
         for chunk in chunks:
             nbin.add_hex(chunk, 32)
 
-
+# segmentation_upid_type: [
+#   human readable name,
+#   parser class,
+#   default segmentation_upid_length (0 if variable)]
 upid_map = {
-    0x00: ["No UPID", NoUpid],
-    0x01: ["Deprecated", Upid],
-    0x02: ["Deprecated", Upid],
-    0x03: ["AdID", Upid],
-    0x04: ["UMID", Umid],
-    0x05: ["ISAN", Isan],
-    0x06: ["ISAN", Isan],
-    0x07: ["TID", Upid],
-    0x08: ["AiringID", AirId],
-    0x09: ["ADI", Upid],
-    0x10: ["UUID", Upid],
-    0x11: ["SCR", Upid],
-    0x0A: ["EIDR", Eidr],
-    0x0B: ["ATSC", Atsc],
-    0x0C: ["MPU", Mpu],
-    0x0D: ["MID", Mid],
-    0x0E: ["ADS Info", Upid],
-    0x0F: ["URI", Upid],
-    0xFD: ["Unknown", Upid],
+    0x00: ["No UPID", NoUpid, 0],
+    0x01: ["Deprecated", Upid, 0],
+    0x02: ["Deprecated", Upid, 8],
+    0x03: ["AdID", Upid, 12],
+    0x04: ["UMID", Umid, 32],
+    0x05: ["ISAN", Isan, 8],
+    0x06: ["ISAN", Isan, 12],
+    0x07: ["TID", Upid, 12],
+    0x08: ["AiringID", AirId, 8],
+    0x09: ["ADI", Upid, 0],
+    0x10: ["UUID", Upid, 16],
+    0x11: ["SCR", Upid, 0],
+    0x0A: ["EIDR", Eidr, 12],
+    0x0B: ["ATSC", Atsc, 0],
+    0x0C: ["MPU", Mpu, 0],
+    0x0D: ["MID", Mid, 0],
+    0x0E: ["ADS Info", Upid, 0],
+    0x0F: ["URI", Upid, 0],
+    0xFD: ["Unknown", Upid, 0],
 }

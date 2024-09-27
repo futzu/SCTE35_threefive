@@ -523,7 +523,9 @@ class SegmentationDescriptor(SpliceDescriptor):
             self.segmentation_upid_type = 0
             if "SegmentationUpid" in stuff:
                 self.load(stuff["SegmentationUpid"])
-                self.segmentation_upid_length = len(self.segmentation_upid.strip("0x"))
+                # get the default length (according to table22)
+                # needs improving to handle all the variable cases
+                self.segmentation_upid_length = upid_map[self.segmentation_upid_type][2]
             self._chk_sub_segments()
 
 
