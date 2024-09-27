@@ -13,7 +13,7 @@ def t2s(v):
     return round(v/90000.0, 6)
 
 
-def camel(k):
+def un_camel(k):
     """
     camel changes camel case xml names
     to underscore_format names.
@@ -39,7 +39,7 @@ def iter_attrs(attrs):
     iter_attrs normalizes xml attributes
     and adds them to the stuff dict.
     """
-    conv = {camel(k): un_xml(v) for k, v in attrs.items()}
+    conv = {un_camel(k): un_xml(v) for k, v in attrs.items()}
     pts_vars = ["pts_time", "pts_adjustment", "duration", "segmentation_duration"]
     conv = {k: (t2s(v) if k in pts_vars else v) for k, v in conv.items()}
     return conv
@@ -147,7 +147,7 @@ class XmlParser:
     """
     def __init__(self):
         self.active=None
-        self.stuff={'descriptors':[]}
+        #stuff={'descriptors':[]}
         self.node_list=[]
 
     def chk_node_list(self,node):
@@ -159,7 +159,7 @@ class XmlParser:
         elif node[-2]!='/':
             self.node_list.append(self.active)
 
-    def mk_value(self,value):
+    def mk_value(self,value,stuff):
         """
         mk_value, if the xml node has a value, write it to self.stuff
 
@@ -167,7 +167,8 @@ class XmlParser:
 
         """
         if value not in [None,'']:
-            self.stuff[self.active][camel(self.active)]=value
+            stuff[self.active][un_camel(self.active)]=value
+        return stuff
 
     def mk_active(self,node):
         """
@@ -192,27 +193,27 @@ class XmlParser:
         """
         parse parses an xml string for a SCTE-35 Cue.
         """
+        stuff={'descriptors':[]}
         data = exemel.replace('\n','')
         while '>' in  data:
-            if '>' in data:
-                rgator=data.index('>')
-                this_node=data[:rgator+1]
-                self.mk_active(this_node)
-                if self.active in self.DESCRIPTORS:
-                    sub_data= self.mk_descriptor(data)
-                    data=data.replace(sub_data,'')
-                    self.stuff['descriptors'].append(self.parse_descriptor(sub_data))
-                else:
-                    self.chk_node_list(this_node)
-                    attrs=self.mk_attrs(this_node)
-                    if self.active not in self.stuff: self.stuff[self.active]=attrs
-                    data = data[rgator+1:]
-                    if '<' in data:
-                        lgator = data.index('<')
-                        value= data[:lgator].strip()
-                        self.mk_value(value)
-                        data=data[lgator:]
-        return self.stuff
+            rgator=data.index('>')
+            this_node=data[:rgator+1]
+            self.mk_active(this_node)
+            if self.active in self.DESCRIPTORS:
+                sub_data= self.mk_descriptor(data)
+                data=data.replace(sub_data,'')
+                stuff['descriptors'].append(self.parse_descriptor(sub_data))
+            else:
+                self.chk_node_list(this_node)
+                attrs=self.mk_attrs(this_node)
+                if self.active not in stuff: stuff[self.active]=attrs
+                data = data[rgator+1:]
+                if '<' in data:
+                    lgator = data.index('<')
+                    value= data[:lgator].strip()
+                    stuff=self.mk_value(value,stuff)
+                    data=data[lgator:]
+        return stuff
 
     def mk_descriptor(self,data):
         tag=data[1:].split(' ',1)[0]
@@ -225,21 +226,18 @@ class XmlParser:
     def parse_descriptor(self,exemel):
         stuff ={}
         data = exemel.replace('\n','')
-        print('data',data)
         while '>' in  data:
-            if '>' in data:
-                rgator=data.index('>')
-                this_node=data[:rgator+1]
-                self.mk_active(this_node)
-                self.chk_node_list(this_node)
-                attrs=self.mk_attrs(this_node)
-                if self.active not in stuff:
-                    stuff[self.active]=attrs
-                data = data[rgator+1:]
+            rgator=data.index('>')
+            this_node=data[:rgator+1]
+            self.mk_active(this_node)
+            self.chk_node_list(this_node)
+            attrs=self.mk_attrs(this_node)
+            if self.active not in stuff:
+                stuff[self.active]=attrs
+            data = data[rgator+1:]
             if '<' in data:
                 lgator = data.index('<')
                 value= data[:lgator].strip()
-                if value not in [None,'']:
-                    stuff[self.active][camel(self.active)]=value
+                stuff =self.mk_value(value,stuff)
                 data=data[lgator:]
         return stuff
