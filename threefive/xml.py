@@ -202,7 +202,6 @@ class XmlParser:
                     sub_data= self.mk_descriptor(data)
                     data=data.replace(sub_data,'')
                     self.stuff['descriptors'].append(self.parse_descriptor(sub_data))
-                    self.chk_node_list(this_node)
                 else:
                     self.chk_node_list(this_node)
                     attrs=self.mk_attrs(this_node)
@@ -217,7 +216,10 @@ class XmlParser:
 
     def mk_descriptor(self,data):
         tag=data[1:].split(' ',1)[0]
-        sub_data=data[:data.index(f'</{tag}>')+len(tag)+1]
+        try:
+            sub_data=data[:data.index(f'</{tag}>')+len(tag)+1]
+        except:
+            sub_data=data[:data.index('/>')+2]
         return sub_data
 
     def parse_descriptor(self,exemel):
