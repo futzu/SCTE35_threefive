@@ -194,7 +194,8 @@ class SpliceInfoSection(SCTE35Base):
         """
         from_xml SpliceInfoSection from Xml
         """
-        if isinstance(stuff["SpliceInfoSection"]["tier"],int):
+        if "tier" in stuff["SpliceInfoSection"] and \
+            isinstance(stuff["SpliceInfoSection"]["tier"], int):
             stuff["SpliceInfoSection"]["tier"] = hex(
                 stuff["SpliceInfoSection"]["tier"])
         self.load(stuff["SpliceInfoSection"])
