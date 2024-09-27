@@ -10,6 +10,8 @@ cyclomatic complexity 1.689
 
 """
 
+from .stuff import print2
+
 charset = "ascii"  # this isn't a constant pylint.
 
 """
@@ -173,17 +175,22 @@ class Mid(Upid):
             ulb -= 8
             upid_length = self.bitbin.as_int(8)
             ulb -= 8
-            upid_type_name, segmentation_upid = upid_map[upid_type][1](
-                self.bitbin, upid_type, upid_length
-            ).decode()
-            mid_upid = {
-                "upid_type": upid_type,
-                "upid_type_name": upid_type_name,
-                "upid_length": upid_length,
-                "segmentation_upid": segmentation_upid,
-            }
+            if upid_type in upid_map:
+                upid_type_name, segmentation_upid = upid_map[upid_type][1](
+                    self.bitbin, upid_type, upid_length
+                ).decode()
+                mid_upid = {
+                    "upid_type": upid_type,
+                    "upid_type_name": upid_type_name,
+                    "upid_length": upid_length,
+                    "segmentation_upid": segmentation_upid,
+                }
+                upids.append(mid_upid)
+            else:
+                print2(f"unknown upid type {upid_type}, "
+                       f"skipping remaining length {upid_length}")
             ulb -= upid_length << 3
-            upids.append(mid_upid)
+
         return self.upid_name, upids
 
     def encode(self, nbin, seg_upid):
