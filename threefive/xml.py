@@ -4,13 +4,14 @@ xml.py  The Node class for converting to xml,
         and several helper functions
 """
 
+
 def t2s(v):
     """
     _t2s converts
     90k ticks to seconds and
     rounds to six decimal places
     """
-    return round(v/90000.0, 6)
+    return round(v / 90000.0, 6)
 
 
 def un_camel(k):
@@ -27,10 +28,14 @@ def un_xml(v):
     un_xml converts an xml value
     to ints, floats and booleans.
     """
-    if v.isdigit(): return int(v)
-    if v.replace(".", "").isdigit():    return float(v)
-    if v in ["false", "False"]: return False
-    if v in ["true", "True"]:   return True
+    if v.isdigit():
+        return int(v)
+    if v.replace(".", "").isdigit():
+        return float(v)
+    if v in ["false", "False"]:
+        return False
+    if v in ["true", "True"]:
+        return True
     return v
 
 
@@ -49,8 +54,10 @@ def val2xml(val):
     """
     val2xmlconvert val for xml
     """
-    if isinstance(val, bool):   return str(val).lower()
-    if isinstance(val, (int, float)):   return str(val)
+    if isinstance(val, bool):
+        return str(val).lower()
+    if isinstance(val, (int, float)):
+        return str(val)
     return val
 
 
@@ -59,7 +66,8 @@ def key2xml(string):
     key2xml convert name to camel case
     """
     new_string = string
-    if "_" in string:   new_string = string.title().replace("_", "")
+    if "_" in string:
+        new_string = string.title().replace("_", "")
     return new_string[0].lower() + new_string[1:]
 
 
@@ -96,7 +104,7 @@ class Node:
     def __init__(self, name, value=None, attrs={}, ns=None):
         self.name = name
         if ns:
-            self.name = ":".join((ns,name))
+            self.name = ":".join((ns, name))
         self.value = value
         self.attrs = attrs
         self.children = []
@@ -110,8 +118,10 @@ class Node:
         set_depth is used to format
         tabs in output
         """
-        if not self.depth:  self.depth = 0
-        for child in self.children: child.depth = self.depth + 1
+        if not self.depth:
+            self.depth = 0
+        for child in self.children:
+            child.depth = self.depth + 1
 
     def mk(self, obj=None):
         """
@@ -119,15 +129,19 @@ class Node:
         and it's children into
         an xml representation.
         """
-        if obj is None: obj=self
+        if obj is None:
+            obj = self
         obj.set_depth()
         ndent = "   " * obj.depth
         new_attrs = mk_xml_attrs(obj.attrs)
         rendrd = f"{ndent}<{obj.name}{new_attrs}>"
-        if obj.value:   return f"{rendrd}{obj.value}</{obj.name}>\n"
+        if obj.value:
+            return f"{rendrd}{obj.value}</{obj.name}>\n"
         rendrd = f"{rendrd}\n"
-        for child in obj.children:  rendrd += obj.mk(child)
-        if obj.children:    return f"{rendrd}{ndent}</{obj.name}>\n"
+        for child in obj.children:
+            rendrd += obj.mk(child)
+        if obj.children:
+            return f"{rendrd}{ndent}</{obj.name}>\n"
         return rendrd.replace(">", "/>")
 
     def add_child(self, child):
@@ -137,107 +151,96 @@ class Node:
         self.children.append(child)
 
 
-
 class XmlParser:
-    DESCRIPTORS=['AvailDescriptor','DTMFDescriptor',
-                 'SegmentationDescriptor','TimeDescriptor']
+    DESCRIPTORS = [
+        "AvailDescriptor",
+        "DTMFDescriptor",
+        "SegmentationDescriptor",
+        "TimeDescriptor",
+    ]
     """
     XmlParser is for parsing
     a SCTE-35 Cue from  xml.
     """
-    def __init__(self):
-        self.active=None
-        #stuff={'descriptors':[]}
-        self.node_list=[]
 
-    def chk_node_list(self,node):
+    def __init__(self):
+        self.active = None
+        self.node_list = []
+
+    def chk_node_list(self, node):
         """
         chk_node_list is used to track open xml nodes
         """
         if self.active in self.node_list:
             self.node_list.remove(self.active)
-        elif node[-2]!='/':
+        elif node[-2] != "/":
             self.node_list.append(self.active)
 
-    def mk_value(self,value,stuff):
+    def mk_value(self, value, stuff):
         """
         mk_value, if the xml node has a value, write it to self.stuff
 
         <name>value</name>
 
         """
-        if value not in [None,'']:
-            stuff[self.active][un_camel(self.active)]=value
+        if value not in [None, ""]:
+            stuff[self.active][un_camel(self.active)] = value
         return stuff
 
-    def mk_active(self,node):
+    def mk_active(self, node):
         """
         mk_active sets self.active to the current node name.
         """
-        name =node[1:].split(' ',1)[0].split(':')[-1]
-        self.active=name.replace('/','').replace('>','')
+        name = node[1:].split(" ", 1)[0].split(":")[-1]
+        self.active = name.replace("/", "").replace(">", "")
 
-    def mk_attrs(self,node):
+    def mk_attrs(self, node):
         """
         mk_attrs parses the current node for attributes
         and stores them in self.stuff[self.active]
         """
-        if '<!--' not in node:
-            attrs = [x for x in node.split(' ') if '=' in x]
-            parsed ={x.split('="')[0]:x.split('="')[1].split('"')[0] for x in attrs}
-            it= iter_attrs(parsed)
+        if "<!--" not in node:
+            attrs = [x for x in node.split(" ") if "=" in x]
+            parsed = {x.split('="')[0]: x.split('="')[1].split('"')[0] for x in attrs}
+            it = iter_attrs(parsed)
             return it
 
-
-    def parse(self,exemel):
+    def parse(self, exemel, descriptor_parse=False):
         """
         parse parses an xml string for a SCTE-35 Cue.
         """
-        stuff={'descriptors':[]}
-        data = exemel.replace('\n','')
-        while '>' in  data:
-            rgator=data.index('>')
-            this_node=data[:rgator+1]
+        stuff = {"descriptors": []}
+        data = exemel.replace("\n", "")
+        while ">" in data:
+            rgator = data.index(">")
+            this_node = data[: rgator + 1]
             self.mk_active(this_node)
-            if self.active in self.DESCRIPTORS:
-                sub_data= self.mk_descriptor(data)
-                data=data.replace(sub_data,'')
-                stuff['descriptors'].append(self.parse_descriptor(sub_data))
+            if self.active in self.DESCRIPTORS and not descriptor_parse:
+                data, stuff = self.mk_descriptor(data, stuff)
             else:
                 self.chk_node_list(this_node)
-                attrs=self.mk_attrs(this_node)
-                if self.active not in stuff: stuff[self.active]=attrs
-                data = data[rgator+1:]
-                if '<' in data:
-                    lgator = data.index('<')
-                    value= data[:lgator].strip()
-                    stuff=self.mk_value(value,stuff)
-                    data=data[lgator:]
+                attrs = self.mk_attrs(this_node)
+                if self.active not in stuff:
+                    stuff[self.active] = attrs
+                data = data[rgator + 1 :]
+                if "<" in data:
+                    lgator = data.index("<")
+                    value = data[:lgator].strip()
+                    stuff = self.mk_value(value, stuff)
+                    data = data[lgator:]
         return stuff
 
-    def mk_descriptor(self,data):
-        tag=data[1:].split(' ',1)[0]
+    def mk_descriptor(self, data, stuff):
+        """
+        mk_descriptor slices off an entire
+        descriptor xml node from data to parse.
+        """
+        sub_data = ""
+        tag = data[1:].split(" ", 1)[0]
         try:
-            sub_data=data[:data.index(f'</{tag}>')+len(tag)+1]
+            sub_data = data[: data.index(f"</{tag}>") + len(tag) + 1]
         except:
-            sub_data=data[:data.index('/>')+2]
-        return sub_data
-
-    def parse_descriptor(self,exemel):
-        stuff ={}
-        data = exemel.replace('\n','')
-        while '>' in  data:
-            rgator=data.index('>')
-            this_node=data[:rgator+1]
-            self.mk_active(this_node)
-            self.chk_node_list(this_node)
-            attrs=self.mk_attrs(this_node)
-            if self.active not in stuff:
-                stuff[self.active]=attrs
-            data = data[rgator+1:]
-            if '<' in data:
-                lgator = data.index('<')
-                value= data[:lgator].strip()
-                stuff =self.mk_value(value,stuff)
-                data=data[lgator:]
-        return stuff
+            sub_data = data[: data.index("/>") + 2]
+        data = data.replace(sub_data, "")
+        stuff["descriptors"].append(self.parse(sub_data, descriptor_parse=True))
+        return data, stuff
