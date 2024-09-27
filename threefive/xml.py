@@ -34,7 +34,7 @@ def un_xml(v):
     return v
 
 
-def iter_xml_attrs(attrs):
+def iter_attrs(attrs):
     """
     iter_attrs normalizes xml attributes
     and adds them to the stuff dict.
@@ -65,7 +65,7 @@ def key2xml(string):
 
 def mk_xml_attrs(attrs):
     """
-    mk_attrs converts a dict into
+    mk_xml_attrs converts a dict into
     a dict of xml friendly keys and values
     """
     return "".join([f' {key2xml(k)}="{val2xml(v)}"' for k, v in attrs.items()])
@@ -93,8 +93,10 @@ class Node:
         print(ts)
     """
 
-    def __init__(self, name, value=None, attrs={}):
+    def __init__(self, name, value=None, attrs={}, ns=None):
         self.name = name
+        if ns:
+            self.name = ":".join((ns,name))
         self.value = value
         self.attrs = attrs
         self.children = []
@@ -137,15 +139,16 @@ class Node:
 
 
 class XmlParser:
+    DESCRIPTORS=['AvailDescriptor','DTMFDescriptor',
+                 'SegmentationDescriptor','TimeDescriptor']
     """
     XmlParser is for parsing
     a SCTE-35 Cue from  xml.
     """
     def __init__(self):
         self.active=None
-        self.stuff={}
+        self.stuff={'descriptors':[]}
         self.node_list=[]
-
 
     def chk_node_list(self,node):
         """
@@ -181,8 +184,8 @@ class XmlParser:
         if '<!--' not in node:
             attrs = [x for x in node.split(' ') if '=' in x]
             parsed ={x.split('="')[0]:x.split('="')[1].split('"')[0] for x in attrs}
-            fixed=  iter_xml_attrs(parsed)
-            if self.active not in self.stuff: self.stuff[self.active]=fixed
+            it= iter_attrs(parsed)
+            return it
 
 
     def parse(self,exemel):
@@ -195,12 +198,46 @@ class XmlParser:
                 rgator=data.index('>')
                 this_node=data[:rgator+1]
                 self.mk_active(this_node)
+                if self.active in self.DESCRIPTORS:
+                    sub_data= self.mk_descriptor(data)
+                    data=data.replace(sub_data,'')
+                    self.stuff['descriptors'].append(self.parse_descriptor(sub_data))
+                    self.chk_node_list(this_node)
+                else:
+                    self.chk_node_list(this_node)
+                    attrs=self.mk_attrs(this_node)
+                    if self.active not in self.stuff: self.stuff[self.active]=attrs
+                    data = data[rgator+1:]
+                    if '<' in data:
+                        lgator = data.index('<')
+                        value= data[:lgator].strip()
+                        self.mk_value(value)
+                        data=data[lgator:]
+        return self.stuff
+
+    def mk_descriptor(self,data):
+        tag=data[1:].split(' ',1)[0]
+        sub_data=data[:data.index(f'</{tag}>')+len(tag)+1]
+        return sub_data
+
+    def parse_descriptor(self,exemel):
+        stuff ={}
+        data = exemel.replace('\n','')
+        print('data',data)
+        while '>' in  data:
+            if '>' in data:
+                rgator=data.index('>')
+                this_node=data[:rgator+1]
+                self.mk_active(this_node)
                 self.chk_node_list(this_node)
-                self.mk_attrs(this_node)
+                attrs=self.mk_attrs(this_node)
+                if self.active not in stuff:
+                    stuff[self.active]=attrs
                 data = data[rgator+1:]
             if '<' in data:
                 lgator = data.index('<')
                 value= data[:lgator].strip()
-                self.mk_value(value)
+                if value not in [None,'']:
+                    stuff[self.active][camel(self.active)]=value
                 data=data[lgator:]
-        return self.stuff
+        return stuff
