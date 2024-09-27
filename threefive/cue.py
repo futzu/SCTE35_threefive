@@ -378,6 +378,7 @@ class Cue(SCTE35Base):
         build_cue takes the data put into the stuff dict
         and builds a threefive.Cue instance
         """
+        print(stuff)
         self._xml_event_signal(stuff)
         if "Binary" in stuff:
             self.bites = self._mk_bits(stuff["Binary"]["binary"])
@@ -386,7 +387,8 @@ class Cue(SCTE35Base):
             self._xml_splice_info_section(stuff)
             self._xml_splice_command(stuff)
             self.info_section.splice_command_type =self.command.command_type
-            self._xml_splice_descriptor(stuff)
+            for dstuff in stuff['descriptors']:
+                self._xml_splice_descriptor(dstuff)
             # Self.encode() will calculate lengths and types and such
             self.encode()
         self.show()
