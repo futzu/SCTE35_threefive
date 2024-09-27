@@ -475,11 +475,6 @@ class SegmentationDescriptor(SpliceDescriptor):
                   # Segmentation Upid format
                   # Can be text,hexbinary, base-64, or pivate
                   # for now, everything will be set to hexbinary
-        ud_attrs={'segmentation_upid_type': self.segmentation_upid_type,
-                  #'segmentation_upid_type_name':self.segmentation_upid_type_name,
-                  #'segmentation_upid':self.segmentation_upid,
-                  }
-        ud= Node('SegmentationUpid',attrs= ud_attrs, value=self.segmentation_upid)
 
         if not self.delivery_not_restricted_flag:
             sd.add_child(Node("DeliveryRestrictions",attrs={
@@ -488,7 +483,22 @@ class SegmentationDescriptor(SpliceDescriptor):
                 'archive_allowed_flag': self.archive_allowed_flag,
                 'device_restrictions': k_by_v(table20, self.device_restrictions),
             }))
-        sd.add_child(ud)
+
+        upids = []
+        if self.segmentation_upid_type == 13:
+            upids = self.segmentation_upid
+        else:
+            upids.append({
+                "upid_type": self.segmentation_upid_type,
+                "upid_length": self.segmentation_upid_length,
+                "segmentation_upid": self.segmentation_upid,
+            })
+
+        for upid in upids:
+            sd.add_child(Node('SegmentationUpid',attrs={
+                'segmentation_upid_type': upid["upid_type"],
+            }, value=upid["segmentation_upid"]))
+
         return sd
 
 
