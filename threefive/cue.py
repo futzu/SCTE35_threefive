@@ -403,9 +403,11 @@ class Cue(SCTE35Base):
             sig_node.add_child(bin_node)
             return sig_node
         sis= self.info_section.xml()
+        sis.attrs["xmlns"] = 'http://www.scte.org/schemas/35'
         self.decode()
         if not self.command: raise Exception('\033[7mA Splice Command is Required\033[27m')
         cmd = self.command.xml()
         sis.add_child(cmd)
         for d in self.descriptors:  sis.add_child(d.xml())
+
         return sis

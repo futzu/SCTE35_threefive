@@ -27,20 +27,20 @@
 
 ```xml
 some_xml = """<Event duration="5310000">
-            <scte35:SpliceInfoSection protocolVersion="0" ptsAdjustment="183003" tier="4095">
-            <scte35:TimeSignal>
-                <scte35:SpliceTime ptsTime="3442857000"/>
-            </scte35:TimeSignal>
-            <scte35:SegmentationDescriptor segmentationEventId="1414668"
+            <SpliceInfoSection protocolVersion="0" ptsAdjustment="183003" tier="4095" xmlns="http://www.scte.org/schemas/35">
+            <TimeSignal>
+                <SpliceTime ptsTime="3442857000"/>
+            </TimeSignal>
+            <SegmentationDescriptor segmentationEventId="1414668"
                 segmentationEventCancelIndicator="false" segmentationDuration="8100000"
                 segmentationTypeId="52" segmentNum="0" segmentsExpected="0">
-            <scte35:DeliveryRestrictions webDeliveryAllowedFlag="false"
+            <DeliveryRestrictions webDeliveryAllowedFlag="false"
                 noRegionalBlackoutFlag="false" archiveAllowedFlag="false"
                 deviceRestrictions="3"/>
-            <scte35:SegmentationUpid segmentationUpidType="8"
-                segmentationUpidLength="8">0x2df3aad7</scte35:SegmentationUpid>
-            </scte35:SegmentationDescriptor>
-            </scte35:SpliceInfoSection>
+            <SegmentationUpid segmentationUpidType="8"
+                segmentationUpidLength="8">0x2df3aad7</SegmentationUpid>
+            </SegmentationDescriptor>
+            </SpliceInfoSection>
         </Event>
         """
 ```
@@ -291,16 +291,15 @@ print(x)   # displays xml
 
 
 ```xml
-<scte35:SpliceInfoSection ptsAdjustment="0" protocolVersion="None" sapType="None" sapDetails="None" tier="None">
-        <scte35:TimeSignal>
-                <scte35:SpliceTime ptsTime="11640.3343"/>
-        </scte35:TimeSignal>
-        <scte35:SegmentationDescriptor segmentationEventId="0x4800006c" segmentationEventCancelIndicator="false" segmentationEventIdComplianceIndicator="true" segmentationDuration="225.166833" segmentNum="0" segmentsExpected="0" self.SubSegmentNum="0" subSegmentsExpected="0">
-                <DeliveryRestrictions webDeliveryAllowedFlag="true" noRegionalBlackoutFlag="true" archiveAllowedFlag="true" deviceRestrictions="No Restrictions"/>
-                <segmentation_upid segmentationUpidType="8" segmentationUpidTypeName="AiringID" segmentationUpid="0x2df3aad7"/>
-        </scte35:SegmentationDescriptor>
-</scte35:SpliceInfoSection>
-
+<SpliceInfoSection ptsAdjustment="7755790832" protocolVersion="0" sapType="3" tier="0" xmlns="http://www.scte.org/schemas/35">
+   <TimeSignal>
+      <SpliceTime ptsTime="1047630087"/>
+   </TimeSignal>
+   <SegmentationDescriptor segmentationEventId="1207959660" segmentationEventCancelIndicator="false" segmentationEventIdComplianceIndicator="true" segmentationDuration="20265015" segmentNum="0" segmentsExpected="0" subSegmentNum="0" subSegmentsExpected="0">
+      <DeliveryRestrictions webDeliveryAllowedFlag="false" noRegionalBlackoutFlag="true" archiveAllowedFlag="true" deviceRestrictions="3"/>
+      <SegmentationUpid segmentationUpidType="8">0x2df3aad7</SegmentationUpid>
+   </SegmentationDescriptor>
+</SpliceInfoSection>
 ```
 
 </details>
