@@ -471,11 +471,6 @@ class SegmentationDescriptor(SpliceDescriptor):
             sd_attrs['segmentation_duration'] = self.as_ticks(self.segmentation_duration)
         sd=Node('SegmentationDescriptor',attrs=sd_attrs)
 
-                 # I still need to figure format_identifier out.
-                  # Segmentation Upid format
-                  # Can be text,hexbinary, base-64, or pivate
-                  # for now, everything will be set to hexbinary
-
         if not self.delivery_not_restricted_flag:
             sd.add_child(Node("DeliveryRestrictions",attrs={
                 'web_delivery_allowed_flag': self.web_delivery_allowed_flag,
@@ -484,21 +479,29 @@ class SegmentationDescriptor(SpliceDescriptor):
                 'device_restrictions': k_by_v(table20, self.device_restrictions),
             }))
 
-        upids = []
+        # I still need to figure format_identifier out.
+        # Segmentation Upid format
+        # Can be text,hexbinary, base-64, or pivate
+        # for now, everything will be set to hexbinary
+        # also need to determine if hexbinary should be zero-padded
+        # to the correct length for fix length upids (maybe), and
+        # also if they should be using 0x (possibly not)
+        #TODO: is there a friendly name for these types?
         if self.segmentation_upid_type == 13:
-            upids = self.segmentation_upid
+            for upid in self.segmentation_upid:
+                sd.add_child(Node('SegmentationUpid',attrs={
+                    'segmentation_upid_type': upid["upid_type"],
+                }, value=upid["segmentation_upid"]))
         else:
-            upids.append({
-                "upid_type": self.segmentation_upid_type,
-                "upid_length": self.segmentation_upid_length,
-                "segmentation_upid": self.segmentation_upid,
-            })
-
-        for upid in upids:
-            sd.add_child(Node('SegmentationUpid',attrs={
-                'segmentation_upid_type': upid["upid_type"],
-            }, value=upid["segmentation_upid"]))
-
+            ud_attrs={'segmentation_upid_type': self.segmentation_upid_type,}
+            value = self.segmentation_upid
+            if self.segmentation_upid_type == 12:
+                ud_attrs["format_identifier"] = \
+                    int(self.segmentation_upid[
+                        "format_identifier"].encode("utf-8").hex(), 16)
+                value = self.segmentation_upid["private_data"]
+            ud=Node('SegmentationUpid',attrs=ud_attrs, value=value)
+            sd.add_child(ud)
         return sd
 
 
