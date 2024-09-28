@@ -11,3 +11,9 @@ def print2(stuff=b""):
     """
     print(stuff, file=stderr, flush=True)
 
+
+class dottable_dict(dict):
+    """ dict implementing methods required to use dot notation """
+    __getattr__ = dict.get
+    __setattr__ = dict.__setitem__
+

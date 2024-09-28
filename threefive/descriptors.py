@@ -5,6 +5,7 @@ SCTE35 Splice Descriptors
 from .bitn import BitBin
 from .base import SCTE35Base
 from .segmentation import table20, table22, dvb_table2
+from .stuff import dottable_dict
 from .upids import upid_map
 from .xml import Node
 
@@ -479,29 +480,47 @@ class SegmentationDescriptor(SpliceDescriptor):
                 'device_restrictions': k_by_v(table20, self.device_restrictions),
             }))
 
-        # I still need to figure format_identifier out.
-        # Segmentation Upid format
-        # Can be text,hexbinary, base-64, or pivate
-        # for now, everything will be set to hexbinary
-        # also need to determine if hexbinary should be zero-padded
-        # to the correct length for fix length upids (maybe), and
-        # also if they should be using 0x (possibly not)
+        def segmentation_upid_xml(ctx):
+            ud_attrs={'segmentation_upid_type': ctx.segmentation_upid_type,
+                      # Segmentation Upid format
+                      # Can be text,hexbinary, base-64, or pivate
+                      # for now, everything will be set to hexbinary
+                      # text can be default once all other types set explicit
+                      # also need to determine if hexbinary should be zero-padded
+                      # to the correct length for fix length upids (maybe), and
+                      # also if they should be using 0x (possibly not)
+                      #'segmentation_upid_format': "text",
+                      }
+            value = ctx.segmentation_upid
+            # handle specifics of each upid type
+            #TODO: is there a friendly name for these types?
+            if ctx.segmentation_upid_type == 12:
+                ud_attrs["format_identifier"] = \
+                    int(ctx.segmentation_upid[
+                        "format_identifier"].encode("utf-8").hex(), 16)
+                value = ctx.segmentation_upid["private_data"]
+            elif ctx.segmentation_upid_type == 10:
+                ud_attrs["segmentation_upid_format"] = "text"
+                # apologies, it was late ...
+                value = f"10.{int(ctx.segmentation_upid[2:6],16):d}/" \
+                        f"{int(ctx.segmentation_upid[6:10],16):04X}-" \
+                        f"{int(ctx.segmentation_upid[10:14],16):04X}-" \
+                        f"{int(ctx.segmentation_upid[14:18],16):04X}-" \
+                        f"{int(ctx.segmentation_upid[18:22],16):04X}-" \
+                        f"{int(ctx.segmentation_upid[22:26],16):04X}"
+
+            return Node('SegmentationUpid',attrs=ud_attrs, value=value)
+
         #TODO: is there a friendly name for these types?
         if self.segmentation_upid_type == 13:
             for upid in self.segmentation_upid:
-                sd.add_child(Node('SegmentationUpid',attrs={
+                sd.add_child(segmentation_upid_xml(dottable_dict({
                     'segmentation_upid_type': upid["upid_type"],
-                }, value=upid["segmentation_upid"]))
+                    'segmentation_upid': upid["segmentation_upid"],
+                })))
         else:
-            ud_attrs={'segmentation_upid_type': self.segmentation_upid_type,}
-            value = self.segmentation_upid
-            if self.segmentation_upid_type == 12:
-                ud_attrs["format_identifier"] = \
-                    int(self.segmentation_upid[
-                        "format_identifier"].encode("utf-8").hex(), 16)
-                value = self.segmentation_upid["private_data"]
-            ud=Node('SegmentationUpid',attrs=ud_attrs, value=value)
-            sd.add_child(ud)
+            sd.add_child(segmentation_upid_xml(self))
+
         return sd
 
 
