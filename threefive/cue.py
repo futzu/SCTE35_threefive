@@ -351,22 +351,15 @@ class Cue(SCTE35Base):
         if self.command: self.command.from_xml(stuff)
 
     def _xml_splice_descriptor(self,stuff):
-        if "SegmentationDescriptor" in stuff:
-            segdes=SegmentationDescriptor()
-            segdes.from_xml(stuff)
-            self.descriptors.append(segdes)
-        if "AvailDescriptor" in stuff:
-            availdes=AvailDescriptor()
-            availdes.from_xml(stuff)
-            self.descriptors.append(availdes)
-        if "DTMFDescriptor" in stuff:
-            dtmfdes=DtmfDescriptor()
-            dtmfdes.from_xml(stuff)
-            self.descriptors.append(dtmfdes)
-        if "TimeDescriptor" in stuff:
-            timedes=TimeDescriptor()
-            timedes.from_xml(stuff)
-            self.descriptors.append(timedes)
+        dmap={"SegmentationDescriptor" : SegmentationDescriptor,
+               "AvailDescriptor": AvailDescriptor,
+               "DTMFDescriptor": DtmfDescriptor,
+               "DTMFDescriptor": TimeDescriptor,}
+        for dname in dmap.keys():
+            if dname in stuff:
+                dscptr = dmap[dname]()
+                dscptr.from_xml(stuff)
+                self.descriptors.append(dscptr)
 
     def _xml_event_signal(self,stuff):
         self.dash_data={}
