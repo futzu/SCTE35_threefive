@@ -364,12 +364,7 @@ class SegmentationDescriptor(SpliceDescriptor):
             self.segmentation_duration = self.as_90k(segmentation_duration_ticks)
         self.segmentation_upid_type = bitbin.as_int(8)
         self.segmentation_upid_length = bitbin.as_int(8)
-        upid_type = self.segmentation_upid_type
-        if upid_type not in upid_map:
-            upid_type = 0xFD
-        the_upid = upid_map[upid_type][1](
-            bitbin, upid_type, self.segmentation_upid_length
-        )
+        the_upid = self.mk_the_upid(bitbin)
         self.segmentation_upid_type_name, self.segmentation_upid = the_upid.decode()
         self.segmentation_type_id = bitbin.as_int(8)
         if self.segmentation_type_id in table22:
@@ -428,18 +423,29 @@ class SegmentationDescriptor(SpliceDescriptor):
         else:
             nbin.reserve(5)
 
+    def mk_the_upid(self,bitbin=None):
+        """
+        mk_the_upid create a upid instance
+        and return it. the bitbin arg is only
+        used in decode()
+        """
+        upid_type = self.segmentation_upid_type
+        if upid_type not in upid_map:
+            upid_type = 0xFD
+        the_upid = upid_map[upid_type][1](
+            bitbin, upid_type, self.segmentation_upid_length
+        )
+        return the_upid
+
     def _encode_segmentation(self, nbin):
         if self.segmentation_duration_flag:
             nbin.add_int(self.as_ticks(self.segmentation_duration), 40)
         self._chk_var(int, nbin.add_int, "segmentation_upid_type", 8)
         self._chk_var(int, nbin.add_int, "segmentation_upid_length", 8)
         upid_type = self.segmentation_upid_type
-        if upid_type not in upid_map:
-            upid_type = 0xFD
-        the_upid = upid_map[upid_type][1](
-            None, upid_type, self.segmentation_upid_length
-        )
-        the_upid.encode(nbin, self.segmentation_upid)
+        the_upid= self.mk_the_upid()
+        the_upid.upid_value=self.segmentation_upid
+        the_upid.encode(nbin)
         self._chk_var(int, nbin.add_int, "segmentation_type_id", 8)
         self._encode_segments(nbin)
 
@@ -470,17 +476,8 @@ class SegmentationDescriptor(SpliceDescriptor):
         if self.segmentation_duration_flag:
             sd_attrs['segmentation_duration'] = self.as_ticks(self.segmentation_duration)
         sd=Node('SegmentationDescriptor',attrs=sd_attrs)
-
-                 # I still need to figure format_identifier out.
-                  # Segmentation Upid format
-                  # Can be text,hexbinary, base-64, or pivate
-                  # for now, everything will be set to hexbinary
-        ud_attrs={'segmentation_upid_type': self.segmentation_upid_type,
-                  #'segmentation_upid_type_name':self.segmentation_upid_type_name,
-                  #'segmentation_upid':self.segmentation_upid,
-                  }
-        ud= Node('SegmentationUpid',attrs= ud_attrs, value=self.segmentation_upid)
-
+        the_upid = self.mk_the_upid()
+        upid_node = the_upid.xml()
         if not self.delivery_not_restricted_flag:
             sd.add_child(Node("DeliveryRestrictions",attrs={
                 'web_delivery_allowed_flag': self.web_delivery_allowed_flag,
@@ -488,7 +485,7 @@ class SegmentationDescriptor(SpliceDescriptor):
                 'archive_allowed_flag': self.archive_allowed_flag,
                 'device_restrictions': k_by_v(table20, self.device_restrictions),
             }))
-        sd.add_child(ud)
+        sd.add_child(upid_node)
         return sd
 
 
