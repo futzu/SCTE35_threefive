@@ -9,6 +9,8 @@ cyclomatic complexity 1.689
 
 
 """
+from .xml import Node
+
 
 charset = "ascii"  # this isn't a constant pylint.
 
@@ -28,20 +30,34 @@ class Upid:
         self.upid_name = upid_map[upid_type][0]
         self.upid_length = upid_length
         self.bit_length = upid_length << 3
+        self.upid_value = None
 
     def decode(self):
         """
         decode Upid
         """
-        return self.upid_name, self.bitbin.as_charset(self.bit_length, charset)
+        self.upid_value = self.bitbin.as_charset(self.bit_length, charset)
+        return self.upid_name, self.upid_value
 
-    def encode(self, nbin, seg_upid):
+    def encode(self, nbin ):
         """
         encode Upid
         """
-        if seg_upid:
-            seg_upid = seg_upid.encode("utf8")
-            nbin.add_bites(seg_upid)
+        if self.upid.value:
+            self.upid.value = self.upid.value.encode("utf8")
+            nbin.add_bites(self.upid.value)
+
+    def xml(self):
+        """
+        xml return a upid xml node
+        """
+        ud_attrs = { 'name': self.upid_name, # this is for clarity
+                    'segmentation_upid_type': hex(self.upid_type),
+                    'segmentation_upid_format':'hexbinary',
+                    'segmentation_upid_length':self.upid_length,}
+        return  Node('SegmentationUpid',attrs= ud_attrs, value=self.upid_value)
+
+
 
 
 class NoUpid(Upid):
@@ -55,7 +71,7 @@ class NoUpid(Upid):
         """
         return self.upid_name, None
 
-    def encode(self, nbin, seg_upid):
+    def encode(self, nbin ):
         """
         encode for no upid
         """
@@ -71,13 +87,14 @@ class AirId(Upid):
         """
         decode AirId
         """
-        return self.upid_name, self.bitbin.as_hex(self.bit_length)
+        self.upid_value=self.bitbin.as_hex(self.bit_length)
+        return self.upid_name, self.upid_value
 
-    def encode(self, nbin, seg_upid):
+    def encode(self, nbin ):
         """
         encode AirId
         """
-        nbin.add_hex(seg_upid, (self.upid_length << 3))
+        nbin.add_hex(self.upid_value, (self.upid_length << 3))
 
 
 class Atsc(Upid):
@@ -90,23 +107,25 @@ class Atsc(Upid):
         decode Atsc Upid
         """
         cont_size = self.bit_length - 32
-        return self.upid_name, {
+        self.upid_value= {
             "TSID": self.bitbin.as_int(16),
             "reserved": self.bitbin.as_int(2),
             "end_of_day": self.bitbin.as_int(5),
             "unique_for": self.bitbin.as_int(9),
             "content_id": self.bitbin.as_charset(cont_size, charset),
         }
+        return self.upid_name,self.upid_value
 
-    def encode(self, nbin, seg_upid):
+
+    def encode(self, nbin ):
         """
         encode Atsc
         """
-        nbin.add_int(seg_upid["TSID"], 16)
-        nbin.add_int(seg_upid["reserved"], 2)
-        nbin.add_int(seg_upid["end_of_day"], 5)
-        nbin.add_int(seg_upid["unique_for"], 9)
-        nbin.add_bites(seg_upid["content_id"].encode("utf-8"))
+        nbin.add_int(self.upid.value["TSID"], 16)
+        nbin.add_int(self.upid.value["reserved"], 2)
+        nbin.add_int(self.upid.value["end_of_day"], 5)
+        nbin.add_int(self.upid.value["unique_for"], 9)
+        nbin.add_bites(self.upid.value["content_id"].encode("utf-8"))
 
 
 class Eidr(Upid):
@@ -125,15 +144,16 @@ class Eidr(Upid):
         while nibbles:
             post.append(hex(self.bitbin.as_int(4))[2:])
             nibbles -= 1
-        return self.upid_name, f"{pre}{''.join(post)}"
+        self.upid_value = f"{pre}{''.join(post)}"
+        return self.upid_name, self.upid_value
 
-    def encode(self, nbin, seg_upid):
+    def encode(self, nbin ):
         """
         encode Eidr Upid
         """
         # switch to compact binary format
-        nbin.add_hex(seg_upid[:6], 16)
-        substring = seg_upid[6:]
+        nbin.add_hex(self.upid.value[:6], 16)
+        substring = self.upid.value[6:]
         for i in substring:
             hexed = f"0x{i}"
             nbin.add_hex(hexed, 4)
@@ -148,13 +168,14 @@ class Isan(Upid):
         """
         decode Isan Upid
         """
-        return self.upid_name, self.bitbin.as_hex(self.bit_length)
+        self.upid_value= self.bitbin.as_hex(self.bit_length)
+        return self.upid_name, self.upid_value
 
-    def encode(self, nbin, seg_upid):
+    def encode(self, nbin ):
         """
         encode Isan Upid
         """
-        nbin.add_hex(seg_upid, (self.upid_length << 3))
+        nbin.add_hex(self.upid.value, (self.upid_length << 3))
 
 
 class Mid(Upid):
@@ -166,7 +187,7 @@ class Mid(Upid):
         """
         decode Mid Upid
         """
-        upids = []
+        self.upid_value = []
         ulb = self.bit_length
         while ulb:
             upid_type = self.bitbin.as_int(8)  # 1 byte
@@ -183,14 +204,14 @@ class Mid(Upid):
                 "segmentation_upid": segmentation_upid,
             }
             ulb -= upid_length << 3
-            upids.append(mid_upid)
-        return self.upid_name, upids
+            self.upid_value.append(mid_upid)
+        return self.upid_name, self.upid_value
 
-    def encode(self, nbin, seg_upid):
+    def encode(self, nbin ):
         """
         encode Mid Upid
         """
-        for mid_upid in seg_upid:
+        for mid_upid in self.upid.value:
             nbin.add_int(mid_upid["upid_type"], 8)
             nbin.add_int(mid_upid["upid_length"], 8)
             the_upid = upid_map[mid_upid["upid_type"]][1](
@@ -204,39 +225,38 @@ class Mpu(Upid):
     Mpu Upid
     """
 
-    def _decode_adfr(self, mpu_data):
+    def _decode_adfr(self):
         """
         decode_adfr handles Addressabkle TV MPU Upids
         """
-        data = bytes.fromhex(mpu_data["private_data"][2:])
-        mpu_data["version"] = data[0]
-        mpu_data["channel_identifier"] = hex(int.from_bytes(data[1:3], byteorder="big"))
-        mpu_data["date"] = int.from_bytes(data[3:7], byteorder="big")
-        mpu_data["break_code"] = int.from_bytes(data[7:9], byteorder="big")
-        mpu_data["duration"] = hex(int.from_bytes(data[9:11], byteorder="big"))
-        return mpu_data
+        data = bytes.fromhex(self.upid_value["private_data"][2:])
+        self.upid_value["version"] = data[0]
+        self.upid_value["channel_identifier"] = hex(int.from_bytes(data[1:3], byteorder="big"))
+        self.upid_value["date"] = int.from_bytes(data[3:7], byteorder="big")
+        self.upid_value["break_code"] = int.from_bytes(data[7:9], byteorder="big")
+        self.upid_value["duration"] = hex(int.from_bytes(data[9:11], byteorder="big"))
 
     def decode(self):
         """
         decode MPU Upids
         """
-        mpu_data = {
+        self.upid_value = {
             "format_identifier": self.bitbin.as_charset(32),
             "private_data": self.bitbin.as_hex(self.bit_length - 32),
         }
-        if mpu_data["format_identifier"] == "ADFR":
-            mpu_data = self._decode_adfr(mpu_data)
-        return self.upid_name, mpu_data
+        if self.upid_value["format_identifier"] == "ADFR":
+           self._decode_adfr()
+        return self.upid_name, self.upid_value
 
-    def encode(self, nbin, seg_upid):
+    def encode(self, nbin ):
         """
         encode MPU Upids
         """
         bit_len = self.bit_length
-        fm = bytes(seg_upid["format_identifier"].encode("utf8"))
+        fm = bytes(self.upid.value["format_identifier"].encode("utf8"))
         nbin.add_bites(fm)
         bit_len -= 32
-        nbin.add_hex(seg_upid["private_data"], bit_len)
+        nbin.add_hex(self.upid.value["private_data"], bit_len)
 
 
 class Umid(Upid):
@@ -253,13 +273,14 @@ class Umid(Upid):
         while ulb > 32:
             chunks.append(self.bitbin.as_hex(32)[2:])
             ulb -= 32
-        return self.upid_name, ".".join(chunks)
+        self.upid_value= ".".join(chunks)
+        return self.upid_name, self.upid_valur
 
-    def encode(self, nbin, seg_upid):
+    def encode(self, nbin ):
         """
         encode Umid Upid
         """
-        chunks = seg_upid.split(".")
+        chunks = self.upid.value.split(".")
         for chunk in chunks:
             nbin.add_hex(chunk, 32)
 
