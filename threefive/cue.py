@@ -354,7 +354,7 @@ class Cue(SCTE35Base):
         dmap={"SegmentationDescriptor" : SegmentationDescriptor,
                "AvailDescriptor": AvailDescriptor,
                "DTMFDescriptor": DtmfDescriptor,
-               "DTMFDescriptor": TimeDescriptor,}
+               "TimeDescriptor": TimeDescriptor,}
         for dname in dmap.keys():
             if dname in stuff:
                 dscptr = dmap[dname]()
