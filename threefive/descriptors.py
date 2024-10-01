@@ -367,8 +367,8 @@ class SegmentationDescriptor(SpliceDescriptor):
         the_upid = self.mk_the_upid(bitbin)
         self.segmentation_upid_type_name, self.segmentation_upid = the_upid.decode()
         self.segmentation_type_id = bitbin.as_int(8)
-        if self.segmentation_type_id in table22:
-            self.segmentation_message = table22[self.segmentation_type_id]
+        #if self.segmentation_type_id in table22:
+        self.segmentation_message = table22[self.segmentation_type_id]
         self._decode_segments(bitbin)
 
     def _chk_sub_segments(self):
@@ -464,7 +464,8 @@ class SegmentationDescriptor(SpliceDescriptor):
         """
         Create a Node describing a SegmentationDescriptor
         """
-        sd_attrs= {'segmentation_event_id':int(self.segmentation_event_id, 0),
+        sd_attrs= { 'segmentation_message': self.segmentation_message,
+                    'segmentation_event_id':int(self.segmentation_event_id, 0),
                    'segmentation_event_cancel_indicator':self.segmentation_event_cancel_indicator,
                    'segmentation_event_id_compliance_indicator':self.segmentation_event_id_compliance_indicator,
                    'segmentation_type_id': self.segmentation_type_id,
@@ -477,6 +478,7 @@ class SegmentationDescriptor(SpliceDescriptor):
             sd_attrs['segmentation_duration'] = self.as_ticks(self.segmentation_duration)
         sd=Node('SegmentationDescriptor',attrs=sd_attrs)
         the_upid = self.mk_the_upid()
+        the_upid.upid_value= self.segmentation_upid
         upid_node = the_upid.xml()
         if not self.delivery_not_restricted_flag:
             sd.add_child(Node("DeliveryRestrictions",attrs={
@@ -485,7 +487,11 @@ class SegmentationDescriptor(SpliceDescriptor):
                 'archive_allowed_flag': self.archive_allowed_flag,
                 'device_restrictions': k_by_v(table20, self.device_restrictions),
             }))
-        sd.add_child(upid_node)
+        if isinstance(upid_node,list):
+            for node in upid_node:
+                sd.add_child(node)
+        else:
+            sd.add_child(upid_node)
         return sd
 
 
