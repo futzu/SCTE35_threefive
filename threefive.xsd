@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is the normative schema for threefive  SCTE 35. It's a modified version of https://scte.org/schemas/35 because that one is out of date and does not comply with SCTE-35 2023r1. Splice Schedule has also been removed because I've never seen one in the wild.  The applicable section in SCTE 35 2023r1 contains details on attributes, elements and interpretation. This is in no way endorsed or supported by SCTE, we just need to be able to validate threefive Xml output. Together we stand, united we fall. -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://iodisco.com/schemas/35"
+	targetNamespace="http://www.scte.org/schemas/35" elementFormDefault="qualified"
+	version="1" attributeFormDefault="unqualified">
+	<xsd:complexType name="SpliceInfoSectionType">
+		<xsd:annotation>
+			<xsd:documentation>See Section 9.6 - Splice Info Section</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="Ext" minOccurs="0"/>
+			<xsd:element name="EncryptedPacket" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="Ext" minOccurs="0"/>
+					</xsd:sequence>
+					<xsd:attribute name="encryptionAlgorithm" type="xsd:unsignedByte" use="required"/>
+					<xsd:attribute name="cwIndex" type="xsd:unsignedByte" use="required"/>
+					<xsd:anyAttribute namespace="##any"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:choice>
+				<xsd:annotation>
+					<xsd:documentation>See Column XML Element in Table 6 - splice_command_type
+						Values. </xsd:documentation>
+				</xsd:annotation>
+				<xsd:element ref="SpliceNull"/
+				<xsd:element ref="SpliceInsert"/>
+				<xsd:element ref="TimeSignal"/>
+				<xsd:element ref="BandwidthReservation"/>
+				<xsd:element ref="PrivateCommand"/>
+			</xsd:choice>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>See Section 10 - Splice Descriptors AND Column XML Element in
+						Table 15 Splice Descriptor Tags </xsd:documentation>
+				</xsd:annotation>
+				<xsd:element ref="AvailDescriptor"/>
+				<xsd:element ref="DTMFDescriptor"/>
+				<xsd:element ref="SegmentationDescriptor"/>
+				<xsd:element ref="TimeDescriptor"/>
+			</xsd:choice>
+		</xsd:sequence>
+		<xsd:attribute name="sapType" default="3">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:unsignedShort">
+					<xsd:maxInclusive value="3"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="ptsAdjustment" type="PTSType" default="0"/>
+		<xsd:attribute name="protocolVersion" type="xsd:unsignedByte" fixed="0"/>
+		<xsd:attribute name="tier">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:unsignedShort">
+					<xsd:maxExclusive value="4096"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:anyAttribute namespace="##any"/>
+	</xsd:complexType>
+	<xsd:element name="SpliceInfoSection" type="SpliceInfoSectionType"/>
+	<xsd:complexType name="BinaryType">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:base64Binary">
+				<xsd:attribute name="signalType" default="SpliceInfoSection">
+					<xsd:annotation>
+						<xsd:documentation>When present, this value will typically specify that the
+							binary content represents a 'SpliceInfoSetion'. However, the binary
+							structure may be used to represent some other content and may do so by
+							providing a different type prefixed with 'other:'</xsd:documentation>
+					</xsd:annotation>
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:token">
+							<xsd:pattern value="SpliceInfoSection|private:.+"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:element name="Binary" type="BinaryType">
+		<xsd:annotation>
+			<xsd:documentation>A binary representation of the in-band SpliceInfoSection or other
+				content as specified by the type attribute.</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:group name="Signal">
+		<xsd:annotation>
+			<xsd:documentation>This group may be referenced in place of a SpliceInfoSection element
+				to allow for the option of a binary representation in XML.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element ref="SpliceInfoSection"/>
+			<xsd:element ref="Binary"/>
+		</xsd:choice>
+	</xsd:group>
+	<!--Common Types-->
+	<!--Extensibility element-->
+	<xsd:element name="Ext">
+		<xsd:annotation>
+			<xsd:documentation>See Section 13.1 - Ext Element</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"
+				/>
+			</xsd:sequence>
+			<xsd:anyAttribute namespace="##any" processContents="lax"/>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- PTSType Type -->
+	<xsd:simpleType name="PTSType">
+		<xsd:annotation>
+			<xsd:documentation>See Section 13.2 - PTSType </xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:unsignedLong">
+			<xsd:maxExclusive value="8589934592"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!--Splice Commands-->
+	<xsd:complexType name="SpliceCommandType">
+		<xsd:annotation>
+			<xsd:documentation>See Section 9.7 - Splice Commands</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="Ext" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:anyAttribute namespace="##any"/>
+	</xsd:complexType>
+	<!-- Splice Null -->
+	<xsd:complexType name="SpliceNullType">
+		<xsd:annotation>
+			<xsd:documentation>See Section 9.7.1 - splice_null()</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="SpliceCommandType"/>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:element name="SpliceNull" type="SpliceNullType"/>
+	<!-- Splice Insert -->
+	<xsd:complexType name="SpliceInsertType">
+		<xsd:annotation>
+			<xsd:documentation>See Section 9.7.3 - splice_insert().</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="SpliceCommandType">
+				<xsd:sequence>
+					<xsd:choice>
+						<xsd:element name="Program">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="Ext" minOccurs="0"/>
+									<xsd:element ref="SpliceTime" minOccurs="0"/>
+								</xsd:sequence>
+								<xsd:anyAttribute namespace="##any"/>
+							</xsd:complexType>
+						</xsd:element>	
+					</xsd:choice>
+					<xsd:element ref="BreakDuration" minOccurs="0"/>
+				</xsd:sequence>
+				<xsd:attribute name="spliceEventId" type="xsd:unsignedInt"/>
+				<xsd:attribute name="spliceEventCancelIndicator" type="xsd:boolean" default="0"/>
+				<xsd:attribute name="outOfNetworkIndicator" type="xsd:boolean"/>
+				<xsd:attribute name="spliceImmediateFlag" type="xsd:boolean"/>
+				<xsd:attribute name="uniqueProgramId" type="xsd:unsignedShort"/>
+				<xsd:attribute name="availNum" type="xsd:unsignedByte"/>
+				<xsd:attribute name="availsExpected" type="xsd:unsignedByte"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:element name="SpliceInsert" type="SpliceInsertType"/>
+	<!-- Time Signal -->
+	<xsd:complexType name="TimeSignalType">
+		<xsd:annotation>
+			<xsd:documentation>See Section 9.7.4 - time_signal()</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="SpliceCommandType">
+				<xsd:sequence>
+					<xsd:element ref="SpliceTime"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:element name="TimeSignal" type="TimeSignalType"/>
+	<!-- Bandwidth Reservation -->
+	<xsd:complexType name="BandwidthReservationType">
+		<xsd:annotation>
+			<xsd:documentation>See Section 9.7.5 - bandwidth_reservation()</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="SpliceCommandType"/>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:element name="BandwidthReservation" type="BandwidthReservationType"/>
+	<!-- Private -->
+	<xsd:complexType name="PrivateCommandType">
+		<xsd:annotation>
+			<xsd:documentation>See Section 9.7.6 - private_command()</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="SpliceCommandType">
+				<xsd:sequence>
+					<xsd:element name="PrivateBytes" type="xsd:hexBinary" minOccurs="0"/>
+				</xsd:sequence>
+				<xsd:attribute name="identifier" type="xsd:unsignedInt" use="required"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:element name="PrivateCommand" type="PrivateCommandType"/>
+	<!-- Time Values - See Section 9.8 - Time-->
+	<!-- Splice Time -->
+	<xsd:complexType name="SpliceTimeType">
+		<xsd:annotation>
+			<xsd:documentation>See Section 9.8.1 - splice_time()</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="Ext" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="ptsTime" type="PTSType"/>
+		<xsd:anyAttribute namespace="##any"/>
+	</xsd:complexType>
+	<xsd:element name="SpliceTime" type="SpliceTimeType"/>
+	<!-- Break Duration -->
+	<xsd:complexType name="BreakDurationType">
+		<xsd:annotation>
+			<xsd:documentation>See Section 9.8.2 - break_duration()</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="Ext" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="autoReturn" type="xsd:boolean" use="required"/>
+		<xsd:attribute name="duration" type="PTSType" use="required"/>
+		<xsd:anyAttribute namespace="##any"/>
+	</xsd:complexType>
+	<xsd:element name="BreakDuration" type="BreakDurationType"/>
+	<!--Splice Descriptors - See Section 10 - Splice Descriptors -->
+	<!-- Table 15 - Splice Descriptor Tags - See column XML Element -->
+	<xsd:complexType name="SpliceDescriptorType" abstract="true">
+		<xsd:sequence>
+			<xsd:element ref="Ext" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:anyAttribute namespace="##any"/>
+	</xsd:complexType>
+	<!-- Avail Descriptor -->
+	<xsd:complexType name="AvailDescriptorType">
+		<xsd:annotation>
+			<xsd:documentation>See Section 10.3.1 - avail_descriptor() </xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="SpliceDescriptorType">
+				<xsd:attribute name="providerAvailId" type="xsd:unsignedInt" use="required"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:element name="AvailDescriptor" type="AvailDescriptorType"/>
+	<!-- DTMF Descriptor -->
+	<xsd:complexType name="DTMFDescriptorType">
+		<xsd:annotation>
+			<xsd:documentation>See Section 10.3.2 - DTMF_descriptor() </xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="SpliceDescriptorType">
+				<xsd:attribute name="preroll" type="xsd:unsignedByte"/>
+				<xsd:attribute name="chars">
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:token">
+							<xsd:whiteSpace value="collapse"/>
+							<xsd:pattern value="[0-9#\*]+"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:element name="DTMFDescriptor" type="DTMFDescriptorType"/>
+	<!-- Segmentation Descriptor -->
+	<xsd:complexType name="SegmentationDescriptorType">
+		<xsd:annotation>
+			<xsd:documentation>See Section 10.3.3 - segmentation_descriptor() </xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="SpliceDescriptorType">
+				<xsd:sequence>
+					<xsd:element name="DeliveryRestrictions" minOccurs="0">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element ref="Ext" minOccurs="0"/>
+							</xsd:sequence>
+							<xsd:attribute name="webDeliveryAllowedFlag" type="xsd:boolean"
+								use="required"/>
+							<xsd:attribute name="noRegionalBlackoutFlag" type="xsd:boolean"
+								use="required"/>
+							<xsd:attribute name="archiveAllowedFlag" type="xsd:boolean"
+								use="required"/>
+							<xsd:attribute name="deviceRestrictions" use="required">
+								<xsd:annotation>
+									<xsd:documentation>See Table 20 - device_restrictions
+									</xsd:documentation>
+								</xsd:annotation>
+								<xsd:simpleType>
+									<xsd:restriction base="xsd:unsignedByte">
+										<xsd:maxInclusive value="3"/>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:attribute>
+							<xsd:anyAttribute namespace="##any"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element ref="SegmentationUpid" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+				<xsd:attribute name="segmentationEventId" type="xsd:unsignedInt"/>
+				<xsd:attribute name="segmentationEventCancelIndicator" type="xsd:boolean"
+					default="0"/>
+				<xsd:attribute name="segmentationDuration">
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:unsignedLong">
+							<xsd:maxExclusive value="1099511627776"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+				<xsd:attribute name="segmentationTypeId" type="xsd:unsignedByte">
+					<xsd:annotation>
+						<xsd:documentation>See Table 22 - segmentation_type_id </xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+				<xsd:attribute name="segmentNum" type="xsd:unsignedByte"/>
+				<xsd:attribute name="segmentsExpected" type="xsd:unsignedByte"/>
+				<xsd:attribute name="subSegmentNum" type="xsd:unsignedByte"/>
+				<xsd:attribute name="subSegmentsExpected" type="xsd:unsignedByte"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:element name="SegmentationDescriptor" type="SegmentationDescriptorType"/>
+	<!-- Segmentation Upid Type -->
+	<xsd:complexType name="SegmentationUpidType">
+		<xsd:annotation>
+			<xsd:documentation>See Section 10.3.3.1 - segmentation_upid()</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:token">
+				<xsd:attribute name="segmentationUpidType" type="xsd:unsignedByte">
+					<xsd:annotation>
+						<xsd:documentation>See Table 21 -segmentation_upid_type</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+				<xsd:attribute name="formatIdentifier" type="xsd:unsignedInt">
+					<xsd:annotation>
+						<xsd:documentation>See Section 10.3.3.3 for description of format_identifier in an MPU.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+				<xsd:attribute name="segmentationUpidFormat">
+					<xsd:annotation>
+						<xsd:documentation>The format of the Upid value. Valid values are: text, hexbinary, base-64 or private: </xsd:documentation>
+					</xsd:annotation>
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:string">
+							<xsd:pattern value="text|hexbinary|base-64|private:.+"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+				<xsd:anyAttribute namespace="##any"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:element name="SegmentationUpid" type="SegmentationUpidType"/>
+	<xsd:complexType name="TimeDescriptorType">
+		<xsd:annotation>
+			<xsd:documentation>See Section 10.3.4 - time_descriptor()</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="SpliceDescriptorType">
+				<xsd:attribute name="taiSeconds">
+					<xsd:annotation>
+						<xsd:documentation>Restricted to 48 bit unsigned</xsd:documentation>
+					</xsd:annotation>
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:unsignedLong">
+							<xsd:maxInclusive value="281474976710656"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+				<xsd:attribute name="taiNs" type="xsd:unsignedInt"/>
+				<xsd:attribute name="utcOffset" type="xsd:unsignedShort"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:element name="TimeDescriptor" type="TimeDescriptorType"/>
+	<xsd:element name="AudioChannel" type="AudioChannelType"/>
+	<xsd:element name="AudioDescriptor">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="AudioDescriptorType">
+					<xsd:sequence maxOccurs="15">
+						<xsd:element ref="AudioChannel"/>
+					</xsd:sequence>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="AudioDescriptorType">
+		<xsd:annotation>
+			<xsd:documentation>See Section 10.3.5 - audio_descriptor() </xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="SpliceDescriptorType"> </xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="AudioChannelType">
+		<xsd:annotation>
+			<xsd:documentation>See Section 10.3.5 - audio_descriptor() </xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="SpliceDescriptorType">
+				<xsd:attribute name="ISOCode" type="xsd:language" use="required"/>
+				<xsd:attribute name="BitStreamMode" use="required">
+					<xsd:annotation>
+						<xsd:documentation>bsmod	acmod 	Type of Service
+‘000’	any 	main audio service: complete main (CM)
+‘001’ 	any 	main audio service: music and effects (ME)
+‘010’ 	any 	associated service: visually impaired (VI)
+‘011’ 	any 	associated service: hearing impaired (HI)
+‘100’ 	any 	associated service: dialogue (D)
+‘101’ 	any 	associated service: commentary (C)
+‘110’ 	any 	associated service: emergency (E)
+‘111’ 	‘001’ 	associated service: voice over (VO)
+‘111’ 	‘010’-‘111’ main audio service: karaoke</xsd:documentation>
+					</xsd:annotation>
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:unsignedByte">
+							<xsd:maxInclusive value="7"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+				<xsd:attribute name="NumChannels" use="required">
+					<xsd:annotation>
+						<xsd:documentation>This is a 4-bit field that indicates the number of channels in the AC-3 elementary stream. When the MSB is 0, the lower 3 bits are set to the same value as the acmod field in the AC-3 elementary stream. When the MSB field is 1, the lower 3 bits indicate the maximum number of encoded audio channels (counting the lfe channel as 1).
+
+num_channels 	Audio coding mode (acmod) 
+‘0000’ 		1 + 1
+‘0001’ 		1/0 
+‘0010’ 		2/0 
+‘0011’ 		3/0 
+‘0100’ 		2/1 
+‘0101’ 		3/1 
+‘0110’ 		2/2 
+‘0111’ 		3/2 
+num_channels 	Number of encoded channels
+‘1000’ 		1
+‘1001’ 		≤ 2
+‘1010’ 		≤ 3
+‘1011’ 		≤ 4
+‘1100’ 		≤ 5
+‘1101’ 		≤ 6
+‘1110’ 		Reserved
+‘1111’ 		Reserved</xsd:documentation>
+					</xsd:annotation>
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:unsignedByte">
+							<xsd:maxInclusive value="15"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+				<xsd:attribute name="FullSrvcAudio" use="required">
+					<xsd:annotation>
+						<xsd:documentation>This is a 1-bit field that indicates whether or not this audio service is a full service suitable for presentation, or whether this audio service is only a partial service which should be
+combined with another audio service before presentation. This bit should be set to a ‘1’ if this audio service is sufficiently complete to be presented to the listener without being combined with another audio service (for example, a visually impaired service which contains all elements of the program; music, effects, dialogue, and the visual content descriptive narrative). This bit should be set to a ‘0’ if the service is not sufficiently complete to be presented without
+being combined with another audio service (e.g., a visually impaired service which only contains a narrative description of the visual program content and which needs to be combined with another audio service which contains music, effects, and dialogue).</xsd:documentation>
+					</xsd:annotation>
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:unsignedByte">
+							<xsd:maxInclusive value="1"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+				<xsd:attribute name="componentTag" type="xsd:unsignedByte">
+					<xsd:annotation>
+						<xsd:documentation>An optional 8-bit value that identifies the elementary PID stream containing the audio channel that follows. If used the value shall be the same as the value used in the stream_identification_descriptor() to identify that elementary PID stream. If this is not used the value shall be 0xFF and the stream order shall be inferred from the PMT audio order.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+</xsd:schema>
