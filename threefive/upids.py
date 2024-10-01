@@ -51,8 +51,8 @@ class Upid:
         """
         xml return a upid xml node
         """
-        ud_attrs = { 'name': self.upid_name, # this is for clarity
-                    'segmentation_upid_type': hex(self.upid_type),
+        ud_attrs = { 'upid_type': self.upid_name, # this is for clarity
+                    'segmentation_upid_type': self.upid_type,
                     'segmentation_upid_format':'hexbinary',
                     'segmentation_upid_length':self.upid_length,}
         return  Node('SegmentationUpid',attrs= ud_attrs, value=self.upid_value)
@@ -219,6 +219,22 @@ class Mid(Upid):
             )
             the_upid.encode(nbin, mid_upid["segmentation_upid"])
 
+    def xml(self):
+        """
+        xml return a upid xml node
+
+        """
+        mid_nodes =[]
+        for u in self.upid_value:
+            u_attrs = { 'upid_type': self.upid_name, # this is for clarity
+                    'segmentation_upid_type': self.upid_type,
+                    'segmentation_upid_format':'hexbinary',
+                    'segmentation_upid_length':self.upid_length,}
+            value= u["segmentation_upid"]
+            node= Node('SegmentationUpid', attrs=u_attrs, value=value)
+            mid_nodes.append(node)
+        return mid_nodes
+
 
 class Mpu(Upid):
     """
@@ -274,7 +290,7 @@ class Umid(Upid):
             chunks.append(self.bitbin.as_hex(32)[2:])
             ulb -= 32
         self.upid_value= ".".join(chunks)
-        return self.upid_name, self.upid_valur
+        return self.upid_name, self.upid_value
 
     def encode(self, nbin ):
         """
