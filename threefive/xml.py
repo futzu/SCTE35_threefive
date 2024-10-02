@@ -58,7 +58,7 @@ def val2xml(val):
         return str(val).lower()
     if isinstance(val, (int, float)):
         return str(val)
-    return escape_special_chars(val)
+    return val
 
 
 def key2xml(string):
@@ -78,14 +78,6 @@ def mk_xml_attrs(attrs):
     """
     return "".join([f' {key2xml(k)}="{val2xml(v)}"' for k, v in attrs.items()])
 
-def escape_special_chars(val):
-    if val is not None:
-        val = val.replace("&", "&amp;")
-        val = val.replace("<", "&lt;")
-        val = val.replace(">", "&gt;")
-        val = val.replace("'", "&apos;")
-        val = val.replace("\"", "&quot;")
-    return val
 
 class Node:
     """
@@ -113,7 +105,7 @@ class Node:
         self.name = name
         if ns:
             self.name = ":".join((ns, name))
-        self.value = escape_special_chars(value)
+        self.value = value
         self.attrs = attrs
         self.children = []
         self.depth = None
