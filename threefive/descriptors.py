@@ -63,9 +63,8 @@ class SpliceDescriptor(SCTE35Base):
         decode handles Private Descriptors
         """
         self.private_data = self.bites.decode()
-        if isinstance(self.private_data,bytes):
+        if isinstance(self.private_data, bytes):
             self.private_data = self.bites.decode()
-
 
     def encode(self, nbin=None):
         """
@@ -74,7 +73,7 @@ class SpliceDescriptor(SCTE35Base):
         nbin = self._chk_nbin(nbin)
         self._encode_id(nbin)
         if self.private_data:
-            if isinstance(self.private_data,str):
+            if isinstance(self.private_data, str):
                 self.private_data = self.private_data.encode()
             nbin.add_bites(self.private_data)
         if self.tag in descriptor_map:
@@ -171,11 +170,10 @@ class AvailDescriptor(SpliceDescriptor):
         """
         Create a Node describing the AvailDescriptor
         """
-        ad = Node('AvailDescriptor',attrs={"providerAvailId": self.provider_avail_id})
+        ad = Node("AvailDescriptor", attrs={"providerAvailId": self.provider_avail_id})
         return ad
 
-
-    def from_xml(self,stuff):
+    def from_xml(self, stuff):
         """
         Load an AvailDescriptor from XML
         """
@@ -224,13 +222,16 @@ class DtmfDescriptor(SpliceDescriptor):
         """
         Create a Node describing a DTMFDescriptor
         """
-        dd = Node('DTMFDescriptor', attrs={
-            "preroll": self.preroll,
-            "chars": ''.join(self.dtmf_chars),
-        })
+        dd = Node(
+            "DTMFDescriptor",
+            attrs={
+                "preroll": self.preroll,
+                "chars": "".join(self.dtmf_chars),
+            },
+        )
         return dd
 
-    def from_xml(self,stuff):
+    def from_xml(self, stuff):
         """
         Load an DTMFDescriptor from XML
         """
@@ -238,6 +239,7 @@ class DtmfDescriptor(SpliceDescriptor):
             stuff["DTMFDescriptor"]["dtmf_chars"] = stuff["DTMFDescriptor"].pop("chars")
             self.load(stuff["DTMFDescriptor"])
             self.dtmf_count = len(self.dtmf_chars)
+
 
 class TimeDescriptor(SpliceDescriptor):
     """
@@ -276,14 +278,20 @@ class TimeDescriptor(SpliceDescriptor):
         """
         create a Node describing a TimeDescriptor
         """
-        td = Node("TimeDescriptor", attrs={
-            "tai_seconds", self.tai_seconds,
-            "tai_ns", self.tai_ns,
-            "utc_offset", self.utc_offset,
-        })
+        td = Node(
+            "TimeDescriptor",
+            attrs={
+                "tai_seconds",
+                self.tai_seconds,
+                "tai_ns",
+                self.tai_ns,
+                "utc_offset",
+                self.utc_offset,
+            },
+        )
         return td
 
-    def from_xml(self,stuff):
+    def from_xml(self, stuff):
         """
         load a TimeDescriptor from XML
         """
@@ -295,16 +303,17 @@ class SegmentationDescriptor(SpliceDescriptor):
     """
     Table 19 - segmentation_descriptor()
     """
-    SUB_SEG_TYPES=[
-            0x30,
-            0x32,
-            0x34,
-            0x36,
-            0x38,
-            0x3A,
-            0x44,
-            0x46,
-        ]
+
+    SUB_SEG_TYPES = [
+        0x30,
+        0x32,
+        0x34,
+        0x36,
+        0x38,
+        0x3A,
+        0x44,
+        0x46,
+    ]
 
     def __init__(self, bites=None):
         super().__init__(bites)
@@ -367,8 +376,8 @@ class SegmentationDescriptor(SpliceDescriptor):
         the_upid = self.mk_the_upid(bitbin)
         self.segmentation_upid_type_name, self.segmentation_upid = the_upid.decode()
         self.segmentation_type_id = bitbin.as_int(8)
-        #if self.segmentation_type_id in table22:
-        self.segmentation_message = table22[self.segmentation_type_id]
+        if self.segmentation_type_id in table22:
+            self.segmentation_message = table22[self.segmentation_type_id]
         self._decode_segments(bitbin)
 
     def _chk_sub_segments(self):
@@ -423,7 +432,7 @@ class SegmentationDescriptor(SpliceDescriptor):
         else:
             nbin.reserve(5)
 
-    def mk_the_upid(self,bitbin=None):
+    def mk_the_upid(self, bitbin=None):
         """
         mk_the_upid create a upid instance
         and return it. the bitbin arg is only
@@ -443,8 +452,8 @@ class SegmentationDescriptor(SpliceDescriptor):
         self._chk_var(int, nbin.add_int, "segmentation_upid_type", 8)
         self._chk_var(int, nbin.add_int, "segmentation_upid_length", 8)
         upid_type = self.segmentation_upid_type
-        the_upid= self.mk_the_upid()
-        the_upid.upid_value=self.segmentation_upid
+        the_upid = self.mk_the_upid()
+        the_upid.upid_value = self.segmentation_upid
         the_upid.encode(nbin)
         self._chk_var(int, nbin.add_int, "segmentation_type_id", 8)
         self._encode_segments(nbin)
@@ -464,38 +473,48 @@ class SegmentationDescriptor(SpliceDescriptor):
         """
         Create a Node describing a SegmentationDescriptor
         """
-        sd_attrs= { 'segmentation_message': self.segmentation_message,
-                    'segmentation_event_id':int(self.segmentation_event_id, 0),
-                   'segmentation_event_cancel_indicator':self.segmentation_event_cancel_indicator,
-                   'segmentation_event_id_compliance_indicator':self.segmentation_event_id_compliance_indicator,
-                   'segmentation_type_id': self.segmentation_type_id,
-                   'segment_num':self.segment_num,
-                   'segments_expected':self.segments_expected,}
+        sd_attrs = {
+            "segmentation_message": self.segmentation_message,
+            "segmentation_event_id": int(self.segmentation_event_id, 0),
+            "segmentation_event_cancel_indicator": self.segmentation_event_cancel_indicator,
+            "segmentation_event_id_compliance_indicator": self.segmentation_event_id_compliance_indicator,
+            "segmentation_type_id": self.segmentation_type_id,
+            "segment_num": self.segment_num,
+            "segments_expected": self.segments_expected,
+        }
         if self.segmentation_type_id in self.SUB_SEG_TYPES:
-            sd_attrs['sub_segment_num']=self.sub_segment_num
-            sd_attrs['sub_segments_expected']=self.sub_segments_expected
+            sd_attrs["sub_segment_num"] = self.sub_segment_num
+            sd_attrs["sub_segments_expected"] = self.sub_segments_expected
         if self.segmentation_duration_flag:
-            sd_attrs['segmentation_duration'] = self.as_ticks(self.segmentation_duration)
-        sd=Node('SegmentationDescriptor',attrs=sd_attrs)
+            sd_attrs["segmentation_duration"] = self.as_ticks(
+                self.segmentation_duration
+            )
+        sd = Node("SegmentationDescriptor", attrs=sd_attrs)
         the_upid = self.mk_the_upid()
-        the_upid.upid_value= self.segmentation_upid
+        the_upid.upid_value = self.segmentation_upid
         upid_node = the_upid.xml()
         if not self.delivery_not_restricted_flag:
-            sd.add_child(Node("DeliveryRestrictions",attrs={
-                'web_delivery_allowed_flag': self.web_delivery_allowed_flag,
-                'no_regional_blackout_flag': self.no_regional_blackout_flag,
-                'archive_allowed_flag': self.archive_allowed_flag,
-                'device_restrictions': k_by_v(table20, self.device_restrictions),
-            }))
-        if isinstance(upid_node,list):
+            sd.add_child(
+                Node(
+                    "DeliveryRestrictions",
+                    attrs={
+                        "web_delivery_allowed_flag": self.web_delivery_allowed_flag,
+                        "no_regional_blackout_flag": self.no_regional_blackout_flag,
+                        "archive_allowed_flag": self.archive_allowed_flag,
+                        "device_restrictions": k_by_v(
+                            table20, self.device_restrictions
+                        ),
+                    },
+                )
+            )
+        if isinstance(upid_node, list):
             for node in upid_node:
                 sd.add_child(node)
         else:
             sd.add_child(upid_node)
         return sd
 
-
-    def from_xml(self,stuff):
+    def from_xml(self, stuff):
         """
         Load a SegmentationDescriptor from XML
         """
@@ -518,7 +537,6 @@ class SegmentationDescriptor(SpliceDescriptor):
                 self.load(stuff["SegmentationUpid"])
                 self.segmentation_upid_length = len(self.segmentation_upid.strip("0x"))
             self._chk_sub_segments()
-
 
 
 # map of known descriptors and associated classes
