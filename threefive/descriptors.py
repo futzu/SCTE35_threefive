@@ -281,12 +281,9 @@ class TimeDescriptor(SpliceDescriptor):
         td = Node(
             "TimeDescriptor",
             attrs={
-                "tai_seconds",
-                self.tai_seconds,
-                "tai_ns",
-                self.tai_ns,
-                "utc_offset",
-                self.utc_offset,
+                "tai_seconds":self.tai_seconds,
+                "tai_ns":self.tai_ns,
+                "utc_offset":self.utc_offset,
             },
         )
         return td
