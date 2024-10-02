@@ -150,6 +150,12 @@ class Node:
         """
         self.children.append(child)
 
+    def add_comment(self,comment):
+        """
+        add-comment add a comment node
+        """
+        cnode = Node(f'!-- {comment} --')
+        self.add_child(cnode)
 
 class XmlParser:
     DESCRIPTORS = [
