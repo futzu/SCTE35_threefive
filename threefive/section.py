@@ -184,7 +184,7 @@ class SpliceInfoSection(SCTE35Base):
         xml create xml node for splice info section
         """
         sis_attrs = {
-            "xmlns": "https://iodisco.com/threefive",
+            "xmlns": "https://scte.org/schemas/35",
             "pts_adjustment": self.as_ticks(self.pts_adjustment),
             "protocol_version": self.protocol_version,
             "sap_type": int(self.sap_type, base=16),
