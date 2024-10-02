@@ -183,18 +183,23 @@ class SpliceInfoSection(SCTE35Base):
         """
         xml create xml node for splice info section
         """
-        sis_attrs= {'pts_adjustment': self.as_ticks(self.pts_adjustment),
-                    'protocol_version': self.protocol_version,
-                    'sap_type': int(self.sap_type, 0),
-                    'tier': int(self.tier, 0),}
-        sis=Node('SpliceInfoSection',attrs=sis_attrs)
+        sis_attrs = {
+            "xmlns": "https://iodisco.com/threefive",
+            "pts_adjustment": self.as_ticks(self.pts_adjustment),
+            "protocol_version": self.protocol_version,
+            "sap_type": int(self.sap_type, base=16),
+            "tier": int(self.tier, base=16),
+        }
+        sis = Node("SpliceInfoSection", attrs=sis_attrs)
         return sis
 
-    def from_xml(self,stuff):
+    def from_xml(self, stuff):
         """
         from_xml SpliceInfoSection from Xml
         """
-        if isinstance(stuff["SpliceInfoSection"]["tier"],int):
-            stuff["SpliceInfoSection"]["tier"] = hex(
-                stuff["SpliceInfoSection"]["tier"])
-        self.load(stuff["SpliceInfoSection"])
+        covrt = ["tier"]
+        short = stuff["SpliceInfoSection"]
+        for v in covrt:
+            if isinstance(short[v], int):
+                short[v] = hex(short[v])
+            self.load(short)
