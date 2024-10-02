@@ -5,7 +5,7 @@ threefve.upids
 
 classy Upids
 
-cyclomatic complexity 1.689
+cyclomatic complexity 1.65625
 
 
 """
@@ -53,7 +53,7 @@ class Upid:
         xml return a upid xml node
         """
         ud_attrs = {
-            "name": self.upid_name,  # this is for clarity
+            "upid_name": self.upid_name,  # this is for clarity
             "segmentation_upid_type": self.upid_type,
             "segmentation_upid_format": "hexbinary",
             "segmentation_upid_length": self.upid_length,
@@ -70,7 +70,7 @@ class NoUpid(Upid):
         """
         decode for no upid
         """
-        return self.upid_name, None
+        return self.upid_name, 'No UPID'
 
     def encode(self, nbin):
         """
@@ -78,6 +78,17 @@ class NoUpid(Upid):
         """
         nbin.forward(0)
 
+    def xml(self):
+        """
+        xml return a upid xml node
+        """
+        ud_attrs = {
+            "upid_name": 'No UPID',  # this is for clarity
+            "segmentation_upid_type": 0,
+            "segmentation_upid_format": "hexbinary",
+            "segmentation_upid_length": 0,
+        }
+        return Node("SegmentationUpid", attrs=ud_attrs, value="")
 
 class AirId(Upid):
     """
@@ -102,7 +113,7 @@ class AirId(Upid):
         xml return a upid xml node
         """
         ud_attrs = {
-            "name": self.upid_name,  # this is for clarity
+            "upid_name": self.upid_name,  # this is for clarity
             "segmentation_upid_type": self.upid_type,
             "segmentation_upid_format": "hexbinary",
             "segmentation_upid_length": self.upid_length,
