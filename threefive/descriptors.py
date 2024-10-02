@@ -471,7 +471,6 @@ class SegmentationDescriptor(SpliceDescriptor):
         Create a Node describing a SegmentationDescriptor
         """
         sd_attrs = {
-            "segmentation_message": self.segmentation_message,
             "segmentation_event_id": int(self.segmentation_event_id, 0),
             "segmentation_event_cancel_indicator": self.segmentation_event_cancel_indicator,
             "segmentation_event_id_compliance_indicator": self.segmentation_event_id_compliance_indicator,
@@ -487,6 +486,7 @@ class SegmentationDescriptor(SpliceDescriptor):
                 self.segmentation_duration
             )
         sd = Node("SegmentationDescriptor", attrs=sd_attrs)
+        sd.add_comment(self.segmentation_message)
         the_upid = self.mk_the_upid()
         the_upid.upid_value = self.segmentation_upid
         upid_node = the_upid.xml()
