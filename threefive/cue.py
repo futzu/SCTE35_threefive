@@ -417,7 +417,7 @@ class Cue(SCTE35Base):
         which can be edited as needed or printed.
         """
         if binary:
-            sig_attrs = {"xmlns": "https://iodisco.com/threefive"}
+            sig_attrs = {"xmlns": "https://scte.org/schemas/35"}
             sig_node = Node("Signal", attrs=sig_attrs)
             bin_node = Node("Binary", value=self.encode())
             sig_node.add_child(bin_node)
