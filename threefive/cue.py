@@ -293,25 +293,28 @@ class Cue(SCTE35Base):
             all_bites.add_bites(chunk)
         return all_bites.bites
 
-    def load_info_section(self, isec):
+    def load_info_section(self, stuff):
         """
         load_info_section loads data for Cue.info_section
         isec should be a dict.
         if 'splice_command_type' is included,
         an empty command instance will be created for Cue.command
         """
-        self.info_section.load(isec)
+        if "info_section" in stuff:
+            self.info_section.load(stuff["info_section"])
 
-    def load_command(self, cmd):
+    def load_command(self, stuff):
         """
         load_command loads data for Cue.command
         cmd should be a dict.
         if 'command_type' is included,
         the command instance will be created.
         """
-        if "command_type" in cmd:
-            self.command = command_map[cmd["command_type"]]()
-            self.command.load(cmd)
+        if "command" in stuff:
+            cmd= stuff["command"]
+            if "command_type" in cmd:
+                self.command = command_map[cmd["command_type"]]()
+                self.command.load(cmd)
 
     def load_descriptors(self, dlist):
         """
@@ -350,11 +353,10 @@ class Cue(SCTE35Base):
             else:
                 stuff = json.loads(stuff)
         if "command" not in stuff:
+            print(stuff.keys())
             raise Exception("\033[7mA splice command is required\033[27m")
-        if "info_section" in stuff:
-            self.load_info_section(stuff["info_section"])
-        if "command" in stuff:
-            self.load_command(stuff["command"])
+        self.load_info_section(stuff)
+        self.load_command(stuff)
         if "descriptors" in stuff:
             self.load_descriptors(stuff["descriptors"])
 
@@ -378,7 +380,7 @@ class Cue(SCTE35Base):
             "SegmentationDescriptor": SegmentationDescriptor,
             "AvailDescriptor": AvailDescriptor,
             "DTMFDescriptor": DtmfDescriptor,
-            "DTMFDescriptor": TimeDescriptor,
+            "TimeDescriptor": TimeDescriptor,
         }
         for dname in dmap.keys():
             if dname in stuff:
