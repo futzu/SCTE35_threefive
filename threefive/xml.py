@@ -101,7 +101,7 @@ class Node:
         print(ts)
     """
 
-    def __init__(self, name, value=None, attrs={}, ns=None,comment=None):
+    def __init__(self, name, value=None, attrs={}, ns=None):
         self.name = name
         if ns:
             self.name = ":".join((ns, name))
