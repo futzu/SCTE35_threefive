@@ -64,6 +64,7 @@ class PrivateCommand(SpliceCommand):
         self.command_type = 255
         self.name = "Private Command"
         self.identifier = None
+        self.private_bytes = None
 
     def decode(self):
         """
@@ -72,7 +73,9 @@ class PrivateCommand(SpliceCommand):
         self.identifier = int.from_bytes(
             self.bites[0:3], byteorder="big"
         )  # 3 bytes = 24 bits
-        self.bites = self.bites[3:]
+        self.command_length = len(self.bites)
+        self.private_bytes = self.bites[3:]
+        
 
     def encode(self, nbin=None):
         """
@@ -80,6 +83,7 @@ class PrivateCommand(SpliceCommand):
         """
         nbin = self._chk_nbin(nbin)
         self._chk_var(int, nbin.add_int, "identifier", 24)  # 3 bytes = 24 bits
+        nbin.add_bites(self.private_bytes)
         return nbin.bites
 
 
