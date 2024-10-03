@@ -486,7 +486,7 @@ class SegmentationDescriptor(SpliceDescriptor):
                 self.segmentation_duration
             )
         sd = Node("SegmentationDescriptor", attrs=sd_attrs)
-        sd.add_comment(f'{self.segmentation_message}')
+        # sd.add_comment(f'{self.segmentation_message}') # Called in cue.py
         the_upid = self.mk_the_upid()
         the_upid.upid_value = self.segmentation_upid
         upid_node = the_upid.xml()
