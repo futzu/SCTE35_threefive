@@ -101,7 +101,7 @@ class Node:
         print(ts)
     """
 
-    def __init__(self, name, value=None, attrs={}, ns=None):
+    def __init__(self, name, value=None, attrs={}, ns=None,comment=None):
         self.name = name
         if ns:
             self.name = ":".join((ns, name))
@@ -157,6 +157,7 @@ class Node:
         cnode = Node(f'!-- {comment} --')
         self.add_child(cnode)
 
+
 class XmlParser:
     DESCRIPTORS = [
         "AvailDescriptor",
@@ -197,7 +198,7 @@ class XmlParser:
         """
         mk_active sets self.active to the current node name.
         """
-        name = node[1:].split(" ", 1)[0].split(":")[-1]
+        name = node[1:].split(" ", 1)[0].split('>',1)[0].split(":")[-1]
         self.active = name.replace("/", "").replace(">", "")
 
     def mk_attrs(self, node):
@@ -211,6 +212,7 @@ class XmlParser:
             it = iter_attrs(parsed)
             return it
 
+
     def parse(self, exemel, descriptor_parse=False):
         """
         parse parses an xml string for a SCTE-35 Cue.
@@ -218,25 +220,37 @@ class XmlParser:
         stuff = {"descriptors": []}
         data = exemel.replace("\n", "")
         while ">" in data:
-            rgator = data.index(">")
-            this_node = data[: rgator + 1]
-            self.mk_active(this_node)
-            if self.active in self.DESCRIPTORS and not descriptor_parse:
-                data, stuff = self.mk_descriptor(data, stuff)
-            else:
-                self.chk_node_list(this_node)
-                attrs = self.mk_attrs(this_node)
-                if self.active not in stuff:
-                    stuff[self.active] = attrs
-                data = data[rgator + 1 :]
-                if "<" in data:
-                    lgator = data.index("<")
-                    value = data[:lgator].strip()
-                    stuff = self.mk_value(value, stuff)
-                    data = data[lgator:]
+            self.mk_active(data)
+            data,stuff = self._parse_nodes(data,stuff,descriptor_parse)
         return stuff
 
-    def mk_descriptor(self, data, stuff):
+    def _parse_nodes(self,data,stuff,descriptor_parse=False):
+        if self.active in self.DESCRIPTORS and not descriptor_parse:
+            data, stuff = self._parse_descriptor(data, stuff)
+        else:
+            data,stuff= self._parse_most(data,stuff)
+        return data,stuff
+
+    def _parse_most(self,data,stuff):
+        """
+        parse_most parse everything except descriptor nodes
+        """
+        rgator = data.index(">")
+        this_node = data[: rgator + 1]
+        self.chk_node_list(this_node)
+        attrs = self.mk_attrs(this_node)
+        if self.active not in stuff:
+            stuff[self.active] = attrs
+        data = data[rgator + 1 :]
+        if "<" in data:
+            lgator = data.index("<")
+            value = data[:lgator].strip()
+            stuff = self.mk_value(value, stuff)
+            data = data[lgator:]
+        return data,stuff
+
+
+    def _parse_descriptor(self, data, stuff):
         """
         mk_descriptor slices off an entire
         descriptor xml node from data to parse.
