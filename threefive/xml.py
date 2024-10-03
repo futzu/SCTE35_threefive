@@ -139,17 +139,16 @@ class Node:
         ndent = obj.get_indent()
         if isinstance(obj, Comment):
             return obj.mk(obj)
-        else:
-            new_attrs = mk_xml_attrs(obj.attrs)
-            rendrd = f"{ndent}<{obj.name}{new_attrs}>"
-            if obj.value:
-                return f"{rendrd}{obj.value}</{obj.name}>\n"
-            rendrd = f"{rendrd}\n"
-            for child in obj.children:
-                rendrd += obj.mk(child)
-            if obj.children:
-                return f"{rendrd}{ndent}</{obj.name}>\n"
-            return rendrd.replace(">", "/>")
+        new_attrs = mk_xml_attrs(obj.attrs)
+        rendrd = f"{ndent}<{obj.name}{new_attrs}>"
+        if obj.value:
+            return f"{rendrd}{obj.value}</{obj.name}>\n"
+        rendrd = f"{rendrd}\n"
+        for child in obj.children:
+            rendrd += obj.mk(child)
+        if obj.children:
+            return f"{rendrd}{ndent}</{obj.name}>\n"
+        return rendrd.replace(">", "/>")
 
     def add_child(self, child):
         """
@@ -157,6 +156,11 @@ class Node:
         """
         self.children.append(child)
 
+    def add_comment(self,comment):
+        """
+        add_comment add a Comment node
+        """
+        self.add_child(Comment(comment))
 
 class Comment(Node):
     def mk(self, obj=None):
@@ -164,6 +168,7 @@ class Comment(Node):
             obj = self
         obj.set_depth()
         return f"{obj.get_indent()}<!-- {obj.name} -->\n"
+
 
 
 class XmlParser:
@@ -220,7 +225,6 @@ class XmlParser:
             it = iter_attrs(parsed)
             return it
 
-
     def parse(self, exemel, descriptor_parse=False):
         """
         parse parses an xml string for a SCTE-35 Cue.
@@ -256,6 +260,7 @@ class XmlParser:
             stuff = self.mk_value(value, stuff)
             data = data[lgator:]
         return data,stuff
+
 
     def _parse_descriptor(self, data, stuff):
         """
