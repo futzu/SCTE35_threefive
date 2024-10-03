@@ -144,4 +144,7 @@ class SCTE35Base:
         if isinstance(stuff, str):
             stuff = json.loads(stuff)
         if isinstance(stuff, dict):
-            self.__dict__.update(stuff)
+            for k,v in stuff.items():
+                if self.has(k):
+                    self.__dict__[k] = v
+           # self.__dict__.update(stuff)
