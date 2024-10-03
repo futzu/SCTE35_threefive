@@ -249,7 +249,6 @@ class XmlParser:
             data = data[lgator:]
         return data,stuff
 
-
     def _parse_descriptor(self, data, stuff):
         """
         mk_descriptor slices off an entire
