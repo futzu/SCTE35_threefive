@@ -19,7 +19,7 @@ from .descriptors import (
     TimeDescriptor,
 )
 from .crc import crc32
-from .xml import Node, XmlParser
+from .xml import Comment, Node, XmlParser
 
 
 class Cue(SCTE35Base):
@@ -432,7 +432,7 @@ class Cue(SCTE35Base):
         sis.add_child(cmd)
         for d in self.descriptors:
             if d.tag ==2:
-                sis.add_comment(d.segmentation_message)
+                sis.add_child(Comment(d.segmentation_message))
             sis.add_child(d.xml())
 
         return sis
