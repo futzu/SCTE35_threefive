@@ -16,6 +16,10 @@ REV = "\033[7m"
 NORM = "\033[27m"
 
 
+def xml_out(cue):
+    print2(cue.xml())
+
+
 class SupaStream(Stream):
 
     def _parse_scte35(self, pkt, pid):
@@ -34,6 +38,7 @@ def mk_sidecar(cue):
             pts = cue.packet_data.pts
         data = f"{pts},{cue.encode()}\n"
         sidecar.write(data)
+
 
 
 HELP = f"""
@@ -114,6 +119,14 @@ write pts, SCTE-35 cue pairs to the file sidecar.txt:{NORM}
 
         threefive sidecar https://example.com/video.ts
 
+{REV} Parse a Cue string and output xml {NORM}
+
+    threefive  xml  '/DBMAAAAAsrbAP/wBQb+zTXUKAA2AhlDVUVJABWWDH+DCAgAAAAALfOq1zQAAAAAAhlDVUVJAAA3Qn+DCAgAAAAALfOq1zQAAAAAAhmCQA=='
+
+{REV} Parse a Stream and output  the Cues as xml {NORM}
+
+    threefive xml video.ts
+    
 {REV} load JSON and encode as a Base64:{NORM}
     cat json.file | threefive encode
     
@@ -125,7 +138,9 @@ write pts, SCTE-35 cue pairs to the file sidecar.txt:{NORM}
 
 {REV} load JSON and encode as bytes:{NORM}
     cat json.file | threefive encode bytes
-       
+
+{REV} load JSON and encode as xml:{NORM}
+    cat json.file | threefive encode xml      
 
 {REV}show this help:{NORM}
 
@@ -165,6 +180,9 @@ def json_load():
         if "bytes" in sys.argv:
             cue.encode()
             print(cue.bites)
+            sys.exit()
+        if "xml" in sys.argv:
+            print(cue.xml())
             sys.exit()
         print(cue.encode())   
         sys.exit()
@@ -230,6 +248,20 @@ def sidecar_chk(arg):
     strm = Stream(arg)
     strm.decode(func=mk_sidecar)
 
+def to_xml(arg):
+    try:
+        # Mpegts Video
+        strm = Stream(arg)
+        strm.decode(func=xml_out)
+        return True
+    except:
+        try:
+            cue = Cue(arg)
+            cue.decode()
+            print2(cue.xml())
+            return True
+        except:
+            return False
 
 func_map = {
     "pts": pts_chk,
@@ -237,6 +269,7 @@ func_map = {
     "packets": packet_chk,
     "proxy": proxy_chk,
     "sidecar": sidecar_chk,
+    "xml": to_xml,
 }
 
 
