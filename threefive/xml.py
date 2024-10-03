@@ -123,6 +123,10 @@ class Node:
         for child in self.children:
             child.depth = self.depth + 1
 
+    def get_indent(self):
+        tab = "   "
+        return tab * self.depth
+
     def mk(self, obj=None):
         """
         mk makes the node obj,
@@ -132,17 +136,20 @@ class Node:
         if obj is None:
             obj = self
         obj.set_depth()
-        ndent = "   " * obj.depth
-        new_attrs = mk_xml_attrs(obj.attrs)
-        rendrd = f"{ndent}<{obj.name}{new_attrs}>"
-        if obj.value:
-            return f"{rendrd}{obj.value}</{obj.name}>\n"
-        rendrd = f"{rendrd}\n"
-        for child in obj.children:
-            rendrd += obj.mk(child)
-        if obj.children:
-            return f"{rendrd}{ndent}</{obj.name}>\n"
-        return rendrd.replace(">", "/>")
+        ndent = obj.get_indent()
+        if isinstance(obj, Comment):
+            return obj.mk(obj)
+        else:
+            new_attrs = mk_xml_attrs(obj.attrs)
+            rendrd = f"{ndent}<{obj.name}{new_attrs}>"
+            if obj.value:
+                return f"{rendrd}{obj.value}</{obj.name}>\n"
+            rendrd = f"{rendrd}\n"
+            for child in obj.children:
+                rendrd += obj.mk(child)
+            if obj.children:
+                return f"{rendrd}{ndent}</{obj.name}>\n"
+            return rendrd.replace(">", "/>")
 
     def add_child(self, child):
         """
@@ -150,12 +157,13 @@ class Node:
         """
         self.children.append(child)
 
-    def add_comment(self,comment):
-        """
-        add-comment add a comment node
-        """
-        cnode = Node(f'!-- {comment} --')
-        self.add_child(cnode)
+
+class Comment(Node):
+    def mk(self, obj=None):
+        if obj is None:
+            obj = self
+        obj.set_depth()
+        return f"{obj.get_indent()}<!-- {obj.name} -->\n"
 
 
 class XmlParser:

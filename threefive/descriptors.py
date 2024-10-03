@@ -6,7 +6,7 @@ from .bitn import BitBin
 from .base import SCTE35Base
 from .segmentation import table20, table22, dvb_table2
 from .upids import upid_map
-from .xml import Node
+from .xml import Comment, Node
 
 
 def k_by_v(adict, avalue):
@@ -486,7 +486,7 @@ class SegmentationDescriptor(SpliceDescriptor):
                 self.segmentation_duration
             )
         sd = Node("SegmentationDescriptor", attrs=sd_attrs)
-        # sd.add_comment(f'{self.segmentation_message}') # Called in cue.py
+        # sd.add_child(Comment(f'{self.segmentation_message}')) # Called in cue.py
         the_upid = self.mk_the_upid()
         the_upid.upid_value = self.segmentation_upid
         upid_node = the_upid.xml()
@@ -504,7 +504,7 @@ class SegmentationDescriptor(SpliceDescriptor):
                     },
                 )
             )
-        sd.add_comment(f'UPID: {self.segmentation_upid_type_name}')
+        sd.add_child(Comment(f'UPID: {self.segmentation_upid_type_name}'))
 
         if isinstance(upid_node, list):
             for node in upid_node:
