@@ -431,6 +431,8 @@ class Cue(SCTE35Base):
         cmd = self.command.xml()
         sis.add_child(cmd)
         for d in self.descriptors:
+            if d.tag ==2:
+                sis.add_comment(d.segmentation_message)
             sis.add_child(d.xml())
 
         return sis
