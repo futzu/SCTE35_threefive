@@ -19,7 +19,7 @@ from .descriptors import (
     TimeDescriptor,
 )
 from .crc import crc32
-from .xml import Comment, Node, XmlParser
+from .xml import Node, XmlParser
 
 
 class Cue(SCTE35Base):
@@ -342,9 +342,7 @@ class Cue(SCTE35Base):
             'descriptors': [list of {dicts}],
             }
         """
-
         if isinstance(stuff, str):
-            # DASH
             if stuff.strip()[0] == "<":
                 xmlp = XmlParser()
                 cue_data = xmlp.parse(stuff)
@@ -353,12 +351,10 @@ class Cue(SCTE35Base):
             else:
                 stuff = json.loads(stuff)
         if "command" not in stuff:
-            print(stuff.keys())
             raise Exception("\033[7mA splice command is required\033[27m")
         self.load_info_section(stuff)
         self.load_command(stuff)
-        if "descriptors" in stuff:
-            self.load_descriptors(stuff["descriptors"])
+        self.load_descriptors(stuff["descriptors"])
 
     # Dash
 
@@ -424,15 +420,15 @@ class Cue(SCTE35Base):
             bin_node = Node("Binary", value=self.encode())
             sig_node.add_child(bin_node)
             return sig_node
-        sis = self.info_section.xml()
+        self.encode()
         self.decode()
+        sis = self.info_section.xml()
         if not self.command:
             raise Exception("\033[7mA Splice Command is Required\033[27m")
         cmd = self.command.xml()
         sis.add_child(cmd)
         for d in self.descriptors:
             if d.tag ==2:
-                sis.add_child(Comment(d.segmentation_message))
+                sis.add_comment(d.segmentation_message)
             sis.add_child(d.xml())
-
         return sis
