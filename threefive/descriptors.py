@@ -135,7 +135,7 @@ class DVBDASDescriptor(SpliceDescriptor):
         nbin.forward(4)
         nbin.add_int(self.equivalent_segmentation_type, 4)
         the_upid = upid_map[self.upid_type][1](None, self.upid_type, self.upid_length)
-        the_upid.encode(nbin, self.upid)
+        the_upid.encode(nbin)
         return nbin.bites
 
 
