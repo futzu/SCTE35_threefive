@@ -1,5 +1,6 @@
 """
 SCTE35 Splice Commands
+
 """
 
 from .bitn import BitBin
