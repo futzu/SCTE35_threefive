@@ -37,6 +37,11 @@ class SpliceCommand(SCTE35Base):
         nbin = self._chk_nbin(nbin)
         return nbin.bites
 
+    def from_xml(self, stuff):
+        """
+        load a SpliceCommand from xml - default method does nothing
+        """
+
 
 class BandwidthReservation(SpliceCommand):
     """
@@ -52,6 +57,12 @@ class BandwidthReservation(SpliceCommand):
         """
         BandwidthReservation.decode method
         """
+
+    def xml(self):
+        """
+        create XML Node of type BandwidthReservation
+        """
+        return Node("BandwidthReservation")
 
 
 class PrivateCommand(SpliceCommand):
@@ -71,21 +82,43 @@ class PrivateCommand(SpliceCommand):
         PrivateCommand.decode method
         """
         self.identifier = int.from_bytes(
-            self.bites[0:3], byteorder="big"
-        )  # 3 bytes = 24 bits
+            self.bites[0:4], byteorder="big"
+        )  # 4 bytes = 32 bits
         self.command_length = len(self.bites)
-        self.private_bytes = self.bites[3:]
+        self.private_bytes = self.bites[4:self.command_length]
         
-
     def encode(self, nbin=None):
         """
         encode private command
         """
         nbin = self._chk_nbin(nbin)
-        self._chk_var(int, nbin.add_int, "identifier", 24)  # 3 bytes = 24 bits
+        self._chk_var(int, nbin.add_int, "identifier", 32)  # 4 bytes = 32 bits
         nbin.add_bites(self.private_bytes)
         return nbin.bites
 
+    def xml(self):
+        """
+        create XML Node of type PrivateCommand
+        """
+        attrs = {
+            "identifier": self.identifier
+        }
+        pc = Node("PrivateCommand", attrs=attrs)
+        print(self.private_bytes)
+        pc.add_child(Node("PrivateBytes",
+                          value=self.private_bytes.decode("utf-8")))
+
+        return pc
+
+    def from_xml(self, stuff):
+        """
+        load a PrivateCommand from XML
+        """
+        self.identifier = stuff["PrivateCommand"]["identifier"]
+        if ("PrivateBytes" in stuff and
+            "private_bytes" in stuff["PrivateBytes"]):
+            self.private_bytes = (
+                stuff["PrivateBytes"]["private_bytes"].encode())
 
 class SpliceNull(SpliceCommand):
     """
@@ -97,6 +130,8 @@ class SpliceNull(SpliceCommand):
         self.command_type = 0
         self.name = "Splice Null"
 
+    def xml(self):
+        return Node("SpliceNull")
 
 class TimeSignal(SpliceCommand):
     """
@@ -165,6 +200,9 @@ class TimeSignal(SpliceCommand):
         return ts
 
     def from_xml(self,stuff):
+        """
+        load a TimeSignal from XML
+        """
         if "SpliceTime" in stuff:
             self.load(stuff['SpliceTime'])
             self.time_specified_flag = True
@@ -293,6 +331,9 @@ class SpliceInsert(TimeSignal):
         return si
 
     def from_xml(self,stuff):
+        """
+        load a SpliceInsert from XML
+        """
         self.load(stuff["SpliceInsert"])
         self.event_id_compliance_flag = True
         self.program_splice_flag = False
