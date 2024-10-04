@@ -44,16 +44,15 @@ class Upid:
         """
         encode Upid
         """
-        if self.upid.value:
-            self.upid.value = self.upid.value.encode("utf8")
-            nbin.add_bites(self.upid.value)
+        if self.upid_value:
+            self.upid_value = self.upid_value.encode("utf8")
+            nbin.add_bites(self.upid_value)
 
     def xml(self):
         """
         xml return a upid xml node
         """
         ud_attrs = {
-            "upid_name": self.upid_name,  # this is for clarity
             "segmentation_upid_type": self.upid_type,
             "segmentation_upid_format": "hexbinary",
             "segmentation_upid_length": self.upid_length,
@@ -83,7 +82,6 @@ class NoUpid(Upid):
         xml return a upid xml node
         """
         ud_attrs = {
-            "upid_name": 'No UPID',  # this is for clarity
             "segmentation_upid_type": 0,
             "segmentation_upid_format": "hexbinary",
             "segmentation_upid_length": 0,
@@ -113,7 +111,6 @@ class AirId(Upid):
         xml return a upid xml node
         """
         ud_attrs = {
-            "upid_name": self.upid_name,  # this is for clarity
             "segmentation_upid_type": self.upid_type,
             "segmentation_upid_format": "hexbinary",
             "segmentation_upid_length": self.upid_length,
@@ -144,11 +141,11 @@ class Atsc(Upid):
         """
         encode Atsc
         """
-        nbin.add_int(self.upid.value["TSID"], 16)
-        nbin.add_int(self.upid.value["reserved"], 2)
-        nbin.add_int(self.upid.value["end_of_day"], 5)
-        nbin.add_int(self.upid.value["unique_for"], 9)
-        nbin.add_bites(self.upid.value["content_id"].encode("utf-8"))
+        nbin.add_int(self.upid_value["TSID"], 16)
+        nbin.add_int(self.upid_value["reserved"], 2)
+        nbin.add_int(self.upid_value["end_of_day"], 5)
+        nbin.add_int(self.upid_value["unique_for"], 9)
+        nbin.add_bites(self.upid_value["content_id"].encode("utf-8"))
 
 
 class Eidr(Upid):
@@ -175,8 +172,8 @@ class Eidr(Upid):
         encode Eidr Upid
         """
         # switch to compact binary format
-        nbin.add_hex(self.upid.value[:6], 16)
-        substring = self.upid.value[6:]
+        nbin.add_hex(self.upid_value[:6], 16)
+        substring = self.upid_value[6:]
         for i in substring:
             hexed = f"0x{i}"
             nbin.add_hex(hexed, 4)
@@ -198,7 +195,7 @@ class Isan(Upid):
         """
         encode Isan Upid
         """
-        nbin.add_hex(self.upid.value, (self.upid_length << 3))
+        nbin.add_hex(self.upid_value, (self.upid_length << 3))
 
 
 class Mid(Upid):
@@ -234,7 +231,7 @@ class Mid(Upid):
         """
         encode Mid Upid
         """
-        for mid_upid in self.upid.value:
+        for mid_upid in self.upid_value:
             nbin.add_int(mid_upid["upid_type"], 8)
             nbin.add_int(mid_upid["upid_length"], 8)
             the_upid = upid_map[mid_upid["upid_type"]][1](
@@ -253,7 +250,10 @@ class Mid(Upid):
                 "upid_type": u["upid_type"],
                 "name": u["upid_type_name"],
             }
+
             value = u["segmentation_upid"]
+            if value[0:2].lower() =='0x':
+                value=value[2:]
             node = Node("SegmentationUpid", attrs=u_attrs, value=value)
             mid_nodes.append(node)
         return mid_nodes
@@ -294,10 +294,10 @@ class Mpu(Upid):
         encode MPU Upids
         """
         bit_len = self.bit_length
-        fm = bytes(self.upid.value["format_identifier"].encode("utf8"))
+        fm = bytes(self.upid_value["format_identifier"].encode("utf8"))
         nbin.add_bites(fm)
         bit_len -= 32
-        nbin.add_hex(self.upid.value["private_data"], bit_len)
+        nbin.add_hex(self.upid_value["private_data"], bit_len)
 
 
 class Umid(Upid):
@@ -321,7 +321,7 @@ class Umid(Upid):
         """
         encode Umid Upid
         """
-        chunks = self.upid.value.split(".")
+        chunks = self.upid_value.split(".")
         for chunk in chunks:
             nbin.add_hex(chunk, 32)
 
