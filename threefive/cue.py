@@ -2,14 +2,20 @@
 threefive.Cue Class
 """
 
-import sys
 from base64 import b64decode, b64encode
 import json
 from .stuff import print2
 from .bitn import NBin
 from .base import SCTE35Base
 from .section import SpliceInfoSection
-from .commands import command_map, SpliceInsert, TimeSignal
+from .commands import (
+    command_map,
+    BandwidthReservation,
+    PrivateCommand,
+    SpliceInsert,
+    SpliceNull,
+    TimeSignal,
+)
 from .descriptors import (
     splice_descriptor,
     descriptor_map,
@@ -311,7 +317,7 @@ class Cue(SCTE35Base):
         the command instance will be created.
         """
         if "command" in stuff:
-            cmd= stuff["command"]
+            cmd = stuff["command"]
             if "command_type" in cmd:
                 self.command = command_map[cmd["command_type"]]()
                 self.command.load(cmd)
@@ -348,8 +354,8 @@ class Cue(SCTE35Base):
                 cue_data = xmlp.parse(stuff)
                 self.from_xml(cue_data)
                 return
-            else:
-                stuff = json.loads(stuff)
+
+            stuff = json.loads(stuff)
         if "command" not in stuff:
             raise Exception("\033[7mA splice command is required\033[27m")
         self.load_info_section(stuff)
@@ -363,13 +369,23 @@ class Cue(SCTE35Base):
             self.info_section = SpliceInfoSection()
             self.info_section.from_xml(stuff)
 
+    def _mk_from_map(self, a_map, stuff):
+        for key in a_map.keys():
+            if key in stuff:
+                made = a_map[key]()
+                made.from_xml(stuff)
+                return made
+        return False
+
     def _xml_splice_command(self, stuff):
-        if "TimeSignal" in stuff:
-            self.command = TimeSignal()
-        if "SpliceInsert" in stuff:
-            self.command = SpliceInsert()
-        if self.command:
-            self.command.from_xml(stuff)
+        cmap = {
+            "BandwidthReservation": BandwidthReservation,
+            "PrivateCommand": PrivateCommand,
+            "SpliceInsert": SpliceInsert,
+            "SpliceNull": SpliceNull,
+            "TimeSignal": TimeSignal,
+        }
+        self.command = self._mk_from_map(cmap, stuff)
 
     def _xml_splice_descriptor(self, stuff):
         dmap = {
@@ -428,7 +444,8 @@ class Cue(SCTE35Base):
         cmd = self.command.xml()
         sis.add_child(cmd)
         for d in self.descriptors:
-            if d.tag ==2:
+            if d.tag == 2:
                 sis.add_comment(d.segmentation_message)
             sis.add_child(d.xml())
+        self.decode()
         return sis
