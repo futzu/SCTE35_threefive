@@ -1,6 +1,5 @@
 """
 SCTE35 Splice Commands
-
 """
 
 from .bitn import BitBin
@@ -85,18 +84,18 @@ class PrivateCommand(SpliceCommand):
         self.identifier = int.from_bytes(
             self.bites[0:4], byteorder="big"
         )  # 4 bytes = 32 bits
-        self.command_length = len(self.bites)
+       # self.command_length = len(self.bites)
         self.private_bytes = self.bites[4:self.command_length]
-        
+
     def encode(self, nbin=None):
         """
         encode private command
         """
         nbin = self._chk_nbin(nbin)
-        self._chk_var(int, nbin.add_int, "identifier", 32)  # 4 bytes = 32 bits
-        nbin.add_bites(self.private_bytes)
+        #self._chk_var(int, nbin.add_int, "identifier", 32)  # 4 bytes = 32 bits
+        nbin.add_bites(self.identifier+self.private_bytes)
         return nbin.bites
-
+##
     def xml(self):
         """
         create XML Node of type PrivateCommand
