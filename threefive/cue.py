@@ -210,6 +210,7 @@ class Cue(SCTE35Base):
         if sct not in command_map:
             return False
         self.command = command_map[sct](bites)
+        self.command.command_length=self.info_section.splice_command_length
         self.command.decode()
         del self.command.bites
         self.info_section.splice_command_length = self.command.command_length
