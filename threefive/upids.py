@@ -237,7 +237,8 @@ class Mid(Upid):
             the_upid = upid_map[mid_upid["upid_type"]][1](
                 None, mid_upid["upid_type"], mid_upid["upid_length"]
             )
-            the_upid.encode(nbin, mid_upid["segmentation_upid"])
+            the_upid.upid_value = mid_upid["segmentation_upid"]
+            the_upid.encode(nbin)
 
     def xml(self):
         """
