@@ -105,7 +105,7 @@ class PrivateCommand(SpliceCommand):
         pc = Node("PrivateCommand", attrs=attrs)
         print(self.private_bytes)
         pc.add_child(Node("PrivateBytes",
-                          value=self.private_bytes))
+                          value=self.private_bytes.decode("utf8")))
 
         return pc
 
