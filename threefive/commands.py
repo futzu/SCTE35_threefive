@@ -82,9 +82,12 @@ class PrivateCommand(SpliceCommand):
         PrivateCommand.decode method
         """
         self.identifier = int.from_bytes(
-            self.bites[0:4], byteorder="big"
+            self.bites[:4], byteorder="big"
         )  # 4 bytes = 32 bits
-        self.private_bytes = self.bites[4:-6]
+        self.private_bytes = self.bites[4:]
+        print('PB  ---> ',self.private_bytes)
+
+
 
     def encode(self, nbin=None):
         """
@@ -103,7 +106,6 @@ class PrivateCommand(SpliceCommand):
             "identifier": self.identifier
         }
         pc = Node("PrivateCommand", attrs=attrs)
-        print(self.private_bytes)
         pc.add_child(Node("PrivateBytes",
                           value=self.private_bytes.decode("utf8")))
 
