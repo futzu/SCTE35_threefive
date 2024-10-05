@@ -26,7 +26,7 @@ from .descriptors import (
 )
 from .crc import crc32
 from .xml import Node, XmlParser
-from .segmentation import table20, table22
+from .segmentation import table22
 
 class Cue(SCTE35Base):
     """
@@ -186,7 +186,7 @@ class Cue(SCTE35Base):
         then call Cue._descriptor_loop
         """
         if len(bites) < 2:
-            return
+            return False
         dll = (bites[0] << 8) | bites[1]
         self.info_section.descriptor_loop_length = dll
         bites = bites[2:]
@@ -216,8 +216,7 @@ class Cue(SCTE35Base):
         self.command.command_length=self.info_section.splice_command_length
         self.command.decode()
         del self.command.bites
-        #bites = bites[self.command.command_length :]
-       # return bites
+        return True
 
     def show(self):
         """
@@ -397,9 +396,9 @@ class Cue(SCTE35Base):
             "DTMFDescriptor": DtmfDescriptor,
             "TimeDescriptor": TimeDescriptor,
         }
-        for dname in dmap.keys():
-            if dname in stuff:
-                dscptr = dmap[dname]()
+        for k,v in dmap.items():
+            if k in stuff:
+                dscptr = v()
                 dscptr.from_xml(stuff)
                 self.descriptors.append(dscptr)
 
