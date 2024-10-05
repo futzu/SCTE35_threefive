@@ -591,8 +591,7 @@ private_data = b'threefive kicks ass'
 
 
 ### [the only accurate online SCTE-35 parser.](https://iodisco.com/cgi-bin/scte35parser)
-[![image](https://github.com/user-attachments/assets/dfacf4d9-ea5d-4a0a-9111-929bfd83c2a1)
-](https://iodisco.com/cgi-bin/scte35parser) <br>
+ <br>
 
 ---
 
