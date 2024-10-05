@@ -256,7 +256,6 @@ class Stream:
         if not self._find_start():
             return False
         for pkt in self.iter_pkts():
-            #if pkt[0] == self.SYNC_BYTE:
             cue = self._parse(pkt)
             if cue:
                 func(cue)
@@ -283,7 +282,6 @@ class Stream:
         if not self._find_start():
             return False
         for pkt in self.iter_pkts():
-            if pkt[0] == self.SYNC_BYTE:
                 cue = self._parse(pkt)
                 if cue:
                     return cue
