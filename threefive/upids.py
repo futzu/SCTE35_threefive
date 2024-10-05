@@ -253,8 +253,6 @@ class Mid(Upid):
             }
 
             value = u["segmentation_upid"]
-            if value[0:2].lower() =='0x':
-                value=value[2:]
             node = Node("SegmentationUpid", attrs=u_attrs, value=value)
             mid_nodes.append(node)
         return mid_nodes
