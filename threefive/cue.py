@@ -26,7 +26,7 @@ from .descriptors import (
 )
 from .crc import crc32
 from .xml import Node, XmlParser
-
+from .segmentation import table20, table22
 
 class Cue(SCTE35Base):
     """
@@ -86,8 +86,10 @@ class Cue(SCTE35Base):
         while bites:
             bites = self.mk_info_section(bites)
             ridx= 4+self.info_section.descriptor_loop_length+2
-            self._set_splice_command(bites[:-ridx])
-            self._mk_descriptors(bites[ridx:-4])
+            cmd_bites=bites[:-ridx]
+            self._set_splice_command(cmd_bites)
+            bites= bites.replace(cmd_bites,b'')
+            self._mk_descriptors(bites)
             crc = hex(int.from_bytes(bites[-4:], byteorder="big"))
             self.info_section.crc = crc
             return True
@@ -214,8 +216,8 @@ class Cue(SCTE35Base):
         self.command.command_length=self.info_section.splice_command_length
         self.command.decode()
         del self.command.bites
-        bites = bites[self.command.command_length :]
-        return bites
+        #bites = bites[self.command.command_length :]
+       # return bites
 
     def show(self):
         """
@@ -444,7 +446,7 @@ class Cue(SCTE35Base):
         sis.add_child(cmd)
         for d in self.descriptors:
             if d.tag == 2:
-                sis.add_comment(d.segmentation_message)
+                sis.add_comment(f'{table22[d.segmentation_type_id]}')
             sis.add_child(d.xml())
             sis.mk()
         return sis
