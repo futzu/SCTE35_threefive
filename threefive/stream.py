@@ -484,6 +484,7 @@ class Stream:
             return self._parse_sdt(pay)
         return False
 
+
     def _parse_info(self, pkt):
         """
         _parse_info parses the packet for tables
@@ -502,9 +503,14 @@ class Stream:
             self._parse_pcr(pkt, pid)
         if self._pusi_flag(pkt):
             self._parse_pts(pkt, pid)
-        if pid in self.pids.scte35 or pid in self.pids.maybe_scte35:
+        if self._pid_has_scte35(pid):
             cue = self._parse_scte35(pkt, pid)
         return cue
+
+    def _pid_has_scte35(self,pid):
+        if pid in self.pids.scte35 or pid in self.pids.maybe_scte35:
+            return True
+        return False
 
     def _chk_partial(self, pay, pid, sep):
         if pid in self.maps.partial:
@@ -545,8 +551,6 @@ class Stream:
         """
         parse a scte35 cue from one or more packets
         """
-        if self.the_scte35_pids and pid not in self.the_scte35_pids:
-            return False
         pay = self._parse_payload(pkt)
         pay = self._strip_scte35_pes(pay)
         if not pay:
