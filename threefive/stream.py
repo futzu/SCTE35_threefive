@@ -215,7 +215,7 @@ class Stream:
         try:
             return pay[pay.index(marker) :]
         except:
-            pass
+            return False
 
     def _find_start(self):
         """
@@ -313,6 +313,7 @@ class Stream:
         self.decode(func=no_op)
         if len(self.start.values()) > 0:
             return self.start.popitem()[1]
+        return False
 
     def proxy(self, func=show_cue_stderr):
         """
@@ -521,7 +522,8 @@ class Stream:
         same = False
         if pid in self.maps.last:
             same = (False, True)[pay == self.maps.last[pid]]
-        if not same: self.maps.last[pid] = pay
+        if not same:
+            self.maps.last[pid] = pay
         return same
 
     def _section_incomplete(self, pay, pid, seclen):
@@ -604,6 +606,8 @@ class Stream:
                     pinfo.service = service_name
                 i = dloop_len
                 idx += i
+                return True
+        return False
 
     def _parse_pat(self, pay):
         """
@@ -625,6 +629,7 @@ class Stream:
                 self.pids.tables.add(pmt_pid)
             seclen -= chunk_size
             idx += chunk_size
+        return True
 
     def _parse_pmt(self, pay, pid):
         """
