@@ -85,9 +85,10 @@ class Cue(SCTE35Base):
         self.descriptors = []
         while bites:
             bites = self.mk_info_section(bites)
-            bites = self._set_splice_command(bites)
-            bites = self._mk_descriptors(bites)
-            crc = hex(int.from_bytes(bites[0:4], byteorder="big"))
+            ridx= 4+self.info_section.descriptor_loop_length+2
+            self._set_splice_command(bites[:-ridx])
+            self._mk_descriptors(bites[ridx:-4])
+            crc = hex(int.from_bytes(bites[-4:], byteorder="big"))
             self.info_section.crc = crc
             return True
         return False
@@ -213,7 +214,6 @@ class Cue(SCTE35Base):
         self.command.command_length=self.info_section.splice_command_length
         self.command.decode()
         del self.command.bites
-        self.info_section.splice_command_length = self.command.command_length
         bites = bites[self.command.command_length :]
         return bites
 
@@ -437,8 +437,6 @@ class Cue(SCTE35Base):
             bin_node = Node("Binary", value=self.encode())
             sig_node.add_child(bin_node)
             return sig_node
-        self.encode()
-        self.decode()
         sis = self.info_section.xml()
         if not self.command:
             raise Exception("\033[7mA Splice Command is Required\033[27m")
@@ -448,5 +446,5 @@ class Cue(SCTE35Base):
             if d.tag == 2:
                 sis.add_comment(d.segmentation_message)
             sis.add_child(d.xml())
-        self.decode()
+            sis.mk()
         return sis
