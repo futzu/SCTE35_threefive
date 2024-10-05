@@ -85,12 +85,9 @@ class Cue(SCTE35Base):
         self.descriptors = []
         while bites:
             bites = self.mk_info_section(bites)
-            ridx= 4+self.info_section.descriptor_loop_length+2
-            cmd_bites=bites[:-ridx]
-            self._set_splice_command(cmd_bites)
-            bites= bites.replace(cmd_bites,b'')
-            self._mk_descriptors(bites)
-            crc = hex(int.from_bytes(bites[-4:], byteorder="big"))
+            bites=self._set_splice_command(bites)
+            bites= self._mk_descriptors(bites)
+            crc = hex(int.from_bytes(bites[0:4], byteorder="big"))
             self.info_section.crc = crc
             return True
         return False
@@ -212,11 +209,14 @@ class Cue(SCTE35Base):
         sct = self.info_section.splice_command_type
         if sct not in command_map:
             return False
-        self.command = command_map[sct](bites)
-        self.command.command_length=self.info_section.splice_command_length
+        iscl = self.info_section.splice_command_length
+        cmd_bites = bites[:iscl]
+        self.command = command_map[sct](cmd_bites)
+        self.command.command_length= iscl
+
         self.command.decode()
         del self.command.bites
-        return True
+        return bites[iscl:]
 
     def show(self):
         """
