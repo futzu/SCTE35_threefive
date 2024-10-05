@@ -58,7 +58,7 @@ def val2xml(val):
         return str(val).lower()
     if isinstance(val, (int, float)):
         return str(val)
-    return val
+    return escape_special_chars(val)
 
 
 def key2xml(string):
@@ -77,6 +77,36 @@ def mk_xml_attrs(attrs):
     a dict of xml friendly keys and values
     """
     return "".join([f' {key2xml(k)}="{val2xml(v)}"' for k, v in attrs.items()])
+
+
+special_char_map = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "\"": "&quot;",
+}
+
+
+def escape_special_chars(val):
+    """
+    escape characters that are not valid in xml
+    replaces characters matching special_char_map keys with corresponding value
+    """
+    if val is not None:
+        for key, value in special_char_map.items():
+            val = val.replace(key, value)
+    return val
+
+
+def unescape_special_chars(val):
+    """
+    unescapes characters that are not valid in xml
+    replaces characters matching special_char_map values with corresponding key
+    """
+    if val is not None:
+        for key, value in special_char_map.items():
+            val = val.replace(value, key)
+    return val
 
 
 class Node:
@@ -105,7 +135,7 @@ class Node:
         self.name = name
         if ns:
             self.name = ":".join((ns, name))
-        self.value = value
+        self.value = escape_special_chars(value)
         self.attrs = attrs
         self.children = []
         self.depth = None
@@ -204,7 +234,8 @@ class XmlParser:
 
         """
         if value not in [None, ""]:
-            stuff[self.active][un_camel(self.active)] = value
+            stuff[self.active][un_camel(self.active)] = (
+                unescape_special_chars(value))
         return stuff
 
     def mk_active(self, node):
@@ -221,7 +252,8 @@ class XmlParser:
         """
         if "<!--" not in node:
             attrs = [x for x in node.split(" ") if "=" in x]
-            parsed = {x.split('="')[0]: x.split('="')[1].split('"')[0] for x in attrs}
+            parsed = {x.split('="')[0]: unescape_special_chars(
+                    x.split('="')[1].split('"')[0]) for x in attrs}
             it = iter_attrs(parsed)
             return it
 
