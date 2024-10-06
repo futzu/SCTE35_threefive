@@ -1,4 +1,4 @@
-#!/usr/bin/pypy3
+#!/usr/bin/python3
 
 """
 threefive command line SCTE35 decoder.
@@ -8,7 +8,8 @@ threefive command line SCTE35 decoder.
 
 import sys
 from time import sleep
-from threefive import Cue,Stream, print2, decode, version
+from threefive import Cue, Stream, print2, decode, version
+from threefive.fixsix import fixsix
 from new_reader import reader
 import cProfile
 
@@ -38,7 +39,6 @@ def mk_sidecar(cue):
             pts = cue.packet_data.pts
         data = f"{pts},{cue.encode()}\n"
         sidecar.write(data)
-
 
 
 HELP = f"""
@@ -94,9 +94,21 @@ from local files, over HTTP(S), UDP unicast or UDP multicast.
 
         threefive version
 
+{REV}Fix SCTE-35 streams converted by ffmpeg to bin data:{NORM}
+
+        threefive fixsix video.ts
+
 {REV}show the pids,programs and streams in an MPEGTS container:{NORM}
 
         threefive show video.ts
+
+{REV} Parse a Cue string and output xml {NORM}
+
+    threefive  xml  '/DBMAAAAAsrbAP/wBQb+zTXUKAA2AhlDVUVJABWWDH+DCAgAAAAALfOq1zQAAAAAAhlDVUVJAAA3Qn+DCAgAAAAALfOq1zQAAAAAAhmCQA=='
+
+{REV} Parse a Stream and output  the Cues as xml {NORM}
+
+    threefive xml video.ts
 
 {REV}show raw SCTE-35 packets from MPEGTS video stream:{NORM}
 
@@ -119,17 +131,10 @@ write pts, SCTE-35 cue pairs to the file sidecar.txt:{NORM}
 
         threefive sidecar https://example.com/video.ts
 
-{REV} Parse a Cue string and output xml {NORM}
 
-    threefive  xml  '/DBMAAAAAsrbAP/wBQb+zTXUKAA2AhlDVUVJABWWDH+DCAgAAAAALfOq1zQAAAAAAhlDVUVJAAA3Qn+DCAgAAAAALfOq1zQAAAAAAhmCQA=='
-
-{REV} Parse a Stream and output  the Cues as xml {NORM}
-
-    threefive xml video.ts
-    
 {REV} load JSON and encode as a Base64:{NORM}
     cat json.file | threefive encode
-    
+
 {REV} load JSON and encode as hex:{NORM}
     cat json.file | threefive encode hex
 
@@ -140,7 +145,7 @@ write pts, SCTE-35 cue pairs to the file sidecar.txt:{NORM}
     cat json.file | threefive encode bytes
 
 {REV} load JSON and encode as xml:{NORM}
-    cat json.file | threefive encode xml      
+    cat json.file | threefive encode xml
 
 {REV}show this help:{NORM}
 
@@ -166,8 +171,9 @@ def print_version():
     print2(f"{version}")
     sys.exit()
 
+
 def json_load():
-    with  reader(sys.stdin.buffer) as stuff:
+    with reader(sys.stdin.buffer) as stuff:
         json = stuff.read().decode()
         cue = Cue()
         cue.load(json)
@@ -182,9 +188,9 @@ def json_load():
             print(cue.bites)
             sys.exit()
         if "xml" in sys.argv:
+            cue.encode()
             print(cue.xml())
             sys.exit()
-        print(cue.encode())   
         sys.exit()
 
 
@@ -192,7 +198,6 @@ print_map = {
     "help": print_help,
     "version": print_version,
     "encode": json_load,
-
 }
 
 
@@ -248,6 +253,7 @@ def sidecar_chk(arg):
     strm = Stream(arg)
     strm.decode(func=mk_sidecar)
 
+
 def to_xml(arg):
     try:
         # Mpegts Video
@@ -263,6 +269,7 @@ def to_xml(arg):
         except:
             return False
 
+
 func_map = {
     "pts": pts_chk,
     "show": show_chk,
@@ -270,6 +277,7 @@ func_map = {
     "proxy": proxy_chk,
     "sidecar": sidecar_chk,
     "xml": to_xml,
+    "fixsix": fixsix,
 }
 
 
