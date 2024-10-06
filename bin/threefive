@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/pypy3
 
 """
 threefive command line SCTE35 decoder.
@@ -8,7 +8,7 @@ threefive command line SCTE35 decoder.
 
 import sys
 from time import sleep
-from threefive import Cue, Stream, print2, decode, version
+from threefive import Cue,Stream, print2, decode, version
 from threefive.fixsix import fixsix
 from new_reader import reader
 import cProfile
@@ -39,6 +39,7 @@ def mk_sidecar(cue):
             pts = cue.packet_data.pts
         data = f"{pts},{cue.encode()}\n"
         sidecar.write(data)
+
 
 
 HELP = f"""
@@ -171,12 +172,19 @@ def print_version():
     print2(f"{version}")
     sys.exit()
 
-
 def json_load():
-    with reader(sys.stdin.buffer) as stuff:
+    with  reader(sys.stdin.buffer) as stuff:
         json = stuff.read().decode()
         cue = Cue()
-        cue.load(json)
+        try:
+            cue.load(json)
+        except:
+            try:
+                cue=Cue(json)
+                cue.decode()
+            except:
+                print("threefive accepts json, xml, base64, or hex as input")
+                sys.exit()
         if "hex" in sys.argv:
             print(cue.encode_as_hex())
             sys.exit()
@@ -191,6 +199,10 @@ def json_load():
             cue.encode()
             print(cue.xml())
             sys.exit()
+        if "json" in sys.argv:
+            cue.encode()
+            print(cue.get_json())
+        print(cue.encode())
         sys.exit()
 
 
@@ -198,6 +210,7 @@ print_map = {
     "help": print_help,
     "version": print_version,
     "encode": json_load,
+
 }
 
 
@@ -253,7 +266,6 @@ def sidecar_chk(arg):
     strm = Stream(arg)
     strm.decode(func=mk_sidecar)
 
-
 def to_xml(arg):
     try:
         # Mpegts Video
@@ -269,7 +281,6 @@ def to_xml(arg):
         except:
             return False
 
-
 func_map = {
     "pts": pts_chk,
     "show": show_chk,
@@ -277,7 +288,7 @@ func_map = {
     "proxy": proxy_chk,
     "sidecar": sidecar_chk,
     "xml": to_xml,
-    "fixsix": fixsix,
+    "fixsix":fixsix,
 }
 
 
