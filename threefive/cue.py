@@ -147,21 +147,13 @@ class Cue(SCTE35Base):
             data = data + "="
         return data
 
-    def _mk_bits(self, data):
-        """
-        cue._mk_bits Converts
-        Hex and Base64 strings into bytes.
-        """
-        if isinstance(data, bytes):
-            return self.idxsplit(data, b"\xfc")
+    def _int_bits(self, data):
+        length = data.bit_length() >> 3
+        bites = int.to_bytes(data, length, byteorder="big")
+        return bites
 
-        # handles int and unquoted hex
-        if isinstance(data, int):
-            length = data.bit_length() >> 3
-            bites = int.to_bytes(data, length, byteorder="big")
-            return bites
+    def _hex_bits(self,data):
         try:
-            # Handles hex byte strings
             i = int(data, 16)
             i_len = i.bit_length() >> 3
             bites = int.to_bytes(i, i_len, byteorder="big")
@@ -171,10 +163,27 @@ class Cue(SCTE35Base):
                 data = data[2:]
             if data[:2].lower() == "fc":
                 return bytes.fromhex(data)
+        return False
+    
+    def _b64_bits(self,data):
         try:
             return b64decode(self.fix_bad_b64(data))
         except (LookupError, TypeError, ValueError):
             return data
+        
+    def _mk_bits(self, data):
+        """
+        cue._mk_bits Converts
+        Hex and Base64 strings into bytes.
+        """
+        if isinstance(data, bytes):
+            return self.idxsplit(data, b"\xfc")
+        if isinstance(data, int):
+            return self.int_bits(self,data)
+        hex_bits=self._hex_bits(data)
+        if hex_bits:
+            return hex_bits
+        return self._b64_bits(data)
 
     def _mk_descriptors(self, bites):
         """
@@ -425,7 +434,7 @@ class Cue(SCTE35Base):
                 self._xml_splice_descriptor(dstuff)
             # Self.encode() will calculate lengths and types and such
             self.encode()
-        self.show()
+        #self.show()
 
     def xml(self, binary=False):
         """
