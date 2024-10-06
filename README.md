@@ -1,4 +1,11 @@
-# threefive is The Industry Leading SCTE-35 Decoder and Encoder. 
+# Oh My God it's Magic, threefive fixsix.
+* the threefive cli in the next release will correct ffmpeg bin-data streams with SCTE-35.
+*  __Boom goes the Dynamite.__
+![image](https://github.com/user-attachments/assets/1b3a21a0-3702-43b0-934b-bc2c1386ad22)
+
+
+
+### threefive is The Industry Leading SCTE-35 Decoder and Encoder. 
 
 
 
