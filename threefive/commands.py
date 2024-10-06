@@ -107,7 +107,7 @@ class PrivateCommand(SpliceCommand):
         }
         pc = Node("PrivateCommand", attrs=attrs)
         pc.add_child(Node("PrivateBytes",
-                          value=self.private_bytes.decode("utf8")))
+                          value=self.private_bytes.hex()))
 
         return pc
 
@@ -118,8 +118,8 @@ class PrivateCommand(SpliceCommand):
         self.identifier = stuff["PrivateCommand"]["identifier"]
         if ("PrivateBytes" in stuff and
             "private_bytes" in stuff["PrivateBytes"]):
-            self.private_bytes = (
-                stuff["PrivateBytes"]["private_bytes"].encode())
+            self.private_bytes = bytes.fromhex((
+                stuff["PrivateBytes"]["private_bytes"]))
 
 class SpliceNull(SpliceCommand):
     """
