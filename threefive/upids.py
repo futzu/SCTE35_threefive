@@ -11,7 +11,7 @@ cyclomatic complexity 1.65625
 """
 
 from .xml import Node
-
+from .bitn import NBin
 
 charset = "ascii"  # this isn't a constant pylint.
 
@@ -146,6 +146,19 @@ class Atsc(Upid):
         nbin.add_int(self.upid_value["end_of_day"], 5)
         nbin.add_int(self.upid_value["unique_for"], 9)
         nbin.add_bites(self.upid_value["content_id"].encode("utf-8"))
+
+
+    def xml(self):
+        nbin =  NBin()
+        self.encode(nbin)
+        self.upid_value =nbin.bites
+        ud_attrs = {
+            "segmentation_upid_type": hex(self.upid_type),
+            "segmentation_upid_format": "hexbinary",
+            "segmentation_upid_length": self.upid_length,
+        }
+        return Node("SegmentationUpid", attrs=ud_attrs, value=str(self.upid_value)[2:])
+
 
 
 class Eidr(Upid):
@@ -297,6 +310,18 @@ class Mpu(Upid):
         nbin.add_bites(fm)
         bit_len -= 32
         nbin.add_hex(self.upid_value["private_data"], bit_len)
+
+    def xml(self):
+        nbin =  NBin()
+        self.encode(nbin)
+        self.upid_value =nbin.bites
+        ud_attrs = {
+            "segmentation_upid_type": hex(self.upid_type),
+            "segmentation_upid_format": "hexbinary",
+            "segmentation_upid_length": self.upid_length,
+        }
+        return Node("SegmentationUpid", attrs=ud_attrs, value=str(self.upid_value)[2:])
+
 
 
 class Umid(Upid):
