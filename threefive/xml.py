@@ -262,7 +262,7 @@ class XmlParser:
         parse parses an xml string for a SCTE-35 Cue.
         """
         stuff = {"descriptors": []}
-        data = exemel.replace("\n", "")
+        data = exemel.replace("\n", "").strip()
         while ">" in data:
             self.mk_active(data)
             data,stuff = self._parse_nodes(data,stuff,descriptor_parse)
