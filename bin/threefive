@@ -200,8 +200,9 @@ def json_load():
             print(cue.xml())
             sys.exit()
         if "json" in sys.argv:
-            cue.encode()
+            _= cue.encode()
             print(cue.get_json())
+            sys.exit()
         print(cue.encode())
         sys.exit()
 
@@ -310,7 +311,7 @@ def chk_func_map():
         if key in sys.argv:
             sys.argv.remove(key)
             for arg in sys.argv[1:]:
-                print2(f"\n\n {arg}\n")
+               # print2(f"\n\n {arg}\n")
                 sleep(1)
                 func_map[key](arg)
             sys.exit()
