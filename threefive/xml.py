@@ -271,6 +271,8 @@ class XmlParser:
     def _parse_nodes(self,data,stuff,descriptor_parse=False):
         if self.active in self.DESCRIPTORS and not descriptor_parse:
             data, stuff = self._parse_descriptor(data, stuff)
+        elif self.active == "!--":
+            data = self._skip_comment(data)
         else:
             data,stuff= self._parse_most(data,stuff)
         return data,stuff
@@ -308,3 +310,12 @@ class XmlParser:
         data = data.replace(sub_data, "")
         stuff["descriptors"].append(self.parse(sub_data, descriptor_parse=True))
         return data, stuff
+
+
+    def _skip_comment(self,data):
+        """
+        _skip_comment skips active XML comment and following spaces
+        """
+        # also skips whitespace up to the next character (or EOF)
+        data = data[data.index("-->") + 3:].strip()
+        return data
