@@ -59,6 +59,14 @@ class Upid:
         }
         return Node("SegmentationUpid", attrs=ud_attrs, value=self.upid_value)
 
+    def from_xml(self,stuff):
+        """
+        from_xml loads a upid
+        from parsed xml data
+        """
+        if "segmentationUpid" in stuff:
+            self.load(stuff["segmentationUpid"])
+            
 
 class NoUpid(Upid):
     """
@@ -264,7 +272,6 @@ class Mid(Upid):
                 "upid_type": u["upid_type"],
                 "name": u["upid_type_name"],
             }
-
             value = u["segmentation_upid"]
             node = Node("SegmentationUpid", attrs=u_attrs, value=value)
             mid_nodes.append(node)
