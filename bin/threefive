@@ -14,8 +14,9 @@ from new_reader import reader
 import cProfile
 
 REV = "\033[7m"
-NORM = "\033[27m"
-
+NORM = "\033[27m\033[0m"
+WHITE = '\033[0m'
+GREEN = "\033[92m"
 
 def xml_out(cue):
     print2(cue.xml())
@@ -43,115 +44,45 @@ def mk_sidecar(cue):
 
 
 HELP = f"""
+{REV}        Parse                  {NORM}
+{GREEN}    base64: {NORM}\tthreefive '/DAWAAAAAAAAAP/wBQb+AKmKxwAACzuu2Q=='
+{GREEN}    hex: {NORM}\tthreefive '0xfc301600000000000000fff00506fe00a98ac700000b3baed9'
+{GREEN}    files: {NORM}\tthreefive myvideo.ts
+{GREEN}    stdin: {NORM}\tcat myvideo.ts | threefive
+{GREEN}    http(s): {NORM}\tthreefive https://futzu.com/xaa.ts
+{GREEN}    udp: {NORM}\tthreefive udp://127.0.0.1:3535
+{GREEN}    multicast:{NORM}\tthreefive udp://@235.35.3.5:3535
+   
+{REV}        Keywords               {NORM}
 
-threefive can parse a SCTE-35 Cue in Base64, Hex, or Integer format.
+   {REV}  fixsix  {NORM}{GREEN}\tFix SCTE-35 data mangled by ffmpeg:{NORM} threefive fixsix video.ts
+   
+   {REV}  xml     {NORM} {GREEN}\tParse a Cue string or mpegts stream and output xml {NORM}
+        {GREEN}\tParse base64 {NORM} threefive xml'/DAWAAAAAAAAAP/wBQb+AKmKxwAACzuu2Q=='
+        {GREEN}\tParse a Stream {NORM} threefive xml video.ts     
+   {REV} packets {NORM}{GREEN}\tPrint raw SCTE-35 packets from mpegts video:{NORM} threefive packets video.ts
+   
+   {REV} show    {NORM}{GREEN}\tProbe mpegts video:{NORM}     threefive show video.ts
+   
+   {REV} pts     {NORM} {GREEN}\tPrint PTS from mpegts video{NORM}    threefive pts video.ts
+   
+   {REV} proxy   {NORM} {GREEN}\tParse a stream, write raw video to stdout {NORM} threefive proxy https://example.com/video.ts
+   
+   {REV} sidecar {NORM}{GREEN}\tParse a stream, write pts,write SCTE-35 Cues to sidecar.txt:{NORM}  threefive sidecar https://example.com/video.ts
+   
+   {REV} encode  {NORM}{GREEN}\tLoad JSON, XML, Base64 or Hex and encode to JSON,XML,Base64,Hex,Int or Bytes
+            {GREEN}\tLoad JSON to base64:{NORM}  cat json.file | threefive encode
+            {GREEN}\tLoad JSON to hex:{NORM}  cat json.file | threefive encode hex
+            {GREEN}\tLoad xml to hex:{NORM}  cat xml.xml | threefive encode hex
+            {GREEN}\tLoad JSON to int:{NORM}  cat json.file | threefive encode int
+            {GREEN}\tLoad JSON to bytes:{NORM}  cat json.file | threefive encode bytes
+            {GREEN}\tLoad JSON to xml:{NORM}  cat json.file | threefive encode xml
+            {GREEN}\tLoad xml to json:{NORM}  cat xml.xml | threefive encode json
+            {GREEN}\tLoad xml to hex:{NORM} cat xml.xml | threefive encode hex{WHITE}
 
-threefive can also parse SCTE-35 in MPEGTS streams
-from local files, over HTTP(S), UDP unicast or UDP multicast.
+   {REV} version {NORM}{GREEN}\tShow  version:{NORM} threefive version
 
-{REV} use like this {NORM}
-
-   {REV} base64: {NORM}
-
-        threefive '/DAWAAAAAAAAAP/wBQb+AKmKxwAACzuu2Q=='
-
-    {REV} threefive writes all info to stderr:{NORM}
-
-     if you want to page or parse the output, use 2>&1 .
-
-        threefive '/DAWAAAAAAAAAP/wBQb+AKmKxwAACzuu2Q==' 2>&1 | grep "event_id'
-
-
-    {REV} hex: {NORM}
-
-       threefive '0xfc301600000000000000fff00506fe00a98ac700000b3baed9'
-
-    {REV} files: {NORM}
-
-        threefive myvideo.ts
-
-        threefive video1.ts video2.ts
-
-    {REV} stdin: {NORM}
-
-        cat myvideo.ts | threefive
-
-    {REV} http(s): {NORM}
-
-        threefive https://futzu.com/xaa.ts
-
-
-    {REV} udp: {NORM}
-
-        threefive udp://127.0.0.1:3535
-
-    {REV}multicast:{NORM}
-
-        threefive udp://@235.35.3.5:3535
-
-{REV} keywords {NORM}
-
-{REV}show the version of threefive:{NORM}
-
-        threefive version
-
-{REV}Fix SCTE-35 streams converted by ffmpeg to bin data:{NORM}
-
-        threefive fixsix video.ts
-
-{REV}show the pids,programs and streams in an MPEGTS container:{NORM}
-
-        threefive show video.ts
-
-{REV} Parse a Cue string and output xml {NORM}
-
-    threefive  xml  '/DBMAAAAAsrbAP/wBQb+zTXUKAA2AhlDVUVJABWWDH+DCAgAAAAALfOq1zQAAAAAAhlDVUVJAAA3Qn+DCAgAAAAALfOq1zQAAAAAAhmCQA=='
-
-{REV} Parse a Stream and output  the Cues as xml {NORM}
-
-    threefive xml video.ts
-
-{REV}show raw SCTE-35 packets from MPEGTS video stream:{NORM}
-
-        threefive packets video.ts
-
-{REV}parse a stream,
-write PID,PTS pairs of the video to stdout:{NORM}
-
-        threefive pts video.ts
-
-{REV}parse a stream,
-write raw video to stdout,
-write SCTE-35 to stderr,
-write pts,scte35 cue pairsto sidecar.txt:{NORM}
-
-        threefive proxy https://example.com/video.ts
-
-{REV}parse a stream,
-write pts, SCTE-35 cue pairs to the file sidecar.txt:{NORM}
-
-        threefive sidecar https://example.com/video.ts
-
-
-{REV} load JSON and encode as a Base64:{NORM}
-    cat json.file | threefive encode
-
-{REV} load JSON and encode as hex:{NORM}
-    cat json.file | threefive encode hex
-
-{REV} load JSON and encode as an int:{NORM}
-    cat json.file | threefive encode int
-
-{REV} load JSON and encode as bytes:{NORM}
-    cat json.file | threefive encode bytes
-
-{REV} load JSON and encode as xml:{NORM}
-    cat json.file | threefive encode xml
-
-{REV}show this help:{NORM}
-
-        threefive help
-
+   {REV} Help    {NORM} {GREEN}\tHelp: {NORM}  threefive help
 """
 
 
@@ -183,27 +114,27 @@ def json_load():
                 cue=Cue(json)
                 cue.decode()
             except:
-                print("threefive accepts json, xml, base64, or hex as input")
+                print2("threefive accepts json, xml, base64, or hex as input")
                 sys.exit()
         if "hex" in sys.argv:
-            print(cue.encode_as_hex())
+            print2(cue.encode_as_hex())
             sys.exit()
         if "int" in sys.argv:
-            print(cue.encode_as_int())
+            print2(cue.encode_as_int())
             sys.exit()
         if "bytes" in sys.argv:
             cue.encode()
-            print(cue.bites)
+            print2(cue.bites)
             sys.exit()
         if "xml" in sys.argv:
             cue.encode()
-            print(cue.xml())
+            print2(cue.xml())
             sys.exit()
         if "json" in sys.argv:
             _= cue.encode()
-            print(cue.get_json())
+            print2(cue.get_json())
             sys.exit()
-        print(cue.encode())
+        print2(cue.encode())
         sys.exit()
 
 
@@ -269,17 +200,17 @@ def sidecar_chk(arg):
 
 def to_xml(arg):
     try:
-        # Mpegts Video
-        strm = Stream(arg)
-        strm.decode(func=xml_out)
+        cue = Cue(arg)
+        cue.decode()
+        print2(cue.xml())
         return True
     except:
         try:
-            cue = Cue(arg)
-            cue.decode()
-            print2(cue.xml())
+        # Mpegts Video
+            strm = Stream(arg)
+            strm.decode(func=xml_out)
             return True
-        except:
+        finally:
             return False
 
 func_map = {
