@@ -58,7 +58,7 @@ def val2xml(val):
         return str(val).lower()
     if isinstance(val, (int, float)):
         return str(val)
-    return escape_special_chars(val)
+    return escape(val)
 
 
 def key2xml(string):
@@ -87,7 +87,7 @@ special_char_map = {
 }
 
 
-def escape_special_chars(val):
+def escape(val):
     """
     escape characters that are not valid in xml
     replaces characters matching special_char_map keys with corresponding value
@@ -98,7 +98,7 @@ def escape_special_chars(val):
     return val
 
 
-def unescape_special_chars(val):
+def unescape(val):
     """
     unescapes characters that are not valid in xml
     replaces characters matching special_char_map values with corresponding key
@@ -135,7 +135,7 @@ class Node:
         self.name = name
         if ns:
             self.name = ":".join((ns, name))
-        self.value = escape_special_chars(value)
+        self.value = escape(value)
         self.attrs = attrs
         self.children = []
         self.depth = None
@@ -235,7 +235,7 @@ class XmlParser:
         """
         if value not in [None, ""]:
             stuff[self.active][un_camel(self.active)] = (
-                unescape_special_chars(value))
+                unescape(value))
         return stuff
 
     def mk_active(self, node):
@@ -252,7 +252,7 @@ class XmlParser:
         """
         if "<!--" not in node:
             attrs = [x for x in node.split(" ") if "=" in x]
-            parsed = {x.split('="')[0]: unescape_special_chars(
+            parsed = {x.split('="')[0]: unescape(
                     x.split('="')[1].split('"')[0]) for x in attrs}
             it = iter_attrs(parsed)
             return it
