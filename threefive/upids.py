@@ -66,7 +66,7 @@ class Upid:
         """
         if "segmentationUpid" in stuff:
             self.load(stuff["segmentationUpid"])
-            
+
 
 class NoUpid(Upid):
     """
