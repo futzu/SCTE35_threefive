@@ -1,321 +1,380 @@
 """
-xml.py  The Node class for converting to xml,
-        The XmlParser class for parsing an xml string for SCTE-35 data.
-        and several helper functions
+threefive/upids.py
+
+threefve.upids
+
+classy Upids
+
+cyclomatic complexity 1.65625
+
+
+"""
+
+from .xml import Node
+from .bitn import NBin
+
+charset = "ascii"  # this isn't a constant pylint.
+
+"""
+set charset to None to return raw bytes
 """
 
 
-def t2s(v):
+class Upid:
     """
-    _t2s converts
-    90k ticks to seconds and
-    rounds to six decimal places
+    Upid base class handles URI UPIDS
     """
-    return round(v / 90000.0, 6)
+
+    def __init__(self, bitbin=None, upid_type=0, upid_length=0):
+        self.bitbin = bitbin
+        self.upid_type = upid_type
+        self.upid_name = upid_map[upid_type][0]
+        self.upid_length = upid_length
+        self.bit_length = upid_length << 3
+        self.upid_value = None
+
+    def decode(self):
+        """
+        decode Upid
+        """
+        self.upid_value = self.bitbin.as_charset(self.bit_length, charset)
+        return self.upid_name, self.upid_value
+
+    def encode(self, nbin):
+        """
+        encode Upid
+        """
+        if self.upid_value:
+            self.upid_value = self.upid_value.encode("utf8")
+            nbin.add_bites(self.upid_value)
+
+    def xml(self):
+        """
+        xml return a upid xml node
+        """
+        ud_attrs = {
+            "segmentation_upid_type": self.upid_type,
+            "segmentation_upid_format": "hexbinary",
+            "segmentation_upid_length": self.upid_length,
+        }
+        return Node("SegmentationUpid", attrs=ud_attrs, value=self.upid_value)
+
+    def from_xml(self,stuff):
+        """
+        from_xml loads a upid
+        from parsed xml data
+        """
+        if "segmentationUpid" in stuff:
+            self.load(stuff["segmentationUpid"])
 
 
-def un_camel(k):
+class NoUpid(Upid):
     """
-    camel changes camel case xml names
-    to underscore_format names.
+    NoUpid class
     """
-    k = "".join([f"_{i.lower()}" if i.isupper() else i for i in k])
-    return (k, k[1:])[k[0] == "_"]
+
+    def decode(self):
+        """
+        decode for no upid
+        """
+        return self.upid_name, 'No UPID'
+
+    def encode(self, nbin):
+        """
+        encode for no upid
+        """
+        nbin.forward(0)
+
+    def xml(self):
+        """
+        xml return a upid xml node
+        """
+        ud_attrs = {
+            "segmentation_upid_type": 0,
+            "segmentation_upid_format": "hexbinary",
+            "segmentation_upid_length": 0,
+        }
+        return Node("SegmentationUpid", attrs=ud_attrs, value="")
+
+class AirId(Upid):
+    """
+    Air Id Upid
+    """
+
+    def decode(self):
+        """
+        decode AirId
+        """
+        self.upid_value = self.bitbin.as_hex(self.bit_length)
+        return self.upid_name, self.upid_value
+
+    def encode(self, nbin):
+        """
+        encode AirId
+        """
+        nbin.add_hex(self.upid_value, (self.upid_length << 3))
+
+    def xml(self):
+        """
+        xml return a upid xml node
+        """
+        ud_attrs = {
+            "segmentation_upid_type": self.upid_type,
+            "segmentation_upid_format": "hexbinary",
+            "segmentation_upid_length": self.upid_length,
+        }
+        return Node("SegmentationUpid", attrs=ud_attrs, value=str(self.upid_value))
 
 
-def un_xml(v):
+class Atsc(Upid):
     """
-    un_xml converts an xml value
-    to ints, floats and booleans.
+    ATSC Upid
     """
-    if v.isdigit():
-        return int(v)
-    if v.replace(".", "").isdigit():
-        return float(v)
-    if v in ["false", "False"]:
-        return False
-    if v in ["true", "True"]:
-        return True
-    return v
+
+    def decode(self):
+        """
+        decode Atsc Upid
+        """
+        cont_size = self.bit_length - 32
+        self.upid_value = {
+            "TSID": self.bitbin.as_int(16),
+            "reserved": self.bitbin.as_int(2),
+            "end_of_day": self.bitbin.as_int(5),
+            "unique_for": self.bitbin.as_int(9),
+            "content_id": self.bitbin.as_charset(cont_size, charset),
+        }
+        return self.upid_name, self.upid_value
+
+    def encode(self, nbin):
+        """
+        encode Atsc
+        """
+        nbin.add_int(self.upid_value["TSID"], 16)
+        nbin.add_int(self.upid_value["reserved"], 2)
+        nbin.add_int(self.upid_value["end_of_day"], 5)
+        nbin.add_int(self.upid_value["unique_for"], 9)
+        nbin.add_bites(self.upid_value["content_id"].encode("utf-8"))
 
 
-def iter_attrs(attrs):
-    """
-    iter_attrs normalizes xml attributes
-    and adds them to the stuff dict.
-    """
-    conv = {un_camel(k): un_xml(v) for k, v in attrs.items()}
-    pts_vars = ["pts_time", "pts_adjustment", "duration", "segmentation_duration"]
-    conv = {k: (t2s(v) if k in pts_vars else v) for k, v in conv.items()}
-    return conv
+    def xml(self):
+        nbin =  NBin()
+        self.encode(nbin)
+        self.upid_value =nbin.bites
+        ud_attrs = {
+            "segmentation_upid_type": hex(self.upid_type),
+            "segmentation_upid_format": "hexbinary",
+            "segmentation_upid_length": self.upid_length,
+        }
+        return Node("SegmentationUpid", attrs=ud_attrs, value=self.upid_value.decode())
 
 
-def val2xml(val):
+
+class Eidr(Upid):
     """
-    val2xmlconvert val for xml
+    Eidr Upid
     """
-    if isinstance(val, bool):
-        return str(val).lower()
-    if isinstance(val, (int, float)):
-        return str(val)
-    return escape(val)
+
+    def decode(self):
+        """
+        decode Eidr Upid
+        """
+        pre = self.bitbin.as_hex(16)
+        post = []
+        # switch to compact binary format
+        nibbles = 20
+        while nibbles:
+            post.append(hex(self.bitbin.as_int(4))[2:])
+            nibbles -= 1
+        self.upid_value = f"{pre}{''.join(post)}"
+        return self.upid_name, self.upid_value
+
+    def encode(self, nbin):
+        """
+        encode Eidr Upid
+        """
+        # switch to compact binary format
+        nbin.add_hex(self.upid_value[:6], 16)
+        substring = self.upid_value[6:]
+        for i in substring:
+            hexed = f"0x{i}"
+            nbin.add_hex(hexed, 4)
 
 
-def key2xml(string):
+class Isan(Upid):
     """
-    key2xml convert name to camel case
+    Isan Upid
     """
-    new_string = string
-    if "_" in string:
-        new_string = string.title().replace("_", "")
-    return new_string[0].lower() + new_string[1:]
+
+    def decode(self):
+        """
+        decode Isan Upid
+        """
+        self.upid_value = self.bitbin.as_hex(self.bit_length)
+        return self.upid_name, self.upid_value
+
+    def encode(self, nbin):
+        """
+        encode Isan Upid
+        """
+        nbin.add_hex(self.upid_value, (self.upid_length << 3))
 
 
-def mk_xml_attrs(attrs):
+class Mid(Upid):
     """
-    mk_xml_attrs converts a dict into
-    a dict of xml friendly keys and values
+    Mid Upid
     """
-    return "".join([f' {key2xml(k)}="{val2xml(v)}"' for k, v in attrs.items()])
+
+    def decode(self):
+        """
+        decode Mid Upid
+        """
+        self.upid_value = []
+        ulb = self.bit_length
+        while ulb:
+            upid_type = self.bitbin.as_int(8)  # 1 byte
+            ulb -= 8
+            upid_length = self.bitbin.as_int(8)
+            ulb -= 8
+            upid_type_name, segmentation_upid = upid_map[upid_type][1](
+                self.bitbin, upid_type, upid_length
+            ).decode()
+            mid_upid = {
+                "upid_type": upid_type,
+                "upid_type_name": upid_type_name,
+                "upid_length": upid_length,
+                "segmentation_upid": segmentation_upid,
+            }
+            ulb -= upid_length << 3
+            self.upid_value.append(mid_upid)
+        return self.upid_name, self.upid_value
+
+    def encode(self, nbin):
+        """
+        encode Mid Upid
+        """
+        for mid_upid in self.upid_value:
+            nbin.add_int(mid_upid["upid_type"], 8)
+            nbin.add_int(mid_upid["upid_length"], 8)
+            the_upid = upid_map[mid_upid["upid_type"]][1](
+                None, mid_upid["upid_type"], mid_upid["upid_length"]
+            )
+            the_upid.upid_value = mid_upid["segmentation_upid"]
+            the_upid.encode(nbin)
+
+    def xml(self):
+        """
+        xml return a upid xml node
+
+        """
+        mid_nodes = []
+        for u in self.upid_value:
+            u_attrs = {
+                "upid_type": u["upid_type"],
+                "name": u["upid_type_name"],
+            }
+            value = u["segmentation_upid"]
+            node = Node("SegmentationUpid", attrs=u_attrs, value=value)
+            mid_nodes.append(node)
+        return mid_nodes
 
 
-special_char_map = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    "\"": "&quot;",
+class Mpu(Upid):
+    """
+    Mpu Upid
+    """
+
+    def _decode_adfr(self):
+        """
+        decode_adfr handles Addressabkle TV MPU Upids
+        """
+        data = bytes.fromhex(self.upid_value["private_data"][2:])
+        self.upid_value["version"] = data[0]
+        self.upid_value["channel_identifier"] = hex(
+            int.from_bytes(data[1:3], byteorder="big")
+        )
+        self.upid_value["date"] = int.from_bytes(data[3:7], byteorder="big")
+        self.upid_value["break_code"] = int.from_bytes(data[7:9], byteorder="big")
+        self.upid_value["duration"] = hex(int.from_bytes(data[9:11], byteorder="big"))
+
+    def decode(self):
+        """
+        decode MPU Upids
+        """
+        self.upid_value = {
+            "format_identifier": self.bitbin.as_charset(32),
+            "private_data": self.bitbin.as_hex(self.bit_length - 32),
+        }
+        if self.upid_value["format_identifier"] == "ADFR":
+            self._decode_adfr()
+        return self.upid_name, self.upid_value
+
+    def encode(self, nbin):
+        """
+        encode MPU Upids
+        """
+        bit_len = self.bit_length
+        fm = bytes(self.upid_value["format_identifier"].encode("utf8"))
+        nbin.add_bites(fm)
+        bit_len -= 32
+        nbin.add_hex(self.upid_value["private_data"], bit_len)
+
+    def xml(self):
+        nbin =  NBin()
+        self.encode(nbin)
+        self.upid_value =nbin.bites
+        ud_attrs = {
+            "segmentation_upid_type": hex(self.upid_type),
+            "segmentation_upid_format": "hexbinary",
+            "segmentation_upid_length": self.upid_length,
+        }
+        return Node("SegmentationUpid", attrs=ud_attrs, value=self.upid_value.decode())
+
+
+
+class Umid(Upid):
+    """
+    Umid Upid
+    """
+
+    def decode(self):
+        """
+        decode Umid Upids
+        """
+        chunks = []
+        ulb = self.bit_length
+        while ulb > 32:
+            chunks.append(self.bitbin.as_hex(32)[2:])
+            ulb -= 32
+        self.upid_value = ".".join(chunks)
+        return self.upid_name, self.upid_value
+
+    def encode(self, nbin):
+        """
+        encode Umid Upid
+        """
+        chunks = self.upid_value.split(".")
+        for chunk in chunks:
+            nbin.add_hex(chunk, 32)
+
+
+upid_map = {
+    0x00: ["No UPID", NoUpid],
+    0x01: ["Deprecated", Upid],
+    0x02: ["Deprecated", Upid],
+    0x03: ["AdID", Upid],
+    0x04: ["UMID", Umid],
+    0x05: ["ISAN", Isan],
+    0x06: ["ISAN", Isan],
+    0x07: ["TID", Upid],
+    0x08: ["AiringID", AirId],
+    0x09: ["ADI", Upid],
+    0x10: ["UUID", Upid],
+    0x11: ["SCR", Upid],
+    0x0A: ["EIDR", Eidr],
+    0x0B: ["ATSC", Atsc],
+    0x0C: ["MPU", Mpu],
+    0x0D: ["MID", Mid],
+    0x0E: ["ADS Info", Upid],
+    0x0F: ["URI", Upid],
+    0xFD: ["Unknown", Upid],
 }
-
-
-def escape(val):
-    """
-    escape characters that are not valid in xml
-    replaces characters matching special_char_map keys with corresponding value
-    """
-    if val is not None:
-        for key, value in special_char_map.items():
-            val = val.replace(key, value)
-    return val
-
-
-def unescape(val):
-    """
-    unescapes characters that are not valid in xml
-    replaces characters matching special_char_map values with corresponding key
-    """
-    if val is not None:
-        for key, value in special_char_map.items():
-            val = val.replace(value, key)
-    return val
-
-
-class Node:
-    """
-    The Node class is to create an xml node.
-
-    An instance of Node has:
-
-        name :      <name> </name>
-        attrs :     <name attrs[k]="attrs[v]">
-        value  :    <name>value</name>
-        children :  <name><children[0]></children[0]</name>
-        depth:      tab depth for printing (automatically set)
-
-    Use like this:
-
-        from threefive.xml import Node
-
-        ts = Node('TimeSignal')
-        st = Node('SpliceTime',attrs={'pts_time':3442857000})
-        ts.add_child(st)
-        print(ts)
-    """
-
-    def __init__(self, name, value=None, attrs={}, ns=None):
-        self.name = name
-        if ns:
-            self.name = ":".join((ns, name))
-        self.value = escape(value)
-        self.attrs = attrs
-        self.children = []
-        self.depth = None
-
-    def __repr__(self):
-        return self.mk()
-
-    def set_depth(self):
-        """
-        set_depth is used to format
-        tabs in output
-        """
-        if not self.depth:
-            self.depth = 0
-        for child in self.children:
-            child.depth = self.depth + 1
-
-    def get_indent(self):
-        tab = "   "
-        return tab * self.depth
-
-    def mk(self, obj=None):
-        """
-        mk makes the node obj,
-        and it's children into
-        an xml representation.
-        """
-        if obj is None:
-            obj = self
-        obj.set_depth()
-        ndent = obj.get_indent()
-        if isinstance(obj, Comment):
-            return obj.mk(obj)
-        new_attrs = mk_xml_attrs(obj.attrs)
-        rendrd = f"{ndent}<{obj.name}{new_attrs}>"
-        if obj.value:
-            return f"{rendrd}{obj.value}</{obj.name}>\n"
-        rendrd = f"{rendrd}\n"
-        for child in obj.children:
-            rendrd += obj.mk(child)
-        if obj.children:
-            return f"{rendrd}{ndent}</{obj.name}>\n"
-        return rendrd.replace(">", "/>")
-
-    def add_child(self, child):
-        """
-        add_child adds a child node
-        """
-        self.children.append(child)
-
-    def add_comment(self,comment):
-        """
-        add_comment add a Comment node
-        """
-        self.add_child(Comment(comment))
-
-class Comment(Node):
-    def mk(self, obj=None):
-        if obj is None:
-            obj = self
-        obj.set_depth()
-        return f"{obj.get_indent()}<!-- {obj.name} -->\n"
-
-
-
-class XmlParser:
-    DESCRIPTORS = [
-        "AvailDescriptor",
-        "DTMFDescriptor",
-        "SegmentationDescriptor",
-        "TimeDescriptor",
-    ]
-    """
-    XmlParser is for parsing
-    a SCTE-35 Cue from  xml.
-    """
-
-    def __init__(self):
-        self.active = None
-        self.node_list = []
-
-    def chk_node_list(self, node):
-        """
-        chk_node_list is used to track open xml nodes
-        """
-        if self.active in self.node_list:
-            self.node_list.remove(self.active)
-        elif node[-2] != "/":
-            self.node_list.append(self.active)
-
-    def mk_value(self, value, stuff):
-        """
-        mk_value, if the xml node has a value, write it to self.stuff
-
-        <name>value</name>
-
-        """
-        if value not in [None, ""]:
-            stuff[self.active][un_camel(self.active)] = (
-                unescape(value))
-        return stuff
-
-    def mk_active(self, node):
-        """
-        mk_active sets self.active to the current node name.
-        """
-        name = node[1:].split(" ", 1)[0].split('>',1)[0].split(":")[-1]
-        self.active = name.replace("/", "").replace(">", "")
-
-    def mk_attrs(self, node):
-        """
-        mk_attrs parses the current node for attributes
-        and stores them in self.stuff[self.active]
-        """
-        if "<!--" not in node:
-            attrs = [x for x in node.split(" ") if "=" in x]
-            parsed = {x.split('="')[0]: unescape(
-                    x.split('="')[1].split('"')[0]) for x in attrs}
-            it = iter_attrs(parsed)
-            return it
-
-    def parse(self, exemel, descriptor_parse=False):
-        """
-        parse parses an xml string for a SCTE-35 Cue.
-        """
-        stuff = {"descriptors": []}
-        data = exemel.replace("\n", "").strip()
-        while ">" in data:
-            self.mk_active(data)
-            data,stuff = self._parse_nodes(data,stuff,descriptor_parse)
-        return stuff
-
-    def _parse_nodes(self,data,stuff,descriptor_parse=False):
-        if self.active in self.DESCRIPTORS and not descriptor_parse:
-            data, stuff = self._parse_descriptor(data, stuff)
-        elif self.active == "!--":
-            data = self._skip_comment(data)
-        else:
-            data,stuff= self._parse_most(data,stuff)
-        return data,stuff
-
-    def _parse_most(self,data,stuff):
-        """
-        parse_most parse everything except descriptor nodes
-        """
-        rgator = data.index(">")
-        this_node = data[: rgator + 1]
-        self.chk_node_list(this_node)
-        attrs = self.mk_attrs(this_node)
-        if self.active not in stuff:
-            stuff[self.active] = attrs
-        data = data[rgator + 1 :]
-        if "<" in data:
-            lgator = data.index("<")
-            value = data[:lgator].strip()
-            stuff = self.mk_value(value, stuff)
-            data = data[lgator:]
-        return data,stuff
-
-
-    def _parse_descriptor(self, data, stuff):
-        """
-        mk_descriptor slices off an entire
-        descriptor xml node from data to parse.
-        """
-        sub_data = ""
-        tag = data[1:].split(" ", 1)[0]
-        try:
-            sub_data = data[: data.index(f"</{tag}>") + len(tag) + 1]
-        except:
-            sub_data = data[: data.index("/>") + 2]
-        data = data.replace(sub_data, "")
-        stuff["descriptors"].append(self.parse(sub_data, descriptor_parse=True))
-        return data, stuff
-
-
-    def _skip_comment(self,data):
-        """
-        _skip_comment skips active XML comment and following spaces
-        """
-        # also skips whitespace up to the next character (or EOF)
-        data = data[data.index("-->") + 3:].strip()
-        return data
