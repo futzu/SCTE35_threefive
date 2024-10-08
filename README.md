@@ -1,41 +1,15 @@
-# Oh My God it's Magic
-### threefive release 2.4.71  due out this week adds powerful new features.
-### fixsix for ffmpeg 
+_"threefive, what are your thoughts when facing an opponent?"_ 
+<br><br>
+ _"I have no opponent."_
+<br>
 
-* the threefive cli in the next release will correct ffmpeg bin-data streams with SCTE-35.
+ # threefive v2.4.71.  Thursday. 
 
-![image](https://github.com/user-attachments/assets/1b3a21a0-3702-43b0-934b-bc2c1386ad22)
 
-### DASH support
-### xml encoding and decoding.
+# threefive is The Industry Leading SCTE-35 Decoder and Encoder 
 
-```js
-a@fu:~/build/SCTE35_threefive$ ./threefive-exp  xml  '/DBMAAAAAsrbAP/wBQb+zTXUKAA2AhlDVUVJABWWDH+DCAgAAAAALfOq1zQAAAAAAhlDVUVJAAA3Qn+DCAgAAAAALfOq1zQAAAAAAhmCQA=='
-```
-```xml
- /DBMAAAAAsrbAP/wBQb+zTXUKAA2AhlDVUVJABWWDH+DCAgAAAAALfOq1zQAAAAAAhlDVUVJAAA3Qn+DCAgAAAAALfOq1zQAAAAAAhmCQA==
+<br><br>
 
-<SpliceInfoSection xmlns="https://scte.org/schemas/35" ptsAdjustment="183003" protocolVersion="0" sapType="3" tier="4095">
-   <TimeSignal>
-      <SpliceTime ptsTime="3442857000"/>
-   </TimeSignal>
-   <!-- Provider Placement Opportunity Start -->
-   <SegmentationDescriptor segmentationEventId="1414668" segmentationEventCancelIndicator="false" segmentationEventIdComplianceIndicator="true" segmentationTypeId="52" segmentNum="0" segmentsExpected="0" subSegmentNum="0" subSegmentsExpected="0">
-      <DeliveryRestrictions webDeliveryAllowedFlag="false" noRegionalBlackoutFlag="false" archiveAllowedFlag="false" deviceRestrictions="3"/>
-      <!-- UPID: AiringID -->
-      <SegmentationUpid segmentationUpidType="8" segmentationUpidFormat="hexbinary" segmentationUpidLength="8">2df3aad7</SegmentationUpid>
-   </SegmentationDescriptor>
-   <!-- Provider Placement Opportunity Start -->
-   <SegmentationDescriptor segmentationEventId="14146" segmentationEventCancelIndicator="false" segmentationEventIdComplianceIndicator="true" segmentationTypeId="52" segmentNum="0" segmentsExpected="0" subSegmentNum="0" subSegmentsExpected="0">
-      <DeliveryRestrictions webDeliveryAllowedFlag="false" noRegionalBlackoutFlag="false" archiveAllowedFlag="false" deviceRestrictions="3"/>
-      <!-- UPID: AiringID -->
-      <SegmentationUpid segmentationUpidType="8" segmentationUpidFormat="hexbinary" segmentationUpidLength="8">2df3aad7</SegmentationUpid>
-   </SegmentationDescriptor>
-</SpliceInfoSection>
-
-```
-
-### threefive is The Industry Leading SCTE-35 Decoder and Encoder. 
 
 
 
