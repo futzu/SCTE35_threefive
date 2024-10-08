@@ -1,19 +1,24 @@
-import argparse
+"""
+fixsix.py
+"""
+
 import io
 import sys
 from functools import partial
-from new_reader import reader
 from threefive.crc import crc32
 from threefive.bitn import NBin
 from threefive.stuff import print2
-from threefive.stream import Stream, show_cue
+from threefive.stream import Stream
 
 
 def passed(cue):
     pass
 
 
-class Stream1(Stream):
+class PreFix(Stream):
+    """
+    PreFix is used to gather 06 Bin data pids with SCTE-35.
+    """
 
     def decode(self, func=passed):
         super().decode(func=passed)
@@ -23,7 +28,11 @@ class Stream1(Stream):
         return fixsix
 
 
-class Stream2(Stream):
+class FixSix(Stream):
+    """
+    FixSix fixes bin data streams with SCTE-35 to 0x86 SCTE-35 streams
+    """
+
     CUEI_DESCRIPTOR = b"\x05\x04CUEI"
 
     def __init__(self, tsdata=None):
@@ -32,9 +41,6 @@ class Stream2(Stream):
         self.con_pids = set()
         self.out_file = "sixfixed-" + tsdata.rsplit("/")[-1]
         self.in_file = sys.stdin.buffer
-
-    def iter_pkts(self):
-        return iter(partial(self._tsdata.read, self._PACKET_SIZE), b"")
 
     def convert_pid(self):
         """
@@ -159,15 +165,15 @@ def fixsix(arg):
     fixsix converts 0x6 bin data mpegts streams
     that contain SCTE-35 data to stream type 0x86
     """
-    s1 = Stream1(arg)
+    s1 = PreFix(arg)
     six2fix = s1.decode(func=passed)
     if not six2fix:
         print2("No bin data SCTE-35 streams were found.")
     else:
-        s2 = Stream2(arg)
+        s2 = FixSix(arg)
         s2.con_pids = six2fix
         s2.convert_pid()
-        print(f'Wrote: sixfixed-{arg.rsplit("/")[-1]}')
+        print2(f'Wrote: sixfixed-{arg.rsplit("/")[-1]}')
 
 
 if __name__ == "__main__":
