@@ -282,9 +282,9 @@ class Stream:
         if not self._find_start():
             return False
         for pkt in self.iter_pkts():
-                cue = self._parse(pkt)
-                if cue:
-                    return cue
+            cue = self._parse(pkt)
+            if cue:
+                return cue
         return False
 
     def decode_program(self, the_program, func=show_cue):
