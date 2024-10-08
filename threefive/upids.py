@@ -123,7 +123,7 @@ class AirId(Upid):
             "segmentation_upid_format": "hexbinary",
             "segmentation_upid_length": self.upid_length,
         }
-        return Node("SegmentationUpid", attrs=ud_attrs, value=str(self.upid_value)[2:])
+        return Node("SegmentationUpid", attrs=ud_attrs, value=str(self.upid_value))
 
 
 class Atsc(Upid):
@@ -165,7 +165,7 @@ class Atsc(Upid):
             "segmentation_upid_format": "hexbinary",
             "segmentation_upid_length": self.upid_length,
         }
-        return Node("SegmentationUpid", attrs=ud_attrs, value=str(self.upid_value)[2:])
+        return Node("SegmentationUpid", attrs=ud_attrs, value=self.upid_value.decode())
 
 
 
@@ -327,7 +327,7 @@ class Mpu(Upid):
             "segmentation_upid_format": "hexbinary",
             "segmentation_upid_length": self.upid_length,
         }
-        return Node("SegmentationUpid", attrs=ud_attrs, value=str(self.upid_value)[2:])
+        return Node("SegmentationUpid", attrs=ud_attrs, value=self.upid_value.decode())
 
 
 
