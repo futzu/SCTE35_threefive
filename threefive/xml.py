@@ -58,7 +58,7 @@ def val2xml(val):
         return str(val).lower()
     if isinstance(val, (int, float)):
         return str(val)
-    return escape_special_chars(val)
+    return escape(val)
 
 
 def key2xml(string):
@@ -87,7 +87,7 @@ special_char_map = {
 }
 
 
-def escape_special_chars(val):
+def escape(val):
     """
     escape characters that are not valid in xml
     replaces characters matching special_char_map keys with corresponding value
@@ -98,7 +98,7 @@ def escape_special_chars(val):
     return val
 
 
-def unescape_special_chars(val):
+def unescape(val):
     """
     unescapes characters that are not valid in xml
     replaces characters matching special_char_map values with corresponding key
@@ -135,7 +135,7 @@ class Node:
         self.name = name
         if ns:
             self.name = ":".join((ns, name))
-        self.value = escape_special_chars(value)
+        self.value = escape(value)
         self.attrs = attrs
         self.children = []
         self.depth = None
@@ -235,7 +235,7 @@ class XmlParser:
         """
         if value not in [None, ""]:
             stuff[self.active][un_camel(self.active)] = (
-                unescape_special_chars(value))
+                unescape(value))
         return stuff
 
     def mk_active(self, node):
@@ -252,7 +252,7 @@ class XmlParser:
         """
         if "<!--" not in node:
             attrs = [x for x in node.split(" ") if "=" in x]
-            parsed = {x.split('="')[0]: unescape_special_chars(
+            parsed = {x.split('="')[0]: unescape(
                     x.split('="')[1].split('"')[0]) for x in attrs}
             it = iter_attrs(parsed)
             return it
@@ -262,7 +262,7 @@ class XmlParser:
         parse parses an xml string for a SCTE-35 Cue.
         """
         stuff = {"descriptors": []}
-        data = exemel.replace("\n", "")
+        data = exemel.replace("\n", "").strip()
         while ">" in data:
             self.mk_active(data)
             data,stuff = self._parse_nodes(data,stuff,descriptor_parse)
@@ -271,6 +271,8 @@ class XmlParser:
     def _parse_nodes(self,data,stuff,descriptor_parse=False):
         if self.active in self.DESCRIPTORS and not descriptor_parse:
             data, stuff = self._parse_descriptor(data, stuff)
+        elif self.active == "!--":
+            data = self._skip_comment(data)
         else:
             data,stuff= self._parse_most(data,stuff)
         return data,stuff
@@ -308,3 +310,12 @@ class XmlParser:
         data = data.replace(sub_data, "")
         stuff["descriptors"].append(self.parse(sub_data, descriptor_parse=True))
         return data, stuff
+
+
+    def _skip_comment(self,data):
+        """
+        _skip_comment skips active XML comment and following spaces
+        """
+        # also skips whitespace up to the next character (or EOF)
+        data = data[data.index("-->") + 3:].strip()
+        return data
