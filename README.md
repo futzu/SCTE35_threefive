@@ -1,17 +1,18 @@
+ # threefive v2.4.71.  Thursday. 
+
+
+
 _"threefive, what are your thoughts when facing an opponent?"_ 
 <br><br>
  _"I have no opponent."_
 <br>
 
- # threefive v2.4.71.  Thursday. 
 
 
-# threefive is The Industry Leading SCTE-35 Decoder and Encoder 
-
-<br><br>
+# threefive is The Industry Leading SCTE-35 Decoder and Encoder.
 
 
-
+<br>
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
 <br> `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
