@@ -164,13 +164,13 @@ class Cue(SCTE35Base):
             if data[:2].lower() == "fc":
                 return bytes.fromhex(data)
         return False
-    
+
     def _b64_bits(self,data):
         try:
             return b64decode(self.fix_bad_b64(data))
         except (LookupError, TypeError, ValueError):
             return data
-        
+
     def _mk_bits(self, data):
         """
         cue._mk_bits Converts
@@ -179,7 +179,7 @@ class Cue(SCTE35Base):
         if isinstance(data, bytes):
             return self.idxsplit(data, b"\xfc")
         if isinstance(data, int):
-            return self.int_bits(self,data)
+            return self._int_bits(data)
         hex_bits=self._hex_bits(data)
         if hex_bits:
             return hex_bits
