@@ -85,9 +85,6 @@ class PrivateCommand(SpliceCommand):
             self.bites[:4], byteorder="big"
         )  # 4 bytes = 32 bits
         self.private_bytes = self.bites[4:]
-        print('PB  ---> ',self.private_bytes)
-
-
 
     def encode(self, nbin=None):
         """
@@ -108,7 +105,6 @@ class PrivateCommand(SpliceCommand):
         pc = Node("PrivateCommand", attrs=attrs)
         pc.add_child(Node("PrivateBytes",
                           value=self.private_bytes.hex()))
-
         return pc
 
     def from_xml(self, stuff):
