@@ -138,7 +138,7 @@ class Node:
         self.value = escape(value)
         self.attrs = attrs
         self.children = []
-        self.depth = None
+        self.depth = 0
 
     def __repr__(self):
         return self.mk()
@@ -148,12 +148,13 @@ class Node:
         set_depth is used to format
         tabs in output
         """
-        if not self.depth:
-            self.depth = 0
         for child in self.children:
             child.depth = self.depth + 1
 
     def get_indent(self):
+        """
+        get_indent returns a string of spaces the required depth for a node
+        """
         tab = "   "
         return tab * self.depth
 
@@ -194,6 +195,28 @@ class Node:
 
 
 class Comment(Node):
+    """
+    The Comment class is to create a Node representing a xml comment.
+
+    An instance of Comment has:
+
+        name :      <!-- name -->
+        depth:      tab depth for printing (automatically set)
+
+    Since Comment is a Node, it also has attrs, value and children but
+    these are ignored. cf etree.Comment
+    Use like this:
+
+        from threefive.xml import Comment, Node
+
+        n = Node('root')
+        c = Comment('my first comment')
+
+        n.add_child(c)
+        print(n)
+
+    See also Node.add_comment:
+    """
     def mk(self, obj=None):
         if obj is None:
             obj = self
@@ -202,16 +225,17 @@ class Comment(Node):
 
 
 class XmlParser:
+    """
+    XmlParser is for parsing
+    a SCTE-35 Cue from  xml.
+    """
+
     DESCRIPTORS = [
         "AvailDescriptor",
         "DTMFDescriptor",
         "SegmentationDescriptor",
         "TimeDescriptor",
     ]
-    """
-    XmlParser is for parsing
-    a SCTE-35 Cue from  xml.
-    """
 
     def __init__(self):
         self.active = None
@@ -249,14 +273,13 @@ class XmlParser:
         mk_attrs parses the current node for attributes
         and stores them in self.stuff[self.active]
         """
-        if "<!--" not in node:
-            attrs = [x for x in node.split(" ") if "=" in x]
-            parsed = {
-                x.split('="')[0]: unescape(x.split('="')[1].split('"')[0])
-                for x in attrs
-            }
-            it = iter_attrs(parsed)
-            return it
+        attrs = [x for x in node.split(" ") if "=" in x]
+        parsed = {
+            x.split('="')[0]: unescape(x.split('="')[1].split('"')[0])
+            for x in attrs
+        }
+        it = iter_attrs(parsed)
+        return it
 
     def parse(self, exemel, descriptor_parse=False):
         """
@@ -265,15 +288,16 @@ class XmlParser:
         stuff = {"descriptors": []}
         data = exemel.replace("\n", "").strip()
         while ">" in data:
-            self.mk_active(data)
-            data, stuff = self._parse_nodes(data, stuff, descriptor_parse)
+            if data.startswith("<!--"):
+                data = self._skip_comment(data)
+            else:
+                self.mk_active(data)
+                data, stuff = self._parse_nodes(data, stuff, descriptor_parse)
         return stuff
 
     def _parse_nodes(self, data, stuff, descriptor_parse=False):
         if self.active in self.DESCRIPTORS and not descriptor_parse:
             data, stuff = self._parse_descriptor(data, stuff)
-        elif self.active == "!--":
-            data = self._skip_comment(data)
         else:
             data, stuff = self._parse_most(data, stuff)
         return data, stuff
