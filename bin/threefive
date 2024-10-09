@@ -9,7 +9,7 @@ threefive command line SCTE35 decoder.
 import sys
 from time import sleep
 from threefive import Cue,Stream, print2, decode, version
-from threefive.fixsix import fixsix
+from threefive.sixfix import sixfix
 from new_reader import reader
 import cProfile
 
@@ -55,7 +55,7 @@ HELP = f"""
    
 {REV}        Keywords               {NORM}
 
-   {REV}  fixsix  {NORM}{GREEN}\tFix SCTE-35 data mangled by ffmpeg:{NORM} threefive fixsix video.ts
+   {REV}  sixfix  {NORM}{GREEN}\tFix SCTE-35 data mangled by ffmpeg:{NORM} threefive fixsix video.ts
    
    {REV}  xml     {NORM} {GREEN}\tParse a Cue string or mpegts stream and output xml {NORM}
         {GREEN}\tParse base64 {NORM} threefive xml'/DAWAAAAAAAAAP/wBQb+AKmKxwAACzuu2Q=='
@@ -220,7 +220,7 @@ func_map = {
     "proxy": proxy_chk,
     "sidecar": sidecar_chk,
     "xml": to_xml,
-    "fixsix":fixsix,
+    "sixfix":sixfix,
 }
 
 
