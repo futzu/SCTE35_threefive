@@ -289,15 +289,16 @@ class XmlParser:
         stuff = {"descriptors": []}
         data = exemel.replace("\n", "").strip()
         while ">" in data:
-            self.mk_active(data)
-            data, stuff = self._parse_nodes(data, stuff, descriptor_parse)
+            if data.startswith("<!--"):
+                data = self._skip_comment(data)
+            else:
+                self.mk_active(data)
+                data, stuff = self._parse_nodes(data, stuff, descriptor_parse)
         return stuff
 
     def _parse_nodes(self, data, stuff, descriptor_parse=False):
         if self.active in self.DESCRIPTORS and not descriptor_parse:
             data, stuff = self._parse_descriptor(data, stuff)
-        elif self.active == "!--":
-            data = self._skip_comment(data)
         else:
             data, stuff = self._parse_most(data, stuff)
         return data, stuff
