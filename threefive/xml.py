@@ -58,6 +58,9 @@ def val2xml(val):
         return str(val).lower()
     if isinstance(val, (int, float)):
         return str(val)
+    if isinstance(val,str):
+        if val.lower()[:2]=="0x":
+            return str(int(val,16))
     return escape(val)
 
 
@@ -273,6 +276,7 @@ class XmlParser:
         mk_attrs parses the current node for attributes
         and stores them in self.stuff[self.active]
         """
+        node= node.replace("='",'="').replace("' ",'" ')
         attrs = [x for x in node.split(" ") if "=" in x]
         parsed = {
             x.split('="')[0]: unescape(x.split('="')[1].split('"')[0])
@@ -288,11 +292,8 @@ class XmlParser:
         stuff = {"descriptors": []}
         data = exemel.replace("\n", "").strip()
         while ">" in data:
-            if data.startswith("<!--"):
-                data = self._skip_comment(data)
-            else:
-                self.mk_active(data)
-                data, stuff = self._parse_nodes(data, stuff, descriptor_parse)
+            self.mk_active(data)
+            data, stuff = self._parse_nodes(data, stuff, descriptor_parse)
         return stuff
 
     def _parse_nodes(self, data, stuff, descriptor_parse=False):
@@ -335,10 +336,10 @@ class XmlParser:
         stuff["descriptors"].append(self.parse(sub_data, descriptor_parse=True))
         return data, stuff
 
-    def _skip_comment(self, data):
-        """
-        _skip_comment skips active XML comment and following spaces
-        """
-        # also skips whitespace up to the next character (or EOF)
-        data = data[data.index("-->") + 3 :].strip()
-        return data
+##    def _skip_comment(self, data):
+##        """
+##        _skip_comment skips active XML comment and following spaces
+##        """
+##        # also skips whitespace up to the next character (or EOF)
+##        data = data[data.index("-->") + 3 :].strip()
+##        return data
