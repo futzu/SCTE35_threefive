@@ -200,6 +200,6 @@ class SpliceInfoSection(SCTE35Base):
         covrt = ["tier"]
         short = stuff["SpliceInfoSection"]
         for v in covrt:
-            if isinstance(short[v], int):
+            if v in short and isinstance(short[v], int):
                 short[v] = hex(short[v])
             self.load(short)
