@@ -55,7 +55,7 @@ class Upid:
         ud_attrs = {
             "segmentation_upid_type": self.upid_type,
             "segmentation_upid_format": "hexbinary",
-            "segmentation_upid_length": self.upid_length,
+           # "segmentation_upid_length": self.upid_length,
         }
         return Node("SegmentationUpid", attrs=ud_attrs, value=self.upid_value)
 
@@ -112,6 +112,7 @@ class AirId(Upid):
         """
         encode AirId
         """
+        self.upid_length = len(self.upid_value)-2
         nbin.add_hex(self.upid_value, (self.upid_length << 3))
 
     def xml(self):
@@ -121,10 +122,17 @@ class AirId(Upid):
         ud_attrs = {
             "segmentation_upid_type": self.upid_type,
             "segmentation_upid_format": "hexbinary",
-            "segmentation_upid_length": self.upid_length,
+          #  "segmentation_upid_length": self.upid_length,
         }
-        return Node("SegmentationUpid", attrs=ud_attrs, value=str(self.upid_value))
+        return Node("SegmentationUpid", attrs=ud_attrs, value=self.upid_value)
 
+    def from_xml(self,stuff):
+        """
+        from_xml loads a upid
+        from parsed xml data
+        """
+        if "segmentationUpid" in stuff:
+            self.load(stuff["segmentationUpid"])
 
 class Atsc(Upid):
     """
@@ -216,6 +224,7 @@ class Isan(Upid):
         """
         encode Isan Upid
         """
+        self.upid_length = len(self.upid_value)-2        
         nbin.add_hex(self.upid_value, (self.upid_length << 3))
 
 
@@ -325,7 +334,7 @@ class Mpu(Upid):
         ud_attrs = {
             "segmentation_upid_type": hex(self.upid_type),
             "segmentation_upid_format": "hexbinary",
-            "segmentation_upid_length": self.upid_length,
+         #   "segmentation_upid_length": self.upid_length,
         }
         return Node("SegmentationUpid", attrs=ud_attrs, value=self.upid_value.decode())
 
