@@ -273,14 +273,13 @@ class XmlParser:
         mk_attrs parses the current node for attributes
         and stores them in self.stuff[self.active]
         """
-        if "<!--" not in node:
-            attrs = [x for x in node.split(" ") if "=" in x]
-            parsed = {
-                x.split('="')[0]: unescape(x.split('="')[1].split('"')[0])
-                for x in attrs
-            }
-            it = iter_attrs(parsed)
-            return it
+        attrs = [x for x in node.split(" ") if "=" in x]
+        parsed = {
+            x.split('="')[0]: unescape(x.split('="')[1].split('"')[0])
+            for x in attrs
+        }
+        it = iter_attrs(parsed)
+        return it
 
     def parse(self, exemel, descriptor_parse=False):
         """
