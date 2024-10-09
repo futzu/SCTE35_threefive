@@ -154,6 +154,9 @@ class Node:
             child.depth = self.depth + 1
 
     def get_indent(self):
+        """
+        get_indent returns a string of spaces the required depth for a node
+        """
         tab = "   "
         return tab * self.depth
 
@@ -194,6 +197,28 @@ class Node:
 
 
 class Comment(Node):
+    """
+    The Comment class is to create a Node representing a xml comment.
+
+    An instance of Comment has:
+
+        name :      <!-- name -->
+        depth:      tab depth for printing (automatically set)
+
+    Since Comment is a Node, it also has attrs, value and children but
+    these are ignored. cf etree.Comment
+    Use like this:
+
+        from threefive.xml import Comment, Node
+
+        n = Node('root')
+        c = Comment('my first comment')
+
+        n.add_child(c)
+        print(n)
+
+    See also Node.add_comment:
+    """
     def mk(self, obj=None):
         if obj is None:
             obj = self
@@ -202,16 +227,17 @@ class Comment(Node):
 
 
 class XmlParser:
+    """
+    XmlParser is for parsing
+    a SCTE-35 Cue from  xml.
+    """
+
     DESCRIPTORS = [
         "AvailDescriptor",
         "DTMFDescriptor",
         "SegmentationDescriptor",
         "TimeDescriptor",
     ]
-    """
-    XmlParser is for parsing
-    a SCTE-35 Cue from  xml.
-    """
 
     def __init__(self):
         self.active = None
