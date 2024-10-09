@@ -138,7 +138,7 @@ class Node:
         self.value = escape(value)
         self.attrs = attrs
         self.children = []
-        self.depth = None
+        self.depth = 0
 
     def __repr__(self):
         return self.mk()
@@ -148,8 +148,6 @@ class Node:
         set_depth is used to format
         tabs in output
         """
-        if not self.depth:
-            self.depth = 0
         for child in self.children:
             child.depth = self.depth + 1
 
