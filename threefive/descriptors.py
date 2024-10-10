@@ -373,8 +373,6 @@ class SegmentationDescriptor(SpliceDescriptor):
         the_upid = self.mk_the_upid(bitbin)
         self.segmentation_upid_type_name, self.segmentation_upid = the_upid.decode()
         self.segmentation_type_id = bitbin.as_int(8)
-        if self.segmentation_type_id in table22:
-            self.segmentation_message = table22[self.segmentation_type_id]
         self._decode_segments(bitbin)
 
     def _chk_sub_segments(self):
@@ -446,12 +444,15 @@ class SegmentationDescriptor(SpliceDescriptor):
     def _encode_segmentation(self, nbin):
         if self.segmentation_duration_flag:
             nbin.add_int(self.as_ticks(self.segmentation_duration), 40)
-        self._chk_var(int, nbin.add_int, "segmentation_upid_type", 8)
-        self._chk_var(int, nbin.add_int, "segmentation_upid_length", 8)
-        upid_type = self.segmentation_upid_type
         the_upid = self.mk_the_upid()
         the_upid.upid_value = self.segmentation_upid
         the_upid.encode(nbin)
+        if the_upid.upid_length:
+            self.segmentation_upid_length= the_upid.upid_length
+        self._chk_var(int, nbin.add_int, "segmentation_upid_type", 8)
+        self._chk_var(int, nbin.add_int, "segmentation_upid_length", 8)
+        upid_type = self.segmentation_upid_type
+
         self._chk_var(int, nbin.add_int, "segmentation_type_id", 8)
         self._encode_segments(nbin)
 
@@ -530,14 +531,17 @@ class SegmentationDescriptor(SpliceDescriptor):
                 self.load(stuff["DeliveryRestrictions"])
                 self.device_restrictions = table20[self.device_restrictions]
             self.segmentation_event_id = hex(self.segmentation_event_id)
-            self.segmentation_message=table22[self.segmentation_type_id]
-            self.segmentation_upid_length = 0 #?
-            self.segmentation_upid_type = 0 #?
+            if self.segmentation_type_id in table22:
+                self.segmentation_message=table22[self.segmentation_type_id]
+            if not self.segmentation_upid_length:
+                self.segmentation_upid_length = 0 #?
+                self.segmentation_upid_type = 0 #?
             if "SegmentationUpid" in stuff:
                 self.load(stuff["SegmentationUpid"])
                 upid_length = upid_map[self.segmentation_upid_type][2]
                 if upid_length:
                     self.segmentation_upid_length = upid_length
+
             self._chk_sub_segments()
 
 
