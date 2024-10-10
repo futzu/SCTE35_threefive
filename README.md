@@ -70,12 +70,13 @@ a@slow:~/threefive$
 
 * [__threefive On The Command Line__](https://github.com/futzu/scte35parser-threefive/blob/master/cli.md)
      * [Decode](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#parse) __SCTE-35 Strings and MPEGTS__
+     * [Sixfix](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#sixfix) __Fix SCTE-35 stremss mangled by Ffmpeg__ (bin data)
+     * [XML](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#xml) __for SCTE-35 Data and MPEGTS streams__ 
      * [Print](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#show) __MPEGTS Stream__ information
      * [Print](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#pts) __PTS__ from MPEGTS Streams
      * [Print](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#packets) __Raw SCTE-35 packets__
      * [Create](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#sidecar) SCTE-35 __Sidecar files__ from MPEGTS
-     * [Encode](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#encode) __JSON to SCTE-35__
-     * [Convert](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#convert) __SCTE-35 Formats__ 
+     * [Encode](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#encode) __JSON or Xml to SCTE-35__
 
 * [__Parse SCTE-35 programmatically__](https://github.com/futzu/scte35parser-threefive/blob/master/prog.md) with __threefive__ </i>(write some code)</i>
      * SCTE-35 code [__Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
