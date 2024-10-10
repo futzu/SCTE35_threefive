@@ -335,11 +335,3 @@ class XmlParser:
         data = data.replace(sub_data, "")
         stuff["descriptors"].append(self.parse(sub_data, descriptor_parse=True))
         return data, stuff
-
-##    def _skip_comment(self, data):
-##        """
-##        _skip_comment skips active XML comment and following spaces
-##        """
-##        # also skips whitespace up to the next character (or EOF)
-##        data = data[data.index("-->") + 3 :].strip()
-##        return data
