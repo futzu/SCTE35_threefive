@@ -3,7 +3,7 @@
 
 * [Help](#help) Display threefive help
 * [Parse](#parse) Decode SCTE-35 Strings and MPEGTS
-* [sixfix][(#sixfix) sixfix changes Ffmpeg bin data back to SCTE-35. 
+* [sixfix](#sixfix) sixfix changes Ffmpeg bin data back to SCTE-35. 
 * [Version](#version) Display threefive version
 * [Show](#show)  Show MPEGTS Stream information
 * [PTS](#pts) Print PTS from MPEGTS Streams
@@ -116,26 +116,6 @@ a@fu:~$ threefive pts /home/a/msnbc.ts
 * As with all threefive, this works with local, http(s), UDP , and Multicast sources.
 
 
-* cli sixfix
----
-* Input file is sixed.ts
-
-```js
-  a@fu:~/build/SCTE35_threefive$ ffprobe -hide_banner sixed.ts                                                                   
-Input #0, mpegts, from 'sixed.ts':
-
-  Stream #0:0[0x100]: Video: h264 (Main) ([27][0][0][0] / 0x001B), yuv420p(tv, progressive), 640x360 [SAR 1:1 DAR 16:9], 29.97 fps, 29.97 tbr, 90k tbn
-  Stream #0:1[0x101](und): Audio: aac (LC) ([15][0][0][0] / 0x000F), 48000 Hz, stereo, fltp, 64 kb/s
-  Stream #0:2[0x102]: Data: bin_data ([6][0][0][0] / 0x0006) <------ Bin Data
-  Stream #0:3[0x103]: Data: timed_id3 (ID3  / 0x20334449)
-```
-* Run sixfix# sixfix
-* ffmpeg changes SCTE-35 streams types to 0x6 bin data. sixfix will convert the bin data back to SCTE-35.
-* The new file name is prefixed with 'fixed'.
-* As with all threefive, this works with local, http(s), UDP , and Multicast sources.
-
-
-* cli sixfix
 ---
 * Input file is sixed.ts
 
