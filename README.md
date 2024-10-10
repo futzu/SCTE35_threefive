@@ -1,4 +1,4 @@
-### threefive v2.4.71. is now available.  [Some of the new features in threefive v2.4.71](https://github.com/futzu/SCTE35-threefive/blob/master/new2471.md)
+### threefive v2.4.71. is now available.  [What's new in threefive v2.4.71](https://github.com/futzu/SCTE35-threefive/blob/master/new2471.md)
 
 # threefive is The Industry Leading SCTE-35 Decoder and Encoder.
 
