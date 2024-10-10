@@ -23,7 +23,7 @@ pypy3: clean
 	$(PYPY3) setup.py install	
 
 install: clean pkg
-	$(PY3)  setup.py install
+	$(PY3)  setup.py install --user
 
 pkg: clean
 	$(PY3) setup.py sdist bdist_wheel
