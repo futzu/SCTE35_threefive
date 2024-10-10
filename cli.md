@@ -11,7 +11,6 @@
 * [PTS](#pts) Print PTS from MPEGTS Streams
 * [Packets](#packets) Print Raw SCTE-35 packets
 * [Sidecar](#sidecar) Create SCTE-35 sidecar files from MPEGTS
-* [Convert](#convert) SCTE-35 Formats (Base64 to Hex, etc...)
 
 
 ## `Help`
