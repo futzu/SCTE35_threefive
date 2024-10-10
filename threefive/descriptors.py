@@ -443,15 +443,19 @@ class SegmentationDescriptor(SpliceDescriptor):
 
     def _encode_segmentation(self, nbin):
         if self.segmentation_duration_flag:
-            nbin.add_int(self.as_ticks(self.segmentation_duration), 40)
-        the_upid = self.mk_the_upid()
-        the_upid.upid_value = self.segmentation_upid
-        the_upid.encode(nbin)
-        if the_upid.upid_length:
-            self.segmentation_upid_length= the_upid.upid_length
+            if not self.segmentation_duration_ticks:
+                self.segmentation_duration_ticks = 0
+            if self.segmentation_duration:
+                self.segmentation_duration_ticks = self.as_ticks(
+                    self.segmentation_duration
+                )
+            self._chk_var(int, nbin.add_int, "segmentation_duration_ticks", 40)
         self._chk_var(int, nbin.add_int, "segmentation_upid_type", 8)
         self._chk_var(int, nbin.add_int, "segmentation_upid_length", 8)
-        upid_type = self.segmentation_upid_type
+        upid_type=self.segmentation_upid_type
+        the_upid =upid_map[upid_type][1](None,upid_type,self.segmentation_upid_length)
+        the_upid.upid_value=self.segmentation_upid
+        the_upid.encode(nbin)
 
         self._chk_var(int, nbin.add_int, "segmentation_type_id", 8)
         self._encode_segments(nbin)
