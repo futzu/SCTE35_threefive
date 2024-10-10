@@ -26,16 +26,16 @@
 
 
 # Documentation
-## Head's Up pip install not available, use make instead.
 
 ### Install
-* 2FA has me locked out of my pypi account, I cannot upload a pip package.
-* follow these steps to install.
-
-1) Install setup-tools and pyAES and new_reader      `python3 -mpip install setup-tools pyAES new_reader`
-2) clone the repo.  `git clone https://github.com/futzu/threefive`
-3) in the threefive directory,  `make install`
-
+* python3
+```py3
+python3 -mpip install threefive
+```
+* pypy3
+```py3
+pypy3 -mpip install threefive
+```
 
 * [Fast Start](https://github.com/futzu/SCTE35-threefive/blob/master/FastStart.md)
 
