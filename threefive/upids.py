@@ -12,6 +12,8 @@ cyclomatic complexity 1.65625
 
 from .xml import Node
 from .bitn import NBin
+from .base import SCTE35Base
+
 
 charset = "ascii"  # this isn't a constant pylint.
 
@@ -20,7 +22,7 @@ set charset to None to return raw bytes
 """
 
 
-class Upid:
+class Upid(SCTE35Base):
     """
     Upid base class handles URI UPIDS
     """
@@ -46,6 +48,7 @@ class Upid:
         """
         if self.upid_value:
             self.upid_value = self.upid_value.encode("utf8")
+            self.upid_length=len(self.upid_value)
             nbin.add_bites(self.upid_value)
 
     def xml(self):
@@ -159,6 +162,7 @@ class Atsc(Upid):
         nbin.add_int(self.upid_value["reserved"], 2)
         nbin.add_int(self.upid_value["end_of_day"], 5)
         nbin.add_int(self.upid_value["unique_for"], 9)
+        self.upid_length= len(self.upid_value["content_id"])+4
         nbin.add_bites(self.upid_value["content_id"].encode("utf-8"))
 
 
@@ -324,6 +328,7 @@ class Mpu(Upid):
         nbin.add_bites(fm)
         bit_len -= 32
         nbin.add_hex(self.upid_value["private_data"], bit_len)
+        self.upid_length= len(self.upid_value["private_data"])+4
 
     def xml(self):
         nbin =  NBin()
@@ -368,19 +373,19 @@ upid_map = {
     0x01: ["Deprecated", Upid,False],
     0x02: ["Deprecated", Upid,8],
     0x03: ["AdID", Upid, 12],
-    0x04: ["UMID", Umid,12],
+    0x04: ["UMID", Umid,32],
     0x05: ["ISAN", Isan,8],
     0x06: ["ISAN", Isan,12],
     0x07: ["TID", Upid,12],
     0x08: ["AiringID", AirId,8],
     0x09: ["ADI", Upid, False],
-    0x10: ["UUID", Upid, 16],
-    0x11: ["SCR", Upid, False],
     0x0A: ["EIDR", Eidr,12],
     0x0B: ["ATSC", Atsc,False],
     0x0C: ["MPU", Mpu, False],
     0x0D: ["MID", Mid, False],
     0x0E: ["ADS Info", Upid,False],
     0x0F: ["URI", Upid, False],
-    0xFD: ["Unknown", Upid, False],
+    0x10: ["UUID", Upid, 16],
+    0x11: ["SCR", Upid, False],
+    0xFD: ["Unknown", Upid],
 }
