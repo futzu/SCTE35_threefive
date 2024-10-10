@@ -3,6 +3,7 @@
 
 * [Help](#help) Display threefive help
 * [Parse](#parse) Decode SCTE-35 Strings and MPEGTS
+* [sixfix][(#sixfix) sixfix changes Ffmpeg bin data back to SCTE-35. 
 * [Version](#version) Display threefive version
 * [Show](#show)  Show MPEGTS Stream information
 * [PTS](#pts) Print PTS from MPEGTS Streams
@@ -109,6 +110,58 @@ a@fu:~$ threefive pts /home/a/msnbc.ts
 1-> 3164.576089
 ```
 ---
+## sixfix
+* ffmpeg changes SCTE-35 streams types to 0x6 bin data. sixfix will convert the bin data back to SCTE-35.
+* The new file name is prefixed with 'fixed'.
+* As with all threefive, this works with local, http(s), UDP , and Multicast sources.
+
+
+* cli sixfix
+---
+* Input file is sixed.ts
+
+```js
+  a@fu:~/build/SCTE35_threefive$ ffprobe -hide_banner sixed.ts                                                                   
+Input #0, mpegts, from 'sixed.ts':
+
+  Stream #0:0[0x100]: Video: h264 (Main) ([27][0][0][0] / 0x001B), yuv420p(tv, progressive), 640x360 [SAR 1:1 DAR 16:9], 29.97 fps, 29.97 tbr, 90k tbn
+  Stream #0:1[0x101](und): Audio: aac (LC) ([15][0][0][0] / 0x000F), 48000 Hz, stereo, fltp, 64 kb/s
+  Stream #0:2[0x102]: Data: bin_data ([6][0][0][0] / 0x0006) <------ Bin Data
+  Stream #0:3[0x103]: Data: timed_id3 (ID3  / 0x20334449)
+```
+* Run sixfix# sixfix
+* ffmpeg changes SCTE-35 streams types to 0x6 bin data. sixfix will convert the bin data back to SCTE-35.
+* The new file name is prefixed with 'fixed'.
+* As with all threefive, this works with local, http(s), UDP , and Multicast sources.
+
+
+* cli sixfix
+---
+* Input file is sixed.ts
+
+```js
+  a@fu:~/build/SCTE35_threefive$ ffprobe -hide_banner sixed.ts                                    
+Input #0, mpegts, from 'sixed.ts':                                                                                  
+  Stream #0:0[0x100]: Video: h264 (Main) ([27][0][0][0] / 0x001B), yuv420p(tv, progressive), 640x360 [SAR 1:1 DAR 16:9], 29.97 fps, 29.97 tbr, 90k tbn
+  Stream #0:1[0x101](und): Audio: aac (LC) ([15][0][0][0] / 0x000F), 48000 Hz, stereo, fltp, 64 kb/s
+  Stream #0:2[0x102]: Data: bin_data ([6][0][0][0] / 0x0006) <------ Bin Data
+  Stream #0:3[0x103]: Data: timed_id3 (ID3  / 0x20334449)
+```
+* Run  threefive sixfix
+```js
+a@fu:~/build/SCTE35_threefive$ ./threefive sixfix sixed.ts
+```
+* output file  is named fixed-sixed.ts
+```js
+a@fu:~/build/SCTE35_threefive$ ffprobe -hide_banner fixed-sixed.ts                            
+Input #0, mpegts, from 'fixed-sixed.ts':                                                                            
+  Stream #0:0[0x100]: Video: h264 (Main) ([27][0][0][0] / 0x001B), yuv420p(tv, progressive), 640x360 [SAR 1:1 DAR 16:9], 29.97 fps, 29.97 tbr, 90k tbn
+  Stream #0:1[0x101](und): Audio: aac (LC) ([15][0][0][0] / 0x000F), 48000 Hz, stereo, fltp, 64 kb/s
+  Stream #0:2[0x102]: Data: scte_35       <------------ fixed
+  Stream #0:3[0x103]: Data: timed_id3 (ID3  / 0x20334449)
+```
+---
+
 ## `Packets`
 
 * keyword `packets` - show raw SCTE-35 packets
@@ -220,6 +273,11 @@ a@fu:~$ cat json.txt | threefive encode int
 a@fu:~$ cat json.txt | threefive encode bytes
 b'\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00Re\xc0\x00\x00gS\xc1D'
 ```
+* Re-encode as Xml
+```lua
+cat json.txt | threefive encode xml
+
+```
 
 ___
 ## `Convert`
@@ -229,24 +287,27 @@ ___
 * `From`:
   * Base64
   * Hex
+  * Json
+  * Xml
 * `To`
   * Base64
   * Bytes
   * Hex
-  * Int 
+  * Int
+  * Json
+  * Xml 
 
 * `Base64` to `hex`
 ```js
-a@fu:~$ threefive '/DAWAAAAAAAAAP/wBQb+ABt4xwAAwhCGHw==' 2>&1 | threefive encode hex
+a@fu:~$ prinf '/DAWAAAAAAAAAP/wBQb+ABt4xwAAwhCGHw==' | threefive encode hex
 ```
 ```js
 0xfc301600000000000000fff00506fe001b78c70000c210861f
 ```
 * `Hex` to `Integer`
 ```js
-a@fu:~$ threefive '0xfc301600000000000000fff00506fe001b78c70000c210861f' 2>&1| threefive encode int
+a@fu:~$ printf '0xfc301600000000000000fff00506fe001b78c70000c210861f'| threefive encode int
 ```
-
 ```js
 1583008701074197245727019716796221242033681613329959740278303
 ```
@@ -254,12 +315,39 @@ a@fu:~$ threefive '0xfc301600000000000000fff00506fe001b78c70000c210861f' 2>&1| t
 * `Hex` to `Bytes`
 ```js
 
-a@fu:~$ threefive '0xfc301600000000000000fff00506fe001b78c70000c210861f' 2>&1| threefive encode bytes
+a@fu:~$ printf '0xfc301600000000000000fff00506fe001b78c70000c210861f'| threefive encode bytes
 ```
 ```js
 b'\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00\x1bx\xc7\x00\x00\xc2\x10\x86\x1f'
 ```
 
+* base64 to hex
+```py3
+  printf '/DBAAAGRZOeYAAAABQb+hJ8vqAAqAihDVUVJ/////3//AAAbX9ABFG1zbmJjX0VQMDQzMTEyMjEwNTU2EQEAbABeoQ==' |threefive encode hex
+```
+* hex to base64
+```py3
+printf 0xfc302500000000000000fff014050000013f7fefffffc3f680fe00a4cb80013f0000000063394f9c|  threefive encode 
+```
+* xml to base64
+ ```py3
+cat xml.xml | threefive encode
+```
+* xml to hex
+ ```py3
+cat xml.xml | threefive encode hex
+```
+* json to xml
+```py3
+cat json.json | threefive encode xml
+```
+* xml to json
+```py3
+cat xml.xml | threefive encode json
+```
+* xml to bytes
+```py3
+cat xml.xml | threefive encode bytes
 ---
 
 
