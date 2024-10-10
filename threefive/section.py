@@ -187,8 +187,8 @@ class SpliceInfoSection(SCTE35Base):
             "xmlns": "https://scte.org/schemas/35",
             "pts_adjustment": self.as_ticks(self.pts_adjustment),
             "protocol_version": self.protocol_version,
-            "sap_type": int(self.sap_type, base=16),
-            "tier": int(self.tier, base=16),
+            "sap_type":self.sap_type,
+            "tier": self.tier,
         }
         sis = Node("SpliceInfoSection", attrs=sis_attrs)
         return sis
@@ -197,9 +197,5 @@ class SpliceInfoSection(SCTE35Base):
         """
         from_xml SpliceInfoSection from Xml
         """
-        covrt = ["tier"]
         short = stuff["SpliceInfoSection"]
-        for v in covrt:
-            if v in short and isinstance(short[v], int):
-                short[v] = hex(short[v])
-            self.load(short)
+        self.load(short)
