@@ -487,26 +487,17 @@ class SegmentationDescriptor(SpliceDescriptor):
                 self.segmentation_duration
             )
         sd = Node("SegmentationDescriptor", attrs=sd_attrs)
-        # sd.add_comment(f'{table22[self.segmentation_type_id]}') # Called in cue.py
         the_upid = self.mk_the_upid()
         the_upid.upid_value = self.segmentation_upid
         upid_node = the_upid.xml()
         if not self.delivery_not_restricted_flag:
-            sd.add_child(
-                Node(
-                    "DeliveryRestrictions",
-                    attrs={
-                        "web_delivery_allowed_flag": self.web_delivery_allowed_flag,
-                        "no_regional_blackout_flag": self.no_regional_blackout_flag,
-                        "archive_allowed_flag": self.archive_allowed_flag,
-                        "device_restrictions": k_by_v(
-                            table20, self.device_restrictions
-                        ),
-                    },
-                )
-            )
+            dr_attrs={"web_delivery_allowed_flag": self.web_delivery_allowed_flag,
+                    "no_regional_blackout_flag": self.no_regional_blackout_flag,
+                    "archive_allowed_flag": self.archive_allowed_flag,
+                    "device_restrictions": k_by_v(table20, self.device_restrictions),}
+            dr= Node("DeliveryRestrictions",attrs=dr_attrs)
+            sd.add_child(dr)
         sd.add_comment(f"UPID: {upid_map[self.segmentation_upid_type][0]}")
-
         if isinstance(upid_node, list):
             for node in upid_node:
                 sd.add_child(node)
@@ -539,6 +530,7 @@ class SegmentationDescriptor(SpliceDescriptor):
             if "SegmentationUpid" in stuff:
                 self.load(stuff["SegmentationUpid"])
                 upid_length = upid_map[self.segmentation_upid_type][2]
+                self.segmentation_upid_type_name = upid_map[self.segmentation_upid_type][0]
                 if upid_length:
                     self.segmentation_upid_length = upid_length
 
