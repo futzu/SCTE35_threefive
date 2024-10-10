@@ -530,11 +530,14 @@ class SegmentationDescriptor(SpliceDescriptor):
                 self.load(stuff["DeliveryRestrictions"])
                 self.device_restrictions = table20[self.device_restrictions]
             self.segmentation_event_id = hex(self.segmentation_event_id)
-            self.segmentation_upid_length = 0
-            self.segmentation_upid_type = 0
+            self.segmentation_message=table22[self.segmentation_type_id]
+            self.segmentation_upid_length = 0 #?
+            self.segmentation_upid_type = 0 #?
             if "SegmentationUpid" in stuff:
                 self.load(stuff["SegmentationUpid"])
-            #  self.segmentation_upid_length = len(self.segmentation_upid.strip("0x"))
+                upid_length = upid_map[self.segmentation_upid_type][2]
+                if upid_length:
+                    self.segmentation_upid_length = upid_length
             self._chk_sub_segments()
 
 
