@@ -1,16 +1,6 @@
- # threefive v2.4.71.  Thursday. 
-
-
-
-_"threefive, what are your thoughts when facing an opponent?"_ 
-<br><br>
- _"I have no opponent."_
-<br>
-
-
+### threefive v2.4.71. is now available.  [Some of the new features in threefive v2.4.71](https://github.com/futzu/SCTE35-threefive/blob/master/new2471.md)
 
 # threefive is The Industry Leading SCTE-35 Decoder and Encoder.
-
 
 <br>
 
@@ -28,7 +18,11 @@ _"threefive, what are your thoughts when facing an opponent?"_
  `Heads Up!`  [Experimental Dash SCTE-214 Support Expected in Release v2.4.71](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md) (_updated 9/26/2024_)
 
 
-# Latest __threefive__ version is `2`.`4`.`69`
+# Latest __threefive__ version is `2`.`4`.`71`
+ * Experimental __XML__ and __DASH__  Support
+ * __sixfix__ converts ffmpeg bin data streams back to SCTE-35
+ * __threefive__ cli tool enhancements.
+
 
 
 # Documentation
