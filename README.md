@@ -29,9 +29,13 @@
 
 <details><summary>Install</summary>
 
-* install threefive with pip
+* <s>install threefive with pip</s>
+* 2FA has me locked out of my pypi account, I cannot upload a pip package.
+1) Install setup-tools and pyAES and new_reader      `python3 -mpip install setup-tools pyAES new_reader`
+2) clone the repo.  `git clone https://github.com/futzu/threefive`
+3) in the threefive directory, as root,  `make install`
 * threefive has two third party package dependencies and I wrote one of them.
-* pip will automatically install PyAES and [new_reader](https://github.com/futzu/new_reader) 
+* <s>pip will automatically install PyAES and [new_reader](https://github.com/futzu/new_reader) </s>
 
 ```smalltalk
 python3 -mpip install --upgrade threefive
