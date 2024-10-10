@@ -55,7 +55,6 @@ class Upid:
         ud_attrs = {
             "segmentation_upid_type": self.upid_type,
             "segmentation_upid_format": "hexbinary",
-           # "segmentation_upid_length": self.upid_length,
         }
         return Node("SegmentationUpid", attrs=ud_attrs, value=self.upid_value)
 
@@ -122,7 +121,6 @@ class AirId(Upid):
         ud_attrs = {
             "segmentation_upid_type": self.upid_type,
             "segmentation_upid_format": "hexbinary",
-          #  "segmentation_upid_length": self.upid_length,
         }
         return Node("SegmentationUpid", attrs=ud_attrs, value=self.upid_value)
 
@@ -224,7 +222,7 @@ class Isan(Upid):
         """
         encode Isan Upid
         """
-        self.upid_length = len(self.upid_value)-2        
+        self.upid_length = len(self.upid_value)-2
         nbin.add_hex(self.upid_value, (self.upid_length << 3))
 
 
@@ -334,7 +332,6 @@ class Mpu(Upid):
         ud_attrs = {
             "segmentation_upid_type": hex(self.upid_type),
             "segmentation_upid_format": "hexbinary",
-         #   "segmentation_upid_length": self.upid_length,
         }
         return Node("SegmentationUpid", attrs=ud_attrs, value=self.upid_value.decode())
 
@@ -367,23 +364,23 @@ class Umid(Upid):
 
 
 upid_map = {
-    0x00: ["No UPID", NoUpid],
-    0x01: ["Deprecated", Upid],
-    0x02: ["Deprecated", Upid],
-    0x03: ["AdID", Upid],
-    0x04: ["UMID", Umid],
-    0x05: ["ISAN", Isan],
-    0x06: ["ISAN", Isan],
-    0x07: ["TID", Upid],
-    0x08: ["AiringID", AirId],
-    0x09: ["ADI", Upid],
-    0x10: ["UUID", Upid],
-    0x11: ["SCR", Upid],
-    0x0A: ["EIDR", Eidr],
-    0x0B: ["ATSC", Atsc],
-    0x0C: ["MPU", Mpu],
-    0x0D: ["MID", Mid],
-    0x0E: ["ADS Info", Upid],
-    0x0F: ["URI", Upid],
-    0xFD: ["Unknown", Upid],
+    0x00: ["No UPID", NoUpid,0],
+    0x01: ["Deprecated", Upid,False],
+    0x02: ["Deprecated", Upid,8],
+    0x03: ["AdID", Upid, 12],
+    0x04: ["UMID", Umid,12],
+    0x05: ["ISAN", Isan,8],
+    0x06: ["ISAN", Isan,12],
+    0x07: ["TID", Upid,12],
+    0x08: ["AiringID", AirId,8],
+    0x09: ["ADI", Upid, False],
+    0x10: ["UUID", Upid, 16],
+    0x11: ["SCR", Upid, False],
+    0x0A: ["EIDR", Eidr,12],
+    0x0B: ["ATSC", Atsc,False],
+    0x0C: ["MPU", Mpu, False],
+    0x0D: ["MID", Mid, False],
+    0x0E: ["ADS Info", Upid,False],
+    0x0F: ["URI", Upid, False],
+    0xFD: ["Unknown", Upid, False],
 }
