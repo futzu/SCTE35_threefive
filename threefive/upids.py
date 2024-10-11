@@ -12,8 +12,6 @@ cyclomatic complexity 1.65625
 
 from .xml import Node
 from .bitn import NBin
-from .base import SCTE35Base
-
 
 charset = "ascii"  # this isn't a constant pylint.
 
@@ -22,7 +20,7 @@ set charset to None to return raw bytes
 """
 
 
-class Upid(SCTE35Base):
+class Upid:
     """
     Upid base class handles URI UPIDS
     """
@@ -48,7 +46,6 @@ class Upid(SCTE35Base):
         """
         if self.upid_value:
             self.upid_value = self.upid_value.encode("utf8")
-            self.upid_length=len(self.upid_value)
             nbin.add_bites(self.upid_value)
 
     def xml(self):
@@ -58,6 +55,7 @@ class Upid(SCTE35Base):
         ud_attrs = {
             "segmentation_upid_type": self.upid_type,
             "segmentation_upid_format": "hexbinary",
+            "segmentation_upid_length": self.upid_length,
         }
         return Node("SegmentationUpid", attrs=ud_attrs, value=self.upid_value)
 
@@ -114,7 +112,6 @@ class AirId(Upid):
         """
         encode AirId
         """
-        self.upid_length = len(self.upid_value)-2
         nbin.add_hex(self.upid_value, (self.upid_length << 3))
 
     def xml(self):
@@ -124,16 +121,10 @@ class AirId(Upid):
         ud_attrs = {
             "segmentation_upid_type": self.upid_type,
             "segmentation_upid_format": "hexbinary",
+            "segmentation_upid_length": self.upid_length,
         }
-        return Node("SegmentationUpid", attrs=ud_attrs, value=self.upid_value)
+        return Node("SegmentationUpid", attrs=ud_attrs, value=str(self.upid_value))
 
-    def from_xml(self,stuff):
-        """
-        from_xml loads a upid
-        from parsed xml data
-        """
-        if "segmentationUpid" in stuff:
-            self.load(stuff["segmentationUpid"])
 
 class Atsc(Upid):
     """
@@ -162,7 +153,6 @@ class Atsc(Upid):
         nbin.add_int(self.upid_value["reserved"], 2)
         nbin.add_int(self.upid_value["end_of_day"], 5)
         nbin.add_int(self.upid_value["unique_for"], 9)
-        self.upid_length= len(self.upid_value["content_id"])+4
         nbin.add_bites(self.upid_value["content_id"].encode("utf-8"))
 
 
@@ -226,7 +216,6 @@ class Isan(Upid):
         """
         encode Isan Upid
         """
-        self.upid_length = len(self.upid_value)-2
         nbin.add_hex(self.upid_value, (self.upid_length << 3))
 
 
@@ -328,7 +317,6 @@ class Mpu(Upid):
         nbin.add_bites(fm)
         bit_len -= 32
         nbin.add_hex(self.upid_value["private_data"], bit_len)
-        self.upid_length= len(self.upid_value["private_data"])+4
 
     def xml(self):
         nbin =  NBin()
@@ -337,6 +325,7 @@ class Mpu(Upid):
         ud_attrs = {
             "segmentation_upid_type": hex(self.upid_type),
             "segmentation_upid_format": "hexbinary",
+            "segmentation_upid_length": self.upid_length,
         }
         return Node("SegmentationUpid", attrs=ud_attrs, value=self.upid_value.decode())
 
@@ -387,5 +376,5 @@ upid_map = {
     0x0F: ["URI", Upid, False],
     0x10: ["UUID", Upid, 16],
     0x11: ["SCR", Upid, False],
-    0xFD: ["Unknown", Upid],
+    0xFD: ["Unknown", Upid,False],
 }
