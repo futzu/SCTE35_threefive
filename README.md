@@ -1,4 +1,3 @@
-![image](https://github.com/user-attachments/assets/b1a05827-7650-4a87-8e97-f9a15eccfac2)
 
 
 ### threefive v2.4.75. is now available. 
@@ -27,6 +26,7 @@
  * __sixfix__ converts ffmpeg bin data streams back to SCTE-35
  * __threefive__ cli tool enhancements.
 
+![image](https://github.com/user-attachments/assets/b1a05827-7650-4a87-8e97-f9a15eccfac2)
 
 
 # Documentation
