@@ -52,33 +52,39 @@ HELP = f"""
 {GREEN}    http(s): {NORM}\tthreefive https://futzu.com/xaa.ts
 {GREEN}    udp: {NORM}\tthreefive udp://127.0.0.1:3535
 {GREEN}    multicast:{NORM}\tthreefive udp://@235.35.3.5:3535
-   
+
 {REV}        Keywords               {NORM}
 
    {REV}  sixfix  {NORM}{GREEN}\tFix SCTE-35 data mangled by ffmpeg:{NORM} threefive fixsix video.ts
-   
+
    {REV}  xml     {NORM} {GREEN}\tParse a Cue string or mpegts stream and output xml {NORM}
         {GREEN}\tParse base64 {NORM} threefive xml'/DAWAAAAAAAAAP/wBQb+AKmKxwAACzuu2Q=='
-        {GREEN}\tParse a Stream {NORM} threefive xml video.ts     
+        {GREEN}\tParse a Stream {NORM} threefive xml video.ts
    {REV} packets {NORM}{GREEN}\tPrint raw SCTE-35 packets from mpegts video:{NORM} threefive packets video.ts
-   
+
    {REV} show    {NORM}{GREEN}\tProbe mpegts video:{NORM}     threefive show video.ts
-   
+
    {REV} pts     {NORM} {GREEN}\tPrint PTS from mpegts video{NORM}    threefive pts video.ts
-   
+
    {REV} proxy   {NORM} {GREEN}\tParse a stream, write raw video to stdout {NORM} threefive proxy https://example.com/video.ts
-   
+
    {REV} sidecar {NORM}{GREEN}\tParse a stream, write pts,write SCTE-35 Cues to sidecar.txt:{NORM}  threefive sidecar https://example.com/video.ts
-   
+
    {REV} encode  {NORM}{GREEN}\tLoad JSON, XML, Base64 or Hex and encode to JSON,XML,Base64,Hex,Int or Bytes
-            {GREEN}\tLoad JSON to base64:{NORM}  cat json.file | threefive encode
-            {GREEN}\tLoad JSON to hex:{NORM}  cat json.file | threefive encode hex
+            {REV}\tExamples:{NORM}
+            {GREEN}\tLoad JSON to base64:{NORM}  threefive encode < json.json
+            {GREEN}\tLoad JSON to hex:{NORM} threefive encode hex  < json.json
+            {GREEN}\tLoad JSON to xml:{NORM}  threefive encode xml < json.json
             {GREEN}\tLoad xml to hex:{NORM}  cat xml.xml | threefive encode hex
-            {GREEN}\tLoad JSON to int:{NORM}  cat json.file | threefive encode int
-            {GREEN}\tLoad JSON to bytes:{NORM}  cat json.file | threefive encode bytes
-            {GREEN}\tLoad JSON to xml:{NORM}  cat json.file | threefive encode xml
+            {GREEN}\tLoad xml to base64:{NORM}  threefive encode  < xml.xml
             {GREEN}\tLoad xml to json:{NORM}  cat xml.xml | threefive encode json
-            {GREEN}\tLoad xml to hex:{NORM} cat xml.xml | threefive encode hex{WHITE}
+            {GREEN}\tBase64 to bytes:{NORM} threefive encode bytes  '/DAlAAAAAAAAAP/wFAUAAAAOf+/+FOvVwP4ApMuAAA4AAAAAzBon0A=='
+            {GREEN}\tBase64 to hex:{NORM} threefive encode hex  '/DAlAAAAAAAAAP/wFAUAAAAOf+/+FOvVwP4ApMuAAA4AAAAAzBon0A=='
+            {GREEN}\tBase64 to xml:{NORM} threefive encode xml  '/DAlAAAAAAAAAP/wFAUAAAAOf+/+FOvVwP4ApMuAAA4AAAAAzBon0A=='
+            {GREEN}\tHex to base64:{NORM} threefive encode base64 0xfc302500000000000000fff014050000000e7feffe14ebd5c0fe00a4cb80000e00000000cc1a27d0
+            {GREEN}\tHex to xml:{NORM} threefive encode xml 0xfc302500000000000000fff014050000000e7feffe14ebd5c0fe00a4cb80000e00000000cc1a27d0
+            {GREEN}\tHex to int:{NORM} threefive encode int 0xfc302500000000000000fff014050000000e7feffe14ebd5c0fe00a4cb80000e00000000cc1a27d0
+
 
    {REV} version {NORM}{GREEN}\tShow  version:{NORM} threefive version
 
@@ -141,6 +147,7 @@ def json_load():
             _ = cue.encode()
             print2(cue.get_json())
             return True
+        print2(cue.encode())
         return True
 
 
@@ -246,12 +253,10 @@ def chk_func_map():
     """
     chk_func_map checks for func_map.keys() in sys.argv
     """
-    for key in func_map.keys():
-        if key in sys.argv:
-            sys.argv.remove(key)
-            for arg in sys.argv[1:]:
-                func_map[key](arg)
-            sys.exit()
+    args = [arg for arg in sys.argv[1:] if arg not in func_map.keys()]
+    cmd = [func_map[cmd] for cmd in sys.argv[1:] if cmd not in args][0]
+    _=[cmd(arg) for arg in args]
+    sys.exit()
 
 
 if __name__ == "__main__":
