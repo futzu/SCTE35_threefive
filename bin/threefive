@@ -111,7 +111,7 @@ def print_version():
 
 
 def json_load():
-    cmdlist = ["encode", "hex", "int", "bytes", "xml", "json"]
+    cmdlist = ["base64","encode", "hex", "int", "bytes", "xml", "json"]
     json = False
     arglist = [arg for arg in sys.argv[1:] if arg not in cmdlist]
     if not arglist:
@@ -147,8 +147,12 @@ def json_load():
             _ = cue.encode()
             print2(cue.get_json())
             return True
+        if "base64" in sys.argv:
+            print2(cue.encode())
+            return True
         print2(cue.encode())
         return True
+    return False
 
 
 print_map = {
@@ -253,10 +257,12 @@ def chk_func_map():
     """
     chk_func_map checks for func_map.keys() in sys.argv
     """
-    args = [arg for arg in sys.argv[1:] if arg not in func_map.keys()]
-    cmd = [func_map[cmd] for cmd in sys.argv[1:] if cmd not in args][0]
-    _=[cmd(arg) for arg in args]
-    sys.exit()
+    for k,v in func_map.items():
+        if k in sys.argv:
+            args=[arg for arg in sys.argv[1:] if arg not in func_map.keys()]
+            for arg in args:
+                v(arg)
+            sys.exit()
 
 
 if __name__ == "__main__":
