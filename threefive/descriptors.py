@@ -135,7 +135,7 @@ class DVBDASDescriptor(SpliceDescriptor):
         nbin.forward(4)
         nbin.add_int(self.equivalent_segmentation_type, 4)
         the_upid = upid_map[self.upid_type][1](None, self.upid_type, self.upid_length)
-        the_upid.encode(nbin)
+        the_upid.encode(nbin, self.upid)
         return nbin.bites
 
 
@@ -475,8 +475,6 @@ class SegmentationDescriptor(SpliceDescriptor):
                 nbin.add_int(0, 8)
                 nbin.add_int(0, 8)
 
-
-
     def xml(self):
         """
         Create a Node describing a SegmentationDescriptor
@@ -501,11 +499,13 @@ class SegmentationDescriptor(SpliceDescriptor):
         the_upid.upid_value = self.segmentation_upid
         upid_node = the_upid.xml()
         if not self.delivery_not_restricted_flag:
-            dr_attrs={"web_delivery_allowed_flag": self.web_delivery_allowed_flag,
-                    "no_regional_blackout_flag": self.no_regional_blackout_flag,
-                    "archive_allowed_flag": self.archive_allowed_flag,
-                    "device_restrictions": k_by_v(table20, self.device_restrictions),}
-            dr= Node("DeliveryRestrictions",attrs=dr_attrs)
+            dr_attrs = {
+                "web_delivery_allowed_flag": self.web_delivery_allowed_flag,
+                "no_regional_blackout_flag": self.no_regional_blackout_flag,
+                "archive_allowed_flag": self.archive_allowed_flag,
+                "device_restrictions": k_by_v(table20, self.device_restrictions),
+            }
+            dr = Node("DeliveryRestrictions", attrs=dr_attrs)
             sd.add_child(dr)
         sd.add_comment(f"UPID: {upid_map[self.segmentation_upid_type][0]}")
         if isinstance(upid_node, list):
@@ -515,39 +515,43 @@ class SegmentationDescriptor(SpliceDescriptor):
             sd.add_child(upid_node)
         return sd
 
+    def _upid_from_xml(self, stuff):
+        if "SegmentationUpid" in stuff:
+            self.load(stuff["SegmentationUpid"])
+            upid_length = upid_map[self.segmentation_upid_type][2]
+            self.segmentation_upid_type_name = upid_map[self.segmentation_upid_type][0]
+            if upid_length:
+                self.segmentation_upid_length = upid_length
+                return True
+            if self.segmentation_upid:
+                self.segmentation_upid_length = len(
+                    self.segmentation_upid.lower().replace("0x", "")
+                )
+                return True
+            self.segmentation_upid = ""
+            self.segmentation_upid_length = 0
+        return False
+
     def from_xml(self, stuff):
         """
         Load a SegmentationDescriptor from XML
         """
-        if "SegmentationDescriptor" in stuff:
-            self.load(stuff["SegmentationDescriptor"])
-            self.segmentation_event_id_compliance_indicator = True
-            self.program_segmentation_flag = True
-            self.segmentation_duration_flag = False
-            if "segmentationDuration" in stuff["SegmentationDescriptor"]:
-                self.segmentation_duration_flag = True
-            self.delivery_not_restricted_flag = True
-            if "DeliveryRestrictions" in stuff:
-                self.delivery_not_restricted_flag = False
-                self.load(stuff["DeliveryRestrictions"])
-                self.device_restrictions = table20[self.device_restrictions]
-            self.segmentation_event_id = hex(self.segmentation_event_id)
-            if self.segmentation_type_id in table22:
-                self.segmentation_message=table22[self.segmentation_type_id]
-              #  self.segmentation_upid_type = 0 #?
-            if "SegmentationUpid" in stuff:
-                self.load(stuff["SegmentationUpid"])
-                upid_length = upid_map[self.segmentation_upid_type][2]
-                self.segmentation_upid_type_name = upid_map[self.segmentation_upid_type][0]
-                if upid_length:
-                    self.segmentation_upid_length = upid_length
-                else:
-                    if self.segmentation_upid:
-                        self.segmentation_upid_length =len(self.segmentation_upid)
-                    else:
-                        self.segmentation_upid=''
-                        self.segmentation_upid_length=0
-            self._chk_sub_segments()
+        self.load(stuff["SegmentationDescriptor"])
+        self.segmentation_event_id_compliance_indicator = True
+        self.program_segmentation_flag = True
+        self.segmentation_duration_flag = False
+        if "segmentationDuration" in stuff["SegmentationDescriptor"]:
+            self.segmentation_duration_flag = True
+        self.delivery_not_restricted_flag = True
+        if "DeliveryRestrictions" in stuff:
+            self.delivery_not_restricted_flag = False
+            self.load(stuff["DeliveryRestrictions"])
+            self.device_restrictions = table20[self.device_restrictions]
+        self.segmentation_event_id = hex(self.segmentation_event_id)
+        if self.segmentation_type_id in table22:
+            self.segmentation_message = table22[self.segmentation_type_id]
+        self._upid_from_xml(stuff)
+        self._chk_sub_segments()
 
 
 # map of known descriptors and associated classes
