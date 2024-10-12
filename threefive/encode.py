@@ -89,7 +89,7 @@ def mk_splice_insert(event_id, pts=None, duration=None, out=False):
     sin.duration_flag = False
     sin.unique_program_id = event_id
     sin.avail_num = 0
-    sin.avail_expected = 0
+    sin.avails_expected = 0
     sin.splice_immediate_flag = True
     sin.time_specified_flag = False
     sin.program_splice_flag = True
