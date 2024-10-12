@@ -364,14 +364,15 @@ class Cue(SCTE35Base):
                 xmlp = XmlParser()
                 cue_data = xmlp.parse(stuff)
                 self.from_xml(cue_data)
-                return
-
+                return True
             stuff = json.loads(stuff)
         if "command" not in stuff:
-            raise Exception("\033[7mA splice command is required\033[27m")
+            print2("\033[7mA splice command is required\033[27m")
+            return False
         self.load_info_section(stuff)
         self.load_command(stuff)
         self.load_descriptors(stuff["descriptors"])
+        return True
 
     # Dash
 
