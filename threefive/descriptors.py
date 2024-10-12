@@ -406,7 +406,6 @@ class SegmentationDescriptor(SpliceDescriptor):
         self._chk_var(
             bool, nbin.add_flag, "segmentation_event_id_compliance_indicator", 1
         )
-
         nbin.forward(6)
         if not self.segmentation_event_cancel_indicator:
             self._encode_flags(nbin)
@@ -443,32 +442,40 @@ class SegmentationDescriptor(SpliceDescriptor):
 
     def _encode_segmentation(self, nbin):
         if self.segmentation_duration_flag:
-            if not self.segmentation_duration_ticks:
-                self.segmentation_duration_ticks = 0
-            if self.segmentation_duration:
-                self.segmentation_duration_ticks = self.as_ticks(
-                    self.segmentation_duration
-                )
-            self._chk_var(int, nbin.add_int, "segmentation_duration_ticks", 40)
+            nbin.add_int(self.as_ticks(self.segmentation_duration), 40)
         self._chk_var(int, nbin.add_int, "segmentation_upid_type", 8)
-        upid_type=self.segmentation_upid_type
-        the_upid =upid_map[upid_type][1](None,upid_type,self.segmentation_upid_length)
-        the_upid.upid_value=self.segmentation_upid
-        the_upid.encode(nbin)
-
+        self._chk_var(int, nbin.add_int, "segmentation_upid_length", 8)
+        upid_type = self.segmentation_upid_type
+        if upid_type not in upid_map:
+            upid_type = 0xFD
+        the_upid = upid_map[upid_type][1](
+            None, upid_type, self.segmentation_upid_length
+        )
+        the_upid.encode(nbin, self.segmentation_upid)
         self._chk_var(int, nbin.add_int, "segmentation_type_id", 8)
         self._encode_segments(nbin)
 
     def _encode_segments(self, nbin):
         self._chk_var(int, nbin.add_int, "segment_num", 8)
         self._chk_var(int, nbin.add_int, "segments_expected", 8)
-        if self.segmentation_type_id in self.SUB_SEG_TYPES:
+        if self.segmentation_type_id in [
+            0x30,
+            0x32,
+            0x34,
+            0x36,
+            0x38,
+            0x3A,
+            0x44,
+            0x46,
+        ]:
             try:
                 self._chk_var(int, nbin.add_int, "sub_segment_num", 8)
                 self._chk_var(int, nbin.add_int, "sub_segments_expected", 8)
             except:
                 nbin.add_int(0, 8)
                 nbin.add_int(0, 8)
+
+
 
     def xml(self):
         """
@@ -527,16 +534,19 @@ class SegmentationDescriptor(SpliceDescriptor):
             self.segmentation_event_id = hex(self.segmentation_event_id)
             if self.segmentation_type_id in table22:
                 self.segmentation_message=table22[self.segmentation_type_id]
-            if not self.segmentation_upid_length:
-                self.segmentation_upid_length = 0 #?
-                self.segmentation_upid_type = 0 #?
+              #  self.segmentation_upid_type = 0 #?
             if "SegmentationUpid" in stuff:
                 self.load(stuff["SegmentationUpid"])
                 upid_length = upid_map[self.segmentation_upid_type][2]
                 self.segmentation_upid_type_name = upid_map[self.segmentation_upid_type][0]
                 if upid_length:
                     self.segmentation_upid_length = upid_length
-
+                else:
+                    if self.segmentation_upid:
+                        self.segmentation_upid_length =len(self.segmentation_upid)
+                    else:
+                        self.segmentation_upid=''
+                        self.segmentation_upid_length=0
             self._chk_sub_segments()
 
 
