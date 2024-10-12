@@ -4,7 +4,6 @@ fixsix.py
 
 import io
 import sys
-from functools import partial
 from threefive.crc import crc32
 from threefive.bitn import NBin
 from threefive.stuff import print2
@@ -12,7 +11,10 @@ from threefive.stream import Stream
 
 
 def passed(cue):
-    pass
+    """
+    passed a no-op function
+    """
+    return cue
 
 
 class PreFix(Stream):
@@ -42,6 +44,14 @@ class SixFix(Stream):
         self.out_file = "sixfixed-" + tsdata.rsplit("/")[-1]
         self.in_file = sys.stdin.buffer
 
+    def _parse_by_pid(self, pkt, pid):
+        if pid in self.pids.tables:
+            self._parse_tables(pkt, pid)
+        if pid in self.pids.pmt:
+            if self.pmt_payload:
+                pkt = pkt[:4] + self.pmt_payload
+        return pkt
+
     def convert_pid(self):
         """
         Stream.decode_proxy writes all ts packets are written to stdout
@@ -56,11 +66,7 @@ class SixFix(Stream):
         with self.out_file as out_file:
             for pkt in self.iter_pkts():
                 pid = self._parse_pid(pkt[1], pkt[2])
-                if pid in self.pids.tables:
-                    self._parse_tables(pkt, pid)
-                if pid in self.pids.pmt:
-                    if self.pmt_payload:
-                        pkt = pkt[:4] + self.pmt_payload
+                pkt = self._parse_by_pid(pkt, pid)
                 active.write(pkt)
                 pkt_count = (pkt_count + 1) % chunk_size
                 if not pkt_count:
@@ -177,4 +183,4 @@ def sixfix(arg):
 
 
 if __name__ == "__main__":
-    fixsix(sys.argv[1])
+    sixfix(sys.argv[1])
