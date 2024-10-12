@@ -104,38 +104,49 @@ def print_version():
     sys.exit()
 
 def json_load():
-    with  reader(sys.stdin.buffer) as stuff:
-        json = stuff.read().decode()
-        cue = Cue()
+    cmdlist=['encode','hex','int','bytes','xml','json']
+    json = False
+    arglist =[arg for arg in sys.argv[1:] if arg not in cmdlist]
+    if not arglist:
+        print(sys.argv)
+        with  reader(sys.stdin.buffer) as stuff:
+            json = stuff.read().decode()
+            arglist.append(json)
+    for arg in arglist:
+        print(arg)
         try:
-            cue.load(json)
+            print("1")
+            cue = Cue()
+            cue.load(arg)
         except:
             try:
-                cue=Cue(json)
+                print("2")
+                cue=Cue(arg)
                 cue.decode()
+                cue.show()
             except:
                 print2("threefive accepts json, xml, base64, or hex as input")
-                sys.exit()
+                return False
         if "hex" in sys.argv:
             print2(cue.encode_as_hex())
-            sys.exit()
+            return True
         if "int" in sys.argv:
             print2(cue.encode_as_int())
-            sys.exit()
+            return True
         if "bytes" in sys.argv:
             cue.encode()
             print2(cue.bites)
-            sys.exit()
+            return True
         if "xml" in sys.argv:
             cue.encode()
             print2(cue.xml())
-            sys.exit()
+            return True
         if "json" in sys.argv:
             _= cue.encode()
             print2(cue.get_json())
-            sys.exit()
+            return True
         print2(cue.encode())
-        sys.exit()
+        return True
 
 
 print_map = {
@@ -200,17 +211,18 @@ def sidecar_chk(arg):
 
 def to_xml(arg):
     try:
-        cue = Cue(arg)
-        cue.decode()
-        print2(cue.xml())
+        # Mpegts Video
+        strm = Stream(arg)
+        strm.decode(func=xml_out)
         return True
+
     except:
         try:
-        # Mpegts Video
-            strm = Stream(arg)
-            strm.decode(func=xml_out)
+            cue = Cue(arg)
+            cue.decode()
+            print2(cue.xml())
             return True
-        finally:
+        except:
             return False
 
 func_map = {
@@ -242,8 +254,6 @@ def chk_func_map():
         if key in sys.argv:
             sys.argv.remove(key)
             for arg in sys.argv[1:]:
-               # print2(f"\n\n {arg}\n")
-                sleep(1)
                 func_map[key](arg)
             sys.exit()
 
