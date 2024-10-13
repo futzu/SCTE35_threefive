@@ -1,13 +1,11 @@
-_The Grande Unification has begun. 
-Soon all of my SCTE-35 projects will be folded into threefive and I will use the unified power to enslave all humanity and ascend to my rightful place as GurKhan, The Universal Ruler and stuff._ 
+# tres cinco!
+_(Dude, It's National Hispanic American Heritage Month)_
 
-### threefive v2.4.81. is now available. 
-### A big thank you to [Super Dave]( @davemevans ) he really stepped up to help make XML support happen.
+## trescinco! v2.4.81. is now available. 
+### A big thank you to [Super Dave]( @davemevans ) , he really stepped up to help make XML support happen.
 
-# threefive is The Industry Leading SCTE-35 Decoder and Encoder.
 
 <br>
-
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
 <br> `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
 <br> `Parses` __SCTE-35__ from  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
@@ -15,17 +13,18 @@ Soon all of my SCTE-35 projects will be folded into threefive and I will use the
 <br>
 
 
-![image alt="threefive is the highest rated SCTE-35 Parser. Ever."](https://github.com/user-attachments/assets/12521de0-ce6d-4471-8cde-87cb51b1a37d)
 
-[iodisco.com/scte35 ](https://iodisco.com/cgi-bin/scte35parser) the only accurate online SCTE-35 parser.
-
- `Heads Up!`  [Experimental Dash SCTE-214 Support Expected in Release v2.4.71](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md) (_updated 9/26/2024_)
+[iodisco.com/scte35 ](https://iodisco.com/cgi-bin/scte35parser) the only accurate online SCTE-35 parser now converts SCTE-35 to Base64,Hex and XML!
+![image](https://github.com/user-attachments/assets/9d6487ed-5211-45f9-ab55-6ffeec20e97e)
 
 
-# Latest __threefive__ version is `2`.`4`.`81`
+ `Heads Up!`  [Experimental Dash SCTE-214 Support Now available in tres cinco! 2.4.81 (https://github.com/futzu/SCTE35-threefive/blob/master/dash.md) (_updated 10/13/2024_)
+
+
+# Latest __trescinco!__ version is `2`.`4`.`81`
  * Experimental __XML__ and __DASH__  Support
  * __sixfix__ converts ffmpeg bin data streams back to SCTE-35
- * __threefive__ cli tool enhancements.
+ * __trescinco!__ cli tool enhancements.
  * Cyclomatic Complexity: __2.07__
  * Pylint Score: __9:85__
 
@@ -596,7 +595,7 @@ private_data = b'threefive kicks ass'
 
 
 
- Powered by threefive
+ Powered by trescinco!
 ---
  
 <br>⚡ [x9k3](https://github.com/futzu/x9k3): SCTE-35 HLS Segmenter and Cue Inserter.
@@ -614,7 +613,7 @@ private_data = b'threefive kicks ass'
 ![image](https://github.com/user-attachments/assets/b1a05827-7650-4a87-8e97-f9a15eccfac2)
 
 
- threefive | more
+ trescinco! | more
  ---
  
 <br>⚡ [Diagram](https://github.com/futzu/threefive/blob/master/cue.md) of a threefive SCTE-35 Cue.
