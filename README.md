@@ -1,6 +1,6 @@
 
 
-### threefive v2.4.79. is now available. 
+### threefive v2.4.81. is now available. 
 ### A big thank you to [Super Dave]( @davemevans ) he really stepped up to help make XML support happen.
 
 # threefive is The Industry Leading SCTE-35 Decoder and Encoder.
@@ -21,8 +21,7 @@
  `Heads Up!`  [Experimental Dash SCTE-214 Support Expected in Release v2.4.71](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md) (_updated 9/26/2024_)
 
 
-# Latest __threefive__ version is `2`.`4`.`79`
-> forgive me for the quick releases, we've expanded the cli, and added xml and sixfix, we had to shake some bugs out.
+# Latest __threefive__ version is `2`.`4`.`81`
  * Experimental __XML__ and __DASH__  Support
  * __sixfix__ converts ffmpeg bin data streams back to SCTE-35
  * __threefive__ cli tool enhancements.
