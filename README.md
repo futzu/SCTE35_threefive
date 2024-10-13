@@ -29,7 +29,6 @@ Soon all of my SCTE-35 projects will be folded into threefive and I will use the
  * Cyclomatic Complexity: __2.07__
  * Pylint Score: __9:85__
 
-![image](https://github.com/user-attachments/assets/b1a05827-7650-4a87-8e97-f9a15eccfac2)
 
 
 # Documentation
@@ -612,6 +611,7 @@ private_data = b'threefive kicks ass'
 <br>⚡ [bpkio-cli](https://pypi.org/project/bpkio-cli/): A command line interface to the broadpeak.io APIs. 
 <br>⚡ [amt-play ](https://github.com/vivoh-inc/amt-play) uses x9k3.
 
+![image](https://github.com/user-attachments/assets/b1a05827-7650-4a87-8e97-f9a15eccfac2)
 
 
  threefive | more
