@@ -1,4 +1,5 @@
-
+The Grande Unification has begun. 
+Soon all of my SCTE-35 projects will be folded in to threefive and I will use the unified power to enslave all humanity and ascend to my rightful place as GurKhan, The Universal Ruler in accordance with the prophecy. 
 
 ### threefive v2.4.81. is now available. 
 ### A big thank you to [Super Dave]( @davemevans ) he really stepped up to help make XML support happen.
@@ -25,6 +26,8 @@
  * Experimental __XML__ and __DASH__  Support
  * __sixfix__ converts ffmpeg bin data streams back to SCTE-35
  * __threefive__ cli tool enhancements.
+ * Cyclomatic Complexity: __2.07__
+ * Pylint Score: __9:85__
 
 ![image](https://github.com/user-attachments/assets/b1a05827-7650-4a87-8e97-f9a15eccfac2)
 
