@@ -1,5 +1,5 @@
-The Grande Unification has begun. 
-Soon all of my SCTE-35 projects will be folded into threefive and I will use the unified power to enslave all humanity and ascend to my rightful place as GurKhan, The Universal Ruler, in accordance with the prophecy. 
+_The Grande Unification has begun. 
+Soon all of my SCTE-35 projects will be folded into threefive and I will use the unified power to enslave all humanity and ascend to my rightful place as GurKhan, The Universal Ruler and stuff._ 
 
 ### threefive v2.4.81. is now available. 
 ### A big thank you to [Super Dave]( @davemevans ) he really stepped up to help make XML support happen.
