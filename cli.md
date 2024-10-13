@@ -19,8 +19,24 @@
 ![image](https://github.com/user-attachments/assets/601f23ca-6a52-4532-908d-a680723230ee)
 
 ## `Parse` 
+```py3
+                 
+    base64:     threefive '/DAWAAAAAAAAAP/wBQb+AKmKxwAACzuu2Q=='
 
-![image](https://github.com/user-attachments/assets/9352fd02-4697-4763-8279-c8fa94eb9ec5)
+    hex:        threefive '0xfc301600000000000000fff00506fe00a98ac700000b3baed9'
+
+    files:      threefive myvideo.ts
+
+    stdin:      cat myvideo.ts | threefive
+
+    http(s):    threefive https://futzu.com/xaa.ts
+
+    udp:        threefive udp://127.0.0.1:3535
+
+    multicast:  threefive udp://@235.35.3.5:3535
+
+
+```
 
 * By default, threefive will parse SCTE-35 from:
 * Strings
@@ -43,17 +59,19 @@ ___
 the threefive cli uses keywords for additional functionality.
 
 ## `Version`
-
-![image](https://github.com/user-attachments/assets/b58d7863-d413-4ddc-9b48-3cb52784820f)
-
 * keyword `version` - show threefive version
+
+```js
+ threefive version
+```
 
 ---
 ## `Show`
 
-![image](https://github.com/user-attachments/assets/91ffece2-8108-40b1-9231-dcbb66caea11)
 * keyword `show`- display mpegts stream info
-
+```js
+ threefive show video.ts
+```
 
  ```lua
 a@fu:~$ threefive show https://futzu.com/xaa.ts
@@ -70,14 +88,18 @@ Program: 1
 ```
 ---
 ## `PTS`
-![image](https://github.com/user-attachments/assets/c4c86da7-fb20-4aba-af30-481f634116e2)
 * keyword `pts` -  display realtime pts values
+```py3
+ threefive pts video.ts
 
+```
 ---
 ## `Sixfix`
-![image](https://github.com/user-attachments/assets/1ad076c1-528f-4e94-9c60-8bb0a2a21857)
 * keyword `sixfix`
+```py3
+Fix SCTE-35 data mangled by ffmpeg:	 threefive sixfix video.ts
 
+```
 
 * ffmpeg changes SCTE-35 streams types to 0x6 bin data. sixfix will convert the bin data back to SCTE-35.
 * The new file name is prefixed with 'fixed'.
@@ -108,8 +130,8 @@ Input #0, mpegts, from 'fixed-sixed.ts':
 ```
 
 ## `Encode`
+![image](https://github.com/user-attachments/assets/3d603b1b-f5c2-4069-9821-da16b992b220)
 
-![image](https://github.com/user-attachments/assets/27307593-eb87-448b-b9e3-d3917f40e34b)
 * keyword `encode` -  JSON or XML as an input for encoding SCTE-35. 
 The threefive cli tool can now encode JSON and XML to SCTE-35.  
 
