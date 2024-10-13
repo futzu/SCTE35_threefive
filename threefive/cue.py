@@ -138,6 +138,12 @@ class Cue(SCTE35Base):
         """
         return json.dumps(self.get(), indent=4)
 
+    def get_bytes(self):
+        """
+        get_bytes returns Cue.bites
+        """
+        return self.bites
+
     @staticmethod
     def fix_bad_b64(data):
         """
