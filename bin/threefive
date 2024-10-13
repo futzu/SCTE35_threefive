@@ -55,7 +55,7 @@ HELP = f"""
 
 {REV}        Keywords               {NORM}
 
-   {REV}  sixfix  {NORM}{GREEN}\tFix SCTE-35 data mangled by ffmpeg:{NORM} threefive fixsix video.ts
+   {REV}  sixfix  {NORM}{GREEN}\tFix SCTE-35 data mangled by ffmpeg:{NORM} threefive sixfix video.ts
 
    {REV}  xml     {NORM} {GREEN}\tParse a Cue string or mpegts stream and output xml {NORM}
         {GREEN}\tParse base64 {NORM} threefive xml'/DAWAAAAAAAAAP/wBQb+AKmKxwAACzuu2Q=='
