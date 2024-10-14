@@ -1,7 +1,7 @@
 # tres cinco!
 _(Dude, It's National Hispanic American Heritage Month)_
 
-## trescinco! v2.4.81. is now available. 
+## threefive v2.4.81. is now available. 
 ### A big thank you to [Super Dave]( @davemevans ) , he really stepped up to help make XML support happen.
 
 <br>
@@ -19,10 +19,10 @@ _(Dude, It's National Hispanic American Heritage Month)_
 ___
 
 
- `Heads Up!`  [Experimental Dash SCTE-214 Support Now available in tres cinco! 2.4.81 (https://github.com/futzu/SCTE35-threefive/blob/master/dash.md) (_updated 10/13/2024_)
+ `Heads Up!`  [Experimental Dash SCTE-214 Support Now available in threefive 2.4.81 (https://github.com/futzu/SCTE35-threefive/blob/master/dash.md) (_updated 10/13/2024_)
 
 
-# Latest __trescinco!__ version is `2`.`4`.`81`
+# Latest __threefive__ version is `2`.`4`.`81`
  * Experimental __XML__ and __DASH__  Support
  * __sixfix__ converts ffmpeg bin data streams back to SCTE-35
  * __trescinco!__ cli tool enhancements.
