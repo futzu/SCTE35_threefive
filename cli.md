@@ -16,7 +16,7 @@
 ## `Help`
 * Use the help man, I spent a lot of time trying to get it to make sense.
 
-![image](https://github.com/user-attachments/assets/601f23ca-6a52-4532-908d-a680723230ee)
+`threefive help`
 
 ## `Parse` 
 
@@ -50,12 +50,11 @@
 * multicast:  `threefive udp://@235.35.3.5:3535`
 
 
-___
+[top](#threefive-is-the-scte-35-cli-tool)
 
 
-![image](https://github.com/user-attachments/assets/de6f9ac4-2950-44f8-b65e-9a62985520d7)
-
-the threefive cli uses keywords for additional functionality.
+# `KeyWords`
+* the threefive cli uses keywords for additional functionality.
 
 ## `Version`
 * keyword `version` - show threefive version
@@ -64,7 +63,9 @@ the threefive cli uses keywords for additional functionality.
  threefive version
 ```
 
----
+[top](#threefive-is-the-scte-35-cli-tool)
+___
+
 ## `Show`
 
 * keyword `show`- display mpegts stream info
@@ -85,6 +86,9 @@ Program: 1
 		Pid: 256[0x100]	Type: 0x1b AVC Video
 		Pid: 257[0x101]	Type: 0xf AAC Audio
 ```
+
+[top](#threefive-is-the-scte-35-cli-tool)
+
 ---
 ## `PTS`
 * keyword `pts` -  display realtime pts values
@@ -92,12 +96,14 @@ Program: 1
  threefive pts video.ts
 
 ```
+
+[top](#threefive-is-the-scte-35-cli-tool)
+
 ---
 ## `Sixfix`
-* keyword `sixfix`
+* keyword `sixfix` Fix SCTE-35 data mangled by ffmpeg.
 ```py3
-Fix SCTE-35 data mangled by ffmpeg:	 threefive sixfix video.ts
-
+	 threefive sixfix video.ts
 ```
 
 * ffmpeg changes SCTE-35 streams types to 0x6 bin data. sixfix will convert the bin data back to SCTE-35.
@@ -127,6 +133,8 @@ Input #0, mpegts, from 'fixed-sixed.ts':
   Stream #0:2[0x102]: Data: scte_35       <------------ fixed
   Stream #0:3[0x103]: Data: timed_id3 (ID3  / 0x20334449)
 ```
+[top](#threefive-is-the-scte-35-cli-tool)
+___
 
 ## `Encode`
 
@@ -169,11 +177,12 @@ a@fu:~$ cat json.txt | threefive encode hex
 * Hex to xml: `threefive encode xml 0xfc302500000000000000fff014050000000e7feffe14ebd5c0fe00a4cb80000e00000000cc1a27d0`
 * Hex to int: `threefive encode int 0xfc302500000000000000fff014050000000e7feffe14ebd5c0fe00a4cb80000e00000000cc1a27d0`
 
+[top](#threefive-is-the-scte-35-cli-tool)
+___
+
 ## `Xml`
 
-![image](https://github.com/user-attachments/assets/5c597b48-764b-4009-b6a3-f0ec984fa6f5)
-* keyword `xml`
-* Xml is also supported as an output when decoding SCTE-35.
+* keyword `xml`  output Xml when decoding SCTE-35 data.
 
 * xml output for Base64
 ```js
@@ -196,7 +205,6 @@ a@fu:~$ threefive xml build/SCTE35_threefive/sixed.ts
 ![image](https://github.com/user-attachments/assets/815b4395-dfc6-48cf-9c85-cfe25120c417)
 * keyword `packets` - show raw SCTE-35 packets
 
-
 ```lua
 a@slow:~/threefive$ threefive packets https://futzu.com/xaa.ts
 
@@ -205,7 +213,10 @@ b'G@\x86\x01\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00\x07<\x
 b'G@\x86\x02\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00\x08\x9c\xd5\x00\x00e\x07\x16F\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff'
 
 ```
----
+
+[top](#threefive-is-the-scte-35-cli-tool)
+___
+
 ## `Sidecar`
 ![image](https://github.com/user-attachments/assets/36ce3f57-99e0-4997-b235-57c2fb04731e)
 
@@ -230,7 +241,10 @@ a@slow:~$ cat sidecar.txt
 19.251189,/DAWAAAAAAAAAP/wBQb+ABp7ugAAs6FQDw==
 20.218822,/DAWAAAAAAAAAP/wBQb+ABvbpAAAoT8LNA==
 ```
+
+[top](#threefive-is-the-scte-35-cli-tool)
 ---
+
 ## `Proxy`
 ![image](https://github.com/user-attachments/assets/00ef6fa5-3c16-4499-ac96-2c526b916268)
 
