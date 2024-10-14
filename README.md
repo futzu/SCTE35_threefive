@@ -4,7 +4,6 @@ _(Dude, It's National Hispanic American Heritage Month)_
 ## trescinco! v2.4.81. is now available. 
 ### A big thank you to [Super Dave]( @davemevans ) , he really stepped up to help make XML support happen.
 
-
 <br>
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
@@ -12,7 +11,6 @@ _(Dude, It's National Hispanic American Heritage Month)_
 <br> `Parses` __SCTE-35__ from  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br> `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
 <br>
-
 
 
 ### [iodisco.com/scte35 ](https://iodisco.com/cgi-bin/scte35parser) the only accurate online SCTE-35 parser.
