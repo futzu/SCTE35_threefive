@@ -239,7 +239,9 @@ class Stream:
         """
         iter_pkts iterates a mpegts stream into packets
         """
-        return iter(partial(self._tsdata.read, self.PACKET_SIZE * num_pkts), b"")
+        if self._find_start():
+            return iter(partial(self._tsdata.read, self.PACKET_SIZE * num_pkts), b"")
+        return False
 
     def _mk_pkts(self, chunk):
         return [
@@ -253,12 +255,10 @@ class Stream:
         func can be set to a custom function that accepts
         a threefive.Cue instance as it's only argument.
         """
-        if not self._find_start():
-            return False
         for pkt in self.iter_pkts():
             cue = self._parse(pkt)
             if cue:
-                func(cue)
+                func(cue)           
         return False
 
     def decode_fu(self, func=show_cue):
@@ -267,11 +267,10 @@ class Stream:
         num_pkts packets at a time.
         Super Fast with pypy3.
         """
-        if self._find_start():
-            num_pkts = 3000
-            for chunk in self.iter_pkts(num_pkts=num_pkts):
-                _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
-                del _
+        num_pkts = 3000
+        for chunk in self.iter_pkts(num_pkts=num_pkts):
+            _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
+            del _
         return False
 
     def decode_next(self):
@@ -279,8 +278,6 @@ class Stream:
         Stream.decode_next returns the next
         SCTE35 cue as a threefive.Cue instance.
         """
-        if not self._find_start():
-            return False
         for pkt in self.iter_pkts():
             cue = self._parse(pkt)
             if cue:
@@ -319,8 +316,6 @@ class Stream:
         for piping into another program like mplayer.
         SCTE-35 cues are print2`ed to stderr.
         """
-        if not self._find_start():
-            return False
         for pkt in self.iter_pkts():
             cue = self._parse(pkt)
             if cue:
@@ -352,13 +347,12 @@ class Stream:
         """
         show_pts displays current pts by pid.
         """
-        if self._find_start():
-            print2("\tPID\tPTS")
-            for pkt in self.iter_pkts():
-                pid = self._parse_info(pkt)
-                if self._pusi_flag(pkt) and pid != 0:
-                    self._parse_pts(pkt, pid)
-                    print(f"\t{pid}\t{self.pid2pts(pid)}", end="\r")
+        print2("\tPID\tPTS")
+        for pkt in self.iter_pkts():
+            pid = self._parse_info(pkt)
+            if self._pusi_flag(pkt) and pid != 0:
+                self._parse_pts(pkt, pid)
+                print(f"\t{pid}\t{self.pid2pts(pid)}", end="\r")
 
     def pts(self):
         """
