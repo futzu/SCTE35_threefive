@@ -19,24 +19,7 @@
 ![image](https://github.com/user-attachments/assets/601f23ca-6a52-4532-908d-a680723230ee)
 
 ## `Parse` 
-```py3
-                 
-    base64:     threefive '/DAWAAAAAAAAAP/wBQb+AKmKxwAACzuu2Q=='
 
-    hex:        threefive '0xfc301600000000000000fff00506fe00a98ac700000b3baed9'
-
-    files:      threefive myvideo.ts
-
-    stdin:      cat myvideo.ts | threefive
-
-    http(s):    threefive https://futzu.com/xaa.ts
-
-    udp:        threefive udp://127.0.0.1:3535
-
-    multicast:  threefive udp://@235.35.3.5:3535
-
-
-```
 
 * By default, threefive will parse SCTE-35 from:
 * Strings
@@ -51,6 +34,22 @@
   	* Multicast
   	* UDP
   	* Stdin
+            
+* base64:     `threefive '/DAWAAAAAAAAAP/wBQb+AKmKxwAACzuu2Q=='`
+
+* hex:        `threefive '0xfc301600000000000000fff00506fe00a98ac700000b3baed9'`
+
+* files:      `threefive myvideo.ts`
+
+* stdin:      `cat myvideo.ts | threefive`
+
+* http(s):    `threefive https://futzu.com/xaa.ts`
+
+* udp:        `threefive udp://127.0.0.1:3535`
+
+* multicast:  `threefive udp://@235.35.3.5:3535`
+
+
 ___
 
 
@@ -130,7 +129,6 @@ Input #0, mpegts, from 'fixed-sixed.ts':
 ```
 
 ## `Encode`
-![image](https://github.com/user-attachments/assets/3d603b1b-f5c2-4069-9821-da16b992b220)
 
 * keyword `encode` -  JSON or XML as an input for encoding SCTE-35. 
 The threefive cli tool can now encode JSON and XML to SCTE-35.  
@@ -155,29 +153,21 @@ a@fu:~$ cat json.txt | threefive encode hex
 0xfc301600000000000000fff00506fe005265c000006753c144
 ```
 
-* Re-encode as an integer
-```lua
-a@fu:~$ cat json.txt | threefive encode int
-1583008701074197245727019716796221242034694813189400685691204
-```
-* Re-encode as bytes
- ```lua
-a@fu:~$ cat json.txt | threefive encode bytes
-b'\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00Re\xc0\x00\x00gS\xc1D'
-```
-* Re-encode as Xml
-```lua
-cat json.txt | threefive encode xml
-```
-* xml to Base64
-```js
-a@fu:~$ cat xml.xml | threefive encode
-/DAWAAAAAAAAAP/wBQb+ABt4xwAAwhCGHw==
-```
-* xml to json
-```
-a@fu:~$ cat xml.xml | threefive encode json
-```
+* Load JSON to base64: `threefive encode < json.json`
+* Load JSON to hex: `threefive encode hex  < json.json`
+* Load JSON to xml:  `threefive encode xml < json.json`
+
+* Load xml to hex:  `cat xml.xml | threefive encode hex`
+* Load xml to base64:  `threefive encode  < xml.xml`
+* Load xml to json:  `cat xml.xml | threefive encode json`
+
+* Base64 to bytes: `threefive encode bytes  '/DAlAAAAAAAAAP/wFAUAAAAOf+/+FOvVwP4ApMuAAA4AAAAAzBon0A=='`
+* Base64 to hex: `threefive encode hex  '/DAlAAAAAAAAAP/wFAUAAAAOf+/+FOvVwP4ApMuAAA4AAAAAzBon0A=='`
+* Base64 to xml: `threefive encode xml  '/DAlAAAAAAAAAP/wFAUAAAAOf+/+FOvVwP4ApMuAAA4AAAAAzBon0A=='`
+
+* Hex to base64: `threefive encode base64 0xfc302500000000000000fff014050000000e7feffe14ebd5c0fe00a4cb80000e00000000cc1a27d0`
+* Hex to xml: `threefive encode xml 0xfc302500000000000000fff014050000000e7feffe14ebd5c0fe00a4cb80000e00000000cc1a27d0`
+* Hex to int: `threefive encode int 0xfc302500000000000000fff014050000000e7feffe14ebd5c0fe00a4cb80000e00000000cc1a27d0`
 
 ## `Xml`
 
