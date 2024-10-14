@@ -596,7 +596,7 @@ private_data = b'threefive kicks ass'
 
 
 
- Powered by trescinco!
+ Powered by threefive
 ---
  
 <br>⚡ [x9k3](https://github.com/futzu/x9k3): SCTE-35 HLS Segmenter and Cue Inserter.
@@ -614,7 +614,7 @@ private_data = b'threefive kicks ass'
 ![image](https://github.com/user-attachments/assets/b1a05827-7650-4a87-8e97-f9a15eccfac2)
 
 
- trescinco! | more
+ threefive | more
  ---
  
 <br>⚡ [Diagram](https://github.com/futzu/threefive/blob/master/cue.md) of a threefive SCTE-35 Cue.
