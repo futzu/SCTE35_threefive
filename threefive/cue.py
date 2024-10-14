@@ -443,26 +443,36 @@ class Cue(SCTE35Base):
             self.encode()
         #self.show()
 
+    def _binary_xml(self):
+        sig_attrs = {"xmlns": "https://scte.org/schemas/35"}
+        sig_node = Node("Signal", attrs=sig_attrs)
+        bin_node = Node("Binary", value=self.encode())
+        sig_node.add_child(bin_node)
+        return sig_node        
+
+    def _mk_descriptor_xml(self,sis):
+        """
+        _mk_descriptor_xml make xml nodes for descriptors.
+        """
+        for d in self.descriptors:
+            if d.tag == 2:
+                if d.segmentation_type_id in table22:
+                    sis.add_comment(f'{table22[d.segmentation_type_id]}')
+            sis.add_child(d.xml())
+        return sis
+        
     def xml(self, binary=False):
         """
         xml returns a threefive.Node instance
         which can be edited as needed or printed.
         """
         if binary:
-            sig_attrs = {"xmlns": "https://scte.org/schemas/35"}
-            sig_node = Node("Signal", attrs=sig_attrs)
-            bin_node = Node("Binary", value=self.encode())
-            sig_node.add_child(bin_node)
-            return sig_node
+            return self._binary_xml()
         sis = self.info_section.xml()
-        if not self.command:
-            raise Exception("\033[7mA Splice Command is Required\033[27m")
+       # if not self.command:
+        #    raise Exception("\033[7mA Splice Command is Required\033[27m")
         cmd = self.command.xml()
         sis.add_child(cmd)
-        for d in self.descriptors:
-            if d.tag == 2:
-                if d.segmentation_type_id in table22:
-                    sis.add_comment(f'{table22[d.segmentation_type_id]}')
-            sis.add_child(d.xml())
-            sis.mk()
+        sis = self._mk_descriptor_xml(sis)
+        sis.mk()
         return sis
