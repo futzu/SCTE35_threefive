@@ -138,14 +138,17 @@ ___
 
 ## `Encode`
 
-* keyword `encode` -  JSON or XML as an input for encoding SCTE-35. 
-The threefive cli tool can now encode JSON and XML to SCTE-35.  
-
-
-* Change the pts_time 
-    * Here I do it with sed, you can use any editor 
-
+* keyword `encode` -  Encode JSON, XML, Base64 or Hex __to__ JSON, XML, Base64, Hex, Int or Bytes.
+___
+* Example: __Change the pts_time__ 
+    
+* dump an existing Cue to json
 ```js
+threefive 0xfc301600000000000000fff00506fe001b78c70000c210861f 2> json.json
+```
+* edit pts_time
+     * Here I do it with sed, you can use any editor
+```sed
 sed -i 's/20.004344/60.0/' json.txt
 ```
 * Re-encode as Base64
@@ -154,13 +157,7 @@ a@fu:~$ cat json.txt | threefive encode
 
 /DAWAAAAAAAAAP/wBQb+AFJlwAAAZ1PBRA==
 ```
-
-* Re-encode as Hex
-```lua
-a@fu:~$ cat json.txt | threefive encode hex
-0xfc301600000000000000fff00506fe005265c000006753c144
-```
-
+___
 * Load JSON to base64: `threefive encode < json.json`
 * Load JSON to hex: `threefive encode hex  < json.json`
 * Load JSON to xml:  `threefive encode xml < json.json`
@@ -202,7 +199,6 @@ a@fu:~$ threefive xml build/SCTE35_threefive/sixed.ts
 ---
 ## `Packets`
 
-![image](https://github.com/user-attachments/assets/815b4395-dfc6-48cf-9c85-cfe25120c417)
 * keyword `packets` - show raw SCTE-35 packets
 
 ```lua
@@ -218,9 +214,7 @@ b'G@\x86\x02\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00\x08\x9
 ___
 
 ## `Sidecar`
-![image](https://github.com/user-attachments/assets/36ce3f57-99e0-4997-b235-57c2fb04731e)
-
-* keyword `sidecar` - Generate a sidecar file of pts,cue pairs from a stream
+* keyword `sidecar` - Generate a sidecar file of pts,cue pairs from a stream.
 ```lua
   threefive sidecar https://futzu.com/xaa.ts
 ```
@@ -246,7 +240,6 @@ a@slow:~$ cat sidecar.txt
 ---
 
 ## `Proxy`
-![image](https://github.com/user-attachments/assets/00ef6fa5-3c16-4499-ac96-2c526b916268)
 
 * keyword `proxy` - parse the SCTE-35 from a stream and write it to stdout (for piping to ffmpeg and such)
 ```smalltalk
