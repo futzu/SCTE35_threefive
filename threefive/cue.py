@@ -420,7 +420,7 @@ class Cue(SCTE35Base):
 
     def _xml_event_signal(self, stuff):
         self.dash_data = {}
-        for x in ["EventStream", "Event", "Signal"]:
+        for x in ["EventStream", "Event", "Signal","Binary"]:
             if x in stuff:
                 self.dash_data[x] = stuff[x]
 
@@ -448,19 +448,19 @@ class Cue(SCTE35Base):
         sig_node = Node("Signal", attrs=sig_attrs)
         bin_node = Node("Binary", value=self.encode())
         sig_node.add_child(bin_node)
-        return sig_node        
+        return sig_node
 
     def _mk_descriptor_xml(self,sis):
         """
         _mk_descriptor_xml make xml nodes for descriptors.
         """
         for d in self.descriptors:
-            if d.tag == 2:
-                if d.segmentation_type_id in table22:
-                    sis.add_comment(f'{table22[d.segmentation_type_id]}')
+            if d.has('segmentation_type_id'):
+               # if d.segmentation_type_id in table22:
+                sis.add_comment(f'{table22[d.segmentation_type_id]}')
             sis.add_child(d.xml())
         return sis
-        
+
     def xml(self, binary=False):
         """
         xml returns a threefive.Node instance
