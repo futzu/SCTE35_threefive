@@ -99,7 +99,7 @@ Program: 1
 
 [top](#threefive-is-the-scte-35-cli-tool)
 
----
+___
 ## `Sixfix`
 * keyword `sixfix` Fix SCTE-35 data mangled by ffmpeg.
 ```py3
@@ -133,7 +133,9 @@ Input #0, mpegts, from 'fixed-sixed.ts':
   Stream #0:2[0x102]: Data: scte_35       <------------ fixed
   Stream #0:3[0x103]: Data: timed_id3 (ID3  / 0x20334449)
 ```
+
 [top](#threefive-is-the-scte-35-cli-tool)
+
 ___
 
 ## `Encode`
@@ -175,6 +177,7 @@ ___
 * Hex to int: `threefive encode int 0xfc302500000000000000fff014050000000e7feffe14ebd5c0fe00a4cb80000e00000000cc1a27d0`
 
 [top](#threefive-is-the-scte-35-cli-tool)
+
 ___
 
 ## `Xml`
@@ -196,7 +199,11 @@ a@fu:~$ threefive xml  '/DAWAAAAAAAAAP/wBQb+ABt4xwAAwhCGHw=='
 ```js
 a@fu:~$ threefive xml build/SCTE35_threefive/sixed.ts
 ```
----
+
+[top](#threefive-is-the-scte-35-cli-tool)
+
+___
+
 ## `Packets`
 
 * keyword `packets` - show raw SCTE-35 packets
@@ -211,6 +218,7 @@ b'G@\x86\x02\xfc0\x16\x00\x00\x00\x00\x00\x00\x00\xff\xf0\x05\x06\xfe\x00\x08\x9
 ```
 
 [top](#threefive-is-the-scte-35-cli-tool)
+
 ___
 
 ## `Sidecar`
@@ -237,7 +245,8 @@ a@slow:~$ cat sidecar.txt
 ```
 
 [top](#threefive-is-the-scte-35-cli-tool)
----
+
+___
 
 ## `Proxy`
 
@@ -245,5 +254,7 @@ a@slow:~$ cat sidecar.txt
 ```smalltalk
 threefive proxy https://example.com/video.ts | ffmpeg -i - {ffmpeg commands}
 ```
----
+[top](#threefive-is-the-scte-35-cli-tool)
+
+___
 
