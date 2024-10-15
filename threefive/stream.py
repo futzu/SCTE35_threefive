@@ -258,7 +258,7 @@ class Stream:
         for pkt in self.iter_pkts():
             cue = self._parse(pkt)
             if cue:
-                func(cue)           
+                func(cue)
         return False
 
     def decode_fu(self, func=show_cue):
@@ -328,20 +328,17 @@ class Stream:
         displays streams that will be
         parsed for SCTE-35.
         """
-        pkt_count = 0
         self.info = True
-        while True:
-            for pkt in self.iter_pkts():
-                pkt_count += 1
-                self._parse_info(pkt)
-            if self.maps.prgm.keys():
-                print2(f"Read {pkt_count} packets")
-                sopro = sorted(self.maps.prgm.items())
-                for k, vee in sopro:
-                    if len(vee.streams.items()) > 0:
-                        print2(f"\nProgram: {k}")
-                        vee.show()
-                return True
+        for pkt in self.iter_pkts():
+            self._parse_info(pkt)
+        if self.maps.prgm.keys():
+            print2(f"Read {pkt_count} packets")
+            sopro = sorted(self.maps.prgm.items())
+            for k, vee in sopro:
+                if len(vee.streams.items()) > 0:
+                    print2(f"\nProgram: {k}")
+                    vee.show()
+            return True
 
     def show_pts(self):
         """
@@ -533,7 +530,9 @@ class Stream:
             return cue
         return False
 
-    def _strip_scte35_pes(self, pay):
+
+    def _strip_scte35_pes(self, pkt):
+        pay = self._parse_payload(pkt)
         if self.SCTE35_PES_START in pay:
             # print2(f"# Stripping PES Header from SCTE35 @ {self.pid2pts(pid)}")
             pay = pay.split(self.SCTE35_PES_START, 1)[-1]
@@ -541,20 +540,25 @@ class Stream:
             pay = pay[peslen:]
         return pay
 
-    def _parse_scte35(self, pkt, pid):
-        """
-        parse a scte35 cue from one or more packets
-        """
-        pay = self._parse_payload(pkt)
-        pay = self._strip_scte35_pes(pay)
+    def _mk_scte35_payload(self,pkt,pid):
+        pay = self._strip_scte35_pes(pkt)
         if not pay:
             return False
         pay = self._chk_partial(pay, pid, self.SCTE35_TID)
         if not pay:
             if pid in self.pids.maybe_scte35:
                 self.pids.maybe_scte35.remove(pid)
-            return False
+                return False
         if pay[13] == self.show_null:
+            return False
+        return pay
+
+    def _parse_scte35(self, pkt, pid):
+        """
+        parse a scte35 cue from one or more packets
+        """
+        pay = self._mk_scte35_payload(pkt,pid)
+        if not pay:
             return False
         seclen = self._parse_length(pay[1], pay[2])
         if self._section_incomplete(pay, pid, seclen):
@@ -623,10 +627,9 @@ class Stream:
             idx += chunk_size
         return True
 
-    def _parse_pmt(self, pay, pid):
-        """
-        parse program maps for streams
-        """
+    def _mk_pmt_payload(self,pay,pid):
+        seclen=False
+        program_number = False
         pay = self._chk_partial(pay, pid, self.PMT_TID)
         if not pay:
             return False
@@ -635,6 +638,16 @@ class Stream:
             return False
         program_number = self._parse_program(pay[3], pay[4])
         if self.the_program and (program_number != self.the_program):
+            return False
+        return pay,seclen,program_number
+
+    
+    def _parse_pmt(self, pay, pid):
+        """
+        parse program maps for streams
+        """
+        pay,seclen,program_number = self._mk_pmt_payload(pay,pid)
+        if not program_number:
             return False
         pcr_pid = self._parse_pid(pay[8], pay[9])
         if program_number not in self.maps.prgm:
