@@ -1,8 +1,8 @@
 # Dash SCTE-35 Parser Preview    (_Updated 9/26/2024_)
-* [The cli also has XML support](https://github.com/futzu/SCTE-35/edit/master/cli.md)
+### [The cli also has XML support](https://github.com/futzu/SCTE-35/edit/master/cli.md)
 ### From Xml
+___
 #### SCTE-35 XML is converted to a threefive.Cue instance.
----
 #### Usage:
 
 * Use a __Cue__ instance and pass in the Xml via the  __load__ method.
@@ -261,9 +261,11 @@ cue.load(some_xml)
 
 </details>
 
----
+
 ### To Xml
-#### Convert a threefive.Cue instance to SCTE-35 Xml 
+___
+
+##### Convert a threefive.Cue instance to SCTE-35 Xml 
 
 #### Usage:
 ```py3
