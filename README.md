@@ -21,7 +21,7 @@
 ___
 
 # Documentation
-#### [Experimental Dash SCTE-214 Support Now available in threefive 2.4.81 ](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md) (_updated 10/15/2024_)
+#### 
 
 ### Install
 * python3
@@ -50,7 +50,7 @@ This makes tracking down bugs and stuff much easier. <br>
 Keep up, I do releases for reasons.
 ```lua
 a@slow:~/threefive$ threefive version
-2.4.41
+2.4.81
 a@slow:~/threefive$ 
 
 ```
@@ -73,6 +73,8 @@ a@slow:~/threefive$
      * [Print](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#packets) __Raw SCTE-35 packets__
      * [Create](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#sidecar) SCTE-35 __Sidecar files__ from MPEGTS
      * [Encode](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#encode) __JSON or Xml to SCTE-35__
+     * [Convert](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#encode) __Convert SCTE-35 formats to other SCTE-35 formats__
+
 
 * [__Parse SCTE-35 programmatically__](https://github.com/futzu/scte35parser-threefive/blob/master/prog.md) with __threefive__ </i>(write some code)</i>
      * SCTE-35 code [__Examples__](https://github.com/futzu/SCTE35-threefive/blob/master/examples/README.md)
@@ -81,6 +83,8 @@ a@slow:~/threefive$
      * [__Trigger on SCTE-35 Events__](https://github.com/futzu/scte35parser-threefive/blob/master/trigger.md) using __threefive.Stream__
      * Automatic __AES decryption__ with [threefive.Segment](https://github.com/futzu/SCTE35_threefive/blob/master/segment.md)
      * Display SCTE-35 Data as [__WebVTT__ subtitles in Video](https://github.com/futzu/SCTE35_threefive/blob/master/examples/stream/cue2vtt.py)
+
+* [Experimental Dash SCTE-214 Support Now available in threefive 2.4.81 ](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md) (_updated 10/15/2024_)
 
 * [__Encoding__](https://github.com/futzu/scte35parser-threefive/blob/master/Encoding.md)
     *  [__Encoding | more__ ](https://github.com/futzu/scte35parser-threefive/blob/master/EncodingPipeMore.md)
@@ -98,6 +102,9 @@ a@slow:~/threefive$
 
    *  src [cue.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/cue.py)
    *  The __threefive.Cue__ class decodes a SCTE35 binary, base64, or hex encoded string.
+
+ ![image](https://github.com/futzu/scte35-threefive/assets/52701496/5b8dbea3-1d39-48c4-8fbe-de03a53cc1dd)
+
 
 ```py3
 
@@ -188,6 +195,9 @@ True
 
 
 <details><summary>Stream Class</summary>
+
+
+
 
   * src [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py)
   * The threefive.__Stream__ class parses __SCTE35__ from __Mpegts__.
@@ -347,8 +357,6 @@ ___
 ```
 </details>
 
-![image](https://github.com/user-attachments/assets/e9724b5d-3f9b-41b0-8929-420926e31291)
-
 
 
 <details><summary> Need to verify your splice points? </summary> 
@@ -368,7 +376,6 @@ ___
 ```
 
 
- ![image](https://github.com/futzu/scte35-threefive/assets/52701496/5b8dbea3-1d39-48c4-8fbe-de03a53cc1dd)
 
 
 ---
@@ -581,9 +588,6 @@ private_data = b'threefive kicks ass'
 
 
 
-### [the only accurate online SCTE-35 parser.](https://iodisco.com/cgi-bin/scte35parser)
- <br>
-
 
 
  Powered by threefive
@@ -601,8 +605,6 @@ private_data = b'threefive kicks ass'
 <br>⚡ [bpkio-cli](https://pypi.org/project/bpkio-cli/): A command line interface to the broadpeak.io APIs. 
 <br>⚡ [amt-play ](https://github.com/vivoh-inc/amt-play) uses x9k3.
 
-![image](https://github.com/user-attachments/assets/b1a05827-7650-4a87-8e97-f9a15eccfac2)
-
 
  threefive | more
  ---
@@ -612,3 +614,4 @@ private_data = b'threefive kicks ass'
 <br>⚡ [Issues and Bugs and Feature Requests](https://github.com/futzu/scte35-threefive/issues) will be considered. Please don't make me regret it. 
 <br>⚡ `NEW!` __threefive__ now has experimental DVB DAS Support `ETSI TS 103 752-1` <br><br>
 
+![image](https://github.com/user-attachments/assets/b1a05827-7650-4a87-8e97-f9a15eccfac2)
