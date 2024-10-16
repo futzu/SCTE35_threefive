@@ -1,15 +1,16 @@
 # threefive is a SCTE-35 parser, SCTE-35 decoder, SCTE-35 encoder and SCTE-35 converter.
-### threefive is the highest rated SCTE-35 tool in the U.S., India, Brazil, and China.
-### New Stuff in threefive v2.4.81
-* [__sixfix__](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#sixfix) : ffmpeg turns SCTE-35 streams to bin data (0x06), sixfix switches them back to SCTE-35 (0x86).
-  
-* [__Xml__](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md): Experimental support for [SCTE-35 xml as an input and output](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#xml) ( DASH SCTE-214)
-<br>
 
 <br> `Parses` __SCTE-35__ from multiple streams in `MPEGTS` and `Multiple Program Transport Streams` 
 <br> `Parses` __SCTE-35__ from  Cues encoded in`Base64`, `Bytes`, `Hex`, `Integers`.
 <br> `Parses` __SCTE-35__ from  `files`, `http(s)`, `Multicast`, `UDP` and even `stdin` _( you can pipe to it)_. 
 <br> `Parses` __SCTE-35__ from streams converted to `bin data` ( _type 0x06_ ) by `ffmpeg`.
+<br>
+
+## threefive is the highest rated SCTE-35 tool in the U.S., India, Brazil, and China.
+### New Stuff in threefive v2.4.81
+* [__sixfix__](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#sixfix) : ffmpeg turns SCTE-35 streams to bin data (0x06), sixfix switches them back to SCTE-35 (0x86).
+  
+* [__Xml__](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md): Experimental support for [SCTE-35 xml as an input and output](https://github.com/futzu/SCTE35_threefive/blob/master/cli.md#xml) ( DASH SCTE-214)
 <br>
 
 
@@ -19,11 +20,8 @@
 
 ___
 
-
-#### [Experimental Dash SCTE-214 Support Now available in threefive 2.4.81 ](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md) (_updated 10/15/2024_)
-
-
 # Documentation
+#### [Experimental Dash SCTE-214 Support Now available in threefive 2.4.81 ](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md) (_updated 10/15/2024_)
 
 ### Install
 * python3
@@ -49,7 +47,7 @@ pypy3 -mpip install threefive
 
 Every time I fix a bug or add a feature, I do a new release. <br>
 This makes tracking down bugs and stuff much easier. <br>
-Keep up folks.
+Keep up, I do releases for reasons.
 ```lua
 a@slow:~/threefive$ threefive version
 2.4.41
