@@ -13,21 +13,13 @@
 
 
 ### [iodisco.com/scte35 ](https://iodisco.com/cgi-bin/scte35parser) the only accurate online SCTE-35 parser.
-![image](https://github.com/user-attachments/assets/31a18ec2-f5ee-4a35-9c40-93c32097154e)
+[![image](https://github.com/user-attachments/assets/d3d3e168-5e6a-4e2d-8688-0fdf4c319176)
+](https://iodisco.com/cgi-bin/scte35parser)
 
 ___
 
 
- `Heads Up!`  [Experimental Dash SCTE-214 Support Now available in threefive 2.4.81 (https://github.com/futzu/SCTE35-threefive/blob/master/dash.md) (_updated 10/13/2024_)
-
-
-# Latest __threefive__ version is `2`.`4`.`81`
- * Experimental __XML__ and __DASH__  Support
- * __sixfix__ converts ffmpeg bin data streams back to SCTE-35
- * __trescinco!__ cli tool enhancements.
- * Cyclomatic Complexity: __2.07__
- * Pylint Score: __9:85__
-
+#### [Experimental Dash SCTE-214 Support Now available in threefive 2.4.81 ](https://github.com/futzu/SCTE35-threefive/blob/master/dash.md) (_updated 10/15/2024_)
 
 
 # Documentation
