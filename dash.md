@@ -1,14 +1,9 @@
 # Dash SCTE-35 Parser Preview    (_Updated 9/26/2024_)
-### Expected in release v2.4.71
-### Everything here may or may not change.
-# From Xml
-  * expat xml parsing
-  *  Dash SCTE-35 data is coverted to threefive.Cue instances.
+* [The cli also has XML support](https://github.com/futzu/SCTE-35/edit/master/cli.md)
+### From Xml
+#### SCTE-35 XML is converted to a threefive.Cue instance.
 ---
-### Usage:
-
-* <s>`threefive.DashSCTE35` is the class </s>
-*  <s> the method is `parse_mpd` </s>
+#### Usage:
 
 * Use a __Cue__ instance and pass in the Xml via the  __load__ method.
 ```py3
@@ -18,9 +13,9 @@
 ```
 ---
 
-### Example #1     
+##### Example #1     
 * `"urn:scte:scte35:2013:xml"`
-* Text Xml of SCTE-35 SpliceInfosection converted to a Cue instance.
+* A DASH SCTE-35 Event converted to a Cue instance.
 
 <details><summary> Xml </summary>
 
@@ -60,8 +55,30 @@ from threefive import Cue
 
 cue = Cue()
 cue.load(some_xml)
+cue.show()
 ```
-
+* You can edit the cue and re-encode:
+```py3
+>>>> cue.command.pts_time
+38253.966667
+>>>> cue.command.pts_time=1234.567890
+>>>> cue.encode()
+'/DAxAAAAAsrbAP/wBQb+Bp9rxgAbAhlDVUVJABWWDH+DCAgAAAAALfOq1zQAAAAAtBIUqg=='  #    <-- Base64
+>>>> print(cue.xml())
+```
+```xml
+<SpliceInfoSection xmlns="https://scte.org/schemas/35" ptsAdjustment="183003" protocolVersion="0" sapType="3" tier="4095">
+   <TimeSignal>
+      <SpliceTime ptsTime="111111110"/> # <--- this is in ticks, that's 1234.567890 seconds
+   </TimeSignal>
+   <!-- Provider Placement Opportunity Start -->
+   <SegmentationDescriptor segmentationEventId="1414668" segmentationEventCancelIndicator="false" segmentationEventIdComplianceIndicator="true" segmentationTypeId="52" segmentNum="0" segmentsExpected="0" subSegmentNum="0" subSegmentsExpected="0">
+      <DeliveryRestrictions webDeliveryAllowedFlag="false" noRegionalBlackoutFlag="false" archiveAllowedFlag="false" deviceRestrictions="3"/>
+      <!-- UPID: AiringID -->
+      <SegmentationUpid segmentationUpidType="8" segmentationUpidFormat="hexbinary">0x2df3aad7</SegmentationUpid>
+   </SegmentationDescriptor>
+</SpliceInfoSection>
+```
 
 </details>
 
@@ -135,13 +152,14 @@ cue.load(some_xml)
 a@fu:~$ 
 ```
 
+
 </details>
 
 
 ---
 
 
-### Example #2 
+#### Example #2 
 * `"urn:scte:scte35:2014:xml+bin"`
 * SCTE-35 Base64 in Xml converted to a threefive.Cue instance.
 
@@ -244,9 +262,10 @@ cue.load(some_xml)
 </details>
 
 ---
-# To Xml
+### To Xml
+#### Convert a threefive.Cue instance to SCTE-35 Xml 
 
-### Usage:
+#### Usage:
 ```py3
 
 from threefive import Cue
@@ -260,7 +279,7 @@ x = cue.xml() # returns a threefive.Node instance
 print(x)  # displays xml
 ```
 
-### Example 3
+##### Example 3
 * `"urn:scte:scte35:2013:xml"`
 * Converting a Cue instance to xml for Dash
 <details><summary> Base64 </summary>
@@ -306,7 +325,7 @@ print(x)   # displays xml
 
 ---
 
-### Example 4
+##### Example 4
 * `"urn:scte:scte35:2014:xml+bin"`
 * Converting a Cue instance to xml+binary for Dash
 <details><summary> Base64 </summary>
