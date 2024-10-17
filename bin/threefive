@@ -10,6 +10,7 @@ import sys
 from new_reader import reader
 from threefive import Cue, Stream, print2, decode, version
 from threefive.sixfix import sixfix
+from threefive.superkabuki import SuperKabuki
 
 REV = "\033[7;1m"
 NORM = "\033[27m\033[0m"
@@ -38,7 +39,6 @@ class SupaStream(Stream):
     SupaStream is subclass of Stream used
     to print raw SCTE-35 packets.
     """
-
 
     def _parse_scte35(self, pkt, pid):
         print2(pkt)
@@ -162,14 +162,31 @@ def json_load():
         sys.exit()
 
 
+def superkabuki():
+    args = {}
+    if "inject" in sys.argv:
+        args["input"] = sys.argv[sys.argv.index("inject") + 1]
+        if "with" in sys.argv:
+            args["sidecar"] = sys.argv[sys.argv.index("with") + 1]
+            if "at" in sys.argv:
+                args["scte35_pid"] = sys.argv[sys.argv.index("at") + 1]
+                if "into" in sys.argv:
+                    args["output"] = sys.argv[sys.argv.index("into") + 1]
+                    supak = SuperKabuki()
+                    print(args)
+                    supak.apply_args(args)
+                    supak.encode()
+                    return True
+    print("threefive inject {infile} with {sidecar_file} at {pid} into {outfile}")
+    return False
+
+
 print_map = {
     "help": print_help,
     "version": print_version,
     "encode": json_load,
+    "inject": superkabuki,
 }
-
-
-#   #   #
 
 
 def no_op(cue):
