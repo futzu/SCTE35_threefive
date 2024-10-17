@@ -12,11 +12,15 @@
 * [section.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/section.py) `threefive.SpliceInfoSection` class.
 * [segment.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/segment.py) `threefive.Segment` class.
 * [segmentation.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/segmentation.py)  `lookup tables` for the  `threefive.SegmentationDescriptor` class.
+* [sixfix.py](https://github.com/futzu/threefive/blob/master/threefive/sixfix.py) `threefive.sixfix ` function.
 * [smoketest.py](https://github.com/futzu/threefive/blob/master/threefive/smoketest.py) `threefive.smoke` function.
+
 * [stream.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stream.py) `threefive.Stream` class.
 * [streamtypes.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/streamtypes.py) `threefive.streamtypes.streamtype_map`  is a dict of mpegts stream types.
 
 * [stuff.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/stuff.py)   `print2` function.
+* [superkabuki.py](https://github.com/futzu/threefive/blob/master/threefive/superkabuki.py) `threefive.SuperKabuki` class.
+
 * [upids.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/upids.py)   `Segmentation Upids`  classes.
 * [version.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/version.py)  `threefive.version`
 * [xml.py](https://github.com/futzu/SCTE35-threefive/blob/master/threefive/xml.py)  `threefive.xml.Node` and, `threefive.xml.XmlParser` classes and several xml related functions.
