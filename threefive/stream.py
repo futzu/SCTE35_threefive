@@ -332,7 +332,6 @@ class Stream:
         for pkt in self.iter_pkts():
             self._parse_info(pkt)
         if self.maps.prgm.keys():
-            print2(f"Read {pkt_count} packets")
             sopro = sorted(self.maps.prgm.items())
             for k, vee in sopro:
                 if len(vee.streams.items()) > 0:
