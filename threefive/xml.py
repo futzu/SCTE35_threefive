@@ -4,6 +4,9 @@ xml.py  The Node class for converting to xml,
         and several helper functions
 """
 
+from xml.sax.saxutils import escape,unescape
+from new_reader import reader
+
 
 def t2s(v):
     """
@@ -90,28 +93,6 @@ special_char_map = {
 }
 
 
-def escape(val):
-    """
-    escape characters that are not valid in xml
-    replaces characters matching special_char_map keys with corresponding value
-    """
-    if val is not None:
-        for key, value in special_char_map.items():
-            val = val.replace(key, value)
-    return val
-
-
-def unescape(val):
-    """
-    unescapes characters that are not valid in xml
-    replaces characters matching special_char_map values with corresponding key
-    """
-    if val is not None:
-        for key, value in special_char_map.items():
-            val = val.replace(value, key)
-    return val
-
-
 class Node:
     """
     The Node class is to create an xml node.
@@ -138,7 +119,9 @@ class Node:
         self.name = name
         if ns:
             self.name = ":".join((ns, name))
-        self.value = escape(value)
+        self.value = value
+        if self.value:
+            self.value = escape(self.value)
         self.attrs = attrs
         self.children = []
         self.depth = 0
@@ -276,6 +259,8 @@ class XmlParser:
         mk_attrs parses the current node for attributes
         and stores them in self.stuff[self.active]
         """
+        if '!--' in node:
+            return False
         node= node.replace("='",'="').replace("' ",'" ')
         attrs = [x for x in node.split(" ") if "=" in x]
         parsed = {
@@ -307,18 +292,18 @@ class XmlParser:
         """
         parse_most parse everything except descriptor nodes
         """
-        rgator = data.index(">")
-        this_node = data[: rgator + 1]
+        ridx = data.index(">")
+        this_node = data[: ridx + 1]
         self.chk_node_list(this_node)
         attrs = self.mk_attrs(this_node)
         if self.active not in stuff:
             stuff[self.active] = attrs
-        data = data[rgator + 1 :]
+        data = data[ridx + 1 :]
         if "<" in data:
-            lgator = data.index("<")
-            value = data[:lgator].strip()
+            lidx = data.index("<")
+            value = data[:lidx].strip()
             stuff = self.mk_value(value, stuff)
-            data = data[lgator:]
+            data = data[lidx:]
         return data, stuff
 
     def _parse_descriptor(self, data, stuff):
