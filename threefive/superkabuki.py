@@ -7,9 +7,12 @@ from collections import deque
 from operator import itemgetter
 from new_reader import reader
 from iframes import IFramer
-from threefive import Stream, Cue, TimeSignal, print2
-from threefive.crc import crc32
-from threefive.bitn import NBin
+from .stream import Stream
+from .cue import Cue
+from .commands import TimeSignal
+from .stuff import print2
+from .crc import crc32
+from .bitn import NBin
 
 
 REV = "\033[7m"
