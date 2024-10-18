@@ -135,7 +135,6 @@ class SuperKabuki(Stream):
         pid = self._parse_info(pkt)
         if self._pusi_flag(pkt):
             self._parse_pts(pkt, pid)
-        self._program_stream_map(pkt, pid)
         if pid in self.pids.pmt:
             pkt = self.pad_pkt(pkt)
         return pkt
@@ -165,7 +164,7 @@ class SuperKabuki(Stream):
         the sidecar file and loads them into X9K3.sidecar
         if live, blank out the sidecar file after cues are loaded.
         """
-        try:
+        if self.sidecar_file:
             with reader(self.sidecar_file) as sidefile:
                 for line in sidefile:
                     line = line.decode().strip().split("#", 1)[0]
@@ -180,8 +179,6 @@ class SuperKabuki(Stream):
                                 self.sidecar = deque(
                                     sorted(self.sidecar, key=itemgetter(0))
                                 )
-        except:
-            pass
 
     def chk_sidecar_cues(self, pts):
         """
@@ -218,12 +215,6 @@ class SuperKabuki(Stream):
         nbin.add_bites(padding)
         self._bump_cc()
         return nbin.bites
-
-    def _program_stream_map(self, pkt, pid):
-        pay = self._parse_payload(pkt)
-        if pay.startswith(b"\x00\x00\x01\xbc"):
-            print2("psm")
-            print2((pid, pay))
 
     def _regen_pmt(self, pcr_pid, n_info_bites, n_streams):
         nbin = NBin()
@@ -309,15 +300,6 @@ class SuperKabuki(Stream):
             self._chk_pid_stream_type(pid, stream_type)
         streams = pay[start:end_idx]
         return streams
-
-    def _parse_stream_type(self, pay, idx):
-        """
-        extract stream pid and type
-        """
-        stream_type = pay[idx]
-        el_pid = self._parse_pid(pay[idx + 1], pay[idx + 2])
-        ei_len = self._parse_length(pay[idx + 3], pay[idx + 4])
-        return stream_type, el_pid, ei_len
 
     def _chk_pid_stream_type(self, pid, stream_type):
         """
