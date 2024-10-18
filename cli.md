@@ -102,11 +102,16 @@ Program: 1
 ___
 ## `Sixfix`
 * keyword `sixfix` Fix SCTE-35 data mangled by ffmpeg.
+
+
 ```py3
 	 threefive sixfix video.ts
 ```
 
-* ffmpeg changes SCTE-35 streams types to 0x6 bin data. sixfix will convert the bin data back to SCTE-35.
+* ffmpeg changes SCTE-35 streams types to 0x6 bin data.
+![image](https://github.com/user-attachments/assets/d039debb-1a47-4c67-a98b-a77d4aa53435)
+
+*  sixfix changes them back to SCTE-35.
 * The new file name is prefixed with 'fixed'.
 
 
@@ -160,21 +165,32 @@ a@fu:~$ cat json.txt | threefive encode
 /DAWAAAAAAAAAP/wBQb+AFJlwAAAZ1PBRA==
 ```
 ___
-* Load JSON to base64: `threefive encode < json.json`
-* Load JSON to hex: `threefive encode hex  < json.json`
-* Load JSON to xml:  `threefive encode xml < json.json`
+* Load JSON to base64:
+  `threefive encode < json.json`
+* Load JSON to hex:
+  `threefive encode hex  < json.json`
+* Load JSON to xml:
+   `threefive encode xml < json.json`
+* Load xml to hex:
+  `cat xml.xml | threefive encode hex`
+* Load xml to base64:
+  `threefive encode  < xml.xml`
+* Load xml to json:
+  `cat xml.xml | threefive encode json`
 
-* Load xml to hex:  `cat xml.xml | threefive encode hex`
-* Load xml to base64:  `threefive encode  < xml.xml`
-* Load xml to json:  `cat xml.xml | threefive encode json`
+* Base64 to bytes:
+ `threefive encode bytes  '/DAlAAAAAAAAAP/wFAUAAAAOf+/+FOvVwP4ApMuAAA4AAAAAzBon0A=='`
+* Base64 to hex:
+   `threefive encode hex  '/DAlAAAAAAAAAP/wFAUAAAAOf+/+FOvVwP4ApMuAAA4AAAAAzBon0A=='`
+* Base64 to xml:
+   `threefive encode xml  '/DAlAAAAAAAAAP/wFAUAAAAOf+/+FOvVwP4ApMuAAA4AAAAAzBon0A=='`
 
-* Base64 to bytes: `threefive encode bytes  '/DAlAAAAAAAAAP/wFAUAAAAOf+/+FOvVwP4ApMuAAA4AAAAAzBon0A=='`
-* Base64 to hex: `threefive encode hex  '/DAlAAAAAAAAAP/wFAUAAAAOf+/+FOvVwP4ApMuAAA4AAAAAzBon0A=='`
-* Base64 to xml: `threefive encode xml  '/DAlAAAAAAAAAP/wFAUAAAAOf+/+FOvVwP4ApMuAAA4AAAAAzBon0A=='`
-
-* Hex to base64: `threefive encode base64 0xfc302500000000000000fff014050000000e7feffe14ebd5c0fe00a4cb80000e00000000cc1a27d0`
-* Hex to xml: `threefive encode xml 0xfc302500000000000000fff014050000000e7feffe14ebd5c0fe00a4cb80000e00000000cc1a27d0`
-* Hex to int: `threefive encode int 0xfc302500000000000000fff014050000000e7feffe14ebd5c0fe00a4cb80000e00000000cc1a27d0`
+* Hex to base64:
+  `threefive encode base64 0xfc302500000000000000fff014050000000e7feffe14ebd5c0fe00a4cb80000e00000000cc1a27d0`
+* Hex to xml:
+  `threefive encode xml 0xfc302500000000000000fff014050000000e7feffe14ebd5c0fe00a4cb80000e00000000cc1a27d0`
+* Hex to int:
+  `threefive encode int 0xfc302500000000000000fff014050000000e7feffe14ebd5c0fe00a4cb80000e00000000cc1a27d0`
 
 [top](#threefive-is-the-scte-35-cli-tool)
 
