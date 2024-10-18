@@ -46,18 +46,17 @@ class SuperKabuki(Stream):
         self.sidecar = deque()
         self.sidecar_file = "sidecar.txt"
         self.time_signals = False
-        # self._parse_args()
 
     def apply_args(self, args):
         """
         _apply_args applies command line args
         """
-        self.outfile = args["output"]
         self.infile = args["input"]
+
+        self.outfile = f'superkabuki-{self.infile.rsplit("/")[-1]}'
         self.sidecar_file = args["sidecar"]
         self._tsdata = reader(args["input"])
         self.pid2int(args["scte35_pid"])
-        # self.time_signals = args.time_signals
         super().__init__(self.infile)
 
     def pid2int(self, pid):
