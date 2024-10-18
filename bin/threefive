@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-threefive command line SCTE35 Super Tool.
+threefive command line SCTE35 decoder.
 
 """
 
@@ -170,14 +170,11 @@ def superkabuki():
             args["sidecar"] = sys.argv[sys.argv.index("with") + 1]
             if "at" in sys.argv:
                 args["scte35_pid"] = sys.argv[sys.argv.index("at") + 1]
-                if "into" in sys.argv:
-                    args["output"] = sys.argv[sys.argv.index("into") + 1]
-                    supak = SuperKabuki()
-                    print(args)
-                    supak.apply_args(args)
-                    supak.encode()
-                    return True
-    print("threefive inject {infile} with {sidecar_file} at {pid} into {outfile}")
+                supak = SuperKabuki()
+                supak.apply_args(args)
+                supak.encode()
+                return True
+    print("threefive inject {infile} with {sidecar_file} at {pid}")
     return False
 
 
